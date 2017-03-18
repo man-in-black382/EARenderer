@@ -8,20 +8,23 @@
 
 #import "ViewController.h"
 
+#include "GLBuffer.hpp"
+
+#include <iostream>
+
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    // Do any additional setup after loading the view.
+    NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
+    std::string filePath(modelPath.UTF8String);    
 }
-
 
 - (void)setRepresentedObject:(id)representedObject {
     [super setRepresentedObject:representedObject];
 
     // Update the view, if already loaded.
 }
-
 
 @end
