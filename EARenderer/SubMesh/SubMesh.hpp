@@ -20,8 +20,8 @@ namespace EARenderer {
         
     public:
         SubMesh() = default;
-        SubMesh(const SubMesh&) = default;
-        SubMesh(SubMesh&&) = default;
+        SubMesh(const SubMesh& that) = default;
+        SubMesh(SubMesh&& that) = default;
         
         SubMesh& operator=(SubMesh that) {
             swap(that);

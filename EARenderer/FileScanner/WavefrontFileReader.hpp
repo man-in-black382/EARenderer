@@ -35,20 +35,22 @@ namespace EARenderer {
         bool mIsUsingNormals = false;
         bool mIsUsingTextureCoords = false;
         
-        WavefrontFileReader(const WavefrontFileReader&) = delete;
-        WavefrontFileReader(WavefrontFileReader&&) = delete;
-        
         void readPosition();
         void readNormal();
         void readTextureCoords();
         void readFaces();
-        WavefrontFaceIndexSet parse1PFace(std::string&);
-        WavefrontFaceIndexSet parse1P1UVFace(std::string&);
-        WavefrontFaceIndexSet parse1P1NFace(std::string&);
-        WavefrontFaceIndexSet parse1P1N1UVFace(std::string&);
+        WavefrontFaceIndexSet parse1PFace(std::string& face);
+        WavefrontFaceIndexSet parse1P1UVFace(std::string& face);
+        WavefrontFaceIndexSet parse1P1NFace(std::string& face);
+        WavefrontFaceIndexSet parse1P1N1UVFace(std::string& face);
         
     public:
-        WavefrontFileReader(const std::string&);
+        WavefrontFileReader(const std::string& fileName);
+        WavefrontFileReader(const WavefrontFileReader& that) = delete;
+        WavefrontFileReader(WavefrontFileReader&& that) = delete;
+        WavefrontFileReader& operator=(const WavefrontFileReader& rhs) = delete;
+        WavefrontFileReader& operator=(WavefrontFileReader&& rhs) = delete;
+        ~WavefrontFileReader() = default;
         Mesh<Vertex1P1N1UV> read();
     };
  

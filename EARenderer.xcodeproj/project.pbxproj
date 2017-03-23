@@ -145,6 +145,7 @@
 		CE675AE01E6EAD7A005ACBDF /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE675ADE1E6EAD7A005ACBDF /* SubMesh.cpp */; };
 		CEE970941E716E2400FF2616 /* Vertex1P1N1UV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE970931E716E2400FF2616 /* Vertex1P1N1UV.cpp */; };
 		CEE970981E717B8200FF2616 /* WavefrontFaceIndexSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE970961E717B8200FF2616 /* WavefrontFaceIndexSet.cpp */; };
+		CEF6BDF41E7EBE2B003CABA1 /* GLTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF6BDF21E7EBE2B003CABA1 /* GLTexture2D.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -453,6 +454,9 @@
 		CEE970931E716E2400FF2616 /* Vertex1P1N1UV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vertex1P1N1UV.cpp; path = Vertices/Vertex1P1N1UV.cpp; sourceTree = "<group>"; };
 		CEE970961E717B8200FF2616 /* WavefrontFaceIndexSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WavefrontFaceIndexSet.cpp; sourceTree = "<group>"; };
 		CEE970971E717B8200FF2616 /* WavefrontFaceIndexSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WavefrontFaceIndexSet.hpp; sourceTree = "<group>"; };
+		CEF6BDF11E7EBDF5003CABA1 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		CEF6BDF21E7EBE2B003CABA1 /* GLTexture2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLTexture2D.cpp; path = OpenGL/GLTexture2D.cpp; sourceTree = "<group>"; };
+		CEF6BDF31E7EBE2B003CABA1 /* GLTexture2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLTexture2D.hpp; path = OpenGL/GLTexture2D.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -478,6 +482,8 @@
 				CE2DAB521E749A5100E3878D /* GLShader.hpp */,
 				CE5090541E7D2FC50044672D /* GLBuffer.cpp */,
 				CE5090551E7D2FC50044672D /* GLBuffer.hpp */,
+				CEF6BDF21E7EBE2B003CABA1 /* GLTexture2D.cpp */,
+				CEF6BDF31E7EBE2B003CABA1 /* GLTexture2D.hpp */,
 				CE5090661E7DC2480044672D /* GLVertexArrayBuffer.cpp */,
 				CE5090671E7DC2480044672D /* GLVertexArrayBuffer.hpp */,
 				CE5090691E7DC6A10044672D /* GLElementArrayBuffer.cpp */,
@@ -493,6 +499,7 @@
 		CE2DAB541E749A7000E3878D /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				CEF6BDF01E7EBDF5003CABA1 /* stb */,
 				CE2DAB551E749A7000E3878D /* glm */,
 			);
 			path = ThirdParty;
@@ -913,6 +920,14 @@
 			path = SubMesh;
 			sourceTree = "<group>";
 		};
+		CEF6BDF01E7EBDF5003CABA1 /* stb */ = {
+			isa = PBXGroup;
+			children = (
+				CEF6BDF11E7EBDF5003CABA1 /* stb_image.h */,
+			);
+			path = stb;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1109,6 +1124,7 @@
 				CE5090561E7D2FC50044672D /* GLBuffer.cpp in Sources */,
 				CE522BE71E4DDF700063470C /* ViewController.mm in Sources */,
 				CE522BE41E4DDF700063470C /* main.m in Sources */,
+				CEF6BDF41E7EBE2B003CABA1 /* GLTexture2D.cpp in Sources */,
 				CE50905C1E7D43D80044672D /* GLBindable.cpp in Sources */,
 				CE2DACDB1E749F4D00E3878D /* GLNamedObject.cpp in Sources */,
 				CE5D577A1E6C976C00C0DF23 /* WavefrontFileReader.cpp in Sources */,

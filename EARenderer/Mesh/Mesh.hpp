@@ -21,8 +21,8 @@ namespace EARenderer {
         
     public:
         Mesh() = default;
-        Mesh(const Mesh&) = default;
-        Mesh(Mesh&&) = default;
+        Mesh(const Mesh& that) = default;
+        Mesh(Mesh&& that) = default;
         
         Mesh& operator=(Mesh& that) {
             swap(that);

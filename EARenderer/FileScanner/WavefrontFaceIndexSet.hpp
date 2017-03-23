@@ -18,7 +18,7 @@ namespace EARenderer {
         int32_t textureCorrdsIndex = 0;
         int32_t normalIndex = 0;
         
-        WavefrontFaceIndexSet(int32_t, int32_t, int32_t);
+        WavefrontFaceIndexSet(int32_t p, int32_t uv, int32_t n);
     };
     
 }
