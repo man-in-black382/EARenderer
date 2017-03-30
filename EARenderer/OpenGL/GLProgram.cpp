@@ -18,7 +18,7 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLProgram::GLProgram(const GLShader& vertexShader, const GLShader& fragmentShader)
+    GLProgram::GLProgram(const GLShader* vertexShader, const GLShader* fragmentShader)
     :
     GLNamedObject(glCreateProgram()),
     mVertexShader(vertexShader),
@@ -32,18 +32,11 @@ namespace EARenderer {
         glDeleteProgram(mName);
     }
     
-#pragma mark - Operators
-    
-    GLProgram& GLProgram::operator=(GLProgram that) {
-        swap(that);
-        return *this;
-    }
-    
 #pragma mark - Private helper methods
     
     void GLProgram::link() {
-        glAttachShader(mName, mVertexShader.getName());
-        glAttachShader(mName, mFragmentShader.getName());
+        glAttachShader(mName, mVertexShader->getName());
+        glAttachShader(mName, mFragmentShader->getName());
         glLinkProgram(mName);
         
         GLint isLinked = 0;

@@ -21,9 +21,11 @@ namespace EARenderer {
     public:
         GLNamedObject() = default;
         GLNamedObject(GLuint);
-        GLNamedObject(GLNamedObject&&) = default;
-        GLNamedObject(const GLNamedObject&) = default;
-        GLNamedObject& operator=(const GLNamedObject&);
+        GLNamedObject(GLNamedObject&&);
+        GLNamedObject& operator=(GLNamedObject&&);
+        GLNamedObject(const GLNamedObject&) = delete;
+        GLNamedObject& operator=(const GLNamedObject&) = delete;
+        
         virtual ~GLNamedObject() = 0;
         void swap(GLNamedObject&);
         

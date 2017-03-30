@@ -20,18 +20,19 @@ namespace EARenderer {
     
     class GLProgram: public GLNamedObject {
     private:
-        GLShader mVertexShader;
-        GLShader mFragmentShader;
+        const GLShader* mVertexShader;
+        const GLShader* mFragmentShader;
         std::map<std::string, int32_t> mUniforms;
         
         void link();
         void obtainUniforms();
         
     public:
-        GLProgram(const GLShader&, const GLShader&);
-        GLProgram(const GLProgram&) = default;
-        GLProgram(GLProgram&&) = default;
-        GLProgram& operator=(GLProgram);
+        GLProgram(const GLShader* vertexShader, const GLShader* fragmentShader);
+        GLProgram(const GLProgram& rhs) = delete;
+        GLProgram& operator=(const GLProgram& that) = delete;
+        GLProgram(GLProgram&& that) = default;
+        GLProgram& operator=(GLProgram&& that) = default;
         ~GLProgram();
         void swap(GLProgram&);
     };

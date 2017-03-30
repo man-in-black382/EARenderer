@@ -40,15 +40,7 @@ namespace EARenderer {
     GLShader::~GLShader() {
         glDeleteShader(mName);
     }
-    
-#pragma mark - Operators
-    
-    GLShader& GLShader::operator=(GLShader that) {
-        GLNamedObject::operator=(that);
-        swap(that);
-        return *this;
-    }
-    
+
 #pragma mark - Private helper methods
     
     void GLShader::compile() {

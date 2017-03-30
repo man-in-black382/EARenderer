@@ -25,22 +25,27 @@ namespace EARenderer {
     private:
         GLVertexArrayBuffer<Vertex> mVertexBuffer;
         GLElementArrayBuffer mIndexBuffer;
+        GLushort mElementsCount;
         
     public:
         GLVertexArray() {
             GLuint name = 0;
             glGenVertexArrays(1, &name);
             mName = name;
+            mElementsCount = 0;
         }
         
         ~GLVertexArray() override {
+            if (mName == 0) {
+                return;
+            }
             glDeleteVertexArrays(1, &mName);
         }
         
         GLVertexArray(const GLVertexArray& that) = delete;
-        GLVertexArray(GLVertexArray&& that) = delete;
+        GLVertexArray(GLVertexArray&& that) = default;
         GLVertexArray& operator=(const GLVertexArray& rhs) = delete;
-        GLVertexArray& operator=(GLVertexArray&& rhs) = delete;
+        GLVertexArray& operator=(GLVertexArray&& rhs) = default;
         
         void bind() override {
             glBindVertexArray(mName);
@@ -48,6 +53,8 @@ namespace EARenderer {
         
         void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const GLVertexArrayLayoutDescription& layoutDescription) {
             bind();
+            
+            mElementsCount = indices.size();
             
             mVertexBuffer.initialize(vertices);
             mIndexBuffer.initialize(indices);
@@ -59,6 +66,10 @@ namespace EARenderer {
                 glVertexAttribPointer(location, attributeSize / sizeof(GLfloat), GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
                 offset += attributeSize;
             }
+        }
+        
+        GLushort getElementsCount() {
+            return mElementsCount;
         }
     };
     

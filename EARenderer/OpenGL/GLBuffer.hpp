@@ -30,9 +30,9 @@ namespace EARenderer {
         }
         
         GLBuffer(const GLBuffer& that) = delete;
-        GLBuffer(GLBuffer&& that) = delete;
+        GLBuffer(GLBuffer&& that) = default;
         GLBuffer& operator=(const GLBuffer& rhs) = delete;
-        GLBuffer& operator=(GLBuffer&& rhs) = delete;
+        GLBuffer& operator=(GLBuffer&& rhs) = default;
         
         virtual void initialize(const std::vector<DataType>& data) = 0;
     };

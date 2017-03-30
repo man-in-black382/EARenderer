@@ -1,0 +1,35 @@
+#
+# Wavefront material file: c:\documents and settings\admir\desktop\nove zivotinje\bear\bear-obj.mtl
+#
+# Converted by the PolyTrans geometry converter from Okino Computer Graphics, Inc.
+# Date/time of export: 02/20/2006 20:03:20
+#
+# Bounding box of geometry = (-4.71417,0.381019,-20.1426) to (5.52928,20.0957,8.69794).
+
+newmtl default
+	Ns 32
+	d 1
+	illum 2
+	Kd 0.4 0.4 0.4
+	Ks 0.7 0.7 0.7
+	Ka 0.3 0.3 0.3
+
+newmtl bear
+	Ns 4
+	d 1
+	illum 2
+	Kd 0.588235 0.588235 0.588235
+	Ks 0.153 0.153 0.153
+	Ka 0.588235 0.588235 0.588235
+	map_Kd bear.tga
+
+newmtl teeths
+	Ns 3
+	d 1
+	illum 2
+	Kd 0.588235 0.588235 0.588235
+	Ks 0 0 0
+	Ka 0.588235 0.588235 0.588235
+	map_Kd bear teeth.tga
+	map_d bear teeth alpha.tga
+

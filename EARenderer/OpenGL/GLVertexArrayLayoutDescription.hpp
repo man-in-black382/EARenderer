@@ -10,7 +10,6 @@
 #define GLVertexArrayLayoutDescription_hpp
 
 #include <OpenGL/gltypes.h>
-#include <stdlib.h>
 #include <vector>
 
 namespace EARenderer {

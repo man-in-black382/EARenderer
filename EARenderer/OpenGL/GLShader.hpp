@@ -26,9 +26,10 @@ namespace EARenderer {
         
     public:
         GLShader(const std::string&, GLShaderType);
-        GLShader(const GLShader&) = default;
+        GLShader(const GLShader&) = delete;
+        GLShader& operator=(const GLShader&) = delete;
         GLShader(GLShader&&) = default;
-        GLShader& operator=(GLShader);
+        GLShader& operator=(GLShader&&) = default;
         ~GLShader();
         void swap(GLShader&);
         

@@ -18,16 +18,23 @@ namespace EARenderer {
     mName(name)
     { }
     
+    GLNamedObject::GLNamedObject(GLNamedObject&& that)
+    :
+    mName(std::move(that.mName)) {
+        that.mName = 0;
+    }
+    
     GLNamedObject::~GLNamedObject()
     { }
     
 #pragma mark - Operators
     
-    GLNamedObject& GLNamedObject::operator=(const GLNamedObject& rhs) {
-        mName = rhs.mName;
+    GLNamedObject& GLNamedObject::operator=(GLNamedObject&& rhs) {
+        swap(rhs);
+        rhs.mName = 0;
         return *this;
     }
-    
+
 #pragma mark - Swap
     
     void GLNamedObject::swap(GLNamedObject& that) {

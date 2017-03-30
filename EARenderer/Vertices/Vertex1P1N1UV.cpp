@@ -9,5 +9,19 @@
 #include "Vertex1P1N1UV.hpp"
 
 namespace EARenderer {
-    Vertex1P1N1UV::Vertex1P1N1UV() : position(glm::vec4()), textureCoords(glm::vec2()), normal(glm::vec3()) { }
+    
+    Vertex1P1N1UV::Vertex1P1N1UV()
+    :
+    mPosition(glm::vec4()),
+    mTextureCoords(glm::vec2()),
+    mNormal(glm::vec3())
+    { }
+    
+    Vertex1P1N1UV::Vertex1P1N1UV(glm::vec4 position, glm::vec2 texcoords, glm::vec3 normal)
+    :
+    mPosition(position),
+    mTextureCoords(texcoords),
+    mNormal(normal)
+    { }
+    
 }
