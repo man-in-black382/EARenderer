@@ -20,12 +20,11 @@ namespace EARenderer {
     class GLShader: public GLNamedObject {
     private:
         std::string mSource;
-        GLShaderType mType;
         
         void compile();
         
     public:
-        GLShader(const std::string&, GLShaderType);
+        GLShader(const std::string& sourcePath, GLenum type);
         GLShader(const GLShader&) = delete;
         GLShader& operator=(const GLShader&) = delete;
         GLShader(GLShader&&) = default;
@@ -33,8 +32,7 @@ namespace EARenderer {
         ~GLShader();
         void swap(GLShader&);
         
-        const std::string& getSource();
-        GLShaderType getType();
+        const std::string& source();
     };
     
     void swap(GLShader&, GLShader&);

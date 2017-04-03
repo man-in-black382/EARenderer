@@ -81,4 +81,17 @@ namespace EARenderer {
     void swap(GLProgram& lhs, GLProgram& rhs) {
         lhs.swap(rhs);
     }
+    
+#pragma mark - Bindable
+    
+    void GLProgram::bind() {
+        glUseProgram(mName);
+    }
+    
+#pragma mark - Public
+    
+    GLint GLProgram::uniformLocation(const std::string& name) {
+        return mUniforms[name];
+    }
+    
 }

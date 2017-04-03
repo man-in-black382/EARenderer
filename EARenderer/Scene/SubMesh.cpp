@@ -10,18 +10,21 @@
 
 namespace EARenderer {
 
-    SubMesh::SubMesh(const std::vector<Vertex1P1N1UV>& vertices, const std::vector<GLushort>& indices)
+    SubMesh::SubMesh(const std::vector<Vertex1P1N1UV>& vertices)
     :
-    mVertices(vertices),
-    mIndices(indices)
+    mVertices(vertices)
     { }
     
-    const std::vector<Vertex1P1N1UV>& SubMesh::getVertices() const {
+    const std::vector<Vertex1P1N1UV>& SubMesh::vertices() const {
         return mVertices;
     }
     
-    const std::vector<GLushort>& SubMesh::getIndices() const {
-        return mIndices;
+    void SubMesh::clearStorage() {
+//        mVertices.erase(mVertices.begin() + 100, mVertices.begin() + 1000);
+//        mVertices.erase(mVertices.begin() + 1000);
+//        mVertices.erase(mVertices.begin() + 1050);
+//        mVertices.erase(mVertices.begin() + 10550);
+//        mVertices.erase(mVertices.begin() + 8090);
     }
 
 }

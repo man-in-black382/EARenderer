@@ -24,15 +24,14 @@ namespace EARenderer {
     class GLVertexArray: public GLNamedObject, public GLBindable {
     private:
         GLVertexArrayBuffer<Vertex> mVertexBuffer;
-        GLElementArrayBuffer mIndexBuffer;
-        GLushort mElementsCount;
+//        GLElementArrayBuffer mIndexBuffer;
+//        GLushort mElementsCount;
         
     public:
         GLVertexArray() {
             GLuint name = 0;
             glGenVertexArrays(1, &name);
             mName = name;
-            mElementsCount = 0;
         }
         
         ~GLVertexArray() override {
@@ -51,13 +50,10 @@ namespace EARenderer {
             glBindVertexArray(mName);
         }
         
-        void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const GLVertexArrayLayoutDescription& layoutDescription) {
+        void initialize(const std::vector<Vertex>& vertices, const GLVertexArrayLayoutDescription& layoutDescription) {
             bind();
-            
-            mElementsCount = indices.size();
-            
+
             mVertexBuffer.initialize(vertices);
-            mIndexBuffer.initialize(indices);
             
             GLuint offset = 0;
             for (GLuint location = 0; location < layoutDescription.getAttributeSizes().size(); location++) {
@@ -66,10 +62,6 @@ namespace EARenderer {
                 glVertexAttribPointer(location, attributeSize / sizeof(GLfloat), GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
                 offset += attributeSize;
             }
-        }
-        
-        GLushort getElementsCount() {
-            return mElementsCount;
         }
     };
     

@@ -142,7 +142,7 @@ namespace glm
 		// functions, inlined (inline)
 
 		template <typename FTy, typename CTy, typename CTr>
-		FTy const& get_facet(std::basic_ios<CTy,CTr>&);
+		FTy const& _facet(std::basic_ios<CTy,CTr>&);
 		template <typename FTy, typename CTy, typename CTr>
 		std::basic_ios<CTy,CTr>& formatted(std::basic_ios<CTy,CTr>&);
 		template <typename FTy, typename CTy, typename CTr>

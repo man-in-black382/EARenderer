@@ -21,13 +21,12 @@ namespace EARenderer {
     class SubMesh {
     private:
         std::vector<Vertex1P1N1UV> mVertices;
-        std::vector<GLushort> mIndices;
         
     public:
-        SubMesh(const std::vector<Vertex1P1N1UV>& vertices, const std::vector<GLushort>& indices);
+        SubMesh(const std::vector<Vertex1P1N1UV>& vertices);
         
-        const std::vector<Vertex1P1N1UV>& getVertices() const;
-        const std::vector<GLushort>& getIndices() const;
+        const std::vector<Vertex1P1N1UV>& vertices() const;
+        void clearStorage();
     };
     
 }

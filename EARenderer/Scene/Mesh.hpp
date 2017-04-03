@@ -20,7 +20,7 @@ namespace EARenderer {
         
     public:
         Mesh(const std::vector<ID>& subMeshIDs);
-        const std::vector<ID>& getSubMeshIDs() const;
+        const std::vector<ID>& subMeshIDs() const;
     };
 
 }

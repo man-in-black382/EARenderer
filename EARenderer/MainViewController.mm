@@ -14,8 +14,10 @@
 #import "ResourceManager.hpp"
 #import "Renderer.hpp"
 #import "RendererOpaque.h"
+#import "GLShader.hpp"
+#import "GLProgram.hpp"
 
-@interface MainViewController ()
+@interface MainViewController () <SceneGLViewDelegate>
 
 @property (weak) IBOutlet SceneGLView *openGLView;
 
@@ -23,20 +25,32 @@
 
 @implementation MainViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do view setup here.
     
+    [self.openGLView becomeFirstResponder];
+    self.openGLView.delegate = self;
+}
+
+- (void)glViewIsReadyForInitialization:(SceneGLView *)view
+{
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
-    NSString *bearPath = [[NSBundle mainBundle] pathForResource:@"bear-obj" ofType:@"obj"];
+    
+    NSString *vertPath = [[NSBundle mainBundle] pathForResource:@"SimplestShader" ofType:@"vert"];
+    NSString *fragPath = [[NSBundle mainBundle] pathForResource:@"SimplestShader" ofType:@"frag"];
     
     auto* sceneOpaquePtr = new SceneOpaque();
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(bearPath.UTF8String) }, &sceneOpaquePtr->scene);
-    auto* rendererOpaquePtr = new RendererOpaque(&sceneOpaquePtr->scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, &sceneOpaquePtr->scene);
     
-    self.openGLView->rendererOpaquePtr = rendererOpaquePtr;
-    self.openGLView->sceneOpaquePtr = sceneOpaquePtr;
+    auto* vertexShader = new EARenderer::GLShader(std::string(vertPath.UTF8String), GL_VERTEX_SHADER);
+    auto* fragmentShader = new EARenderer::GLShader(std::string(fragPath.UTF8String), GL_FRAGMENT_SHADER);
+    auto* program = new EARenderer::GLProgram(vertexShader, fragmentShader);
+    auto* rendererOpaquePtr = new RendererOpaque(&sceneOpaquePtr->scene, program);
+    
+    view->rendererOpaquePtr = rendererOpaquePtr;
+    view->sceneOpaquePtr = sceneOpaquePtr;
 }
 
 @end

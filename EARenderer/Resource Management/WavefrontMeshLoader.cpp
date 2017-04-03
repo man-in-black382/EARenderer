@@ -103,11 +103,12 @@ namespace EARenderer {
         // bmin[0] = bmin[1] = bmin[2] = std::numeric_limits<float>::max();
         // bmax[0] = bmax[1] = bmax[2] = -std::numeric_limits<float>::max();
         
+        size_t indicesPerFaceLine = 3;
         for (size_t s = 0; s < shapes.size(); s++) {
             std::vector<Vertex1P1N1UV> vertices;
-            std::vector<GLushort> indices;
-            size_t toValue = shapes[s].face_offset + shapes[s].length;
-            for (size_t i = shapes[s].face_offset; i < toValue; i++) {
+
+            size_t toValue = (shapes[s].face_offset + shapes[s].length) * indicesPerFaceLine;
+            for (size_t i = shapes[s].face_offset * indicesPerFaceLine; i < toValue; i++) {
                 tinyobj_opt::index_t idx = attrib.indices[s + i];
                 
                 glm::vec4 position;
@@ -151,10 +152,9 @@ namespace EARenderer {
                 }
                 
                 vertices.emplace_back(position, texcoords, normal);
-                indices.emplace_back(idx.vertex_index - shapes[s].face_offset);
             }
             
-            subMeshes.emplace_back(vertices, indices);
+            subMeshes.emplace_back(vertices);
         }
         return subMeshes;
     }

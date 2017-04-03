@@ -17,10 +17,10 @@ namespace EARenderer {
             WavefrontMeshLoader loader(meshPath);
             auto subMeshes = loader.load();
             for (auto& subMesh : subMeshes) {
-                ID id = scene->getSubMeshes().insert(subMesh);
+                ID id = scene->subMeshes().insert(subMesh);
                 subMeshIDs.push_back(id);
             }
-            scene->getMeshes().insert(Mesh(subMeshIDs));
+            scene->meshes().insert(Mesh(subMeshIDs));
         }
     }
     

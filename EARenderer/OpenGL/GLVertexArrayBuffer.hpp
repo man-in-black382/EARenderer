@@ -18,11 +18,12 @@ namespace EARenderer {
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
         void bind() override {
-            glBindBuffer(GL_VERTEX_ARRAY, GLBuffer<Vertex>::mName);
+            glBindBuffer(GL_ARRAY_BUFFER, GLBuffer<Vertex>::mName);
         }
         
         void initialize(const std::vector<Vertex>& data) override {
-            glBufferData(GL_VERTEX_ARRAY, data.size() * sizeof(Vertex), &data[0], GL_STATIC_DRAW);
+            bind();
+            glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(Vertex), data.data(), GL_STATIC_DRAW);
         }
     };
     

@@ -15,6 +15,7 @@ namespace EARenderer {
     }
     
     void GLElementArrayBuffer::initialize(const std::vector<GLushort>& data) {
+        bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(GLushort), &data[0], GL_STATIC_DRAW);
     }
     

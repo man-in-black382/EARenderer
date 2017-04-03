@@ -26,14 +26,18 @@ namespace EARenderer {
         PackedLookupTable<Camera> mCameras;
         PackedLookupTable<Light> mLights;
         
+        ID mMainCameraID;
+        
     public:
         Scene();
         
-        PackedLookupTable<Mesh>& getMeshes();
-        PackedLookupTable<SubMesh>& getSubMeshes();
-        PackedLookupTable<Transform>& getTransforms();
-        PackedLookupTable<Camera>& getCameras();
-        PackedLookupTable<Light>& getLights();
+        PackedLookupTable<Mesh>& meshes();
+        PackedLookupTable<SubMesh>& subMeshes();
+        PackedLookupTable<Transform>& transforms();
+        PackedLookupTable<Camera>& cameras();
+        PackedLookupTable<Light>& lights();
+        
+        ID mainCameraID();
     };
     
 }

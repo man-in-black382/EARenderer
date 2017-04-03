@@ -10,7 +10,9 @@
 #define Renderer_hpp
 
 #include <map>
+#include <OpenGL/gl.h>
 #include "Scene.hpp"
+#include "GLProgram.hpp"
 #include "GLVertexArray.hpp"
 
 namespace EARenderer {
@@ -18,10 +20,11 @@ namespace EARenderer {
     class Renderer {
     private:
         Scene *mScene;
+        GLProgram *mProgram;
         std::map<ID, GLVertexArray<Vertex1P1N1UV> *> mVAOs;
         
     public:
-        Renderer(Scene* scene);
+        Renderer(Scene* scene, GLProgram* program);
         void render();
     };
     

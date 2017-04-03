@@ -94,7 +94,7 @@ namespace io
 	{}
 
 	template <typename FTy, typename CTy, typename CTr>
-	GLM_FUNC_QUALIFIER FTy const& get_facet(std::basic_ios<CTy, CTr>& ios)
+	GLM_FUNC_QUALIFIER FTy const& _facet(std::basic_ios<CTy, CTr>& ios)
 	{
 		if(!std::has_facet<FTy>(ios.getloc()))
 			ios.imbue(std::locale(ios.getloc(), new FTy));

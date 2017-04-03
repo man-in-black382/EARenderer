@@ -17,22 +17,11 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLShader::GLShader(const std::string& sourcePath, GLShaderType type)
-    :
-    GLNamedObject(0),
-    mType(type)
-    {
+    GLShader::GLShader(const std::string& sourcePath, GLenum type) {
         std::ifstream stream(sourcePath);
         ASSERT(stream.is_open(), "Cannot load shader (" << sourcePath << ")");
         mSource = std::string((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
-        
-        GLenum glType;
-        switch (type) {
-            case GLShaderType::vertex: glType = GL_VERTEX_SHADER; break;
-            case GLShaderType::fragment: glType = GL_FRAGMENT_SHADER; break;
-        }
-        
-        mName = glCreateShader(glType);
+        mName = glCreateShader(type);
         
         compile();
     }
@@ -70,7 +59,6 @@ namespace EARenderer {
     
     void GLShader::swap(GLShader& that) {
         GLNamedObject::swap(that);
-        std::swap(mType, that.mType);
         std::swap(mSource, that.mSource);
     }
     
@@ -80,11 +68,8 @@ namespace EARenderer {
     
 #pragma mark - Accessors
     
-    const std::string& GLShader::getSource() {
+    const std::string& GLShader::source() {
         return mSource;
     }
-    
-    GLShaderType GLShader::getType() {
-        return mType;
-    }
+
 }

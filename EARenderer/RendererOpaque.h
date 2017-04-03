@@ -13,7 +13,7 @@
 #include "Scene.hpp"
 
 struct RendererOpaque {
-    RendererOpaque(EARenderer::Scene *scene) : renderer(scene) { }
+    RendererOpaque(EARenderer::Scene *scene, EARenderer::GLProgram *program) : renderer(scene, program) { }
     EARenderer::Renderer renderer;
 };
 

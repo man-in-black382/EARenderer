@@ -9,20 +9,20 @@
 #ifndef GLProgram_hpp
 #define GLProgram_hpp
 
-#include "GLNamedObject.hpp"
-
 #include <map>
 #include <string>
 
+#include "GLNamedObject.hpp"
 #include "GLShader.hpp"
+#include "GLBindable.hpp"
 
 namespace EARenderer {
     
-    class GLProgram: public GLNamedObject {
+    class GLProgram: public GLNamedObject, public GLBindable {
     private:
         const GLShader* mVertexShader;
         const GLShader* mFragmentShader;
-        std::map<std::string, int32_t> mUniforms;
+        std::map<std::string, GLint> mUniforms;
         
         void link();
         void obtainUniforms();
@@ -35,6 +35,10 @@ namespace EARenderer {
         GLProgram& operator=(GLProgram&& that) = default;
         ~GLProgram();
         void swap(GLProgram&);
+        
+        void bind() override;
+        
+        GLint uniformLocation(const std::string& name);
     };
     
     void swap(GLProgram&, GLProgram&);

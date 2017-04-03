@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0C45BA1E90631D005CCA00 /* Deer.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE0C45B91E90631D005CCA00 /* Deer.obj */; };
 		CE2DAB501E7499B700E3878D /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2DAB4E1E7499B700E3878D /* GLProgram.cpp */; };
 		CE2DAB531E749A5100E3878D /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2DAB511E749A5100E3878D /* GLShader.cpp */; };
 		CE2DAC621E749A7000E3878D /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = CE2DAB561E749A7000E3878D /* CMakeLists.txt */; };
@@ -128,8 +129,8 @@
 		CE2DACDB1E749F4D00E3878D /* GLNamedObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2DACD91E749F4D00E3878D /* GLNamedObject.cpp */; };
 		CE2FB91F1E86F60C008459B4 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2FB91D1E86F60C008459B4 /* ResourceManager.cpp */; };
 		CE2FB9221E86F626008459B4 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2FB9201E86F626008459B4 /* WavefrontMeshLoader.cpp */; };
-		CE3D2A231E76AEA900CDAF77 /* LightRenderer.fsh in Resources */ = {isa = PBXBuildFile; fileRef = CE3D2A211E76AEA900CDAF77 /* LightRenderer.fsh */; };
-		CE3D2A241E76AEA900CDAF77 /* LightRenderer.vsh in Resources */ = {isa = PBXBuildFile; fileRef = CE3D2A221E76AEA900CDAF77 /* LightRenderer.vsh */; };
+		CE4154851E8D803400B04673 /* SimplestShader.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE4154841E8D803400B04673 /* SimplestShader.vert */; };
+		CE4154871E8D804900B04673 /* SimplestShader.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE4154861E8D804900B04673 /* SimplestShader.frag */; };
 		CE5090531E7D2F060044672D /* GLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5090511E7D2F060044672D /* GLVertexArray.cpp */; };
 		CE5090561E7D2FC50044672D /* GLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5090541E7D2FC50044672D /* GLBuffer.cpp */; };
 		CE50905C1E7D43D80044672D /* GLBindable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE50905B1E7D43D80044672D /* GLBindable.cpp */; };
@@ -145,6 +146,7 @@
 		CE7ACBD21E83DC8400983A2A /* SceneGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE7ACBD11E83DC8400983A2A /* SceneGLView.mm */; };
 		CE7D1F291E8BA3A300CD026E /* Renderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7D1F271E8BA3A300CD026E /* Renderable.cpp */; };
 		CE7D1F2F1E8BAABD00CD026E /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7D1F2D1E8BAABD00CD026E /* Renderer.cpp */; };
+		CEA303391E8E479B003208CD /* liblary.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEA303381E8E479B003208CD /* liblary.obj */; };
 		CEB191011E8667D600AB2A63 /* ltalloc.cc in Sources */ = {isa = PBXBuildFile; fileRef = CEB190F71E8667D600AB2A63 /* ltalloc.cc */; };
 		CEC747CB1E867A9800D401C3 /* bear-obj.mtl in Resources */ = {isa = PBXBuildFile; fileRef = CEC747C81E867A9800D401C3 /* bear-obj.mtl */; };
 		CEC747CC1E867A9800D401C3 /* bear-obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEC747C91E867A9800D401C3 /* bear-obj.obj */; };
@@ -162,6 +164,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0C45B91E90631D005CCA00 /* Deer.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Deer.obj; sourceTree = "<group>"; };
 		CE14C2121E8CF75F006047E5 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Types.h; path = Other/Types.h; sourceTree = "<group>"; };
 		CE2DAB4E1E7499B700E3878D /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLProgram.cpp; path = OpenGL/GLProgram.cpp; sourceTree = "<group>"; };
 		CE2DAB4F1E7499B700E3878D /* GLProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLProgram.hpp; path = OpenGL/GLProgram.hpp; sourceTree = "<group>"; };
@@ -439,8 +442,8 @@
 		CE2FB91E1E86F60C008459B4 /* ResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ResourceManager.hpp; path = "Resource Management/ResourceManager.hpp"; sourceTree = "<group>"; };
 		CE2FB9201E86F626008459B4 /* WavefrontMeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WavefrontMeshLoader.cpp; path = "Resource Management/WavefrontMeshLoader.cpp"; sourceTree = "<group>"; };
 		CE2FB9211E86F626008459B4 /* WavefrontMeshLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = WavefrontMeshLoader.hpp; path = "Resource Management/WavefrontMeshLoader.hpp"; sourceTree = "<group>"; };
-		CE3D2A211E76AEA900CDAF77 /* LightRenderer.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightRenderer.fsh; sourceTree = "<group>"; };
-		CE3D2A221E76AEA900CDAF77 /* LightRenderer.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightRenderer.vsh; sourceTree = "<group>"; };
+		CE4154841E8D803400B04673 /* SimplestShader.vert */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimplestShader.vert; path = ShaderSources/SimplestShader.vert; sourceTree = "<group>"; };
+		CE4154861E8D804900B04673 /* SimplestShader.frag */ = {isa = PBXFileReference; explicitFileType = sourcecode.glsl; fileEncoding = 4; name = SimplestShader.frag; path = ShaderSources/SimplestShader.frag; sourceTree = "<group>"; };
 		CE5090511E7D2F060044672D /* GLVertexArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLVertexArray.cpp; path = OpenGL/GLVertexArray.cpp; sourceTree = "<group>"; };
 		CE5090521E7D2F060044672D /* GLVertexArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLVertexArray.hpp; path = OpenGL/GLVertexArray.hpp; sourceTree = "<group>"; };
 		CE5090541E7D2FC50044672D /* GLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLBuffer.cpp; path = OpenGL/GLBuffer.cpp; sourceTree = "<group>"; };
@@ -472,6 +475,7 @@
 		CE7D1F2D1E8BAABD00CD026E /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Renderer.cpp; path = Rendering/Renderer.cpp; sourceTree = "<group>"; };
 		CE7D1F2E1E8BAABD00CD026E /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Rendering/Renderer.hpp; sourceTree = "<group>"; };
 		CE7D1F301E8BAB9E00CD026E /* RendererOpaque.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RendererOpaque.h; sourceTree = "<group>"; };
+		CEA303381E8E479B003208CD /* liblary.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = liblary.obj; sourceTree = "<group>"; };
 		CEB190F71E8667D600AB2A63 /* ltalloc.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ltalloc.cc; sourceTree = "<group>"; };
 		CEB190F81E8667D600AB2A63 /* ltalloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ltalloc.h; sourceTree = "<group>"; };
 		CEB190F91E8667D600AB2A63 /* ltalloc.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ltalloc.hpp; sourceTree = "<group>"; };
@@ -878,13 +882,13 @@
 			name = "Resource Management";
 			sourceTree = "<group>";
 		};
-		CE3D2A201E76AEA900CDAF77 /* GL Shaders */ = {
+		CE4154831E8D7FEB00B04673 /* ShaderSources */ = {
 			isa = PBXGroup;
 			children = (
-				CE3D2A211E76AEA900CDAF77 /* LightRenderer.fsh */,
-				CE3D2A221E76AEA900CDAF77 /* LightRenderer.vsh */,
+				CE4154841E8D803400B04673 /* SimplestShader.vert */,
+				CE4154861E8D804900B04673 /* SimplestShader.frag */,
 			);
-			path = "GL Shaders";
+			name = ShaderSources;
 			sourceTree = "<group>";
 		};
 		CE5090571E7D35D60044672D /* Interfaces */ = {
@@ -915,6 +919,7 @@
 		CE522BDE1E4DDF700063470C /* EARenderer */ = {
 			isa = PBXGroup;
 			children = (
+				CE4154831E8D7FEB00B04673 /* ShaderSources */,
 				CE7D1F261E8BA36800CD026E /* Rendering */,
 				CE2DAB541E749A7000E3878D /* ThirdParty */,
 				CE64D5581E8A4A4B000B9AAB /* Containers */,
@@ -923,7 +928,6 @@
 				CE2F60CE1E6F3C090015B2A0 /* Vertices */,
 				CE2DAB4D1E74995400E3878D /* OpenGL */,
 				CE2DACD71E749EE500E3878D /* Other */,
-				CE3D2A201E76AEA900CDAF77 /* GL Shaders */,
 				CE522BDF1E4DDF700063470C /* AppDelegate.h */,
 				CE522BE01E4DDF700063470C /* AppDelegate.m */,
 				CE7D1F2B1E8BA8AE00CD026E /* SceneOpaque.h */,
@@ -983,6 +987,8 @@
 		CEC747C71E867A9800D401C3 /* 3D Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE0C45B91E90631D005CCA00 /* Deer.obj */,
+				CEA303381E8E479B003208CD /* liblary.obj */,
 				CEC747D71E86BC1400D401C3 /* chair.mtl */,
 				CEC747D81E86BC1400D401C3 /* chair.obj */,
 				CEC747C81E867A9800D401C3 /* bear-obj.mtl */,
@@ -1085,10 +1091,11 @@
 				CE2DAC771E749A7000E3878D /* type_mat.inl in Resources */,
 				CE2DACCD1E749A7000E3878D /* spline.inl in Resources */,
 				CE2DACD21E749A7000E3878D /* type_aligned.inl in Resources */,
-				CE3D2A241E76AEA900CDAF77 /* LightRenderer.vsh in Resources */,
 				CE2DAC661E749A7000E3878D /* func_exponential.inl in Resources */,
 				CE2DAC9B1E749A7000E3878D /* ulp.inl in Resources */,
+				CE4154851E8D803400B04673 /* SimplestShader.vert in Resources */,
 				CE2DACA21E749A7000E3878D /* common.inl in Resources */,
+				CEA303391E8E479B003208CD /* liblary.obj in Resources */,
 				CE2DACAD1E749A7000E3878D /* gradient_paint.inl in Resources */,
 				CE2DACB41E749A7000E3878D /* matrix_cross_product.inl in Resources */,
 				CE2DACCC1E749A7000E3878D /* simd_vec4.inl in Resources */,
@@ -1101,7 +1108,6 @@
 				CE2DACA71E749A7000E3878D /* extend.inl in Resources */,
 				CE2DACB21E749A7000E3878D /* io.inl in Resources */,
 				CE2DACA01E749A7000E3878D /* color_space.inl in Resources */,
-				CE3D2A231E76AEA900CDAF77 /* LightRenderer.fsh in Resources */,
 				CE2DAC721E749A7000E3878D /* func_vector_relational.inl in Resources */,
 				CE2DAC671E749A7000E3878D /* func_exponential_simd.inl in Resources */,
 				CE2DAC931E749A7000E3878D /* packing.inl in Resources */,
@@ -1174,6 +1180,7 @@
 				CE2DACC41E749A7000E3878D /* projection.inl in Resources */,
 				CE2DACD51E749A7000E3878D /* vector_query.inl in Resources */,
 				CE2DAC901E749A7000E3878D /* matrix_inverse.inl in Resources */,
+				CE4154871E8D804900B04673 /* SimplestShader.frag in Resources */,
 				CE2DAC9F1E749A7000E3878D /* closest_point.inl in Resources */,
 				CE2DACC11E749A7000E3878D /* orthonormalize.inl in Resources */,
 				CE2DAC871E749A7000E3878D /* type_vec4_simd.inl in Resources */,
@@ -1182,6 +1189,7 @@
 				CE2DAC7F1E749A7000E3878D /* type_mat4x3.inl in Resources */,
 				CE2DACBC1E749A7000E3878D /* norm.inl in Resources */,
 				CE2DACB91E749A7000E3878D /* matrix_query.inl in Resources */,
+				CE0C45BA1E90631D005CCA00 /* Deer.obj in Resources */,
 				CE2DACAE1E749A7000E3878D /* handed_coordinate_space.inl in Resources */,
 				CE2DAC761E749A7000E3878D /* type_half.inl in Resources */,
 				CE522BE91E4DDF700063470C /* Assets.xcassets in Resources */,

@@ -15,7 +15,7 @@ namespace EARenderer {
     mSubMeshIDs(subMeshIDs)
     { }
     
-    const std::vector<ID>& Mesh::getSubMeshIDs() const {
+    const std::vector<ID>& Mesh::subMeshIDs() const {
         return mSubMeshIDs;
     }
     

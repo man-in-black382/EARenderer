@@ -7,6 +7,8 @@
 //
 
 #include "Scene.hpp"
+#include <glm/vec3.hpp>
+#include <glm/gtc/constants.hpp>
 
 namespace EARenderer {
     
@@ -17,27 +19,35 @@ namespace EARenderer {
     mTransforms(1000),
     mCameras(10),
     mLights(10)
-    { }
+    {
+        Camera camera(87.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
+        camera.moveTo(glm::vec3(0, 0, 0.5));
+        camera.lookAt(glm::vec3(0, 0, 0));
+        mMainCameraID = mCameras.insert(camera);
+    }
     
-    PackedLookupTable<Mesh>& Scene::getMeshes() {
+    PackedLookupTable<Mesh>& Scene::meshes() {
         return mMeshes;
     }
     
-    PackedLookupTable<SubMesh>& Scene::getSubMeshes() {
+    PackedLookupTable<SubMesh>& Scene::subMeshes() {
         return mSubMeshes;
     }
     
-    PackedLookupTable<Transform>& Scene::getTransforms() {
+    PackedLookupTable<Transform>& Scene::transforms() {
         return mTransforms;
     }
     
-    PackedLookupTable<Camera>& Scene::getCameras() {
+    PackedLookupTable<Camera>& Scene::cameras() {
         return mCameras;
     }
 
-    PackedLookupTable<Light>& Scene::getLights() {
+    PackedLookupTable<Light>& Scene::lights() {
         return mLights;
     }
     
+    ID Scene::mainCameraID() {
+        return mMainCameraID;
+    }
     
 }
