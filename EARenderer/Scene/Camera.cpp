@@ -111,8 +111,12 @@ namespace EARenderer {
     
     glm::mat4 Camera::viewProjectionMatrix() const {
         glm::mat4 projection = glm::perspective(glm::radians(mFieldOfView), mViewportAspectRatio, mNearClipPlane, mFarClipPlane);
-        glm::mat4 view = glm::lookAt(mPosition, mFront, mWorldUp);
+        glm::mat4 view = glm::lookAt(mPosition, mPosition + mFront, mWorldUp);
         return projection * view;
+    }
+    
+    void Camera::setViewportAspectRatio(float aspectRatio) {
+        mViewportAspectRatio = aspectRatio;
     }
 
 }

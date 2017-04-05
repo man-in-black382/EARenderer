@@ -20,11 +20,7 @@ namespace EARenderer {
     }
     
     void SubMesh::clearStorage() {
-//        mVertices.erase(mVertices.begin() + 100, mVertices.begin() + 1000);
-//        mVertices.erase(mVertices.begin() + 1000);
-//        mVertices.erase(mVertices.begin() + 1050);
-//        mVertices.erase(mVertices.begin() + 10550);
-//        mVertices.erase(mVertices.begin() + 8090);
+        mVertices.clear();
     }
 
 }

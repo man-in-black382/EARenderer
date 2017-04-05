@@ -15,7 +15,7 @@ namespace EARenderer {
     
     class Camera {
     private:
-        const float MaximumPitch = 89.f;
+        const float MaximumPitch = 75.f;
         
         glm::vec3 mFront;
         glm::vec3 mRight;
@@ -53,6 +53,8 @@ namespace EARenderer {
         glm::vec3 right() const;
         glm::vec3 up() const;
         glm::mat4 viewProjectionMatrix() const;
+        
+        void setViewportAspectRatio(float aspectRatio);
     };
     
 }

@@ -20,7 +20,7 @@ namespace EARenderer {
     mCameras(10),
     mLights(10)
     {
-        Camera camera(87.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
+        Camera camera(75.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
         camera.moveTo(glm::vec3(0, 0, 0.5));
         camera.lookAt(glm::vec3(0, 0, 0));
         mMainCameraID = mCameras.insert(camera);
@@ -46,8 +46,12 @@ namespace EARenderer {
         return mLights;
     }
     
-    ID Scene::mainCameraID() {
+    ID Scene::mainCameraID() const {
         return mMainCameraID;
+    }
+    
+    Camera& Scene::mainCamera() const {
+        return mCameras[mMainCameraID];
     }
     
 }

@@ -37,7 +37,8 @@ namespace EARenderer {
         PackedLookupTable<Camera>& cameras();
         PackedLookupTable<Light>& lights();
         
-        ID mainCameraID();
+        ID mainCameraID() const;
+        Camera& mainCamera() const;
     };
     
 }

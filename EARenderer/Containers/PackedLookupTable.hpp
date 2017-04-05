@@ -284,7 +284,7 @@ namespace EARenderer {
         
         iterator end() const
         {
-            return iterator{ mObjectIDs + mCapacity };
+            return iterator{ mObjectIDs + mObjectsCount };
         }
         
         bool empty() const
