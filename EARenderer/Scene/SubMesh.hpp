@@ -14,19 +14,30 @@
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArray.hpp"
-#include "Renderable.hpp"
+#include "Drawable.hpp"
+#include "Types.h"
 
 namespace EARenderer {
 
-    class SubMesh {
+    class SubMesh: public Drawable {
     private:
         std::vector<Vertex1P1N1UV> mVertices;
+        GLVertexArray<Vertex1P1N1UV> *mVAO;
+        ID mMeshID;
         
     public:
+        SubMesh();
         SubMesh(const std::vector<Vertex1P1N1UV>& vertices);
         
         const std::vector<Vertex1P1N1UV>& vertices() const;
-        void clearStorage();
+        const GLVertexArray<Vertex1P1N1UV>* VAO() const;
+        ID meshID() const;
+        
+        void addVertex(const Vertex1P1N1UV& vertex);
+        void setMeshID(ID meshID);
+        void finalizeVertexBuffer();
+        
+        void draw() override;
     };
     
 }

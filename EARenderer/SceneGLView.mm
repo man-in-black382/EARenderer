@@ -36,6 +36,7 @@
     {
         NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion4_1Core,
         NSOpenGLPFAColorSize    , 24                           ,
+        NSOpenGLPFADepthSize    , 24                           ,
         NSOpenGLPFAAlphaSize    , 8                            ,
         NSOpenGLPFADoubleBuffer ,
         NSOpenGLPFAAccelerated  ,
@@ -82,6 +83,8 @@
     
     CGLLockContext(self.openGLContext.CGLContextObj);
     
+    glEnable(GL_DEPTH_TEST);
+    
     if ([self.delegate respondsToSelector:@selector(glViewIsReadyForInitialization:)]) {
         [self.delegate glViewIsReadyForInitialization: self];
     }
@@ -118,37 +121,37 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
 {
     [super reshape];
     
-    EARenderer::Camera& camera = sceneOpaquePtr->scene.mainCamera();
+    EARenderer::Camera& camera = sceneOpaquePtr->scene.camera();
     camera.setViewportAspectRatio(self.bounds.size.width / self.bounds.size.height);
 }
     
 - (void)render
 {
     [self moveCamera];
-    rendererOpaquePtr->renderer.render();
+    rendererOpaquePtr->renderer.render(&sceneOpaquePtr->scene);
 }
 
 - (void)moveCamera
 {
     BOOL isMoveKeyPressed = NO;
     
-    EARenderer::Camera& camera = sceneOpaquePtr->scene.mainCamera();
+    EARenderer::Camera& camera = sceneOpaquePtr->scene.camera();
     glm::vec3 moveDirection = glm::zero<glm::vec3>();
     
     if ([self.pressedKeys containsString:@"w"]) {
-        moveDirection = camera.front();
+        moveDirection += camera.front();
         isMoveKeyPressed = YES;
     }
     if ([self.pressedKeys containsString:@"a"]) {
-        moveDirection = -camera.right();
+        moveDirection -= camera.right();
         isMoveKeyPressed = YES;
     }
     if ([self.pressedKeys containsString:@"s"]) {
-        moveDirection = -camera.front();
+        moveDirection -= camera.front();
         isMoveKeyPressed = YES;
     }
     if ([self.pressedKeys containsString:@"d"]) {
-        moveDirection = camera.right();
+        moveDirection += camera.right();
         isMoveKeyPressed = YES;
     }
     
@@ -156,8 +159,11 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
         return;
     }
     
-    moveDirection = glm::normalize(moveDirection);
-    camera.moveBy(moveDirection * 0.05f);
+    if (glm::length(moveDirection) > 0.01) {
+        moveDirection = glm::normalize(moveDirection);
+    }
+    
+    camera.moveBy(moveDirection * 0.01f);
 }
 
 - (void)keyDown:(NSEvent *)event
@@ -196,7 +202,7 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
     
     NSPoint delta = NSMakePoint(localPoint.x - self.previousMouseLocation.x, localPoint.y - self.previousMouseLocation.y);
     
-    EARenderer::Camera& camera = sceneOpaquePtr->scene.mainCamera();
+    EARenderer::Camera& camera = sceneOpaquePtr->scene.camera();
     camera.rotateBy(delta.y, delta.x);
     
     self.previousMouseLocation = localPoint;

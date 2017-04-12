@@ -687,7 +687,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="665" height="356"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <openGLView useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
+                            <openGLView depthSize="24bit" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
                                 <rect key="frame" x="222" y="0.0" width="443" height="356"/>
                             </openGLView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ptj-ds-eD0">

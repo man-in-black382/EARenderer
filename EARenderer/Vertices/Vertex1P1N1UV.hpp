@@ -9,7 +9,6 @@
 #ifndef Vertex1P1N1UV_hpp
 #define Vertex1P1N1UV_hpp
 
-#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
@@ -17,11 +16,11 @@ namespace EARenderer {
     
     struct Vertex1P1N1UV {
         glm::vec4 mPosition;
-        glm::vec2 mTextureCoords;
+        glm::vec3 mTextureCoords;
         glm::vec3 mNormal;
         
         Vertex1P1N1UV();
-        Vertex1P1N1UV(glm::vec4 position, glm::vec2 texcoords, glm::vec3 normal);
+        Vertex1P1N1UV(glm::vec4 position, glm::vec3 texcoords, glm::vec3 normal);
     };
 
 }

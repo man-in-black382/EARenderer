@@ -26,6 +26,9 @@ namespace EARenderer {
         
         void link();
         void obtainUniforms();
+     
+    protected:
+        GLint uniformLocation(const std::string& name);
         
     public:
         GLProgram(const GLShader* vertexShader, const GLShader* fragmentShader);
@@ -33,12 +36,10 @@ namespace EARenderer {
         GLProgram& operator=(const GLProgram& that) = delete;
         GLProgram(GLProgram&& that) = default;
         GLProgram& operator=(GLProgram&& that) = default;
-        ~GLProgram();
+        virtual ~GLProgram() = 0;
         void swap(GLProgram&);
         
-        void bind() override;
-        
-        GLint uniformLocation(const std::string& name);
+        void bind() const override;
     };
     
     void swap(GLProgram&, GLProgram&);

@@ -9,23 +9,18 @@
 #ifndef Renderer_hpp
 #define Renderer_hpp
 
-#include <map>
-#include <OpenGL/gl.h>
 #include "Scene.hpp"
-#include "GLProgram.hpp"
-#include "GLVertexArray.hpp"
+#include "GLSLProgramFacility.hpp"
 
 namespace EARenderer {
     
     class Renderer {
     private:
-        Scene *mScene;
-        GLProgram *mProgram;
-        std::map<ID, GLVertexArray<Vertex1P1N1UV> *> mVAOs;
+        GLSLProgramFacility *mProgramFacility;
         
     public:
-        Renderer(Scene* scene, GLProgram* program);
-        void render();
+        Renderer(GLSLProgramFacility *facility);
+        void render(Scene *scene);
     };
     
 }

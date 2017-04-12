@@ -44,12 +44,12 @@ namespace EARenderer {
         
         if (!isLinked) {
             GLint infoLength = 0;
-            glGetProgramiv(getName(), GL_INFO_LOG_LENGTH, &infoLength);
+            glGetProgramiv(mName, GL_INFO_LOG_LENGTH, &infoLength);
             
             if (infoLength > 1) {
                 std::vector<char> infoChars(infoLength);
-                glGetShaderInfoLog(getName(), infoLength, nullptr, infoChars.data());
-                std::string infoLog(infoChars.begin(), infoChars.end());
+                glGetShaderInfoLog(mName, infoLength, nullptr, infoChars.data());
+                std::string infoLog(infoChars.data());
                 ASSERT(isLinked, "Failed to link program: " << infoLog);
             }
             
@@ -64,8 +64,9 @@ namespace EARenderer {
         for (GLuint index = 0; index < count; index++) {
             std::vector<GLchar> uniformNameChars(128);
             glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, nullptr, nullptr, uniformNameChars.data());
-            std::string name(uniformNameChars.begin(), uniformNameChars.end());
-            mUniforms[name] = glGetUniformLocation(mName, &name[0]);
+            std::string name(uniformNameChars.data());
+            // Increment by 1 to use 0 as a non-used uniform indicator
+            mUniforms[name] = glGetUniformLocation(mName, &name[0]) + 1;
         }
     }
     
@@ -84,14 +85,15 @@ namespace EARenderer {
     
 #pragma mark - Bindable
     
-    void GLProgram::bind() {
+    void GLProgram::bind() const {
         glUseProgram(mName);
     }
     
 #pragma mark - Public
     
     GLint GLProgram::uniformLocation(const std::string& name) {
-        return mUniforms[name];
+        // Decrement location to return -1 for non-used uniform
+        return mUniforms[name] - 1;
     }
     
 }

@@ -23,10 +23,9 @@ namespace EARenderer {
         PackedLookupTable<Mesh> mMeshes;
         PackedLookupTable<SubMesh> mSubMeshes;
         PackedLookupTable<Transform> mTransforms;
-        PackedLookupTable<Camera> mCameras;
         PackedLookupTable<Light> mLights;
         
-        ID mMainCameraID;
+        Camera mCamera;
         
     public:
         Scene();
@@ -37,8 +36,8 @@ namespace EARenderer {
         PackedLookupTable<Camera>& cameras();
         PackedLookupTable<Light>& lights();
         
-        ID mainCameraID() const;
-        Camera& mainCamera() const;
+        void setCamera(Camera& camera);
+        Camera& camera();
     };
     
 }

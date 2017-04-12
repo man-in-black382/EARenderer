@@ -17,7 +17,7 @@ namespace EARenderer {
     template <typename Vertex>
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
-        void bind() override {
+        void bind() const override {
             glBindBuffer(GL_ARRAY_BUFFER, GLBuffer<Vertex>::mName);
         }
         

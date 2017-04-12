@@ -10,7 +10,7 @@
 
 namespace EARenderer {
     
-    void GLElementArrayBuffer::bind() {
+    void GLElementArrayBuffer::bind() const {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mName);
     }
     

@@ -12,31 +12,38 @@
 
 namespace EARenderer {
     
-    Renderer::Renderer(Scene* scene, GLProgram* program)
+    Renderer::Renderer(GLSLProgramFacility *facility)
     :
-    mScene(scene),
-    mProgram(program)
-    {
-        auto& subMeshTable = mScene->subMeshes();
-        for (ID subMeshID : subMeshTable) {
-            auto& subMesh = subMeshTable[subMeshID];
-            auto* VAO = new GLVertexArray<Vertex1P1N1UV>();
-            VAO->initialize(subMesh.vertices(), GLVertexArrayLayoutDescription({ 4 * sizeof(GLfloat), 2 * sizeof(GLfloat), 3 * sizeof(GLfloat) }));
-            mVAOs[subMeshID] = VAO;
-        }
-    }
-    
-    void Renderer::render() {
+    mProgramFacility(facility)
+    { }
+
+    void Renderer::render(Scene *scene) {
         glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        for (ID subMeshID : mScene->subMeshes()) {
-            auto* VAO = mVAOs[subMeshID];
-            VAO->bind();
-            mProgram->bind();
-            auto& camera = mScene->cameras()[mScene->mainCameraID()];
-            glUniformMatrix4fv(mProgram->uniformLocation("u_mvp"), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
-            glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(mScene->subMeshes()[subMeshID].vertices().size()));
+        auto *blinnPhong = mProgramFacility->blinnPhongProgram();
+        blinnPhong->bind();
+        
+        for (ID subMeshID : scene->subMeshes()) {
+            SubMesh& subMesh = scene->subMeshes()[subMeshID];
+            ID meshID = subMesh.meshID();
+            ID transformID = scene->meshes()[meshID].transformID();
+            Transform& transform = scene->transforms()[transformID];
+            
+            blinnPhong->setModelMatrix(transform.modelMatrix());
+            blinnPhong->setNormalMatrix(transform.modelMatrix());
+            blinnPhong->setViewProjectionMatrix(scene->camera().viewProjectionMatrix());
+            
+            ID lightID = *(scene->lights().begin());
+            Light& light = scene->lights()[lightID];
+            
+            blinnPhong->setLightPosition(light.position());
+            blinnPhong->setLightColor(light.color());
+            
+            blinnPhong->setCameraPosition(scene->camera().position());
+            blinnPhong->setMaterial({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }, 16);
+            
+            subMesh.draw();
         }
     }
     

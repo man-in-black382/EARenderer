@@ -25,7 +25,8 @@ namespace EARenderer {
     mRight(glm::vec3(1, 0, 0)),
     mUp(glm::vec3(0, 1, 0)),
     mPitch(0),
-    mYaw(-90)
+    mYaw(-90.f),
+    mMaximumPitch(85.f)
     { }
     
     Camera::Camera(float fieldOfView,
@@ -34,12 +35,13 @@ namespace EARenderer {
                    float viewportAspectRatio,
                    glm::vec3 worldUp)
     :
-    mFieldOfView(fieldOfView),
-    mNearClipPlane(zNear),
-    mFarClipPlane(zFar),
-    mViewportAspectRatio(viewportAspectRatio),
-    mWorldUp(worldUp)
+    Camera()
     {
+        mFieldOfView = fieldOfView;
+        mNearClipPlane = zNear;
+        mFarClipPlane = zFar;
+        mViewportAspectRatio = viewportAspectRatio;
+        mWorldUp = worldUp;
         updateVectors();
     }
     
@@ -52,15 +54,15 @@ namespace EARenderer {
         mUp = glm::normalize(glm::cross(mRight, mFront));
     }
     
-    void Camera::moveTo(glm::vec3 position) {
+    void Camera::moveTo(const glm::vec3& position) {
         mPosition = position;
     }
     
-    void Camera::moveBy(glm::vec3 translation) {
+    void Camera::moveBy(const glm::vec3& translation) {
         mPosition += translation;
     }
     
-    void Camera::lookAt(glm::vec3 point) {
+    void Camera::lookAt(const glm::vec3& point) {
         glm::vec3 direction = point - mPosition;
         mPitch = glm::degrees(-asin(direction.y));
         mYaw = glm::degrees(-atan2(-direction.x, -direction.z)) - 90;
@@ -79,11 +81,11 @@ namespace EARenderer {
         mPitch += pitch;
         mYaw += yaw;
         
-        if (mPitch > MaximumPitch) {
-            mPitch = MaximumPitch;
+        if (mPitch > mMaximumPitch) {
+            mPitch = mMaximumPitch;
         }
-        if (mPitch < -MaximumPitch) {
-            mPitch = -MaximumPitch;
+        if (mPitch < -mMaximumPitch) {
+            mPitch = -mMaximumPitch;
         }
         
         updateVectors();
@@ -93,19 +95,19 @@ namespace EARenderer {
         
     }
     
-    glm::vec3 Camera::position() const {
+    const glm::vec3& Camera::position() const {
         return mPosition;
     }
     
-    glm::vec3 Camera::front() const {
+    const glm::vec3& Camera::front() const {
         return mFront;
     }
     
-    glm::vec3 Camera::right() const {
+    const glm::vec3& Camera::right() const {
         return mRight;
     }
     
-    glm::vec3 Camera::up() const {
+    const glm::vec3& Camera::up() const {
         return mRight;
     }
     

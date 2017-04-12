@@ -10,6 +10,8 @@
 #define Mesh_hpp
 
 #include <vector>
+
+#include "Geometry.hpp"
 #include "Types.h"
 
 namespace EARenderer {
@@ -17,10 +19,13 @@ namespace EARenderer {
     class Mesh {
     private:
         std::vector<ID> mSubMeshIDs;
+        ID mTransformID;
         
     public:
-        Mesh(const std::vector<ID>& subMeshIDs);
+        void setSubMeshIDs(const std::vector<ID>& subMeshIDs);
         const std::vector<ID>& subMeshIDs() const;
+        void setTransformID(ID transformID);
+        const ID transformID() const;
     };
 
 }

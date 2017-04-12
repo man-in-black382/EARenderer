@@ -2,7 +2,7 @@
 //  Renderable.hpp
 //  EARenderer
 //
-//  Created by Pavlo Muratov on 29.03.17.
+//  Created by Pavlo Muratov on 12.04.17.
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
@@ -11,7 +11,7 @@
 
 namespace EARenderer {
     
-    class Renderable {
+    class Drawable {
         virtual void draw() = 0;
     };
     

@@ -8,68 +8,87 @@
 
 #include "WavefrontMeshLoader.hpp"
 
-#define TINYOBJ_LOADER_OPT_IMPLEMENTATION // define this in only *one* .cc
-#include "tinyobj_loader_opt.h"
+#include <fstream>
 
 namespace EARenderer {
     
-    const char *mmap_file(size_t *len, const char* filename)
-    {
-        (*len) = 0;
-#ifdef _WIN64
-        HANDLE file = CreateFileA(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
-        assert(file != INVALID_HANDLE_VALUE);
+    void WavefrontMeshLoader::vertexCallback(void *userData, float x, float y, float z, float w) {
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
-        HANDLE fileMapping = CreateFileMapping(file, NULL, PAGE_READONLY, 0, 0, NULL);
-        assert(fileMapping != INVALID_HANDLE_VALUE);
+        thisPtr->mBoundingBox->min.x = std::min(thisPtr->mBoundingBox->min.x, x);
+        thisPtr->mBoundingBox->min.y = std::min(thisPtr->mBoundingBox->min.y, y);
+        thisPtr->mBoundingBox->min.z = std::min(thisPtr->mBoundingBox->min.z, z);
         
-        LPVOID fileMapView = MapViewOfFile(fileMapping, FILE_MAP_READ, 0, 0, 0);
-        auto fileMapViewChar = (const char*)fileMapView;
-        assert(fileMapView != NULL);
-#else
+        thisPtr->mBoundingBox->max.x = std::max(thisPtr->mBoundingBox->max.x, x);
+        thisPtr->mBoundingBox->max.y = std::max(thisPtr->mBoundingBox->max.y, y);
+        thisPtr->mBoundingBox->max.z = std::max(thisPtr->mBoundingBox->max.z, z);
         
-        FILE* f = fopen(filename, "r");
-        fseek(f, 0, SEEK_END);
-        long fileSize = ftell(f);
-        fclose(f);
+        thisPtr->mVertices.emplace_back(x, y, z, w);
+    }
+    
+    void WavefrontMeshLoader::normalCallback(void *userData, float x, float y, float z) {
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        thisPtr->mNormals.emplace_back(x, y, z);
+    }
+    
+    void WavefrontMeshLoader::texcoordCallback(void *userData, float x, float y, float z) {
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        thisPtr->mTexCoords.emplace_back(x, y ,z);
+    }
+    
+    void WavefrontMeshLoader::indexCallback(void *userData, tinyobj::index_t *indices, int numIndices) {
+        tinyobj::index_t *idxs = reinterpret_cast<tinyobj::index_t *>(indices);
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
-        struct stat sb;
-        char *p;
-        int fd;
+        tinyobj::index_t i0 = idxs[0];// f[0];
+        tinyobj::index_t i1 = { -1, -1, -1 };
+        tinyobj::index_t i2 = idxs[1]; //f[1];
         
-        fd = open (filename, O_RDONLY);
-        if (fd == -1) {
-            perror ("open");
-            return NULL;
+        for (size_t k = 2; k < numIndices; k++) {
+            i1 = i2;
+            i2 = idxs[k];
+            
+            tinyobj::index_t indices[3] = { i0, i1, i2 };
+            thisPtr->processTriangle(indices);
         }
-        
-        if (fstat (fd, &sb) == -1) {
-            perror ("fstat");
-            return NULL;
+    }
+
+    void WavefrontMeshLoader::groupCallback(void *userData, const char **names, int numNames) {
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
+        if (lastSubMesh) {
+            lastSubMesh->finalizeVertexBuffer();
         }
-        
-        if (!S_ISREG (sb.st_mode)) {
-            fprintf (stderr, "%s is not a file\n", "lineitem.tbl");
-            return NULL;
+        thisPtr->mSubMeshes->emplace_back();
+    }
+    
+    void WavefrontMeshLoader::objectCallback(void *userData, const char *name) {
+//        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+//        thisPtr->mSubMeshes->emplace_back();
+    }
+    
+    void WavefrontMeshLoader::processTriangle(tinyobj::index_t (&indices)[3]) {
+        for (size_t i = 0; i < 3; i++) {
+            size_t fixedVIdx = fixIndex(indices[i].vertex_index, static_cast<int>(mVertices.size()));
+            size_t fixedNIdx = fixIndex(indices[i].normal_index, static_cast<int>(mNormals.size()));
+            size_t fixedVTIdx = fixIndex(indices[i].texcoord_index, static_cast<int>(mTexCoords.size()));
+            
+            if (!indices[i].texcoord_index && !indices[i].normal_index) {
+                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], glm::vec3(), glm::vec3()));
+            } else if (!indices[i].texcoord_index) {
+                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], glm::vec3(), mNormals[fixedNIdx]));
+            } else if (!indices[i].normal_index) {
+                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], glm::vec3()));
+            } else {
+                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], mNormals[fixedNIdx]));
+            }
         }
-        
-        p = (char*)mmap (0, fileSize, PROT_READ, MAP_SHARED, fd, 0);
-        
-        if (p == MAP_FAILED) {
-            perror ("mmap");
-            return NULL;
-        }
-        
-        if (close (fd) == -1) {
-            perror ("close");
-            return NULL;
-        }
-        
-        (*len) = fileSize;
-        
-        return p;
-        
-#endif
+    }
+    
+    inline int WavefrontMeshLoader::fixIndex(int idx, int n) {
+        if (idx > 0) return idx - 1;
+        if (idx == 0) return 0;
+        return n + idx;  // negative value = relative
     }
     
     WavefrontMeshLoader::WavefrontMeshLoader(const std::string& meshPath)
@@ -77,85 +96,39 @@ namespace EARenderer {
     mMeshPath(meshPath)
     { }
     
-    std::vector<SubMesh> WavefrontMeshLoader::load() {
+    void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, Box &boundingBox) {
+        mSubMeshes = &subMeshes;
+        mSubMeshes->emplace_back();
+        mBoundingBox = &boundingBox;
+        mBoundingBox->min = glm::vec3(std::numeric_limits<float>::max());
+        mBoundingBox->max = glm::vec3(-std::numeric_limits<float>::max());
         
-        std::vector<SubMesh> subMeshes;
+        tinyobj::callback_t cb;
+        cb.vertex_cb = vertexCallback;
+        cb.normal_cb = normalCallback;
+        cb.texcoord_cb = texcoordCallback;
+        cb.index_cb = indexCallback;
+        cb.group_cb = groupCallback;
+        cb.object_cb = objectCallback;
         
-        tinyobj_opt::attrib_t attrib;
-        std::vector<tinyobj_opt::shape_t> shapes;
-        std::vector<tinyobj_opt::material_t> materials;
+        std::string err;
+        std::ifstream ifs(mMeshPath.c_str());
         
-        size_t data_len = 0;
-        const char* data = mmap_file(&data_len, mMeshPath.c_str());
-        if (!data) {
-            std::cerr << "Failed to read .obj file" << std::endl;
+        if (ifs.fail()) {
+            std::cerr << "file not found." << std::endl;
+            return;
         }
         
-        tinyobj_opt::LoadOption option;
-        option.req_num_threads = 8;
-        option.verbose = true;
-        bool ret = parseObj(&attrib, &shapes, &materials, data, data_len, option);
+        bool ret = tinyobj::LoadObjWithCallback(ifs, cb, this, nullptr, &err);
+        mSubMeshes->back().finalizeVertexBuffer();
+        
+        if (!err.empty()) {
+            std::cerr << err << std::endl;
+        }
         
         if (!ret) {
             std::cerr << "Failed to parse .obj" << std::endl;
-        } 
-        
-        // bmin[0] = bmin[1] = bmin[2] = std::numeric_limits<float>::max();
-        // bmax[0] = bmax[1] = bmax[2] = -std::numeric_limits<float>::max();
-        
-        size_t indicesPerFaceLine = 3;
-        for (size_t s = 0; s < shapes.size(); s++) {
-            std::vector<Vertex1P1N1UV> vertices;
-
-            size_t toValue = (shapes[s].face_offset + shapes[s].length) * indicesPerFaceLine;
-            for (size_t i = shapes[s].face_offset * indicesPerFaceLine; i < toValue; i++) {
-                tinyobj_opt::index_t idx = attrib.indices[s + i];
-                
-                glm::vec4 position;
-                position.w = 1.0;
-                
-                for (int k = 0; k < 3; k++) {
-                    int vi = idx.vertex_index;
-                    assert(vi >= 0);
-                    
-                    position[k] = attrib.vertices[3 * vi + k];
-                    
-                    //    bmin[k] = std::min(v[0][k], bmin[k]);
-                    //  bmin[k] = std::min(v[1][k], bmin[k]);
-                    //  bmin[k] = std::min(v[2][k], bmin[k]);
-                    //  bmax[k] = std::max(v[0][k], bmax[k]);
-                    //  bmax[k] = std::max(v[1][k], bmax[k]);
-                    // bmax[k] = std::max(v[2][k], bmax[k]);
-                }
-                                
-                glm::vec3 normal;
-                
-                if (attrib.normals.size() > 0) {
-                    int nf = idx.normal_index;
-                    if (nf >= 0) {
-                        assert(3 * nf + 2 < attrib.normals.size());
-                        for (int k = 0; k < 3; k++) {
-                            normal[k] = attrib.normals[3 * nf + k];
-                        }
-                    }
-                }
-                
-                glm::vec2 texcoords;
-                
-                if (attrib.texcoords.size() > 0) {
-                    int tf = idx.texcoord_index;
-                    assert(tf >= 0);
-                    
-                    for (int k = 0; k < 2; k++) {
-                        texcoords[k] = attrib.texcoords[2 * tf + k];
-                    }
-                }
-                
-                vertices.emplace_back(position, texcoords, normal);
-            }
-            
-            subMeshes.emplace_back(vertices);
+            return;
         }
-        return subMeshes;
     }
 }

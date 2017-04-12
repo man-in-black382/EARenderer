@@ -10,10 +10,10 @@
 #define RendererOpaque_h
 
 #include "Renderer.hpp"
-#include "Scene.hpp"
+#include "GLSLProgramFacility.hpp"
 
 struct RendererOpaque {
-    RendererOpaque(EARenderer::Scene *scene, EARenderer::GLProgram *program) : renderer(scene, program) { }
+    RendererOpaque(EARenderer::GLSLProgramFacility *facility) : renderer(facility) { }
     EARenderer::Renderer renderer;
 };
 

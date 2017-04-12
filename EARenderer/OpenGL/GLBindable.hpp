@@ -15,7 +15,7 @@ namespace EARenderer {
     
     class GLBindable {
     public:
-        virtual void bind() = 0;
+        virtual void bind() const = 0;
     };
     
 }

@@ -17,14 +17,8 @@ namespace EARenderer {
     mMeshes(1000),
     mSubMeshes(1000),
     mTransforms(1000),
-    mCameras(10),
     mLights(10)
-    {
-        Camera camera(75.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
-        camera.moveTo(glm::vec3(0, 0, 0.5));
-        camera.lookAt(glm::vec3(0, 0, 0));
-        mMainCameraID = mCameras.insert(camera);
-    }
+    { }
     
     PackedLookupTable<Mesh>& Scene::meshes() {
         return mMeshes;
@@ -37,21 +31,17 @@ namespace EARenderer {
     PackedLookupTable<Transform>& Scene::transforms() {
         return mTransforms;
     }
-    
-    PackedLookupTable<Camera>& Scene::cameras() {
-        return mCameras;
-    }
 
     PackedLookupTable<Light>& Scene::lights() {
         return mLights;
     }
-    
-    ID Scene::mainCameraID() const {
-        return mMainCameraID;
+
+    void Scene::setCamera(Camera& camera) {
+        mCamera = camera;
     }
     
-    Camera& Scene::mainCamera() const {
-        return mCameras[mMainCameraID];
+    Camera& Scene::camera() {
+        return mCamera;
     }
     
 }

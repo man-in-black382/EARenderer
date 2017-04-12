@@ -46,7 +46,7 @@ namespace EARenderer {
         GLVertexArray& operator=(const GLVertexArray& rhs) = delete;
         GLVertexArray& operator=(GLVertexArray&& rhs) = default;
         
-        void bind() override {
+        void bind() const override {
             glBindVertexArray(mName);
         }
         
