@@ -26,6 +26,7 @@ namespace EARenderer {
     {
         link();
         obtainUniforms();
+        obtainAvailableTextureUnits();
     }
     
     GLProgram::~GLProgram() {
@@ -70,6 +71,19 @@ namespace EARenderer {
         }
     }
     
+    void GLProgram::obtainAvailableTextureUnits() {
+        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mAvailableTextureUnits);
+    }
+    
+    void GLProgram::setUniformTexture(const std::string& uniformName, const GLBindable& texture) {
+        GLint location = uniformLocation(uniformName);
+        ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+        glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
+        glUniform1i(location, mFreeTextureUnitIndex);
+        mFreeTextureUnitIndex++;
+        texture.bind();
+    }
+    
 #pragma mark - Swap
     
     void GLProgram::swap(GLProgram& that) {
@@ -89,11 +103,25 @@ namespace EARenderer {
         glUseProgram(mName);
     }
     
-#pragma mark - Public
+#pragma mark - Protected
+    
+    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture2D& texture) {
+        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
+    }
+    
+    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTextureCubemap& texture) {
+        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
+    }
     
     GLint GLProgram::uniformLocation(const std::string& name) {
         // Decrement location to return -1 for non-used uniform
         return mUniforms[name] - 1;
+    }
+    
+#pragma mark - Public
+    
+    void GLProgram::flushState() {
+        mFreeTextureUnitIndex = 0;
     }
     
 }

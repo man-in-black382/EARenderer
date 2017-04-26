@@ -10,7 +10,7 @@
 #define GLElementArrayBuffer_hpp
 
 #include <OpenGL/gltypes.h>
-#include "GLBuffer.hpp"
+#include "GLBuffer.inl"
 
 namespace EARenderer {
     

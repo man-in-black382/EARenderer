@@ -13,7 +13,7 @@
 
 #include "Vertex1P.hpp"
 #include "SubMesh.hpp"
-#include "GLVertexArray.hpp"
+#include "GLVertexArray.inl"
 #include "Drawable.hpp"
 
 namespace EARenderer {
@@ -26,7 +26,10 @@ namespace EARenderer {
     public:
         MeshNormalVisualizer(SubMesh& subMesh);
         MeshNormalVisualizer(MeshNormalVisualizer&& that);
+        MeshNormalVisualizer(const MeshNormalVisualizer& that) = delete;
         MeshNormalVisualizer& operator=(MeshNormalVisualizer&& rhs);
+        MeshNormalVisualizer& operator=(const MeshNormalVisualizer& rhs) = delete;
+        ~MeshNormalVisualizer();
         
         const GLVertexArray<Vertex1P> * VAO() const;
         

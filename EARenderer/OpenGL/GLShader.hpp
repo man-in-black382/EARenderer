@@ -15,8 +15,6 @@
 
 namespace EARenderer {
     
-    enum class GLShaderType { vertex, fragment };
-    
     class GLShader: public GLNamedObject {
     private:
         std::string mSource;

@@ -18,7 +18,7 @@ struct Material {
 };
 
 uniform Material uMaterial;
-
+ 
 vec3 ambientColor() {
     return uMaterial.ambientReflectances * uLightColor;
 }
@@ -38,12 +38,10 @@ void main() {
     vec3 L = normalize(oToLight);
     vec3 V = normalize(oToCamera);
     vec3 N = normalize(oNormal);
-
+    
     vec3 ambientColor = ambientColor();
     vec3 diffuseColor = diffuseColor(N, L);
     vec3 specularColor = specularColor(N, L, V);
     
-    vec3 resultingColor = (ambientColor + diffuseColor + specularColor);// * texture(uMaterial.diffuseTexture, oTexCoords).rgb;
-    
-    outputFragColor = vec4(resultingColor, 1.0);    
+    outputFragColor = vec4((ambientColor + diffuseColor + specularColor), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st);
 }

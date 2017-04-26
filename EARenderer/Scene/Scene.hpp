@@ -15,6 +15,8 @@
 #include "Transform.hpp"
 #include "Camera.hpp"
 #include "Light.hpp"
+#include "Material.hpp"
+#include "Skybox.hpp"
 
 namespace EARenderer {
     
@@ -24,8 +26,10 @@ namespace EARenderer {
         PackedLookupTable<SubMesh> mSubMeshes;
         PackedLookupTable<Transform> mTransforms;
         PackedLookupTable<Light> mLights;
+        PackedLookupTable<Material> mMaterials;
         
-        Camera mCamera;
+        Camera *mCamera;
+        Skybox *mSkybox;
         
     public:
         Scene();
@@ -35,9 +39,13 @@ namespace EARenderer {
         PackedLookupTable<Transform>& transforms();
         PackedLookupTable<Camera>& cameras();
         PackedLookupTable<Light>& lights();
+        PackedLookupTable<Material>& materials();
         
-        void setCamera(Camera& camera);
-        Camera& camera();
+        void setCamera(Camera* camera);
+        Camera* camera() const;
+        
+        void setSkybox(Skybox* skybox);
+        Skybox* skybox() const;
     };
     
 }

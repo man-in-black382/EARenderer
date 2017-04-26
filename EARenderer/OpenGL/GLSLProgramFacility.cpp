@@ -35,4 +35,13 @@ namespace EARenderer {
         return mNormalVisualizationProgram;
     }
     
+    GLSkyboxProgram* GLSLProgramFacility::skyboxProgram() {
+        if (!mSkyboxProgram) {
+            mSkyboxVertShader = new EARenderer::GLShader(std::string(mShaderSrcDirectory).append("Skybox.vert"), GL_VERTEX_SHADER);
+            mSkyboxFragShader = new EARenderer::GLShader(std::string(mShaderSrcDirectory).append("Skybox.frag"), GL_FRAGMENT_SHADER);
+            mSkyboxProgram = new GLSkyboxProgram(mSkyboxVertShader, mSkyboxFragShader);
+        }
+        return mSkyboxProgram;
+    }
+    
 }

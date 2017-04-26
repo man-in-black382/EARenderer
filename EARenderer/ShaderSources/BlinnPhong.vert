@@ -19,10 +19,11 @@ out vec3 oTexCoords;
 void main() {
     vec4 worldPosition = uModelMat * iPosition;
     
+    // Flip texture Y coordinate
+    oTexCoords = vec3(iTexCoords.s, 1.0 - iTexCoords.t, iTexCoords.r);
     oNormal = normalize(uNormalMat * vec4(iNormal, 0.0)).xyz;
     oToLight = normalize(uLightPosition - worldPosition.xyz);
     oToCamera = normalize(uCameraPosition - worldPosition.xyz);
-    oTexCoords = iTexCoords;
     
     gl_Position = uViewProjectionMat * worldPosition;
 }

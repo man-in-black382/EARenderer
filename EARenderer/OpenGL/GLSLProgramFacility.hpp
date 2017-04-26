@@ -11,6 +11,7 @@
 
 #include "GLBlinnPhongProgram.hpp"
 #include "GLNormalVisualizationProgram.hpp"
+#include "GLSkyboxProgram.hpp"
 
 namespace EARenderer {
     
@@ -26,11 +27,16 @@ namespace EARenderer {
         GLShader *mNormalVisualizationFragShader;
         GLNormalVisualizationProgram *mNormalVisualizationProgram;
         
+        GLShader *mSkyboxVertShader;
+        GLShader *mSkyboxFragShader;
+        GLSkyboxProgram *mSkyboxProgram;
+        
     public:
         GLSLProgramFacility(const std::string& shaderSrcDirectory);
         
         GLBlinnPhongProgram* blinnPhongProgram();
         GLNormalVisualizationProgram* normalVisualizationProgram();
+        GLSkyboxProgram* skyboxProgram();
     };
     
 }

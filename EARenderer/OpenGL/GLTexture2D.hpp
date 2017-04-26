@@ -14,8 +14,15 @@
 
 namespace EARenderer {
     
-    class GLTexture2D {
+    class GLTexture2D: public GLNamedObject, public GLBindable {
+    public:
+        using GLNamedObject::GLNamedObject;
+        GLTexture2D(const std::string& fileName);
+        GLTexture2D(GLTexture2D&& that) = default;
+        GLTexture2D& operator=(GLTexture2D&& rhs) = default;
+        ~GLTexture2D() override;
         
+        void bind() const override;
     };
     
 }

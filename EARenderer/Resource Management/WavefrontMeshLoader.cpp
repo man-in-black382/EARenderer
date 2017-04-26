@@ -96,7 +96,7 @@ namespace EARenderer {
     mMeshPath(meshPath)
     { }
     
-    void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, Box &boundingBox) {
+    void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, Box& boundingBox) {
         mSubMeshes = &subMeshes;
         mSubMeshes->emplace_back();
         mBoundingBox = &boundingBox;

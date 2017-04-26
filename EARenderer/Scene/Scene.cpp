@@ -17,7 +17,8 @@ namespace EARenderer {
     mMeshes(1000),
     mSubMeshes(1000),
     mTransforms(1000),
-    mLights(10)
+    mLights(10),
+    mMaterials(1000)
     { }
     
     PackedLookupTable<Mesh>& Scene::meshes() {
@@ -36,12 +37,24 @@ namespace EARenderer {
         return mLights;
     }
 
-    void Scene::setCamera(Camera& camera) {
+    PackedLookupTable<Material>& Scene::materials() {
+        return mMaterials;
+    }
+    
+    void Scene::setCamera(Camera* camera) {
         mCamera = camera;
     }
     
-    Camera& Scene::camera() {
+    Camera* Scene::camera() const {
         return mCamera;
+    }
+    
+    void Scene::setSkybox(Skybox* skybox) {
+        mSkybox = skybox;
+    }
+    
+    Skybox* Scene::skybox() const {
+        return mSkybox;
     }
     
 }

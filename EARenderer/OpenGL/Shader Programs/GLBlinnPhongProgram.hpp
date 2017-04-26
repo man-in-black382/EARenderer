@@ -10,17 +10,12 @@
 #define GLBlinnPhongProgram_hpp
 
 #include "GLProgram.hpp"
+#include "Material.hpp"
+
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
-
-//    uniform mat4 uViewProjectionMat;
-//    uniform mat4 uModelMat;
-//    uniform mat4 uNormalMat;
-//    
-//    uniform vec3 uLightPosition;
-//    uniform vec3 uCameraPosition;
     
     class GLBlinnPhongProgram: public GLProgram {
     public:
@@ -32,10 +27,7 @@ namespace EARenderer {
         void setModelMatrix(const glm::mat4& matrix);
         void setNormalMatrix(const glm::mat4& matrix);
         void setLightColor(const glm::vec3& color);
-        void setMaterial(const glm::vec3& ambientReflectances,
-                         const glm::vec3& diffuseReflectances,
-                         const glm::vec3& specularReflectances,
-                         float specularExponent);
+        void setMaterial(const Material& material);
     };
     
 }

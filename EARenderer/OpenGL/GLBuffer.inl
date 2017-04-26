@@ -19,19 +19,19 @@ namespace EARenderer {
     template <typename DataType>
     class GLBuffer: public GLNamedObject, public GLBindable {
     public:
+        using GLNamedObject::GLNamedObject;
+        
         GLBuffer() {
             GLuint name = 0;
             glGenBuffers(1, &name);
             mName = name;
         }
         
-        ~GLBuffer() {
+        ~GLBuffer() override {
             glDeleteBuffers(1, &mName);
         }
         
-        GLBuffer(const GLBuffer& that) = delete;
         GLBuffer(GLBuffer&& that) = default;
-        GLBuffer& operator=(const GLBuffer& rhs) = delete;
         GLBuffer& operator=(GLBuffer&& rhs) = default;
         
         virtual void initialize(const std::vector<DataType>& data) = 0;

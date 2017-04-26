@@ -40,6 +40,10 @@ namespace EARenderer {
         return *this;
     }
     
+    MeshNormalVisualizer::~MeshNormalVisualizer() {
+        delete mVAO;
+    }
+    
     const GLVertexArray<Vertex1P> * MeshNormalVisualizer::VAO() const {
         return mVAO;
     }

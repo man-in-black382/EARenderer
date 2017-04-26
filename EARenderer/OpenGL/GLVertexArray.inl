@@ -14,7 +14,7 @@
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
-#include "GLVertexArrayBuffer.hpp"
+#include "GLVertexArrayBuffer.inl"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArrayLayoutDescription.hpp"
 
@@ -24,10 +24,10 @@ namespace EARenderer {
     class GLVertexArray: public GLNamedObject, public GLBindable {
     private:
         GLVertexArrayBuffer<Vertex> mVertexBuffer;
-//        GLElementArrayBuffer mIndexBuffer;
-//        GLushort mElementsCount;
         
     public:
+        using GLNamedObject::GLNamedObject;
+        
         GLVertexArray() {
             GLuint name = 0;
             glGenVertexArrays(1, &name);
@@ -41,9 +41,9 @@ namespace EARenderer {
             glDeleteVertexArrays(1, &mName);
         }
         
-        GLVertexArray(const GLVertexArray& that) = delete;
+//        GLVertexArray(const GLVertexArray& that) = delete;
         GLVertexArray(GLVertexArray&& that) = default;
-        GLVertexArray& operator=(const GLVertexArray& rhs) = delete;
+//        GLVertexArray& operator=(const GLVertexArray& rhs) = delete;
         GLVertexArray& operator=(GLVertexArray&& rhs) = default;
         
         void bind() const override {

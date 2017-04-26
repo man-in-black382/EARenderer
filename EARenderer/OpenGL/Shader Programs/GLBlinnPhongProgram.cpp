@@ -36,15 +36,14 @@ namespace EARenderer {
         glUniform3fv(uniformLocation("uLightColor"), 1, glm::value_ptr(color));
     }
     
-    void GLBlinnPhongProgram::setMaterial(const glm::vec3 &ambientReflectances,
-                                          const glm::vec3 &diffuseReflectances,
-                                          const glm::vec3 &specularReflectances,
-                                          float specularExponent)
+    void GLBlinnPhongProgram::setMaterial(const Material& material)
     {
-        glUniform3fv(uniformLocation("uMaterial.ambientReflectances"), 1, glm::value_ptr(ambientReflectances));
-        glUniform3fv(uniformLocation("uMaterial.diffuseReflectances"), 1, glm::value_ptr(diffuseReflectances));
-        glUniform3fv(uniformLocation("uMaterial.specularReflectances"), 1, glm::value_ptr(specularReflectances));
-        glUniform1f(uniformLocation("uMaterial.specularExponent"), specularExponent);
+        glUniform3fv(uniformLocation("uMaterial.ambientReflectances"), 1, glm::value_ptr(material.ambientReflectances()));
+        glUniform3fv(uniformLocation("uMaterial.diffuseReflectances"), 1, glm::value_ptr(material.diffuseReflectances()));
+        glUniform3fv(uniformLocation("uMaterial.specularReflectances"), 1, glm::value_ptr(material.specularReflectances()));
+        glUniform1f(uniformLocation("uMaterial.specularExponent"), material.specularExponent());
+        
+        setUniformTexture("uMaterial.diffuseTexture", material.skin());
     }
     
 }

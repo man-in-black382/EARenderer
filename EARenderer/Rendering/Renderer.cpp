@@ -15,14 +15,18 @@ namespace EARenderer {
     Renderer::Renderer(GLSLProgramFacility *facility)
     :
     mProgramFacility(facility)
-    { }
+    {
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    }
 
     void Renderer::render(Scene *scene) {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        auto *blinnPhong = mProgramFacility->blinnPhongProgram();
-        blinnPhong->bind();
+        mProgramFacility->blinnPhongProgram()->bind();
         
         for (ID subMeshID : scene->subMeshes()) {
             SubMesh& subMesh = scene->subMeshes()[subMeshID];
@@ -30,21 +34,31 @@ namespace EARenderer {
             ID transformID = scene->meshes()[meshID].transformID();
             Transform& transform = scene->transforms()[transformID];
             
-            blinnPhong->setModelMatrix(transform.modelMatrix());
-            blinnPhong->setNormalMatrix(transform.modelMatrix());
-            blinnPhong->setViewProjectionMatrix(scene->camera().viewProjectionMatrix());
+            mProgramFacility->blinnPhongProgram()->flushState();
+            mProgramFacility->blinnPhongProgram()->setModelMatrix(transform.modelMatrix());
+            mProgramFacility->blinnPhongProgram()->setNormalMatrix(transform.modelMatrix());
+            mProgramFacility->blinnPhongProgram()->setViewProjectionMatrix(scene->camera()->viewProjectionMatrix());
             
             ID lightID = *(scene->lights().begin());
             Light& light = scene->lights()[lightID];
             
-            blinnPhong->setLightPosition(light.position());
-            blinnPhong->setLightColor(light.color());
+            mProgramFacility->blinnPhongProgram()->setLightPosition(light.position());
+            mProgramFacility->blinnPhongProgram()->setLightColor(light.color());
+            mProgramFacility->blinnPhongProgram()->setCameraPosition(scene->camera()->position());
             
-            blinnPhong->setCameraPosition(scene->camera().position());
-            blinnPhong->setMaterial({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0 }, 16);
+            ID materialID = *(scene->materials().begin());
+            Material& material = scene->materials()[materialID];
+            mProgramFacility->blinnPhongProgram()->setMaterial(material);
             
             subMesh.draw();
         }
+        
+        mProgramFacility->skyboxProgram()->bind();
+        mProgramFacility->skyboxProgram()->flushState();
+        mProgramFacility->skyboxProgram()->setViewMatrix(scene->camera()->viewMatrix());
+        mProgramFacility->skyboxProgram()->setProjectionMatrix(scene->camera()->projectionMatrix());
+        mProgramFacility->skyboxProgram()->setCubemap(scene->skybox()->cubemap());
+        scene->skybox()->draw();
     }
     
 }

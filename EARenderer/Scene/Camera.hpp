@@ -52,6 +52,8 @@ namespace EARenderer {
         const glm::vec3& right() const;
         const glm::vec3& up() const;
         glm::mat4 viewProjectionMatrix() const;
+        glm::mat4 viewMatrix() const;
+        glm::mat4 projectionMatrix() const;
         
         void setViewportAspectRatio(float aspectRatio);
     };

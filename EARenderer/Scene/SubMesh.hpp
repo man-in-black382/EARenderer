@@ -11,9 +11,9 @@
 
 #include <vector>
 #include "Vertex1P1N1UV.hpp"
-#include "GLVertexArrayBuffer.hpp"
+#include "GLVertexArrayBuffer.inl"
 #include "GLElementArrayBuffer.hpp"
-#include "GLVertexArray.hpp"
+#include "GLVertexArray.inl"
 #include "Drawable.hpp"
 #include "Types.h"
 
@@ -22,7 +22,7 @@ namespace EARenderer {
     class SubMesh: public Drawable {
     private:
         std::vector<Vertex1P1N1UV> mVertices;
-        GLVertexArray<Vertex1P1N1UV> *mVAO;
+        GLVertexArray<Vertex1P1N1UV> mVAO;
         ID mMeshID;
         
     public:
@@ -30,7 +30,7 @@ namespace EARenderer {
         SubMesh(const std::vector<Vertex1P1N1UV>& vertices);
         
         const std::vector<Vertex1P1N1UV>& vertices() const;
-        const GLVertexArray<Vertex1P1N1UV>* VAO() const;
+        const GLVertexArray<Vertex1P1N1UV>& VAO() const;
         ID meshID() const;
         
         void addVertex(const Vertex1P1N1UV& vertex);
