@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
 #import <OpenGL/gltypes.h>
 
 struct SceneOpaque;
@@ -18,17 +17,13 @@ struct RendererOpaque;
 @protocol SceneGLViewDelegate <NSObject>
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view;
+- (void)glViewIsReadyToRenderFrame:(SceneGLView *)view;
 
 @end
 
-@interface SceneGLView : NSOpenGLView {
-@public
-    struct SceneOpaque *sceneOpaquePtr;
-    struct RendererOpaque *rendererOpaquePtr;
-    
-    
-}
 
+@interface SceneGLView : NSOpenGLView
+    
 @property (weak, nonatomic) id<SceneGLViewDelegate> delegate;
 
 @end

@@ -28,11 +28,7 @@ namespace EARenderer {
     { }
     
     glm::mat4 Transform::modelMatrix() const {
-        glm::mat4 matrix;
-        matrix = glm::scale(matrix, scale);
-//        glm::rotate(matrix, , <#const tvec3<T, P> &v#>) = glm::toMat4(rotation);
-        matrix = glm::translate(matrix, translation);
-        return matrix;
+        return glm::translate(translation) * glm::mat4_cast(rotation) * glm::scale(scale);
     }
     
 }

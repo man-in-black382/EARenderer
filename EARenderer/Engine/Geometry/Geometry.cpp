@@ -12,6 +12,13 @@
 
 namespace EARenderer {
     
+#pragma mark - Size
+    
+    const Size& Size::zero() {
+        static Size zero = { 0, 0 };
+        return zero;
+    }
+    
     Size::Size(float w, float h)
     :
     width(w),
@@ -21,6 +28,15 @@ namespace EARenderer {
     bool Size::operator==(const Size& rhs) {
         return width == rhs.width && height == rhs.height;
     }
+    
+#pragma mark - Rect
+    
+    const Rect& Rect::zero() {
+        static Rect zero = { { 0, 0 }, { 0, 0 } };
+        return zero;
+    }
+    
+#pragma mark - Box
     
     const float Box::diagonal() const {
         return glm::length(max - min);

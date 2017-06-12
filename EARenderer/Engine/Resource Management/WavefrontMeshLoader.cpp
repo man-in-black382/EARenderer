@@ -58,13 +58,16 @@ namespace EARenderer {
         SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
         if (lastSubMesh) {
             lastSubMesh->finalizeVertexBuffer();
+            if (numNames) {
+                lastSubMesh->setName(std::string(names[numNames - 1]));
+            }
         }
         thisPtr->mSubMeshes->emplace_back();
     }
     
     void WavefrontMeshLoader::objectCallback(void *userData, const char *name) {
-//        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
-//        thisPtr->mSubMeshes->emplace_back();
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        thisPtr->mMeshName = std::string(name);
     }
     
     void WavefrontMeshLoader::processTriangle(tinyobj::index_t (&indices)[3]) {
@@ -96,7 +99,7 @@ namespace EARenderer {
     mMeshPath(meshPath)
     { }
     
-    void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, Box& boundingBox) {
+    void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, std::string& meshName, Box& boundingBox) {
         mSubMeshes = &subMeshes;
         mSubMeshes->emplace_back();
         mBoundingBox = &boundingBox;
@@ -120,6 +123,7 @@ namespace EARenderer {
         }
         
         bool ret = tinyobj::LoadObjWithCallback(ifs, cb, this, nullptr, &err);
+        meshName = mMeshName;
         mSubMeshes->back().finalizeVertexBuffer();
         
         if (!err.empty()) {

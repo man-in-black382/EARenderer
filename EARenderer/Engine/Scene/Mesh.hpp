@@ -10,6 +10,7 @@
 #define Mesh_hpp
 
 #include <vector>
+#include <string>
 
 #include "Geometry.hpp"
 #include "PackedLookupTable.inl"
@@ -18,14 +19,18 @@ namespace EARenderer {
     
     class Mesh {
     private:
+        std::string mName;
         std::vector<ID> mSubMeshIDs;
         ID mTransformID;
         
     public:
-        void setSubMeshIDs(const std::vector<ID>& subMeshIDs);
+        const std::string& name() const;
         const std::vector<ID>& subMeshIDs() const;
-        void setTransformID(ID transformID);
         const ID transformID() const;
+        
+        void setSubMeshIDs(const std::vector<ID>& subMeshIDs);
+        void setTransformID(ID transformID);
+        void setName(const std::string& name);
     };
 
 }

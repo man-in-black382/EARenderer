@@ -18,18 +18,20 @@ namespace EARenderer {
             
             std::vector<SubMesh> subMeshes;
             Box boundingBox;
+            std::string meshName;
 
             std::vector<ID> subMeshIDs;
             WavefrontMeshLoader loader(meshPath);
 
-            loader.load(subMeshes, boundingBox);
+            loader.load(subMeshes, meshName, boundingBox);
             for (auto& subMesh : subMeshes) {
                 ID id = scene->subMeshes().insert(std::move(subMesh));
                 subMeshIDs.push_back(id);
                 SubMesh& movedSubMesh = scene->subMeshes()[id];
                 movedSubMesh.setMeshID(meshID);
             }
-
+            
+            mesh.setName(meshName);
             mesh.setSubMeshIDs(subMeshIDs);
             
             Transform outOfTheBoxTransform;

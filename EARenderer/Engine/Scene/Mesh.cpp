@@ -9,21 +9,33 @@
 #include "Mesh.hpp"
 
 namespace EARenderer {
-
-    void Mesh::setSubMeshIDs(const std::vector<ID> &subMeshIDs) {
-        mSubMeshIDs = subMeshIDs;
+    
+#pragma mark - Getters
+    
+    const std::string& Mesh::name() const {
+        return mName;
     }
     
     const std::vector<ID>& Mesh::subMeshIDs() const {
         return mSubMeshIDs;
     }
     
+    const ID Mesh::transformID() const {
+        return mTransformID;
+    }
+    
+#pragma mark - Setters
+    
+    void Mesh::setName(const std::string &name) {
+        mName = name;
+    }
+    
     void Mesh::setTransformID(ID transformID) {
         mTransformID = transformID;
     }
     
-    const ID Mesh::transformID() const {
-        return mTransformID;
+    void Mesh::setSubMeshIDs(const std::vector<ID> &subMeshIDs) {
+        mSubMeshIDs = subMeshIDs;
     }
     
 }

@@ -13,8 +13,8 @@
 #include "GLSLProgramFacility.hpp"
 
 struct RendererOpaque {
-    RendererOpaque(EARenderer::GLSLProgramFacility *facility) : renderer(facility) { }
     EARenderer::Renderer renderer;
+    RendererOpaque(EARenderer::GLSLProgramFacility *facility) : renderer(facility) { }
 };
 
 #endif /* RendererOpaque_h */

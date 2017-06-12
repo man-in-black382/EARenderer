@@ -27,16 +27,14 @@ namespace EARenderer {
         finalizeVertexBuffer();
     }
     
+#pragma mark - Getters
+    
+    const std::string& SubMesh::name() const {
+        return mName;
+    }
+    
     const std::vector<Vertex1P1N1UV>& SubMesh::vertices() const {
         return mVertices;
-    }
-    
-    void SubMesh::addVertex(const Vertex1P1N1UV& vertex) {
-        mVertices.push_back(vertex);
-    }
-    
-    void SubMesh::setMeshID(ID meshID) {
-        mMeshID = meshID;
     }
     
     ID SubMesh::meshID() const {
@@ -45,6 +43,22 @@ namespace EARenderer {
     
     const GLVertexArray<Vertex1P1N1UV>& SubMesh::VAO() const {
         return mVAO;
+    }
+    
+#pragma mark - Setters
+    
+    void SubMesh::setMeshID(ID meshID) {
+        mMeshID = meshID;
+    }
+    
+    void SubMesh::setName(const std::string &name) {
+        mName = name;
+    }
+    
+#pragma mark - Other methods
+    
+    void SubMesh::addVertex(const Vertex1P1N1UV& vertex) {
+        mVertices.push_back(vertex);
     }
     
     void SubMesh::finalizeVertexBuffer() {

@@ -10,10 +10,9 @@
 
 @implementation FlippedClipView
 
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
+- (BOOL)isFlipped
+{
+    return YES;
 }
 
 @end

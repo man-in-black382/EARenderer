@@ -9,6 +9,7 @@
 #ifndef Rect_hpp
 #define Rect_hpp
 
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
@@ -17,14 +18,17 @@ namespace EARenderer {
         float width;
         float height;
         
+        static const Size& zero();
         Size(float w, float h);
         
         bool operator==(const Size& rhs);
     };
     
     struct Rect {
-        glm::vec3 origin;
+        glm::vec2 origin;
         Size size;
+        
+        static const Rect& zero();
     };
     
     struct Box {

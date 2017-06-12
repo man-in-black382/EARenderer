@@ -8,27 +8,29 @@
 
 #import "MainViewController.h"
 #import "SceneGLView.h"
-#import "OutlineViewManager.h"
+#import "SceneEditorTabView.h"
+#import "SceneObjectsTabView.h"
 
-#import "Scene.hpp"
 #import "SceneOpaque.h"
-#import "ResourceManager.hpp"
-#import "Renderer.hpp"
-#import "DirectionalLight.hpp"
 #import "RendererOpaque.h"
-#import "GLSLProgramFacility.hpp"
-#import "Material.hpp"
+#import "ResourceManager.hpp"
+#import "RunLoop.hpp"
 
-@interface MainViewController () <SceneGLViewDelegate>
+@interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
-@property (weak) IBOutlet SceneGLView *openGLView;
-@property (strong) IBOutlet OutlineViewManager *outlineViewManager;
+@property (weak, nonatomic) IBOutlet SceneGLView *openGLView;
+@property (weak, nonatomic) IBOutlet SceneObjectsTabView *sceneObjectsTabView;
+@property (weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
+
 @property (assign, nonatomic) SceneOpaque *sceneOpaquePtr;
 @property (assign, nonatomic) RendererOpaque *rendererOpaquePtr;
+@property (assign, nonatomic) EARenderer::RunLoop *runLoop;
 
 @end
 
 @implementation MainViewController
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad
 {
@@ -37,6 +39,8 @@
     [self.openGLView becomeFirstResponder];
     self.openGLView.delegate = self;
 }
+
+#pragma mark - SceneGLViewDelegate
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
@@ -60,12 +64,34 @@
     self.sceneOpaquePtr->scene.lights().insert(light);
     self.sceneOpaquePtr->scene.setSkybox([self skybox]);
     self.sceneOpaquePtr->scene.materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 16, std::string(texturePath.UTF8String)));
-
-    view->rendererOpaquePtr = self.rendererOpaquePtr;
-    view->sceneOpaquePtr = self.sceneOpaquePtr;
     
-    [self.outlineViewManager buildOutlineViewWith:self.sceneOpaquePtr];
+    [self.sceneObjectsTabView buildTabsWithScene:self.sceneOpaquePtr];
+    self.sceneEditorTabView.sceneOpaquePtr = self.sceneOpaquePtr;
+    
+    self.runLoop = new EARenderer::RunLoop(&self.sceneOpaquePtr->scene,
+                                           &EARenderer::Input::shared(),
+                                           &self.rendererOpaquePtr->renderer,
+                                           &EARenderer::GLViewport::main());
 }
+
+- (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
+{
+    self.runLoop->runOnce();
+}
+
+#pragma mark - MeshListTabViewItemDelegate
+
+- (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id
+{
+    [self.sceneEditorTabView showMesh:&self.sceneOpaquePtr->scene.meshes()[id]];
+}
+
+- (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id
+{
+    
+}
+
+#pragma mark - Helper methods
 
 - (EARenderer::GLSLProgramFacility *)programFacility
 {
@@ -95,3 +121,4 @@
 }
 
 @end
+

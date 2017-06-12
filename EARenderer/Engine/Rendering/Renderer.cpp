@@ -15,7 +15,6 @@ namespace EARenderer {
     Renderer::Renderer(GLSLProgramFacility *facility)
     :
     mProgramFacility(facility),
-//    mSystemFramebuffer(systemFramebuffer),
     mDepthTexture(Size(1024, 1024)),
     mDepthFramebuffer(Size(1024, 1024))
     {

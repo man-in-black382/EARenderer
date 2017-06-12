@@ -9,7 +9,8 @@
 #ifndef Camera_hpp
 #define Camera_hpp
 
-#include "glm.hpp"
+#include <glm/glm.hpp>
+#include "Ray.hpp"
 
 namespace EARenderer {
     
@@ -46,6 +47,7 @@ namespace EARenderer {
         void rotateTo(float pitch, float yaw);
         void rotateBy(float pitch, float yaw);
         void zoom(float zoomFactor);
+        Ray rayFromScreenPoint(const glm::vec2& point);
         
         const glm::vec3& position() const;
         const glm::vec3& front() const;

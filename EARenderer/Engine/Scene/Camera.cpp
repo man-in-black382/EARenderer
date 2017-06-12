@@ -13,6 +13,8 @@
 
 namespace EARenderer {
     
+#pragma mark - Lifecycle
+    
     Camera::Camera()
     :
     mPosition(glm::zero<glm::vec3>()),
@@ -45,6 +47,8 @@ namespace EARenderer {
         updateVectors();
     }
     
+#pragma mark - Private methods
+    
     void Camera::updateVectors() {
         mFront.x = cos(glm::radians(mYaw)) * cos(glm::radians(mPitch));
         mFront.y = sin(glm::radians(mPitch));
@@ -53,6 +57,8 @@ namespace EARenderer {
         mRight = glm::normalize(glm::cross(mFront, mWorldUp));
         mUp = glm::normalize(glm::cross(mRight, mFront));
     }
+    
+#pragma mark - Public methods
     
     void Camera::moveTo(const glm::vec3& position) {
         mPosition = position;
@@ -78,6 +84,7 @@ namespace EARenderer {
     }
     
     void Camera::rotateBy(float pitch, float yaw) {
+        printf("pitch: %f, yaw: %f\n", pitch, yaw);
         mPitch += pitch;
         mYaw += yaw;
         
@@ -95,6 +102,17 @@ namespace EARenderer {
         
     }
     
+    Ray Camera::rayFromScreenPoint(const glm::vec2& point) {
+        glm::mat4 inverseVP = glm::inverse(viewProjectionMatrix());
+        glm::vec4 nearPlanePoint = glm::vec4(point.x, point.y, mNearClipPlane, 1.0);
+        glm::vec4 farPlanePoint = glm::vec4(point.x, point.y, mFarClipPlane, 1.0);
+        glm::vec4 nearUntransformed = inverseVP * nearPlanePoint;
+        glm::vec4 farUntransformed = inverseVP * farPlanePoint;
+        return Ray({0, 0, 0});
+    }
+    
+#pragma mark - Getters
+    
     const glm::vec3& Camera::position() const {
         return mPosition;
     }
@@ -108,7 +126,7 @@ namespace EARenderer {
     }
     
     const glm::vec3& Camera::up() const {
-        return mRight;
+        return mUp;
     }
     
     glm::mat4 Camera::viewProjectionMatrix() const {
@@ -122,6 +140,8 @@ namespace EARenderer {
     glm::mat4 Camera::projectionMatrix() const {
         return glm::perspective(glm::radians(mFieldOfView), mViewportAspectRatio, mNearClipPlane, mFarClipPlane);
     }
+    
+#pragma mark - Setters
     
     void Camera::setViewportAspectRatio(float aspectRatio) {
         mViewportAspectRatio = aspectRatio;
