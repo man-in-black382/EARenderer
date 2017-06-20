@@ -20,12 +20,22 @@ namespace EARenderer {
         for (ID meshID : meshes) {
             Mesh& mesh = meshes[meshID];
             Transformation& transformation = transformations[mesh.transformID()];
-            Ray meshLocalSpaceRay = ray.transformedBy(glm::inverse(transformation.modelMatrix()));
+            glm::mat4 modelMatrix = transformation.modelMatrix();
+            Ray meshLocalSpaceRay = ray.transformedBy(glm::inverse(modelMatrix));
             
             float distance = 0;
-            if (meshLocalSpaceRay.intersectsAABB(mesh.boundingBox(), &distance) && distance < minimumDistance) {
-                minimumDistance = distance;
-                closestMeshID = meshID;
+            if (meshLocalSpaceRay.intersectsAABB(mesh.boundingBox(), &distance)) {
+                // Intersection distance is in the mesh's local space
+                // Scale local space ray's direction vector (which is a unit vector) accordingly
+                glm::vec3 localScaledDirection = meshLocalSpaceRay.direction() * distance;
+                // Transform back to world space to obtain real origin -> intersection distance
+                glm::vec3 worldScaledDirection = modelMatrix * glm::vec4(localScaledDirection, 1.0);
+                float worldDistance = glm::length(worldScaledDirection);
+                
+                if (worldDistance < minimumDistance) {
+                    minimumDistance = worldDistance;
+                    closestMeshID = meshID;
+                }
             }
         }
         
