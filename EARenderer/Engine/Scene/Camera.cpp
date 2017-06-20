@@ -20,7 +20,7 @@ namespace EARenderer {
     mPosition(glm::zero<glm::vec3>()),
     mFieldOfView(75),
     mNearClipPlane(0.1),
-    mFarClipPlane(1),
+    mFarClipPlane(10),
     mViewportAspectRatio(16.f / 9.f),
     mWorldUp(glm::vec3(0, 1, 0)),
     mFront(glm::vec3(0, 0, 1)),
@@ -84,7 +84,6 @@ namespace EARenderer {
     }
     
     void Camera::rotateBy(float pitch, float yaw) {
-        printf("pitch: %f, yaw: %f\n", pitch, yaw);
         mPitch += pitch;
         mYaw += yaw;
         
@@ -102,13 +101,23 @@ namespace EARenderer {
         
     }
     
-    Ray Camera::rayFromScreenPoint(const glm::vec2& point) {
+    Ray Camera::rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) {
+        glm::vec2 ndc = viewport->NDCFromPoint(point);
         glm::mat4 inverseVP = glm::inverse(viewProjectionMatrix());
-        glm::vec4 nearPlanePoint = glm::vec4(point.x, point.y, mNearClipPlane, 1.0);
-        glm::vec4 farPlanePoint = glm::vec4(point.x, point.y, mFarClipPlane, 1.0);
+        
+        // -1.0 from NDC maps to near clip plane
+        glm::vec4 nearPlanePoint = glm::vec4(ndc.x, ndc.y, -1.0, 1.0);
+        
+        // 1.0 from NDC maps to far clip plane
+        glm::vec4 farPlanePoint = glm::vec4(ndc.x, ndc.y, 1.0, 1.0);
+        
         glm::vec4 nearUntransformed = inverseVP * nearPlanePoint;
+        nearUntransformed /= nearUntransformed.w;
+        
         glm::vec4 farUntransformed = inverseVP * farPlanePoint;
-        return Ray({0, 0, 0});
+        farUntransformed /= farUntransformed.w;
+        
+        return Ray(glm::vec3(nearUntransformed), glm::vec3(farUntransformed));
     }
     
 #pragma mark - Getters

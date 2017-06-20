@@ -65,7 +65,7 @@
 
     switch (marker.type) {
         case SceneObjectMarkerTypeMesh: {
-            EARenderer::Mesh mesh = (*self.meshes)[marker.objectID];
+            EARenderer::Mesh& mesh = (*self.meshes)[marker.objectID];
             return mesh.subMeshIDs().size();
         }
             
@@ -90,7 +90,7 @@
     
     switch (marker.type) {
         case SceneObjectMarkerTypeMesh: {
-            EARenderer::Mesh mesh = (*self.meshes)[marker.objectID];
+            EARenderer::Mesh& mesh = (*self.meshes)[marker.objectID];
             EARenderer::ID subMeshID = mesh.subMeshIDs()[index];
             return [[SceneObjectMarker alloc] initWithObjectID:subMeshID type:SceneObjectMarkerTypeSubMesh];
         }

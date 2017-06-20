@@ -11,6 +11,8 @@
 #import "SceneEditorTabView.h"
 #import "SceneObjectsTabView.h"
 
+#import "DefaultRenderComponentsProvider.h"
+
 #import "SceneOpaque.h"
 #import "RendererOpaque.h"
 #import "ResourceManager.hpp"
@@ -24,6 +26,7 @@
 
 @property (assign, nonatomic) SceneOpaque *sceneOpaquePtr;
 @property (assign, nonatomic) RendererOpaque *rendererOpaquePtr;
+@property (assign, nonatomic) EARenderer::DefaultRenderComponentsProviding *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::RunLoop *runLoop;
 
 @end
@@ -42,17 +45,21 @@
 
 #pragma mark - SceneGLViewDelegate
 
+#import "GLBlinnPhongProgram.hpp"
+
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
     self.sceneOpaquePtr = new SceneOpaque();
     self.rendererOpaquePtr = new RendererOpaque([self programFacility]);
+    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
+    self.rendererOpaquePtr->renderer.setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
     
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     NSString *texturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
 
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(paletPath.UTF8String) }, &self.sceneOpaquePtr->scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, &self.sceneOpaquePtr->scene);
     
     auto *camera = new EARenderer::Camera(75.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
     camera->moveTo(glm::vec3(0, 0, 0.5));

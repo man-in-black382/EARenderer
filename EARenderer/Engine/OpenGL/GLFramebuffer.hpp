@@ -12,7 +12,7 @@
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
 #include "GLDepthTexture2D.hpp"
-#include "Geometry.hpp"
+#include "Size.hpp"
 
 namespace EARenderer {
     

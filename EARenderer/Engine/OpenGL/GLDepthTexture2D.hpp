@@ -11,7 +11,7 @@
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
-#include "Geometry.hpp"
+#include "Size.hpp"
 
 namespace EARenderer {
     

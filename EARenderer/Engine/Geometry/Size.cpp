@@ -1,18 +1,14 @@
 //
-//  Rect.cpp
+//  Size.cpp
 //  EARenderer
 //
-//  Created by Pavlo Muratov on 07.04.17.
+//  Created by Pavlo Muratov on 16.06.17.
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
-#include "Geometry.hpp"
-
-#include <glm/gtx/norm.hpp>
+#include "Size.hpp"
 
 namespace EARenderer {
-    
-#pragma mark - Size
     
     const Size& Size::zero() {
         static Size zero = { 0, 0 };
@@ -29,17 +25,8 @@ namespace EARenderer {
         return width == rhs.width && height == rhs.height;
     }
     
-#pragma mark - Rect
-    
-    const Rect& Rect::zero() {
-        static Rect zero = { { 0, 0 }, { 0, 0 } };
-        return zero;
-    }
-    
-#pragma mark - Box
-    
-    const float Box::diagonal() const {
-        return glm::length(max - min);
+    bool Size::operator!=(const Size& rhs) {
+        return !operator==(rhs);
     }
     
 }

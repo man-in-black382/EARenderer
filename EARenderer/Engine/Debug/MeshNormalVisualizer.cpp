@@ -48,7 +48,7 @@ namespace EARenderer {
         return mVAO;
     }
     
-    void MeshNormalVisualizer::draw() {
+    void MeshNormalVisualizer::draw() const {
         mVAO->bind();
         glDrawArrays(GL_LINES, 0, static_cast<GLsizei>(mVertices.size()));
     }

@@ -29,7 +29,7 @@ namespace EARenderer {
         return mSubMeshes;
     }
     
-    PackedLookupTable<Transform>& Scene::transforms() {
+    PackedLookupTable<Transformation>& Scene::transforms() {
         return mTransforms;
     }
 

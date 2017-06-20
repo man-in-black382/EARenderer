@@ -21,7 +21,7 @@ namespace EARenderer {
     GLNamedObject::GLNamedObject(GLNamedObject&& that)
     :
     mName(std::move(that.mName)) {
-        that.mName = 0;
+        that.mName = -1;
     }
     
     GLNamedObject::~GLNamedObject()
@@ -31,7 +31,6 @@ namespace EARenderer {
     
     GLNamedObject& GLNamedObject::operator=(GLNamedObject&& rhs) {
         swap(rhs);
-        rhs.mName = 0;
         return *this;
     }
 

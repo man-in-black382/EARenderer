@@ -8,6 +8,8 @@
 
 #import "MeshEditingTabViewItem.h"
 
+#import "NSNumberFormatter+CustomFormatters.h"
+
 @interface MeshEditingTabViewItem () <NSTextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet NSTextField *positionXTextField;
@@ -38,7 +40,7 @@
 
 #pragma mark - Accessors
 
-- (void)setMeshTransform:(EARenderer::Transform *)meshTransform
+- (void)setMeshTransform:(EARenderer::Transformation *)meshTransform
 {
     _meshTransform = meshTransform;
     
@@ -68,7 +70,7 @@
     }
     
     NSTextField *textField = obj.object;
-    float value = textField.stringValue.floatValue;
+    float value = [[NSNumberFormatter floatInputFormatter] numberFromString:textField.stringValue].floatValue;
     
     if ([textField isEqual:self.positionXTextField]) {
         self.meshTransform->translation.x = value;

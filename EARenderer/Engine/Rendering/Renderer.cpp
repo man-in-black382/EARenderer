@@ -10,7 +10,11 @@
 #include "GLShader.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Vertex1P.hpp"
+
 namespace EARenderer {
+    
+#pragma mark - Lifecycle
     
     Renderer::Renderer(GLSLProgramFacility *facility)
     :
@@ -25,7 +29,15 @@ namespace EARenderer {
         
         mDepthFramebuffer.attachTexture(mDepthTexture);
     }
-
+    
+#pragma mark - Setters
+    
+    void Renderer::setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider) {
+        mDefaultRenderComponentsProvider = provider;
+    }
+    
+#pragma mark - Rendering
+    
     void Renderer::render(Scene *scene) {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -40,7 +52,7 @@ namespace EARenderer {
             SubMesh& subMesh = scene->subMeshes()[subMeshID];
             ID meshID = subMesh.meshID();
             ID transformID = scene->meshes()[meshID].transformID();
-            Transform& transform = scene->transforms()[transformID];
+            Transformation& transform = scene->transforms()[transformID];
             ID lightID = *(scene->lights().begin());
             DirectionalLight& light = scene->lights()[lightID];
             
@@ -51,16 +63,19 @@ namespace EARenderer {
             subMesh.draw();
         }
         
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, mDepthFramebuffer.size().width, mDepthFramebuffer.size().height);
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+            mDefaultRenderComponentsProvider->applyDefaultViewport();
+        }
         
         mProgramFacility->blinnPhongProgram()->bind();
         
         for (ID subMeshID : scene->subMeshes()) {
             SubMesh& subMesh = scene->subMeshes()[subMeshID];
             ID meshID = subMesh.meshID();
-            ID transformID = scene->meshes()[meshID].transformID();
-            Transform& transform = scene->transforms()[transformID];
+            Mesh& mesh = scene->meshes()[meshID];
+            ID transformID = mesh.transformID();
+            Transformation& transform = scene->transforms()[transformID];
             
             mProgramFacility->blinnPhongProgram()->flushState();
             mProgramFacility->blinnPhongProgram()->setModelMatrix(transform.modelMatrix());
@@ -80,9 +95,24 @@ namespace EARenderer {
             Material& material = scene->materials()[materialID];
             mProgramFacility->blinnPhongProgram()->setMaterial(material);
             
+            mProgramFacility->blinnPhongProgram()->setHighlighted(mesh.isHighlighted());
+            
             subMesh.draw();
         }
-//
+        
+        mProgramFacility->lineVisualizationProgram()->bind();
+        
+        for (ID meshID : scene->meshes()) {
+            Mesh& mesh = scene->meshes()[meshID];
+            if (mesh.boundingBoxVisualizer()) {
+                ID transformID = mesh.transformID();
+                Transformation& transform = scene->transforms()[transformID];
+                glm::mat4 mvpMat = scene->camera()->viewProjectionMatrix() * transform.modelMatrix();
+                mProgramFacility->lineVisualizationProgram()->setModelViewProjectionMatrix(mvpMat);
+                mesh.boundingBoxVisualizer()->draw();
+            }
+        }
+        
 //        mProgramFacility->skyboxProgram()->bind();
 //        mProgramFacility->skyboxProgram()->flushState();
 //        mProgramFacility->skyboxProgram()->setViewMatrix(scene->camera()->viewMatrix());

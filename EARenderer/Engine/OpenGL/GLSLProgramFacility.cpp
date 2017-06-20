@@ -26,11 +26,11 @@ namespace EARenderer {
         return mBlinnPhongProgram;
     }
     
-    GLNormalVisualizationProgram* GLSLProgramFacility::normalVisualizationProgram() {
+    GLLineVisualizationProgram* GLSLProgramFacility::lineVisualizationProgram() {
         if (!mNormalVisualizationProgram) {
-            mNormalVisualizationVertShader = new GLShader(std::string(mShaderSrcDirectory).append("NormalVisualization.vert"), GL_VERTEX_SHADER);
-            mNormalVisualizationFragShader = new GLShader(std::string(mShaderSrcDirectory).append("NormalVisualization.frag"), GL_FRAGMENT_SHADER);
-            mNormalVisualizationProgram = new GLNormalVisualizationProgram(mNormalVisualizationVertShader, mNormalVisualizationFragShader);
+            mNormalVisualizationVertShader = new GLShader(std::string(mShaderSrcDirectory).append("LineVisualizationShader.vert"), GL_VERTEX_SHADER);
+            mNormalVisualizationFragShader = new GLShader(std::string(mShaderSrcDirectory).append("LineVisualizationShader.frag"), GL_FRAGMENT_SHADER);
+            mNormalVisualizationProgram = new GLLineVisualizationProgram(mNormalVisualizationVertShader, mNormalVisualizationFragShader);
         }
         return mNormalVisualizationProgram;
     }

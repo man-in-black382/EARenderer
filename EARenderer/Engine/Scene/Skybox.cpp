@@ -24,7 +24,7 @@ namespace EARenderer {
         return mCubemap;
     }
     
-    void Skybox::draw() {
+    void Skybox::draw() const {
         glDepthFunc(GL_LEQUAL);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }

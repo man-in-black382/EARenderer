@@ -2,19 +2,24 @@
 //  RayTracer.hpp
 //  EARenderer
 //
-//  Created by Pavlo Muratov on 11.06.17.
+//  Created by Pavlo Muratov on 20.06.17.
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
 #ifndef RayTracer_hpp
 #define RayTracer_hpp
 
-#include <glm/vec2.hpp>
+#include "Ray.hpp"
+#include "Mesh.hpp"
+#include "Transformation.hpp"
 
 namespace EARenderer {
     
     class RayTracer {
-        
+    public:
+        static ID closestMeshToRayOrigin(const PackedLookupTable<Mesh>& meshes,
+                                         const PackedLookupTable<Transformation>& transformations,
+                                         const Ray& ray);
     };
     
 }

@@ -11,11 +11,9 @@
 
 #include <glm/vec4.hpp>
 
-#endif /* Vertex1P_hpp */
-
 namespace EARenderer {
     
-    struct Vertex1P{
+    struct Vertex1P {
         glm::vec4 position;
         
         Vertex1P();
@@ -23,4 +21,6 @@ namespace EARenderer {
     };
     
 }
+
+#endif /* Vertex1P_hpp */
 

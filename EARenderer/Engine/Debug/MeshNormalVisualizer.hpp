@@ -33,7 +33,7 @@ namespace EARenderer {
         
         const GLVertexArray<Vertex1P> * VAO() const;
         
-        void draw() override;
+        void draw() const override;
     };
     
 }

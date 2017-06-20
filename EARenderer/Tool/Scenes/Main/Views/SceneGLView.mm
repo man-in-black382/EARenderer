@@ -27,6 +27,8 @@
 
 @implementation SceneGLView
 
+#pragma mark - Lifeycle
+
 - (void)awakeFromNib
 {
     [super awakeFromNib];
@@ -102,12 +104,16 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
     }
 }
 
+#pragma mark - Layout
+
 - (void)reshape
 {
     [super reshape];
     
     EARenderer::GLViewport::main().setDimensions(EARenderer::Size(self.bounds.size.width, self.bounds.size.height));
 }
+
+#pragma mark - Keyboard
 
 - (void)keyDown:(NSEvent *)event
 {
@@ -119,28 +125,34 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
     EARenderer::Input::shared().unregisterKey(event.keyCode);
 }
 
+#pragma mark - Mouse
+
 - (void)mouseDown:(NSEvent *)event
 {
-    NSPoint eventLocation = [event locationInWindow];
-    NSPoint localPoint = [self convertPoint:eventLocation fromView:nil];
-    
-    EARenderer::Input::shared().updateMousePosition(glm::vec2(localPoint.x, localPoint.y), true);
+    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::pressDown];
 }
 
 - (void)mouseUp:(NSEvent *)event
 {
-    NSPoint eventLocation = [event locationInWindow];
-    NSPoint localPoint = [self convertPoint:eventLocation fromView:nil];
-
-    EARenderer::Input::shared().updateMousePosition(glm::vec2(localPoint.x, localPoint.y), true);
+    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::pressUp];
 }
 
 - (void)mouseDragged:(NSEvent *)event
 {
+    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::drag];
+}
+
+- (void)mouseMoved:(NSEvent *)event
+{
+    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::freeMovement];
+}
+
+- (void)notifyInputWithMouseEvent:(NSEvent *)event action:(EARenderer::Input::MouseAction)action
+{
     NSPoint eventLocation = [event locationInWindow];
     NSPoint localPoint = [self convertPoint:eventLocation fromView:nil];
     
-    EARenderer::Input::shared().updateMousePosition(glm::vec2(localPoint.x, localPoint.y), false);
+    EARenderer::Input::shared().updateMousePosition(glm::vec2(localPoint.x, localPoint.y), action);
 }
 
 @end

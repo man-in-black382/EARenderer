@@ -24,8 +24,8 @@ namespace EARenderer {
     
     class GLProgram: public GLNamedObject, public GLBindable {
     private:
-        const GLShader* mVertexShader;
-        const GLShader* mFragmentShader;
+        const GLShader* mVertexShader = nullptr;
+        const GLShader* mFragmentShader = nullptr;
         std::map<std::string, GLint> mUniforms;
         GLint mAvailableTextureUnits = 0;
         GLint mFreeTextureUnitIndex = 0;

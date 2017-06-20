@@ -10,26 +10,29 @@
 #define GLViewport_hpp
 
 #include <glm/vec2.hpp>
-#include "Geometry.hpp"
+#include "Rect.hpp"
 
 namespace EARenderer {
     
     class GLViewport {
     private:
-        Rect mRect;
+        Rect mFrame;
         
     public:
         static GLViewport& main();
         
         GLViewport();
-        GLViewport(const Rect& rect);
+        GLViewport(const Rect& frame);
         
-        const Rect& rect() const;
-        void setRect(const Rect& rect);
+        const Rect& frame() const;
+        float aspectRatio() const;
+        
+        void setFrame(const Rect& frame);
         void setDimensions(const Size& dimensions);
         
-        void apply();
-        glm::vec2 NDCNoZ();
+        void apply() const;
+        
+        glm::vec2 NDCFromPoint(const glm::vec2& point) const;
     };
     
 }

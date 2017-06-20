@@ -8,6 +8,8 @@
 
 #include "RunLoop.hpp"
 
+#include "RayTracer.hpp"
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -28,17 +30,17 @@ namespace EARenderer {
     void RunLoop::updateCamera() {
         EARenderer::Camera *camera = mScene->camera();
         glm::vec3 moveDirection = glm::zero<glm::vec3>();
-        
-        if (mInput->isDirectionKeyPressed(InputDirection::up)) {
+
+        if (mInput->isDirectionKeyPressed(Input::Direction::up)) {
             moveDirection += camera->front();
         }
-        if (mInput->isDirectionKeyPressed(InputDirection::left)) {
+        if (mInput->isDirectionKeyPressed(Input::Direction::left)) {
             moveDirection -= camera->right();
         }
-        if (mInput->isDirectionKeyPressed(InputDirection::down)) {
+        if (mInput->isDirectionKeyPressed(Input::Direction::down)) {
             moveDirection -= camera->front();
         }
-        if (mInput->isDirectionKeyPressed(InputDirection::right)) {
+        if (mInput->isDirectionKeyPressed(Input::Direction::right)) {
             moveDirection += camera->right();
         }
         
@@ -46,10 +48,20 @@ namespace EARenderer {
             moveDirection = glm::normalize(moveDirection);
         }
         
-        camera->moveBy(moveDirection * 0.01f);
+        glm::vec2 mouseDelta = mInput->draggedMouseDelta();
         
-        glm::vec2 mouseDelta = mInput->mouseDelta();
+        camera->moveBy(moveDirection * 0.01f);
         camera->rotateBy(mouseDelta.y, mouseDelta.x);
+        camera->setViewportAspectRatio(mMainViewport->aspectRatio());
+    }
+    
+    void RunLoop::updateMeshes() {
+        Ray cameraRay = mScene->camera()->rayFromPointOnViewport(mInput->freeMousePosition(), mMainViewport);
+        ID closestSelectedMeshID = RayTracer::closestMeshToRayOrigin(mScene->meshes(), mScene->transforms(), cameraRay);
+        for (ID meshID : mScene->meshes()) {
+            Mesh& mesh = mScene->meshes()[meshID];
+            mesh.setHighlighted(meshID == closestSelectedMeshID);
+        }
     }
     
     void RunLoop::drawScene() {
@@ -60,6 +72,7 @@ namespace EARenderer {
     
     void RunLoop::runOnce() {
         updateCamera();
+        updateMeshes();
         drawScene();
     }
     

@@ -16,7 +16,7 @@ namespace EARenderer {
     
     class GLNamedObject {
     protected:
-        GLuint mName = 0;
+        GLuint mName = -1;
         
     public:
         GLNamedObject() = default;

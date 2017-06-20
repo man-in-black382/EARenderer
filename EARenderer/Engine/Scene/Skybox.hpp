@@ -30,7 +30,7 @@ namespace EARenderer {
         
         const GLTextureCubemap& cubemap() const;
         
-        void draw() override;
+        void draw() const override;
     };
     
 }

@@ -12,7 +12,7 @@
 namespace EARenderer {
     
     class Drawable {
-        virtual void draw() = 0;
+        virtual void draw() const = 0;
     };
     
 }

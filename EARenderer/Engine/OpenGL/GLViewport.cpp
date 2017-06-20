@@ -21,34 +21,42 @@ namespace EARenderer {
     
     GLViewport::GLViewport()
     :
-    mRect(Rect::zero())
+    mFrame(Rect::zero())
     { }
     
-    GLViewport::GLViewport(const Rect& rect)
+    GLViewport::GLViewport(const Rect& frame)
     :
-    mRect(rect)
+    mFrame(frame)
     { }
     
 #pragma mark - Getters
     
-    const Rect& GLViewport::rect() const {
-        return mRect;
+    const Rect& GLViewport::frame() const {
+        return mFrame;
+    }
+    
+    float GLViewport::aspectRatio() const {
+        return mFrame.size.width / mFrame.size.height;
     }
     
 #pragma mark - Setters
     
-    void GLViewport::setRect(const Rect& rect) {
-        mRect = rect;
+    void GLViewport::setFrame(const Rect& frame) {
+        mFrame = frame;
     }
     
     void GLViewport::setDimensions(const Size& dimensions) {
-        mRect.size = dimensions;
+        mFrame.size = dimensions;
     }
     
 #pragma mark - Other methods
     
-    void GLViewport::apply() {
-        glViewport(mRect.origin.x, mRect.origin.y, mRect.size.width, mRect.size.height);
+    void GLViewport::apply() const {
+        glViewport(mFrame.origin.x, mFrame.origin.y, mFrame.size.width, mFrame.size.height);
+    }
+    
+    glm::vec2 GLViewport::NDCFromPoint(const glm::vec2& point) const {
+        return glm::vec2(point.x / mFrame.size.width * 2.0 - 1.0, point.y / mFrame.size.height * 2.0 - 1.0);
     }
     
 }

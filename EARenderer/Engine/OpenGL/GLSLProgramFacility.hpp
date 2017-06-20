@@ -10,7 +10,7 @@
 #define GLSLProgramFacility_hpp
 
 #include "GLBlinnPhongProgram.hpp"
-#include "GLNormalVisualizationProgram.hpp"
+#include "GLLineVisualizationProgram.hpp"
 #include "GLSkyboxProgram.hpp"
 #include "GLDepthFillerProgram.hpp"
 
@@ -26,7 +26,7 @@ namespace EARenderer {
         
         GLShader *mNormalVisualizationVertShader = nullptr;
         GLShader *mNormalVisualizationFragShader = nullptr;
-        GLNormalVisualizationProgram *mNormalVisualizationProgram = nullptr;
+        GLLineVisualizationProgram *mNormalVisualizationProgram = nullptr;
         
         GLShader *mSkyboxVertShader = nullptr;
         GLShader *mSkyboxFragShader = nullptr;
@@ -40,7 +40,7 @@ namespace EARenderer {
         GLSLProgramFacility(const std::string& shaderSrcDirectory);
         
         GLBlinnPhongProgram* blinnPhongProgram();
-        GLNormalVisualizationProgram* normalVisualizationProgram();
+        GLLineVisualizationProgram* lineVisualizationProgram();
         GLSkyboxProgram* skyboxProgram();
         GLDepthFillerProgram *depthFillerProgram();
     };

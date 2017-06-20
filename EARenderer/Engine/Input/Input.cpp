@@ -24,14 +24,12 @@ namespace EARenderer {
     
 #pragma mark - Getters
     
-    glm::vec2 Input::mouseDelta() {
-        glm::vec2 delta = mShouldReturnDelta ? mMousePosition - mPreviousMousePosition : glm::zero<glm::vec2>();
-        mShouldReturnDelta = false;
-        return delta;
+    const glm::vec2& Input::freeMousePosition() const {
+        return mFreeMousePosition;
     }
     
-    const glm::vec2& Input::mousePosition() const {
-        return mMousePosition;
+    const glm::vec2& Input::draggedMousePosition() const {
+        return mDraggedMousePosition;
     }
     
     const std::unordered_set<uint16_t>& Input::pressedKeyCodes() const {
@@ -40,11 +38,23 @@ namespace EARenderer {
     
 #pragma mark - Other methods
     
-    void Input::updateMousePosition(const glm::vec2& position, bool dropPreviousPosition) {
+    void Input::updateMousePosition(const glm::vec2& position, MouseAction action) {
         // Prevent mouse jumping
-        mPreviousMousePosition = dropPreviousPosition ? position : mMousePosition;
-        mMousePosition = position;
-        mShouldReturnDelta = true;
+        switch (action) {
+            case MouseAction::pressDown:
+            case MouseAction::pressUp:
+            case MouseAction::drag: {
+                mPreviousDraggedMousePosition = mDraggedMousePosition;
+                mDraggedMousePosition = position;
+                mShouldReturnDelta = true;
+                break;
+            }
+                
+            case MouseAction::freeMovement: {
+                mFreeMousePosition = position;
+                break;
+            }
+        }
     }
     
     void Input::registerKey(uint16_t code) {
@@ -55,8 +65,14 @@ namespace EARenderer {
         mPressedKeyCodes.erase(code);
     }
     
-    bool Input::isDirectionKeyPressed(InputDirection direction) {
-        uint16_t code = static_cast<std::underlying_type<InputDirection>::type>(direction);
+    glm::vec2 Input::draggedMouseDelta() {
+        glm::vec2 delta = mShouldReturnDelta ? mDraggedMousePosition - mPreviousDraggedMousePosition : glm::zero<glm::vec2>();
+        mShouldReturnDelta = false;
+        return delta;
+    }
+    
+    bool Input::isDirectionKeyPressed(Direction direction) const {
+        uint16_t code = static_cast<std::underlying_type<Direction>::type>(direction);
         return mPressedKeyCodes.find(code) != mPressedKeyCodes.end();
     }
     

@@ -40,7 +40,7 @@ namespace EARenderer {
         void setMeshID(ID meshID);
         void finalizeVertexBuffer();
         
-        void draw() override;
+        void draw() const override;
     };
     
 }

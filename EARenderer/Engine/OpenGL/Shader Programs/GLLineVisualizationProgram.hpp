@@ -14,7 +14,7 @@
 
 namespace EARenderer {
     
-    class GLNormalVisualizationProgram: public GLProgram {
+    class GLLineVisualizationProgram: public GLProgram {
     public:
         using GLProgram::GLProgram;
         

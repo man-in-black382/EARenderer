@@ -26,6 +26,7 @@ struct Material {
 };
 
 uniform Material uMaterial;
+uniform bool isHighlighted;
 
 // Functions
 
@@ -49,7 +50,7 @@ float isInShadow(in vec3 N, in vec3 L)
     // perform perspective divide
     vec3 projCoords = oPosInLightSpace.xyz / oPosInLightSpace.w;
     
-    // Transform to [0,1] range
+    // Transformation to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
     
     // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
@@ -73,4 +74,7 @@ void main() {
     vec3 specularColor = specularColor(N, L, V);
     
     outputFragColor = vec4((ambientColor + (1.0 - isInShadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st);
+    if (isHighlighted) {
+        outputFragColor += vec4(0.5, 0.5, 0.5, 1.0);
+    }
 }

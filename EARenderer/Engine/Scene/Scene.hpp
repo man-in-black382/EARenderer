@@ -12,7 +12,7 @@
 #include "PackedLookupTable.inl"
 #include "Mesh.hpp"
 #include "SubMesh.hpp"
-#include "Transform.hpp"
+#include "Transformation.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
 #include "Material.hpp"
@@ -24,7 +24,7 @@ namespace EARenderer {
     private:
         PackedLookupTable<Mesh> mMeshes;
         PackedLookupTable<SubMesh> mSubMeshes;
-        PackedLookupTable<Transform> mTransforms;
+        PackedLookupTable<Transformation> mTransforms;
         PackedLookupTable<DirectionalLight> mLights;
         PackedLookupTable<Material> mMaterials;
         
@@ -36,7 +36,7 @@ namespace EARenderer {
         
         PackedLookupTable<Mesh>& meshes();
         PackedLookupTable<SubMesh>& subMeshes();
-        PackedLookupTable<Transform>& transforms();
+        PackedLookupTable<Transformation>& transforms();
         PackedLookupTable<Camera>& cameras();
         PackedLookupTable<DirectionalLight>& lights();
         PackedLookupTable<Material>& materials();

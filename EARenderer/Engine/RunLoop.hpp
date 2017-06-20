@@ -24,6 +24,7 @@ namespace EARenderer {
         GLViewport *mMainViewport;
         
         void updateCamera();
+        void updateMeshes();
         void drawScene();
         
     public:

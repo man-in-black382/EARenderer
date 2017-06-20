@@ -11,6 +11,7 @@
 
 #include <glm/glm.hpp>
 #include "Ray.hpp"
+#include "GLViewport.hpp"
 
 namespace EARenderer {
     
@@ -47,7 +48,8 @@ namespace EARenderer {
         void rotateTo(float pitch, float yaw);
         void rotateBy(float pitch, float yaw);
         void zoom(float zoomFactor);
-        Ray rayFromScreenPoint(const glm::vec2& point);
+        
+        Ray rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport);
         
         const glm::vec3& position() const;
         const glm::vec3& front() const;

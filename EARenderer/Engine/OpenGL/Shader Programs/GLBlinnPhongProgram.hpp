@@ -31,6 +31,7 @@ namespace EARenderer {
         void setLightColor(const glm::vec3& color);
         void setMaterial(const Material& material);
         void setShadowMap(const GLDepthTexture2D& shadowMap);
+        void setHighlighted(bool isHighlighted);
     };
     
 }

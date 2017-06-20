@@ -8,10 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "Transform.hpp"
+#import "Transformation.hpp"
 
 @interface MeshEditingTabViewItem : NSTabViewItem
 
-@property (assign, nonatomic) EARenderer::Transform *meshTransform;
+@property (assign, nonatomic) EARenderer::Transformation *meshTransform;
 
 @end

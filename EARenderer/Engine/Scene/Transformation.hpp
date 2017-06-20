@@ -15,15 +15,19 @@
 
 namespace EARenderer {
     
-    struct Transform {
+    struct Transformation {
         glm::vec3 scale;
         glm::vec3 translation;
         glm::quat rotation;
         
-        Transform();
-        Transform(glm::vec3 scale, glm::vec3 translation, glm::quat rotation);
+        Transformation();
+        Transformation(glm::vec3 scale, glm::vec3 translation, glm::quat rotation);
         
         glm::mat4 modelMatrix() const;
+        glm::mat4 inverseScaleMatrix() const;
+        glm::mat4 inverseRotationMatrix() const;
+        glm::mat4 inverseTranslationMatrix() const;
+
     };
     
 }

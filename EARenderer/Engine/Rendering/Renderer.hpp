@@ -9,10 +9,15 @@
 #ifndef Renderer_hpp
 #define Renderer_hpp
 
+#include <unordered_set>
+
+#include "DefaultRenderComponentsProviding.hpp"
 #include "Scene.hpp"
 #include "GLSLProgramFacility.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLDepthTexture2D.hpp"
+
+#include "Ray.hpp"
 
 namespace EARenderer {
     
@@ -21,10 +26,12 @@ namespace EARenderer {
         GLSLProgramFacility *mProgramFacility;
         GLDepthTexture2D mDepthTexture;
         GLFramebuffer mDepthFramebuffer;
-        GLFramebuffer *mSystemFramebuffer;
+        DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider;
         
     public:
         Renderer(GLSLProgramFacility *facility);
+        
+        void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void render(Scene *scene);
     };
     

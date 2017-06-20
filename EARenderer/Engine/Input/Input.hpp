@@ -16,14 +16,20 @@
 
 namespace EARenderer {
     
-    enum class InputDirection : uint16_t {
-        up = 13, down = 1, left = 0, right = 2
-    };
-    
     class Input {
+    public:
+        enum class Direction : uint16_t {
+            up = 13, down = 1, left = 0, right = 2
+        };
+        
+        enum class MouseAction {
+            pressDown, pressUp, drag, freeMovement
+        };
+        
     private:
-        glm::vec2 mPreviousMousePosition;
-        glm::vec2 mMousePosition;
+        glm::vec2 mPreviousDraggedMousePosition;
+        glm::vec2 mFreeMousePosition;
+        glm::vec2 mDraggedMousePosition;
         std::unordered_set<uint16_t> mPressedKeyCodes;
         bool mShouldReturnDelta;
         
@@ -36,14 +42,16 @@ namespace EARenderer {
     public:
         static Input& shared();
         
-        void updateMousePosition(const glm::vec2& position, bool dropPreviousPosition);
+        void updateMousePosition(const glm::vec2& position, MouseAction action);
         void registerKey(uint16_t code);
         void unregisterKey(uint16_t code);
-        bool isDirectionKeyPressed(InputDirection direction);
         
-        glm::vec2 mouseDelta();
-        const glm::vec2& mousePosition() const;
+        const glm::vec2& freeMousePosition() const;
+        const glm::vec2& draggedMousePosition() const;
         const std::unordered_set<uint16_t>& pressedKeyCodes() const;
+        
+        glm::vec2 draggedMouseDelta();
+        bool isDirectionKeyPressed(Direction direction) const;
     };
     
 }

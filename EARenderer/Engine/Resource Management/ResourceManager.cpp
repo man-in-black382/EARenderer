@@ -33,10 +33,11 @@ namespace EARenderer {
             
             mesh.setName(meshName);
             mesh.setSubMeshIDs(subMeshIDs);
+            mesh.setBoundingBox(boundingBox);
             
-            Transform outOfTheBoxTransform;
+            Transformation outOfTheBoxTransform;
             float scaleDown = boundingBox.diagonal() * 1.44;
-            outOfTheBoxTransform.scale = glm::vec3(1.0 / scaleDown);
+//            outOfTheBoxTransform.scale = glm::vec3(1.0 / scaleDown);
             ID transformID = scene->transforms().insert(outOfTheBoxTransform);
             
             mesh.setTransformID(transformID);

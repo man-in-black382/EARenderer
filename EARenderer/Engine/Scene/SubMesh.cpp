@@ -68,7 +68,7 @@ namespace EARenderer {
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
     }
     
-    void SubMesh::draw() {
+    void SubMesh::draw() const {
         mVAO.bind();
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(mVertices.size()));
     }

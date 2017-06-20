@@ -18,6 +18,7 @@
 namespace EARenderer {
     
     typedef uint32_t ID;
+    static ID IDNotFound = 0;
     
     template <typename T>
     class PackedLookupTable {

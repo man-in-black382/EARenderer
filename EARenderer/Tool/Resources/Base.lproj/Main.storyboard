@@ -1426,7 +1426,7 @@
                                                                                             <constraint firstAttribute="width" constant="65" id="vEU-Ih-7Mg"/>
                                                                                         </constraints>
                                                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" placeholderString="1.0000" drawsBackground="YES" id="o79-z7-xCD">
-                                                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="PGD-Eo-XyW"/>
+                                                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="SZ1-4T-T1S" customClass="NumericFormatter"/>
                                                                                             <font key="font" metaFont="smallSystem"/>
                                                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1464,7 +1464,7 @@
                                                                                             <constraint firstAttribute="height" constant="18" id="zhv-bH-9yv"/>
                                                                                         </constraints>
                                                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" state="on" borderStyle="bezel" placeholderString="1.0000" drawsBackground="YES" id="pNW-my-yyF">
-                                                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="0mM-RX-jcM"/>
+                                                                                            <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="NeJ-se-iBO" customClass="NumericFormatter"/>
                                                                                             <font key="font" metaFont="smallSystem"/>
                                                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
