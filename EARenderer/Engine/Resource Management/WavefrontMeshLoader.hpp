@@ -28,7 +28,7 @@ namespace EARenderer {
         std::vector<glm::vec3> mNormals;
         std::vector<glm::vec3> mTexCoords;
         std::vector<SubMesh> *mSubMeshes;
-        Box *mBoundingBox;
+        AxisAlignedBox3D *mBoundingBox;
         std::string mMeshName;
       
         static void vertexCallback(void *userData, float x, float y, float z, float w);
@@ -43,7 +43,7 @@ namespace EARenderer {
         
     public:
         WavefrontMeshLoader(const std::string& meshPath);
-        void load(std::vector<SubMesh>& subMeshes, std::string& meshName, Box &boundingBox);
+        void load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D &boundingBox);
     };
     
 }

@@ -12,7 +12,7 @@
 
 namespace EARenderer {
     
-    GLFramebuffer::GLFramebuffer(const Size& size)
+    GLFramebuffer::GLFramebuffer(const Size2D& size)
     :
     mSize(size)
     {
@@ -32,7 +32,7 @@ namespace EARenderer {
         glBindFramebuffer(GL_FRAMEBUFFER, mName);
     }
     
-    const Size& GLFramebuffer::size() const {
+    const Size2D& GLFramebuffer::size() const {
         return mSize;
     }
     

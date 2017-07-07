@@ -21,17 +21,17 @@ namespace EARenderer {
     
     GLViewport::GLViewport()
     :
-    mFrame(Rect::zero())
+    mFrame(Rect2D::zero())
     { }
     
-    GLViewport::GLViewport(const Rect& frame)
+    GLViewport::GLViewport(const Rect2D& frame)
     :
     mFrame(frame)
     { }
     
 #pragma mark - Getters
     
-    const Rect& GLViewport::frame() const {
+    const Rect2D& GLViewport::frame() const {
         return mFrame;
     }
     
@@ -41,11 +41,11 @@ namespace EARenderer {
     
 #pragma mark - Setters
     
-    void GLViewport::setFrame(const Rect& frame) {
+    void GLViewport::setFrame(const Rect2D& frame) {
         mFrame = frame;
     }
     
-    void GLViewport::setDimensions(const Size& dimensions) {
+    void GLViewport::setDimensions(const Size2D& dimensions) {
         mFrame.size = dimensions;
     }
     

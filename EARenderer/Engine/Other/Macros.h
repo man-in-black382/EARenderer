@@ -13,6 +13,8 @@
 
 #include <string>
 #include <iostream>
+#include <BitwiseEnum.hpp>
+
 
 #   define ASSERT(condition, message) \
 do { \
@@ -25,5 +27,14 @@ std::terminate(); \
 #else
 #   define ASSERT(condition, message) do { } while (false)
 #endif
+
+
+#define ENABLE_BITMASK_OPERATORS(x)  \
+template<>                           \
+struct EnableBitMaskOperators<x>     \
+{                                    \
+static const bool enable = true; \
+};
+
 
 #endif /* Macros_h */

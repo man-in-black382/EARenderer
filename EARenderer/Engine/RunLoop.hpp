@@ -9,10 +9,11 @@
 #ifndef RunLoop_hpp
 #define RunLoop_hpp
 
-#import "Scene.hpp"
-#import "Input.hpp"
-#import "Renderer.hpp"
-#import "GLViewport.hpp"
+#include "Scene.hpp"
+#include "Input.hpp"
+#include "SceneRenderer.hpp"
+#include "AxesRenderer.hpp"
+#include "GLViewport.hpp"
 
 namespace EARenderer {
     
@@ -20,7 +21,8 @@ namespace EARenderer {
     private:
         Scene *mScene;
         Input *mInput;
-        Renderer *mRenderer;
+        SceneRenderer *mSceneRenderer;
+        AxesRenderer *mAxesRenderer;
         GLViewport *mMainViewport;
         
         void updateCamera();
@@ -30,7 +32,8 @@ namespace EARenderer {
     public:
         RunLoop(Scene * const scene,
                 Input * const input,
-                Renderer * const renderer,
+                SceneRenderer * const renderer,
+                AxesRenderer * const axesVisualizer,
                 GLViewport * const mainViewport);
         
         void runOnce();

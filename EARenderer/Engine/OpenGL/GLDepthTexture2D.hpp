@@ -11,22 +11,22 @@
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
-#include "Size.hpp"
+#include "Size2D.hpp"
 
 namespace EARenderer {
     
     class GLDepthTexture2D: public GLNamedObject, public GLBindable {
     private:
-        Size mSize;
+        Size2D mSize;
         
     public:
         using GLNamedObject::GLNamedObject;
-        GLDepthTexture2D(const Size& size);
+        GLDepthTexture2D(const Size2D& size);
         GLDepthTexture2D(GLDepthTexture2D&& that) = default;
         GLDepthTexture2D& operator=(GLDepthTexture2D&& rhs) = default;
         ~GLDepthTexture2D() override;
         
-        const Size& size() const;
+        const Size2D& size() const;
         
         void bind() const override;
     };

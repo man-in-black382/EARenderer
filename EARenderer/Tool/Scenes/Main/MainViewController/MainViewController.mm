@@ -15,6 +15,7 @@
 
 #import "SceneOpaque.h"
 #import "RendererOpaque.h"
+#import "AxesRenderer.hpp"
 #import "ResourceManager.hpp"
 #import "RunLoop.hpp"
 
@@ -24,8 +25,11 @@
 @property (weak, nonatomic) IBOutlet SceneObjectsTabView *sceneObjectsTabView;
 @property (weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
 
+// C++ raw pointers
+@property (assign, nonatomic) EARenderer::GLSLProgramFacility *programFacility;
 @property (assign, nonatomic) SceneOpaque *sceneOpaquePtr;
 @property (assign, nonatomic) RendererOpaque *rendererOpaquePtr;
+@property (assign, nonatomic) EARenderer::AxesRenderer *axesVisualizer;
 @property (assign, nonatomic) EARenderer::DefaultRenderComponentsProviding *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::RunLoop *runLoop;
 
@@ -45,21 +49,29 @@
 
 #pragma mark - SceneGLViewDelegate
 
-#import "GLBlinnPhongProgram.hpp"
-
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
+    self.programFacility = new EARenderer::GLSLProgramFacility([self programFacilityDirectory]);
     self.sceneOpaquePtr = new SceneOpaque();
-    self.rendererOpaquePtr = new RendererOpaque([self programFacility]);
+    self.rendererOpaquePtr = new RendererOpaque(self.programFacility);
+    self.axesVisualizer = new EARenderer::AxesRenderer(&self.sceneOpaquePtr->scene, self.programFacility);
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.rendererOpaquePtr->renderer.setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
     
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     NSString *texturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
-
+    
+    self.runLoop = new EARenderer::RunLoop(&self.sceneOpaquePtr->scene,
+                                           &EARenderer::Input::shared(),
+                                           &self.rendererOpaquePtr->renderer,
+                                           self.axesVisualizer,
+                                           &EARenderer::GLViewport::main());
+    
+    // Temporary
+    
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(paletPath.UTF8String) }, &self.sceneOpaquePtr->scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, &self.sceneOpaquePtr->scene);
     
     auto *camera = new EARenderer::Camera(75.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
     camera->moveTo(glm::vec3(0, 0, 0.5));
@@ -75,10 +87,9 @@
     [self.sceneObjectsTabView buildTabsWithScene:self.sceneOpaquePtr];
     self.sceneEditorTabView.sceneOpaquePtr = self.sceneOpaquePtr;
     
-    self.runLoop = new EARenderer::RunLoop(&self.sceneOpaquePtr->scene,
-                                           &EARenderer::Input::shared(),
-                                           &self.rendererOpaquePtr->renderer,
-                                           &EARenderer::GLViewport::main());
+    for (EARenderer::ID meshID : self.sceneOpaquePtr->scene.meshes()) {
+        self.axesVisualizer->enableAxisVisualizationForMesh(meshID);
+    }
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
@@ -100,14 +111,12 @@
 
 #pragma mark - Helper methods
 
-- (EARenderer::GLSLProgramFacility *)programFacility
+- (std::string)programFacilityDirectory
 {
     NSString *shaderPath = [[NSBundle mainBundle] pathForResource:@"BlinnPhong" ofType:@"vert"];
     NSString *directory = [shaderPath stringByDeletingLastPathComponent];
     directory = [directory stringByAppendingString:@"/"];
-    std::string shaderDirectory(directory.UTF8String);
-    
-    return new EARenderer::GLSLProgramFacility(shaderDirectory);
+    return std::string(directory.UTF8String);
 }
 
 - (EARenderer::Skybox *)skybox

@@ -10,7 +10,7 @@
 #define Camera_hpp
 
 #include <glm/glm.hpp>
-#include "Ray.hpp"
+#include "Ray3D.hpp"
 #include "GLViewport.hpp"
 
 namespace EARenderer {
@@ -49,7 +49,7 @@ namespace EARenderer {
         void rotateBy(float pitch, float yaw);
         void zoom(float zoomFactor);
         
-        Ray rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport);
+        Ray3D rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport);
         
         const glm::vec3& position() const;
         const glm::vec3& front() const;

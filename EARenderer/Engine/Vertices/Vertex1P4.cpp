@@ -6,16 +6,16 @@
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
-#include "Vertex1P.hpp"
+#include "Vertex1P4.hpp"
 
 namespace EARenderer {
     
-    Vertex1P::Vertex1P()
+    Vertex1P4::Vertex1P4()
     :
     position(glm::vec4())
     { }
     
-    Vertex1P::Vertex1P(glm::vec4 p)
+    Vertex1P4::Vertex1P4(glm::vec4 p)
     :
     position(p)
     { }

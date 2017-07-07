@@ -35,6 +35,7 @@ namespace EARenderer {
         GLBuffer& operator=(GLBuffer&& rhs) = default;
         
         virtual void initialize(const std::vector<DataType>& data) = 0;
+        virtual void initialize(const DataType *data, uint64_t size) = 0;
     };
     
 }

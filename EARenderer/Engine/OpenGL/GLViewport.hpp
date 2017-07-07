@@ -10,25 +10,25 @@
 #define GLViewport_hpp
 
 #include <glm/vec2.hpp>
-#include "Rect.hpp"
+#include "Rect2D.hpp"
 
 namespace EARenderer {
     
     class GLViewport {
     private:
-        Rect mFrame;
+        Rect2D mFrame;
         
     public:
         static GLViewport& main();
         
         GLViewport();
-        GLViewport(const Rect& frame);
+        GLViewport(const Rect2D& frame);
         
-        const Rect& frame() const;
+        const Rect2D& frame() const;
         float aspectRatio() const;
         
-        void setFrame(const Rect& frame);
-        void setDimensions(const Size& dimensions);
+        void setFrame(const Rect2D& frame);
+        void setDimensions(const Size2D& dimensions);
         
         void apply() const;
         

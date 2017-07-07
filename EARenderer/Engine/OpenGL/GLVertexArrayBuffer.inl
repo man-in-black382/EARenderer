@@ -10,7 +10,7 @@
 #define GLVertexArrayBuffer_hpp
 
 #include "GLBuffer.inl"
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 namespace EARenderer {
     
@@ -18,9 +18,7 @@ namespace EARenderer {
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
         using GLBuffer<Vertex>::GLBuffer;
-//        GLVertexArrayBuffer(const GLVertexArrayBuffer& that) = delete;
         GLVertexArrayBuffer(GLVertexArrayBuffer&& that) = default;
-//        GLVertexArrayBuffer& operator=(const GLVertexArrayBuffer& rhs) = delete;
         GLVertexArrayBuffer& operator=(GLVertexArrayBuffer&& rhs) = default;
         
         void bind() const override {
@@ -30,6 +28,11 @@ namespace EARenderer {
         void initialize(const std::vector<Vertex>& data) override {
             bind();
             glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(Vertex), data.data(), GL_STATIC_DRAW);
+        }
+        
+        void initialize(const Vertex *data, uint64_t size) override {
+            bind();
+            glBufferData(GL_ARRAY_BUFFER, size * sizeof(Vertex), data, GL_STATIC_DRAW);
         }
     };
     

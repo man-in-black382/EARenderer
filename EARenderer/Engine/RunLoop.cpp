@@ -16,12 +16,14 @@ namespace EARenderer {
     
     RunLoop::RunLoop(Scene * const scene,
                      Input * const input,
-                     Renderer * const renderer,
+                     SceneRenderer * const renderer,
+                     AxesRenderer * const axesVisualizer,
                      GLViewport * const mainViewport)
     :
     mScene(scene),
     mInput(input),
-    mRenderer(renderer),
+    mSceneRenderer(renderer),
+    mAxesRenderer(axesVisualizer),
     mMainViewport(mainViewport)
     { }
     
@@ -56,16 +58,28 @@ namespace EARenderer {
     }
     
     void RunLoop::updateMeshes() {
-        Ray cameraRay = mScene->camera()->rayFromPointOnViewport(mInput->freeMousePosition(), mMainViewport);
-        ID closestSelectedMeshID = RayTracer::closestMeshToRayOrigin(mScene->meshes(), mScene->transforms(), cameraRay);
-        for (ID meshID : mScene->meshes()) {
-            Mesh& mesh = mScene->meshes()[meshID];
-            mesh.setHighlighted(meshID == closestSelectedMeshID);
+        Ray3D cameraRay = mScene->camera()->rayFromPointOnViewport(mInput->freeMousePosition(), mMainViewport);
+        
+        AxesSelection selection;
+        if (mAxesRenderer->raySelectsAxes(cameraRay, selection)) {
+            mAxesRenderer->enableAxesHighlightForMesh(selection.axesMask, selection.meshID);
+//            for (ID meshID : mScene->meshes()) {
+//                Mesh& mesh = mScene->meshes()[meshID];
+//                mesh.setHighlighted(false);
+//            }
+        } else {
+            mAxesRenderer->disableAxesHighlight();
+//            ID closestSelectedMeshID = RayTracer::closestMeshToRayOrigin(mScene->meshes(), mScene->transforms(), cameraRay);
+//            for (ID meshID : mScene->meshes()) {
+//                Mesh& mesh = mScene->meshes()[meshID];
+//                mesh.setHighlighted(meshID == closestSelectedMeshID);
+//            }
         }
     }
     
     void RunLoop::drawScene() {
-        mRenderer->render(mScene);
+        mSceneRenderer->render(mScene);
+        mAxesRenderer->render();
     }
     
 #pragma mark - Public methods

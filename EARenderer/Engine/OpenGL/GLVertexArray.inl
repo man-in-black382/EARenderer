@@ -24,6 +24,7 @@ namespace EARenderer {
     class GLVertexArray: public GLNamedObject, public GLBindable {
     private:
         GLVertexArrayBuffer<Vertex> mVertexBuffer;
+        GLElementArrayBuffer mIndexBuffer;
         
     public:
         using GLNamedObject::GLNamedObject;
@@ -48,10 +49,14 @@ namespace EARenderer {
             glBindVertexArray(mName);
         }
         
-        void initialize(const std::vector<Vertex>& vertices, const GLVertexArrayLayoutDescription& layoutDescription) {
+        void initialize(const Vertex *vertices, uint64_t verticesSize,
+                        const GLushort *indices, uint64_t indicesSize,
+                        const GLVertexArrayLayoutDescription& layoutDescription)
+        {
             bind();
-
-            mVertexBuffer.initialize(vertices);
+            
+            mVertexBuffer.initialize(vertices, verticesSize);
+            if (indices) { mIndexBuffer.initialize(indices, indicesSize); }
             
             GLuint offset = 0;
             for (GLuint location = 0; location < layoutDescription.getAttributeSizes().size(); location++) {
@@ -60,6 +65,18 @@ namespace EARenderer {
                 glVertexAttribPointer(location, attributeSize / sizeof(GLfloat), GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
                 offset += attributeSize;
             }
+        }
+        
+        void initialize(const Vertex *vertices, uint64_t verticesSize, const GLVertexArrayLayoutDescription& layoutDescription) {
+            initialize(vertices, verticesSize, nullptr, 0, layoutDescription);
+        }
+        
+        void initialize(const std::vector<Vertex>& vertices, const GLVertexArrayLayoutDescription& layoutDescription) {
+            initialize(vertices.data(), vertices.size(), nullptr, 0, layoutDescription);
+        }
+        
+        void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const GLVertexArrayLayoutDescription& layoutDescription) {
+            initialize(vertices.data(), vertices.size(), nullptr, 0, layoutDescription);
         }
     };
     

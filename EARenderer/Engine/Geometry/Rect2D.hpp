@@ -9,16 +9,16 @@
 #ifndef Rect_hpp
 #define Rect_hpp
 
-#include "Size.hpp"
+#include "Size2D.hpp"
 #include <glm/vec2.hpp>
 
 namespace EARenderer {
     
-    struct Rect {
+    struct Rect2D {
         glm::vec2 origin;
-        Size size;
+        Size2D size;
         
-        static const Rect& zero();
+        static const Rect2D& zero();
     };
     
 }

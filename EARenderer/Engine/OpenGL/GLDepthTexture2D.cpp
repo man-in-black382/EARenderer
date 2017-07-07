@@ -11,7 +11,7 @@
 
 namespace EARenderer {
     
-    GLDepthTexture2D::GLDepthTexture2D(const Size& size)
+    GLDepthTexture2D::GLDepthTexture2D(const Size2D& size)
     :
     mSize(size)
     {
@@ -36,7 +36,7 @@ namespace EARenderer {
         glDeleteTextures(1, &mName);
     }
     
-    const Size& GLDepthTexture2D::size() const {
+    const Size2D& GLDepthTexture2D::size() const {
         return mSize;
     }
     

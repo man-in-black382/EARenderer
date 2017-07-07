@@ -10,7 +10,6 @@
 
 #include <vector>
 #include <sstream>
-#include <OpenGL/gl.h>
 
 #include "Macros.h"
 

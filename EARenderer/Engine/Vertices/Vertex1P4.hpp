@@ -13,11 +13,11 @@
 
 namespace EARenderer {
     
-    struct Vertex1P {
+    struct Vertex1P4 {
         glm::vec4 position;
         
-        Vertex1P();
-        Vertex1P(glm::vec4 p);
+        Vertex1P4();
+        Vertex1P4(glm::vec4 p);
     };
     
 }

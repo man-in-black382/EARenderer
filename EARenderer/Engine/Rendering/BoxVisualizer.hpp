@@ -11,8 +11,8 @@
 
 #include <vector>
 
-#include "Vertex1P.hpp"
-#include "Box.hpp"
+#include "Vertex1P3.hpp"
+#include "AxisAlignedBox3D.hpp"
 #include "GLVertexArray.inl"
 #include "Drawable.hpp"
 
@@ -20,11 +20,11 @@ namespace EARenderer {
     
     class BoxVisualizer: public Drawable {
     private:
-        std::vector<Vertex1P> mVertices;
-        GLVertexArray<Vertex1P> *mVAO = nullptr;
+        std::vector<Vertex1P3> mVertices;
+        GLVertexArray<Vertex1P3> *mVAO = nullptr;
         
     public:
-        BoxVisualizer(const Box& box);
+        BoxVisualizer(const AxisAlignedBox3D& box);
         BoxVisualizer(BoxVisualizer&& that);
         BoxVisualizer& operator=(BoxVisualizer rhs);
         BoxVisualizer(const BoxVisualizer& that) = delete;
@@ -33,7 +33,7 @@ namespace EARenderer {
         
         void swap(BoxVisualizer&);
         
-        const GLVertexArray<Vertex1P> * VAO() const;
+        const GLVertexArray<Vertex1P3> * VAO() const;
         
         void draw() const override;
     };

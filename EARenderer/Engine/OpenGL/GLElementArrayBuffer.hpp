@@ -17,7 +17,9 @@ namespace EARenderer {
     class GLElementArrayBuffer : public GLBuffer<GLushort> {
     public:
         void bind() const override;
+        
         void initialize(const std::vector<GLushort>& data) override;
+        void initialize(const GLushort* data, uint64_t size) override;
     };
     
 }

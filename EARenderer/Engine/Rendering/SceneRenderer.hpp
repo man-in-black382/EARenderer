@@ -17,21 +17,27 @@
 #include "GLFramebuffer.hpp"
 #include "GLDepthTexture2D.hpp"
 
-#include "Ray.hpp"
+#include "Ray3D.hpp"
 
 namespace EARenderer {
     
-    class Renderer {
+    class SceneRenderer {
     private:
-        GLSLProgramFacility *mProgramFacility;
+        GLSLProgramFacility *mProgramFacility = nullptr;
+        DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
+        
         GLDepthTexture2D mDepthTexture;
         GLFramebuffer mDepthFramebuffer;
-        DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider;
+        
+        std::unordered_set<ID> mMeshesToHighlight;
         
     public:
-        Renderer(GLSLProgramFacility *facility);
+        SceneRenderer(GLSLProgramFacility *facility);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
+        void setMeshHiglightEnabled(bool enabled, ID meshID);
+        void disableMeshesHighlight();
+        
         void render(Scene *scene);
     };
     

@@ -6,39 +6,51 @@
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
-#include "Renderer.hpp"
+#include "SceneRenderer.hpp"
 #include "GLShader.hpp"
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Vertex1P.hpp"
+#include "Vertex1P4.hpp"
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    Renderer::Renderer(GLSLProgramFacility *facility)
+    SceneRenderer::SceneRenderer(GLSLProgramFacility *facility)
     :
     mProgramFacility(facility),
-    mDepthTexture(Size(1024, 1024)),
-    mDepthFramebuffer(Size(1024, 1024))
+    mDepthTexture(Size2D(1024, 1024)),
+    mDepthFramebuffer(Size2D(1024, 1024))
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
         
-        mDepthFramebuffer.attachTexture(mDepthTexture);
+        mDepthFramebuffer.attachTexture(mDepthTexture);        
     }
     
 #pragma mark - Setters
     
-    void Renderer::setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider) {
+    void SceneRenderer::setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider) {
         mDefaultRenderComponentsProvider = provider;
+    }
+    
+    void SceneRenderer::setMeshHiglightEnabled(bool enabled, ID meshID) {
+        if (enabled) {
+            mMeshesToHighlight.insert(meshID);
+        } else {
+            mMeshesToHighlight.erase(meshID);
+        }
+    }
+    
+    void SceneRenderer::disableMeshesHighlight() {
+        mMeshesToHighlight.clear();
     }
     
 #pragma mark - Rendering
     
-    void Renderer::render(Scene *scene) {
+    void SceneRenderer::render(Scene *scene) {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -95,30 +107,17 @@ namespace EARenderer {
             Material& material = scene->materials()[materialID];
             mProgramFacility->blinnPhongProgram()->setMaterial(material);
             
-            mProgramFacility->blinnPhongProgram()->setHighlighted(mesh.isHighlighted());
+//            mProgramFacility->blinnPhongProgram()->setHighlighted(mesh.isHighlighted());
             
             subMesh.draw();
         }
         
-        mProgramFacility->lineVisualizationProgram()->bind();
-        
-        for (ID meshID : scene->meshes()) {
-            Mesh& mesh = scene->meshes()[meshID];
-            if (mesh.boundingBoxVisualizer()) {
-                ID transformID = mesh.transformID();
-                Transformation& transform = scene->transforms()[transformID];
-                glm::mat4 mvpMat = scene->camera()->viewProjectionMatrix() * transform.modelMatrix();
-                mProgramFacility->lineVisualizationProgram()->setModelViewProjectionMatrix(mvpMat);
-                mesh.boundingBoxVisualizer()->draw();
-            }
-        }
-        
-//        mProgramFacility->skyboxProgram()->bind();
-//        mProgramFacility->skyboxProgram()->flushState();
-//        mProgramFacility->skyboxProgram()->setViewMatrix(scene->camera()->viewMatrix());
-//        mProgramFacility->skyboxProgram()->setProjectionMatrix(scene->camera()->projectionMatrix());
-//        mProgramFacility->skyboxProgram()->setCubemap(scene->skybox()->cubemap());
-//        scene->skybox()->draw();
+        mProgramFacility->skyboxProgram()->bind();
+        mProgramFacility->skyboxProgram()->flushState();
+        mProgramFacility->skyboxProgram()->setViewMatrix(scene->camera()->viewMatrix());
+        mProgramFacility->skyboxProgram()->setProjectionMatrix(scene->camera()->projectionMatrix());
+        mProgramFacility->skyboxProgram()->setCubemap(scene->skybox()->cubemap());
+        scene->skybox()->draw();
     }
     
 }

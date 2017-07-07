@@ -9,7 +9,7 @@
 #ifndef RayTracer_hpp
 #define RayTracer_hpp
 
-#include "Ray.hpp"
+#include "Ray3D.hpp"
 #include "Mesh.hpp"
 #include "Transformation.hpp"
 
@@ -19,7 +19,7 @@ namespace EARenderer {
     public:
         static ID closestMeshToRayOrigin(const PackedLookupTable<Mesh>& meshes,
                                          const PackedLookupTable<Transformation>& transformations,
-                                         const Ray& ray);
+                                         const Ray3D& ray);
     };
     
 }

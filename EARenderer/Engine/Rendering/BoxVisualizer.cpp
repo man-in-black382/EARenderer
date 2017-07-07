@@ -12,15 +12,15 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    BoxVisualizer::BoxVisualizer(const Box& box) {
-        glm::vec4 p0 = { box.min.x, box.min.y, box.min.z, 1.0 };
-        glm::vec4 p1 = { box.min.x, box.max.y, box.min.z, 1.0 };
-        glm::vec4 p2 = { box.min.x, box.min.y, box.max.z, 1.0 };
-        glm::vec4 p3 = { box.min.x, box.max.y, box.max.z, 1.0 };
-        glm::vec4 p4 = { box.max.x, box.min.y, box.min.z, 1.0 };
-        glm::vec4 p5 = { box.max.x, box.max.y, box.min.z, 1.0 };
-        glm::vec4 p6 = { box.max.x, box.min.y, box.max.z, 1.0 };
-        glm::vec4 p7 = { box.max.x, box.max.y, box.max.z, 1.0 };
+    BoxVisualizer::BoxVisualizer(const AxisAlignedBox3D& box) {
+        glm::vec3 p0 = { box.min.x, box.min.y, box.min.z };
+        glm::vec3 p1 = { box.min.x, box.max.y, box.min.z };
+        glm::vec3 p2 = { box.min.x, box.min.y, box.max.z };
+        glm::vec3 p3 = { box.min.x, box.max.y, box.max.z };
+        glm::vec3 p4 = { box.max.x, box.min.y, box.min.z };
+        glm::vec3 p5 = { box.max.x, box.max.y, box.min.z };
+        glm::vec3 p6 = { box.max.x, box.min.y, box.max.z };
+        glm::vec3 p7 = { box.max.x, box.max.y, box.max.z };
         
         // Build box edges
         mVertices.emplace_back(p0);
@@ -59,8 +59,8 @@ namespace EARenderer {
         mVertices.emplace_back(p1);
         mVertices.emplace_back(p3);
         
-        mVAO = new GLVertexArray<Vertex1P>();
-        mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec4::length() * sizeof(GLfloat)) }));
+        mVAO = new GLVertexArray<Vertex1P3>();
+        mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
     }
     
     BoxVisualizer::BoxVisualizer(BoxVisualizer&& that)
@@ -93,7 +93,7 @@ namespace EARenderer {
     
 #pragma mark - Getters
     
-    const GLVertexArray<Vertex1P> * BoxVisualizer::VAO() const {
+    const GLVertexArray<Vertex1P3> * BoxVisualizer::VAO() const {
         return mVAO;
     }
     

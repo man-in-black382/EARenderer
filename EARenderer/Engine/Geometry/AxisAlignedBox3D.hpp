@@ -14,24 +14,21 @@
 
 namespace EARenderer {
     
-    struct Box {
+    struct AxisAlignedBox3D {
         glm::vec3 min;
         glm::vec3 max;
         
-        static const Box& zero();
+        static const AxisAlignedBox3D& zero();
+        static const AxisAlignedBox3D& unit();
         
-        Box();
-        Box(const glm::vec3& min, const glm::vec3& max);
-        
-        void swap(Box& that);
+        AxisAlignedBox3D();
+        AxisAlignedBox3D(const glm::vec3& min, const glm::vec3& max);
         
         const float diagonal() const;
-        Box transformedBy(const Transformation& t) const;
-        Box transformedBy(const glm::mat4& m) const;
+        AxisAlignedBox3D transformedBy(const Transformation& t) const;
+        AxisAlignedBox3D transformedBy(const glm::mat4& m) const;
     };
-    
-    void swap(Box& lhs, Box& rhs);
-    
+        
 }
 
 #endif /* Box_hpp */

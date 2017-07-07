@@ -17,7 +17,7 @@ namespace EARenderer {
             Mesh& mesh = scene->meshes()[meshID];
             
             std::vector<SubMesh> subMeshes;
-            Box boundingBox;
+            AxisAlignedBox3D boundingBox;
             std::string meshName;
 
             std::vector<ID> subMeshIDs;

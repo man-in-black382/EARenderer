@@ -101,7 +101,7 @@ namespace EARenderer {
         
     }
     
-    Ray Camera::rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) {
+    Ray3D Camera::rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) {
         glm::vec2 ndc = viewport->NDCFromPoint(point);
         glm::mat4 inverseVP = glm::inverse(viewProjectionMatrix());
         
@@ -117,7 +117,7 @@ namespace EARenderer {
         glm::vec4 farUntransformed = inverseVP * farPlanePoint;
         farUntransformed /= farUntransformed.w;
         
-        return Ray(glm::vec3(nearUntransformed), glm::vec3(farUntransformed));
+        return Ray3D(glm::vec3(nearUntransformed), glm::vec3(farUntransformed));
     }
     
 #pragma mark - Getters

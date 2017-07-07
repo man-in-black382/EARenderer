@@ -10,12 +10,65 @@
 
 namespace EARenderer {
     
+#pragma mark - Lifecycle
+    
     GLSLProgramFacility::GLSLProgramFacility(const std::string& shaderSrcDirectory)
     :
-    mShaderSrcDirectory(shaderSrcDirectory),
-    mBlinnPhongProgram(nullptr),
-    mNormalVisualizationProgram(nullptr)
+    mShaderSrcDirectory(shaderSrcDirectory)
     { }
+    
+    GLSLProgramFacility::GLSLProgramFacility(GLSLProgramFacility&& that) {
+        swap(that);
+    }
+    
+    GLSLProgramFacility& GLSLProgramFacility::operator=(GLSLProgramFacility rhs) {
+        swap(rhs);
+        return *this;
+    }
+    
+    GLSLProgramFacility::~GLSLProgramFacility() {
+        delete mBlinnPhongVertShader;
+        delete mBlinnPhongFragShader;
+        delete mBlinnPhongProgram;
+        
+        delete mNormalVisualizationVertShader;
+        delete mNormalVisualizationFragShader;
+        delete mNormalVisualizationProgram;
+        
+        delete mSkyboxVertShader;
+        delete mSkyboxFragShader;
+        delete mSkyboxProgram;
+        
+        delete mDepthFillerVertShader;
+        delete mDepthFillerFragShader;
+        delete mDepthFillerProgram;
+    }
+    
+#pragma mark - Swap
+    
+    void GLSLProgramFacility::swap(GLSLProgramFacility& that) {
+        std::swap(mBlinnPhongFragShader, that.mBlinnPhongFragShader);
+        std::swap(mBlinnPhongVertShader, that.mBlinnPhongVertShader);
+        std::swap(mBlinnPhongProgram, that.mBlinnPhongProgram);
+        
+        std::swap(mNormalVisualizationFragShader, that.mNormalVisualizationFragShader);
+        std::swap(mNormalVisualizationVertShader, that.mNormalVisualizationVertShader);
+        std::swap(mNormalVisualizationProgram, that.mNormalVisualizationProgram);
+        
+        std::swap(mSkyboxFragShader, that.mSkyboxFragShader);
+        std::swap(mSkyboxVertShader, that.mSkyboxVertShader);
+        std::swap(mSkyboxProgram, that.mSkyboxProgram);
+        
+        std::swap(mDepthFillerFragShader, that.mDepthFillerFragShader);
+        std::swap(mDepthFillerVertShader, that.mDepthFillerVertShader);
+        std::swap(mDepthFillerProgram, that.mDepthFillerProgram);
+    }
+    
+    void swap(GLSLProgramFacility& lhs, GLSLProgramFacility &rhs) {
+        lhs.swap(rhs);
+    }
+    
+#pragma mark - Getters
     
     GLBlinnPhongProgram* GLSLProgramFacility::blinnPhongProgram() {
         if (!mBlinnPhongProgram) {
@@ -26,11 +79,11 @@ namespace EARenderer {
         return mBlinnPhongProgram;
     }
     
-    GLLineVisualizationProgram* GLSLProgramFacility::lineVisualizationProgram() {
+    GLVertex1P3Program* GLSLProgramFacility::vertex1P3Program() {
         if (!mNormalVisualizationProgram) {
-            mNormalVisualizationVertShader = new GLShader(std::string(mShaderSrcDirectory).append("LineVisualizationShader.vert"), GL_VERTEX_SHADER);
-            mNormalVisualizationFragShader = new GLShader(std::string(mShaderSrcDirectory).append("LineVisualizationShader.frag"), GL_FRAGMENT_SHADER);
-            mNormalVisualizationProgram = new GLLineVisualizationProgram(mNormalVisualizationVertShader, mNormalVisualizationFragShader);
+            mNormalVisualizationVertShader = new GLShader(std::string(mShaderSrcDirectory).append("Vertex1P3Drawer.vert"), GL_VERTEX_SHADER);
+            mNormalVisualizationFragShader = new GLShader(std::string(mShaderSrcDirectory).append("Vertex1P3Drawer.frag"), GL_FRAGMENT_SHADER);
+            mNormalVisualizationProgram = new GLVertex1P3Program(mNormalVisualizationVertShader, mNormalVisualizationFragShader);
         }
         return mNormalVisualizationProgram;
     }

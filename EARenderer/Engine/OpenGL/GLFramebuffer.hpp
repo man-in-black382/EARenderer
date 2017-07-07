@@ -12,24 +12,24 @@
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
 #include "GLDepthTexture2D.hpp"
-#include "Size.hpp"
+#include "Size2D.hpp"
 
 namespace EARenderer {
     
     class GLFramebuffer: public GLNamedObject, public GLBindable {
     private:
-        Size mSize;
+        Size2D mSize;
         
     public:
         using GLNamedObject::GLNamedObject;
-        GLFramebuffer(const Size& size);
+        GLFramebuffer(const Size2D& size);
         GLFramebuffer(GLFramebuffer&& that) = default;
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
         ~GLFramebuffer() override;
         
         void bind() const override;
         
-        const Size& size() const;
+        const Size2D& size() const;
         bool isComplete();
         void attachTexture(const GLDepthTexture2D& texture);
     };

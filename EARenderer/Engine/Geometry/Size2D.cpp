@@ -6,26 +6,26 @@
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
-#include "Size.hpp"
+#include "Size2D.hpp"
 
 namespace EARenderer {
     
-    const Size& Size::zero() {
-        static Size zero = { 0, 0 };
+    const Size2D& Size2D::zero() {
+        static Size2D zero = { 0, 0 };
         return zero;
     }
     
-    Size::Size(float w, float h)
+    Size2D::Size2D(float w, float h)
     :
     width(w),
     height(h)
     { }
     
-    bool Size::operator==(const Size& rhs) {
+    bool Size2D::operator==(const Size2D& rhs) {
         return width == rhs.width && height == rhs.height;
     }
     
-    bool Size::operator!=(const Size& rhs) {
+    bool Size2D::operator!=(const Size2D& rhs) {
         return !operator==(rhs);
     }
     

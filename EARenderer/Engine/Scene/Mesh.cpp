@@ -11,21 +11,10 @@
 namespace EARenderer {
     
 #pragma mark - Lifecycle
-    
-    Mesh::Mesh(Mesh&& that)
-    :
-    mBoundingBoxVisualizer(std::move(that.mBoundingBoxVisualizer))
-    {
-        that.mBoundingBoxVisualizer = nullptr;
-    }
-    
+        
     Mesh& Mesh::operator=(Mesh rhs) {
         swap(rhs);
         return *this;
-    }
-    
-    Mesh::~Mesh() {
-        deallocateBoundingBoxVisualizer();
     }
     
 #pragma mark - Swap
@@ -35,8 +24,6 @@ namespace EARenderer {
         std::swap(mSubMeshIDs, that.mSubMeshIDs);
         std::swap(mTransformID, that.mTransformID);
         std::swap(mBoundingBox, that.mBoundingBox);
-        std::swap(mIsHighlighted, that.mIsHighlighted);
-        std::swap(mBoundingBoxVisualizer, that.mBoundingBoxVisualizer);
     }
     
     void swap(Mesh& lhs, Mesh& rhs) {
@@ -57,16 +44,8 @@ namespace EARenderer {
         return mTransformID;
     }
     
-    const Box& Mesh::boundingBox() const {
+    const AxisAlignedBox3D& Mesh::boundingBox() const {
         return mBoundingBox;
-    }
-    
-    bool Mesh::isHighlighted() const {
-        return mIsHighlighted;
-    }
-    
-    const BoxVisualizer* Mesh::boundingBoxVisualizer() const {
-        return mBoundingBoxVisualizer;
     }
     
 #pragma mark - Setters
@@ -83,27 +62,8 @@ namespace EARenderer {
         mSubMeshIDs = subMeshIDs;
     }
     
-    void Mesh::setBoundingBox(const Box& box) {
+    void Mesh::setBoundingBox(const AxisAlignedBox3D& box) {
         mBoundingBox = box;
-        allocateBoundingBoxVisualizer();
-    }
-    
-    void Mesh::setHighlighted(bool isHighlighted) {
-        mIsHighlighted = isHighlighted;
-    }
-    
-    void Mesh::allocateBoundingBoxVisualizer() {
-        if (mBoundingBoxVisualizer) {
-            deallocateBoundingBoxVisualizer();
-        }
-        mBoundingBoxVisualizer = new BoxVisualizer(mBoundingBox);
-    }
-    
-    void Mesh::deallocateBoundingBoxVisualizer() {
-        if (mBoundingBoxVisualizer) {
-            delete mBoundingBoxVisualizer;
-            mBoundingBoxVisualizer = nullptr;
-        }
     }
     
 }

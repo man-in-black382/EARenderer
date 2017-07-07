@@ -11,15 +11,15 @@
 
 namespace EARenderer {
     
-    struct Size {
+    struct Size2D {
         float width;
         float height;
         
-        static const Size& zero();
-        Size(float w, float h);
+        static const Size2D& zero();
+        Size2D(float w, float h);
         
-        bool operator==(const Size& rhs);
-        bool operator!=(const Size& rhs);
+        bool operator==(const Size2D& rhs);
+        bool operator!=(const Size2D& rhs);
     };
     
 }

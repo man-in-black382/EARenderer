@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE0BE55E1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm */; };
 		CE143EB11EBC79A6009EE0E1 /* FlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE143EB01EBC79A6009EE0E1 /* FlippedClipView.m */; };
-		CE44B89B1EF3FF4400CB690C /* Rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect.cpp */; };
-		CE44B89E1EF3FF4B00CB690C /* Size.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size.cpp */; };
-		CE44B8A11EF3FF5300CB690C /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* Box.cpp */; };
-		CE44B8A41EF40BF500CB690C /* BoxVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8A21EF40BF500CB690C /* BoxVisualizer.cpp */; };
+		CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1737971F07EFA700D7871F /* Parallelogram3D.cpp */; };
+		CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE216F531EFA853B002D12AE /* Vertex1P3.cpp */; };
+		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
+		CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */; };
+		CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */; };
 		CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322B61EBB3557005F49C2 /* AppDelegate.m */; };
 		CE5322E21EBB3557005F49C2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5322BE1EBB3557005F49C2 /* Info.plist */; };
 		CE5322E31EBB3557005F49C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322BF1EBB3557005F49C2 /* main.m */; };
@@ -42,7 +43,6 @@
 		CE5322FB1EBB3557005F49C2 /* wooden-crate.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE5322DC1EBB3557005F49C2 /* wooden-crate.jpg */; };
 		CE5323091EBB360B005F49C2 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5323051EBB360B005F49C2 /* MainViewController.mm */; };
 		CE53230A1EBB360B005F49C2 /* SceneGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5323081EBB360B005F49C2 /* SceneGLView.mm */; };
-		CE5835DF1EB9031C009E2F61 /* MeshNormalVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834491EB9031B009E2F61 /* MeshNormalVisualizer.cpp */; };
 		CE5835E11EB9031C009E2F61 /* GLDepthTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834511EB9031B009E2F61 /* GLDepthTexture2D.cpp */; };
 		CE5835E21EB9031C009E2F61 /* GLElementArrayBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834531EB9031B009E2F61 /* GLElementArrayBuffer.cpp */; };
 		CE5835E31EB9031C009E2F61 /* GLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834551EB9031B009E2F61 /* GLFramebuffer.cpp */; };
@@ -56,9 +56,8 @@
 		CE5835EB1EB9031C009E2F61 /* GLBlinnPhongProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834681EB9031B009E2F61 /* GLBlinnPhongProgram.cpp */; };
 		CE5835EC1EB9031C009E2F61 /* GLDepthFillerProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58346A1EB9031B009E2F61 /* GLDepthFillerProgram.cpp */; };
 		CE5835ED1EB9031C009E2F61 /* GLFSQuadTextureRenderingProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58346C1EB9031B009E2F61 /* GLFSQuadTextureRenderingProgram.cpp */; };
-		CE5835EE1EB9031C009E2F61 /* GLLineVisualizationProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58346E1EB9031B009E2F61 /* GLLineVisualizationProgram.cpp */; };
+		CE5835EE1EB9031C009E2F61 /* GLVertex1P3Program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58346E1EB9031B009E2F61 /* GLVertex1P3Program.cpp */; };
 		CE5835EF1EB9031C009E2F61 /* GLSkyboxProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834701EB9031B009E2F61 /* GLSkyboxProgram.cpp */; };
-		CE5835F01EB9031C009E2F61 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834771EB9031B009E2F61 /* Renderer.cpp */; };
 		CE5835F11EB9031C009E2F61 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347A1EB9031B009E2F61 /* ResourceManager.cpp */; };
 		CE5835F21EB9031C009E2F61 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347C1EB9031B009E2F61 /* WavefrontMeshLoader.cpp */; };
 		CE5835F31EB9031C009E2F61 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347F1EB9031B009E2F61 /* Camera.cpp */; };
@@ -73,7 +72,7 @@
 		CE5835FD1EB9031C009E2F61 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834C01EB9031B009E2F61 /* glm.cpp */; };
 		CE5835FE1EB9031C009E2F61 /* ltalloc.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE5835AB1EB9031C009E2F61 /* ltalloc.cc */; };
 		CE5835FF1EB9031C009E2F61 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5835AE1EB9031C009E2F61 /* tiny_obj_loader.cpp */; };
-		CE5836001EB9031C009E2F61 /* Vertex1P.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5835B31EB9031C009E2F61 /* Vertex1P.cpp */; };
+		CE5836001EB9031C009E2F61 /* Vertex1P4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5835B31EB9031C009E2F61 /* Vertex1P4.cpp */; };
 		CE5836011EB9031C009E2F61 /* Vertex1P1N1UV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5835B51EB9031C009E2F61 /* Vertex1P1N1UV.cpp */; };
 		CE5836261EB90E37009E2F61 /* BlinnPhong.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE5834921EB9031B009E2F61 /* BlinnPhong.frag */; };
 		CE5836271EB90E37009E2F61 /* BlinnPhong.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE5834931EB9031B009E2F61 /* BlinnPhong.vert */; };
@@ -81,16 +80,18 @@
 		CE5836291EB90E37009E2F61 /* DepthFiller.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE5834951EB9031B009E2F61 /* DepthFiller.vert */; };
 		CE58362A1EB90E37009E2F61 /* FSQuadTexRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE5834961EB9031B009E2F61 /* FSQuadTexRendering.frag */; };
 		CE58362B1EB90E37009E2F61 /* FSQuadTexRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE5834971EB9031B009E2F61 /* FSQuadTexRendering.vert */; };
-		CE58362C1EB90E37009E2F61 /* LineVisualizationShader.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE5834981EB9031B009E2F61 /* LineVisualizationShader.frag */; };
-		CE58362D1EB90E37009E2F61 /* LineVisualizationShader.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE5834991EB9031B009E2F61 /* LineVisualizationShader.vert */; };
+		CE58362C1EB90E37009E2F61 /* Vertex1P3Drawer.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE5834981EB9031B009E2F61 /* Vertex1P3Drawer.frag */; };
+		CE58362D1EB90E37009E2F61 /* Vertex1P3Drawer.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE5834991EB9031B009E2F61 /* Vertex1P3Drawer.vert */; };
 		CE58362E1EB90E37009E2F61 /* Skybox.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE58349A1EB9031B009E2F61 /* Skybox.frag */; };
 		CE58362F1EB90E37009E2F61 /* Skybox.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE58349B1EB9031B009E2F61 /* Skybox.vert */; };
 		CE6539DA1EF6B2B2003D6808 /* NSNumberFormatter+CustomFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */; };
+		CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */; };
 		CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */; };
 		CE859D1F1EEEBDB500C9A4AC /* RunLoop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE859D1D1EEEBDB500C9A4AC /* RunLoop.cpp */; };
-		CEE0F71A1EED58EB0048AD01 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F7181EED58EB0048AD01 /* Ray.cpp */; };
+		CEE0F71A1EED58EB0048AD01 /* Ray3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F7181EED58EB0048AD01 /* Ray3D.cpp */; };
 		CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71B1EED736F0048AD01 /* GLViewport.cpp */; };
 		CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71F1EED7BD30048AD01 /* Input.cpp */; };
+		CEE5D0F21EFADA2300C71F43 /* DebugRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE5D0F01EFADA2300C71F43 /* DebugRenderer.cpp */; };
 		CEE971A21EE3FD99000C20DD /* ColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE971A11EE3FD99000C20DD /* ColoredView.m */; };
 		CEE971A71EE55220000C20DD /* OutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE971A61EE55220000C20DD /* OutlineView.m */; };
 		CEE971AF1EE55665000C20DD /* SceneObjectsTabView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971AE1EE55665000C20DD /* SceneObjectsTabView.mm */; };
@@ -100,24 +101,32 @@
 		CEE971BD1EE5570F000C20DD /* CameraListTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971BC1EE5570F000C20DD /* CameraListTabViewItem.mm */; };
 		CEE971C01EE55721000C20DD /* LightListTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971BF1EE55721000C20DD /* LightListTabViewItem.mm */; };
 		CEEB08E61EF92781003E60D5 /* RayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEB08E41EF92781003E60D5 /* RayTracer.cpp */; };
+		CEF3315A1F03A4EB009BE235 /* AxesSelection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF3314E1F03A3B5009BE235 /* AxesSelection.cpp */; };
+		CEF3315B1F03A4EB009BE235 /* AxesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331501F03A3B5009BE235 /* AxesRenderer.cpp */; };
+		CEF3315C1F03A4EB009BE235 /* BoxVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331521F03A3B5009BE235 /* BoxVisualizer.cpp */; };
+		CEF3315D1F03A4EB009BE235 /* MeshNormalVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331561F03A3B5009BE235 /* MeshNormalVisualizer.cpp */; };
+		CEF3315E1F03A4EB009BE235 /* SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331581F03A3B5009BE235 /* SceneRenderer.cpp */; };
 		CEF5578B1EEC1414005FA16E /* NumericTextFieldManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF5578A1EEC1414005FA16E /* NumericTextFieldManager.m */; };
 		CEF6C2A01EE6CA58003818D3 /* SceneObjectMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEF6C29F1EE6CA58003818D3 /* SceneObjectMarker.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSystem.cpp; sourceTree = "<group>"; };
+		CE07DFEB1F0F6FAA002CB321 /* AxesSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSystem.hpp; sourceTree = "<group>"; };
 		CE0BE55D1EF0038E001B0BCF /* DefaultRenderComponentsProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultRenderComponentsProvider.h; sourceTree = "<group>"; };
 		CE0BE55E1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DefaultRenderComponentsProvider.mm; sourceTree = "<group>"; };
 		CE143EAF1EBC79A6009EE0E1 /* FlippedClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlippedClipView.h; path = Common/Views/FlippedClipView/FlippedClipView.h; sourceTree = "<group>"; };
 		CE143EB01EBC79A6009EE0E1 /* FlippedClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FlippedClipView.m; path = Common/Views/FlippedClipView/FlippedClipView.m; sourceTree = "<group>"; };
-		CE3E99F11EEFFBF0008DD076 /* DefaultRenderComponentsProviding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DefaultRenderComponentsProviding.hpp; sourceTree = "<group>"; };
-		CE44B8991EF3FF4400CB690C /* Rect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect.cpp; sourceTree = "<group>"; };
-		CE44B89A1EF3FF4400CB690C /* Rect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Rect.hpp; sourceTree = "<group>"; };
-		CE44B89C1EF3FF4B00CB690C /* Size.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Size.cpp; sourceTree = "<group>"; };
-		CE44B89D1EF3FF4B00CB690C /* Size.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size.hpp; sourceTree = "<group>"; };
-		CE44B89F1EF3FF5300CB690C /* Box.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Box.cpp; sourceTree = "<group>"; };
-		CE44B8A01EF3FF5300CB690C /* Box.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Box.hpp; sourceTree = "<group>"; };
-		CE44B8A21EF40BF500CB690C /* BoxVisualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxVisualizer.cpp; sourceTree = "<group>"; };
-		CE44B8A31EF40BF500CB690C /* BoxVisualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxVisualizer.hpp; sourceTree = "<group>"; };
+		CE1737971F07EFA700D7871F /* Parallelogram3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parallelogram3D.cpp; sourceTree = "<group>"; };
+		CE1737981F07EFA700D7871F /* Parallelogram3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Parallelogram3D.hpp; sourceTree = "<group>"; };
+		CE216F531EFA853B002D12AE /* Vertex1P3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P3.cpp; sourceTree = "<group>"; };
+		CE216F541EFA853B002D12AE /* Vertex1P3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P3.hpp; sourceTree = "<group>"; };
+		CE44B8991EF3FF4400CB690C /* Rect2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect2D.cpp; sourceTree = "<group>"; };
+		CE44B89A1EF3FF4400CB690C /* Rect2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Rect2D.hpp; sourceTree = "<group>"; };
+		CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Size2D.cpp; sourceTree = "<group>"; };
+		CE44B89D1EF3FF4B00CB690C /* Size2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size2D.hpp; sourceTree = "<group>"; };
+		CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
+		CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxisAlignedBox3D.hpp; sourceTree = "<group>"; };
 		CE522BDC1E4DDF700063470C /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5322B51EBB3557005F49C2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE5322B61EBB3557005F49C2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -154,8 +163,6 @@
 		CE5323071EBB360B005F49C2 /* SceneGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneGLView.h; sourceTree = "<group>"; };
 		CE5323081EBB360B005F49C2 /* SceneGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneGLView.mm; sourceTree = "<group>"; };
 		CE5834471EB9031B009E2F61 /* PackedLookupTable.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PackedLookupTable.inl; sourceTree = "<group>"; };
-		CE5834491EB9031B009E2F61 /* MeshNormalVisualizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshNormalVisualizer.cpp; sourceTree = "<group>"; };
-		CE58344A1EB9031B009E2F61 /* MeshNormalVisualizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MeshNormalVisualizer.hpp; sourceTree = "<group>"; };
 		CE58344F1EB9031B009E2F61 /* GLBindable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLBindable.hpp; sourceTree = "<group>"; };
 		CE5834501EB9031B009E2F61 /* GLBuffer.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = GLBuffer.inl; sourceTree = "<group>"; };
 		CE5834511EB9031B009E2F61 /* GLDepthTexture2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthTexture2D.cpp; sourceTree = "<group>"; };
@@ -186,15 +193,12 @@
 		CE58346B1EB9031B009E2F61 /* GLDepthFillerProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLDepthFillerProgram.hpp; sourceTree = "<group>"; };
 		CE58346C1EB9031B009E2F61 /* GLFSQuadTextureRenderingProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFSQuadTextureRenderingProgram.cpp; sourceTree = "<group>"; };
 		CE58346D1EB9031B009E2F61 /* GLFSQuadTextureRenderingProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLFSQuadTextureRenderingProgram.hpp; sourceTree = "<group>"; };
-		CE58346E1EB9031B009E2F61 /* GLLineVisualizationProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLineVisualizationProgram.cpp; sourceTree = "<group>"; };
-		CE58346F1EB9031B009E2F61 /* GLLineVisualizationProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLLineVisualizationProgram.hpp; sourceTree = "<group>"; };
+		CE58346E1EB9031B009E2F61 /* GLVertex1P3Program.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertex1P3Program.cpp; sourceTree = "<group>"; };
+		CE58346F1EB9031B009E2F61 /* GLVertex1P3Program.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLVertex1P3Program.hpp; sourceTree = "<group>"; };
 		CE5834701EB9031B009E2F61 /* GLSkyboxProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSkyboxProgram.cpp; sourceTree = "<group>"; };
 		CE5834711EB9031B009E2F61 /* GLSkyboxProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSkyboxProgram.hpp; sourceTree = "<group>"; };
 		CE5834731EB9031B009E2F61 /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		CE5834741EB9031B009E2F61 /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
-		CE5834761EB9031B009E2F61 /* Drawable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Drawable.hpp; sourceTree = "<group>"; };
-		CE5834771EB9031B009E2F61 /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
-		CE5834781EB9031B009E2F61 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Renderer.hpp; sourceTree = "<group>"; };
 		CE58347A1EB9031B009E2F61 /* ResourceManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
 		CE58347B1EB9031B009E2F61 /* ResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResourceManager.hpp; sourceTree = "<group>"; };
 		CE58347C1EB9031B009E2F61 /* WavefrontMeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WavefrontMeshLoader.cpp; sourceTree = "<group>"; };
@@ -223,8 +227,8 @@
 		CE5834951EB9031B009E2F61 /* DepthFiller.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DepthFiller.vert; sourceTree = "<group>"; };
 		CE5834961EB9031B009E2F61 /* FSQuadTexRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FSQuadTexRendering.frag; sourceTree = "<group>"; };
 		CE5834971EB9031B009E2F61 /* FSQuadTexRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FSQuadTexRendering.vert; sourceTree = "<group>"; };
-		CE5834981EB9031B009E2F61 /* LineVisualizationShader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LineVisualizationShader.frag; sourceTree = "<group>"; };
-		CE5834991EB9031B009E2F61 /* LineVisualizationShader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LineVisualizationShader.vert; sourceTree = "<group>"; };
+		CE5834981EB9031B009E2F61 /* Vertex1P3Drawer.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Vertex1P3Drawer.frag; sourceTree = "<group>"; };
+		CE5834991EB9031B009E2F61 /* Vertex1P3Drawer.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Vertex1P3Drawer.vert; sourceTree = "<group>"; };
 		CE58349A1EB9031B009E2F61 /* Skybox.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Skybox.frag; sourceTree = "<group>"; };
 		CE58349B1EB9031B009E2F61 /* Skybox.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Skybox.vert; sourceTree = "<group>"; };
 		CE58349E1EB9031B009E2F61 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -497,22 +501,25 @@
 		CE5835AE1EB9031C009E2F61 /* tiny_obj_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tiny_obj_loader.cpp; sourceTree = "<group>"; };
 		CE5835AF1EB9031C009E2F61 /* tiny_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiny_obj_loader.h; sourceTree = "<group>"; };
 		CE5835B11EB9031C009E2F61 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		CE5835B31EB9031C009E2F61 /* Vertex1P.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P.cpp; sourceTree = "<group>"; };
-		CE5835B41EB9031C009E2F61 /* Vertex1P.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P.hpp; sourceTree = "<group>"; };
+		CE5835B31EB9031C009E2F61 /* Vertex1P4.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P4.cpp; sourceTree = "<group>"; };
+		CE5835B41EB9031C009E2F61 /* Vertex1P4.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P4.hpp; sourceTree = "<group>"; };
 		CE5835B51EB9031C009E2F61 /* Vertex1P1N1UV.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N1UV.cpp; sourceTree = "<group>"; };
 		CE5835B61EB9031C009E2F61 /* Vertex1P1N1UV.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N1UV.hpp; sourceTree = "<group>"; };
+		CE6651DC1F0284D800620B65 /* BitwiseEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BitwiseEnum.hpp; sourceTree = "<group>"; };
 		CE7B07181EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSNumberFormatter+CustomFormatters.h"; sourceTree = "<group>"; };
 		CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+CustomFormatters.m"; sourceTree = "<group>"; };
 		CE7FAFC81EEBEFE5009FC6F5 /* NumericFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NumericFormatter.h; path = Common/NumericFormatter/NumericFormatter.h; sourceTree = "<group>"; };
 		CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NumericFormatter.m; path = Common/NumericFormatter/NumericFormatter.m; sourceTree = "<group>"; };
 		CE859D1D1EEEBDB500C9A4AC /* RunLoop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RunLoop.cpp; sourceTree = "<group>"; };
 		CE859D1E1EEEBDB500C9A4AC /* RunLoop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RunLoop.hpp; sourceTree = "<group>"; };
-		CEE0F7181EED58EB0048AD01 /* Ray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
-		CEE0F7191EED58EB0048AD01 /* Ray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ray.hpp; sourceTree = "<group>"; };
+		CEE0F7181EED58EB0048AD01 /* Ray3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray3D.cpp; sourceTree = "<group>"; };
+		CEE0F7191EED58EB0048AD01 /* Ray3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ray3D.hpp; sourceTree = "<group>"; };
 		CEE0F71B1EED736F0048AD01 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
 		CEE0F71C1EED736F0048AD01 /* GLViewport.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLViewport.hpp; sourceTree = "<group>"; };
 		CEE0F71F1EED7BD30048AD01 /* Input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
 		CEE0F7201EED7BD30048AD01 /* Input.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Input.hpp; sourceTree = "<group>"; };
+		CEE5D0F01EFADA2300C71F43 /* DebugRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugRenderer.cpp; sourceTree = "<group>"; };
+		CEE5D0F11EFADA2300C71F43 /* DebugRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DebugRenderer.hpp; sourceTree = "<group>"; };
 		CEE971A01EE3FD99000C20DD /* ColoredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColoredView.h; path = Common/Views/ColoredView/ColoredView.h; sourceTree = "<group>"; };
 		CEE971A11EE3FD99000C20DD /* ColoredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ColoredView.m; path = Common/Views/ColoredView/ColoredView.m; sourceTree = "<group>"; };
 		CEE971A51EE55220000C20DD /* OutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OutlineView.h; path = Common/Views/OutlineView/OutlineView.h; sourceTree = "<group>"; };
@@ -531,6 +538,18 @@
 		CEE971BF1EE55721000C20DD /* LightListTabViewItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LightListTabViewItem.mm; sourceTree = "<group>"; };
 		CEEB08E41EF92781003E60D5 /* RayTracer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RayTracer.cpp; sourceTree = "<group>"; };
 		CEEB08E51EF92781003E60D5 /* RayTracer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RayTracer.hpp; sourceTree = "<group>"; };
+		CEF3314E1F03A3B5009BE235 /* AxesSelection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSelection.cpp; sourceTree = "<group>"; };
+		CEF3314F1F03A3B5009BE235 /* AxesSelection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSelection.hpp; sourceTree = "<group>"; };
+		CEF331501F03A3B5009BE235 /* AxesRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesRenderer.cpp; sourceTree = "<group>"; };
+		CEF331511F03A3B5009BE235 /* AxesRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesRenderer.hpp; sourceTree = "<group>"; };
+		CEF331521F03A3B5009BE235 /* BoxVisualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxVisualizer.cpp; sourceTree = "<group>"; };
+		CEF331531F03A3B5009BE235 /* BoxVisualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxVisualizer.hpp; sourceTree = "<group>"; };
+		CEF331541F03A3B5009BE235 /* DefaultRenderComponentsProviding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DefaultRenderComponentsProviding.hpp; sourceTree = "<group>"; };
+		CEF331551F03A3B5009BE235 /* Drawable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Drawable.hpp; sourceTree = "<group>"; };
+		CEF331561F03A3B5009BE235 /* MeshNormalVisualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshNormalVisualizer.cpp; sourceTree = "<group>"; };
+		CEF331571F03A3B5009BE235 /* MeshNormalVisualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshNormalVisualizer.hpp; sourceTree = "<group>"; };
+		CEF331581F03A3B5009BE235 /* SceneRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneRenderer.cpp; sourceTree = "<group>"; };
+		CEF331591F03A3B5009BE235 /* SceneRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneRenderer.hpp; sourceTree = "<group>"; };
 		CEF557891EEC1414005FA16E /* NumericTextFieldManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NumericTextFieldManager.h; sourceTree = "<group>"; };
 		CEF5578A1EEC1414005FA16E /* NumericTextFieldManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumericTextFieldManager.m; sourceTree = "<group>"; };
 		CEF6C29E1EE6CA58003818D3 /* SceneObjectMarker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SceneObjectMarker.h; path = Common/SceneObjectMarker/SceneObjectMarker.h; sourceTree = "<group>"; };
@@ -756,13 +775,13 @@
 				CE5834481EB9031B009E2F61 /* Debug */,
 				CE58344B1EB9031B009E2F61 /* Geometry */,
 				CE58344E1EB9031B009E2F61 /* OpenGL */,
-				CE5834721EB9031B009E2F61 /* Other */,
-				CE5834751EB9031B009E2F61 /* Rendering */,
 				CE5834791EB9031B009E2F61 /* Resource Management */,
 				CE58347E1EB9031B009E2F61 /* Scene */,
+				CEF3314D1F03A3B5009BE235 /* Rendering */,
 				CE5834911EB9031B009E2F61 /* ShaderSources */,
 				CE58349C1EB9031B009E2F61 /* ThirdParty */,
 				CE5835B21EB9031C009E2F61 /* Vertices */,
+				CE5834721EB9031B009E2F61 /* Other */,
 			);
 			path = Engine;
 			sourceTree = "<group>";
@@ -778,10 +797,8 @@
 		CE5834481EB9031B009E2F61 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
-				CE5834491EB9031B009E2F61 /* MeshNormalVisualizer.cpp */,
-				CE58344A1EB9031B009E2F61 /* MeshNormalVisualizer.hpp */,
-				CE44B8A21EF40BF500CB690C /* BoxVisualizer.cpp */,
-				CE44B8A31EF40BF500CB690C /* BoxVisualizer.hpp */,
+				CEE5D0F01EFADA2300C71F43 /* DebugRenderer.cpp */,
+				CEE5D0F11EFADA2300C71F43 /* DebugRenderer.hpp */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -789,14 +806,16 @@
 		CE58344B1EB9031B009E2F61 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				CEE0F7181EED58EB0048AD01 /* Ray.cpp */,
-				CEE0F7191EED58EB0048AD01 /* Ray.hpp */,
-				CE44B8991EF3FF4400CB690C /* Rect.cpp */,
-				CE44B89A1EF3FF4400CB690C /* Rect.hpp */,
-				CE44B89C1EF3FF4B00CB690C /* Size.cpp */,
-				CE44B89D1EF3FF4B00CB690C /* Size.hpp */,
-				CE44B89F1EF3FF5300CB690C /* Box.cpp */,
-				CE44B8A01EF3FF5300CB690C /* Box.hpp */,
+				CEE0F7181EED58EB0048AD01 /* Ray3D.cpp */,
+				CEE0F7191EED58EB0048AD01 /* Ray3D.hpp */,
+				CE44B8991EF3FF4400CB690C /* Rect2D.cpp */,
+				CE44B89A1EF3FF4400CB690C /* Rect2D.hpp */,
+				CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */,
+				CE44B89D1EF3FF4B00CB690C /* Size2D.hpp */,
+				CE1737971F07EFA700D7871F /* Parallelogram3D.cpp */,
+				CE1737981F07EFA700D7871F /* Parallelogram3D.hpp */,
+				CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */,
+				CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */,
 				CEEB08E41EF92781003E60D5 /* RayTracer.cpp */,
 				CEEB08E51EF92781003E60D5 /* RayTracer.hpp */,
 			);
@@ -846,8 +865,8 @@
 				CE58346B1EB9031B009E2F61 /* GLDepthFillerProgram.hpp */,
 				CE58346C1EB9031B009E2F61 /* GLFSQuadTextureRenderingProgram.cpp */,
 				CE58346D1EB9031B009E2F61 /* GLFSQuadTextureRenderingProgram.hpp */,
-				CE58346E1EB9031B009E2F61 /* GLLineVisualizationProgram.cpp */,
-				CE58346F1EB9031B009E2F61 /* GLLineVisualizationProgram.hpp */,
+				CE58346E1EB9031B009E2F61 /* GLVertex1P3Program.cpp */,
+				CE58346F1EB9031B009E2F61 /* GLVertex1P3Program.hpp */,
 				CE5834701EB9031B009E2F61 /* GLSkyboxProgram.cpp */,
 				CE5834711EB9031B009E2F61 /* GLSkyboxProgram.hpp */,
 			);
@@ -859,19 +878,9 @@
 			children = (
 				CE5834731EB9031B009E2F61 /* Macros.h */,
 				CE5834741EB9031B009E2F61 /* Types.h */,
+				CE6651DC1F0284D800620B65 /* BitwiseEnum.hpp */,
 			);
 			path = Other;
-			sourceTree = "<group>";
-		};
-		CE5834751EB9031B009E2F61 /* Rendering */ = {
-			isa = PBXGroup;
-			children = (
-				CE5834781EB9031B009E2F61 /* Renderer.hpp */,
-				CE5834771EB9031B009E2F61 /* Renderer.cpp */,
-				CE5834761EB9031B009E2F61 /* Drawable.hpp */,
-				CE3E99F11EEFFBF0008DD076 /* DefaultRenderComponentsProviding.hpp */,
-			);
-			path = Rendering;
 			sourceTree = "<group>";
 		};
 		CE5834791EB9031B009E2F61 /* Resource Management */ = {
@@ -888,6 +897,8 @@
 		CE58347E1EB9031B009E2F61 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */,
+				CE07DFEB1F0F6FAA002CB321 /* AxesSystem.hpp */,
 				CE58347F1EB9031B009E2F61 /* Camera.cpp */,
 				CE5834801EB9031B009E2F61 /* Camera.hpp */,
 				CE5834811EB9031B009E2F61 /* DirectionalLight.cpp */,
@@ -919,8 +930,8 @@
 				CE5834951EB9031B009E2F61 /* DepthFiller.vert */,
 				CE5834961EB9031B009E2F61 /* FSQuadTexRendering.frag */,
 				CE5834971EB9031B009E2F61 /* FSQuadTexRendering.vert */,
-				CE5834981EB9031B009E2F61 /* LineVisualizationShader.frag */,
-				CE5834991EB9031B009E2F61 /* LineVisualizationShader.vert */,
+				CE5834981EB9031B009E2F61 /* Vertex1P3Drawer.frag */,
+				CE5834991EB9031B009E2F61 /* Vertex1P3Drawer.vert */,
 				CE58349A1EB9031B009E2F61 /* Skybox.frag */,
 				CE58349B1EB9031B009E2F61 /* Skybox.vert */,
 			);
@@ -1263,8 +1274,10 @@
 		CE5835B21EB9031C009E2F61 /* Vertices */ = {
 			isa = PBXGroup;
 			children = (
-				CE5835B31EB9031C009E2F61 /* Vertex1P.cpp */,
-				CE5835B41EB9031C009E2F61 /* Vertex1P.hpp */,
+				CE216F531EFA853B002D12AE /* Vertex1P3.cpp */,
+				CE216F541EFA853B002D12AE /* Vertex1P3.hpp */,
+				CE5835B31EB9031C009E2F61 /* Vertex1P4.cpp */,
+				CE5835B41EB9031C009E2F61 /* Vertex1P4.hpp */,
 				CE5835B51EB9031C009E2F61 /* Vertex1P1N1UV.cpp */,
 				CE5835B61EB9031C009E2F61 /* Vertex1P1N1UV.hpp */,
 			);
@@ -1340,6 +1353,25 @@
 				CEE971B31EE5568F000C20DD /* MeshEditingTabViewItem.mm */,
 			);
 			path = "Scene Editing";
+			sourceTree = "<group>";
+		};
+		CEF3314D1F03A3B5009BE235 /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				CEF3314E1F03A3B5009BE235 /* AxesSelection.cpp */,
+				CEF3314F1F03A3B5009BE235 /* AxesSelection.hpp */,
+				CEF331501F03A3B5009BE235 /* AxesRenderer.cpp */,
+				CEF331511F03A3B5009BE235 /* AxesRenderer.hpp */,
+				CEF331521F03A3B5009BE235 /* BoxVisualizer.cpp */,
+				CEF331531F03A3B5009BE235 /* BoxVisualizer.hpp */,
+				CEF331541F03A3B5009BE235 /* DefaultRenderComponentsProviding.hpp */,
+				CEF331551F03A3B5009BE235 /* Drawable.hpp */,
+				CEF331561F03A3B5009BE235 /* MeshNormalVisualizer.cpp */,
+				CEF331571F03A3B5009BE235 /* MeshNormalVisualizer.hpp */,
+				CEF331581F03A3B5009BE235 /* SceneRenderer.cpp */,
+				CEF331591F03A3B5009BE235 /* SceneRenderer.hpp */,
+			);
+			path = Rendering;
 			sourceTree = "<group>";
 		};
 		CEF557881EEC13B8005FA16E /* NumericTextFieldManager */ = {
@@ -1437,10 +1469,10 @@
 				CE5322F01EBB3557005F49C2 /* left.jpg in Resources */,
 				CE5322F51EBB3557005F49C2 /* skyboxLeft.png in Resources */,
 				CE58362B1EB90E37009E2F61 /* FSQuadTexRendering.vert in Resources */,
-				CE58362C1EB90E37009E2F61 /* LineVisualizationShader.frag in Resources */,
+				CE58362C1EB90E37009E2F61 /* Vertex1P3Drawer.frag in Resources */,
 				CE5322E51EBB3557005F49C2 /* Main.storyboard in Resources */,
 				CE5322EC1EBB3557005F49C2 /* spot.obj in Resources */,
-				CE58362D1EB90E37009E2F61 /* LineVisualizationShader.vert in Resources */,
+				CE58362D1EB90E37009E2F61 /* Vertex1P3Drawer.vert in Resources */,
 				CE5322EE1EBB3557005F49C2 /* bottom.jpg in Resources */,
 				CE5322F21EBB3557005F49C2 /* skyboxBack.png in Resources */,
 				CE5322FA1EBB3557005F49C2 /* hazard.png in Resources */,
@@ -1464,12 +1496,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE5836001EB9031C009E2F61 /* Vertex1P.cpp in Sources */,
+				CE5836001EB9031C009E2F61 /* Vertex1P4.cpp in Sources */,
 				CE5835F21EB9031C009E2F61 /* WavefrontMeshLoader.cpp in Sources */,
-				CE5835F01EB9031C009E2F61 /* Renderer.cpp in Sources */,
 				CEE971A21EE3FD99000C20DD /* ColoredView.m in Sources */,
 				CE5835E71EB9031C009E2F61 /* GLSLProgramFacility.cpp in Sources */,
+				CEF3315D1F03A4EB009BE235 /* MeshNormalVisualizer.cpp in Sources */,
 				CEF5578B1EEC1414005FA16E /* NumericTextFieldManager.m in Sources */,
+				CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */,
 				CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */,
 				CE5835E11EB9031C009E2F61 /* GLDepthTexture2D.cpp in Sources */,
 				CE5323091EBB360B005F49C2 /* MainViewController.mm in Sources */,
@@ -1477,8 +1510,8 @@
 				CEE971BA1EE556FE000C20DD /* MeshListTabViewItem.mm in Sources */,
 				CE5835E31EB9031C009E2F61 /* GLFramebuffer.cpp in Sources */,
 				CE5835F41EB9031C009E2F61 /* DirectionalLight.cpp in Sources */,
-				CEE0F71A1EED58EB0048AD01 /* Ray.cpp in Sources */,
-				CE5835DF1EB9031C009E2F61 /* MeshNormalVisualizer.cpp in Sources */,
+				CEE0F71A1EED58EB0048AD01 /* Ray3D.cpp in Sources */,
+				CEE5D0F21EFADA2300C71F43 /* DebugRenderer.cpp in Sources */,
 				CE5835E51EB9031C009E2F61 /* GLProgram.cpp in Sources */,
 				CE5835E91EB9031C009E2F61 /* GLTextureCubemap.cpp in Sources */,
 				CE5835FE1EB9031C009E2F61 /* ltalloc.cc in Sources */,
@@ -1490,37 +1523,42 @@
 				CE5835E21EB9031C009E2F61 /* GLElementArrayBuffer.cpp in Sources */,
 				CE5835F91EB9031C009E2F61 /* Skybox.cpp in Sources */,
 				CE6539DA1EF6B2B2003D6808 /* NSNumberFormatter+CustomFormatters.m in Sources */,
-				CE44B8A41EF40BF500CB690C /* BoxVisualizer.cpp in Sources */,
 				CEEB08E61EF92781003E60D5 /* RayTracer.cpp in Sources */,
 				CE5836011EB9031C009E2F61 /* Vertex1P1N1UV.cpp in Sources */,
 				CE53230A1EBB360B005F49C2 /* SceneGLView.mm in Sources */,
 				CE5835F81EB9031C009E2F61 /* Scene.cpp in Sources */,
 				CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */,
-				CE44B89E1EF3FF4B00CB690C /* Size.cpp in Sources */,
+				CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */,
 				CEF6C2A01EE6CA58003818D3 /* SceneObjectMarker.mm in Sources */,
 				CE5322E31EBB3557005F49C2 /* main.m in Sources */,
 				CEE971B71EE5568F000C20DD /* SceneEditorTabView.mm in Sources */,
 				CE5835EA1EB9031C009E2F61 /* GLVertexArrayLayoutDescription.cpp in Sources */,
 				CEE971B61EE5568F000C20DD /* MeshEditingTabViewItem.mm in Sources */,
+				CEF3315B1F03A4EB009BE235 /* AxesRenderer.cpp in Sources */,
 				CE5835E41EB9031C009E2F61 /* GLNamedObject.cpp in Sources */,
 				CE5835FB1EB9031C009E2F61 /* Transformation.cpp in Sources */,
 				CE5835EB1EB9031C009E2F61 /* GLBlinnPhongProgram.cpp in Sources */,
 				CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */,
+				CEF3315C1F03A4EB009BE235 /* BoxVisualizer.cpp in Sources */,
 				CE143EB11EBC79A6009EE0E1 /* FlippedClipView.m in Sources */,
-				CE44B8A11EF3FF5300CB690C /* Box.cpp in Sources */,
+				CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */,
 				CE5835ED1EB9031C009E2F61 /* GLFSQuadTextureRenderingProgram.cpp in Sources */,
 				CE5835F31EB9031C009E2F61 /* Camera.cpp in Sources */,
 				CE5835EF1EB9031C009E2F61 /* GLSkyboxProgram.cpp in Sources */,
+				CEF3315A1F03A4EB009BE235 /* AxesSelection.cpp in Sources */,
 				CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */,
 				CE5835F61EB9031C009E2F61 /* Material.cpp in Sources */,
 				CE5835FF1EB9031C009E2F61 /* tiny_obj_loader.cpp in Sources */,
+				CEF3315E1F03A4EB009BE235 /* SceneRenderer.cpp in Sources */,
 				CE5835FD1EB9031C009E2F61 /* glm.cpp in Sources */,
-				CE44B89B1EF3FF4400CB690C /* Rect.cpp in Sources */,
+				CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */,
+				CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */,
 				CEE971BD1EE5570F000C20DD /* CameraListTabViewItem.mm in Sources */,
 				CEE971AF1EE55665000C20DD /* SceneObjectsTabView.mm in Sources */,
 				CE5835E61EB9031C009E2F61 /* GLShader.cpp in Sources */,
-				CE5835EE1EB9031C009E2F61 /* GLLineVisualizationProgram.cpp in Sources */,
+				CE5835EE1EB9031C009E2F61 /* GLVertex1P3Program.cpp in Sources */,
 				CE5835EC1EB9031C009E2F61 /* GLDepthFillerProgram.cpp in Sources */,
+				CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */,
 				CE5835F71EB9031C009E2F61 /* Mesh.cpp in Sources */,
 				CE5835FA1EB9031C009E2F61 /* SubMesh.cpp in Sources */,
 				CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */,

@@ -13,7 +13,7 @@
 #import "Input.hpp"
 #import "Scene.hpp"
 #import "SceneOpaque.h"
-#import "Renderer.hpp"
+#import "SceneRenderer.hpp"
 #import "GLViewport.hpp"
 #import "RendererOpaque.h"
 
@@ -42,6 +42,9 @@
         NSOpenGLPFADoubleBuffer ,
         NSOpenGLPFAAccelerated  ,
         NSOpenGLPFANoRecovery   ,
+        NSOpenGLPFASupersample,
+        NSOpenGLPFASampleBuffers, 1,
+        NSOpenGLPFASamples, 4,
         0
     };
     
@@ -110,7 +113,7 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
 {
     [super reshape];
     
-    EARenderer::GLViewport::main().setDimensions(EARenderer::Size(self.bounds.size.width, self.bounds.size.height));
+    EARenderer::GLViewport::main().setDimensions(EARenderer::Size2D(self.bounds.size.width, self.bounds.size.height));
 }
 
 #pragma mark - Keyboard

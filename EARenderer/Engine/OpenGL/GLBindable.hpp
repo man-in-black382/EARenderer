@@ -9,7 +9,7 @@
 #ifndef GLBindable_hpp
 #define GLBindable_hpp
 
-#include <OpenGL/gl.h>
+#include <OpenGL/gl3.h>
 
 namespace EARenderer {
     
