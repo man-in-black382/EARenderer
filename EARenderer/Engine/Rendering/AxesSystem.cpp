@@ -19,7 +19,7 @@ namespace EARenderer {
     
     AxesSystem::AxesSystem()
     :
-    mAxisBoundingBox({ -0.3, 0.0, -0.3 }, { 0.3, 3.0, 0.3 }),
+    mAxisBoundingBox({ -0.2, 0.0, -0.2 }, { 0.2, 3.0, 0.2 }),
     mXYSelectionRect({ 0.0, 0.0, 0.0 }, { SegmentHeight, 0.0, 0.0 }, { 0.0, SegmentHeight, 0.0 }),
     mXZSelectionRect({ 0.0, 0.0, 0.0 }, { SegmentHeight, 0.0, 0.0 }, { 0.0, 0.0, SegmentHeight }),
     mYZSelectionRect({ 0.0, 0.0, 0.0 }, { 0.0, SegmentHeight, 0.0 }, { 0.0, 0.0, SegmentHeight }),

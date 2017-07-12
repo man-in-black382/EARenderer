@@ -14,6 +14,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 
+#include "Color.hpp"
+
 namespace EARenderer {
     
     class GLVertex1P3Program: public GLProgram {
@@ -21,8 +23,8 @@ namespace EARenderer {
         using GLProgram::GLProgram;
         
         void setModelViewProjectionMatrix(const glm::mat4& mvp);
-        void setColor(const glm::vec4& color);
-        void setHighlightColor(const glm::vec4& color);
+        void setColor(const Color& color);
+        void setHighlightColor(const Color& color);
     };
     
 }

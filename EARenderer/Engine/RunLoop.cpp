@@ -8,8 +8,6 @@
 
 #include "RunLoop.hpp"
 
-#include "RayTracer.hpp"
-
 namespace EARenderer {
     
 #pragma mark - Lifecycle

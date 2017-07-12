@@ -46,13 +46,6 @@ namespace EARenderer {
     void AxesRenderer::renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp) const {
         GLVertex1P3Program *program = mProgramFacility->vertex1P3Program();
         
-        glm::vec4 xAxisColor = { 0.807, 0.184, 0.0, 1.0 };
-        glm::vec4 yAxisColor = { 0.209, 0.557, 1.0, 1.0 };
-        glm::vec4 zAxisColor = { 0.470, 0.749, 0.0, 1.0 };
-        
-        glm::vec4 grayColor = { 0.4, 0.4, 0.4, 1.0 };
-        glm::vec4 blackColor = { 0.0, 0.0, 0.0, 0.0 };
-        
         bool shouldHighlightX = (axesToHighlight & CartesianAxis::x) == CartesianAxis::x;
         bool shouldHighlightY = (axesToHighlight & CartesianAxis::y) == CartesianAxis::y;
         bool shouldHighlightZ = (axesToHighlight & CartesianAxis::z) == CartesianAxis::z;
@@ -62,30 +55,23 @@ namespace EARenderer {
         glm::mat4 highlightScaleZ = shouldHighlightZ ? glm::scale(glm::vec3(1.15)) : glm::mat4(1.0);
         
         program->setModelViewProjectionMatrix(mvp * highlightScaleX * mAxesSystem.rotationForAxis(CartesianAxis::x));
-        program->setHighlightColor(shouldHighlightX ? grayColor : blackColor);
-        program->setColor(xAxisColor);
+        program->setHighlightColor(shouldHighlightX ? Color::gray() : Color::black());
+        program->setColor(mXAxisColor);
         mAxesSystem.drawAxis();
         
         program->setModelViewProjectionMatrix(mvp * highlightScaleY * mAxesSystem.rotationForAxis(CartesianAxis::y));
-        program->setHighlightColor(shouldHighlightY ? grayColor : blackColor);
-        program->setColor(yAxisColor);
+        program->setHighlightColor(shouldHighlightY ? Color::gray() : Color::black());
+        program->setColor(mYAxisColor);
         mAxesSystem.drawAxis();
         
         program->setModelViewProjectionMatrix(mvp * highlightScaleZ * mAxesSystem.rotationForAxis(CartesianAxis::z));
-        program->setHighlightColor(shouldHighlightZ ? grayColor : blackColor);
-        program->setColor(zAxisColor);
+        program->setHighlightColor(shouldHighlightZ ? Color::gray() : Color::black());
+        program->setColor(mZAxisColor);
         mAxesSystem.drawAxis();
     }
     
     void AxesRenderer::renderSegments(CartesianAxis axesToHighlight, const glm::mat4& mvp) const {
         GLVertex1P3Program *program = mProgramFacility->vertex1P3Program();
-        
-        glm::vec4 xAxisColor = { 0.807, 0.184, 0.0, 1.0 };
-        glm::vec4 yAxisColor = { 0.209, 0.557, 1.0, 1.0 };
-        glm::vec4 zAxisColor = { 0.470, 0.749, 0.0, 1.0 };
-        
-        glm::vec4 grayColor = { 0.4, 0.4, 0.4, 1.0 };
-        glm::vec4 blackColor = { 0.0, 0.0, 0.0, 0.0 };
         
         bool shouldHighlightX = (axesToHighlight & CartesianAxis::x) == CartesianAxis::x;
         bool shouldHighlightY = (axesToHighlight & CartesianAxis::y) == CartesianAxis::y;
@@ -98,33 +84,33 @@ namespace EARenderer {
         glm::mat4 highlightScaleZX = shouldHighlightZ && shouldHighlightX ? glm::scale(glm::vec3(1.15)) : glm::mat4(1.0);
         glm::mat4 highlightScaleZY = shouldHighlightZ && shouldHighlightY ? glm::scale(glm::vec3(1.15)) : glm::mat4(1.0);
         
-        program->setColor(xAxisColor);
+        program->setColor(mXAxisColor);
         
-        program->setHighlightColor(shouldHighlightX && shouldHighlightY ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightX && shouldHighlightY ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleXY * mAxesSystem.XYSegmentTransform());
         mAxesSystem.drawSegment();
         
-        program->setHighlightColor(shouldHighlightX && shouldHighlightZ ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightX && shouldHighlightZ ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleXZ * mAxesSystem.XZSegmentTransform());
         mAxesSystem.drawSegment();
         
-        program->setColor(yAxisColor);
+        program->setColor(mYAxisColor);
         
-        program->setHighlightColor(shouldHighlightY && shouldHighlightX ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightY && shouldHighlightX ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleYX * mAxesSystem.YXSegmentTransform());
         mAxesSystem.drawSegment();
         
-        program->setHighlightColor(shouldHighlightY && shouldHighlightZ ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightY && shouldHighlightZ ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleYZ * mAxesSystem.YZSegmentTransform());
         mAxesSystem.drawSegment();
         
-        program->setColor(zAxisColor);
+        program->setColor(mZAxisColor);
         
-        program->setHighlightColor(shouldHighlightZ && shouldHighlightX ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightZ && shouldHighlightX ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleZX * mAxesSystem.ZXSegmentTransform());
         mAxesSystem.drawSegment();
         
-        program->setHighlightColor(shouldHighlightZ && shouldHighlightY ? grayColor : blackColor);
+        program->setHighlightColor(shouldHighlightZ && shouldHighlightY ? Color::gray() : Color::black());
         program->setModelViewProjectionMatrix(mvp * highlightScaleZY * mAxesSystem.ZYSegmentTransform());
         mAxesSystem.drawSegment();
     }
@@ -201,12 +187,16 @@ namespace EARenderer {
         return anySelectionOccured;
     }
     
-    void AxesRenderer::enableAxisVisualizationForMesh(ID meshID) {
-        mMeshIDs.insert(meshID);
+    void AxesRenderer::setAxesVisualizationEnabledForMesh(bool enabled, ID meshID) {
+        if (enabled) {
+            mMeshIDs.insert(meshID);
+        } else {
+            mMeshIDs.erase(meshID);
+        }
     }
     
-    void AxesRenderer::disableAxisVisualizationForMesh(ID meshID) {
-        mMeshIDs.erase(meshID);
+    void AxesRenderer::disableAxesVisualization() {
+        mMeshIDs.clear();
     }
     
     void AxesRenderer::enableAxesHighlightForMesh(CartesianAxis axesMask, ID meshID) {

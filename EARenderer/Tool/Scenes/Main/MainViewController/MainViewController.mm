@@ -73,7 +73,7 @@
     EARenderer::ResourceManager resourceManager;
     resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, &self.sceneOpaquePtr->scene);
     
-    auto *camera = new EARenderer::Camera(75.f, 0.1f, 5.f, 16.f / 9.f, glm::vec3(0, 1, 0));
+    auto *camera = new EARenderer::Camera(75.f, 0.1f, 50.f, 16.f / 9.f, glm::vec3(0, 1, 0));
     camera->moveTo(glm::vec3(0, 0, 0.5));
     camera->lookAt(glm::vec3(0, 0, 0));
     
@@ -88,7 +88,7 @@
     self.sceneEditorTabView.sceneOpaquePtr = self.sceneOpaquePtr;
     
     for (EARenderer::ID meshID : self.sceneOpaquePtr->scene.meshes()) {
-        self.axesVisualizer->enableAxisVisualizationForMesh(meshID);
+        self.axesVisualizer->setAxesVisualizationEnabledForMesh(true, meshID);
     }
 }
 

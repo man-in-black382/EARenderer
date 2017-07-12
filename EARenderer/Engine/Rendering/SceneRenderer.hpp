@@ -23,6 +23,7 @@ namespace EARenderer {
     
     class SceneRenderer {
     private:
+        Scene *mScene = nullptr;
         GLSLProgramFacility *mProgramFacility = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         
@@ -37,6 +38,8 @@ namespace EARenderer {
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void setMeshHiglightEnabled(bool enabled, ID meshID);
         void disableMeshesHighlight();
+        
+        bool raySelectsMesh(const Ray3D& ray, ID& meshID);
         
         void render(Scene *scene);
     };

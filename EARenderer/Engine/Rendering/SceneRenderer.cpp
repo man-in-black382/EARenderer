@@ -48,6 +48,38 @@ namespace EARenderer {
         mMeshesToHighlight.clear();
     }
     
+#pragma mark - Math
+    
+    bool SceneRenderer::raySelectsMesh(const Ray3D& ray, ID& meshID) {
+        float minimumDistance = std::numeric_limits<float>::max();
+        ID closestMeshID = IDNotFound;
+        
+        for (ID id : mScene->meshes()) {
+            Mesh& mesh = mScene->meshes()[id];
+            Transformation& transformation = mScene->transforms()[mesh.transformID()];
+            glm::mat4 modelMatrix = transformation.modelMatrix();
+            Ray3D meshLocalSpaceRay = ray.transformedBy(glm::inverse(modelMatrix));
+            
+            float distance = 0;
+            if (meshLocalSpaceRay.intersectsAAB(mesh.boundingBox(), distance)) {
+                // Intersection distance is in the mesh's local space
+                // Scale local space ray's direction vector (which is a unit vector) accordingly
+                glm::vec3 localScaledDirection = meshLocalSpaceRay.direction * distance;
+                // Transform back to world space to obtain real origin -> intersection distance
+                glm::vec3 worldScaledDirection = modelMatrix * glm::vec4(localScaledDirection, 1.0);
+                float worldDistance = glm::length(worldScaledDirection);
+                
+                if (worldDistance < minimumDistance) {
+                    minimumDistance = worldDistance;
+                    closestMeshID = meshID;
+                }
+            }
+        }
+        
+        meshID = closestMeshID;
+        return closestMeshID != IDNotFound;
+    }
+    
 #pragma mark - Rendering
     
     void SceneRenderer::render(Scene *scene) {

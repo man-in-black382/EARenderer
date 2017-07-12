@@ -16,12 +16,12 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformLocation("uModelViewProjection"), 1, GL_FALSE, glm::value_ptr(mvp));
     }
     
-    void GLVertex1P3Program::setColor(const glm::vec4& color) {
-        glUniform4fv(uniformLocation("uColor"), 1, glm::value_ptr(color));
+    void GLVertex1P3Program::setColor(const Color& color) {
+        glUniform4fv(uniformLocation("uColor"), 1, reinterpret_cast<const float *>(&color));
     }
     
-    void GLVertex1P3Program::setHighlightColor(const glm::vec4& color) {
-        glUniform4fv(uniformLocation("uHighlightColor"), 1, glm::value_ptr(color));
+    void GLVertex1P3Program::setHighlightColor(const Color& color) {
+        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const float *>(&color));
     }
     
 }
