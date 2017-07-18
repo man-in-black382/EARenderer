@@ -55,8 +55,12 @@ namespace EARenderer {
         glViewport(mFrame.origin.x, mFrame.origin.y, mFrame.size.width, mFrame.size.height);
     }
     
-    glm::vec2 GLViewport::NDCFromPoint(const glm::vec2& point) const {
-        return glm::vec2(point.x / mFrame.size.width * 2.0 - 1.0, point.y / mFrame.size.height * 2.0 - 1.0);
+    glm::vec2 GLViewport::NDCFromPoint(const glm::vec2& screenPoint) const {
+        return glm::vec2(screenPoint.x / mFrame.size.width * 2.0 - 1.0, screenPoint.y / mFrame.size.height * 2.0 - 1.0);
+    }
+    
+    glm::vec2 GLViewport::pointFromNDC(const glm::vec2& NDCPoint) const {
+        return glm::vec2((NDCPoint.x + 1.0) / 2.0 * mFrame.size.width, (NDCPoint.y + 1.0) / 2.0 * mFrame.size.height);
     }
     
 }

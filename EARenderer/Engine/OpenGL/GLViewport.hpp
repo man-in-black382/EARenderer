@@ -32,7 +32,8 @@ namespace EARenderer {
         
         void apply() const;
         
-        glm::vec2 NDCFromPoint(const glm::vec2& point) const;
+        glm::vec2 NDCFromPoint(const glm::vec2& screenPoint) const;
+        glm::vec2 pointFromNDC(const glm::vec2& NDCPoint) const;
     };
     
 }

@@ -33,7 +33,7 @@ namespace EARenderer {
         std::unordered_set<ID> mMeshesToHighlight;
         
     public:
-        SceneRenderer(GLSLProgramFacility *facility);
+        SceneRenderer(Scene* scene, GLSLProgramFacility* facility);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void setMeshHiglightEnabled(bool enabled, ID meshID);
@@ -41,7 +41,7 @@ namespace EARenderer {
         
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
         
-        void render(Scene *scene);
+        void render();
     };
     
 }

@@ -10,31 +10,44 @@
 #define Input_hpp
 
 #include <glm/vec2.hpp>
+
 #include <unordered_set>
 #include <string>
 #include <type_traits>
+
+#include "Event.inl"
 
 namespace EARenderer {
     
     class Input {
     public:
-        enum class Direction : uint16_t {
-            up = 13, down = 1, left = 0, right = 2
+        enum class KeyboardAction {
+            KeyDown, KeyUp
         };
         
         enum class MouseAction {
-            pressDown, pressUp, drag, freeMovement
+            PressDown, PressUp, Drag, Move
+        };
+        
+        using KeyCode = uint16_t;
+        using KeySet = std::unordered_set<KeyCode>;
+        using KeyboardEvent = MultiEvent<Input, KeyboardAction, std::string, void(const Input *)>;
+        using MouseEvent = MultiEvent<Input, MouseAction, std::string, void(const Input *)>;
+        
+        enum class Key: KeyCode {
+            W = 13, S = 1, A = 0, D = 2
         };
         
     private:
-        glm::vec2 mPreviousDraggedMousePosition;
-        glm::vec2 mFreeMousePosition;
-        glm::vec2 mDraggedMousePosition;
-        std::unordered_set<uint16_t> mPressedKeyCodes;
-        bool mShouldReturnDelta;
+        MouseEvent mMouseEvent;
+        KeyboardEvent mKeyboardEvent;
         
-        Input();
-        ~Input();
+        glm::vec2 mMousePosition;
+        KeyCode mPressedMouseButtonsMask;
+        KeySet mPressedKeyboardKeys;
+        
+        Input() = default;
+        ~Input() = default;
         
         Input(const Input& that) = delete;
         Input& operator=(const Input& rhs) = delete;
@@ -42,16 +55,18 @@ namespace EARenderer {
     public:
         static Input& shared();
         
-        void updateMousePosition(const glm::vec2& position, MouseAction action);
-        void registerKey(uint16_t code);
-        void unregisterKey(uint16_t code);
+        MouseEvent& mouseEvent();
+        KeyboardEvent& keyboardEvent();
+        const glm::vec2& mousePosition() const;
+        const KeyCode pressedMouseButtonsMask() const;
+        const KeySet& pressedKeyboardButtons() const;
         
-        const glm::vec2& freeMousePosition() const;
-        const glm::vec2& draggedMousePosition() const;
-        const std::unordered_set<uint16_t>& pressedKeyCodes() const;
+        void registerMouseAction(MouseAction action, const glm::vec2& position, KeyCode keysMask);
+        void registerKey(KeyCode code);
+        void unregisterKey(KeyCode code);
         
-        glm::vec2 draggedMouseDelta();
-        bool isDirectionKeyPressed(Direction direction) const;
+        bool isKeyPressed(Key key) const;
+        bool isMouseButtonPressed(uint8_t button) const;
     };
     
 }

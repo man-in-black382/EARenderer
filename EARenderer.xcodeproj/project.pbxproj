@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0357D41F1779CA00BD449A /* Cameraman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357BB1F1779CA00BD449A /* Cameraman.cpp */; };
+		CE0357D51F1779CA00BD449A /* SceneInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357BD1F1779CA00BD449A /* SceneInteractor.cpp */; };
+		CE0357D61F1779CA00BD449A /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357C01F1779CA00BD449A /* Camera.cpp */; };
+		CE0357D71F1779CA00BD449A /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357C21F1779CA00BD449A /* DirectionalLight.cpp */; };
+		CE0357D81F1779CA00BD449A /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357C41F1779CA00BD449A /* Light.cpp */; };
+		CE0357D91F1779CA00BD449A /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357C61F1779CA00BD449A /* Material.cpp */; };
+		CE0357DA1F1779CA00BD449A /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357C81F1779CA00BD449A /* Mesh.cpp */; };
+		CE0357DB1F1779CA00BD449A /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357CA1F1779CA00BD449A /* Scene.cpp */; };
+		CE0357DC1F1779CA00BD449A /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357CC1F1779CA00BD449A /* SceneObject.cpp */; };
+		CE0357DD1F1779CA00BD449A /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357CE1F1779CA00BD449A /* Skybox.cpp */; };
+		CE0357DE1F1779CA00BD449A /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357D01F1779CA00BD449A /* SubMesh.cpp */; };
+		CE0357DF1F1779CA00BD449A /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357D21F1779CA00BD449A /* Transformation.cpp */; };
 		CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE0BE55E1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm */; };
 		CE143EB11EBC79A6009EE0E1 /* FlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE143EB01EBC79A6009EE0E1 /* FlippedClipView.m */; };
 		CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1737971F07EFA700D7871F /* Parallelogram3D.cpp */; };
@@ -14,8 +26,6 @@
 		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
 		CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */; };
 		CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */; };
-		CE4A1C681F1229BC009DB867 /* SceneObjectInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4A1C661F1229BC009DB867 /* SceneObjectInteractor.cpp */; };
-		CE4A1C6B1F1229C7009DB867 /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4A1C691F1229C7009DB867 /* SceneObject.cpp */; };
 		CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322B61EBB3557005F49C2 /* AppDelegate.m */; };
 		CE5322E21EBB3557005F49C2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5322BE1EBB3557005F49C2 /* Info.plist */; };
 		CE5322E31EBB3557005F49C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322BF1EBB3557005F49C2 /* main.m */; };
@@ -62,15 +72,6 @@
 		CE5835EF1EB9031C009E2F61 /* GLSkyboxProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834701EB9031B009E2F61 /* GLSkyboxProgram.cpp */; };
 		CE5835F11EB9031C009E2F61 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347A1EB9031B009E2F61 /* ResourceManager.cpp */; };
 		CE5835F21EB9031C009E2F61 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347C1EB9031B009E2F61 /* WavefrontMeshLoader.cpp */; };
-		CE5835F31EB9031C009E2F61 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58347F1EB9031B009E2F61 /* Camera.cpp */; };
-		CE5835F41EB9031C009E2F61 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834811EB9031B009E2F61 /* DirectionalLight.cpp */; };
-		CE5835F51EB9031C009E2F61 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834831EB9031B009E2F61 /* Light.cpp */; };
-		CE5835F61EB9031C009E2F61 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834851EB9031B009E2F61 /* Material.cpp */; };
-		CE5835F71EB9031C009E2F61 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834871EB9031B009E2F61 /* Mesh.cpp */; };
-		CE5835F81EB9031C009E2F61 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834891EB9031B009E2F61 /* Scene.cpp */; };
-		CE5835F91EB9031C009E2F61 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58348B1EB9031B009E2F61 /* Skybox.cpp */; };
-		CE5835FA1EB9031C009E2F61 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58348D1EB9031B009E2F61 /* SubMesh.cpp */; };
-		CE5835FB1EB9031C009E2F61 /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE58348F1EB9031B009E2F61 /* Transformation.cpp */; };
 		CE5835FD1EB9031C009E2F61 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5834C01EB9031B009E2F61 /* glm.cpp */; };
 		CE5835FE1EB9031C009E2F61 /* ltalloc.cc in Sources */ = {isa = PBXBuildFile; fileRef = CE5835AB1EB9031C009E2F61 /* ltalloc.cc */; };
 		CE5835FF1EB9031C009E2F61 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5835AE1EB9031C009E2F61 /* tiny_obj_loader.cpp */; };
@@ -89,8 +90,6 @@
 		CE6539DA1EF6B2B2003D6808 /* NSNumberFormatter+CustomFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */; };
 		CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */; };
 		CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */; };
-		CE859D1F1EEEBDB500C9A4AC /* RunLoop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE859D1D1EEEBDB500C9A4AC /* RunLoop.cpp */; };
-		CEB791CC1F154E9D00A67854 /* Delegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB791CA1F154E9D00A67854 /* Delegate.cpp */; };
 		CEE0F71A1EED58EB0048AD01 /* Ray3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F7181EED58EB0048AD01 /* Ray3D.cpp */; };
 		CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71B1EED736F0048AD01 /* GLViewport.cpp */; };
 		CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71F1EED7BD30048AD01 /* Input.cpp */; };
@@ -113,6 +112,30 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0357BB1F1779CA00BD449A /* Cameraman.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cameraman.cpp; sourceTree = "<group>"; };
+		CE0357BC1F1779CA00BD449A /* Cameraman.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cameraman.hpp; sourceTree = "<group>"; };
+		CE0357BD1F1779CA00BD449A /* SceneInteractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInteractor.cpp; sourceTree = "<group>"; };
+		CE0357BE1F1779CA00BD449A /* SceneInteractor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneInteractor.hpp; sourceTree = "<group>"; };
+		CE0357C01F1779CA00BD449A /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		CE0357C11F1779CA00BD449A /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
+		CE0357C21F1779CA00BD449A /* DirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
+		CE0357C31F1779CA00BD449A /* DirectionalLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
+		CE0357C41F1779CA00BD449A /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
+		CE0357C51F1779CA00BD449A /* Light.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
+		CE0357C61F1779CA00BD449A /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		CE0357C71F1779CA00BD449A /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
+		CE0357C81F1779CA00BD449A /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		CE0357C91F1779CA00BD449A /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		CE0357CA1F1779CA00BD449A /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		CE0357CB1F1779CA00BD449A /* Scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
+		CE0357CC1F1779CA00BD449A /* SceneObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
+		CE0357CD1F1779CA00BD449A /* SceneObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneObject.hpp; sourceTree = "<group>"; };
+		CE0357CE1F1779CA00BD449A /* Skybox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
+		CE0357CF1F1779CA00BD449A /* Skybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
+		CE0357D01F1779CA00BD449A /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
+		CE0357D11F1779CA00BD449A /* SubMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SubMesh.hpp; sourceTree = "<group>"; };
+		CE0357D21F1779CA00BD449A /* Transformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transformation.cpp; sourceTree = "<group>"; };
+		CE0357D31F1779CA00BD449A /* Transformation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Transformation.hpp; sourceTree = "<group>"; };
 		CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSystem.cpp; sourceTree = "<group>"; };
 		CE07DFEB1F0F6FAA002CB321 /* AxesSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSystem.hpp; sourceTree = "<group>"; };
 		CE0BE55D1EF0038E001B0BCF /* DefaultRenderComponentsProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultRenderComponentsProvider.h; sourceTree = "<group>"; };
@@ -129,10 +152,6 @@
 		CE44B89D1EF3FF4B00CB690C /* Size2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size2D.hpp; sourceTree = "<group>"; };
 		CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
 		CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxisAlignedBox3D.hpp; sourceTree = "<group>"; };
-		CE4A1C661F1229BC009DB867 /* SceneObjectInteractor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObjectInteractor.cpp; sourceTree = "<group>"; };
-		CE4A1C671F1229BC009DB867 /* SceneObjectInteractor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneObjectInteractor.hpp; sourceTree = "<group>"; };
-		CE4A1C691F1229C7009DB867 /* SceneObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
-		CE4A1C6A1F1229C7009DB867 /* SceneObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneObject.hpp; sourceTree = "<group>"; };
 		CE522BDC1E4DDF700063470C /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5322B51EBB3557005F49C2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE5322B61EBB3557005F49C2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -209,24 +228,6 @@
 		CE58347B1EB9031B009E2F61 /* ResourceManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ResourceManager.hpp; sourceTree = "<group>"; };
 		CE58347C1EB9031B009E2F61 /* WavefrontMeshLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WavefrontMeshLoader.cpp; sourceTree = "<group>"; };
 		CE58347D1EB9031B009E2F61 /* WavefrontMeshLoader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WavefrontMeshLoader.hpp; sourceTree = "<group>"; };
-		CE58347F1EB9031B009E2F61 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
-		CE5834801EB9031B009E2F61 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
-		CE5834811EB9031B009E2F61 /* DirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
-		CE5834821EB9031B009E2F61 /* DirectionalLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
-		CE5834831EB9031B009E2F61 /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
-		CE5834841EB9031B009E2F61 /* Light.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
-		CE5834851EB9031B009E2F61 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
-		CE5834861EB9031B009E2F61 /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
-		CE5834871EB9031B009E2F61 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
-		CE5834881EB9031B009E2F61 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
-		CE5834891EB9031B009E2F61 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		CE58348A1EB9031B009E2F61 /* Scene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
-		CE58348B1EB9031B009E2F61 /* Skybox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
-		CE58348C1EB9031B009E2F61 /* Skybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
-		CE58348D1EB9031B009E2F61 /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
-		CE58348E1EB9031B009E2F61 /* SubMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SubMesh.hpp; sourceTree = "<group>"; };
-		CE58348F1EB9031B009E2F61 /* Transformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transformation.cpp; sourceTree = "<group>"; };
-		CE5834901EB9031B009E2F61 /* Transformation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Transformation.hpp; sourceTree = "<group>"; };
 		CE5834921EB9031B009E2F61 /* BlinnPhong.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlinnPhong.frag; sourceTree = "<group>"; };
 		CE5834931EB9031B009E2F61 /* BlinnPhong.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BlinnPhong.vert; sourceTree = "<group>"; };
 		CE5834941EB9031B009E2F61 /* DepthFiller.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DepthFiller.frag; sourceTree = "<group>"; };
@@ -516,11 +517,7 @@
 		CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+CustomFormatters.m"; sourceTree = "<group>"; };
 		CE7FAFC81EEBEFE5009FC6F5 /* NumericFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NumericFormatter.h; path = Common/NumericFormatter/NumericFormatter.h; sourceTree = "<group>"; };
 		CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NumericFormatter.m; path = Common/NumericFormatter/NumericFormatter.m; sourceTree = "<group>"; };
-		CE859D1D1EEEBDB500C9A4AC /* RunLoop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RunLoop.cpp; sourceTree = "<group>"; };
-		CE859D1E1EEEBDB500C9A4AC /* RunLoop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RunLoop.hpp; sourceTree = "<group>"; };
 		CEB791C81F154E8500A67854 /* Event.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Event.inl; sourceTree = "<group>"; };
-		CEB791CA1F154E9D00A67854 /* Delegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Delegate.cpp; sourceTree = "<group>"; };
-		CEB791CB1F154E9D00A67854 /* Delegate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Delegate.hpp; sourceTree = "<group>"; };
 		CEE0F7181EED58EB0048AD01 /* Ray3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray3D.cpp; sourceTree = "<group>"; };
 		CEE0F7191EED58EB0048AD01 /* Ray3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ray3D.hpp; sourceTree = "<group>"; };
 		CEE0F71B1EED736F0048AD01 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
@@ -574,6 +571,44 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CE0357BA1F1779CA00BD449A /* Manipulators */ = {
+			isa = PBXGroup;
+			children = (
+				CE0357BB1F1779CA00BD449A /* Cameraman.cpp */,
+				CE0357BC1F1779CA00BD449A /* Cameraman.hpp */,
+				CE0357BD1F1779CA00BD449A /* SceneInteractor.cpp */,
+				CE0357BE1F1779CA00BD449A /* SceneInteractor.hpp */,
+			);
+			path = Manipulators;
+			sourceTree = "<group>";
+		};
+		CE0357BF1F1779CA00BD449A /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				CE0357C01F1779CA00BD449A /* Camera.cpp */,
+				CE0357C11F1779CA00BD449A /* Camera.hpp */,
+				CE0357C21F1779CA00BD449A /* DirectionalLight.cpp */,
+				CE0357C31F1779CA00BD449A /* DirectionalLight.hpp */,
+				CE0357C41F1779CA00BD449A /* Light.cpp */,
+				CE0357C51F1779CA00BD449A /* Light.hpp */,
+				CE0357C61F1779CA00BD449A /* Material.cpp */,
+				CE0357C71F1779CA00BD449A /* Material.hpp */,
+				CE0357C81F1779CA00BD449A /* Mesh.cpp */,
+				CE0357C91F1779CA00BD449A /* Mesh.hpp */,
+				CE0357CA1F1779CA00BD449A /* Scene.cpp */,
+				CE0357CB1F1779CA00BD449A /* Scene.hpp */,
+				CE0357CC1F1779CA00BD449A /* SceneObject.cpp */,
+				CE0357CD1F1779CA00BD449A /* SceneObject.hpp */,
+				CE0357CE1F1779CA00BD449A /* Skybox.cpp */,
+				CE0357CF1F1779CA00BD449A /* Skybox.hpp */,
+				CE0357D01F1779CA00BD449A /* SubMesh.cpp */,
+				CE0357D11F1779CA00BD449A /* SubMesh.hpp */,
+				CE0357D21F1779CA00BD449A /* Transformation.cpp */,
+				CE0357D31F1779CA00BD449A /* Transformation.hpp */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
 		CE0BE55C1EF00371001B0BCF /* DefaultRenderComponentsProvider */ = {
 			isa = PBXGroup;
 			children = (
@@ -776,8 +811,6 @@
 			isa = PBXGroup;
 			children = (
 				CEB791C61F154E6800A67854 /* EventSystem */,
-				CE859D1D1EEEBDB500C9A4AC /* RunLoop.cpp */,
-				CE859D1E1EEEBDB500C9A4AC /* RunLoop.hpp */,
 				CEE0F71E1EED7B800048AD01 /* Input */,
 				CE5834461EB9031B009E2F61 /* Containers */,
 				CE58344B1EB9031B009E2F61 /* Geometry */,
@@ -883,28 +916,8 @@
 		CE58347E1EB9031B009E2F61 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				CE4A1C691F1229C7009DB867 /* SceneObject.cpp */,
-				CE4A1C6A1F1229C7009DB867 /* SceneObject.hpp */,
-				CE58347F1EB9031B009E2F61 /* Camera.cpp */,
-				CE5834801EB9031B009E2F61 /* Camera.hpp */,
-				CE5834811EB9031B009E2F61 /* DirectionalLight.cpp */,
-				CE5834821EB9031B009E2F61 /* DirectionalLight.hpp */,
-				CE5834831EB9031B009E2F61 /* Light.cpp */,
-				CE5834841EB9031B009E2F61 /* Light.hpp */,
-				CE5834851EB9031B009E2F61 /* Material.cpp */,
-				CE5834861EB9031B009E2F61 /* Material.hpp */,
-				CE5834871EB9031B009E2F61 /* Mesh.cpp */,
-				CE5834881EB9031B009E2F61 /* Mesh.hpp */,
-				CE5834891EB9031B009E2F61 /* Scene.cpp */,
-				CE58348A1EB9031B009E2F61 /* Scene.hpp */,
-				CE58348B1EB9031B009E2F61 /* Skybox.cpp */,
-				CE58348C1EB9031B009E2F61 /* Skybox.hpp */,
-				CE58348D1EB9031B009E2F61 /* SubMesh.cpp */,
-				CE58348E1EB9031B009E2F61 /* SubMesh.hpp */,
-				CE58348F1EB9031B009E2F61 /* Transformation.cpp */,
-				CE5834901EB9031B009E2F61 /* Transformation.hpp */,
-				CE4A1C661F1229BC009DB867 /* SceneObjectInteractor.cpp */,
-				CE4A1C671F1229BC009DB867 /* SceneObjectInteractor.hpp */,
+				CE0357BA1F1779CA00BD449A /* Manipulators */,
+				CE0357BF1F1779CA00BD449A /* Objects */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -1294,8 +1307,6 @@
 			isa = PBXGroup;
 			children = (
 				CEB791C81F154E8500A67854 /* Event.inl */,
-				CEB791CA1F154E9D00A67854 /* Delegate.cpp */,
-				CEB791CB1F154E9D00A67854 /* Delegate.hpp */,
 			);
 			path = EventSystem;
 			sourceTree = "<group>";
@@ -1513,6 +1524,8 @@
 				CEE971A21EE3FD99000C20DD /* ColoredView.m in Sources */,
 				CE5835E71EB9031C009E2F61 /* GLSLProgramFacility.cpp in Sources */,
 				CEF3315D1F03A4EB009BE235 /* MeshNormalVisualizer.cpp in Sources */,
+				CE0357DD1F1779CA00BD449A /* Skybox.cpp in Sources */,
+				CE0357DF1F1779CA00BD449A /* Transformation.cpp in Sources */,
 				CEF5578B1EEC1414005FA16E /* NumericTextFieldManager.m in Sources */,
 				CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */,
 				CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */,
@@ -1521,47 +1534,44 @@
 				CEE971A71EE55220000C20DD /* OutlineView.m in Sources */,
 				CEE971BA1EE556FE000C20DD /* MeshListTabViewItem.mm in Sources */,
 				CE5835E31EB9031C009E2F61 /* GLFramebuffer.cpp in Sources */,
-				CE5835F41EB9031C009E2F61 /* DirectionalLight.cpp in Sources */,
 				CEE0F71A1EED58EB0048AD01 /* Ray3D.cpp in Sources */,
 				CE5835E51EB9031C009E2F61 /* GLProgram.cpp in Sources */,
 				CE5835E91EB9031C009E2F61 /* GLTextureCubemap.cpp in Sources */,
 				CE5835FE1EB9031C009E2F61 /* ltalloc.cc in Sources */,
-				CE859D1F1EEEBDB500C9A4AC /* RunLoop.cpp in Sources */,
-				CE5835F51EB9031C009E2F61 /* Light.cpp in Sources */,
 				CEE971C01EE55721000C20DD /* LightListTabViewItem.mm in Sources */,
 				CE5835E81EB9031C009E2F61 /* GLTexture2D.cpp in Sources */,
 				CE5835F11EB9031C009E2F61 /* ResourceManager.cpp in Sources */,
 				CEE147DC1F10D53900FF1DE5 /* Color.cpp in Sources */,
 				CE5835E21EB9031C009E2F61 /* GLElementArrayBuffer.cpp in Sources */,
-				CE5835F91EB9031C009E2F61 /* Skybox.cpp in Sources */,
 				CE6539DA1EF6B2B2003D6808 /* NSNumberFormatter+CustomFormatters.m in Sources */,
+				CE0357DE1F1779CA00BD449A /* SubMesh.cpp in Sources */,
 				CE5836011EB9031C009E2F61 /* Vertex1P1N1UV.cpp in Sources */,
 				CE53230A1EBB360B005F49C2 /* SceneGLView.mm in Sources */,
-				CE5835F81EB9031C009E2F61 /* Scene.cpp in Sources */,
+				CE0357D61F1779CA00BD449A /* Camera.cpp in Sources */,
 				CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */,
+				CE0357D91F1779CA00BD449A /* Material.cpp in Sources */,
 				CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */,
 				CEF6C2A01EE6CA58003818D3 /* SceneObjectMarker.mm in Sources */,
-				CEB791CC1F154E9D00A67854 /* Delegate.cpp in Sources */,
 				CE5322E31EBB3557005F49C2 /* main.m in Sources */,
 				CEE971B71EE5568F000C20DD /* SceneEditorTabView.mm in Sources */,
 				CE5835EA1EB9031C009E2F61 /* GLVertexArrayLayoutDescription.cpp in Sources */,
 				CEE971B61EE5568F000C20DD /* MeshEditingTabViewItem.mm in Sources */,
 				CEF3315B1F03A4EB009BE235 /* AxesRenderer.cpp in Sources */,
 				CE5835E41EB9031C009E2F61 /* GLNamedObject.cpp in Sources */,
-				CE5835FB1EB9031C009E2F61 /* Transformation.cpp in Sources */,
+				CE0357D81F1779CA00BD449A /* Light.cpp in Sources */,
 				CE5835EB1EB9031C009E2F61 /* GLBlinnPhongProgram.cpp in Sources */,
 				CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */,
+				CE0357DB1F1779CA00BD449A /* Scene.cpp in Sources */,
 				CEF3315C1F03A4EB009BE235 /* BoxVisualizer.cpp in Sources */,
 				CE143EB11EBC79A6009EE0E1 /* FlippedClipView.m in Sources */,
 				CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */,
 				CE5835ED1EB9031C009E2F61 /* GLFSQuadTextureRenderingProgram.cpp in Sources */,
-				CE5835F31EB9031C009E2F61 /* Camera.cpp in Sources */,
-				CE4A1C6B1F1229C7009DB867 /* SceneObject.cpp in Sources */,
 				CE5835EF1EB9031C009E2F61 /* GLSkyboxProgram.cpp in Sources */,
+				CE0357DA1F1779CA00BD449A /* Mesh.cpp in Sources */,
 				CEF3315A1F03A4EB009BE235 /* AxesSelection.cpp in Sources */,
 				CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */,
-				CE5835F61EB9031C009E2F61 /* Material.cpp in Sources */,
 				CE5835FF1EB9031C009E2F61 /* tiny_obj_loader.cpp in Sources */,
+				CE0357D41F1779CA00BD449A /* Cameraman.cpp in Sources */,
 				CEF3315E1F03A4EB009BE235 /* SceneRenderer.cpp in Sources */,
 				CE5835FD1EB9031C009E2F61 /* glm.cpp in Sources */,
 				CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */,
@@ -1570,12 +1580,12 @@
 				CEE971AF1EE55665000C20DD /* SceneObjectsTabView.mm in Sources */,
 				CE5835E61EB9031C009E2F61 /* GLShader.cpp in Sources */,
 				CE5835EE1EB9031C009E2F61 /* GLVertex1P3Program.cpp in Sources */,
-				CE4A1C681F1229BC009DB867 /* SceneObjectInteractor.cpp in Sources */,
 				CE5835EC1EB9031C009E2F61 /* GLDepthFillerProgram.cpp in Sources */,
 				CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */,
-				CE5835F71EB9031C009E2F61 /* Mesh.cpp in Sources */,
-				CE5835FA1EB9031C009E2F61 /* SubMesh.cpp in Sources */,
+				CE0357D51F1779CA00BD449A /* SceneInteractor.cpp in Sources */,
 				CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */,
+				CE0357DC1F1779CA00BD449A /* SceneObject.cpp in Sources */,
+				CE0357D71F1779CA00BD449A /* DirectionalLight.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1685,6 +1695,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
@@ -1701,6 +1712,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";

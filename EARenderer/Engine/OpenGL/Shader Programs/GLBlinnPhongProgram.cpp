@@ -54,8 +54,8 @@ namespace EARenderer {
         setUniformTexture("uShadowMap", shadowMap);
     }
     
-    void GLBlinnPhongProgram::setHighlighted(bool isHighlighted) {
-        glUniform1i(uniformLocation("isHighlighted"), GLint(isHighlighted));
+    void GLBlinnPhongProgram::setHighlightColor(const Color& color) {
+        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const GLfloat *>(&color));
     }
     
 }

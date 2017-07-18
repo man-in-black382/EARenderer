@@ -16,7 +16,10 @@
 
 #include "AxisAlignedBox3D.hpp"
 #include "Parallelogram3D.hpp"
+#include "Transformation.hpp"
+#include "Camera.hpp"
 
+#include <array>
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
@@ -58,8 +61,6 @@ namespace EARenderer {
     public:
         AxesSystem();
         
-        glm::mat4 rotationForAxis(Cartesian axis) const;
-        
         const AxisAlignedBox3D& axisBoundingBox() const;
         
         const Parallelogram3D& XYSelectionRect() const;
@@ -73,11 +74,17 @@ namespace EARenderer {
         const glm::mat4& ZXSegmentTransform() const;
         const glm::mat4& ZYSegmentTransform() const;
         
+        std::array<Cartesian, 3> allAxes() const;
+        
+        glm::mat4 rotationForAxis(Cartesian axis) const;
+        glm::mat4 worldTransformation(Transformation targetTransform, const glm::vec3& anchorPoint) const;
+        glm::vec3 basisVectorForAxis(Cartesian axis) const;
+        
         void drawAxis() const;
         void drawSegment() const;
     };
     
-    typedef AxesSystem::Cartesian CartesianAxis;
+    using CartesianAxis = AxesSystem::Cartesian;
     
 }
 

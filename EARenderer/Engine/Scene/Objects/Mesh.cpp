@@ -36,6 +36,14 @@ namespace EARenderer {
         return mName;
     }
     
+    bool Mesh::isSelected() const {
+        return mIsSelected;
+    }
+    
+    bool Mesh::isHighlighted() const {
+        return mIsHighlighted;
+    }
+    
     const std::vector<ID>& Mesh::subMeshIDs() const {
         return mSubMeshIDs;
     }
@@ -52,6 +60,14 @@ namespace EARenderer {
     
     void Mesh::setName(const std::string &name) {
         mName = name;
+    }
+    
+    void Mesh::setIsSelected(bool selected) {
+        mIsSelected = selected;
+    }
+    
+    void Mesh::setIsHighlighted(bool highlighted) {
+        mIsHighlighted = highlighted;
     }
     
     void Mesh::setTransformID(ID transformID) {

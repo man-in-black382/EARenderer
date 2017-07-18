@@ -25,24 +25,6 @@ namespace EARenderer {
         
 #pragma mark - Private
     
-    glm::mat4 AxesRenderer::independentScale(ID meshID) const {
-        Camera *camera = mScene->camera();
-        Mesh *mesh = &mScene->meshes()[meshID];
-        Transformation meshTransform = mScene->transforms()[mesh->transformID()];
-        
-        // Calculate the scale in a way that makes axes to appear in constant size
-        float meshCameraDistance = glm::length(meshTransform.translation - camera->position());
-        return glm::scale(glm::vec3(meshCameraDistance / 11.0));
-    }
-    
-    glm::mat4 AxesRenderer::axesSystemWorldTransformation(ID meshID) const {
-        Mesh *mesh = &mScene->meshes()[meshID];
-        Transformation modelTransform = mScene->transforms()[mesh->transformID()];
-        // Get rid of mesh's scale. We want to scale axes independently.
-        modelTransform.scale = glm::vec3(1.0);
-        return modelTransform.modelMatrix() * independentScale(meshID);
-    }
-    
     void AxesRenderer::renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp) const {
         GLVertex1P3Program *program = mProgramFacility->vertex1P3Program();
         
@@ -115,46 +97,40 @@ namespace EARenderer {
         mAxesSystem.drawSegment();
     }
     
+#pragma mark - Getters
+    
+    const AxesSystem& AxesRenderer::axesSystem() const {
+        return mAxesSystem;
+    }
+    
 #pragma mark - Public
     
     bool AxesRenderer::raySelectsAxes(const Ray3D& ray, AxesSelection& selection) {
         float minimumDistance = std::numeric_limits<float>::max();
         bool anySelectionOccured = false;
         
-        std::array<CartesianAxis, 3> allAxes = { CartesianAxis::x, CartesianAxis::y, CartesianAxis::z };
-        
-        Parallelogram3D XYSelectionRect = mAxesSystem.XYSelectionRect();
-        Parallelogram3D XZSelectionRect = mAxesSystem.XZSelectionRect();
-        Parallelogram3D YZSelectionRect = mAxesSystem.YZSelectionRect();
-        
-        for (ID meshID : mMeshIDs) {
-            glm::mat4 worldTransform = axesSystemWorldTransformation(meshID);
-            bool areSeveralAxesSelected = false;
+        auto checkRectIntersection = [&minimumDistance, &ray, &selection](const Parallelogram3D& rect, CartesianAxis axesMask, ID meshID, bool& isIntersecting) {
             float distance = 0;
-            
-            if (ray.intersectsParallelogram(XYSelectionRect.transformedBy(worldTransform), distance)) {
+            if (ray.intersectsParallelogram(rect, distance)) {
                 if (distance < minimumDistance) {
                     minimumDistance = distance;
-                    selection = AxesSelection(CartesianAxis::x | CartesianAxis::y, meshID);
+                    selection = AxesSelection(axesMask, meshID);
                 }
-                areSeveralAxesSelected = true;
+                isIntersecting = true;
             }
+        };
+        
+        for (ID meshID : mScene->meshes()) {
+            Mesh& mesh = mScene->meshes()[meshID];
+            if (!mesh.isSelected()) { continue; }
             
-            if (ray.intersectsParallelogram(XZSelectionRect.transformedBy(worldTransform), distance)) {
-                if (distance < minimumDistance) {
-                    minimumDistance = distance;
-                    selection = AxesSelection(CartesianAxis::x | CartesianAxis::z, meshID);
-                }
-                areSeveralAxesSelected = true;
-            }
+            Transformation& tr = mScene->transforms()[mesh.transformID()];
+            glm::mat4 worldTransform = mAxesSystem.worldTransformation(tr, mScene->camera()->position());
             
-            if (ray.intersectsParallelogram(YZSelectionRect.transformedBy(worldTransform), distance)) {
-                if (distance < minimumDistance) {
-                    minimumDistance = distance;
-                    selection = AxesSelection(CartesianAxis::y | CartesianAxis::z, meshID);
-                }
-                areSeveralAxesSelected = true;
-            }
+            bool areSeveralAxesSelected = false;
+            checkRectIntersection(mAxesSystem.XYSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::y, meshID, areSeveralAxesSelected);
+            checkRectIntersection(mAxesSystem.XZSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::z, meshID, areSeveralAxesSelected);
+            checkRectIntersection(mAxesSystem.YZSelectionRect().transformedBy(worldTransform), CartesianAxis::y | CartesianAxis::z, meshID, areSeveralAxesSelected);
             
             // No need to check individual axes if we found two of them already
             if (areSeveralAxesSelected) {
@@ -162,9 +138,10 @@ namespace EARenderer {
                 continue;
             }
             
-            for (auto axis : allAxes) {
+            for (auto axis : mAxesSystem.allAxes()) {
                 glm::mat4 axisTransformation = worldTransform * mAxesSystem.rotationForAxis(axis);
                 Ray3D localSpaceRay = ray.transformedBy(glm::inverse(axisTransformation));
+                float distance = 0;
                 
                 if (localSpaceRay.intersectsAAB(mAxesSystem.axisBoundingBox(), distance)) {
                     // Intersection distance is in the mesh's local space
@@ -187,18 +164,6 @@ namespace EARenderer {
         return anySelectionOccured;
     }
     
-    void AxesRenderer::setAxesVisualizationEnabledForMesh(bool enabled, ID meshID) {
-        if (enabled) {
-            mMeshIDs.insert(meshID);
-        } else {
-            mMeshIDs.erase(meshID);
-        }
-    }
-    
-    void AxesRenderer::disableAxesVisualization() {
-        mMeshIDs.clear();
-    }
-    
     void AxesRenderer::enableAxesHighlightForMesh(CartesianAxis axesMask, ID meshID) {
         mAxesToHighlight[meshID] = axesMask;
     }
@@ -214,8 +179,12 @@ namespace EARenderer {
         mProgramFacility->vertex1P3Program()->bind();
         mProgramFacility->vertex1P3Program()->flushState();
         
-        for (ID meshID : mMeshIDs) {
-            glm::mat4 mvp = mScene->camera()->viewProjectionMatrix() * axesSystemWorldTransformation(meshID);
+        for (ID meshID : mScene->meshes()) {
+            Mesh& mesh = mScene->meshes()[meshID];
+            if (!mesh.isSelected()) { continue; }
+            
+            Transformation& tr = mScene->transforms()[mesh.transformID()];
+            glm::mat4 mvp = mScene->camera()->viewProjectionMatrix() * mAxesSystem.worldTransformation(tr, mScene->camera()->position());
             CartesianAxis axesToHighlight = CartesianAxis::none;
             
             const auto& it = mAxesToHighlight.find(meshID);

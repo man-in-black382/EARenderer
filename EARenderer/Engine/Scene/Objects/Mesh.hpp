@@ -21,6 +21,8 @@ namespace EARenderer {
     class Mesh {
     private:
         std::string mName;
+        bool mIsSelected = false;
+        bool mIsHighlighted = false;
         std::vector<ID> mSubMeshIDs;
         ID mTransformID = 0;
         AxisAlignedBox3D mBoundingBox;
@@ -36,13 +38,17 @@ namespace EARenderer {
         void swap(Mesh&);
         
         const std::string& name() const;
+        bool isSelected() const;
+        bool isHighlighted() const;
         const std::vector<ID>& subMeshIDs() const;
         const ID transformID() const;
         const AxisAlignedBox3D& boundingBox() const;
         
+        void setName(const std::string& name);
+        void setIsSelected(bool selected);
+        void setIsHighlighted(bool highlighted);
         void setSubMeshIDs(const std::vector<ID>& subMeshIDs);
         void setTransformID(ID transformID);
-        void setName(const std::string& name);
         void setBoundingBox(const AxisAlignedBox3D& box);
     };
     

@@ -22,8 +22,8 @@ namespace EARenderer {
         
         glm::vec3 normal() const;
         
-        Parallelogram3D transformedBy(const Transformation& t);
-        Parallelogram3D transformedBy(const glm::mat4& mat);
+        Parallelogram3D transformedBy(const Transformation& t) const;
+        Parallelogram3D transformedBy(const glm::mat4& mat) const;
     };
     
 }

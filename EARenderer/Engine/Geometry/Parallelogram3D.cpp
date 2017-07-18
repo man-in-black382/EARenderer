@@ -29,11 +29,11 @@ namespace EARenderer {
         return glm::normalize(glm::cross(side1, side2));
     }
     
-    Parallelogram3D Parallelogram3D::transformedBy(const Transformation& t) {
+    Parallelogram3D Parallelogram3D::transformedBy(const Transformation& t) const {
         return transformedBy(t.modelMatrix());
     }
     
-    Parallelogram3D Parallelogram3D::transformedBy(const glm::mat4& mat) {
+    Parallelogram3D Parallelogram3D::transformedBy(const glm::mat4& mat) const {
         glm::vec3 newCorner = mat * glm::vec4(corner, 1.0);
         // w = 0 to exclude translation from direction vectors
         glm::vec3 newSide1 = mat * glm::vec4(side1, 0.0);

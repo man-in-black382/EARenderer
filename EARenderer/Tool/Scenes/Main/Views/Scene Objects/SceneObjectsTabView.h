@@ -12,7 +12,7 @@
 #import "CameraListTabViewItem.h"
 #import "LightListTabViewItem.h"
 
-#import "SceneOpaque.h"
+#import "Scene.hpp"
 
 @interface SceneObjectsTabView : NSTabView
 
@@ -20,6 +20,6 @@
 @property (weak, nonatomic) IBOutlet CameraListTabViewItem *camerasTab;
 @property (weak, nonatomic) IBOutlet LightListTabViewItem *lightsTab;
 
-- (void)buildTabsWithScene:(SceneOpaque *)scenePtr;
+- (void)buildTabsWithScene:(EARenderer::Scene *)scene;
 
 @end

@@ -14,7 +14,7 @@
 
 struct RendererOpaque {
     EARenderer::SceneRenderer renderer;
-    RendererOpaque(EARenderer::GLSLProgramFacility *facility) : renderer(facility) { }
+//    RendererOpaque(EARenderer::GLSLProgramFacility *facility) : renderer(facility) { }
 };
 
 #endif /* RendererOpaque_h */

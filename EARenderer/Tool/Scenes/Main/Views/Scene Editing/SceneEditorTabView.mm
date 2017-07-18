@@ -20,8 +20,10 @@
 
 - (void)showMesh:(EARenderer::Mesh *)mesh
 {
-    self.meshTab.meshTransform = &self.sceneOpaquePtr->scene.transforms()[mesh->transformID()];
-    [self selectTabViewItem:self.meshTab];
+    self.meshTab.meshTransform = &self.scene->transforms()[mesh->transformID()];
+    if (![self.selectedTabViewItem isEqual:self.meshTab]) {
+        [self selectTabViewItem:self.meshTab];
+    }
 }
 
 @end

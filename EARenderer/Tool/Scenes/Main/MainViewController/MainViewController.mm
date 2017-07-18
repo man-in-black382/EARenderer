@@ -13,11 +13,12 @@
 
 #import "DefaultRenderComponentsProvider.h"
 
-#import "SceneOpaque.h"
-#import "RendererOpaque.h"
+#import "Scene.hpp"
+#import "SceneRenderer.hpp"
 #import "AxesRenderer.hpp"
 #import "ResourceManager.hpp"
-#import "RunLoop.hpp"
+#import "SceneInteractor.hpp"
+#import "Cameraman.hpp"
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
@@ -27,11 +28,12 @@
 
 // C++ raw pointers
 @property (assign, nonatomic) EARenderer::GLSLProgramFacility *programFacility;
-@property (assign, nonatomic) SceneOpaque *sceneOpaquePtr;
-@property (assign, nonatomic) RendererOpaque *rendererOpaquePtr;
-@property (assign, nonatomic) EARenderer::AxesRenderer *axesVisualizer;
+@property (assign, nonatomic) EARenderer::Scene *scene;
+@property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
+@property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
 @property (assign, nonatomic) EARenderer::DefaultRenderComponentsProviding *defaultRenderComponentsProvider;
-@property (assign, nonatomic) EARenderer::RunLoop *runLoop;
+@property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
+@property (assign, nonatomic) EARenderer::Cameraman *cameraman;
 
 @end
 
@@ -52,56 +54,60 @@
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
     self.programFacility = new EARenderer::GLSLProgramFacility([self programFacilityDirectory]);
-    self.sceneOpaquePtr = new SceneOpaque();
-    self.rendererOpaquePtr = new RendererOpaque(self.programFacility);
-    self.axesVisualizer = new EARenderer::AxesRenderer(&self.sceneOpaquePtr->scene, self.programFacility);
+    self.scene = new EARenderer::Scene();
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, self.programFacility);
+    self.axesRenderer = new EARenderer::AxesRenderer(self.scene, self.programFacility);
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
-    self.rendererOpaquePtr->renderer.setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
+    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
+    
+    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
+                                                                 self.scene,
+                                                                 self.axesRenderer,
+                                                                 self.sceneRenderer,
+                                                                 &EARenderer::GLViewport::main());
+    
+    // Temporary
     
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     NSString *texturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
     
-    self.runLoop = new EARenderer::RunLoop(&self.sceneOpaquePtr->scene,
-                                           &EARenderer::Input::shared(),
-                                           &self.rendererOpaquePtr->renderer,
-                                           self.axesVisualizer,
-                                           &EARenderer::GLViewport::main());
-    
-    // Temporary
-    
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, &self.sceneOpaquePtr->scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, self.scene);
     
-    auto *camera = new EARenderer::Camera(75.f, 0.1f, 50.f, 16.f / 9.f, glm::vec3(0, 1, 0));
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f, 16.f / 9.f, glm::vec3(0, 1, 0));
     camera->moveTo(glm::vec3(0, 0, 0.5));
     camera->lookAt(glm::vec3(0, 0, 0));
     
+    self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
+    
     EARenderer::DirectionalLight light(glm::vec3(1, 1, 1), glm::vec3(1.0), glm::vec3(0.0, 0.0, 0.0));
     
-    self.sceneOpaquePtr->scene.setCamera(camera);
-    self.sceneOpaquePtr->scene.lights().insert(light);
-    self.sceneOpaquePtr->scene.setSkybox([self skybox]);
-    self.sceneOpaquePtr->scene.materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 16, std::string(texturePath.UTF8String)));
+    self.scene->setCamera(camera);
+    self.scene->lights().insert(light);
+    self.scene->setSkybox([self skybox]);
+    self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 16, std::string(texturePath.UTF8String)));
     
-    [self.sceneObjectsTabView buildTabsWithScene:self.sceneOpaquePtr];
-    self.sceneEditorTabView.sceneOpaquePtr = self.sceneOpaquePtr;
+    [self.sceneObjectsTabView buildTabsWithScene:self.scene];
+    self.sceneEditorTabView.scene = self.scene;
     
-    for (EARenderer::ID meshID : self.sceneOpaquePtr->scene.meshes()) {
-        self.axesVisualizer->setAxesVisualizationEnabledForMesh(true, meshID);
-    }
+    [self subscribeForEvents];
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
-    self.runLoop->runOnce();
+    self.cameraman->updateCamera();
+    self.sceneRenderer->render();
+    self.axesRenderer->render();
 }
 
 #pragma mark - MeshListTabViewItemDelegate
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id
 {
-    [self.sceneEditorTabView showMesh:&self.sceneOpaquePtr->scene.meshes()[id]];
+    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+    mesh.setIsSelected(true);
+    [self.sceneEditorTabView showMesh:&mesh];
 }
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id
@@ -110,6 +116,22 @@
 }
 
 #pragma mark - Helper methods
+
+- (void)subscribeForEvents
+{
+    self.sceneInteractor->meshUpdateStartEvent() += { "main.controller.mesh.update.start", [self](EARenderer::ID meshID) {
+        self.cameraman->setIsEnabled(false);
+    }};
+    
+    self.sceneInteractor->meshUpdateEvent() += { "main.controller.mesh.update", [self](EARenderer::ID meshID) {
+        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
+        [self.sceneEditorTabView showMesh:&mesh];
+    }};
+    
+    self.sceneInteractor->meshUpdateEndEvent() += { "main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
+        self.cameraman->setIsEnabled(true);
+    }};
+}
 
 - (std::string)programFacilityDirectory
 {

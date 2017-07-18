@@ -9,9 +9,11 @@
 #ifndef Camera_hpp
 #define Camera_hpp
 
-#include <glm/glm.hpp>
 #include "Ray3D.hpp"
 #include "GLViewport.hpp"
+
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace EARenderer {
     
@@ -49,12 +51,15 @@ namespace EARenderer {
         void rotateBy(float pitch, float yaw);
         void zoom(float zoomFactor);
         
-        Ray3D rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport);
+        Ray3D rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) const;
+        glm::vec3 worldToNDC(const glm::vec3& v) const;
         
         const glm::vec3& position() const;
         const glm::vec3& front() const;
         const glm::vec3& right() const;
         const glm::vec3& up() const;
+        float nearClipPlane() const;
+        float farClipPlane() const;
         glm::mat4 viewProjectionMatrix() const;
         glm::mat4 viewMatrix() const;
         glm::mat4 projectionMatrix() const;

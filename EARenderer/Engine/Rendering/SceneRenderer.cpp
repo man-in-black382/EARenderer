@@ -16,8 +16,9 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(GLSLProgramFacility *facility)
+    SceneRenderer::SceneRenderer(Scene* scene, GLSLProgramFacility* facility)
     :
+    mScene(scene),
     mProgramFacility(facility),
     mDepthTexture(Size2D(1024, 1024)),
     mDepthFramebuffer(Size2D(1024, 1024))
@@ -71,7 +72,7 @@ namespace EARenderer {
                 
                 if (worldDistance < minimumDistance) {
                     minimumDistance = worldDistance;
-                    closestMeshID = meshID;
+                    closestMeshID = id;
                 }
             }
         }
@@ -82,7 +83,7 @@ namespace EARenderer {
     
 #pragma mark - Rendering
     
-    void SceneRenderer::render(Scene *scene) {
+    void SceneRenderer::render() {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -92,13 +93,13 @@ namespace EARenderer {
         mDepthFramebuffer.bind();
         glViewport(0, 0, mDepthFramebuffer.size().width, mDepthFramebuffer.size().height);
         
-        for (ID subMeshID : scene->subMeshes()) {
-            SubMesh& subMesh = scene->subMeshes()[subMeshID];
+        for (ID subMeshID : mScene->subMeshes()) {
+            SubMesh& subMesh = mScene->subMeshes()[subMeshID];
             ID meshID = subMesh.meshID();
-            ID transformID = scene->meshes()[meshID].transformID();
-            Transformation& transform = scene->transforms()[transformID];
-            ID lightID = *(scene->lights().begin());
-            DirectionalLight& light = scene->lights()[lightID];
+            ID transformID = mScene->meshes()[meshID].transformID();
+            Transformation& transform = mScene->transforms()[transformID];
+            ID lightID = *(mScene->lights().begin());
+            DirectionalLight& light = mScene->lights()[lightID];
             
             mProgramFacility->depthFillerProgram()->flushState();
             mProgramFacility->depthFillerProgram()->setModelMatrix(transform.modelMatrix());
@@ -114,42 +115,42 @@ namespace EARenderer {
         
         mProgramFacility->blinnPhongProgram()->bind();
         
-        for (ID subMeshID : scene->subMeshes()) {
-            SubMesh& subMesh = scene->subMeshes()[subMeshID];
+        for (ID subMeshID : mScene->subMeshes()) {
+            SubMesh& subMesh = mScene->subMeshes()[subMeshID];
             ID meshID = subMesh.meshID();
-            Mesh& mesh = scene->meshes()[meshID];
+            Mesh& mesh = mScene->meshes()[meshID];
             ID transformID = mesh.transformID();
-            Transformation& transform = scene->transforms()[transformID];
+            Transformation& transform = mScene->transforms()[transformID];
             
             mProgramFacility->blinnPhongProgram()->flushState();
             mProgramFacility->blinnPhongProgram()->setModelMatrix(transform.modelMatrix());
             mProgramFacility->blinnPhongProgram()->setNormalMatrix(transform.modelMatrix());
-            mProgramFacility->blinnPhongProgram()->setCameraSpaceMatrix(scene->camera()->viewProjectionMatrix());
-            mProgramFacility->blinnPhongProgram()->setCameraPosition(scene->camera()->position());
+            mProgramFacility->blinnPhongProgram()->setCameraSpaceMatrix(mScene->camera()->viewProjectionMatrix());
+            mProgramFacility->blinnPhongProgram()->setCameraPosition(mScene->camera()->position());
             
-            ID lightID = *(scene->lights().begin());
-            DirectionalLight& light = scene->lights()[lightID];
+            ID lightID = *(mScene->lights().begin());
+            DirectionalLight& light = mScene->lights()[lightID];
             
             mProgramFacility->blinnPhongProgram()->setLightPosition(light.position());
             mProgramFacility->blinnPhongProgram()->setLightColor(light.color());
             mProgramFacility->blinnPhongProgram()->setLightSpaceMatrix(light.viewProjectionMatrix());
             mProgramFacility->blinnPhongProgram()->setShadowMap(mDepthTexture);
             
-            ID materialID = *(scene->materials().begin());
-            Material& material = scene->materials()[materialID];
+            ID materialID = *(mScene->materials().begin());
+            Material& material = mScene->materials()[materialID];
             mProgramFacility->blinnPhongProgram()->setMaterial(material);
             
-//            mProgramFacility->blinnPhongProgram()->setHighlighted(mesh.isHighlighted());
+            mProgramFacility->blinnPhongProgram()->setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
             
             subMesh.draw();
         }
         
         mProgramFacility->skyboxProgram()->bind();
         mProgramFacility->skyboxProgram()->flushState();
-        mProgramFacility->skyboxProgram()->setViewMatrix(scene->camera()->viewMatrix());
-        mProgramFacility->skyboxProgram()->setProjectionMatrix(scene->camera()->projectionMatrix());
-        mProgramFacility->skyboxProgram()->setCubemap(scene->skybox()->cubemap());
-        scene->skybox()->draw();
+        mProgramFacility->skyboxProgram()->setViewMatrix(mScene->camera()->viewMatrix());
+        mProgramFacility->skyboxProgram()->setProjectionMatrix(mScene->camera()->projectionMatrix());
+        mProgramFacility->skyboxProgram()->setCubemap(mScene->skybox()->cubemap());
+        mScene->skybox()->draw();
     }
     
 }

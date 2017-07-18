@@ -9,11 +9,11 @@
 #import <Cocoa/Cocoa.h>
 
 #import "Mesh.hpp"
-#import "SceneOpaque.h"
+#import "Scene.hpp"
 
 @interface SceneEditorTabView : NSTabView
 
-@property (assign, nonatomic) SceneOpaque *sceneOpaquePtr;
+@property (assign, nonatomic) EARenderer::Scene *scene;
 
 - (void)showMesh:(EARenderer::Mesh *)mesh;
 

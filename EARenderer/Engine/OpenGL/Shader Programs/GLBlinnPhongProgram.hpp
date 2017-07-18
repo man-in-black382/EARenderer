@@ -12,6 +12,7 @@
 #include "GLProgram.hpp"
 #include "Material.hpp"
 #include "GLDepthTexture2D.hpp"
+#include "Color.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -31,7 +32,7 @@ namespace EARenderer {
         void setLightColor(const glm::vec3& color);
         void setMaterial(const Material& material);
         void setShadowMap(const GLDepthTexture2D& shadowMap);
-        void setHighlighted(bool isHighlighted);
+        void setHighlightColor(const Color& color);
     };
     
 }

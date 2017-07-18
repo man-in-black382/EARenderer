@@ -26,7 +26,7 @@ struct Material {
 };
 
 uniform Material uMaterial;
-uniform bool isHighlighted;
+uniform vec4 uHighlightColor;
 
 // Functions
 
@@ -73,8 +73,5 @@ void main() {
     vec3 diffuseColor = diffuseColor(N, L);
     vec3 specularColor = specularColor(N, L, V);
     
-    outputFragColor = vec4((ambientColor + (1.0 - isInShadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st);
-    if (isHighlighted) {
-        outputFragColor += vec4(0.5, 0.5, 0.5, 1.0);
-    }
+    outputFragColor = vec4((ambientColor + (1.0 - isInShadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st) + uHighlightColor;
 }

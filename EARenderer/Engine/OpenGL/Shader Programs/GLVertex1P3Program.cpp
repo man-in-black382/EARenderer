@@ -21,7 +21,7 @@ namespace EARenderer {
     }
     
     void GLVertex1P3Program::setHighlightColor(const Color& color) {
-        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const float *>(&color));
+        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const GLfloat *>(&color));
     }
     
 }

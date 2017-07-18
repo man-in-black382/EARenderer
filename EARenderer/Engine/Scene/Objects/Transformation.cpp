@@ -31,6 +31,18 @@ namespace EARenderer {
         return glm::translate(translation) * glm::mat4_cast(rotation) * glm::scale(scale);
     }
     
+    glm::mat4 Transformation::scaleMatrix() const {
+        return glm::scale(scale);
+    }
+    
+    glm::mat4 Transformation::rotationMatrix() const {
+        return glm::mat4_cast(rotation);
+    }
+    
+    glm::mat4 Transformation::translationMatrix() const {
+        return glm::translate(translation);
+    }
+    
     glm::mat4 Transformation::inverseScaleMatrix() const {
         return glm::inverse(glm::scale(scale));
     }

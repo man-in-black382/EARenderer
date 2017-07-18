@@ -101,7 +101,7 @@ namespace EARenderer {
         
     }
     
-    Ray3D Camera::rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) {
+    Ray3D Camera::rayFromPointOnViewport(const glm::vec2& point, const GLViewport *viewport) const {
         glm::vec2 ndc = viewport->NDCFromPoint(point);
         glm::mat4 inverseVP = glm::inverse(viewProjectionMatrix());
         
@@ -120,6 +120,11 @@ namespace EARenderer {
         return Ray3D(glm::vec3(nearUntransformed), glm::vec3(farUntransformed));
     }
     
+    glm::vec3 Camera::worldToNDC(const glm::vec3& v) const {
+        glm::vec4 clipSpaceVector = viewProjectionMatrix() * glm::vec4(v, 1.0);
+        return fabs(clipSpaceVector.w) > std::numeric_limits<float>::epsilon() ? clipSpaceVector / clipSpaceVector.w : clipSpaceVector;
+    }
+    
 #pragma mark - Getters
     
     const glm::vec3& Camera::position() const {
@@ -136,6 +141,14 @@ namespace EARenderer {
     
     const glm::vec3& Camera::up() const {
         return mUp;
+    }
+    
+    float Camera::nearClipPlane() const {
+        return mNearClipPlane;
+    }
+    
+    float Camera::farClipPlane() const {
+        return mFarClipPlane;
     }
     
     glm::mat4 Camera::viewProjectionMatrix() const {

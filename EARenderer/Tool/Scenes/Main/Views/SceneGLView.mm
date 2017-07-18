@@ -130,24 +130,20 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
 
 #pragma mark - Mouse
 
-- (void)mouseDown:(NSEvent *)event
-{
-    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::pressDown];
-}
+- (void)mouseDown:(NSEvent *)event          { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
+- (void)rightMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
+- (void)mouseUp:(NSEvent *)event            { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
+- (void)rightMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
+- (void)mouseDragged:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
+- (void)rightMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
+- (void)otherMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
+- (void)otherMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
+- (void)otherMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
+- (void)mouseMoved:(NSEvent *)event         { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Move];       }
 
-- (void)mouseUp:(NSEvent *)event
+- (void)scrollWheel:(NSEvent *)event
 {
-    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::pressUp];
-}
-
-- (void)mouseDragged:(NSEvent *)event
-{
-    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::drag];
-}
-
-- (void)mouseMoved:(NSEvent *)event
-{
-    [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::freeMovement];
+    NSLog(@"Scroll wheel delta X %f Y %f", event.scrollingDeltaX, event.scrollingDeltaY);
 }
 
 - (void)notifyInputWithMouseEvent:(NSEvent *)event action:(EARenderer::Input::MouseAction)action
@@ -155,7 +151,7 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
     NSPoint eventLocation = [event locationInWindow];
     NSPoint localPoint = [self convertPoint:eventLocation fromView:nil];
     
-    EARenderer::Input::shared().updateMousePosition(glm::vec2(localPoint.x, localPoint.y), action);
+    EARenderer::Input::shared().registerMouseAction(action, glm::vec2(localPoint.x, localPoint.y), NSEvent.pressedMouseButtons);
 }
 
 @end

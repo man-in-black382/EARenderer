@@ -8,8 +8,6 @@
 
 #import "SceneObjectsTabView.h"
 
-#import "Scene.hpp"
-
 @interface SceneObjectsTabView ()
 
 @property (assign, nonatomic) EARenderer::Scene *scene;
@@ -18,9 +16,9 @@
 
 @implementation SceneObjectsTabView
 
-- (void)buildTabsWithScene:(SceneOpaque *)scenePtr
+- (void)buildTabsWithScene:(EARenderer::Scene *)scene
 {
-    self.scene = &scenePtr->scene;
+    self.scene = scene;
     
     [self.meshesTab buildOutlineViewWithMeshes:&self.scene->meshes() andSubMeshes:&self.scene->subMeshes()];
 }

@@ -28,26 +28,22 @@ namespace EARenderer {
         Scene *mScene = nullptr;
         GLSLProgramFacility *mProgramFacility = nullptr;
         
-        std::unordered_set<ID> mMeshIDs;
         std::unordered_map<ID, CartesianAxis> mAxesToHighlight;
         AxesSystem mAxesSystem;
         Color mXAxisColor = { 0.807, 0.184, 0.0, 1.0 };
         Color mYAxisColor = { 0.209, 0.557, 1.0, 1.0 };
         Color mZAxisColor = { 0.470, 0.749, 0.0, 1.0 };
         
-        glm::mat4 independentScale(ID meshID) const;
-        glm::mat4 axesSystemWorldTransformation(ID meshID) const;
-        
         void renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp) const;
         void renderSegments(CartesianAxis axesToHighlight, const glm::mat4& mvp) const;
         
     public:
-        AxesRenderer(Scene *scene, GLSLProgramFacility *programFacility);        
+        AxesRenderer(Scene *scene, GLSLProgramFacility *programFacility);
+        
+        const AxesSystem& axesSystem() const;
         
         bool raySelectsAxes(const Ray3D& ray, AxesSelection& selection);
         
-        void setAxesVisualizationEnabledForMesh(bool enabled, ID meshID);
-        void disableAxesVisualization();
         void enableAxesHighlightForMesh(CartesianAxis axesMask, ID meshID);
         void disableAxesHighlight();
         
