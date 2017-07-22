@@ -115,6 +115,14 @@
     
 }
 
+- (void)meshListTabViewItemDidDeselectAll:(MeshListTabViewItem *)item
+{
+    for (EARenderer::ID meshID : self.scene->meshes()) {
+        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
+        mesh.setIsSelected(false);
+    }
+}
+
 #pragma mark - Helper methods
 
 - (void)subscribeForEvents
@@ -130,6 +138,18 @@
     
     self.sceneInteractor->meshUpdateEndEvent() += { "main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
         self.cameraman->setIsEnabled(true);
+    }};
+    
+    self.sceneInteractor->meshSelectionEvent() += { "main.controller.mesh.select", [self](EARenderer::ID meshID) {
+        [self.sceneObjectsTabView.meshesTab selectMeshWithID:meshID];
+    }};
+    
+    self.sceneInteractor->meshDeselectionEvent() += { "main.controller.mesh.deselect", [self](EARenderer::ID meshID) {
+        [self.sceneObjectsTabView.meshesTab deselectMeshWithID:meshID];
+    }};
+    
+    self.sceneInteractor->allObjectsDeselectionEvent() += { "main.controller.deselect.all", [self]() {
+        [self.sceneObjectsTabView.meshesTab deselectAll];
     }};
 }
 

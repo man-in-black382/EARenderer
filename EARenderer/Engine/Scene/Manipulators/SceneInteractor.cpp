@@ -28,17 +28,19 @@ namespace EARenderer {
     mSceneRenderer(sceneRenderer),
     mMainViewport(mainViewport)
     {
-        mUserInput->mouseEvent()[Input::MouseAction::Move] += { "move", this, &SceneInteractor::handleMouseMove };
-        mUserInput->mouseEvent()[Input::MouseAction::Drag] += { "drag", this, &SceneInteractor::handleMouseDrag };
-        mUserInput->mouseEvent()[Input::MouseAction::PressDown] += { "down", this, &SceneInteractor::handleMouseDown };
-        mUserInput->mouseEvent()[Input::MouseAction::PressUp] += { "up", this, &SceneInteractor::handleMouseUp };
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Move] += { "move", this, &SceneInteractor::handleMouseMove };
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Drag] += { "drag", this, &SceneInteractor::handleMouseDrag };
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::PressDown] += { "down", this, &SceneInteractor::handleMouseDown };
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::PressUp] += { "up", this, &SceneInteractor::handleMouseUp };
+        mUserInput->clickMouseEvent() += { "click", this, &SceneInteractor::handleMouseClick };
     }
     
     SceneInteractor::~SceneInteractor() {
-        mUserInput->mouseEvent()[Input::MouseAction::Move] -= "move";
-        mUserInput->mouseEvent()[Input::MouseAction::Drag] -= "drag";
-        mUserInput->mouseEvent()[Input::MouseAction::PressDown] -= "down";
-        mUserInput->mouseEvent()[Input::MouseAction::PressUp] -= "up";
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Move] -= "move";
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Drag] -= "drag";
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::PressDown] -= "down";
+        mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::PressUp] -= "up";
+        mUserInput->clickMouseEvent() -= "click" ;
     }
     
 #pragma mark - Event Handlers
@@ -131,12 +133,19 @@ namespace EARenderer {
     }
     
     void SceneInteractor::handleMouseUp(const Input* input) {
+        if (mPreviouslySelectedMeshID != IDNotFound) {
+            mMeshUpdateEndEvent(mPreviouslySelectedMeshID);
+        }
+    }
+    
+    void SceneInteractor::handleMouseClick(const Input* input) {
         Ray3D cameraRay = mScene->camera()->rayFromPointOnViewport(input->mousePosition(), mMainViewport);
         
         if (mPreviouslySelectedMeshID != IDNotFound) {
             Mesh& previousMesh = mScene->meshes()[mPreviouslySelectedMeshID];
             previousMesh.setIsSelected(false);
-            mMeshUpdateEndEvent(mPreviouslySelectedMeshID);
+            mMeshDeselectionEvent(mPreviouslySelectedMeshID);
+            mPreviouslySelectedMeshID = IDNotFound;
         }
         
         ID selectedMeshID = IDNotFound;
@@ -146,8 +155,9 @@ namespace EARenderer {
             mesh.setIsSelected(true);
             mesh.setIsHighlighted(false);
             mPreviouslySelectedMeshID = selectedMeshID;
-            
-            mMeshUpdateEvent(selectedMeshID);
+            mMeshSelectionEvent(selectedMeshID);
+        } else {
+            mAllObjectsDeselectionEvent();
         }
     }
     
@@ -163,6 +173,18 @@ namespace EARenderer {
     
     SceneInteractor::MeshEvent& SceneInteractor::meshUpdateEndEvent() {
         return mMeshUpdateEndEvent;
+    }
+
+    SceneInteractor::MeshEvent& SceneInteractor::meshSelectionEvent() {
+        return mMeshSelectionEvent;
+    }
+    
+    SceneInteractor::MeshEvent& SceneInteractor::meshDeselectionEvent() {
+        return mMeshDeselectionEvent;
+    }
+    
+    SceneInteractor::Event& SceneInteractor::allObjectsDeselectionEvent() {
+        return mAllObjectsDeselectionEvent;
     }
     
 #pragma mark - Helpers

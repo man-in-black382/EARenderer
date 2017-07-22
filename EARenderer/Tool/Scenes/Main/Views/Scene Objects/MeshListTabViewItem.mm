@@ -42,6 +42,31 @@
     [self.outlineView reloadData];
 }
 
+- (void)selectMeshWithID:(EARenderer::ID)meshID
+{
+    const auto& it = std::find(self.meshIDs.begin(), self.meshIDs.end(), meshID);
+    if (it != self.meshIDs.end()) {
+        size_t index = std::distance(self.meshIDs.begin(), it);
+        [self.outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:index] byExtendingSelection:NO];
+        [self.outlineView expandItem:[self.outlineView itemAtRow:index]];
+    }
+}
+
+- (void)deselectMeshWithID:(EARenderer::ID)meshID
+{
+    const auto& it = std::find(self.meshIDs.begin(), self.meshIDs.end(), meshID);
+    if (it != self.meshIDs.end()) {
+        size_t index = std::distance(self.meshIDs.begin(), it);
+        [self.outlineView deselectRow:index];
+        [self.outlineView collapseItem:[self.outlineView itemAtRow:index]];
+    }
+}
+
+- (void)deselectAll
+{
+    [self.outlineView deselectAll:nil];
+}
+
 - (BOOL)arePointersValid
 {
     return self.meshes && self.subMeshes;
@@ -141,8 +166,15 @@
     return cell;
 }
 
-- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+- (IBAction)outlineViewClicked:(id)sender
 {
+    if (self.outlineView.selectedRow == -1) {
+        if ([self.delegate respondsToSelector:@selector(meshListTabViewItemDidDeselectAll:)]) {
+            [self.delegate meshListTabViewItemDidDeselectAll:self];
+        }
+        return;
+    }
+    
     SceneObjectMarker *marker = [self.outlineView itemAtRow:self.outlineView.selectedRow];
     switch (marker.type) {
         case SceneObjectMarkerTypeMesh: {

@@ -130,23 +130,23 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
 
 #pragma mark - Mouse
 
-- (void)mouseDown:(NSEvent *)event          { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
-- (void)rightMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
-- (void)mouseUp:(NSEvent *)event            { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
-- (void)rightMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
-- (void)mouseDragged:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
-- (void)rightMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
-- (void)otherMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressDown];  }
-- (void)otherMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::PressUp];    }
-- (void)otherMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Drag];       }
-- (void)mouseMoved:(NSEvent *)event         { [self notifyInputWithMouseEvent:event action:EARenderer::Input::MouseAction::Move];       }
+- (void)mouseDown:(NSEvent *)event          { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressDown];  }
+- (void)rightMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressDown];  }
+- (void)mouseUp:(NSEvent *)event            { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressUp];    }
+- (void)rightMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressUp];    }
+- (void)mouseDragged:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::Drag];       }
+- (void)rightMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::Drag];       }
+- (void)otherMouseDown:(NSEvent *)event     { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressDown];  }
+- (void)otherMouseUp:(NSEvent *)event       { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::PressUp];    }
+- (void)otherMouseDragged:(NSEvent *)event  { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::Drag];       }
+- (void)mouseMoved:(NSEvent *)event         { [self notifyInputWithMouseEvent:event action:EARenderer::Input::SimpleMouseAction::Move];       }
 
 - (void)scrollWheel:(NSEvent *)event
 {
-    NSLog(@"Scroll wheel delta X %f Y %f", event.scrollingDeltaX, event.scrollingDeltaY);
+    EARenderer::Input::shared().registerMouseScroll({ event.scrollingDeltaX, event.scrollingDeltaY });
 }
 
-- (void)notifyInputWithMouseEvent:(NSEvent *)event action:(EARenderer::Input::MouseAction)action
+- (void)notifyInputWithMouseEvent:(NSEvent *)event action:(EARenderer::Input::SimpleMouseAction)action
 {
     NSPoint eventLocation = [event locationInWindow];
     NSPoint localPoint = [self convertPoint:eventLocation fromView:nil];

@@ -25,6 +25,7 @@ namespace EARenderer {
     class SceneInteractor {
     public:
         using MeshEvent = Event<SceneInteractor, std::string, void(ID)>;
+        using Event = Event<SceneInteractor, std::string, void()>;
         
     private:
         Input *mUserInput = nullptr;
@@ -42,11 +43,15 @@ namespace EARenderer {
         MeshEvent mMeshUpdateStartEvent;
         MeshEvent mMeshUpdateEvent;
         MeshEvent mMeshUpdateEndEvent;
+        MeshEvent mMeshSelectionEvent;
+        MeshEvent mMeshDeselectionEvent;
+        Event mAllObjectsDeselectionEvent;
         
         void handleMouseMove(const Input* input);
         void handleMouseDrag(const Input* input);
         void handleMouseDown(const Input* input);
         void handleMouseUp(const Input* input);
+        void handleMouseClick(const Input* input);
         
     public:
         SceneInteractor(Input* userInput,
@@ -64,6 +69,9 @@ namespace EARenderer {
         MeshEvent& meshUpdateStartEvent();
         MeshEvent& meshUpdateEvent();
         MeshEvent& meshUpdateEndEvent();
+        MeshEvent& meshSelectionEvent();
+        MeshEvent& meshDeselectionEvent();
+        Event& allObjectsDeselectionEvent();
     };
     
 }

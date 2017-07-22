@@ -19,6 +19,7 @@
 @optional
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id;
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id;
+- (void)meshListTabViewItemDidDeselectAll:(MeshListTabViewItem *)item;
 
 @end
 
@@ -29,5 +30,9 @@
 
 - (void)buildOutlineViewWithMeshes:(EARenderer::PackedLookupTable<EARenderer::Mesh> *)meshes
                       andSubMeshes:(EARenderer::PackedLookupTable<EARenderer::SubMesh> *)subMeshes;
+
+- (void)selectMeshWithID:(EARenderer::ID)meshID;
+- (void)deselectMeshWithID:(EARenderer::ID)meshID;
+- (void)deselectAll;
 
 @end

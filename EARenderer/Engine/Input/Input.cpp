@@ -12,6 +12,8 @@
 
 #include <glm/gtc/constants.hpp>
 
+static constexpr std::chrono::milliseconds ClickDetectionTime(200);
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -23,12 +25,28 @@ namespace EARenderer {
     
 #pragma mark - Getters
     
-    Input::MouseEvent& Input::mouseEvent() {
-        return mMouseEvent;
+    Input::SimpleMouseEvent& Input::simpleMouseEvent() {
+        return mSimpleMouseEvent;
+    }
+    
+    Input::ScrollEvent& Input::scrollMouseEvent() {
+        return mMouseScrollEvent;
+    }
+    
+    Input::ClickEvent& Input::clickMouseEvent() {
+        return mMouseClickEvent;
     }
     
     Input::KeyboardEvent& Input::keyboardEvent() {
         return mKeyboardEvent;
+    }
+    
+    uint8_t Input::clicksCount() const {
+        return mClickCount;
+    }
+    
+    const glm::vec2& Input::scrollDelta() const {
+        return mScrollDelta;
     }
     
     const glm::vec2& Input::mousePosition() const {
@@ -45,10 +63,40 @@ namespace EARenderer {
     
 #pragma mark - Other methods
     
-    void Input::registerMouseAction(MouseAction action, const glm::vec2& position, KeyCode keysMask) {
+    void Input::registerMouseAction(SimpleMouseAction action, const glm::vec2& position, KeyCode keysMask) {
+        using namespace std::chrono;
+        
+        auto now = steady_clock::now();
+        milliseconds clickDuration = duration_cast<milliseconds>(now - mTimePoint);
+        
+        switch (action) {
+            case SimpleMouseAction::PressDown: {
+                if (clickDuration >= ClickDetectionTime) {
+                    mClickCount = 0;
+                }
+                mTimePoint = steady_clock::now();
+                break;
+            }
+            case SimpleMouseAction::PressUp: {
+                if (clickDuration < ClickDetectionTime) {
+                    mClickCount++;
+                    mTimePoint = steady_clock::now();
+                    mMouseClickEvent(this);
+                }
+                break;
+            }
+            
+            default: { break; }
+        }
+        
         mMousePosition = position;
         mPressedMouseButtonsMask = keysMask;
-        mMouseEvent[action](this);
+        mSimpleMouseEvent[action](this);
+    }
+    
+    void Input::registerMouseScroll(const glm::vec2& delta) {
+        mScrollDelta = delta;
+        mMouseScrollEvent(this);
     }
 
     void Input::registerKey(KeyCode code) {
