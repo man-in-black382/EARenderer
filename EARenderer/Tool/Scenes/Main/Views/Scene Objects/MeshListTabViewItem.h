@@ -18,6 +18,7 @@
 
 @optional
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id;
+- (void)meshListTabViewItem:(MeshListTabViewItem *)item didDeselectMeshWithID:(EARenderer::ID)id;
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id;
 - (void)meshListTabViewItemDidDeselectAll:(MeshListTabViewItem *)item;
 

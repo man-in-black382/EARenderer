@@ -8,6 +8,8 @@
 
 #include "Skybox.hpp"
 
+#include <glm/vec3.hpp>
+
 namespace EARenderer {
     
     Skybox::Skybox(const std::string& rightImagePath,

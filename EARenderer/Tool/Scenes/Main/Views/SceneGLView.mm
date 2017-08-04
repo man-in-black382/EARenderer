@@ -12,10 +12,8 @@
 
 #import "Input.hpp"
 #import "Scene.hpp"
-#import "SceneOpaque.h"
 #import "SceneRenderer.hpp"
 #import "GLViewport.hpp"
-#import "RendererOpaque.h"
 
 #import <glm/gtc/constants.hpp>
 

@@ -9,7 +9,7 @@
 #ifndef GLNamedObject_hpp
 #define GLNamedObject_hpp
 
-#include <OpenGL/gltypes.h>
+#include <OpenGL/gl3.h>
 #include <iostream>
 
 namespace EARenderer {
@@ -29,7 +29,7 @@ namespace EARenderer {
         virtual ~GLNamedObject() = 0;
         void swap(GLNamedObject&);
         
-        GLuint getName() const;
+        GLuint name() const;
     };
     
     void swap(GLNamedObject&, GLNamedObject&);

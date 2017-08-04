@@ -151,6 +151,14 @@ namespace EARenderer {
         return mFarClipPlane;
     }
     
+    float Camera::FOVH() const {
+        return mFieldOfView;
+    }
+    
+    float Camera::FOVV() const {
+        return mFieldOfView * mViewportAspectRatio;
+    }
+    
     glm::mat4 Camera::viewProjectionMatrix() const {
         return projectionMatrix() * viewMatrix();
     }
@@ -160,7 +168,8 @@ namespace EARenderer {
     }
     
     glm::mat4 Camera::projectionMatrix() const {
-        return glm::perspective(glm::radians(mFieldOfView), mViewportAspectRatio, mNearClipPlane, mFarClipPlane);
+        float fovV = mFieldOfView / mViewportAspectRatio;
+        return glm::perspective(glm::radians(fovV), mViewportAspectRatio, mNearClipPlane, mFarClipPlane);
     }
     
 #pragma mark - Setters

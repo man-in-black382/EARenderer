@@ -1,4 +1,4 @@
-#version 400
+#version 400 core
 
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;

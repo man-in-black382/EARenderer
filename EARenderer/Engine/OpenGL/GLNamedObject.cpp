@@ -42,7 +42,7 @@ namespace EARenderer {
     
 #pragma mark - Accessors
     
-    GLuint GLNamedObject::getName() const {
+    GLuint GLNamedObject::name() const {
         return mName;
     }
     

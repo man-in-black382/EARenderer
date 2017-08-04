@@ -203,7 +203,7 @@ namespace EARenderer {
         // Calculate the scale in a way that makes axes to appear in constant size
         float meshCameraDistance = glm::length(targetTransform.translation - anchorPoint);
         // Get rid of mesh's scale. We want to scale axes independently.
-        targetTransform.scale = glm::vec3(meshCameraDistance / 11.0);
+        targetTransform.scale = glm::vec3(meshCameraDistance / 15.0);
         return targetTransform.modelMatrix();
     }
     

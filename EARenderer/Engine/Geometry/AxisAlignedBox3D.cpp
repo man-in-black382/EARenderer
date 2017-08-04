@@ -9,6 +9,7 @@
 #include "AxisAlignedBox3D.hpp"
 
 #include <glm/detail/func_geometric.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec4.hpp>
 
 namespace EARenderer {
@@ -43,6 +44,10 @@ namespace EARenderer {
     
     const float AxisAlignedBox3D::diagonal() const {
         return glm::length(max - min);
+    }
+    
+    glm::mat4 AxisAlignedBox3D::asFrustum() const {
+        return glm::ortho(min.x, max.x, min.y, max.y, min.z, max.z);
     }
     
     AxisAlignedBox3D AxisAlignedBox3D::transformedBy(const Transformation& t) const {

@@ -16,7 +16,7 @@
 #include "Color.hpp"
 #include "Vertex1P3.hpp"
 #include "GLVertexArray.inl"
-#include "GLSLProgramFacility.hpp"
+#include "GLSLGenericGeometry.hpp"
 #include "Scene.hpp"
 #include "AxesSystem.hpp"
 #include "AxesSelection.hpp"
@@ -26,7 +26,7 @@ namespace EARenderer {
     class AxesRenderer {
     private:
         Scene *mScene = nullptr;
-        GLSLProgramFacility *mProgramFacility = nullptr;
+        GLSLGenericGeometry mGenericGeometryShader;
         
         std::unordered_map<ID, CartesianAxis> mAxesToHighlight;
         AxesSystem mAxesSystem;
@@ -34,11 +34,11 @@ namespace EARenderer {
         Color mYAxisColor = { 0.209, 0.557, 1.0, 1.0 };
         Color mZAxisColor = { 0.470, 0.749, 0.0, 1.0 };
         
-        void renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp) const;
-        void renderSegments(CartesianAxis axesToHighlight, const glm::mat4& mvp) const;
+        void renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp);
+        void renderSegments(CartesianAxis axesToHighlight, const glm::mat4& mvp);
         
     public:
-        AxesRenderer(Scene *scene, GLSLProgramFacility *programFacility);
+        AxesRenderer(Scene *scene);
         
         const AxesSystem& axesSystem() const;
         
@@ -47,7 +47,7 @@ namespace EARenderer {
         void enableAxesHighlightForMesh(CartesianAxis axesMask, ID meshID);
         void disableAxesHighlight();
         
-        void render() const;
+        void render();
     };
         
 }

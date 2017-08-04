@@ -1,4 +1,4 @@
-#version 400
+#version 400 core
 
 uniform samplerCube uCubeMapTexture;
 

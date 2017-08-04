@@ -15,6 +15,6 @@
 
 @property (assign, nonatomic) EARenderer::Scene *scene;
 
-- (void)showMesh:(EARenderer::Mesh *)mesh;
+- (void)showMeshWithID:(EARenderer::ID)meshID;
 
 @end

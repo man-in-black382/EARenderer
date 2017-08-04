@@ -109,8 +109,8 @@ namespace EARenderer {
     
     void Cameraman::handleMouseScroll(const Input* input) {
         glm::vec2 scrollDelta = input->scrollDelta();
-        glm::vec3 front = mCamera->front() * scrollDelta.y * 0.005f;
-        glm::vec3 right = mCamera->right() * scrollDelta.x * -0.005f;
+        glm::vec3 front = mCamera->front() * scrollDelta.y * -0.005f;
+        glm::vec3 right = mCamera->right() * scrollDelta.x * 0.005f;
         mMouseMoveDirection = front + right;
     }
     

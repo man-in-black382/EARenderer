@@ -13,12 +13,14 @@
 
 #import "DefaultRenderComponentsProvider.h"
 
+#import "Color.hpp"
 #import "Scene.hpp"
 #import "SceneRenderer.hpp"
 #import "AxesRenderer.hpp"
 #import "ResourceManager.hpp"
 #import "SceneInteractor.hpp"
 #import "Cameraman.hpp"
+#import "FileManager.hpp"
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
@@ -27,7 +29,6 @@
 @property (weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
 
 // C++ raw pointers
-@property (assign, nonatomic) EARenderer::GLSLProgramFacility *programFacility;
 @property (assign, nonatomic) EARenderer::Scene *scene;
 @property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
@@ -53,10 +54,11 @@
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
-    self.programFacility = new EARenderer::GLSLProgramFacility([self programFacilityDirectory]);
+    EARenderer::FileManager::shared().setShaderSourceFolderPath([self shadersDirectory]);
+    
     self.scene = new EARenderer::Scene();
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, self.programFacility);
-    self.axesRenderer = new EARenderer::AxesRenderer(self.scene, self.programFacility);
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
+    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
     
@@ -69,11 +71,12 @@
     // Temporary
     
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
-    NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
-    NSString *texturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
+    NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
+    NSString *boxTexturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
+    NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String) }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(paletPath.UTF8String) }, self.scene);
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f, 16.f / 9.f, glm::vec3(0, 1, 0));
     camera->moveTo(glm::vec3(0, 0, 0.5));
@@ -81,12 +84,15 @@
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    EARenderer::DirectionalLight light(glm::vec3(1, 1, 1), glm::vec3(1.0), glm::vec3(0.0, 0.0, 0.0));
+    EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(-1.0, -1.0, -1.0));
+    EARenderer::PointLight pointLight(glm::vec3(-3, 0, 0), EARenderer::Color::white());
     
     self.scene->setCamera(camera);
-    self.scene->lights().insert(light);
+    self.scene->directionalLights().insert(directionalLight);
+    self.scene->pointLights().insert(pointLight);
     self.scene->setSkybox([self skybox]);
-    self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 16, std::string(texturePath.UTF8String)));
+    
+    EARenderer::ID mat1ID = self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 64, std::string(boxTexturePath.UTF8String)));
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
@@ -107,7 +113,13 @@
 {
     EARenderer::Mesh& mesh = self.scene->meshes()[id];
     mesh.setIsSelected(true);
-    [self.sceneEditorTabView showMesh:&mesh];
+    [self.sceneEditorTabView showMeshWithID:id];
+}
+
+- (void)meshListTabViewItem:(MeshListTabViewItem *)item didDeselectMeshWithID:(EARenderer::ID)id
+{
+    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+    mesh.setIsSelected(false);
 }
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id
@@ -132,8 +144,7 @@
     }};
     
     self.sceneInteractor->meshUpdateEvent() += { "main.controller.mesh.update", [self](EARenderer::ID meshID) {
-        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
-        [self.sceneEditorTabView showMesh:&mesh];
+        [self.sceneEditorTabView showMeshWithID:meshID];
     }};
     
     self.sceneInteractor->meshUpdateEndEvent() += { "main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
@@ -142,6 +153,7 @@
     
     self.sceneInteractor->meshSelectionEvent() += { "main.controller.mesh.select", [self](EARenderer::ID meshID) {
         [self.sceneObjectsTabView.meshesTab selectMeshWithID:meshID];
+        [self.sceneEditorTabView showMeshWithID:meshID];
     }};
     
     self.sceneInteractor->meshDeselectionEvent() += { "main.controller.mesh.deselect", [self](EARenderer::ID meshID) {
@@ -153,9 +165,9 @@
     }};
 }
 
-- (std::string)programFacilityDirectory
+- (std::string)shadersDirectory
 {
-    NSString *shaderPath = [[NSBundle mainBundle] pathForResource:@"BlinnPhong" ofType:@"vert"];
+    NSString *shaderPath = [[NSBundle mainBundle] pathForResource:@"DirectionalBlinnPhong" ofType:@"vert"];
     NSString *directory = [shaderPath stringByDeletingLastPathComponent];
     directory = [directory stringByAppendingString:@"/"];
     return std::string(directory.UTF8String);

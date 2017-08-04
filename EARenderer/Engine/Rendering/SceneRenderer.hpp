@@ -11,29 +11,49 @@
 
 #include <unordered_set>
 
-#include "DefaultRenderComponentsProviding.hpp"
 #include "Scene.hpp"
-#include "GLSLProgramFacility.hpp"
 #include "GLFramebuffer.hpp"
+#include "GLSLDirectionalBlinnPhong.hpp"
+#include "GLSLOmnidirectionalBlinnPhong.hpp"
 #include "GLDepthTexture2D.hpp"
-
+#include "GLDepthTextureCubemap.hpp"
+#include "GLDepthTexture2DArray.hpp"
+#include "GLSLDirectionalDepth.hpp"
+#include "GLSLOmnidirectionalDepth.hpp"
+#include "GLSLSkybox.hpp"
+#include "DefaultRenderComponentsProviding.hpp"
+#include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
 
 namespace EARenderer {
     
     class SceneRenderer {
     private:
+        uint8_t mNumberOfCascades = 3;
+        
         Scene *mScene = nullptr;
-        GLSLProgramFacility *mProgramFacility = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         
-        GLDepthTexture2D mDepthTexture;
+        GLSLDirectionalBlinnPhong mDirectionalBlinnPhongShader;
+        GLSLOmnidirectionalBlinnPhong mOmnidirectionalBlinnPhongShader;
+        GLSLDirectionalDepth mDirectionalDepthShader;
+        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
+        GLSLSkybox mSkyboxShader;
+        
+        GLDepthTexture2DArray mCascadedShadowMaps;
+        GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
         
         std::unordered_set<ID> mMeshesToHighlight;
         
+        void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
+        void renderShadowMapsForPointLights();
+        void renderDirectionalLighting(const FrustumCascades& cascades);
+        void renderPointLighting();
+        void renderSkybox();
+        
     public:
-        SceneRenderer(Scene* scene, GLSLProgramFacility* facility);
+        SceneRenderer(Scene* scene);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void setMeshHiglightEnabled(bool enabled, ID meshID);

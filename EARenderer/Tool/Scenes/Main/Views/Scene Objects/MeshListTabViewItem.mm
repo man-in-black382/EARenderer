@@ -23,6 +23,7 @@
 @property (assign, nonatomic) EARenderer::PackedLookupTable<EARenderer::Mesh> *meshes;
 @property (assign, nonatomic) EARenderer::PackedLookupTable<EARenderer::SubMesh> *subMeshes;
 @property (assign, nonatomic) std::vector<EARenderer::ID> meshIDs;
+@property (assign, nonatomic) EARenderer::ID selectedMeshID;
 
 @end
 
@@ -44,6 +45,7 @@
 
 - (void)selectMeshWithID:(EARenderer::ID)meshID
 {
+    self.selectedMeshID = meshID;
     const auto& it = std::find(self.meshIDs.begin(), self.meshIDs.end(), meshID);
     if (it != self.meshIDs.end()) {
         size_t index = std::distance(self.meshIDs.begin(), it);
@@ -54,6 +56,7 @@
 
 - (void)deselectMeshWithID:(EARenderer::ID)meshID
 {
+    self.selectedMeshID = EARenderer::IDNotFound;
     const auto& it = std::find(self.meshIDs.begin(), self.meshIDs.end(), meshID);
     if (it != self.meshIDs.end()) {
         size_t index = std::distance(self.meshIDs.begin(), it);
@@ -65,6 +68,7 @@
 - (void)deselectAll
 {
     [self.outlineView deselectAll:nil];
+    self.selectedMeshID = EARenderer::IDNotFound;
 }
 
 - (BOOL)arePointersValid
@@ -171,6 +175,7 @@
     if (self.outlineView.selectedRow == -1) {
         if ([self.delegate respondsToSelector:@selector(meshListTabViewItemDidDeselectAll:)]) {
             [self.delegate meshListTabViewItemDidDeselectAll:self];
+            self.selectedMeshID = EARenderer::IDNotFound;
         }
         return;
     }
@@ -178,9 +183,16 @@
     SceneObjectMarker *marker = [self.outlineView itemAtRow:self.outlineView.selectedRow];
     switch (marker.type) {
         case SceneObjectMarkerTypeMesh: {
+            if (self.selectedMeshID != EARenderer::IDNotFound && [self.delegate respondsToSelector:@selector(meshListTabViewItem:didDeselectMeshWithID:)]) {
+                [self.delegate meshListTabViewItem:self didDeselectMeshWithID:self.selectedMeshID];
+                self.selectedMeshID = EARenderer::IDNotFound;
+            }
+            
             if ([self.delegate respondsToSelector:@selector(meshListTabViewItem:didSelectMeshWithID:)]) {
                 [self.delegate meshListTabViewItem:self didSelectMeshWithID:marker.objectID];
+                self.selectedMeshID = marker.objectID;
             }
+            
             break;
         }
             

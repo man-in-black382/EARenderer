@@ -18,9 +18,10 @@
 
 @implementation SceneEditorTabView
 
-- (void)showMesh:(EARenderer::Mesh *)mesh
+- (void)showMeshWithID:(EARenderer::ID)meshID
 {
-    self.meshTab.meshTransform = &self.scene->transforms()[mesh->transformID()];
+    const auto& mesh = self.scene->meshes()[meshID];
+    self.meshTab.meshTransform = &self.scene->transforms()[mesh.transformID()];
     if (![self.selectedTabViewItem isEqual:self.meshTab]) {
         [self selectTabViewItem:self.meshTab];
     }

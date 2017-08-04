@@ -60,6 +60,8 @@ namespace EARenderer {
         const glm::vec3& up() const;
         float nearClipPlane() const;
         float farClipPlane() const;
+        float FOVH() const;
+        float FOVV() const;
         glm::mat4 viewProjectionMatrix() const;
         glm::mat4 viewMatrix() const;
         glm::mat4 projectionMatrix() const;
