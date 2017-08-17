@@ -9,6 +9,7 @@
 #include "DirectionalLight.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/matrix_access.hpp>
 
 namespace EARenderer {
     
@@ -43,7 +44,13 @@ namespace EARenderer {
 #pragma mark - Math
     
     glm::mat4 DirectionalLight::viewMatrix() const {
-        return glm::lookAt(mPosition, mDirection, { 0.0, 1.0, 0.0 });
+        // Avoid gimbal locks
+        glm::vec3 up{ 0.0, 1.0, 0.0 };
+        glm::vec3 front{ 0.0, 0.0, 1.0 };
+        float dot = glm::dot(mDirection, up);
+        glm::vec3 reference = (1.f - fabs(dot)) < 0.01f ? front : up;
+        
+        return glm::lookAt(glm::zero<glm::vec3>(), mDirection, reference);
     }
     
     glm::mat4 DirectionalLight::projectionMatrix() const {

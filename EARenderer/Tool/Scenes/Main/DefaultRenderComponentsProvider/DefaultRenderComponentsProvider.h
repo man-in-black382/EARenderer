@@ -18,5 +18,5 @@ public:
     DefaultRenderComponentsProvider(EARenderer::GLViewport *mainViewport);
     
     void bindSystemFramebuffer() override;
-    void applyDefaultViewport() override;
+    const EARenderer::GLViewport& defaultViewport() override;
 };

@@ -14,23 +14,17 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLTextureCubemap::GLTextureCubemap(const Size2D& size) {
+    GLTextureCubemap::GLTextureCubemap(const Size2D& size)
+    :
+    GLTexture(size, GL_TEXTURE_CUBE_MAP, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    {
         ASSERT(size.width > 0, "Cubemap texture width should be greater than 0");
         ASSERT(size.height > 0, "Cubemap texture height should be greater than 0");
-        
-        GLuint name = -1;
-        glGenTextures(1, &name);
-        mName = name;
-        mSize = size;
-        
-        bind();
         
         for(GLuint i = 0; i < 6; i++) {
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, size.width,
                          size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
         }
-        
-        applyParameters();
     }
     
     GLTextureCubemap::GLTextureCubemap(const std::string& rightImagePath,
@@ -39,16 +33,12 @@ namespace EARenderer {
                                        const std::string& bottomImagePath,
                                        const std::string& frontImagePath,
                                        const std::string& backImagePath)
+    :
+    GLTexture(GL_TEXTURE_CUBE_MAP, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
-        GLuint name = -1;
-        glGenTextures(1, &name);
-        mName = name;
-        
         int32_t width = 0;
         int32_t height = 0;
         int32_t components = 0;
-        
-        bind();
         
         std::string paths[6] = {
             rightImagePath, leftImagePath, topImagePath,
@@ -64,31 +54,6 @@ namespace EARenderer {
         }
         
         mSize = Size2D(width, height);
-        applyParameters();
-    }
-    
-    GLTextureCubemap::~GLTextureCubemap() {
-        glDeleteTextures(1, &mName);
-    }
-    
-    void GLTextureCubemap::applyParameters() {
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    }
-    
-#pragma mark - Getters
-    
-    const Size2D& GLTextureCubemap::size() const {
-        return mSize;
-    }
-    
-#pragma mark - Binding
-    
-    void GLTextureCubemap::bind() const {
-        glBindTexture(GL_TEXTURE_CUBE_MAP, mName);
     }
  
 }

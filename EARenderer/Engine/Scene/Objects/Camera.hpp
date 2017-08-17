@@ -40,9 +40,7 @@ namespace EARenderer {
         
         Camera(float fieldOfView,
                float zNear,
-               float zFar,
-               float viewportAspectRatio,
-               glm::vec3 worldUp);
+               float zFar);
         
         void moveTo(const glm::vec3& position);
         void moveBy(const glm::vec3& translation);

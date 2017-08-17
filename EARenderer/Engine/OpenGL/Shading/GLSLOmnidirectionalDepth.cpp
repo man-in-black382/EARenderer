@@ -28,7 +28,7 @@ namespace EARenderer {
     void GLSLOmnidirectionalDepth::setLight(const PointLight& light) {
         glUniform3fv(uniformLocation("uLight.position"), 1, glm::value_ptr(light.position()));
         glUniform1f(uniformLocation("uLight.farClipPlane"), light.clipDistance());
-        setUniformArray("uLightSpaceMatrices", light.viewProjectionMatrices());
+        glUniformMatrix4fv(uniformLocation("uLightSpaceMatrices[0]"), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(light.viewProjectionMatrices().data()));
     }
     
 }

@@ -12,6 +12,8 @@
 #include "GLProgram.hpp"
 #include "Material.hpp"
 #include "GLDepthTexture2DArray.hpp"
+#include "GLTexture2D.hpp"
+#include "GLTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
 #include "FrustumCascades.hpp"

@@ -90,8 +90,8 @@ namespace EARenderer {
         GLint location = uniformLocation(uniformName);
         ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
         glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
-        texture.bind();
         glUniform1i(location, mFreeTextureUnitIndex);
+        texture.bind();
         mFreeTextureUnitIndex++;
     }
     
@@ -136,6 +136,10 @@ namespace EARenderer {
         setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
     }
     
+    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture2DArray& texture) {
+        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
+    }
+    
     GLint GLProgram::uniformLocation(const std::string& name) {
         // Decrement location to return -1 for non-used uniform
         return mUniforms[name] - 1;
@@ -145,6 +149,18 @@ namespace EARenderer {
     
     void GLProgram::flushState() {
         mFreeTextureUnitIndex = 0;
+    }
+    
+    bool GLProgram::validateState() const {
+        GLsizei loglen = 0;
+        GLchar logbuffer[1000];
+        glValidateProgram(mName);
+        glGetProgramInfoLog(mName, sizeof(logbuffer), &loglen, logbuffer);
+        if (loglen > 0) {
+            printf("OpenGL Program %d is invalid: \n %s\n", mName, logbuffer);
+            return false;
+        }
+        return true;
     }
     
 }

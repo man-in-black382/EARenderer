@@ -18,9 +18,7 @@ namespace EARenderer {
     
     template <typename DataType>
     class GLBuffer: public GLNamedObject, public GLBindable {
-    public:
-        using GLNamedObject::GLNamedObject;
-        
+    public:        
         GLBuffer() {
             GLuint name = -1;
             glGenBuffers(1, &name);

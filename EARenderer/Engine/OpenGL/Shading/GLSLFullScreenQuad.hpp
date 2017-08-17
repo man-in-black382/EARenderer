@@ -12,6 +12,8 @@
 #include "GLProgram.hpp"
 #include "GLTexture2D.hpp"
 #include "GLDepthTexture2D.hpp"
+#include "GLTexture2DArray.hpp"
+#include "GLDepthTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -23,6 +25,8 @@ namespace EARenderer {
         
         void setTexture(const GLTexture2D& texture);
         void setTexture(const GLDepthTexture2D& texture);
+        void setTexture(const GLTexture2DArray& texture);
+        void setTexture(const GLDepthTexture2DArray& texture, uint8_t index);
     };
     
 }

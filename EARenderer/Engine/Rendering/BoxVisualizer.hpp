@@ -10,6 +10,7 @@
 #define BoxVisualizer_hpp
 
 #include <vector>
+#include <array>
 
 #include "Vertex1P3.hpp"
 #include "AxisAlignedBox3D.hpp"
@@ -25,6 +26,7 @@ namespace EARenderer {
         
     public:
         BoxVisualizer(const AxisAlignedBox3D& box);
+        BoxVisualizer(const std::array<glm::vec4, 8>& cornerPoints);
         BoxVisualizer(BoxVisualizer&& that);
         BoxVisualizer& operator=(BoxVisualizer rhs);
         BoxVisualizer(const BoxVisualizer& that) = delete;

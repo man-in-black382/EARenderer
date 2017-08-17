@@ -32,9 +32,6 @@ namespace EARenderer {
         void setMaterial(const Material& material);
         void setShadowMap(const GLDepthTextureCubemap& shadowMap);
         void setHighlightColor(const Color& color);
-        
-        // DEBUG
-        void setShadowMap(const GLTextureCubemap& shadowMap);
     };
     
 }

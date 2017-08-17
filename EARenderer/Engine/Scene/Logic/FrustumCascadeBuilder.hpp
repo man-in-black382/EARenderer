@@ -20,6 +20,9 @@
 namespace EARenderer {
     
     class FrustumCascadeBuilder {
+    private:
+        static float split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda);
+        
     public:
         static FrustumCascades subfrustumsForCameraInLightSpace(const Camera& camera, const DirectionalLight& light, int8_t numberOfCascades);
     };

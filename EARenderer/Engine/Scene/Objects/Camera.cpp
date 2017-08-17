@@ -33,17 +33,13 @@ namespace EARenderer {
     
     Camera::Camera(float fieldOfView,
                    float zNear,
-                   float zFar,
-                   float viewportAspectRatio,
-                   glm::vec3 worldUp)
+                   float zFar)
     :
     Camera()
     {
         mFieldOfView = fieldOfView;
         mNearClipPlane = zNear;
         mFarClipPlane = zFar;
-        mViewportAspectRatio = viewportAspectRatio;
-        mWorldUp = worldUp;
         updateVectors();
     }
     
@@ -69,9 +65,9 @@ namespace EARenderer {
     }
     
     void Camera::lookAt(const glm::vec3& point) {
-        glm::vec3 direction = point - mPosition;
-        mPitch = glm::degrees(-asin(direction.y));
-        mYaw = glm::degrees(-atan2(-direction.x, -direction.z)) - 90;
+        glm::vec3 direction = glm::normalize(point - mPosition);
+        mPitch = glm::degrees(asin(-direction.y));
+        mYaw = glm::degrees(atan2(direction.x, direction.z)) + 90;
         
         updateVectors();
     }
@@ -156,7 +152,7 @@ namespace EARenderer {
     }
     
     float Camera::FOVV() const {
-        return mFieldOfView * mViewportAspectRatio;
+        return mFieldOfView / mViewportAspectRatio;
     }
     
     glm::mat4 Camera::viewProjectionMatrix() const {

@@ -27,18 +27,11 @@ namespace EARenderer {
         GLElementArrayBuffer mIndexBuffer;
         
     public:
-        using GLNamedObject::GLNamedObject;
-        
         GLVertexArray() {
-            GLuint name = -1;
-            glGenVertexArrays(1, &name);
-            mName = name;
+            glGenVertexArrays(1, &mName);
         }
         
         ~GLVertexArray() override {
-            if (mName == 0) {
-                return;
-            }
             glDeleteVertexArrays(1, &mName);
         }
         

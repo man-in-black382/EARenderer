@@ -27,4 +27,13 @@ namespace EARenderer {
         setUniformTexture("uTexture", texture);
     }
     
+    void GLSLFullScreenQuad::setTexture(const GLTexture2DArray& texture) {
+        setUniformTexture("uTextureArray", texture);
+    }
+    
+    void GLSLFullScreenQuad::setTexture(const GLDepthTexture2DArray& texture, uint8_t index) {
+        setUniformTexture("uTextureArray", texture);
+        glUniform1i(uniformLocation("uIndex"), index);
+    }
+    
 }

@@ -63,6 +63,48 @@ namespace EARenderer {
         mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
     }
     
+    BoxVisualizer::BoxVisualizer(const std::array<glm::vec4, 8>& cornerPoints) {
+        // Build box edges
+        mVertices.emplace_back(cornerPoints[0]);
+        mVertices.emplace_back(cornerPoints[1]);
+        
+        mVertices.emplace_back(cornerPoints[1]);
+        mVertices.emplace_back(cornerPoints[2]);
+        
+        mVertices.emplace_back(cornerPoints[2]);
+        mVertices.emplace_back(cornerPoints[3]);
+        
+        mVertices.emplace_back(cornerPoints[3]);
+        mVertices.emplace_back(cornerPoints[0]);
+        
+        mVertices.emplace_back(cornerPoints[0]);
+        mVertices.emplace_back(cornerPoints[4]);
+        
+        mVertices.emplace_back(cornerPoints[1]);
+        mVertices.emplace_back(cornerPoints[5]);
+        
+        mVertices.emplace_back(cornerPoints[2]);
+        mVertices.emplace_back(cornerPoints[6]);
+        
+        mVertices.emplace_back(cornerPoints[3]);
+        mVertices.emplace_back(cornerPoints[7]);
+        
+        mVertices.emplace_back(cornerPoints[4]);
+        mVertices.emplace_back(cornerPoints[5]);
+        
+        mVertices.emplace_back(cornerPoints[5]);
+        mVertices.emplace_back(cornerPoints[6]);
+        
+        mVertices.emplace_back(cornerPoints[6]);
+        mVertices.emplace_back(cornerPoints[7]);
+        
+        mVertices.emplace_back(cornerPoints[7]);
+        mVertices.emplace_back(cornerPoints[4]);
+        
+        mVAO = new GLVertexArray<Vertex1P3>();
+        mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
+    }
+    
     BoxVisualizer::BoxVisualizer(BoxVisualizer&& that)
     :
     mVertices(std::move(that.mVertices)),

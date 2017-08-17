@@ -28,7 +28,6 @@ namespace EARenderer {
     
     void GLSLDirectionalBlinnPhong::setDirectionalLight(const DirectionalLight& light) {
         glUniform3fv(uniformLocation("uLightDirection"), 1, glm::value_ptr(light.direction()));
-        glUniformMatrix4fv(uniformLocation("uLightSpaceMat"), 1, GL_FALSE, glm::value_ptr(light.viewProjectionMatrix()));
         glUniform3fv(uniformLocation("uLightColor"), 1, reinterpret_cast<const GLfloat *>(&light.color()));
     }
     
@@ -50,7 +49,8 @@ namespace EARenderer {
     void GLSLDirectionalBlinnPhong::setShadowCascades(const FrustumCascades& cascades) {
         uint8_t numberOfCascades = cascades.splits.size();
         glUniform1i(uniformLocation("uNumberOfCascades"), numberOfCascades);
-        glUniform1fv(uniformLocation("uDepthSplits"), numberOfCascades, cascades.splits.data());
+        glUniformMatrix4fv(uniformLocation("uLightSpaceMatrices[0]"), static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE, reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+        glUniform1fv(uniformLocation("uDepthSplits[0]"), numberOfCascades, reinterpret_cast<const GLfloat *>(cascades.splits.data()));
     }
     
     void GLSLDirectionalBlinnPhong::setShadowMaps(const GLDepthTexture2DArray& shadowMaps) {

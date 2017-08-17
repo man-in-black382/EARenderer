@@ -55,9 +55,4 @@ namespace EARenderer {
         glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const GLfloat *>(&color));
     }
     
-    //DEBUG
-    void GLSLOmnidirectionalBlinnPhong::setShadowMap(const GLTextureCubemap& shadowMap) {
-        setUniformTexture("uShadowCubeMap", shadowMap);
-    }
-    
 }

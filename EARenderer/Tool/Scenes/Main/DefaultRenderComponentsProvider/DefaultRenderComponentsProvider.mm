@@ -18,6 +18,6 @@ void DefaultRenderComponentsProvider::bindSystemFramebuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void DefaultRenderComponentsProvider::applyDefaultViewport() {
-    mMainViewport->apply();
+const EARenderer::GLViewport& DefaultRenderComponentsProvider::defaultViewport() {
+    return *mMainViewport;
 }

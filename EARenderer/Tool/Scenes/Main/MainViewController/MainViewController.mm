@@ -22,6 +22,8 @@
 #import "Cameraman.hpp"
 #import "FileManager.hpp"
 
+#import "GLLayeredTexture.hpp"
+
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
 @property (weak, nonatomic) IBOutlet SceneGLView *openGLView;
@@ -47,7 +49,7 @@
     [super viewDidLoad];
     
     [self.openGLView becomeFirstResponder];
-    self.openGLView.delegate = self;
+    self.openGLView.delegate = self;    
 }
 
 #pragma mark - SceneGLViewDelegate
@@ -57,16 +59,6 @@
     EARenderer::FileManager::shared().setShaderSourceFolderPath([self shadersDirectory]);
     
     self.scene = new EARenderer::Scene();
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
-    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
-    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
-    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
-    
-    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
-                                                                 self.scene,
-                                                                 self.axesRenderer,
-                                                                 self.sceneRenderer,
-                                                                 &EARenderer::GLViewport::main());
     
     // Temporary
     
@@ -78,13 +70,13 @@
     EARenderer::ResourceManager resourceManager;
     resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(paletPath.UTF8String) }, self.scene);
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f, 16.f / 9.f, glm::vec3(0, 1, 0));
-    camera->moveTo(glm::vec3(0, 0, 0.5));
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
+    camera->moveTo(glm::vec3(0, 0, 1));
     camera->lookAt(glm::vec3(0, 0, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(-1.0, -1.0, -1.0));
+    EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(-1.0, 0.0, 0.0));
     EARenderer::PointLight pointLight(glm::vec3(-3, 0, 0), EARenderer::Color::white());
     
     self.scene->setCamera(camera);
@@ -96,6 +88,17 @@
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
+    
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
+    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
+    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
+    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
+    
+    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
+                                                           self.scene,
+                                                           self.axesRenderer,
+                                                           self.sceneRenderer,
+                                                           &EARenderer::GLViewport::main());
     
     [self subscribeForEvents];
 }

@@ -13,8 +13,6 @@
 #include <utility>
 #include <assert.h>
 
-#include "Types.h"
-
 namespace EARenderer {
     
     typedef uint32_t ID;

@@ -9,28 +9,13 @@
 #ifndef GLDepthTextureCubemap_hpp
 #define GLDepthTextureCubemap_hpp
 
-#include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
-#include "Size2D.hpp"
+#include "GLTexture.hpp"
 
 namespace EARenderer {
     
-    class GLDepthTextureCubemap: public GLNamedObject, public GLBindable {
-    private:
-        Size2D mSize;
-        
-        void applyParameters();
-        
+    class GLDepthTextureCubemap: public GLTexture {
     public:
-        using GLNamedObject::GLNamedObject;
         GLDepthTextureCubemap(const Size2D& size);
-        GLDepthTextureCubemap(GLDepthTextureCubemap&& that) = default;
-        GLDepthTextureCubemap& operator=(GLDepthTextureCubemap&& rhs) = default;
-        ~GLDepthTextureCubemap() override;
-        
-        const Size2D& size() const;
-        
-        void bind() const override;
     };
     
 }

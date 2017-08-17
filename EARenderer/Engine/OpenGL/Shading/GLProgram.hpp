@@ -25,6 +25,7 @@
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -51,13 +52,7 @@ namespace EARenderer {
         void setUniformTexture(const std::string& uniformName, const GLDepthTexture2D& texture);
         void setUniformTexture(const std::string& uniformName, const GLDepthTextureCubemap& texture);
         void setUniformTexture(const std::string& uniformName, const GLDepthTexture2DArray& texture);
-        
-        template <std::size_t size>
-        void setUniformArray(const std::string& uniformName, const std::array<glm::mat4, size>& matrices) {
-            for(int i = 0; i < matrices.size(); ++i) {
-                glUniformMatrix4fv(uniformLocation(uniformName + "[" + std::to_string(i) + "]"), 1, GL_FALSE, glm::value_ptr(matrices[i]));
-            }
-        }
+        void setUniformTexture(const std::string& uniformName, const GLTexture2DArray& texture);
         
     public:
         GLProgram(const GLProgram& rhs) = delete;
@@ -70,6 +65,7 @@ namespace EARenderer {
         void bind() const override;
         
         void flushState();
+        bool validateState() const;
     };
     
     void swap(GLProgram&, GLProgram&);

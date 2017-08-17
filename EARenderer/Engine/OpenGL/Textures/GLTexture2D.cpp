@@ -16,25 +16,20 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLTexture2D::GLTexture2D(const Size2D& size) {
+    GLTexture2D::GLTexture2D(const Size2D& size)
+    :
+    GLTexture(size, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    {
         ASSERT(size.width > 0, "Texture width should be greater than 0");
         ASSERT(size.height > 0, "Texture height should be greater than 0");
-        
-        GLuint name = -1;
-        glGenTextures(1, &name);
-        mName = name;
-        mSize = size;
-        
-        bind();
+
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        applyParameters();
     }
     
-    GLTexture2D::GLTexture2D(const std::string& fileName) {
-        GLuint name = -1;
-        glGenTextures(1, &name);
-        mName = name;
-        
+    GLTexture2D::GLTexture2D(const std::string& fileName)
+    :
+    GLTexture(GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    {
         int32_t width = 0;
         int32_t height = 0;
         int32_t components = 0;
@@ -43,34 +38,8 @@ namespace EARenderer {
         ASSERT(pixelData, "Unable to read texture file: " << fileName);
         
         mSize = Size2D(width, height);
-        
-        bind();
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-        applyParameters();
         stbi_image_free(pixelData);
     };
-    
-    GLTexture2D::~GLTexture2D() {
-        glDeleteTextures(1, &mName);
-    }
-    
-#pragma mark - Private
-    
-    void GLTexture2D::applyParameters() {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    }
-    
-#pragma mark - Public
-    
-    void GLTexture2D::bind() const {
-        glBindTexture(GL_TEXTURE_2D, mName);
-    }
-    
-    const Size2D& GLTexture2D::size() const {
-        return mSize;
-    }
-    
+ 
 }

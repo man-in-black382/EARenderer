@@ -15,12 +15,15 @@
 #include "GLFramebuffer.hpp"
 #include "GLSLDirectionalBlinnPhong.hpp"
 #include "GLSLOmnidirectionalBlinnPhong.hpp"
+#include "GLSLFullScreenQuad.hpp"
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "GLSLDirectionalDepth.hpp"
 #include "GLSLOmnidirectionalDepth.hpp"
 #include "GLSLSkybox.hpp"
+#include "GLSLGenericGeometry.hpp"
 #include "DefaultRenderComponentsProviding.hpp"
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
@@ -43,6 +46,11 @@ namespace EARenderer {
         GLDepthTexture2DArray mCascadedShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
+        
+        // DEBUG
+        GLSLFullScreenQuad mFSQuadShader;
+        GLSLGenericGeometry mGenericShader;
+        FrustumCascades mCascades;
         
         std::unordered_set<ID> mMeshesToHighlight;
         

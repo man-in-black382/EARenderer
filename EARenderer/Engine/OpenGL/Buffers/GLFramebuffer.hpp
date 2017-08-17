@@ -16,6 +16,8 @@
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
+#include "GLViewport.hpp"
 #include "Size2D.hpp"
 
 namespace EARenderer {
@@ -23,9 +25,9 @@ namespace EARenderer {
     class GLFramebuffer: public GLNamedObject, public GLBindable {
     private:
         Size2D mSize;
+        GLViewport mViewport;
         
     public:
-        using GLNamedObject::GLNamedObject;
         GLFramebuffer(const Size2D& size);
         GLFramebuffer(GLFramebuffer&& that) = default;
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
@@ -35,6 +37,7 @@ namespace EARenderer {
         
         const Size2D& size() const;
         bool isComplete() const;
+        const GLViewport& viewport() const;
         
         /**
           Tells opengl that color attachments are not needed to complete the framebuffer
@@ -46,6 +49,7 @@ namespace EARenderer {
         void attachTexture(const GLDepthTexture2D& texture);
         void attachTexture(const GLDepthTextureCubemap& texture);
         void attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer);
+        void attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer);
     };
     
 }

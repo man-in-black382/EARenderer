@@ -9,12 +9,14 @@
 #ifndef DefaultRenderComponentsProviding_hpp
 #define DefaultRenderComponentsProviding_hpp
 
+#include "GLViewport.hpp"
+
 namespace EARenderer {
     
     class DefaultRenderComponentsProviding {
     public:
         virtual void bindSystemFramebuffer() = 0;
-        virtual void applyDefaultViewport() = 0;
+        virtual const GLViewport& defaultViewport() = 0;
     };
     
 }

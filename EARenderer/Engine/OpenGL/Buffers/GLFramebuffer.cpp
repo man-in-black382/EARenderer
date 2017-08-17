@@ -7,30 +7,30 @@
 //
 
 #include "GLFramebuffer.hpp"
-#include <OpenGL/gl3.h>
 #include "Macros.h"
+
+#include <OpenGL/gl3.h>
 
 namespace EARenderer {
     
+#pragma mark - Lifecycle
+    
     GLFramebuffer::GLFramebuffer(const Size2D& size)
     :
-    mSize(size)
+    mSize(size),
+    mViewport(Rect2D(size))
     {
         ASSERT(size.width > 0, "Framebuffer width should be greater than 0");
         ASSERT(size.height > 0, "Framebuffer height should be greater than 0");
         
-        GLuint name = -1;
-        glGenFramebuffers(1, &name);
-        mName = name;        
+        glGenFramebuffers(1, &mName);
     }
     
     GLFramebuffer::~GLFramebuffer() {
         glDeleteFramebuffers(1, &mName);
     }
     
-    void GLFramebuffer::bind() const {
-        glBindFramebuffer(GL_FRAMEBUFFER, mName);
-    }
+#pragma mark - Getters
     
     const Size2D& GLFramebuffer::size() const {
         return mSize;
@@ -40,10 +40,24 @@ namespace EARenderer {
         return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
     }
     
+    const GLViewport& GLFramebuffer::viewport() const {
+        return mViewport;
+    }
+    
+#pragma mark - Binding
+    
+    void GLFramebuffer::bind() const {
+        glBindFramebuffer(GL_FRAMEBUFFER, mName);
+    }
+    
+#pragma mark - Private helpers
+    
     void GLFramebuffer::disableColorAttachments() {
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
     }
+    
+#pragma mark - Public
     
     void GLFramebuffer::attachTexture(const GLTexture2D& texture) {
         bind();
@@ -80,6 +94,14 @@ namespace EARenderer {
         textures.bind();
         glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textures.name(), 0, layer);
         disableColorAttachments();
+    }
+    
+    void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer) {
+        bind();
+        textures.bind();
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textures.name(), 0, layer);
+        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+        glReadBuffer(GL_NONE);
     }
     
 }

@@ -16,7 +16,7 @@ namespace EARenderer {
     class DirectionalLight: public Light {
     protected:
         glm::vec3 mDirection;
-        float mFrustumSize = 20.f;
+        float mFrustumSize = 10.f;
         
     public:
         DirectionalLight(const Color& color, const glm::vec3& direction);

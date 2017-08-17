@@ -12,6 +12,7 @@
 #include "FrustumCascadeBuilder.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace EARenderer {
     
@@ -20,10 +21,14 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
-    mCascadedShadowMaps(Size2D(1024, 1024), mNumberOfCascades),
-    mShadowCubeMap(Size2D(1024, 1024)),
-    mDepthFramebuffer(Size2D(1024, 1024))
-    { }
+    mCascadedShadowMaps(Size2D(2048, 2048), mNumberOfCascades),
+    mShadowCubeMap(Size2D(2048, 2048)),
+    mDepthFramebuffer(Size2D(2048, 2048))
+    {
+        ID lightID = *(mScene->directionalLights().begin());
+        DirectionalLight& light = mScene->directionalLights()[lightID];
+        mCascades = FrustumCascadeBuilder::subfrustumsForCameraInLightSpace(*mScene->camera(), light, mNumberOfCascades);
+    }
     
 #pragma mark - Setters
     
@@ -83,7 +88,6 @@ namespace EARenderer {
         
         for (uint8_t cascade = 0; cascade < cascades.splits.size(); cascade++) {
             mDepthFramebuffer.attachTextureLayer(mCascadedShadowMaps, cascade);
-
             glClear(GL_DEPTH_BUFFER_BIT);
             
             for (ID subMeshID : mScene->subMeshes()) {
@@ -95,7 +99,7 @@ namespace EARenderer {
                 mDirectionalDepthShader.flushState();
                 mDirectionalDepthShader.setModelMatrix(transform.modelMatrix());
                 mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
-                
+
                 subMesh.draw();
             }
         }
@@ -133,7 +137,7 @@ namespace EARenderer {
         mDirectionalBlinnPhongShader.setDirectionalLight(light);
         mDirectionalBlinnPhongShader.setShadowMaps(mCascadedShadowMaps);
         mDirectionalBlinnPhongShader.setShadowCascades(cascades);
-        
+                
         for (ID subMeshID : mScene->subMeshes()) {
             SubMesh& subMesh = mScene->subMeshes()[subMeshID];
             ID meshID = subMesh.meshID();
@@ -150,9 +154,7 @@ namespace EARenderer {
             mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
 
             subMesh.draw();
-            printf("error: %d\n", glGetError());
         }
-//        mScene->skybox()->draw();
     }
     
     void SceneRenderer::renderPointLighting() {
@@ -200,25 +202,94 @@ namespace EARenderer {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         
         mDepthFramebuffer.bind();
-        glViewport(0, 0, mDepthFramebuffer.size().width, mDepthFramebuffer.size().height);
+        mDepthFramebuffer.viewport().apply();
         
         ID lightID = *(mScene->directionalLights().begin());
         DirectionalLight& light = mScene->directionalLights()[lightID];
-        FrustumCascades cascades = FrustumCascadeBuilder::subfrustumsForCameraInLightSpace(*mScene->camera(), light, mNumberOfCascades);
-        
-//        renderShadowMapsForDirectionalLights(cascades);
+        mCascades = FrustumCascadeBuilder::subfrustumsForCameraInLightSpace(*mScene->camera(), light, mNumberOfCascades);
+
+        renderShadowMapsForDirectionalLights(mCascades);
 //        renderShadowMapsForPointLights();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-            mDefaultRenderComponentsProvider->applyDefaultViewport();
+            mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        renderDirectionalLighting(cascades);
+//
+        renderDirectionalLighting(mCascades);
 //        renderPointLighting();
 //        renderSkybox();
+        
+        //////////////////////////////////
+        //////////////// DEBUG /////////////////
+        //////////////////////////////////
+        
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//
+//        float width = mDefaultRenderComponentsProvider->defaultViewport().frame().size.width / 3.f;
+//        float aspect = mDefaultRenderComponentsProvider->defaultViewport().aspectRatio();
+//        for (int i = 0; i < mCascades.splits.size(); i++) {
+//            mFSQuadShader.flushState();
+//            mFSQuadShader.setTexture(mCascadedShadowMaps, i);
+//            GLViewport miniport{ Rect2D{ { width * i, 0.f }, { width, width / aspect } } };
+//            miniport.apply();
+//            glDrawArrays(GL_TRIANGLES, 0, 4);
+//        }
+//
+//        mGenericShader.bind();
+//        mGenericShader.flushState();
+//        GLViewport miniport{ Rect2D{ { 0.f, width / aspect }, { width, width / aspect } } };
+//        miniport.apply();
+//        glm::mat4 view = glm::lookAt(glm::vec3{ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 0.0 }, { 0.0, 0.0, -1.0 });
+//        glm::mat4 proj = glm::ortho(-5.f, 5.f, -5.f, 5.f, -5.f, 5.f);
+//
+//        for (int i = 0; i < mCascades.splits.size(); i++) {
+//            BoxVisualizer boxVisualizer{ mCascades.boxes[i] };
+//
+//            mGenericShader.setModelViewProjectionMatrix(proj * view);
+//            mGenericShader.setColor(Color::red());
+//            boxVisualizer.draw();
+//
+//            BoxVisualizer frustumVisualizer{ mCascades.cornerPoints[i] };
+//            mGenericShader.setModelViewProjectionMatrix(proj * view);
+//            mGenericShader.setColor(Color::green());
+//            frustumVisualizer.draw();
+//        }
+//
+//        mDirectionalBlinnPhongShader.bind();
+//        mDirectionalBlinnPhongShader.flushState();
+//        glUniformMatrix4fv(glGetUniformLocation(mDirectionalBlinnPhongShader.name(), "uCameraSpaceMat"), 1, GL_FALSE, glm::value_ptr(proj * view));
+//        glUniform3fv(glGetUniformLocation(mDirectionalBlinnPhongShader.name(), "uCameraPosition"), 1, glm::value_ptr(glm::vec3{ 0.0, 1.0, 0.0 }));
+//        mDirectionalBlinnPhongShader.setDirectionalLight(light);
+//        mDirectionalBlinnPhongShader.setShadowMaps(mCascadedShadowMaps);
+//        mDirectionalBlinnPhongShader.setShadowCascades(mCascades);
+//
+//        for (ID subMeshID : mScene->subMeshes()) {
+//            SubMesh& subMesh = mScene->subMeshes()[subMeshID];
+//            ID meshID = subMesh.meshID();
+//            Mesh& mesh = mScene->meshes()[meshID];
+//            ID transformID = mesh.transformID();
+//            Transformation& transform = mScene->transforms()[transformID];
+//
+//            mDirectionalBlinnPhongShader.setModelMatrix(transform.modelMatrix());
+//
+//            ID materialID = *(mScene->materials().begin());
+//            Material& material = mScene->materials()[materialID];
+//
+//            mDirectionalBlinnPhongShader.setMaterial(material);
+//            mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
+//
+//            subMesh.draw();
+////        }
+//        
+//        if (mDefaultRenderComponentsProvider) {
+//            mDefaultRenderComponentsProvider->defaultViewport().apply();
+//        }
+        
     }
     
 }
