@@ -50,7 +50,6 @@ namespace EARenderer {
         // DEBUG
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
-        FrustumCascades mCascades;
         
         std::unordered_set<ID> mMeshesToHighlight;
         

@@ -114,13 +114,13 @@ void main() {
     vec3 specularColor = specularColor(N, L, V);
     
     outputFragColor = vec4((ambientColor + (1.0 - isInShadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st) + uHighlightColor;
-
-    int shadowCascadeIndex = cascadeIndex();
-    if (shadowCascadeIndex == 0) {
-        outputFragColor += vec4(0.3, 0.0, 0.0, 0.0);
-    } else if (shadowCascadeIndex == 1) {
-        outputFragColor += vec4(0.0, 0.3, 0.0, 0.0);
-    } else if (shadowCascadeIndex == 2) {
-        outputFragColor += vec4(0.0, 0.0, 0.3, 0.0);
-    }
+//
+//    int shadowCascadeIndex = cascadeIndex();
+//    if (shadowCascadeIndex == 0) {
+//        outputFragColor += vec4(0.3, 0.0, 0.0, 0.0);
+//    } else if (shadowCascadeIndex == 1) {
+//        outputFragColor += vec4(0.0, 0.3, 0.0, 0.0);
+//    } else if (shadowCascadeIndex == 2) {
+//        outputFragColor += vec4(0.0, 0.0, 0.3, 0.0);
+//    }
 }

@@ -47,7 +47,7 @@ namespace EARenderer {
     }
     
     glm::mat4 AxisAlignedBox3D::asFrustum() const {
-        // Z component shenanigans cus of NDC and world handedness inconsistency
+        // Z component shenanigans cuz of NDC and world handedness inconsistency
         return glm::ortho(min.x, max.x, min.y, max.y, -max.z, -min.z);
     }
     

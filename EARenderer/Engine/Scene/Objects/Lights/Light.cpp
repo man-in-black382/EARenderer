@@ -46,4 +46,16 @@ namespace EARenderer {
         mColor = color;
     }
     
+#pragma mark - Protected
+    
+    float Light::split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda) const {
+        
+        // Formula https://habrahabr.ru/post/226421/
+        
+        float f = (float)cascadeIndex / (float)cascadesCount;
+        float l = nearPlane * powf(farPlane / nearPlane, f);
+        float u = nearPlane + (farPlane - nearPlane) * f;
+        return l * lambda + u * (1.0f - lambda);
+    }
+    
 }

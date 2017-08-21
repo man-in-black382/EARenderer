@@ -22,6 +22,18 @@ namespace EARenderer {
         glm::vec3 mPosition;
         Color mColor;
         
+        /**
+         Calculates split distance using method from “Practical Split Scheme” provided in the GPU Gems 3 – Chapters 10 “Parallel Split Shadow Maps on Programmable GPUs” article.
+
+         @param cascadeIndex index of current cascade
+         @param cascadesCount total number of cascades
+         @param nearPlane frustum near clip plane
+         @param farPlane frustum far clip plane
+         @param lambda regulates linearity of splits distribution
+         @return far clip plane for 'cascadeIndex' cascade
+         */
+        float split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda) const;
+        
     public:
         Light();
         Light(const glm::vec3& position, const Color& color);
