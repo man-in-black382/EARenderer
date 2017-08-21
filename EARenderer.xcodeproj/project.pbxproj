@@ -19,7 +19,6 @@
 		CE0357DE1F1779CA00BD449A /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357D01F1779CA00BD449A /* SubMesh.cpp */; };
 		CE0357DF1F1779CA00BD449A /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0357D21F1779CA00BD449A /* Transformation.cpp */; };
 		CE039E0D1F31F19900E8630D /* GLDepthTexture2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE039E0B1F31F19900E8630D /* GLDepthTexture2DArray.cpp */; };
-		CE092C501F308FA2006FCA9C /* FrustumCascadeBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE092C4E1F308FA2006FCA9C /* FrustumCascadeBuilder.cpp */; };
 		CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE0BE55E1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm */; };
 		CE143EB11EBC79A6009EE0E1 /* FlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE143EB01EBC79A6009EE0E1 /* FlippedClipView.m */; };
 		CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1737971F07EFA700D7871F /* Parallelogram3D.cpp */; };
@@ -153,8 +152,6 @@
 		CE039E0C1F31F19900E8630D /* GLDepthTexture2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthTexture2DArray.hpp; sourceTree = "<group>"; };
 		CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSystem.cpp; sourceTree = "<group>"; };
 		CE07DFEB1F0F6FAA002CB321 /* AxesSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSystem.hpp; sourceTree = "<group>"; };
-		CE092C4E1F308FA2006FCA9C /* FrustumCascadeBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrustumCascadeBuilder.cpp; sourceTree = "<group>"; };
-		CE092C4F1F308FA2006FCA9C /* FrustumCascadeBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FrustumCascadeBuilder.hpp; sourceTree = "<group>"; };
 		CE0BE55D1EF0038E001B0BCF /* DefaultRenderComponentsProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefaultRenderComponentsProvider.h; sourceTree = "<group>"; };
 		CE0BE55E1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DefaultRenderComponentsProvider.mm; sourceTree = "<group>"; };
 		CE143EAF1EBC79A6009EE0E1 /* FlippedClipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FlippedClipView.h; path = Common/Views/FlippedClipView/FlippedClipView.h; sourceTree = "<group>"; };
@@ -614,10 +611,6 @@
 				CE0357BC1F1779CA00BD449A /* Cameraman.hpp */,
 				CE0357BD1F1779CA00BD449A /* SceneInteractor.cpp */,
 				CE0357BE1F1779CA00BD449A /* SceneInteractor.hpp */,
-				CE092C4E1F308FA2006FCA9C /* FrustumCascadeBuilder.cpp */,
-				CE092C4F1F308FA2006FCA9C /* FrustumCascadeBuilder.hpp */,
-				CEC3B0571F3321EB00A535AE /* FrustumCascades.cpp */,
-				CEC3B0581F3321EB00A535AE /* FrustumCascades.hpp */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -1373,6 +1366,8 @@
 		CECB912A1F275A6B00DED6D7 /* Lights */ = {
 			isa = PBXGroup;
 			children = (
+				CEC3B0571F3321EB00A535AE /* FrustumCascades.cpp */,
+				CEC3B0581F3321EB00A535AE /* FrustumCascades.hpp */,
 				CE0357C21F1779CA00BD449A /* DirectionalLight.cpp */,
 				CE0357C31F1779CA00BD449A /* DirectionalLight.hpp */,
 				CECB912B1F275A8D00DED6D7 /* PointLight.cpp */,
@@ -1670,7 +1665,6 @@
 				CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */,
 				CE0357D51F1779CA00BD449A /* SceneInteractor.cpp in Sources */,
 				CE1B346A1F29036100A8D4BA /* FileManager.cpp in Sources */,
-				CE092C501F308FA2006FCA9C /* FrustumCascadeBuilder.cpp in Sources */,
 				CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */,
 				CE039E0D1F31F19900E8630D /* GLDepthTexture2DArray.cpp in Sources */,
 				CE0357D71F1779CA00BD449A /* DirectionalLight.cpp in Sources */,

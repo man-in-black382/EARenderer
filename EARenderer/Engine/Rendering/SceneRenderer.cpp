@@ -9,7 +9,6 @@
 #include "SceneRenderer.hpp"
 #include "GLShader.hpp"
 #include "Vertex1P4.hpp"
-#include "FrustumCascadeBuilder.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -24,11 +23,7 @@ namespace EARenderer {
     mCascadedShadowMaps(Size2D(2048, 2048), mNumberOfCascades),
     mShadowCubeMap(Size2D(2048, 2048)),
     mDepthFramebuffer(Size2D(2048, 2048))
-    {
-        ID lightID = *(mScene->directionalLights().begin());
-        DirectionalLight& light = mScene->directionalLights()[lightID];
-        mCascades = FrustumCascadeBuilder::subfrustumsForCameraInLightSpace(*mScene->camera(), light, mNumberOfCascades);
-    }
+    { }
     
 #pragma mark - Setters
     
@@ -206,9 +201,9 @@ namespace EARenderer {
         
         ID lightID = *(mScene->directionalLights().begin());
         DirectionalLight& light = mScene->directionalLights()[lightID];
-        mCascades = FrustumCascadeBuilder::subfrustumsForCameraInLightSpace(*mScene->camera(), light, mNumberOfCascades);
+        FrustumCascades cascades = light.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
 
-        renderShadowMapsForDirectionalLights(mCascades);
+        renderShadowMapsForDirectionalLights(cascades);
 //        renderShadowMapsForPointLights();
         
         if (mDefaultRenderComponentsProvider) {
@@ -218,7 +213,7 @@ namespace EARenderer {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 //
-        renderDirectionalLighting(mCascades);
+        renderDirectionalLighting(cascades);
 //        renderPointLighting();
 //        renderSkybox();
         
@@ -284,7 +279,7 @@ namespace EARenderer {
 //            mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
 //
 //            subMesh.draw();
-////        }
+//        }
 //        
 //        if (mDefaultRenderComponentsProvider) {
 //            mDefaultRenderComponentsProvider->defaultViewport().apply();

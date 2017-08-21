@@ -26,8 +26,6 @@ namespace EARenderer {
     mFragmentShader(fragmentSourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + fragmentSourceName, GL_FRAGMENT_SHADER)),
     mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + geometrySourceName, GL_GEOMETRY_SHADER))
     {
-        printf("Vertex source: %s\n", vertexSourceName.c_str());
-        
         link();
         obtainUniforms();
         obtainAvailableTextureUnits();
@@ -101,6 +99,7 @@ namespace EARenderer {
         GLNamedObject::swap(that);
         std::swap(mVertexShader, that.mVertexShader);
         std::swap(mFragmentShader, that.mFragmentShader);
+        std::swap(mGeometryShader, that.mGeometryShader);
         std::swap(mUniforms, that.mUniforms);
     }
     

@@ -10,6 +10,10 @@
 #define DirectionalLight_hpp
 
 #include "Light.hpp"
+#include "Camera.hpp"
+#include "FrustumCascades.hpp"
+
+#include <vector>
 
 namespace EARenderer {
     
@@ -23,8 +27,7 @@ namespace EARenderer {
         DirectionalLight(const Color& color, const glm::vec3& direction, float frustumSize);
         
         glm::mat4 viewMatrix() const;
-        glm::mat4 projectionMatrix() const;
-        glm::mat4 viewProjectionMatrix() const;
+        FrustumCascades cascadesForCamera(const Camera& camera, uint8_t numberOfCascades) const;
         
         const glm::vec3& direction() const;
         void setDirection(const glm::vec3& direction);
