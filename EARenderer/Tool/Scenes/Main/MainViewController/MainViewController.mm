@@ -76,7 +76,7 @@
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(-1.0, 0.0, 0.0));
+    EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     EARenderer::PointLight pointLight(glm::vec3(-3, 0, 0), EARenderer::Color::white());
     
     self.scene->setCamera(camera);

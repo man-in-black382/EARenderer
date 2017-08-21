@@ -284,7 +284,7 @@ namespace EARenderer {
 //            mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
 //
 //            subMesh.draw();
-////        }
+//        }
 //        
 //        if (mDefaultRenderComponentsProvider) {
 //            mDefaultRenderComponentsProvider->defaultViewport().apply();

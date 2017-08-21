@@ -35,23 +35,24 @@ namespace EARenderer {
         
         FrustumCascades cascades;
         
-        float halfFOVH = glm::radians(camera.FOVH() / 2.f);
-        float halfFOVV = glm::radians(camera.FOVV() / 2.f);
+        float tanFOVV = tanf(glm::radians(camera.FOVV() / 2.f));
+        float tanFOVH = tanf(glm::radians(camera.FOVH() / 2.f));
         
         glm::mat4 inverseCameraViewMat = glm::inverse(camera.viewMatrix());
         glm::mat4 lightViewMat = light.viewMatrix();
-        
+
         // NDC Z is in opposite direction, don't forget!
         float near = -camera.nearClipPlane();
         
         for (int8_t i = 0; i < numberOfCascades; i++) {
             // -, cuz we're going in the negative direction (Z)
             float far = -split(i + 1, numberOfCascades, camera.nearClipPlane(), camera.farClipPlane(), 0.9);
-            float xn = near * tanf(halfFOVH);
-            float xf = far * tanf(halfFOVH);
-            float yn = near * tanf(halfFOVV);
-            float yf = far * tanf(halfFOVV);
             
+            float xn = near * tanFOVH;
+            float xf = far * tanFOVH;
+            float yn = near * tanFOVV;
+            float yf = far * tanFOVV;
+
             // Construct corner points of subfrustum in camera view space
             std::array<glm::vec4, 8> cornerPoints {
                 glm::vec4{ -xn, -yn, near, 1.f },
@@ -63,27 +64,26 @@ namespace EARenderer {
                 glm::vec4{ xf, yf, far, 1.f },
                 glm::vec4{ xf, -yf, far, 1.f }
             };
-            
+
             AxisAlignedBox3D box{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
-            
+
             for (auto& point : cornerPoints) {
                 glm::vec4 p = point;
-                p = glm::inverse(lightViewMat) * inverseCameraViewMat * p;
+                p = lightViewMat * inverseCameraViewMat * p;
                 box.min = glm::min(box.min, glm::vec3{p});
                 box.max = glm::max(box.max, glm::vec3{p});
             }
 
-            cascades.lightViewProjections.emplace_back(box.asFrustum() * lightViewMat);
-            
+            glm::mat4 scale = glm::scale(glm::vec3{ i == 0 ? 1.f : 1.f });
+            cascades.lightViewProjections.emplace_back(box.transformedBy(scale).asFrustum() * lightViewMat);
+
             // DEBUG
             for (auto& point : cornerPoints) {
-                point = inverseCameraViewMat * point;
+                point = inverseCameraViewMat * glm::scale(glm::vec3(0.1)) * point;
             }
             cascades.cornerPoints.emplace_back(cornerPoints);
-            cascades.boxes.emplace_back(box);
-            Log::logConsole(box);
-            
-            
+            cascades.boxes.emplace_back(box.transformedBy(glm::scale(glm::vec3(0.1))));
+
             // Depth is not linear when perspective projection is applied
             // Project splits first so shader code could understand it
             glm::vec4 dv = camera.projectionMatrix() * glm::vec4{ 0.0, 0.0, far, 1.0 };
@@ -92,8 +92,6 @@ namespace EARenderer {
             
             near = far;
         }
-        
-        printf("\n\n");
         
         return cascades;
     }
