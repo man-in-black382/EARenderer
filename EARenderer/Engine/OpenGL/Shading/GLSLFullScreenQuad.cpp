@@ -33,7 +33,7 @@ namespace EARenderer {
     
     void GLSLFullScreenQuad::setTexture(const GLDepthTexture2DArray& texture, uint8_t index) {
         setUniformTexture("uTextureArray", texture);
-        glUniform1i(uniformLocation("uIndex"), index);
+        glUniform1i(uniformByName("uIndex").location(), index);
     }
     
 }

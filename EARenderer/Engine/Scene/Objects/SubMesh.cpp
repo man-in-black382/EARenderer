@@ -14,14 +14,14 @@ namespace EARenderer {
 
     SubMesh::SubMesh()
     :
-    mVAO(GLVertexArray<Vertex1P1N1UV>()),
+    mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>()),
     mMeshID(0)
     { }
     
-    SubMesh::SubMesh(const std::vector<Vertex1P1N1UV>& vertices)
+    SubMesh::SubMesh(const std::vector<Vertex1P1N1UV1T1BT>& vertices)
     :
     mVertices(vertices),
-    mVAO(GLVertexArray<Vertex1P1N1UV>()),
+    mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>()),
     mMeshID(0)
     {
         finalizeVertexBuffer();
@@ -33,7 +33,7 @@ namespace EARenderer {
         return mName;
     }
     
-    const std::vector<Vertex1P1N1UV>& SubMesh::vertices() const {
+    std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() {
         return mVertices;
     }
     
@@ -41,7 +41,7 @@ namespace EARenderer {
         return mMeshID;
     }
     
-    const GLVertexArray<Vertex1P1N1UV>& SubMesh::VAO() const {
+    const GLVertexArray<Vertex1P1N1UV1T1BT>& SubMesh::VAO() const {
         return mVAO;
     }
     
@@ -57,7 +57,7 @@ namespace EARenderer {
     
 #pragma mark - Other methods
     
-    void SubMesh::addVertex(const Vertex1P1N1UV& vertex) {
+    void SubMesh::addVertex(const Vertex1P1N1UV1T1BT& vertex) {
         mVertices.push_back(vertex);
     }
     
@@ -65,7 +65,10 @@ namespace EARenderer {
         mVAO.initialize(mVertices, GLVertexArrayLayoutDescription({
             static_cast<int>(glm::vec4::length() * sizeof(GLfloat)),
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
+        }));
     }
     
     void SubMesh::draw() const {

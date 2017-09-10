@@ -29,7 +29,6 @@
 		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
 		CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */; };
 		CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */; };
-		CE4537071F24B3DF005479FE /* bricks.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4537061F24B3DF005479FE /* bricks.jpg */; };
 		CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322B61EBB3557005F49C2 /* AppDelegate.m */; };
 		CE5322E21EBB3557005F49C2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5322BE1EBB3557005F49C2 /* Info.plist */; };
 		CE5322E31EBB3557005F49C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322BF1EBB3557005F49C2 /* main.m */; };
@@ -106,6 +105,7 @@
 		CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71B1EED736F0048AD01 /* GLViewport.cpp */; };
 		CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE0F71F1EED7BD30048AD01 /* Input.cpp */; };
 		CEE147DC1F10D53900FF1DE5 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE147DA1F10D53900FF1DE5 /* Color.cpp */; };
+		CEE63EFD1F5C352100A06357 /* Vertex1P1N1UV1T1BT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE63EFB1F5C352100A06357 /* Vertex1P1N1UV1T1BT.cpp */; };
 		CEE8DB471F375A45001BCC8C /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE8DB451F375A45001BCC8C /* GLTexture.cpp */; };
 		CEE8DB4A1F386778001BCC8C /* GLLayeredTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE8DB481F386778001BCC8C /* GLLayeredTexture.cpp */; };
 		CEE971A21EE3FD99000C20DD /* ColoredView.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE971A11EE3FD99000C20DD /* ColoredView.m */; };
@@ -116,6 +116,7 @@
 		CEE971BA1EE556FE000C20DD /* MeshListTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971B91EE556FE000C20DD /* MeshListTabViewItem.mm */; };
 		CEE971BD1EE5570F000C20DD /* CameraListTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971BC1EE5570F000C20DD /* CameraListTabViewItem.mm */; };
 		CEE971C01EE55721000C20DD /* LightListTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEE971BF1EE55721000C20DD /* LightListTabViewItem.mm */; };
+		CEEA7B0C1F65940F003349A5 /* GLUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEA7B0A1F65940F003349A5 /* GLUniform.cpp */; };
 		CEF3315A1F03A4EB009BE235 /* AxesSelection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF3314E1F03A3B5009BE235 /* AxesSelection.cpp */; };
 		CEF3315B1F03A4EB009BE235 /* AxesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331501F03A3B5009BE235 /* AxesRenderer.cpp */; };
 		CEF3315C1F03A4EB009BE235 /* BoxVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF331521F03A3B5009BE235 /* BoxVisualizer.cpp */; };
@@ -172,7 +173,6 @@
 		CE44B89D1EF3FF4B00CB690C /* Size2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size2D.hpp; sourceTree = "<group>"; };
 		CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
 		CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxisAlignedBox3D.hpp; sourceTree = "<group>"; };
-		CE4537061F24B3DF005479FE /* bricks.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = bricks.jpg; path = ../../../../../../Downloads/bricks.jpg; sourceTree = "<group>"; };
 		CE522BDC1E4DDF700063470C /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5322B51EBB3557005F49C2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE5322B61EBB3557005F49C2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -555,6 +555,8 @@
 		CEE147DB1F10D53900FF1DE5 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Color.hpp; sourceTree = "<group>"; };
 		CEE2E8FF1F2C95D300B19A6A /* GLSLOmnidirectionalBlinnPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLOmnidirectionalBlinnPhong.cpp; sourceTree = "<group>"; };
 		CEE2E9001F2C95D300B19A6A /* GLSLOmnidirectionalBlinnPhong.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLOmnidirectionalBlinnPhong.hpp; sourceTree = "<group>"; };
+		CEE63EFB1F5C352100A06357 /* Vertex1P1N1UV1T1BT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N1UV1T1BT.cpp; sourceTree = "<group>"; };
+		CEE63EFC1F5C352100A06357 /* Vertex1P1N1UV1T1BT.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N1UV1T1BT.hpp; sourceTree = "<group>"; };
 		CEE8DB451F375A45001BCC8C /* GLTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		CEE8DB461F375A45001BCC8C /* GLTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture.hpp; sourceTree = "<group>"; };
 		CEE8DB481F386778001BCC8C /* GLLayeredTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLLayeredTexture.cpp; sourceTree = "<group>"; };
@@ -575,6 +577,8 @@
 		CEE971BC1EE5570F000C20DD /* CameraListTabViewItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CameraListTabViewItem.mm; sourceTree = "<group>"; };
 		CEE971BE1EE55721000C20DD /* LightListTabViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LightListTabViewItem.h; sourceTree = "<group>"; };
 		CEE971BF1EE55721000C20DD /* LightListTabViewItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LightListTabViewItem.mm; sourceTree = "<group>"; };
+		CEEA7B0A1F65940F003349A5 /* GLUniform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniform.cpp; sourceTree = "<group>"; };
+		CEEA7B0B1F65940F003349A5 /* GLUniform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLUniform.hpp; sourceTree = "<group>"; };
 		CEF3314E1F03A3B5009BE235 /* AxesSelection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSelection.cpp; sourceTree = "<group>"; };
 		CEF3314F1F03A3B5009BE235 /* AxesSelection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSelection.hpp; sourceTree = "<group>"; };
 		CEF331501F03A3B5009BE235 /* AxesRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesRenderer.cpp; sourceTree = "<group>"; };
@@ -654,8 +658,11 @@
 		CE039E0A1F31EE7B00E8630D /* Shading */ = {
 			isa = PBXGroup;
 			children = (
+				CE5834911EB9031B009E2F61 /* ShaderSources */,
 				CE5834591EB9031B009E2F61 /* GLProgram.cpp */,
 				CE58345A1EB9031B009E2F61 /* GLProgram.hpp */,
+				CEEA7B0A1F65940F003349A5 /* GLUniform.cpp */,
+				CEEA7B0B1F65940F003349A5 /* GLUniform.hpp */,
 				CE58345B1EB9031B009E2F61 /* GLShader.cpp */,
 				CE58345C1EB9031B009E2F61 /* GLShader.hpp */,
 				CE58346A1EB9031B009E2F61 /* GLSLDirectionalDepth.cpp */,
@@ -809,7 +816,6 @@
 		CE5322D91EBB3557005F49C2 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				CE4537061F24B3DF005479FE /* bricks.jpg */,
 				CE5322DA1EBB3557005F49C2 /* gun.jpg */,
 				CE5322DB1EBB3557005F49C2 /* hazard.png */,
 				CE5322DC1EBB3557005F49C2 /* wooden-crate.jpg */,
@@ -876,7 +882,6 @@
 				CE5834791EB9031B009E2F61 /* Resource Management */,
 				CE58347E1EB9031B009E2F61 /* Scene */,
 				CEF3314D1F03A3B5009BE235 /* Rendering */,
-				CE5834911EB9031B009E2F61 /* ShaderSources */,
 				CE58349C1EB9031B009E2F61 /* ThirdParty */,
 				CE5835B21EB9031C009E2F61 /* Vertices */,
 				CEE147D91F10D4E900FF1DE5 /* Miscellaneous */,
@@ -1310,6 +1315,8 @@
 				CE5835B41EB9031C009E2F61 /* Vertex1P4.hpp */,
 				CE5835B51EB9031C009E2F61 /* Vertex1P1N1UV.cpp */,
 				CE5835B61EB9031C009E2F61 /* Vertex1P1N1UV.hpp */,
+				CEE63EFB1F5C352100A06357 /* Vertex1P1N1UV1T1BT.cpp */,
+				CEE63EFC1F5C352100A06357 /* Vertex1P1N1UV1T1BT.hpp */,
 			);
 			path = Vertices;
 			sourceTree = "<group>";
@@ -1581,7 +1588,6 @@
 				CE58362F1EB90E37009E2F61 /* Skybox.vert in Resources */,
 				CEC492011F2CA8D100DEA92B /* OmnidirectionalBlinnPhong.frag in Resources */,
 				CE5322F41EBB3557005F49C2 /* skyboxFront.png in Resources */,
-				CE4537071F24B3DF005479FE /* bricks.jpg in Resources */,
 				CEBFE7051F28D557005B898D /* OmnidirectionalDepth.geom in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1604,6 +1610,7 @@
 				CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */,
 				CE2A6E781F2C9777000C3B72 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */,
 				CEC3B0591F3321EB00A535AE /* FrustumCascades.cpp in Sources */,
+				CEEA7B0C1F65940F003349A5 /* GLUniform.cpp in Sources */,
 				CE5835E11EB9031C009E2F61 /* GLDepthTexture2D.cpp in Sources */,
 				CE5323091EBB360B005F49C2 /* MainViewController.mm in Sources */,
 				CEE971A71EE55220000C20DD /* OutlineView.m in Sources */,
@@ -1654,6 +1661,7 @@
 				CE0357D41F1779CA00BD449A /* Cameraman.cpp in Sources */,
 				CEF3315E1F03A4EB009BE235 /* SceneRenderer.cpp in Sources */,
 				CE5835FD1EB9031C009E2F61 /* glm.cpp in Sources */,
+				CEE63EFD1F5C352100A06357 /* Vertex1P1N1UV1T1BT.cpp in Sources */,
 				CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */,
 				CEF716B01F34CAEB00AAA9E7 /* GLTexture2DArray.cpp in Sources */,
 				CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */,

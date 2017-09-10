@@ -68,7 +68,7 @@
     NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String), std::string(paletPath.UTF8String) }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String)/*, std::string(paletPath.UTF8String)*/ }, self.scene);
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));

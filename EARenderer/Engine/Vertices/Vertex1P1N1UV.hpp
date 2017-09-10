@@ -14,13 +14,19 @@
 
 namespace EARenderer {
     
+    /**
+     1 position
+     1 normal
+     1 texture coordinate
+     */
     struct Vertex1P1N1UV {
-        glm::vec4 mPosition;
-        glm::vec3 mTextureCoords;
-        glm::vec3 mNormal;
+        glm::vec4 position;
+        glm::vec3 textureCoords;
+        glm::vec3 normal;
         
-        Vertex1P1N1UV();
-        Vertex1P1N1UV(glm::vec4 position, glm::vec3 texcoords, glm::vec3 normal);
+        Vertex1P1N1UV(const glm::vec4& position,
+                      const glm::vec3& texcoords,
+                      const glm::vec3& normal);
     };
 
 }

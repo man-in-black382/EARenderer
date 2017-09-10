@@ -73,10 +73,12 @@ namespace EARenderer {
         
         for (GLuint index = 0; index < count; index++) {
             std::vector<GLchar> uniformNameChars(128);
-            glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, nullptr, nullptr, uniformNameChars.data());
+            GLint size;
+            GLenum type;
+            glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, &size, &type, uniformNameChars.data());
             std::string name(uniformNameChars.data());
-            // Increment by 1 to use 0 as a non-used uniform indicator
-            mUniforms[name] = glGetUniformLocation(mName, &name[0]) + 1;
+            GLint location = glGetUniformLocation(mName, &name[0]);
+            mUniforms.insert(std::make_pair(name, GLUniform(location, size, type, name)));
         }
     }
     
@@ -85,12 +87,14 @@ namespace EARenderer {
     }
     
     void GLProgram::setUniformTexture(const std::string& uniformName, const GLBindable& texture) {
-        GLint location = uniformLocation(uniformName);
+        GLUniform sampler = uniformByName(uniformName);
+        ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
         glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
-        glUniform1i(location, mFreeTextureUnitIndex);
+        glUniform1i(sampler.location(), mFreeTextureUnitIndex);
         texture.bind();
         mFreeTextureUnitIndex++;
+        mUsedSamplerLocations.insert(sampler.location());
     }
     
 #pragma mark - Swap
@@ -139,15 +143,33 @@ namespace EARenderer {
         setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
     }
     
-    GLint GLProgram::uniformLocation(const std::string& name) {
-        // Decrement location to return -1 for non-used uniform
-        return mUniforms[name] - 1;
+    const GLUniform& GLProgram::uniformByName(const std::string& name) {
+        return mUniforms[name];
     }
     
 #pragma mark - Public
     
-    void GLProgram::flushState() {
+    void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
+        isModifyingUniforms = true;
         mFreeTextureUnitIndex = 0;
+        mUsedSamplerLocations.clear();
+        
+        closure();
+        
+        // Make 1 to 1 connection for all samplers - texture units to exclude situation
+        // where 2 or more samplers are using the same texture unit
+        // when not all texture uniforms were set by user before draw call
+        for (auto& keyValuePair : mUniforms) {
+            auto& uniform = keyValuePair.second;
+            if (uniform.isSampler() && mUsedSamplerLocations.find(uniform.location()) == mUsedSamplerLocations.end()) {
+                ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+                glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
+                glUniform1i(uniform.location(), mFreeTextureUnitIndex);
+                mFreeTextureUnitIndex++;
+            }
+        }
+        
+        isModifyingUniforms = false;
     }
     
     bool GLProgram::validateState() const {

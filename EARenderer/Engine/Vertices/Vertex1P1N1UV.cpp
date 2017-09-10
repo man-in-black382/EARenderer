@@ -10,18 +10,11 @@
 
 namespace EARenderer {
     
-    Vertex1P1N1UV::Vertex1P1N1UV()
+    Vertex1P1N1UV::Vertex1P1N1UV(const glm::vec4& position, const glm::vec3& texcoords, const glm::vec3& normal)
     :
-    mPosition(glm::vec4()),
-    mTextureCoords(glm::vec3()),
-    mNormal(glm::vec3())
-    { }
-    
-    Vertex1P1N1UV::Vertex1P1N1UV(glm::vec4 position, glm::vec3 texcoords, glm::vec3 normal)
-    :
-    mPosition(position),
-    mTextureCoords(texcoords),
-    mNormal(normal)
+    position(position),
+    textureCoords(texcoords),
+    normal(normal)
     { }
     
 }

@@ -12,6 +12,8 @@
 
 namespace EARenderer {
     
+#pragma mark - Callbacks
+    
     void WavefrontMeshLoader::vertexCallback(void *userData, float x, float y, float z, float w) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
@@ -40,6 +42,7 @@ namespace EARenderer {
         tinyobj::index_t *idxs = reinterpret_cast<tinyobj::index_t *>(indices);
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
+        // Triangulate
         tinyobj::index_t i0 = idxs[0];// f[0];
         tinyobj::index_t i1 = { -1, -1, -1 };
         tinyobj::index_t i2 = idxs[1]; //f[1];
@@ -48,7 +51,7 @@ namespace EARenderer {
             i1 = i2;
             i2 = idxs[k];
             
-            tinyobj::index_t indices[3] = { i0, i1, i2 };
+            std::array<tinyobj::index_t, 3> indices = { i0, i1, i2 };
             thisPtr->processTriangle(indices);
         }
     }
@@ -70,34 +73,76 @@ namespace EARenderer {
         thisPtr->mMeshName = std::string(name);
     }
     
-    void WavefrontMeshLoader::processTriangle(tinyobj::index_t (&indices)[3]) {
-        for (size_t i = 0; i < 3; i++) {
-            size_t fixedVIdx = fixIndex(indices[i].vertex_index, static_cast<int>(mVertices.size()));
-            size_t fixedNIdx = fixIndex(indices[i].normal_index, static_cast<int>(mNormals.size()));
-            size_t fixedVTIdx = fixIndex(indices[i].texcoord_index, static_cast<int>(mTexCoords.size()));
+    void WavefrontMeshLoader::processTriangle(const std::array<tinyobj::index_t, 3>& indices) {
+        std::array<int32_t, 3> positionIndices;
+        std::array<int32_t, 3> texCoordIndices;
+        bool shouldBuildTangent = false;
+        
+        for (int32_t i = 0; i < 3; i++) {
+            int32_t fixedVIdx = fixIndex(indices[i].vertex_index, static_cast<int32_t>(mVertices.size()));
+            int32_t fixedNIdx = fixIndex(indices[i].normal_index, static_cast<int32_t>(mNormals.size()));
+            int32_t fixedVTIdx = fixIndex(indices[i].texcoord_index, static_cast<int32_t>(mTexCoords.size()));
             
             if (!indices[i].texcoord_index && !indices[i].normal_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], glm::vec3(), glm::vec3()));
+                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], glm::vec3(), glm::vec3(), glm::vec3(), glm::vec3()));
             } else if (!indices[i].texcoord_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], glm::vec3(), mNormals[fixedNIdx]));
+                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], glm::vec3(), mNormals[fixedNIdx], glm::vec3(), glm::vec3()));
             } else if (!indices[i].normal_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], glm::vec3()));
+                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], glm::vec3(), glm::vec3(), glm::vec3()));
             } else {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], mNormals[fixedNIdx]));
+                positionIndices[i] = fixedVIdx;
+                texCoordIndices[i] = fixedVTIdx;
+                shouldBuildTangent = true;
+                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], mNormals[fixedNIdx]));
             }
+        }
+        
+        if (shouldBuildTangent) {
+            buildTangentSpace(positionIndices, texCoordIndices);
         }
     }
     
-    inline int WavefrontMeshLoader::fixIndex(int idx, int n) {
+    void WavefrontMeshLoader::buildTangentSpace(const std::array<int32_t, 3>& positionIndices, const std::array<int32_t, 3>& texCoordIndices) {
+        glm::vec3 edge1 = mVertices[positionIndices[1]] - mVertices[positionIndices[0]];
+        glm::vec3 edge2 = mVertices[positionIndices[2]] - mVertices[positionIndices[0]];
+        glm::vec2 deltaUV1 = mTexCoords[texCoordIndices[1]] - mTexCoords[texCoordIndices[0]];
+        glm::vec2 deltaUV2 = mTexCoords[texCoordIndices[2]] - mTexCoords[texCoordIndices[0]];
+        
+        float f = 1.f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+        
+        glm::vec3 tangent;
+        tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+        tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+        tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+        
+        glm::vec3 bitangent;
+        bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+        bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+        bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+        
+        // Update tangent vectors for latest vertices
+        auto size = mSubMeshes->back().vertices().size();
+        for (auto i = 1; i <= 3; i++) {
+            auto& vertex = mSubMeshes->back().vertices()[size - i];
+            vertex.tangent = tangent;
+            vertex.bitangent = bitangent;
+        }
+    }
+    
+    int32_t WavefrontMeshLoader::fixIndex(int32_t idx, int32_t n) {
         if (idx > 0) return idx - 1;
         if (idx == 0) return 0;
         return n + idx;  // negative value = relative
     }
     
+#pragma mark - Lifecycle
+    
     WavefrontMeshLoader::WavefrontMeshLoader(const std::string& meshPath)
     :
     mMeshPath(meshPath)
     { }
+    
+#pragma mark - Public
     
     void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D& boundingBox) {
         mSubMeshes = &subMeshes;

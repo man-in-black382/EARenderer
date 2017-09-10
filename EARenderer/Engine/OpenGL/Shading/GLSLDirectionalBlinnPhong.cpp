@@ -22,35 +22,36 @@ namespace EARenderer {
 #pragma mark - Setters
     
     void GLSLDirectionalBlinnPhong::setCamera(const Camera& camera) {
-        glUniformMatrix4fv(uniformLocation("uCameraSpaceMat"), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
-        glUniform3fv(uniformLocation("uCameraPosition"), 1, glm::value_ptr(camera.position()));
+        glUniformMatrix4fv(uniformByName("uCameraSpaceMat").location(), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
+        glUniform3fv(uniformByName("uCameraPosition").location(), 1, glm::value_ptr(camera.position()));
     }
     
     void GLSLDirectionalBlinnPhong::setDirectionalLight(const DirectionalLight& light) {
-        glUniform3fv(uniformLocation("uLightDirection"), 1, glm::value_ptr(light.direction()));
-        glUniform3fv(uniformLocation("uLightColor"), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform3fv(uniformByName("uLightDirection").location(), 1, glm::value_ptr(light.direction()));
+        glUniform3fv(uniformByName("uLightColor").location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
     }
     
     void GLSLDirectionalBlinnPhong::setModelMatrix(const glm::mat4& matrix) {
-        glUniformMatrix4fv(uniformLocation("uModelMat"), 1, GL_FALSE, glm::value_ptr(matrix));
-        glUniformMatrix4fv(uniformLocation("uNormalMat"), 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(matrix))));
+        glUniformMatrix4fv(uniformByName("uModelMat").location(), 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(uniformByName("uNormalMat").location(), 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(matrix))));
     }
     
     void GLSLDirectionalBlinnPhong::setMaterial(const Material& material)
     {
-        glUniform3fv(uniformLocation("uMaterial.ambientReflectances"), 1, glm::value_ptr(material.ambientReflectances()));
-        glUniform3fv(uniformLocation("uMaterial.diffuseReflectances"), 1, glm::value_ptr(material.diffuseReflectances()));
-        glUniform3fv(uniformLocation("uMaterial.specularReflectances"), 1, glm::value_ptr(material.specularReflectances()));
-        glUniform1f(uniformLocation("uMaterial.specularExponent"), material.specularExponent());
+        glUniform3fv(uniformByName("uMaterial.ambientReflectances").location(), 1, glm::value_ptr(material.ambientReflectances()));
+        glUniform3fv(uniformByName("uMaterial.diffuseReflectances").location(), 1, glm::value_ptr(material.diffuseReflectances()));
+        glUniform3fv(uniformByName("uMaterial.specularReflectances").location(), 1, glm::value_ptr(material.specularReflectances()));
+        glUniform1f(uniformByName("uMaterial.specularExponent").location(), material.specularExponent());
         
-        setUniformTexture("uMaterial.diffuseTexture", material.skin());
+        setUniformTexture("uMaterial.diffuseMap", material.skin());
+
     }
     
     void GLSLDirectionalBlinnPhong::setShadowCascades(const FrustumCascades& cascades) {
         uint8_t numberOfCascades = cascades.splits.size();
-        glUniform1i(uniformLocation("uNumberOfCascades"), numberOfCascades);
-        glUniformMatrix4fv(uniformLocation("uLightSpaceMatrices[0]"), static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE, reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
-        glUniform1fv(uniformLocation("uDepthSplits[0]"), numberOfCascades, reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+        glUniform1i(uniformByName("uNumberOfCascades").location(), numberOfCascades);
+        glUniformMatrix4fv(uniformByName("uLightSpaceMatrices[0]").location(), static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE, reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+        glUniform1fv(uniformByName("uDepthSplits[0]").location(), numberOfCascades, reinterpret_cast<const GLfloat *>(cascades.splits.data()));
     }
     
     void GLSLDirectionalBlinnPhong::setShadowMaps(const GLDepthTexture2DArray& shadowMaps) {
@@ -58,7 +59,7 @@ namespace EARenderer {
     }
     
     void GLSLDirectionalBlinnPhong::setHighlightColor(const Color& color) {
-        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const GLfloat *>(&color));
+        glUniform4fv(uniformByName("uHighlightColor").location(), 1, reinterpret_cast<const GLfloat *>(&color));
     }
     
 }

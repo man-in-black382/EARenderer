@@ -9,6 +9,8 @@ const int kMaxCascades = 4;
 layout (location = 0) in vec4 iPosition;
 layout (location = 1) in vec3 iTexCoords;
 layout (location = 2) in vec3 iNormal;
+layout (location = 3) in vec3 iTangent;
+layout (location = 4) in vec3 iBitabgent;
 
 // Uniforms
 
@@ -26,6 +28,8 @@ uniform int uNumberOfCascades;
 out vec3 oNormal;
 out vec3 oToCamera;
 out vec3 oTexCoords;
+out vec3 oTangent;
+out vec3 oBitangent;
 out vec4 oPosInLightSpace[kMaxCascades];
 out vec4 oPosInCameraSpace;
 

@@ -13,13 +13,16 @@ out vec4 outputFragColor;
 in vec3 oNormal;
 in vec3 oToCamera;
 in vec3 oTexCoords;
+in vec3 oTangent;
+in vec3 oBitangent;
 in vec4 oPosInLightSpace[kMaxCascades];
 in vec4 oPosInCameraSpace;
 
 // Uniforms
 
 struct Material {
-    sampler2D diffuseTexture;
+    sampler2D diffuseMap;
+    sampler2D normalMap;
     vec3 ambientReflectances;
     vec3 diffuseReflectances;
     vec3 specularReflectances;
@@ -32,6 +35,8 @@ uniform vec3 uLightDirection;
 uniform sampler2DArray uShadowMaps;
 uniform float uDepthSplits[kMaxCascades];
 uniform vec4 uHighlightColor;
+
+uniform int test;
 
 uniform int uNumberOfCascades;
 
@@ -57,7 +62,7 @@ int cascadeIndex()
     vec3 projCoords = oPosInCameraSpace.xyz / oPosInCameraSpace.w;
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
-    
+
     float fragDepth = projCoords.z;
 
     for (int i = 0; i < uNumberOfCascades; ++i) {
@@ -67,16 +72,16 @@ int cascadeIndex()
     }
 }
 
-float isInShadow(in vec3 N, in vec3 L)
+float shadow(in vec3 N, in vec3 L)
 {
     int shadowCascadeIndex = cascadeIndex();
-    
+
     // perform perspective division
     vec3 projCoords = oPosInLightSpace[shadowCascadeIndex].xyz / oPosInLightSpace[shadowCascadeIndex].w;
 
     // Transformation to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
-    
+
     // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
     float closestDepth = texture(uShadowMaps, vec3(projCoords.xy, shadowCascadeIndex)).r;
 
@@ -98,9 +103,6 @@ float isInShadow(in vec3 N, in vec3 L)
     }
     shadow /= 36.0;
     return shadow;
-//    float unbiasedDepth = currentDepth - bias;
-//    return unbiasedDepth > closestDepth && // Check of being in shadow
-//    unbiasedDepth <= 1.0 ? 1.0 : 0.0; // Depth values > 1.0 are considered to not being in shadow
 }
 
 void main() {
@@ -112,15 +114,10 @@ void main() {
     vec3 ambientColor = ambientColor();
     vec3 diffuseColor = diffuseColor(N, L);
     vec3 specularColor = specularColor(N, L, V);
+
+//    vec4 test = texture(uMaterial.normalMap, oTexCoords.st);
     
-    outputFragColor = vec4((ambientColor + (1.0 - isInShadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseTexture, oTexCoords.st) + uHighlightColor;
-//
-//    int shadowCascadeIndex = cascadeIndex();
-//    if (shadowCascadeIndex == 0) {
-//        outputFragColor += vec4(0.3, 0.0, 0.0, 0.0);
-//    } else if (shadowCascadeIndex == 1) {
-//        outputFragColor += vec4(0.0, 0.3, 0.0, 0.0);
-//    } else if (shadowCascadeIndex == 2) {
-//        outputFragColor += vec4(0.0, 0.0, 0.3, 0.0);
-//    }
+    outputFragColor = vec4((ambientColor + (1.0 - shadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseMap, oTexCoords.st) + uHighlightColor;
+
+//    outputFragColor = vec4((ambientColor + (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseMap, oTexCoords.st) + uHighlightColor;
 }

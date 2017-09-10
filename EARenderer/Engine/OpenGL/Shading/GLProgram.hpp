@@ -10,6 +10,7 @@
 #define GLProgram_hpp
 
 #include <unordered_map>
+#include <unordered_set>
 #include <string>
 #include <vector>
 #include <array>
@@ -18,6 +19,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GLNamedObject.hpp"
+#include "GLUniform.hpp"
 #include "GLShader.hpp"
 #include "GLBindable.hpp"
 #include "GLTexture2D.hpp"
@@ -34,9 +36,11 @@ namespace EARenderer {
         const GLShader* mVertexShader = nullptr;
         const GLShader* mFragmentShader = nullptr;
         const GLShader* mGeometryShader = nullptr;
-        std::unordered_map<std::string, GLint> mUniforms;
+        std::unordered_map<std::string, GLUniform> mUniforms;
+        std::unordered_set<GLint> mUsedSamplerLocations;
         GLint mAvailableTextureUnits = 0;
         GLint mFreeTextureUnitIndex = 0;
+        bool isModifyingUniforms = false;
         
         void link();
         void obtainUniforms();
@@ -46,7 +50,7 @@ namespace EARenderer {
     protected:
         GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
         
-        GLint uniformLocation(const std::string& name);
+        const GLUniform& uniformByName(const std::string& name);
         void setUniformTexture(const std::string& uniformName, const GLTexture2D& texture);
         void setUniformTexture(const std::string& uniformName, const GLTextureCubemap& texture);
         void setUniformTexture(const std::string& uniformName, const GLDepthTexture2D& texture);
@@ -55,6 +59,8 @@ namespace EARenderer {
         void setUniformTexture(const std::string& uniformName, const GLTexture2DArray& texture);
         
     public:
+        using UniformModifierClosure = const std::function<void()>&;
+        
         GLProgram(const GLProgram& rhs) = delete;
         GLProgram& operator=(const GLProgram& that) = delete;
         GLProgram(GLProgram&& that) = default;
@@ -63,9 +69,17 @@ namespace EARenderer {
         void swap(GLProgram&);
         
         void bind() const override;
-        
-        void flushState();
         bool validateState() const;
+        
+        /**
+         You should use this function for setting up uniform sampler values.
+         If GLSL code for a particular program requires optional samplers,
+         (no normal or gloss map provided for a particular object, etc.)
+         it ensures 1-to-1 sampler - texture unit mapping for all unused samplers
+
+         @param closure function object in which uniform sampler modifications should be performed
+         */
+        void ensureSamplerValidity(UniformModifierClosure closure);
     };
     
     void swap(GLProgram&, GLProgram&);

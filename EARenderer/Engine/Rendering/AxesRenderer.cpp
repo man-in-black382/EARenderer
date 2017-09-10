@@ -172,8 +172,6 @@ namespace EARenderer {
         glEnable(GL_MULTISAMPLE);
         
         mGenericGeometryShader.bind();
-        mGenericGeometryShader.flushState();
-        
         for (ID meshID : mScene->meshes()) {
             Mesh& mesh = mScene->meshes()[meshID];
             if (!mesh.isSelected()) { continue; }
@@ -190,7 +188,7 @@ namespace EARenderer {
             renderAxes(axesToHighlight, mvp);
             renderSegments(axesToHighlight, mvp);
         }
-                
+        
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_MULTISAMPLE);
     }

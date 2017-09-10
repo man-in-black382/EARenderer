@@ -22,11 +22,11 @@ namespace EARenderer {
 #pragma mark - Setters
     
     void GLSLSkybox::setViewMatrix(const glm::mat4& matrix) {
-        glUniformMatrix4fv(uniformLocation("uProjectionMatrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(uniformByName("uProjectionMatrix").location(), 1, GL_FALSE, glm::value_ptr(matrix));
     }
     
     void GLSLSkybox::setProjectionMatrix(const glm::mat4& matrix) {
-        glUniformMatrix4fv(uniformLocation("uViewMatrix"), 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(uniformByName("uViewMatrix").location(), 1, GL_FALSE, glm::value_ptr(matrix));
     }
     
     void GLSLSkybox::setCubemap(const GLTextureCubemap& cubemap) {

@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -37,9 +38,10 @@ namespace EARenderer {
         static void indexCallback(void *userData, tinyobj::index_t *indices, int numIndices);
         static void groupCallback(void *userData, const char **names, int numNames);
         static void objectCallback(void *userData, const char *name);
-        
-        void processTriangle(tinyobj::index_t (&indices)[3]);
-        inline int fixIndex(int idx, int n);
+
+        void processTriangle(const std::array<tinyobj::index_t, 3>& indices);
+        void buildTangentSpace(const std::array<int32_t, 3>& positionIndices, const std::array<int32_t, 3>& texCoordIndices);
+        int32_t fixIndex(int32_t idx, int32_t n);
         
     public:
         WavefrontMeshLoader(const std::string& meshPath);

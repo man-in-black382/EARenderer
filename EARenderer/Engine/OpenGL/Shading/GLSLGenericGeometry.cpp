@@ -22,15 +22,15 @@ namespace EARenderer {
 #pragma mark - Setters
     
     void GLSLGenericGeometry::setModelViewProjectionMatrix(const glm::mat4 &mvp) {
-        glUniformMatrix4fv(uniformLocation("uModelViewProjection"), 1, GL_FALSE, glm::value_ptr(mvp));
+        glUniformMatrix4fv(uniformByName("uModelViewProjection").location(), 1, GL_FALSE, glm::value_ptr(mvp));
     }
     
     void GLSLGenericGeometry::setColor(const Color& color) {
-        glUniform4fv(uniformLocation("uColor"), 1, reinterpret_cast<const float *>(&color));
+        glUniform4fv(uniformByName("uColor").location(), 1, reinterpret_cast<const float *>(&color));
     }
     
     void GLSLGenericGeometry::setHighlightColor(const Color& color) {
-        glUniform4fv(uniformLocation("uHighlightColor"), 1, reinterpret_cast<const GLfloat *>(&color));
+        glUniform4fv(uniformByName("uHighlightColor").location(), 1, reinterpret_cast<const GLfloat *>(&color));
     }
     
 }
