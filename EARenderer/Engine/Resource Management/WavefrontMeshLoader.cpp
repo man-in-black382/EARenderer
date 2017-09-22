@@ -58,19 +58,36 @@ namespace EARenderer {
 
     void WavefrontMeshLoader::groupCallback(void *userData, const char **names, int numNames) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        
         SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
-        if (lastSubMesh) {
+        if (lastSubMesh && thisPtr->mSubMeshes->size() > 1) {
             lastSubMesh->finalizeVertexBuffer();
-            if (numNames) {
-                lastSubMesh->setName(std::string(names[numNames - 1]));
-            }
         }
+        
         thisPtr->mSubMeshes->emplace_back();
+        lastSubMesh = &thisPtr->mSubMeshes->back();
+        if (numNames) {
+            lastSubMesh->setName(std::string(names[numNames - 1]));
+        }
     }
     
     void WavefrontMeshLoader::objectCallback(void *userData, const char *name) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
-        thisPtr->mMeshName = std::string(name);
+        
+        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
+        if (lastSubMesh && thisPtr->mSubMeshes->size() > 1) {
+            for (int32_t i = 0; i < lastSubMesh->vertices().size(); i++) {
+                auto& vertex = lastSubMesh->vertices()[i];
+                vertex.normal = glm::normalize(thisPtr->mManualNormals[i]);
+            }
+            lastSubMesh->finalizeVertexBuffer();
+        }
+        
+        thisPtr->mSubMeshes->emplace_back();
+        lastSubMesh = &thisPtr->mSubMeshes->back();
+        if (name) {
+            lastSubMesh->setName(std::string(name));
+        }
     }
     
     void WavefrontMeshLoader::processTriangle(const std::array<tinyobj::index_t, 3>& indices) {
@@ -81,20 +98,27 @@ namespace EARenderer {
         for (int32_t i = 0; i < 3; i++) {
             int32_t fixedVIdx = fixIndex(indices[i].vertex_index, static_cast<int32_t>(mVertices.size()));
             int32_t fixedNIdx = fixIndex(indices[i].normal_index, static_cast<int32_t>(mNormals.size()));
-            int32_t fixedVTIdx = fixIndex(indices[i].texcoord_index, static_cast<int32_t>(mTexCoords.size()));
+            int32_t fixedTIdx = fixIndex(indices[i].texcoord_index, static_cast<int32_t>(mTexCoords.size()));
             
-            if (!indices[i].texcoord_index && !indices[i].normal_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], glm::vec3(), glm::vec3(), glm::vec3(), glm::vec3()));
-            } else if (!indices[i].texcoord_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], glm::vec3(), mNormals[fixedNIdx], glm::vec3(), glm::vec3()));
-            } else if (!indices[i].normal_index) {
-                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], glm::vec3(), glm::vec3(), glm::vec3()));
-            } else {
-                positionIndices[i] = fixedVIdx;
-                texCoordIndices[i] = fixedVTIdx;
-                shouldBuildTangent = true;
-                mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx], mTexCoords[fixedVTIdx], mNormals[fixedNIdx]));
-            }
+            bool isTexCoordPresent = fixedTIdx != 0;
+            bool isNormalPresent = fixedNIdx != 0;
+            
+            mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx],
+                                                            isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec3(),
+                                                            isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
+            
+            shouldBuildTangent = isTexCoordPresent && isNormalPresent;
+            
+            positionIndices[i] = fixedVIdx;
+            texCoordIndices[i] = fixedTIdx;
+        }
+        
+        glm::vec3 edge1 = mVertices[positionIndices[1]] - mVertices[positionIndices[0]];
+        glm::vec3 edge2 = mVertices[positionIndices[2]] - mVertices[positionIndices[0]];
+        glm::vec3 surfaceNormal = glm::cross(edge1, edge2);
+        
+        for (auto positionIndex : positionIndices) {
+            mManualNormals[positionIndex] += surfaceNormal;
         }
         
         if (shouldBuildTangent) {
@@ -146,7 +170,7 @@ namespace EARenderer {
     
     void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D& boundingBox) {
         mSubMeshes = &subMeshes;
-        mSubMeshes->emplace_back();
+//        mSubMeshes->emplace_back();
         mBoundingBox = &boundingBox;
         mBoundingBox->min = glm::vec3(std::numeric_limits<float>::max());
         mBoundingBox->max = glm::vec3(-std::numeric_limits<float>::max());

@@ -44,7 +44,9 @@ namespace EARenderer {
         glUniform3fv(uniformByName("uMaterial.specularReflectances").location(), 1, glm::value_ptr(material.specularReflectances()));
         glUniform1f(uniformByName("uMaterial.specularExponent").location(), material.specularExponent());
         
-        setUniformTexture("uMaterial.diffuseTexture", material.skin());
+        if (material.skin()) {
+            setUniformTexture("uMaterial.diffuseTexture", *material.skin());
+        }
     }
     
     void GLSLOmnidirectionalBlinnPhong::setShadowMap(const GLDepthTextureCubemap& shadowMap) {

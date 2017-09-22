@@ -43,8 +43,14 @@ namespace EARenderer {
         glUniform3fv(uniformByName("uMaterial.specularReflectances").location(), 1, glm::value_ptr(material.specularReflectances()));
         glUniform1f(uniformByName("uMaterial.specularExponent").location(), material.specularExponent());
         
-        setUniformTexture("uMaterial.diffuseMap", material.skin());
-
+        if (material.skin()) {
+            setUniformTexture("uMaterial.diffuseMap", *material.skin());
+        }
+        
+        if (material.normalMap()) {
+            setUniformTexture("uMaterial.normalMap", *material.normalMap());
+            glUniform1d(uniformByName("uIsNormalMappingEnabled").location(), GL_TRUE);
+        }
     }
     
     void GLSLDirectionalBlinnPhong::setShadowCascades(const FrustumCascades& cascades) {

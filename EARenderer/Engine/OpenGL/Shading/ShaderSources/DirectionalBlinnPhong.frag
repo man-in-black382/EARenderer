@@ -17,6 +17,7 @@ in vec3 oTangent;
 in vec3 oBitangent;
 in vec4 oPosInLightSpace[kMaxCascades];
 in vec4 oPosInCameraSpace;
+in mat3 oTBN;
 
 // Uniforms
 
@@ -36,11 +37,15 @@ uniform sampler2DArray uShadowMaps;
 uniform float uDepthSplits[kMaxCascades];
 uniform vec4 uHighlightColor;
 
-uniform int test;
-
 uniform int uNumberOfCascades;
+uniform bool uIsNormalMappingEnabled;
 
 // Functions
+
+vec3 fetchNormal() {
+    return oNormal;
+//    return uIsNormalMappingEnabled ? (oTBN * texture(uMaterial.normalMap, oTexCoords.xy).xyz) : oNormal;
+}
 
 vec3 ambientColor() {
     return uMaterial.ambientReflectances * uLightColor;
@@ -115,9 +120,10 @@ void main() {
     vec3 diffuseColor = diffuseColor(N, L);
     vec3 specularColor = specularColor(N, L, V);
 
-//    vec4 test = texture(uMaterial.normalMap, oTexCoords.st);
+//    outputFragColor = vec4(oNormal, 1.0);
     
-    outputFragColor = vec4((ambientColor + (1.0 - shadow(N, L)) * (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseMap, oTexCoords.st) + uHighlightColor;
-
-//    outputFragColor = vec4((ambientColor + (diffuseColor + specularColor)), 1.0) * texture(uMaterial.diffuseMap, oTexCoords.st) + uHighlightColor;
+    vec4 contributions = vec4((ambientColor + (1.0 - shadow(N, L)) * (diffuseColor + specularColor)), 1.0);
+//    outputFragColor = texture(uMaterial.diffuseMap, oTexCoords.st);
+    vec4 textureColor = texture(uMaterial.diffuseMap, oTexCoords.st);
+    outputFragColor = contributions * textureColor + uHighlightColor;
 }

@@ -93,6 +93,9 @@
 		CE6E19C31F26149E00546364 /* GLDepthTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE6E19C11F26149E00546364 /* GLDepthTextureCubemap.cpp */; };
 		CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */; };
 		CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */; };
+		CEB0E9E31F751B0B00552059 /* tank.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9DF1F750D1F00552059 /* tank.obj */; };
+		CEB0E9E41F751B2500552059 /* tank_texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E21F751A3900552059 /* tank_texture.png */; };
+		CEB0E9E51F751B2500552059 /* tank_normal_map.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E11F750DC600552059 /* tank_normal_map.png */; };
 		CEBFE7041F28D557005B898D /* OmnidirectionalDepth.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEBFE7021F28D54F005B898D /* OmnidirectionalDepth.frag */; };
 		CEBFE7051F28D557005B898D /* OmnidirectionalDepth.geom in Resources */ = {isa = PBXBuildFile; fileRef = CEBFE7031F28D54F005B898D /* OmnidirectionalDepth.geom */; };
 		CEBFE7061F28D557005B898D /* OmnidirectionalDepth.vert in Resources */ = {isa = PBXBuildFile; fileRef = CEBFE7011F28D54F005B898D /* OmnidirectionalDepth.vert */; };
@@ -535,6 +538,9 @@
 		CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+CustomFormatters.m"; sourceTree = "<group>"; };
 		CE7FAFC81EEBEFE5009FC6F5 /* NumericFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NumericFormatter.h; path = Common/NumericFormatter/NumericFormatter.h; sourceTree = "<group>"; };
 		CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NumericFormatter.m; path = Common/NumericFormatter/NumericFormatter.m; sourceTree = "<group>"; };
+		CEB0E9DF1F750D1F00552059 /* tank.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = tank.obj; sourceTree = "<group>"; };
+		CEB0E9E11F750DC600552059 /* tank_normal_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_normal_map.png; sourceTree = "<group>"; };
+		CEB0E9E21F751A3900552059 /* tank_texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_texture.png; sourceTree = "<group>"; };
 		CEB791C81F154E8500A67854 /* Event.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Event.inl; sourceTree = "<group>"; };
 		CEBFE7011F28D54F005B898D /* OmnidirectionalDepth.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalDepth.vert; sourceTree = "<group>"; };
 		CEBFE7021F28D54F005B898D /* OmnidirectionalDepth.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalDepth.frag; sourceTree = "<group>"; };
@@ -783,6 +789,7 @@
 		CE5322C41EBB3557005F49C2 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CEB0E9DF1F750D1F00552059 /* tank.obj */,
 				CE5322C51EBB3557005F49C2 /* bear-obj.obj */,
 				CE5322C61EBB3557005F49C2 /* chair.obj */,
 				CE5322C71EBB3557005F49C2 /* cube.obj */,
@@ -816,6 +823,8 @@
 		CE5322D91EBB3557005F49C2 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CEB0E9E21F751A3900552059 /* tank_texture.png */,
+				CEB0E9E11F750DC600552059 /* tank_normal_map.png */,
 				CE5322DA1EBB3557005F49C2 /* gun.jpg */,
 				CE5322DB1EBB3557005F49C2 /* hazard.png */,
 				CE5322DC1EBB3557005F49C2 /* wooden-crate.jpg */,
@@ -1551,6 +1560,7 @@
 			files = (
 				CE5322E81EBB3557005F49C2 /* cube.obj in Resources */,
 				CE5836261EB90E37009E2F61 /* DirectionalBlinnPhong.frag in Resources */,
+				CEB0E9E31F751B0B00552059 /* tank.obj in Resources */,
 				CE5322E61EBB3557005F49C2 /* bear-obj.obj in Resources */,
 				CE5836271EB90E37009E2F61 /* DirectionalBlinnPhong.vert in Resources */,
 				CE5322EF1EBB3557005F49C2 /* front.jpg in Resources */,
@@ -1559,6 +1569,8 @@
 				CE5836281EB90E37009E2F61 /* DirectionalDepth.frag in Resources */,
 				CE5836291EB90E37009E2F61 /* DirectionalDepth.vert in Resources */,
 				CEBFE7041F28D557005B898D /* OmnidirectionalDepth.frag in Resources */,
+				CEB0E9E41F751B2500552059 /* tank_texture.png in Resources */,
+				CEB0E9E51F751B2500552059 /* tank_normal_map.png in Resources */,
 				CE5322F81EBB3557005F49C2 /* top.jpg in Resources */,
 				CEBFE7061F28D557005B898D /* OmnidirectionalDepth.vert in Resources */,
 				CE5322FB1EBB3557005F49C2 /* wooden-crate.jpg in Resources */,

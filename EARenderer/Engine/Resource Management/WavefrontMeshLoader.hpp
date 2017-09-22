@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <unordered_map>
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -28,6 +29,7 @@ namespace EARenderer {
         std::vector<glm::vec4> mVertices;
         std::vector<glm::vec3> mNormals;
         std::vector<glm::vec3> mTexCoords;
+        std::unordered_map<int32_t, glm::vec3> mManualNormals;
         std::vector<SubMesh> *mSubMeshes;
         AxisAlignedBox3D *mBoundingBox;
         std::string mMeshName;

@@ -64,11 +64,14 @@
     
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
+    NSString *tankPath = [[NSBundle mainBundle] pathForResource:@"tank" ofType:@"obj"];
     NSString *boxTexturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
     NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
+    NSString *tankTexturePath = [[NSBundle mainBundle] pathForResource:@"tank_texture" ofType:@"png"];
+    NSString *tankNormalMapPath = [[NSBundle mainBundle] pathForResource:@"tank_normal_map" ofType:@"png"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spotPath.UTF8String)/*, std::string(paletPath.UTF8String)*/ }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(tankPath.UTF8String)/*, std::string(paletPath.UTF8String)*/ }, self.scene);
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));
@@ -84,7 +87,12 @@
     self.scene->pointLights().insert(pointLight);
     self.scene->setSkybox([self skybox]);
     
-    EARenderer::ID mat1ID = self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 }, { 1.0, 1.0, 1.0 }, { 0.2, 0.2, 0.2 }, 64, std::string(boxTexturePath.UTF8String)));
+    self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 },
+                                                        { 1.0, 1.0, 1.0 },
+                                                        { 0.4, 0.4, 0.4 },
+                                                        64,
+                                                        std::string(tankTexturePath.UTF8String),
+                                                        std::string(tankNormalMapPath.UTF8String)));
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
