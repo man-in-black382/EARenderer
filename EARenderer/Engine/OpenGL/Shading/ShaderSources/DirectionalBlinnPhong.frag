@@ -43,8 +43,7 @@ uniform bool uIsNormalMappingEnabled;
 // Functions
 
 vec3 fetchNormal() {
-    return oNormal;
-//    return uIsNormalMappingEnabled ? (oTBN * texture(uMaterial.normalMap, oTexCoords.xy).xyz) : oNormal;
+    return uIsNormalMappingEnabled ? (oTBN * texture(uMaterial.normalMap, oTexCoords.xy).xyz) : oNormal;
 }
 
 vec3 ambientColor() {

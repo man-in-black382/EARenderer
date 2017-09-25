@@ -65,6 +65,7 @@
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
     NSString *tankPath = [[NSBundle mainBundle] pathForResource:@"tank" ofType:@"obj"];
+    NSString *bearPath = [[NSBundle mainBundle] pathForResource:@"bear" ofType:@"obj"];
     NSString *boxTexturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
     NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
     NSString *tankTexturePath = [[NSBundle mainBundle] pathForResource:@"tank_texture" ofType:@"png"];

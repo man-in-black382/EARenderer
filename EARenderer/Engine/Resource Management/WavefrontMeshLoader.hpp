@@ -25,11 +25,15 @@ namespace EARenderer {
     
     class WavefrontMeshLoader {
     private:
+        /// Objects of such type contain averaged normal for a vertex and indices of vertices
+        /// in current submesh which are sharing this normal
+        using SmoothNormalData = std::pair<glm::vec3, std::vector<int32_t>>;
+        
         std::string mMeshPath;
         std::vector<glm::vec4> mVertices;
         std::vector<glm::vec3> mNormals;
         std::vector<glm::vec3> mTexCoords;
-        std::unordered_map<int32_t, glm::vec3> mManualNormals;
+        std::unordered_map<int32_t, SmoothNormalData> mManualNormals;
         std::vector<SubMesh> *mSubMeshes;
         AxisAlignedBox3D *mBoundingBox;
         std::string mMeshName;
@@ -43,7 +47,10 @@ namespace EARenderer {
 
         void processTriangle(const std::array<tinyobj::index_t, 3>& indices);
         void buildTangentSpace(const std::array<int32_t, 3>& positionIndices, const std::array<int32_t, 3>& texCoordIndices);
+        void calculateNormal(const std::array<int32_t, 3>& positionIndices);
         int32_t fixIndex(int32_t idx, int32_t n);
+        bool wasEmptyGroupOrObjectDetected();
+        void finalizeSubMesh(SubMesh& subMesh);
         
     public:
         WavefrontMeshLoader(const std::string& meshPath);

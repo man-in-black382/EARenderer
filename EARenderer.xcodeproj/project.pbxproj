@@ -34,7 +34,7 @@
 		CE5322E31EBB3557005F49C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322BF1EBB3557005F49C2 /* main.m */; };
 		CE5322E41EBB3557005F49C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C11EBB3557005F49C2 /* Assets.xcassets */; };
 		CE5322E51EBB3557005F49C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C21EBB3557005F49C2 /* Main.storyboard */; };
-		CE5322E61EBB3557005F49C2 /* bear-obj.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C51EBB3557005F49C2 /* bear-obj.obj */; };
+		CE5322E61EBB3557005F49C2 /* bear.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C51EBB3557005F49C2 /* bear.obj */; };
 		CE5322E71EBB3557005F49C2 /* chair.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C61EBB3557005F49C2 /* chair.obj */; };
 		CE5322E81EBB3557005F49C2 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C71EBB3557005F49C2 /* cube.obj */; };
 		CE5322E91EBB3557005F49C2 /* Deer.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5322C81EBB3557005F49C2 /* Deer.obj */; };
@@ -183,7 +183,7 @@
 		CE5322BF1EBB3557005F49C2 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE5322C11EBB3557005F49C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE5322C31EBB3557005F49C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CE5322C51EBB3557005F49C2 /* bear-obj.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "bear-obj.obj"; sourceTree = "<group>"; };
+		CE5322C51EBB3557005F49C2 /* bear.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = bear.obj; sourceTree = "<group>"; };
 		CE5322C61EBB3557005F49C2 /* chair.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = chair.obj; sourceTree = "<group>"; };
 		CE5322C71EBB3557005F49C2 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
 		CE5322C81EBB3557005F49C2 /* Deer.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Deer.obj; sourceTree = "<group>"; };
@@ -790,7 +790,7 @@
 			isa = PBXGroup;
 			children = (
 				CEB0E9DF1F750D1F00552059 /* tank.obj */,
-				CE5322C51EBB3557005F49C2 /* bear-obj.obj */,
+				CE5322C51EBB3557005F49C2 /* bear.obj */,
 				CE5322C61EBB3557005F49C2 /* chair.obj */,
 				CE5322C71EBB3557005F49C2 /* cube.obj */,
 				CE5322C81EBB3557005F49C2 /* Deer.obj */,
@@ -1561,7 +1561,7 @@
 				CE5322E81EBB3557005F49C2 /* cube.obj in Resources */,
 				CE5836261EB90E37009E2F61 /* DirectionalBlinnPhong.frag in Resources */,
 				CEB0E9E31F751B0B00552059 /* tank.obj in Resources */,
-				CE5322E61EBB3557005F49C2 /* bear-obj.obj in Resources */,
+				CE5322E61EBB3557005F49C2 /* bear.obj in Resources */,
 				CE5836271EB90E37009E2F61 /* DirectionalBlinnPhong.vert in Resources */,
 				CE5322EF1EBB3557005F49C2 /* front.jpg in Resources */,
 				CE5322F11EBB3557005F49C2 /* right.jpg in Resources */,

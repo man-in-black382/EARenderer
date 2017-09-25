@@ -12,7 +12,7 @@
 
 namespace EARenderer {
     
-#pragma mark - Callbacks
+#pragma mark - Callbacks (static)
     
     void WavefrontMeshLoader::vertexCallback(void *userData, float x, float y, float z, float w) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
@@ -59,13 +59,14 @@ namespace EARenderer {
     void WavefrontMeshLoader::groupCallback(void *userData, const char **names, int numNames) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
-        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
-        if (lastSubMesh && thisPtr->mSubMeshes->size() > 1) {
-            lastSubMesh->finalizeVertexBuffer();
+        if (thisPtr->wasEmptyGroupOrObjectDetected()) { return; };
+        
+        if (!thisPtr->mSubMeshes->empty()) {
+            thisPtr->finalizeSubMesh(thisPtr->mSubMeshes->back());
         }
         
         thisPtr->mSubMeshes->emplace_back();
-        lastSubMesh = &thisPtr->mSubMeshes->back();
+        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
         if (numNames) {
             lastSubMesh->setName(std::string(names[numNames - 1]));
         }
@@ -74,51 +75,52 @@ namespace EARenderer {
     void WavefrontMeshLoader::objectCallback(void *userData, const char *name) {
         WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
         
-        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
-        if (lastSubMesh && thisPtr->mSubMeshes->size() > 1) {
-            for (int32_t i = 0; i < lastSubMesh->vertices().size(); i++) {
-                auto& vertex = lastSubMesh->vertices()[i];
-                vertex.normal = glm::normalize(thisPtr->mManualNormals[i]);
-            }
-            lastSubMesh->finalizeVertexBuffer();
+        if (thisPtr->wasEmptyGroupOrObjectDetected()) { return; };
+        
+        if (!thisPtr->mSubMeshes->empty()) {
+            thisPtr->finalizeSubMesh(thisPtr->mSubMeshes->back());
         }
         
         thisPtr->mSubMeshes->emplace_back();
-        lastSubMesh = &thisPtr->mSubMeshes->back();
+        SubMesh* lastSubMesh = &thisPtr->mSubMeshes->back();
         if (name) {
             lastSubMesh->setName(std::string(name));
         }
     }
     
+#pragma mark - Private instance functions
+    
     void WavefrontMeshLoader::processTriangle(const std::array<tinyobj::index_t, 3>& indices) {
         std::array<int32_t, 3> positionIndices;
         std::array<int32_t, 3> texCoordIndices;
         bool shouldBuildTangent = false;
+        bool shouldCalculateNormal = false;
         
-        for (int32_t i = 0; i < 3; i++) {
+        const int32_t faceVertexCount = 3;
+        
+        SubMesh& lastSubMesh = mSubMeshes->back();
+        
+        for (int32_t i = 0; i < faceVertexCount; i++) {
             int32_t fixedVIdx = fixIndex(indices[i].vertex_index, static_cast<int32_t>(mVertices.size()));
             int32_t fixedNIdx = fixIndex(indices[i].normal_index, static_cast<int32_t>(mNormals.size()));
             int32_t fixedTIdx = fixIndex(indices[i].texcoord_index, static_cast<int32_t>(mTexCoords.size()));
             
-            bool isTexCoordPresent = fixedTIdx != 0;
-            bool isNormalPresent = fixedNIdx != 0;
-            
-            mSubMeshes->back().addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx],
+            bool isTexCoordPresent = indices[i].texcoord_index != 0;
+            bool isNormalPresent = indices[i].normal_index != 0;
+
+            lastSubMesh.addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx],
                                                             isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec3(),
                                                             isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
             
+            shouldCalculateNormal = !isNormalPresent;
             shouldBuildTangent = isTexCoordPresent && isNormalPresent;
             
             positionIndices[i] = fixedVIdx;
             texCoordIndices[i] = fixedTIdx;
         }
         
-        glm::vec3 edge1 = mVertices[positionIndices[1]] - mVertices[positionIndices[0]];
-        glm::vec3 edge2 = mVertices[positionIndices[2]] - mVertices[positionIndices[0]];
-        glm::vec3 surfaceNormal = glm::cross(edge1, edge2);
-        
-        for (auto positionIndex : positionIndices) {
-            mManualNormals[positionIndex] += surfaceNormal;
+        if (shouldCalculateNormal) {
+            calculateNormal(positionIndices);
         }
         
         if (shouldBuildTangent) {
@@ -146,10 +148,28 @@ namespace EARenderer {
         
         // Update tangent vectors for latest vertices
         auto size = mSubMeshes->back().vertices().size();
-        for (auto i = 1; i <= 3; i++) {
+        for (int32_t i = 1; i <= 3; i++) {
             auto& vertex = mSubMeshes->back().vertices()[size - i];
             vertex.tangent = tangent;
             vertex.bitangent = bitangent;
+        }
+    }
+    
+    void WavefrontMeshLoader::calculateNormal(const std::array<int32_t, 3>& positionIndices) {
+        glm::vec3 edge1 = mVertices[positionIndices[1]] - mVertices[positionIndices[0]];
+        glm::vec3 edge2 = mVertices[positionIndices[2]] - mVertices[positionIndices[0]];
+        glm::vec3 surfaceNormal = glm::cross(edge1, edge2);
+        
+        const int32_t faceVertexCount = 3;
+        
+        SubMesh& lastSubMesh = mSubMeshes->back();
+        
+        for (int32_t i = 0; i < faceVertexCount; i++) {
+            auto& normalData = mManualNormals[positionIndices[i]];
+            normalData.first += surfaceNormal;
+            // Indicate that [submeshVertexIndex] vertex should receive averaged normal afterwards (normalData.first)
+            int32_t submeshVertexIndex = static_cast<int32_t>(lastSubMesh.vertices().size()) - (faceVertexCount - i);
+            normalData.second.emplace_back(submeshVertexIndex);
         }
     }
     
@@ -157,6 +177,27 @@ namespace EARenderer {
         if (idx > 0) return idx - 1;
         if (idx == 0) return 0;
         return n + idx;  // negative value = relative
+    }
+    
+    bool WavefrontMeshLoader::wasEmptyGroupOrObjectDetected() {
+        if (mSubMeshes->size() < 1) { return false; };
+        auto lastSubmeshIdx = mSubMeshes->size() - 1;
+        return mSubMeshes->at(lastSubmeshIdx).vertices().size() == 0;
+    }
+    
+    void WavefrontMeshLoader::finalizeSubMesh(SubMesh& subMesh) {
+        // Check if manual normal calculation took place in triangle callback
+        if (mManualNormals.size()) {
+            for (auto& keyObjectPair : mManualNormals) {
+                glm::vec3 normal = glm::normalize(keyObjectPair.second.first);
+                std::vector<int32_t>& vertexIndices = keyObjectPair.second.second;
+                for (auto submeshVertexIdx : vertexIndices) {
+                    subMesh.vertices()[submeshVertexIdx].normal = normal;
+                }
+            }
+            mManualNormals.clear();
+        }
+        subMesh.finalizeVertexBuffer();
     }
     
 #pragma mark - Lifecycle
@@ -170,7 +211,6 @@ namespace EARenderer {
     
     void WavefrontMeshLoader::load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D& boundingBox) {
         mSubMeshes = &subMeshes;
-//        mSubMeshes->emplace_back();
         mBoundingBox = &boundingBox;
         mBoundingBox->min = glm::vec3(std::numeric_limits<float>::max());
         mBoundingBox->max = glm::vec3(-std::numeric_limits<float>::max());
@@ -193,7 +233,8 @@ namespace EARenderer {
         
         bool ret = tinyobj::LoadObjWithCallback(ifs, cb, this, nullptr, &err);
         meshName = mMeshName;
-        mSubMeshes->back().finalizeVertexBuffer();
+        
+        finalizeSubMesh(mSubMeshes->back());
         
         if (!err.empty()) {
             std::cerr << err << std::endl;
