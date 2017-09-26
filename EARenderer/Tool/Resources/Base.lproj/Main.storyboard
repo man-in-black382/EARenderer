@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13168.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13168.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13196"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
         <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
@@ -978,7 +978,7 @@
                                     <outlet property="meshesTab" destination="msi-lg-5I7" id="I2K-A6-CZB"/>
                                 </connections>
                             </tabView>
-                            <openGLView depthSize="24bit" antiAliasingType="multisample" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
+                            <openGLView depthSize="24bit" antiAliasingType="multisample" rendererType="accelerated" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
                                 <rect key="frame" x="250" y="0.0" width="772" height="474"/>
                             </openGLView>
                             <tabView type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="o3E-Ow-U6b" customClass="SceneEditorTabView">
@@ -1625,6 +1625,41 @@
                                     <outlet property="meshTab" destination="Q6w-3f-6br" id="RYN-zC-3SB"/>
                                 </connections>
                             </tabView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="dAA-ol-bed" userLabel="FPS View" customClass="FPSView">
+                                <rect key="frame" x="250" y="414" width="150" height="60"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h5x-cL-Esw" userLabel="Frames Label">
+                                        <rect key="frame" x="13" y="24" width="139" height="36"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="60" id="ywv-Q3-bSW">
+                                            <font key="font" metaFont="system" size="30"/>
+                                            <color key="textColor" red="1" green="0.34414661768010202" blue="0.22862274116145354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c69-ME-75j" userLabel="Time Label">
+                                        <rect key="frame" x="13" y="0.0" width="139" height="24"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="33 ms" id="94v-Q1-dYw">
+                                            <font key="font" metaFont="system" size="20"/>
+                                            <color key="textColor" red="0.59873392353908639" green="1" blue="0.38061242002964812" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="c69-ME-75j" secondAttribute="trailing" id="C8C-vg-WT6"/>
+                                    <constraint firstItem="h5x-cL-Esw" firstAttribute="leading" secondItem="dAA-ol-bed" secondAttribute="leading" constant="15" id="E0u-L9-Edj"/>
+                                    <constraint firstAttribute="bottom" secondItem="c69-ME-75j" secondAttribute="bottom" id="dSc-OE-cjM"/>
+                                    <constraint firstItem="c69-ME-75j" firstAttribute="leading" secondItem="dAA-ol-bed" secondAttribute="leading" constant="15" id="ijE-2N-r8T"/>
+                                    <constraint firstAttribute="trailing" secondItem="h5x-cL-Esw" secondAttribute="trailing" id="klr-Ru-1p4"/>
+                                    <constraint firstAttribute="width" constant="150" id="m7B-GW-l3y"/>
+                                    <constraint firstItem="c69-ME-75j" firstAttribute="top" secondItem="h5x-cL-Esw" secondAttribute="bottom" id="qiX-yQ-i2M"/>
+                                    <constraint firstItem="h5x-cL-Esw" firstAttribute="top" secondItem="dAA-ol-bed" secondAttribute="top" id="tUH-eN-9hM"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="framesTextField" destination="h5x-cL-Esw" id="i57-0v-2bZ"/>
+                                    <outlet property="timeTextField" destination="c69-ME-75j" id="eEF-yr-XRI"/>
+                                </connections>
+                            </customView>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="XJn-Te-qHz" secondAttribute="bottom" id="1Xk-XL-454"/>
@@ -1632,14 +1667,17 @@
                             <constraint firstAttribute="bottom" secondItem="mBd-pU-WrJ" secondAttribute="bottom" id="HIY-RM-ArG"/>
                             <constraint firstAttribute="trailing" secondItem="o3E-Ow-U6b" secondAttribute="trailing" id="IgX-3b-4ft"/>
                             <constraint firstItem="XJn-Te-qHz" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="Ox0-ol-3Hu"/>
+                            <constraint firstItem="dAA-ol-bed" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="QN8-wN-eEE"/>
                             <constraint firstItem="mBd-pU-WrJ" firstAttribute="leading" secondItem="XJn-Te-qHz" secondAttribute="trailing" id="TNE-eg-CHC"/>
                             <constraint firstItem="XJn-Te-qHz" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="YbW-yD-GOY"/>
+                            <constraint firstItem="dAA-ol-bed" firstAttribute="leading" secondItem="XJn-Te-qHz" secondAttribute="trailing" id="abm-8v-tsD"/>
                             <constraint firstItem="o3E-Ow-U6b" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="l2h-R2-7uT"/>
                             <constraint firstItem="mBd-pU-WrJ" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="rLd-hC-4MB"/>
                             <constraint firstAttribute="bottom" secondItem="o3E-Ow-U6b" secondAttribute="bottom" id="sAS-CS-ayj"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="fpsView" destination="dAA-ol-bed" id="aNj-WN-ekX"/>
                         <outlet property="openGLView" destination="mBd-pU-WrJ" id="YmD-TD-ygH"/>
                         <outlet property="sceneEditorTabView" destination="o3E-Ow-U6b" id="XVR-fm-C2v"/>
                         <outlet property="sceneObjectsTabView" destination="XJn-Te-qHz" id="dP7-Po-qhA"/>

@@ -11,5 +11,6 @@
 @interface NSNumberFormatter (CustomFormatters)
 
 + (NSNumberFormatter *)floatInputFormatter;
++ (NSNumberFormatter *)fpsFormatter;
 
 @end

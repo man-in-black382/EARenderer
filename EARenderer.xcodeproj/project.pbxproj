@@ -26,6 +26,9 @@
 		CE1B346A1F29036100A8D4BA /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1B34681F29036100A8D4BA /* FileManager.cpp */; };
 		CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE216F531EFA853B002D12AE /* Vertex1P3.cpp */; };
 		CE2A6E781F2C9777000C3B72 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE2E8FF1F2C95D300B19A6A /* GLSLOmnidirectionalBlinnPhong.cpp */; };
+		CE3064B61F7A428A008943F2 /* FPSView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE3064B51F7A428A008943F2 /* FPSView.mm */; };
+		CE3064B91F7A4405008943F2 /* NSColor+ApplicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3064B81F7A4405008943F2 /* NSColor+ApplicationColors.m */; };
+		CE3064BD1F7A4EB6008943F2 /* FrameMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE3064BB1F7A4EB6008943F2 /* FrameMeter.cpp */; };
 		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
 		CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */; };
 		CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */; };
@@ -170,6 +173,12 @@
 		CE216F541EFA853B002D12AE /* Vertex1P3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P3.hpp; sourceTree = "<group>"; };
 		CE250FB51F2B7757002C1C6D /* OmnidirectionalBlinnPhong.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalBlinnPhong.frag; sourceTree = "<group>"; };
 		CE250FB61F2B7757002C1C6D /* OmnidirectionalBlinnPhong.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalBlinnPhong.vert; sourceTree = "<group>"; };
+		CE3064B41F7A428A008943F2 /* FPSView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FPSView.h; sourceTree = "<group>"; };
+		CE3064B51F7A428A008943F2 /* FPSView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FPSView.mm; sourceTree = "<group>"; };
+		CE3064B71F7A4405008943F2 /* NSColor+ApplicationColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+ApplicationColors.h"; sourceTree = "<group>"; };
+		CE3064B81F7A4405008943F2 /* NSColor+ApplicationColors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSColor+ApplicationColors.m"; sourceTree = "<group>"; };
+		CE3064BB1F7A4EB6008943F2 /* FrameMeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameMeter.cpp; sourceTree = "<group>"; };
+		CE3064BC1F7A4EB6008943F2 /* FrameMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FrameMeter.hpp; sourceTree = "<group>"; };
 		CE44B8991EF3FF4400CB690C /* Rect2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect2D.cpp; sourceTree = "<group>"; };
 		CE44B89A1EF3FF4400CB690C /* Rect2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Rect2D.hpp; sourceTree = "<group>"; };
 		CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Size2D.cpp; sourceTree = "<group>"; };
@@ -728,6 +737,19 @@
 			name = FlippedClipView;
 			sourceTree = "<group>";
 		};
+		CE3064BA1F7A4E85008943F2 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CE1B34681F29036100A8D4BA /* FileManager.cpp */,
+				CE1B34691F29036100A8D4BA /* FileManager.hpp */,
+				CED4A32E1F388A69003AA8BD /* Log.cpp */,
+				CED4A32F1F388A69003AA8BD /* Log.hpp */,
+				CE3064BB1F7A4EB6008943F2 /* FrameMeter.cpp */,
+				CE3064BC1F7A4EB6008943F2 /* FrameMeter.hpp */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		CE522BD31E4DDF700063470C = {
 			isa = PBXGroup;
 			children = (
@@ -867,6 +889,8 @@
 				CEE971B11EE5568F000C20DD /* Scene Editing */,
 				CE5323071EBB360B005F49C2 /* SceneGLView.h */,
 				CE5323081EBB360B005F49C2 /* SceneGLView.mm */,
+				CE3064B41F7A428A008943F2 /* FPSView.h */,
+				CE3064B51F7A428A008943F2 /* FPSView.mm */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -883,6 +907,7 @@
 		CE5834451EB9031B009E2F61 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				CE3064BA1F7A4E85008943F2 /* Utils */,
 				CEB791C61F154E6800A67854 /* EventSystem */,
 				CEE0F71E1EED7B800048AD01 /* Input */,
 				CE5834461EB9031B009E2F61 /* Containers */,
@@ -1358,6 +1383,8 @@
 			children = (
 				CE7B07181EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.h */,
 				CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */,
+				CE3064B71F7A4405008943F2 /* NSColor+ApplicationColors.h */,
+				CE3064B81F7A4405008943F2 /* NSColor+ApplicationColors.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1410,10 +1437,6 @@
 				CE6651DC1F0284D800620B65 /* BitwiseEnum.hpp */,
 				CEE147DA1F10D53900FF1DE5 /* Color.cpp */,
 				CEE147DB1F10D53900FF1DE5 /* Color.hpp */,
-				CE1B34681F29036100A8D4BA /* FileManager.cpp */,
-				CE1B34691F29036100A8D4BA /* FileManager.hpp */,
-				CED4A32E1F388A69003AA8BD /* Log.cpp */,
-				CED4A32F1F388A69003AA8BD /* Log.hpp */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -1619,6 +1642,7 @@
 				CE0357DF1F1779CA00BD449A /* Transformation.cpp in Sources */,
 				CEF5578B1EEC1414005FA16E /* NumericTextFieldManager.m in Sources */,
 				CE1737991F07EFA700D7871F /* Parallelogram3D.cpp in Sources */,
+				CE3064B61F7A428A008943F2 /* FPSView.mm in Sources */,
 				CEE0F7211EED7BD30048AD01 /* Input.cpp in Sources */,
 				CE2A6E781F2C9777000C3B72 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */,
 				CEC3B0591F3321EB00A535AE /* FrustumCascades.cpp in Sources */,
@@ -1645,6 +1669,7 @@
 				CE0357D61F1779CA00BD449A /* Camera.cpp in Sources */,
 				CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */,
 				CE0357D91F1779CA00BD449A /* Material.cpp in Sources */,
+				CE3064BD1F7A4EB6008943F2 /* FrameMeter.cpp in Sources */,
 				CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */,
 				CEF6C2A01EE6CA58003818D3 /* SceneObjectMarker.mm in Sources */,
 				CE5322E31EBB3557005F49C2 /* main.m in Sources */,
@@ -1656,6 +1681,7 @@
 				CE5835E41EB9031C009E2F61 /* GLNamedObject.cpp in Sources */,
 				CE0357D81F1779CA00BD449A /* Light.cpp in Sources */,
 				CE5835EB1EB9031C009E2F61 /* GLSLDirectionalBlinnPhong.cpp in Sources */,
+				CE3064B91F7A4405008943F2 /* NSColor+ApplicationColors.m in Sources */,
 				CEE8DB471F375A45001BCC8C /* GLTexture.cpp in Sources */,
 				CE0BE55F1EF0038E001B0BCF /* DefaultRenderComponentsProvider.mm in Sources */,
 				CE0357DB1F1779CA00BD449A /* Scene.cpp in Sources */,

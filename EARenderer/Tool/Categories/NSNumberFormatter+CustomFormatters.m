@@ -21,4 +21,16 @@
     return formatter;
 }
 
++ (NSNumberFormatter *)fpsFormatter
+{
+    static NSNumberFormatter *formatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSNumberFormatter alloc] init];
+        formatter.numberStyle = NSNumberFormatterDecimalStyle;
+        formatter.maximumFractionDigits = 0;
+    });
+    return formatter;
+}
+
 @end

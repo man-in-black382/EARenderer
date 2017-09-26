@@ -10,6 +10,7 @@
 #import "SceneGLView.h"
 #import "SceneEditorTabView.h"
 #import "SceneObjectsTabView.h"
+#import "FPSView.h"
 
 #import "DefaultRenderComponentsProvider.h"
 
@@ -21,12 +22,14 @@
 #import "SceneInteractor.hpp"
 #import "Cameraman.hpp"
 #import "FileManager.hpp"
+#import "FrameMeter.hpp"
 
 #import "GLLayeredTexture.hpp"
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
 @property (weak, nonatomic) IBOutlet SceneGLView *openGLView;
+@property (weak, nonatomic) IBOutlet FPSView *fpsView;
 @property (weak, nonatomic) IBOutlet SceneObjectsTabView *sceneObjectsTabView;
 @property (weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
 
@@ -37,6 +40,7 @@
 @property (assign, nonatomic) EARenderer::DefaultRenderComponentsProviding *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
 @property (assign, nonatomic) EARenderer::Cameraman *cameraman;
+@property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 
 @end
 
@@ -59,6 +63,7 @@
     EARenderer::FileManager::shared().setShaderSourceFolderPath([self shadersDirectory]);
     
     self.scene = new EARenderer::Scene();
+    self.frameMeter = new EARenderer::FrameMeter();
     
     // Temporary
     
@@ -117,6 +122,8 @@
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
     self.axesRenderer->render();
+    
+    self.fpsView.frameCharacteristics = self.frameMeter->tick(200);
 }
 
 #pragma mark - MeshListTabViewItemDelegate

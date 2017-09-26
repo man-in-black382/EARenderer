@@ -96,13 +96,16 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
     @autoreleasepool {
         dispatch_sync(dispatch_get_main_queue(), ^{
             SceneGLView *view = (__bridge SceneGLView*)displayLinkContext;
-            [view.openGLContext makeCurrentContext];
-            [view.delegate glViewIsReadyToRenderFrame:view];
-            CGLFlushDrawable(view.openGLContext.CGLContextObj); // This does glFlush() for you.
+            [view setNeedsDisplay:YES];
         });
-        
         return kCVReturnSuccess;
     }
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [self.delegate glViewIsReadyToRenderFrame:self];
+    CGLFlushDrawable(self.openGLContext.CGLContextObj);
 }
 
 #pragma mark - Layout
