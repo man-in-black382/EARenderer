@@ -32,6 +32,8 @@
 		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
 		CE44B89E1EF3FF4B00CB690C /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89C1EF3FF4B00CB690C /* Size2D.cpp */; };
 		CE44B8A11EF3FF5300CB690C /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */; };
+		CE4B27651F83975D0026D104 /* brickwork_normal_map.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4B27631F83970B0026D104 /* brickwork_normal_map.jpg */; };
+		CE4B27661F83975D0026D104 /* brickwork_texture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4B27641F83970B0026D104 /* brickwork_texture.jpg */; };
 		CE5322E01EBB3557005F49C2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322B61EBB3557005F49C2 /* AppDelegate.m */; };
 		CE5322E21EBB3557005F49C2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5322BE1EBB3557005F49C2 /* Info.plist */; };
 		CE5322E31EBB3557005F49C2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5322BF1EBB3557005F49C2 /* main.m */; };
@@ -185,6 +187,8 @@
 		CE44B89D1EF3FF4B00CB690C /* Size2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size2D.hpp; sourceTree = "<group>"; };
 		CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
 		CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxisAlignedBox3D.hpp; sourceTree = "<group>"; };
+		CE4B27631F83970B0026D104 /* brickwork_normal_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = brickwork_normal_map.jpg; sourceTree = "<group>"; };
+		CE4B27641F83970B0026D104 /* brickwork_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = brickwork_texture.jpg; sourceTree = "<group>"; };
 		CE522BDC1E4DDF700063470C /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE5322B51EBB3557005F49C2 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CE5322B61EBB3557005F49C2 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -845,6 +849,8 @@
 		CE5322D91EBB3557005F49C2 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CE4B27631F83970B0026D104 /* brickwork_normal_map.jpg */,
+				CE4B27641F83970B0026D104 /* brickwork_texture.jpg */,
 				CEB0E9E21F751A3900552059 /* tank_texture.png */,
 				CEB0E9E11F750DC600552059 /* tank_normal_map.png */,
 				CE5322DA1EBB3557005F49C2 /* gun.jpg */,
@@ -1584,6 +1590,7 @@
 				CE5322E81EBB3557005F49C2 /* cube.obj in Resources */,
 				CE5836261EB90E37009E2F61 /* DirectionalBlinnPhong.frag in Resources */,
 				CEB0E9E31F751B0B00552059 /* tank.obj in Resources */,
+				CE4B27661F83975D0026D104 /* brickwork_texture.jpg in Resources */,
 				CE5322E61EBB3557005F49C2 /* bear.obj in Resources */,
 				CE5836271EB90E37009E2F61 /* DirectionalBlinnPhong.vert in Resources */,
 				CE5322EF1EBB3557005F49C2 /* front.jpg in Resources */,
@@ -1615,6 +1622,7 @@
 				CE5322EA1EBB3557005F49C2 /* gun.obj in Resources */,
 				CE5322F91EBB3557005F49C2 /* gun.jpg in Resources */,
 				CE5322EB1EBB3557005F49C2 /* palet.obj in Resources */,
+				CE4B27651F83975D0026D104 /* brickwork_normal_map.jpg in Resources */,
 				CE5322E21EBB3557005F49C2 /* Info.plist in Resources */,
 				CE5322F61EBB3557005F49C2 /* skyboxRight.png in Resources */,
 				CE58362E1EB90E37009E2F61 /* Skybox.frag in Resources */,

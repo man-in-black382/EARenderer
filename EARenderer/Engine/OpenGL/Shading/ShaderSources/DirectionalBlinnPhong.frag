@@ -13,8 +13,6 @@ out vec4 outputFragColor;
 in vec3 oNormal;
 in vec3 oToCamera;
 in vec3 oTexCoords;
-in vec3 oTangent;
-in vec3 oBitangent;
 in vec4 oPosInLightSpace[kMaxCascades];
 in vec4 oPosInCameraSpace;
 in mat3 oTBN;
@@ -43,7 +41,12 @@ uniform bool uIsNormalMappingEnabled;
 // Functions
 
 vec3 fetchNormal() {
-    return uIsNormalMappingEnabled ? (oTBN * texture(uMaterial.normalMap, oTexCoords.xy).xyz) : oNormal;
+    if (!uIsNormalMappingEnabled) {
+        return oNormal;
+    }
+
+    vec3 normal = texture(uMaterial.normalMap, oTexCoords.xy).xyz;
+    return normalize(oTBN * (normal * 2.0 - 1.0));
 }
 
 vec3 ambientColor() {
@@ -107,22 +110,23 @@ float shadow(in vec3 N, in vec3 L)
     }
     shadow /= 36.0;
     return shadow;
+    
+//    float pcfDepth = texture(uShadowMaps, vec3(projCoords.xy, shadowCascadeIndex)).r;
+//    float unbiasedDepth = currentDepth - bias;
+//    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
 }
 
 void main() {
     // Invert light direction because we need TO light vector, not FROM light vector to perform Half vector computations
     vec3 L = normalize(-uLightDirection);
     vec3 V = normalize(oToCamera);
-    vec3 N = normalize(oNormal);
+    vec3 N = normalize(fetchNormal());
 
     vec3 ambientColor = ambientColor();
     vec3 diffuseColor = diffuseColor(N, L);
     vec3 specularColor = specularColor(N, L, V);
-
-//    outputFragColor = vec4(oNormal, 1.0);
     
     vec4 contributions = vec4((ambientColor + (1.0 - shadow(N, L)) * (diffuseColor + specularColor)), 1.0);
-//    outputFragColor = texture(uMaterial.diffuseMap, oTexCoords.st);
     vec4 textureColor = texture(uMaterial.diffuseMap, oTexCoords.st);
     outputFragColor = contributions * textureColor + uHighlightColor;
 }

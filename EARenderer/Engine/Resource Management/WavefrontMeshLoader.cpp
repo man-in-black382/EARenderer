@@ -113,7 +113,7 @@ namespace EARenderer {
                                                             isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
             
             shouldCalculateNormal = !isNormalPresent;
-            shouldBuildTangent = isTexCoordPresent && isNormalPresent;
+            shouldBuildTangent = isTexCoordPresent;
             
             positionIndices[i] = fixedVIdx;
             texCoordIndices[i] = fixedTIdx;

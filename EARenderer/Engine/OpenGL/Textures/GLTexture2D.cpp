@@ -28,7 +28,7 @@ namespace EARenderer {
     
     GLTexture2D::GLTexture2D(const std::string& fileName)
     :
-    GLTexture(GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         int32_t width = 0;
         int32_t height = 0;
@@ -40,6 +40,8 @@ namespace EARenderer {
         mSize = Size2D(width, height);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
         stbi_image_free(pixelData);
+        
+        glGenerateMipmap(GL_TEXTURE_2D);
     };
  
 }

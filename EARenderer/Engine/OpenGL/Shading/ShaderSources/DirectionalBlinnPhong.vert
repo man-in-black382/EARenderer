@@ -17,10 +17,8 @@ layout (location = 4) in vec3 iBitangent;
 uniform mat4 uModelMat;
 uniform mat4 uNormalMat;
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
-
-uniform vec3 uCameraPosition;
 uniform mat4 uCameraSpaceMat;
-
+uniform vec3 uCameraPosition;
 uniform int uNumberOfCascades;
 
 // Output
@@ -28,11 +26,29 @@ uniform int uNumberOfCascades;
 out vec3 oNormal;
 out vec3 oToCamera;
 out vec3 oTexCoords;
-out vec3 oTangent;
-out vec3 oBitangent;
 out vec4 oPosInLightSpace[kMaxCascades];
 out vec4 oPosInCameraSpace;
 out mat3 oTBN;
+
+// Functions
+
+// Build TBN matrix as-is
+mat3 TBN() {
+    vec3 T = normalize(uNormalMat * vec4(iTangent, 0.0)).xyz;
+    vec3 B = normalize(uNormalMat * vec4(iBitangent, 0.0)).xyz;
+    vec3 N = normalize(uNormalMat * vec4(iNormal, 0.0)).xyz;
+    return mat3(T, B, N);
+}
+
+// Build TBN matrix and make sure it's orthogonal by using Gram-Schmidt's approach
+mat3 orthogonalTBN() {
+    vec3 T = normalize(uNormalMat * vec4(iTangent, 0.0)).xyz;
+    vec3 N = normalize(uNormalMat * vec4(iNormal, 0.0)).xyz;
+    // re-orthogonalize T with respect to N
+    T = normalize(T - dot(T, N) * N);
+    vec3 B = cross(N, T);
+    return mat3(T, B, N);
+}
 
 void main() {
     vec4 worldPosition = uModelMat * iPosition;
@@ -41,11 +57,9 @@ void main() {
     oTexCoords = vec3(iTexCoords.s, 1.0 - iTexCoords.t, iTexCoords.r);
     oToCamera = normalize(uCameraPosition - worldPosition.xyz);
     oPosInCameraSpace = uCameraSpaceMat * worldPosition;
-    
-    oTangent = normalize(uNormalMat * vec4(iTangent, 0.0)).xyz;
-    oBitangent = normalize(uNormalMat * vec4(iBitangent, 0.0)).xyz;
-    oNormal = normalize(uNormalMat * vec4(iNormal, 0.0)).xyz;
-    oTBN = mat3(oTangent, oBitangent, oNormal);
+
+    oTBN = orthogonalTBN();
+    oNormal = iNormal;
     
     for (int i = 0; i < uNumberOfCascades; ++i) {
         oPosInLightSpace[i] = uLightSpaceMatrices[i] * worldPosition;

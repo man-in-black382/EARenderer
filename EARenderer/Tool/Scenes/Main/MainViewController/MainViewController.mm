@@ -67,6 +67,7 @@
     
     // Temporary
     
+    NSString *cubePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
     NSString *tankPath = [[NSBundle mainBundle] pathForResource:@"tank" ofType:@"obj"];
@@ -75,11 +76,13 @@
     NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
     NSString *tankTexturePath = [[NSBundle mainBundle] pathForResource:@"tank_texture" ofType:@"png"];
     NSString *tankNormalMapPath = [[NSBundle mainBundle] pathForResource:@"tank_normal_map" ofType:@"png"];
+    NSString *bricksTexturePath = [[NSBundle mainBundle] pathForResource:@"brickwork_texture" ofType:@"jpg"];
+    NSString *bricksNormalMapPath = [[NSBundle mainBundle] pathForResource:@"brickwork_normal_map" ofType:@"jpg"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(tankPath.UTF8String)/*, std::string(paletPath.UTF8String)*/ }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(cubePath.UTF8String), std::string(paletPath.UTF8String) }, self.scene);
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));
     camera->lookAt(glm::vec3(0, 0, 0));
     
@@ -97,8 +100,8 @@
                                                         { 1.0, 1.0, 1.0 },
                                                         { 0.4, 0.4, 0.4 },
                                                         64,
-                                                        std::string(tankTexturePath.UTF8String),
-                                                        std::string(tankNormalMapPath.UTF8String)));
+                                                        std::string(bricksTexturePath.UTF8String),
+                                                        std::string(bricksNormalMapPath.UTF8String)));
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
