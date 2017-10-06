@@ -98,6 +98,8 @@
 		CE6E19C31F26149E00546364 /* GLDepthTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE6E19C11F26149E00546364 /* GLDepthTextureCubemap.cpp */; };
 		CE74EB451F0F84AA00D598D7 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE07DFEA1F0F6FAA002CB321 /* AxesSystem.cpp */; };
 		CE7FAFCA1EEBEFE5009FC6F5 /* NumericFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */; };
+		CE8AFC251F878C0200D846D7 /* CookTorrance.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE8AFC231F878C0100D846D7 /* CookTorrance.frag */; };
+		CE8AFC261F878C0200D846D7 /* CookTorrance.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE8AFC241F878C0100D846D7 /* CookTorrance.vert */; };
 		CEB0E9E31F751B0B00552059 /* tank.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9DF1F750D1F00552059 /* tank.obj */; };
 		CEB0E9E41F751B2500552059 /* tank_texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E21F751A3900552059 /* tank_texture.png */; };
 		CEB0E9E51F751B2500552059 /* tank_normal_map.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E11F750DC600552059 /* tank_normal_map.png */; };
@@ -551,6 +553,8 @@
 		CE7B07191EF6B0AC002A0C21 /* NSNumberFormatter+CustomFormatters.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSNumberFormatter+CustomFormatters.m"; sourceTree = "<group>"; };
 		CE7FAFC81EEBEFE5009FC6F5 /* NumericFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NumericFormatter.h; path = Common/NumericFormatter/NumericFormatter.h; sourceTree = "<group>"; };
 		CE7FAFC91EEBEFE5009FC6F5 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = NumericFormatter.m; path = Common/NumericFormatter/NumericFormatter.m; sourceTree = "<group>"; };
+		CE8AFC231F878C0100D846D7 /* CookTorrance.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.frag; sourceTree = "<group>"; };
+		CE8AFC241F878C0100D846D7 /* CookTorrance.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.vert; sourceTree = "<group>"; };
 		CEB0E9DF1F750D1F00552059 /* tank.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = tank.obj; sourceTree = "<group>"; };
 		CEB0E9E11F750DC600552059 /* tank_normal_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_normal_map.png; sourceTree = "<group>"; };
 		CEB0E9E21F751A3900552059 /* tank_texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_texture.png; sourceTree = "<group>"; };
@@ -994,6 +998,8 @@
 		CE5834911EB9031B009E2F61 /* ShaderSources */ = {
 			isa = PBXGroup;
 			children = (
+				CE8AFC231F878C0100D846D7 /* CookTorrance.frag */,
+				CE8AFC241F878C0100D846D7 /* CookTorrance.vert */,
 				CE250FB51F2B7757002C1C6D /* OmnidirectionalBlinnPhong.frag */,
 				CE250FB61F2B7757002C1C6D /* OmnidirectionalBlinnPhong.vert */,
 				CE5834921EB9031B009E2F61 /* DirectionalBlinnPhong.frag */,
@@ -1591,6 +1597,7 @@
 				CE5836261EB90E37009E2F61 /* DirectionalBlinnPhong.frag in Resources */,
 				CEB0E9E31F751B0B00552059 /* tank.obj in Resources */,
 				CE4B27661F83975D0026D104 /* brickwork_texture.jpg in Resources */,
+				CE8AFC251F878C0200D846D7 /* CookTorrance.frag in Resources */,
 				CE5322E61EBB3557005F49C2 /* bear.obj in Resources */,
 				CE5836271EB90E37009E2F61 /* DirectionalBlinnPhong.vert in Resources */,
 				CE5322EF1EBB3557005F49C2 /* front.jpg in Resources */,
@@ -1616,6 +1623,7 @@
 				CE5322EC1EBB3557005F49C2 /* spot.obj in Resources */,
 				CE58362D1EB90E37009E2F61 /* GenericGeometry.vert in Resources */,
 				CE5322EE1EBB3557005F49C2 /* bottom.jpg in Resources */,
+				CE8AFC261F878C0200D846D7 /* CookTorrance.vert in Resources */,
 				CE5322F21EBB3557005F49C2 /* skyboxBack.png in Resources */,
 				CE5322FA1EBB3557005F49C2 /* hazard.png in Resources */,
 				CEC492021F2CA8D100DEA92B /* OmnidirectionalBlinnPhong.vert in Resources */,
