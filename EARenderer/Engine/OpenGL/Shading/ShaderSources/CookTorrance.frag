@@ -31,14 +31,14 @@ struct Spotlight {
     vec3 position;
     vec3 direction;
     float cutOffAngleCos;
-}
+};
 
 struct Material {
-    uniform vec3 albedo;
-    uniform float metallic;
-    uniform float roughness;
-    uniform float AO; // Ambient occlusion
-}
+    vec3 albedo;
+    float metallic;
+    float roughness;
+    float AO; // Ambient occlusion
+};
 
 uniform vec3 uCameraPosition;
 
@@ -54,7 +54,7 @@ uniform Material uMaterial;
 // Describes the ratio of light that gets reflected over the light that gets refracted,
 // which varies over the angle we're looking at a surface.
 //
-vec3 FresnelSchlick(vec3 N, vec3 H) {
+vec3 FresnelSchlick(vec3 V, vec3 H) {
     // F0 - base reflectivity of a surface, a.k.a. surface reflection at zero incidence
     // or how much the surface reflects if looking directly at the surface
     vec3 F0 = vec3(0.04); // 0.04 is a commonly used constant for dielectrics
@@ -103,19 +103,30 @@ float GeometrySmith(float NdotL, float NdotV, float roughness) {
     return ggx1 * ggx2;
 }
 
-float CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness) {
+vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 radiance) {
     float NdotL     = max(dot(N, L), 0.0);
     float NdotV     = max(dot(N, V), 0.0);
     
     float NDF       = NormalDistributionGGX(N, H, roughness);
     float G         = GeometrySmith(NdotL, NdotV, roughness);
-    vec3 F          = FresnelSchlick(N, H);
+    vec3 F          = FresnelSchlick(V, H);
 
     vec3 nom        = NDF * G * F;
     float denom     = 4.0 * NdotL * NdotV + 0.001; // Add 0.001 to prevent division by 0
     vec3 specular   = nom / denom;
     
+    vec3 Ks         = F;                // Specular (reflected) portion
+    vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
     
+    Kd              *= 1.0 - uMaterial.metallic;  // This will turn diffuse component of metallic surfaces to 0
+    
+    return (Kd * uMaterial.albedo / PI + specular) * radiance * NdotL;
+}
+
+vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
+    vec3 mappedColor = color / (color + vec3(1.0));
+    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.0));
+    return gammaCorrectedColor;
 }
 
 vec3 PointLightRadiance(vec3 N) {
@@ -124,16 +135,25 @@ vec3 PointLightRadiance(vec3 N) {
     float distance          = length(Wi);                                           // Distance from fragment to light
     float attenuation       = 1.0 / (distance * distance);                          // How much enegry has light lost at current distance
     
-    return uPointLight.radiantFlux * attenuation * cosTheta;
+    return uPointLight.radiantFlux * attenuation;
 }
 
 void main() {
     vec3 N = normalize(vNormal);
     vec3 V = normalize(uCameraPosition - vWorldPosition);
-//    vec3 L =
+    vec3 L = normalize(uPointLight.position - vWorldPosition);
+    vec3 H = normalize(L + V);
     
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
-    float roughness = uMaterial.roughness * uMaterial.roughness;
+    float roughness         = uMaterial.roughness * uMaterial.roughness;
+    
+    vec3 pointLightRadiance = PointLightRadiance(N);
+    
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness, pointLightRadiance);
+    vec3 ambient            = vec3(0.03) * uMaterial.albedo * uMaterial.AO;
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
+    
+    outputFragColor         = vec4(correctColor, 1.0);
 }

@@ -13,6 +13,7 @@
 
 #include "Scene.hpp"
 #include "GLFramebuffer.hpp"
+#include "GLSLCookTorrance.hpp"
 #include "GLSLDirectionalBlinnPhong.hpp"
 #include "GLSLOmnidirectionalBlinnPhong.hpp"
 #include "GLSLFullScreenQuad.hpp"
@@ -37,6 +38,7 @@ namespace EARenderer {
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         
+        GLSLCookTorrance mCookTorranceShader;
         GLSLDirectionalBlinnPhong mDirectionalBlinnPhongShader;
         GLSLOmnidirectionalBlinnPhong mOmnidirectionalBlinnPhongShader;
         GLSLDirectionalDepth mDirectionalDepthShader;

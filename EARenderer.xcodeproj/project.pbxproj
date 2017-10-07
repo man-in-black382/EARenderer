@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE045FFE1F88C76E005BE6F4 /* GLSLCookTorrance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE045FFC1F88C76E005BE6F4 /* GLSLCookTorrance.cpp */; };
 		CEA2306E1F8819F00028A56E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CEA22E961F8819BD0028A56E /* Assets.xcassets */; };
 		CEA2306F1F8819F00028A56E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CEA22E9E1F8819BD0028A56E /* Main.storyboard */; };
 		CEA230721F881BEF0028A56E /* NumericFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA22E5F1F8819BD0028A56E /* NumericFormatter.m */; };
@@ -134,6 +135,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE045FFC1F88C76E005BE6F4 /* GLSLCookTorrance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLCookTorrance.cpp; sourceTree = "<group>"; };
+		CE045FFD1F88C76E005BE6F4 /* GLSLCookTorrance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLCookTorrance.hpp; sourceTree = "<group>"; };
 		CEA22E441F8819610028A56E /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEA22E5F1F8819BD0028A56E /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumericFormatter.m; sourceTree = "<group>"; };
 		CEA22E601F8819BD0028A56E /* NumericFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NumericFormatter.h; sourceTree = "<group>"; };
@@ -935,14 +938,14 @@
 		CEA22EB91F8819BD0028A56E /* Vertices */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22EBA1F8819BD0028A56E /* Vertex1P1N1UV1T1BT.cpp */,
-				CEA22EBB1F8819BD0028A56E /* Vertex1P3.cpp */,
-				CEA22EBC1F8819BD0028A56E /* Vertex1P1N1UV.hpp */,
-				CEA22EBD1F8819BD0028A56E /* Vertex1P4.cpp */,
 				CEA22EBE1F8819BD0028A56E /* Vertex1P1N1UV.cpp */,
-				CEA22EBF1F8819BD0028A56E /* Vertex1P3.hpp */,
-				CEA22EC01F8819BD0028A56E /* Vertex1P4.hpp */,
+				CEA22EBC1F8819BD0028A56E /* Vertex1P1N1UV.hpp */,
+				CEA22EBA1F8819BD0028A56E /* Vertex1P1N1UV1T1BT.cpp */,
 				CEA22EC11F8819BD0028A56E /* Vertex1P1N1UV1T1BT.hpp */,
+				CEA22EBB1F8819BD0028A56E /* Vertex1P3.cpp */,
+				CEA22EBF1F8819BD0028A56E /* Vertex1P3.hpp */,
+				CEA22EBD1F8819BD0028A56E /* Vertex1P4.cpp */,
+				CEA22EC01F8819BD0028A56E /* Vertex1P4.hpp */,
 			);
 			path = Vertices;
 			sourceTree = "<group>";
@@ -972,10 +975,10 @@
 		CEA22ECC1F8819BD0028A56E /* Miscellaneous */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22ECD1F8819BD0028A56E /* Color.cpp */,
-				CEA22ECE1F8819BD0028A56E /* Macros.h */,
-				CEA22ECF1F8819BD0028A56E /* Color.hpp */,
 				CEA22ED01F8819BD0028A56E /* BitwiseEnum.hpp */,
+				CEA22ECD1F8819BD0028A56E /* Color.cpp */,
+				CEA22ECF1F8819BD0028A56E /* Color.hpp */,
+				CEA22ECE1F8819BD0028A56E /* Macros.h */,
 			);
 			path = Miscellaneous;
 			sourceTree = "<group>";
@@ -983,18 +986,18 @@
 		CEA22ED11F8819BD0028A56E /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22ED21F8819BD0028A56E /* SceneRenderer.cpp */,
-				CEA22ED31F8819BD0028A56E /* AxesSelection.hpp */,
-				CEA22ED41F8819BD0028A56E /* BoxVisualizer.cpp */,
-				CEA22ED51F8819BD0028A56E /* AxesSystem.cpp */,
-				CEA22ED61F8819BD0028A56E /* AxesRenderer.hpp */,
 				CEA22ED71F8819BD0028A56E /* AxesRenderer.cpp */,
-				CEA22ED81F8819BD0028A56E /* Drawable.hpp */,
-				CEA22ED91F8819BD0028A56E /* SceneRenderer.hpp */,
+				CEA22ED61F8819BD0028A56E /* AxesRenderer.hpp */,
 				CEA22EDA1F8819BD0028A56E /* AxesSelection.cpp */,
-				CEA22EDB1F8819BD0028A56E /* DefaultRenderComponentsProviding.hpp */,
+				CEA22ED31F8819BD0028A56E /* AxesSelection.hpp */,
+				CEA22ED51F8819BD0028A56E /* AxesSystem.cpp */,
 				CEA22EDC1F8819BD0028A56E /* AxesSystem.hpp */,
+				CEA22ED41F8819BD0028A56E /* BoxVisualizer.cpp */,
 				CEA22EDD1F8819BD0028A56E /* BoxVisualizer.hpp */,
+				CEA22EDB1F8819BD0028A56E /* DefaultRenderComponentsProviding.hpp */,
+				CEA22ED81F8819BD0028A56E /* Drawable.hpp */,
+				CEA22ED21F8819BD0028A56E /* SceneRenderer.cpp */,
+				CEA22ED91F8819BD0028A56E /* SceneRenderer.hpp */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -1010,16 +1013,16 @@
 		CEA22EE01F8819BD0028A56E /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22EE11F8819BD0028A56E /* Rect2D.cpp */,
-				CEA22EE21F8819BD0028A56E /* Ray3D.cpp */,
 				CEA22EE31F8819BD0028A56E /* AxisAlignedBox3D.cpp */,
-				CEA22EE41F8819BD0028A56E /* Parallelogram3D.hpp */,
-				CEA22EE51F8819BD0028A56E /* Size2D.hpp */,
-				CEA22EE61F8819BD0028A56E /* Parallelogram3D.cpp */,
-				CEA22EE71F8819BD0028A56E /* Size2D.cpp */,
-				CEA22EE81F8819BD0028A56E /* Rect2D.hpp */,
-				CEA22EE91F8819BD0028A56E /* Ray3D.hpp */,
 				CEA22EEA1F8819BD0028A56E /* AxisAlignedBox3D.hpp */,
+				CEA22EE61F8819BD0028A56E /* Parallelogram3D.cpp */,
+				CEA22EE41F8819BD0028A56E /* Parallelogram3D.hpp */,
+				CEA22EE21F8819BD0028A56E /* Ray3D.cpp */,
+				CEA22EE91F8819BD0028A56E /* Ray3D.hpp */,
+				CEA22EE11F8819BD0028A56E /* Rect2D.cpp */,
+				CEA22EE81F8819BD0028A56E /* Rect2D.hpp */,
+				CEA22EE71F8819BD0028A56E /* Size2D.cpp */,
+				CEA22EE51F8819BD0028A56E /* Size2D.hpp */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -1027,9 +1030,9 @@
 		CEA22EEB1F8819BD0028A56E /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22EEC1F8819BD0028A56E /* Scene.cpp */,
 				CEA22EED1F8819BD0028A56E /* Logic */,
 				CEA22EF21F8819BD0028A56E /* Objects */,
+				CEA22EEC1F8819BD0028A56E /* Scene.cpp */,
 				CEA22F081F8819BD0028A56E /* Scene.hpp */,
 			);
 			path = Scene;
@@ -1038,10 +1041,10 @@
 		CEA22EED1F8819BD0028A56E /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22EEE1F8819BD0028A56E /* Cameraman.hpp */,
-				CEA22EEF1F8819BD0028A56E /* SceneInteractor.hpp */,
-				CEA22EF01F8819BD0028A56E /* SceneInteractor.cpp */,
 				CEA22EF11F8819BD0028A56E /* Cameraman.cpp */,
+				CEA22EEE1F8819BD0028A56E /* Cameraman.hpp */,
+				CEA22EF01F8819BD0028A56E /* SceneInteractor.cpp */,
+				CEA22EEF1F8819BD0028A56E /* SceneInteractor.hpp */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -1049,19 +1052,19 @@
 		CEA22EF21F8819BD0028A56E /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				CEA22EF31F8819BD0028A56E /* Mesh.cpp */,
-				CEA22EF41F8819BD0028A56E /* Material.hpp */,
-				CEA22EF51F8819BD0028A56E /* Camera.cpp */,
-				CEA22EF61F8819BD0028A56E /* Skybox.hpp */,
-				CEA22EF71F8819BD0028A56E /* SubMesh.hpp */,
-				CEA22EF81F8819BD0028A56E /* Transformation.hpp */,
-				CEA22EF91F8819BD0028A56E /* Skybox.cpp */,
-				CEA22EFA1F8819BD0028A56E /* SubMesh.cpp */,
-				CEA22EFB1F8819BD0028A56E /* Transformation.cpp */,
-				CEA22EFC1F8819BD0028A56E /* Mesh.hpp */,
-				CEA22EFD1F8819BD0028A56E /* Material.cpp */,
 				CEA22EFE1F8819BD0028A56E /* Lights */,
+				CEA22EF51F8819BD0028A56E /* Camera.cpp */,
 				CEA22F071F8819BD0028A56E /* Camera.hpp */,
+				CEA22EFD1F8819BD0028A56E /* Material.cpp */,
+				CEA22EF41F8819BD0028A56E /* Material.hpp */,
+				CEA22EF31F8819BD0028A56E /* Mesh.cpp */,
+				CEA22EFC1F8819BD0028A56E /* Mesh.hpp */,
+				CEA22EF91F8819BD0028A56E /* Skybox.cpp */,
+				CEA22EF61F8819BD0028A56E /* Skybox.hpp */,
+				CEA22EFA1F8819BD0028A56E /* SubMesh.cpp */,
+				CEA22EF71F8819BD0028A56E /* SubMesh.hpp */,
+				CEA22EFB1F8819BD0028A56E /* Transformation.cpp */,
+				CEA22EF81F8819BD0028A56E /* Transformation.hpp */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1070,12 +1073,12 @@
 			isa = PBXGroup;
 			children = (
 				CEA22EFF1F8819BD0028A56E /* DirectionalLight.cpp */,
-				CEA22F001F8819BD0028A56E /* PointLight.cpp */,
-				CEA22F011F8819BD0028A56E /* Light.cpp */,
-				CEA22F021F8819BD0028A56E /* FrustumCascades.cpp */,
-				CEA22F031F8819BD0028A56E /* Light.hpp */,
-				CEA22F041F8819BD0028A56E /* FrustumCascades.hpp */,
 				CEA22F051F8819BD0028A56E /* DirectionalLight.hpp */,
+				CEA22F021F8819BD0028A56E /* FrustumCascades.cpp */,
+				CEA22F041F8819BD0028A56E /* FrustumCascades.hpp */,
+				CEA22F011F8819BD0028A56E /* Light.cpp */,
+				CEA22F031F8819BD0028A56E /* Light.hpp */,
+				CEA22F001F8819BD0028A56E /* PointLight.cpp */,
 				CEA22F061F8819BD0028A56E /* PointLight.hpp */,
 			);
 			path = Lights;
@@ -1425,10 +1428,10 @@
 		CEA230211F8819BD0028A56E /* Resource Management */ = {
 			isa = PBXGroup;
 			children = (
-				CEA230221F8819BD0028A56E /* ResourceManager.hpp */,
-				CEA230231F8819BD0028A56E /* WavefrontMeshLoader.hpp */,
-				CEA230241F8819BD0028A56E /* WavefrontMeshLoader.cpp */,
 				CEA230251F8819BD0028A56E /* ResourceManager.cpp */,
+				CEA230221F8819BD0028A56E /* ResourceManager.hpp */,
+				CEA230241F8819BD0028A56E /* WavefrontMeshLoader.cpp */,
+				CEA230231F8819BD0028A56E /* WavefrontMeshLoader.hpp */,
 			);
 			path = "Resource Management";
 			sourceTree = "<group>";
@@ -1436,14 +1439,14 @@
 		CEA230261F8819BD0028A56E /* OpenGL */ = {
 			isa = PBXGroup;
 			children = (
+				CEA2306C1F8819BD0028A56E /* GLBindable.hpp */,
+				CEA2306B1F8819BD0028A56E /* GLNamedObject.cpp */,
+				CEA230431F8819BD0028A56E /* GLNamedObject.hpp */,
+				CEA2306D1F8819BD0028A56E /* GLViewport.cpp */,
 				CEA230271F8819BD0028A56E /* GLViewport.hpp */,
-				CEA230281F8819BD0028A56E /* Textures */,
 				CEA230391F8819BD0028A56E /* Buffers */,
 				CEA230441F8819BD0028A56E /* Shading */,
-				CEA230431F8819BD0028A56E /* GLNamedObject.hpp */,
-				CEA2306B1F8819BD0028A56E /* GLNamedObject.cpp */,
-				CEA2306C1F8819BD0028A56E /* GLBindable.hpp */,
-				CEA2306D1F8819BD0028A56E /* GLViewport.cpp */,
+				CEA230281F8819BD0028A56E /* Textures */,
 			);
 			path = OpenGL;
 			sourceTree = "<group>";
@@ -1490,27 +1493,29 @@
 		CEA230441F8819BD0028A56E /* Shading */ = {
 			isa = PBXGroup;
 			children = (
-				CEA230471F8819BD0028A56E /* ShaderSources */,
-				CEA230451F8819BD0028A56E /* GLSLDirectionalBlinnPhong.cpp */,
-				CEA230461F8819BD0028A56E /* GLSLGenericGeometry.hpp */,
-				CEA230591F8819BD0028A56E /* GLSLOmnidirectionalBlinnPhong.hpp */,
-				CEA2305A1F8819BD0028A56E /* GLSLFullScreenQuad.cpp */,
-				CEA2305B1F8819BD0028A56E /* GLShader.cpp */,
-				CEA2305C1F8819BD0028A56E /* GLSLOmnidirectionalDepth.cpp */,
-				CEA2305D1F8819BD0028A56E /* GLUniform.cpp */,
-				CEA2305E1F8819BD0028A56E /* GLSLDirectionalDepth.cpp */,
-				CEA2305F1F8819BD0028A56E /* GLSLSkybox.hpp */,
 				CEA230601F8819BD0028A56E /* GLProgram.cpp */,
-				CEA230611F8819BD0028A56E /* GLUniform.hpp */,
-				CEA230621F8819BD0028A56E /* GLSLDirectionalDepth.hpp */,
-				CEA230631F8819BD0028A56E /* GLSLSkybox.cpp */,
 				CEA230641F8819BD0028A56E /* GLProgram.hpp */,
-				CEA230651F8819BD0028A56E /* GLSLDirectionalBlinnPhong.hpp */,
-				CEA230661F8819BD0028A56E /* GLSLGenericGeometry.cpp */,
-				CEA230671F8819BD0028A56E /* GLSLFullScreenQuad.hpp */,
-				CEA230681F8819BD0028A56E /* GLSLOmnidirectionalBlinnPhong.cpp */,
+				CEA2305D1F8819BD0028A56E /* GLUniform.cpp */,
+				CEA230611F8819BD0028A56E /* GLUniform.hpp */,
+				CEA2305B1F8819BD0028A56E /* GLShader.cpp */,
 				CEA230691F8819BD0028A56E /* GLShader.hpp */,
+				CEA230451F8819BD0028A56E /* GLSLDirectionalBlinnPhong.cpp */,
+				CEA230651F8819BD0028A56E /* GLSLDirectionalBlinnPhong.hpp */,
+				CEA2305E1F8819BD0028A56E /* GLSLDirectionalDepth.cpp */,
+				CEA230621F8819BD0028A56E /* GLSLDirectionalDepth.hpp */,
+				CEA2305A1F8819BD0028A56E /* GLSLFullScreenQuad.cpp */,
+				CEA230671F8819BD0028A56E /* GLSLFullScreenQuad.hpp */,
+				CEA230661F8819BD0028A56E /* GLSLGenericGeometry.cpp */,
+				CEA230461F8819BD0028A56E /* GLSLGenericGeometry.hpp */,
+				CEA230681F8819BD0028A56E /* GLSLOmnidirectionalBlinnPhong.cpp */,
+				CEA230591F8819BD0028A56E /* GLSLOmnidirectionalBlinnPhong.hpp */,
+				CEA2305C1F8819BD0028A56E /* GLSLOmnidirectionalDepth.cpp */,
 				CEA2306A1F8819BD0028A56E /* GLSLOmnidirectionalDepth.hpp */,
+				CE045FFC1F88C76E005BE6F4 /* GLSLCookTorrance.cpp */,
+				CE045FFD1F88C76E005BE6F4 /* GLSLCookTorrance.hpp */,
+				CEA230631F8819BD0028A56E /* GLSLSkybox.cpp */,
+				CEA2305F1F8819BD0028A56E /* GLSLSkybox.hpp */,
+				CEA230471F8819BD0028A56E /* ShaderSources */,
 			);
 			path = Shading;
 			sourceTree = "<group>";
@@ -1518,23 +1523,23 @@
 		CEA230471F8819BD0028A56E /* ShaderSources */ = {
 			isa = PBXGroup;
 			children = (
-				CEA230481F8819BD0028A56E /* GenericGeometry.vert */,
-				CEA230491F8819BD0028A56E /* DirectionalDepth.vert */,
-				CEA2304A1F8819BD0028A56E /* Skybox.frag */,
 				CEA2304B1F8819BD0028A56E /* CookTorrance.frag */,
-				CEA2304C1F8819BD0028A56E /* OmnidirectionalDepth.frag */,
-				CEA2304D1F8819BD0028A56E /* FullScreenQuad.vert */,
-				CEA2304E1F8819BD0028A56E /* OmnidirectionalBlinnPhong.vert */,
-				CEA2304F1F8819BD0028A56E /* DirectionalBlinnPhong.vert */,
-				CEA230501F8819BD0028A56E /* OmnidirectionalDepth.geom */,
 				CEA230511F8819BD0028A56E /* CookTorrance.vert */,
-				CEA230521F8819BD0028A56E /* Skybox.vert */,
-				CEA230531F8819BD0028A56E /* DirectionalDepth.frag */,
-				CEA230541F8819BD0028A56E /* GenericGeometry.frag */,
 				CEA230551F8819BD0028A56E /* DirectionalBlinnPhong.frag */,
-				CEA230561F8819BD0028A56E /* OmnidirectionalBlinnPhong.frag */,
+				CEA2304F1F8819BD0028A56E /* DirectionalBlinnPhong.vert */,
+				CEA230531F8819BD0028A56E /* DirectionalDepth.frag */,
+				CEA230491F8819BD0028A56E /* DirectionalDepth.vert */,
 				CEA230571F8819BD0028A56E /* FullScreenQuad.frag */,
+				CEA2304D1F8819BD0028A56E /* FullScreenQuad.vert */,
+				CEA230541F8819BD0028A56E /* GenericGeometry.frag */,
+				CEA230481F8819BD0028A56E /* GenericGeometry.vert */,
+				CEA230561F8819BD0028A56E /* OmnidirectionalBlinnPhong.frag */,
+				CEA2304E1F8819BD0028A56E /* OmnidirectionalBlinnPhong.vert */,
+				CEA2304C1F8819BD0028A56E /* OmnidirectionalDepth.frag */,
+				CEA230501F8819BD0028A56E /* OmnidirectionalDepth.geom */,
 				CEA230581F8819BD0028A56E /* OmnidirectionalDepth.vert */,
+				CEA2304A1F8819BD0028A56E /* Skybox.frag */,
+				CEA230521F8819BD0028A56E /* Skybox.vert */,
 			);
 			path = ShaderSources;
 			sourceTree = "<group>";
@@ -1685,6 +1690,7 @@
 				CEA230A91F881C470028A56E /* Light.cpp in Sources */,
 				CEA230AA1F881C470028A56E /* FrustumCascades.cpp in Sources */,
 				CEA230AB1F881C470028A56E /* tiny_obj_loader.cpp in Sources */,
+				CE045FFE1F88C76E005BE6F4 /* GLSLCookTorrance.cpp in Sources */,
 				CEA230AD1F881C470028A56E /* glm.cpp in Sources */,
 				CEA230AE1F881C470028A56E /* WavefrontMeshLoader.cpp in Sources */,
 				CEA230AF1F881C470028A56E /* ResourceManager.cpp in Sources */,
