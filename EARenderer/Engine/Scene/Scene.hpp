@@ -16,7 +16,8 @@
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
-#include "Material.hpp"
+#include "ClassicMaterial.hpp"
+#include "PBRMaterial.hpp"
 #include "Skybox.hpp"
 
 namespace EARenderer {
@@ -28,7 +29,8 @@ namespace EARenderer {
         PackedLookupTable<Transformation> mTransforms;
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;
-        PackedLookupTable<Material> mMaterials;
+        PackedLookupTable<ClassicMaterial> mClassicMaterials;
+        PackedLookupTable<PBRMaterial> mPBRMaterials;
         
         Camera *mCamera;
         Skybox *mSkybox;
@@ -42,7 +44,8 @@ namespace EARenderer {
         PackedLookupTable<Camera>& cameras();
         PackedLookupTable<DirectionalLight>& directionalLights();
         PackedLookupTable<PointLight>& pointLights();
-        PackedLookupTable<Material>& materials();
+        PackedLookupTable<ClassicMaterial>& classicMaterials();
+        PackedLookupTable<PBRMaterial>& PBRMaterials();
         
         void setCamera(Camera* camera);
         Camera* camera() const;

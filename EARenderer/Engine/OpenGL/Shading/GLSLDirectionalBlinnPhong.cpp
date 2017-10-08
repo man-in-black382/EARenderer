@@ -36,7 +36,7 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByName("uNormalMat").location(), 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(matrix))));
     }
     
-    void GLSLDirectionalBlinnPhong::setMaterial(const Material& material)
+    void GLSLDirectionalBlinnPhong::setMaterial(const ClassicMaterial& material)
     {
         glUniform3fv(uniformByName("uMaterial.ambientReflectances").location(), 1, glm::value_ptr(material.ambientReflectances()));
         glUniform3fv(uniformByName("uMaterial.diffuseReflectances").location(), 1, glm::value_ptr(material.diffuseReflectances()));

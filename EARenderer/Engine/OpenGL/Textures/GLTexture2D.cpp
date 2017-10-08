@@ -38,7 +38,16 @@ namespace EARenderer {
         ASSERT(pixelData, "Unable to read texture file: " << fileName);
         
         mSize = Size2D(width, height);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+        
+        GLint texComponents;
+        switch (components) {
+            case 1: texComponents = GL_RED; break;
+            case 2: texComponents = GL_RG; break;
+            case 3: texComponents = GL_RGB; break;
+            default: texComponents = GL_RGBA; break;
+        }
+        
+        glTexImage2D(GL_TEXTURE_2D, 0, texComponents, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
         stbi_image_free(pixelData);
         
         glGenerateMipmap(GL_TEXTURE_2D);

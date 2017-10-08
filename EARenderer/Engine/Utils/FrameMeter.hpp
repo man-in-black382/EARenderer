@@ -10,7 +10,8 @@
 #define FPSMeter_hpp
 
 #include <stdlib.h>
-#include <chrono>
+
+#include "Throttle.hpp"
 
 namespace EARenderer {
     
@@ -22,14 +23,14 @@ namespace EARenderer {
         };
         
     private:
-        using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-        
         uint64_t mPassedFrames;
-        TimePoint mPreviousFrameTime;
-        FrameCharacteristics mPreviousCharacteristics;
+        FrameCharacteristics mFrameCharacteristics;
+        Throttle mThrottle;
         
     public:
-        FrameCharacteristics tick(double throttleMilliseconds = 0.0);
+        FrameMeter(float throttleMilliseconds = 200);
+        
+        FrameCharacteristics tick();
     };
     
 }

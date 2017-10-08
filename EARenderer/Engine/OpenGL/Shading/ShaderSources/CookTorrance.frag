@@ -12,7 +12,7 @@ out vec4 outputFragColor;
 
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
-in vec3 vNormal;
+in mat3 vTBN;
 
 // Uniforms
 
@@ -34,10 +34,11 @@ struct Spotlight {
 };
 
 struct Material {
-    vec3 albedo;
-    float metallic;
-    float roughness;
-    float AO; // Ambient occlusion
+    sampler2D albedoMap;
+    sampler2D normalMap;
+    sampler2D metallicMap;
+    sampler2D roughnessMap;
+    sampler2D AOMap; // Ambient occlusion
 };
 
 uniform vec3 uCameraPosition;
@@ -47,6 +48,10 @@ uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
 uniform Material uMaterial;
 
+////////////////////////////////////////////////////////////
+//////////////////// Lighting equation /////////////////////
+////////////////////////////////////////////////////////////
+
 // Functions
 
 // The Fresnel equation describes the ratio of surface reflection at different surface angles.
@@ -54,11 +59,11 @@ uniform Material uMaterial;
 // Describes the ratio of light that gets reflected over the light that gets refracted,
 // which varies over the angle we're looking at a surface.
 //
-vec3 FresnelSchlick(vec3 V, vec3 H) {
+vec3 FresnelSchlick(vec3 V, vec3 H, vec3 albedo, float metallic) {
     // F0 - base reflectivity of a surface, a.k.a. surface reflection at zero incidence
     // or how much the surface reflects if looking directly at the surface
     vec3 F0 = vec3(0.04); // 0.04 is a commonly used constant for dielectrics
-    F0 = mix(F0, uMaterial.albedo, uMaterial.metallic);
+    F0 = mix(F0, albedo, metallic);
     
     float cosTheta = max(dot(H, V), 0.0);
     
@@ -103,13 +108,13 @@ float GeometrySmith(float NdotL, float NdotV, float roughness) {
     return ggx1 * ggx2;
 }
 
-vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 radiance) {
+vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, vec3 radiance) {
     float NdotL     = max(dot(N, L), 0.0);
     float NdotV     = max(dot(N, V), 0.0);
     
     float NDF       = NormalDistributionGGX(N, H, roughness);
     float G         = GeometrySmith(NdotL, NdotV, roughness);
-    vec3 F          = FresnelSchlick(V, H);
+    vec3 F          = FresnelSchlick(V, H, albedo, metallic);
 
     vec3 nom        = NDF * G * F;
     float denom     = 4.0 * NdotL * NdotV + 0.001; // Add 0.001 to prevent division by 0
@@ -118,16 +123,14 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 radi
     vec3 Ks         = F;                // Specular (reflected) portion
     vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
     
-    Kd              *= 1.0 - uMaterial.metallic;  // This will turn diffuse component of metallic surfaces to 0
+    Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
-    return (Kd * uMaterial.albedo / PI + specular) * radiance * NdotL;
+    return (Kd * albedo / PI + specular) * radiance * NdotL;
 }
 
-vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
-    vec3 mappedColor = color / (color + vec3(1.0));
-    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.0));
-    return gammaCorrectedColor;
-}
+////////////////////////////////////////////////////////////
+//////////// Radiance of different light types /////////////
+////////////////////////////////////////////////////////////
 
 vec3 PointLightRadiance(vec3 N) {
     vec3 Wi                 = normalize(uPointLight.position - vWorldPosition);     // To light vector
@@ -138,22 +141,67 @@ vec3 PointLightRadiance(vec3 N) {
     return uPointLight.radiantFlux * attenuation;
 }
 
-void main() {
-    vec3 N = normalize(vNormal);
-    vec3 V = normalize(uCameraPosition - vWorldPosition);
-    vec3 L = normalize(uPointLight.position - vWorldPosition);
-    vec3 H = normalize(L + V);
-    
+////////////////////////////////////////////////////////////
+///////////////////////// Helpers //////////////////////////
+////////////////////////////////////////////////////////////
+
+vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
+    vec3 mappedColor = color / (color + vec3(1.0));
+    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.2));
+    return gammaCorrectedColor;
+}
+
+vec3 LinearFromSRGB(vec3 sRGB) {
+    return pow(sRGB, vec3(2.2));
+}
+
+vec3 FetchAlbedoMap() {
+    return LinearFromSRGB(texture(uMaterial.albedoMap, vTexCoords.st).rgb);
+}
+
+vec3 FetchNormalMap() {
+    vec3 normal = texture(uMaterial.normalMap, vTexCoords.st).xyz;
+    return normalize(vTBN * (normal * 2.0 - 1.0));
+}
+
+float FetchMetallicMap() {
+    return texture(uMaterial.metallicMap, vTexCoords.st).r;
+}
+
+float FetchRoughnessMap() {
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
-    float roughness         = uMaterial.roughness * uMaterial.roughness;
-    
+    float roughness = texture(uMaterial.roughnessMap, vTexCoords.st).r;
+    return roughness * roughness;
+}
+
+float FetchAOMap() {
+    return texture(uMaterial.AOMap, vTexCoords.st).r;
+}
+
+////////////////////////////////////////////////////////////
+////////////////////////// Main ////////////////////////////
+////////////////////////////////////////////////////////////
+
+void main() {
+    // Based on observations by Disney and adopted by Epic Games
+    // the lighting looks more correct squaring the roughness
+    // in both the geometry and normal distribution function.
+    float roughness         = FetchRoughnessMap();
+    float metallic          = FetchMetallicMap();
+    float ao                = FetchAOMap();
+    vec3 albedo             = FetchAlbedoMap();
+    vec3 N                  = FetchNormalMap();
+    vec3 V                  = normalize(uCameraPosition - vWorldPosition);
+    vec3 L                  = normalize(uPointLight.position - vWorldPosition);
+    vec3 H                  = normalize(L + V);
+
     vec3 pointLightRadiance = PointLightRadiance(N);
-    
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness, pointLightRadiance);
-    vec3 ambient            = vec3(0.03) * uMaterial.albedo * uMaterial.AO;
+
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness, albedo, metallic, pointLightRadiance);
+    vec3 ambient            = vec3(0.03) * albedo * ao;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
-    
-    outputFragColor         = vec4(correctColor, 1.0);
+
+    outputFragColor         = vec4(correctColor, 1.0);    
 }

@@ -77,6 +77,16 @@ namespace EARenderer {
     
 #pragma mark - Rendering
     
+    void SceneRenderer::renderSkybox() {
+        mSkyboxShader.bind();
+        mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+        mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+        mSkyboxShader.setCubemap(mScene->skybox()->cubemap());
+        mScene->skybox()->draw();
+    }
+    
+#pragma mark Blinn-Phong
+    
     void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
         // Fill shadow map
         mDirectionalDepthShader.bind();
@@ -141,8 +151,8 @@ namespace EARenderer {
                 
                 mDirectionalBlinnPhongShader.setModelMatrix(transform.modelMatrix());
                 
-                ID materialID = *(mScene->materials().begin());
-                Material& material = mScene->materials()[materialID];
+                ID materialID = *(mScene->classicMaterials().begin());
+                ClassicMaterial& material = mScene->classicMaterials()[materialID];
                 
                 mDirectionalBlinnPhongShader.setMaterial(material);
                 mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
@@ -171,8 +181,8 @@ namespace EARenderer {
                 mOmnidirectionalBlinnPhongShader.setPointLight(light);
                 mOmnidirectionalBlinnPhongShader.setShadowMap(mShadowCubeMap);
                 
-                ID materialID = *(mScene->materials().begin());
-                Material& material = mScene->materials()[materialID];
+                ID materialID = *(mScene->classicMaterials().begin());
+                ClassicMaterial& material = mScene->classicMaterials()[materialID];
                 
                 mOmnidirectionalBlinnPhongShader.setMaterial(material);
                 
@@ -181,15 +191,7 @@ namespace EARenderer {
         }
     }
     
-    void SceneRenderer::renderSkybox() {
-        mSkyboxShader.bind();
-        mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
-        mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-        mSkyboxShader.setCubemap(mScene->skybox()->cubemap());
-        mScene->skybox()->draw();
-    }
-    
-    void SceneRenderer::render() {
+    void SceneRenderer::renderClassicMeshes() {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
@@ -202,7 +204,7 @@ namespace EARenderer {
         ID lightID = *(mScene->directionalLights().begin());
         DirectionalLight& light = mScene->directionalLights()[lightID];
         FrustumCascades cascades = light.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
-
+        
         renderShadowMapsForDirectionalLights(cascades);
         renderShadowMapsForPointLights();
         
@@ -210,13 +212,62 @@ namespace EARenderer {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
-
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
+        //
         renderDirectionalLighting(cascades);
         renderPointLighting();
-//        renderSkybox();
+        //        renderSkybox();
+    }
+    
+#pragma mark Cook-Torrance
+    
+    void SceneRenderer::renderPBRMeshes() {
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
         
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+            mDefaultRenderComponentsProvider->defaultViewport().apply();
+        }
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        ID lightID = *(mScene->pointLights().begin());
+        PointLight& light = mScene->pointLights()[lightID];
+        
+        mCookTorranceShader.bind();
+        
+        for (ID subMeshID : mScene->subMeshes()) {
+            mCookTorranceShader.ensureSamplerValidity([&]() {
+                mCookTorranceShader.setCamera(*(mScene->camera()));
+                mCookTorranceShader.setLight(light);
+                
+                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
+                ID meshID = subMesh.meshID();
+                Mesh& mesh = mScene->meshes()[meshID];
+                ID transformID = mesh.transformID();
+                Transformation& transform = mScene->transforms()[transformID];
+                
+                mCookTorranceShader.setModelMatrix(transform.modelMatrix());
+                
+                ID materialID = *(mScene->PBRMaterials().begin());
+                PBRMaterial& material = mScene->PBRMaterials()[materialID];
+                
+                mCookTorranceShader.setMaterial(material);
+                
+                subMesh.draw();
+            });
+        }
+    }
+    
+#pragma mark - Public access point
+    
+    void SceneRenderer::render() {
+        renderPBRMeshes();
     }
     
 }

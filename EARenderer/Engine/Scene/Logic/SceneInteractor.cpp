@@ -47,27 +47,12 @@ namespace EARenderer {
     
     void SceneInteractor::handleMouseMove(const Input* input) {
         Ray3D cameraRay = mScene->camera()->rayFromPointOnViewport(input->mousePosition(), mMainViewport);
-
+        
         mAxesRenderer->disableAxesHighlight();
         AxesSelection axesSelection;
         if (mAxesRenderer->raySelectsAxes(cameraRay, axesSelection)) {
             mAxesRenderer->enableAxesHighlightForMesh(axesSelection.axesMask, axesSelection.meshID);
         }
-
-//        if (mPreviouslyHighlightedMeshID != IDNotFound) {
-//            Mesh& previousMesh = mScene->meshes()[mPreviouslyHighlightedMeshID];
-//            previousMesh.setIsHighlighted(false);
-//        }
-        
-//        ID selectedMeshID = IDNotFound;
-//        if (mSceneRenderer->raySelectsMesh(cameraRay, selectedMeshID)) {
-//            Mesh& mesh = mScene->meshes()[selectedMeshID];
-//            // Shouldn't highlight mesh if it's selected
-//            if (!mesh.isSelected()) {
-//                mesh.setIsHighlighted(true);
-//                mPreviouslyHighlightedMeshID = selectedMeshID;
-//            }
-//        }
     }
     
     void SceneInteractor::handleMouseDrag(const Input* input) {

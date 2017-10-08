@@ -10,7 +10,7 @@
 #define GLSLOmnidirectionalBlinnPhong_hpp
 
 #include "GLProgram.hpp"
-#include "Material.hpp"
+#include "ClassicMaterial.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "PointLight.hpp"
 #include "Camera.hpp"
@@ -29,7 +29,7 @@ namespace EARenderer {
         void setCamera(const Camera& camera);
         void setModelMatrix(const glm::mat4& matrix);
         void setPointLight(const PointLight& light);
-        void setMaterial(const Material& material);
+        void setMaterial(const ClassicMaterial& material);
         void setShadowMap(const GLDepthTextureCubemap& shadowMap);
         void setHighlightColor(const Color& color);
     };

@@ -61,6 +61,9 @@ namespace EARenderer {
         void renderPointLighting();
         void renderSkybox();
         
+        void renderClassicMeshes();
+        void renderPBRMeshes();
+        
     public:
         SceneRenderer(Scene* scene);
         

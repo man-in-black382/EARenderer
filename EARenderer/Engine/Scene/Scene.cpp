@@ -12,6 +12,8 @@
 
 namespace EARenderer {
     
+#pragma mark - Lifecycle
+    
     Scene::Scene()
     :
     mMeshes(1000),
@@ -19,8 +21,11 @@ namespace EARenderer {
     mTransforms(1000),
     mDirectionalLights(10),
     mPointLights(10),
-    mMaterials(1000)
+    mClassicMaterials(1000),
+    mPBRMaterials(1000)
     { }
+    
+#pragma mark - Getters
     
     PackedLookupTable<Mesh>& Scene::meshes() {
         return mMeshes;
@@ -42,24 +47,30 @@ namespace EARenderer {
         return mPointLights;
     }
 
-    PackedLookupTable<Material>& Scene::materials() {
-        return mMaterials;
+    PackedLookupTable<ClassicMaterial>& Scene::classicMaterials() {
+        return mClassicMaterials;
     }
     
-    void Scene::setCamera(Camera* camera) {
-        mCamera = camera;
+    PackedLookupTable<PBRMaterial>& Scene::PBRMaterials() {
+        return mPBRMaterials;
     }
     
     Camera* Scene::camera() const {
         return mCamera;
     }
     
-    void Scene::setSkybox(Skybox* skybox) {
-        mSkybox = skybox;
-    }
-    
     Skybox* Scene::skybox() const {
         return mSkybox;
+    }
+    
+#pragma mark - Setters
+    
+    void Scene::setCamera(Camera* camera) {
+        mCamera = camera;
+    }
+
+    void Scene::setSkybox(Skybox* skybox) {
+        mSkybox = skybox;
     }
     
 }

@@ -10,7 +10,7 @@
 #define GLSLDirectionalBlinnPhong_hpp
 
 #include "GLProgram.hpp"
-#include "Material.hpp"
+#include "ClassicMaterial.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
@@ -32,7 +32,7 @@ namespace EARenderer {
         void setCamera(const Camera& camera);
         void setModelMatrix(const glm::mat4& matrix);
         void setDirectionalLight(const DirectionalLight& light);
-        void setMaterial(const Material& material);
+        void setMaterial(const ClassicMaterial& material);
         void setShadowCascades(const FrustumCascades& cascades);
         void setShadowMaps(const GLDepthTexture2DArray& shadowMaps);
         void setHighlightColor(const Color& color);

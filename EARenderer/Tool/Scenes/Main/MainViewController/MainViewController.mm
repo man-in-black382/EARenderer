@@ -23,8 +23,11 @@
 #import "Cameraman.hpp"
 #import "FileManager.hpp"
 #import "FrameMeter.hpp"
+#import "Throttle.hpp"
 
 #import "GLLayeredTexture.hpp"
+
+static float const FrequentEventsThrottleCooldownMS = 100;
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
 
@@ -41,6 +44,7 @@
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
 @property (assign, nonatomic) EARenderer::Cameraman *cameraman;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
+@property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 
 @end
 
@@ -64,44 +68,34 @@
     
     self.scene = new EARenderer::Scene();
     self.frameMeter = new EARenderer::FrameMeter();
+    self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
     
     // Temporary
     
+    NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
     NSString *cubePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
     NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
-    NSString *spotPath = [[NSBundle mainBundle] pathForResource:@"spot" ofType:@"obj"];
-    NSString *tankPath = [[NSBundle mainBundle] pathForResource:@"tank" ofType:@"obj"];
-    NSString *bearPath = [[NSBundle mainBundle] pathForResource:@"bear" ofType:@"obj"];
-    NSString *boxTexturePath = [[NSBundle mainBundle] pathForResource:@"wooden-crate" ofType:@"jpg"];
-    NSString *paletTexturePath = [[NSBundle mainBundle] pathForResource:@"bricks" ofType:@"jpg"];
-    NSString *tankTexturePath = [[NSBundle mainBundle] pathForResource:@"tank_texture" ofType:@"png"];
-    NSString *tankNormalMapPath = [[NSBundle mainBundle] pathForResource:@"tank_normal_map" ofType:@"png"];
-    NSString *bricksTexturePath = [[NSBundle mainBundle] pathForResource:@"brickwork_texture" ofType:@"jpg"];
-    NSString *bricksNormalMapPath = [[NSBundle mainBundle] pathForResource:@"brickwork_normal_map" ofType:@"jpg"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(cubePath.UTF8String), std::string(paletPath.UTF8String) }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String) }, self.scene);
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));
     camera->lookAt(glm::vec3(0, 0, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
-    EARenderer::PointLight pointLight(glm::vec3(-3, 0, 0), EARenderer::Color::white());
+    
+    auto HDRColor = EARenderer::Color(20.0, 22.0, 14.0, 1.0);
+    EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
     
     self.scene->setCamera(camera);
     self.scene->directionalLights().insert(directionalLight);
     self.scene->pointLights().insert(pointLight);
     self.scene->setSkybox([self skybox]);
     
-    self.scene->materials().insert(EARenderer::Material({ 0.2, 0.2, 0.2 },
-                                                        { 1.0, 1.0, 1.0 },
-                                                        { 0.4, 0.4, 0.4 },
-                                                        64,
-                                                        std::string(bricksTexturePath.UTF8String),
-                                                        std::string(bricksNormalMapPath.UTF8String)));
+    [self addPBRMaterial];
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
@@ -126,7 +120,7 @@
     self.sceneRenderer->render();
     self.axesRenderer->render();
     
-    self.fpsView.frameCharacteristics = self.frameMeter->tick(200);
+    self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }
 
 #pragma mark - MeshListTabViewItemDelegate
@@ -166,7 +160,9 @@
     }};
     
     self.sceneInteractor->meshUpdateEvent() += { "main.controller.mesh.update", [self](EARenderer::ID meshID) {
-        [self.sceneEditorTabView showMeshWithID:meshID];
+        self.frequentEventsThrottle->attemptToPerformAction([=]() {
+            [self.sceneEditorTabView showMeshWithID:meshID];
+        });
     }};
     
     self.sceneInteractor->meshUpdateEndEvent() += { "main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
@@ -210,6 +206,23 @@
                                   std::string(bottom.UTF8String),
                                   std::string(front.UTF8String),
                                   std::string(back.UTF8String));
+}
+
+- (void)addPBRMaterial
+{
+    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
+    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
+    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_normal" ofType:@"png"];
+    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_roughness" ofType:@"png"];
+    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank" ofType:@"jpg"];
+    
+    self.scene->PBRMaterials().insert({
+        std::string(albedoMapPath.UTF8String),
+        std::string(normalMapPath.UTF8String),
+        std::string(metallicMapPath.UTF8String),
+        std::string(roughnessMapPath.UTF8String),
+        std::string(blankImagePath.UTF8String)
+    });
 }
 
 @end

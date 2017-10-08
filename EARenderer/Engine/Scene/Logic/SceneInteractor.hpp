@@ -27,7 +27,7 @@ namespace EARenderer {
         using MeshEvent = Event<SceneInteractor, std::string, void(ID)>;
         using Event = Event<SceneInteractor, std::string, void()>;
         
-    private:
+    private:        
         Input *mUserInput = nullptr;
         Scene *mScene = nullptr;
         AxesRenderer *mAxesRenderer = nullptr;
