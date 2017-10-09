@@ -73,8 +73,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     // Temporary
     
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
-    NSString *cubePath = [[NSBundle mainBundle] pathForResource:@"cube" ofType:@"obj"];
-    NSString *paletPath = [[NSBundle mainBundle] pathForResource:@"palet" ofType:@"obj"];
     
     EARenderer::ResourceManager resourceManager;
     resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String) }, self.scene);
