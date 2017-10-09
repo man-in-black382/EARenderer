@@ -16,7 +16,7 @@ namespace EARenderer {
     
     GLTextureCubemap::GLTextureCubemap(const Size2D& size)
     :
-    GLTexture(size, GL_TEXTURE_CUBE_MAP, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(size, GL_TEXTURE_CUBE_MAP, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         ASSERT(size.width > 0, "Cubemap texture width should be greater than 0");
         ASSERT(size.height > 0, "Cubemap texture height should be greater than 0");
@@ -34,7 +34,7 @@ namespace EARenderer {
                                        const std::string& frontImagePath,
                                        const std::string& backImagePath)
     :
-    GLTexture(GL_TEXTURE_CUBE_MAP, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(GL_TEXTURE_CUBE_MAP, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         int32_t width = 0;
         int32_t height = 0;

@@ -86,17 +86,6 @@ namespace EARenderer {
         glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mAvailableTextureUnits);
     }
     
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLBindable& texture) {
-        GLUniform sampler = uniformByName(uniformName);
-        ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
-        ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
-        glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
-        glUniform1i(sampler.location(), mFreeTextureUnitIndex);
-        texture.bind();
-        mFreeTextureUnitIndex++;
-        mUsedSamplerLocations.insert(sampler.location());
-    }
-    
 #pragma mark - Swap
     
     void GLProgram::swap(GLProgram& that) {
@@ -119,30 +108,17 @@ namespace EARenderer {
     
 #pragma mark - Protected
     
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture2D& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
+    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture& texture) {
+        GLUniform sampler = uniformByName(uniformName);
+        ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
+        ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+        glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
+        glUniform1i(sampler.location(), mFreeTextureUnitIndex);
+        texture.bind();
+        mFreeTextureUnitIndex++;
+        mUsedSamplerLocations.insert(sampler.location());
     }
-    
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTextureCubemap& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
-    }
-    
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLDepthTexture2D& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
-    }
-    
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLDepthTextureCubemap& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
-    }
-    
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLDepthTexture2DArray& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
-    }
-    
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture2DArray& texture) {
-        setUniformTexture(uniformName, dynamic_cast<const GLBindable&>(texture));
-    }
-    
+      
     const GLUniform& GLProgram::uniformByName(const std::string& name) {
         return mUniforms[name];
     }

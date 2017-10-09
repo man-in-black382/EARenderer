@@ -13,7 +13,7 @@ namespace EARenderer {
     
     GLDepthTexture2D::GLDepthTexture2D(const Size2D& size)
     :
-    GLTexture(size, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER)
+    GLTexture(size, GL_TEXTURE_2D, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER)
     {
         ASSERT(size.width > 0, "Depth texture width should be greater than 0");
         ASSERT(size.height > 0, "Depth texture height should be greater than 0");

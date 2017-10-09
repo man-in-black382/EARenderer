@@ -45,18 +45,12 @@ namespace EARenderer {
         void link();
         void obtainUniforms();
         void obtainAvailableTextureUnits();
-        void setUniformTexture(const std::string& uniformName, const GLBindable& texture);
         
     protected:
         GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
         
         const GLUniform& uniformByName(const std::string& name);
-        void setUniformTexture(const std::string& uniformName, const GLTexture2D& texture);
-        void setUniformTexture(const std::string& uniformName, const GLTextureCubemap& texture);
-        void setUniformTexture(const std::string& uniformName, const GLDepthTexture2D& texture);
-        void setUniformTexture(const std::string& uniformName, const GLDepthTextureCubemap& texture);
-        void setUniformTexture(const std::string& uniformName, const GLDepthTexture2DArray& texture);
-        void setUniformTexture(const std::string& uniformName, const GLTexture2DArray& texture);
+        void setUniformTexture(const std::string& uniformName, const GLTexture& texture);
         
     public:
         using UniformModifierClosure = const std::function<void()>&;

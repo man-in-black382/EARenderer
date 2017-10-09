@@ -17,7 +17,7 @@ namespace EARenderer {
     
     GLDepthTexture2DArray::GLDepthTexture2DArray(const Size2D& size, GLsizei layers)
     :
-    GLLayeredTexture(size, layers, GL_TEXTURE_2D_ARRAY, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLLayeredTexture(size, layers, GL_TEXTURE_2D_ARRAY, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         ASSERT(size.width > 0, "Texture 2d array width should be greater than 0");
         ASSERT(size.height > 0, "Texture 2d array height should be greater than 0");

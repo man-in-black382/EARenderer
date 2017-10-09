@@ -12,17 +12,18 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLLayeredTexture::GLLayeredTexture(GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT)
+    GLLayeredTexture::GLLayeredTexture(GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT, GLint wrapModeR)
     :
-    mLayers(layers),
-    GLTexture(bindingPoint, minFilter, magFilter, wrapModeS, wrapModeT)
+    GLLayeredTexture(Size2D::zero(), layers, bindingPoint, minFilter, magFilter, wrapModeS, wrapModeT, wrapModeR)
     { }
     
-    GLLayeredTexture::GLLayeredTexture(const Size2D& size, GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT)
+    GLLayeredTexture::GLLayeredTexture(const Size2D& size, GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT, GLint wrapModeR)
     :
     mLayers(layers),
     GLTexture(size, bindingPoint, minFilter, magFilter, wrapModeS, wrapModeT)
-    { }
+    {
+        glTexParameteri(bindingPoint, GL_TEXTURE_WRAP_R, wrapModeR);
+    }
     
     GLLayeredTexture::~GLLayeredTexture() { }
     

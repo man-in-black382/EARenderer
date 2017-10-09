@@ -14,6 +14,7 @@
 		CE1B34671F28FF7700A8D4BA /* GLSLOmnidirectionalDepth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1B34651F28FF7700A8D4BA /* GLSLOmnidirectionalDepth.cpp */; };
 		CE216F551EFA853B002D12AE /* Vertex1P3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE216F531EFA853B002D12AE /* Vertex1P3.cpp */; };
 		CE2A6E781F2C9777000C3B72 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE2E8FF1F2C95D300B19A6A /* GLSLOmnidirectionalBlinnPhong.cpp */; };
+		CE2A971D1F8BB0A9003E2239 /* env.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CE2A971C1F8BB07D003E2239 /* env.hdr */; };
 		CE3064B61F7A428A008943F2 /* FPSView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE3064B51F7A428A008943F2 /* FPSView.mm */; };
 		CE3064B91F7A4405008943F2 /* NSColor+ApplicationColors.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3064B81F7A4405008943F2 /* NSColor+ApplicationColors.m */; };
 		CE44B89B1EF3FF4400CB690C /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE44B8991EF3FF4400CB690C /* Rect2D.cpp */; };
@@ -109,6 +110,13 @@
 		CE9A5E701F8B737A00808124 /* rustediron2_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E6A1F8B735400808124 /* rustediron2_roughness.png */; };
 		CE9A5E731F8B73C000808124 /* CookTorrance.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E711F8B73BF00808124 /* CookTorrance.vert */; };
 		CE9A5E741F8B73C000808124 /* CookTorrance.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E721F8B73C000808124 /* CookTorrance.frag */; };
+		CE9A5E771F8B817400808124 /* GLHDRTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9A5E751F8B817400808124 /* GLHDRTexture2D.cpp */; };
+		CE9A5E7A1F8B818E00808124 /* GLHDRTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9A5E781F8B818E00808124 /* GLHDRTextureCubemap.cpp */; };
+		CE9A5E7E1F8B9F9D00808124 /* EquirectangularMapConversion.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E7B1F8B9F9C00808124 /* EquirectangularMapConversion.frag */; };
+		CE9A5E7F1F8B9F9D00808124 /* EquirectangularMapConversion.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E7C1F8B9F9D00808124 /* EquirectangularMapConversion.geom */; };
+		CE9A5E801F8B9F9D00808124 /* EquirectangularMapConversion.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE9A5E7D1F8B9F9D00808124 /* EquirectangularMapConversion.vert */; };
+		CE9A5E881F8BA35F00808124 /* GLSLEquirectangularMapConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9A5E861F8BA35F00808124 /* GLSLEquirectangularMapConversion.cpp */; };
+		CE9A5E8B1F8BA4B700808124 /* CommonGeometricEntities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9A5E891F8BA4B700808124 /* CommonGeometricEntities.cpp */; };
 		CEB0E9E41F751B2500552059 /* tank_texture.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E21F751A3900552059 /* tank_texture.png */; };
 		CEB0E9E51F751B2500552059 /* tank_normal_map.png in Resources */ = {isa = PBXBuildFile; fileRef = CEB0E9E11F750DC600552059 /* tank_normal_map.png */; };
 		CEBFE7041F28D557005B898D /* OmnidirectionalDepth.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEBFE7021F28D54F005B898D /* OmnidirectionalDepth.frag */; };
@@ -157,6 +165,7 @@
 		CE216F541EFA853B002D12AE /* Vertex1P3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P3.hpp; sourceTree = "<group>"; };
 		CE250FB51F2B7757002C1C6D /* OmnidirectionalBlinnPhong.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalBlinnPhong.frag; sourceTree = "<group>"; };
 		CE250FB61F2B7757002C1C6D /* OmnidirectionalBlinnPhong.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalBlinnPhong.vert; sourceTree = "<group>"; };
+		CE2A971C1F8BB07D003E2239 /* env.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = env.hdr; sourceTree = "<group>"; };
 		CE3064B41F7A428A008943F2 /* FPSView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FPSView.h; sourceTree = "<group>"; };
 		CE3064B51F7A428A008943F2 /* FPSView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FPSView.mm; sourceTree = "<group>"; };
 		CE3064B71F7A4405008943F2 /* NSColor+ApplicationColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSColor+ApplicationColors.h"; sourceTree = "<group>"; };
@@ -575,6 +584,17 @@
 		CE9A5E6B1F8B736200808124 /* blank.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blank.jpg; sourceTree = "<group>"; };
 		CE9A5E711F8B73BF00808124 /* CookTorrance.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.vert; sourceTree = "<group>"; };
 		CE9A5E721F8B73C000808124 /* CookTorrance.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.frag; sourceTree = "<group>"; };
+		CE9A5E751F8B817400808124 /* GLHDRTexture2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTexture2D.cpp; sourceTree = "<group>"; };
+		CE9A5E761F8B817400808124 /* GLHDRTexture2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTexture2D.hpp; sourceTree = "<group>"; };
+		CE9A5E781F8B818E00808124 /* GLHDRTextureCubemap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTextureCubemap.cpp; sourceTree = "<group>"; };
+		CE9A5E791F8B818E00808124 /* GLHDRTextureCubemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTextureCubemap.hpp; sourceTree = "<group>"; };
+		CE9A5E7B1F8B9F9C00808124 /* EquirectangularMapConversion.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = EquirectangularMapConversion.frag; sourceTree = "<group>"; };
+		CE9A5E7C1F8B9F9D00808124 /* EquirectangularMapConversion.geom */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = EquirectangularMapConversion.geom; sourceTree = "<group>"; };
+		CE9A5E7D1F8B9F9D00808124 /* EquirectangularMapConversion.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = EquirectangularMapConversion.vert; sourceTree = "<group>"; };
+		CE9A5E861F8BA35F00808124 /* GLSLEquirectangularMapConversion.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLEquirectangularMapConversion.cpp; sourceTree = "<group>"; };
+		CE9A5E871F8BA35F00808124 /* GLSLEquirectangularMapConversion.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLEquirectangularMapConversion.hpp; sourceTree = "<group>"; };
+		CE9A5E891F8BA4B700808124 /* CommonGeometricEntities.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommonGeometricEntities.cpp; sourceTree = "<group>"; };
+		CE9A5E8A1F8BA4B700808124 /* CommonGeometricEntities.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CommonGeometricEntities.hpp; sourceTree = "<group>"; };
 		CEB0E9E11F750DC600552059 /* tank_normal_map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_normal_map.png; sourceTree = "<group>"; };
 		CEB0E9E21F751A3900552059 /* tank_texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tank_texture.png; sourceTree = "<group>"; };
 		CEB791C81F154E8500A67854 /* Event.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Event.inl; sourceTree = "<group>"; };
@@ -680,6 +700,8 @@
 				CE58346D1EB9031B009E2F61 /* GLSLFullScreenQuad.hpp */,
 				CE58346E1EB9031B009E2F61 /* GLSLGenericGeometry.cpp */,
 				CE58346F1EB9031B009E2F61 /* GLSLGenericGeometry.hpp */,
+				CE9A5E861F8BA35F00808124 /* GLSLEquirectangularMapConversion.cpp */,
+				CE9A5E871F8BA35F00808124 /* GLSLEquirectangularMapConversion.hpp */,
 				CE9A5E631F8B710100808124 /* GLSLCookTorrance.cpp */,
 				CE9A5E621F8B710100808124 /* GLSLCookTorrance.hpp */,
 				CE5834701EB9031B009E2F61 /* GLSLSkybox.cpp */,
@@ -807,6 +829,7 @@
 		CE5322D91EBB3557005F49C2 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CE2A971C1F8BB07D003E2239 /* env.hdr */,
 				CE9A5E6B1F8B736200808124 /* blank.jpg */,
 				CE9A5E661F8B735400808124 /* Rusted Iron */,
 				CE4B27631F83970B0026D104 /* brickwork_normal_map.jpg */,
@@ -910,6 +933,8 @@
 				CE1737981F07EFA700D7871F /* Parallelogram3D.hpp */,
 				CE44B89F1EF3FF5300CB690C /* AxisAlignedBox3D.cpp */,
 				CE44B8A01EF3FF5300CB690C /* AxisAlignedBox3D.hpp */,
+				CE9A5E891F8BA4B700808124 /* CommonGeometricEntities.cpp */,
+				CE9A5E8A1F8BA4B700808124 /* CommonGeometricEntities.hpp */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -954,6 +979,9 @@
 				CEBFE7011F28D54F005B898D /* OmnidirectionalDepth.vert */,
 				CEBFE7031F28D54F005B898D /* OmnidirectionalDepth.geom */,
 				CEBFE7021F28D54F005B898D /* OmnidirectionalDepth.frag */,
+				CE9A5E7B1F8B9F9C00808124 /* EquirectangularMapConversion.frag */,
+				CE9A5E7C1F8B9F9D00808124 /* EquirectangularMapConversion.geom */,
+				CE9A5E7D1F8B9F9D00808124 /* EquirectangularMapConversion.vert */,
 				CE5834961EB9031B009E2F61 /* FullScreenQuad.frag */,
 				CE5834971EB9031B009E2F61 /* FullScreenQuad.vert */,
 				CE5834981EB9031B009E2F61 /* GenericGeometry.frag */,
@@ -1321,10 +1349,14 @@
 				CEE8DB491F386778001BCC8C /* GLLayeredTexture.hpp */,
 				CE58345F1EB9031B009E2F61 /* GLTexture2D.cpp */,
 				CE5834601EB9031B009E2F61 /* GLTexture2D.hpp */,
+				CE9A5E751F8B817400808124 /* GLHDRTexture2D.cpp */,
+				CE9A5E761F8B817400808124 /* GLHDRTexture2D.hpp */,
 				CE5834511EB9031B009E2F61 /* GLDepthTexture2D.cpp */,
 				CE5834521EB9031B009E2F61 /* GLDepthTexture2D.hpp */,
 				CE5834611EB9031B009E2F61 /* GLTextureCubemap.cpp */,
 				CE5834621EB9031B009E2F61 /* GLTextureCubemap.hpp */,
+				CE9A5E781F8B818E00808124 /* GLHDRTextureCubemap.cpp */,
+				CE9A5E791F8B818E00808124 /* GLHDRTextureCubemap.hpp */,
 				CE6E19C11F26149E00546364 /* GLDepthTextureCubemap.cpp */,
 				CE6E19C21F26149E00546364 /* GLDepthTextureCubemap.hpp */,
 				CEF716AF1F34CAEB00AAA9E7 /* GLTexture2DArray.cpp */,
@@ -1391,11 +1423,11 @@
 		CE9A5E251F8B698E00808124 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				CE9A5E261F8B698E00808124 /* Camera.cpp */,
-				CE9A5E271F8B698E00808124 /* Camera.hpp */,
 				CE9A5E281F8B698E00808124 /* Geometry */,
 				CE9A5E2F1F8B698E00808124 /* Lights */,
 				CE9A5E381F8B698E00808124 /* Materials */,
+				CE9A5E261F8B698E00808124 /* Camera.cpp */,
+				CE9A5E271F8B698E00808124 /* Camera.hpp */,
 				CE9A5E3D1F8B698E00808124 /* Skybox.cpp */,
 				CE9A5E3E1F8B698E00808124 /* Skybox.hpp */,
 			);
@@ -1646,6 +1678,7 @@
 				CE5836291EB90E37009E2F61 /* DirectionalDepth.vert in Resources */,
 				CE9A5E1D1F8B68A600808124 /* suzanne.obj in Resources */,
 				CEBFE7041F28D557005B898D /* OmnidirectionalDepth.frag in Resources */,
+				CE9A5E801F8B9F9D00808124 /* EquirectangularMapConversion.vert in Resources */,
 				CEB0E9E41F751B2500552059 /* tank_texture.png in Resources */,
 				CE9A5E731F8B73C000808124 /* CookTorrance.vert in Resources */,
 				CE9A5E6F1F8B737A00808124 /* rustediron2_normal.png in Resources */,
@@ -1661,6 +1694,7 @@
 				CE5322F51EBB3557005F49C2 /* skyboxLeft.png in Resources */,
 				CE58362B1EB90E37009E2F61 /* FullScreenQuad.vert in Resources */,
 				CE9A5E741F8B73C000808124 /* CookTorrance.frag in Resources */,
+				CE9A5E7F1F8B9F9D00808124 /* EquirectangularMapConversion.geom in Resources */,
 				CE58362C1EB90E37009E2F61 /* GenericGeometry.frag in Resources */,
 				CE5322E51EBB3557005F49C2 /* Main.storyboard in Resources */,
 				CE58362D1EB90E37009E2F61 /* GenericGeometry.vert in Resources */,
@@ -1669,12 +1703,14 @@
 				CE5322F21EBB3557005F49C2 /* skyboxBack.png in Resources */,
 				CE5322FA1EBB3557005F49C2 /* hazard.png in Resources */,
 				CEC492021F2CA8D100DEA92B /* OmnidirectionalBlinnPhong.vert in Resources */,
+				CE2A971D1F8BB0A9003E2239 /* env.hdr in Resources */,
 				CE5322F91EBB3557005F49C2 /* gun.jpg in Resources */,
 				CE4B27651F83975D0026D104 /* brickwork_normal_map.jpg in Resources */,
 				CE5322E21EBB3557005F49C2 /* Info.plist in Resources */,
 				CE5322F61EBB3557005F49C2 /* skyboxRight.png in Resources */,
 				CE9A5E701F8B737A00808124 /* rustediron2_roughness.png in Resources */,
 				CE9A5E1C1F8B68A600808124 /* sphere.obj in Resources */,
+				CE9A5E7E1F8B9F9D00808124 /* EquirectangularMapConversion.frag in Resources */,
 				CE58362E1EB90E37009E2F61 /* Skybox.frag in Resources */,
 				CE9A5E1B1F8B68A600808124 /* plane.obj in Resources */,
 				CE5322E41EBB3557005F49C2 /* Assets.xcassets in Resources */,
@@ -1715,6 +1751,7 @@
 				CE1B34671F28FF7700A8D4BA /* GLSLOmnidirectionalDepth.cpp in Sources */,
 				CE9A5E461F8B69EF00808124 /* Transformation.cpp in Sources */,
 				CEE0F71A1EED58EB0048AD01 /* Ray3D.cpp in Sources */,
+				CE9A5E7A1F8B818E00808124 /* GLHDRTextureCubemap.cpp in Sources */,
 				CE5835E51EB9031C009E2F61 /* GLProgram.cpp in Sources */,
 				CE9A5E5F1F8B6A5300808124 /* FrameMeter.cpp in Sources */,
 				CE5835E91EB9031C009E2F61 /* GLTextureCubemap.cpp in Sources */,
@@ -1726,6 +1763,7 @@
 				CE9A5E451F8B69EF00808124 /* SubMesh.cpp in Sources */,
 				CE9A5E641F8B710200808124 /* GLSLCookTorrance.cpp in Sources */,
 				CE6539DA1EF6B2B2003D6808 /* NSNumberFormatter+CustomFormatters.m in Sources */,
+				CE9A5E8B1F8BA4B700808124 /* CommonGeometricEntities.cpp in Sources */,
 				CE5836011EB9031C009E2F61 /* Vertex1P1N1UV.cpp in Sources */,
 				CE53230A1EBB360B005F49C2 /* SceneGLView.mm in Sources */,
 				CE9A5E4E1F8B69EF00808124 /* Scene.cpp in Sources */,
@@ -1753,9 +1791,11 @@
 				CE9A5E411F8B69EF00808124 /* Cameraman.cpp in Sources */,
 				CE5835EF1EB9031C009E2F61 /* GLSLSkybox.cpp in Sources */,
 				CE9A5E601F8B6A5300808124 /* Log.cpp in Sources */,
+				CE9A5E881F8BA35F00808124 /* GLSLEquirectangularMapConversion.cpp in Sources */,
 				CEF3315A1F03A4EB009BE235 /* AxesSelection.cpp in Sources */,
 				CE9A5E5E1F8B6A5300808124 /* FileManager.cpp in Sources */,
 				CEE0F71D1EED736F0048AD01 /* GLViewport.cpp in Sources */,
+				CE9A5E771F8B817400808124 /* GLHDRTexture2D.cpp in Sources */,
 				CE5835FF1EB9031C009E2F61 /* tiny_obj_loader.cpp in Sources */,
 				CE6E19C31F26149E00546364 /* GLDepthTextureCubemap.cpp in Sources */,
 				CEF3315E1F03A4EB009BE235 /* SceneRenderer.cpp in Sources */,

@@ -17,8 +17,8 @@ namespace EARenderer {
     protected:
         GLsizei mLayers;
         
-        GLLayeredTexture(GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
-        GLLayeredTexture(const Size2D& size, GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
+        GLLayeredTexture(GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT, GLint wrapModeR);
+        GLLayeredTexture(const Size2D& size, GLsizei layers, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT, GLint wrapModeR);
         
     public:
         ~GLLayeredTexture() override = 0;

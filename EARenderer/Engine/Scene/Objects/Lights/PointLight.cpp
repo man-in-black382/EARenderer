@@ -7,6 +7,7 @@
 //
 
 #include "PointLight.hpp"
+#include "CommonGeometricEntities.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -21,15 +22,7 @@ namespace EARenderer {
     { }
     
     std::array<glm::mat4, 6> PointLight::viewProjectionMatrices() const {
-        glm::mat4 projMat = glm::perspective(glm::radians(90.f), 1.f, 0.01f, mClipDistance);
-        return {
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)),
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)),
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)),
-        };
+        return CommonGeometricEntities::omnidirectionalViewProjectionMatrixSet(mPosition, mClipDistance);
     }
     
     float PointLight::clipDistance() const {

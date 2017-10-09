@@ -18,7 +18,7 @@ namespace EARenderer {
     
     GLTexture2D::GLTexture2D(const Size2D& size)
     :
-    GLTexture(size, GL_TEXTURE_2D, GL_NEAREST, GL_NEAREST, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(size, GL_TEXTURE_2D, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         ASSERT(size.width > 0, "Texture width should be greater than 0");
         ASSERT(size.height > 0, "Texture height should be greater than 0");

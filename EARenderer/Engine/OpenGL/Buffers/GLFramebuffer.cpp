@@ -52,56 +52,43 @@ namespace EARenderer {
     
 #pragma mark - Private helpers
     
-    void GLFramebuffer::disableColorAttachments() {
+    void GLFramebuffer::attachTextureToDepthAttachment(const GLTexture& texture, int16_t layer) {
+        bind();
+        texture.bind();
+        
+        if (layer == -1) {
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), 0);
+        } else {
+            glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), 0, layer);
+        }
+        
         glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+    }
+    
+    void GLFramebuffer::attachTextureToColorAttachment0(const GLTexture& texture, int16_t layer) {
+        bind();
+        texture.bind();
+        
+        if (layer == -1) {
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), 0);
+        } else {
+            glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), 0, layer);
+        }
+        
+        glDrawBuffer(GL_COLOR_ATTACHMENT0);
         glReadBuffer(GL_NONE);
     }
     
 #pragma mark - Public
     
-    void GLFramebuffer::attachTexture(const GLTexture2D& texture) {
-        bind();
-        texture.bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), 0);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
-        glReadBuffer(GL_NONE);
-    }
-    
-    void GLFramebuffer::attachTexture(const GLTextureCubemap& texture) {
-        bind();
-        texture.bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), 0);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
-        glReadBuffer(GL_NONE);
-    }
-    
-    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture) {
-        bind();
-        texture.bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), 0);
-        disableColorAttachments();
-    }
-    
-    void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture) {
-        bind();
-        texture.bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), 0);
-        disableColorAttachments();
-    }
-    
-    void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer) {
-        bind();
-        textures.bind();
-        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, textures.name(), 0, layer);
-        disableColorAttachments();
-    }
-    
-    void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer) {
-        bind();
-        textures.bind();
-        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, textures.name(), 0, layer);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
-        glReadBuffer(GL_NONE);
-    }
+    void GLFramebuffer::attachTexture(const GLTexture2D& texture)                                   { attachTextureToColorAttachment0(texture); }
+    void GLFramebuffer::attachTexture(const GLTextureCubemap& texture)                              { attachTextureToColorAttachment0(texture); }
+    void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture)                                { attachTextureToColorAttachment0(texture); }
+    void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture)                           { attachTextureToColorAttachment0(texture); }
+    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture)                              { attachTextureToDepthAttachment(texture); }
+    void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture)                         { attachTextureToDepthAttachment(texture); }
+    void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer)        { attachTextureToColorAttachment0(textures, layer); }
+    void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer)   { attachTextureToDepthAttachment(textures, layer); }
     
 }
