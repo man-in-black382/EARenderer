@@ -31,10 +31,17 @@ namespace EARenderer {
     
     void GLSLSkybox::setCubemap(const GLTextureCubemap& cubemap) {
         setUniformTexture("uCubeMapTexture", cubemap);
+        glUniform1i(uniformByName("uIsHDR").location(), GL_FALSE);
     }
     
     void GLSLSkybox::setCubemap(const GLDepthTextureCubemap& cubemap) {
         setUniformTexture("uCubeMapTexture", cubemap);
+        glUniform1i(uniformByName("uIsHDR").location(), GL_FALSE);
+    }
+    
+    void GLSLSkybox::setCubemap(const GLHDRTextureCubemap& cubemap) {
+        setUniformTexture("uCubeMapTexture", cubemap);
+        glUniform1i(uniformByName("uIsHDR").location(), GL_TRUE);
     }
     
 }

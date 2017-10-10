@@ -11,6 +11,8 @@
 
 #include "GLProgram.hpp"
 #include "GLTextureCubemap.hpp"
+#include "GLHDRTextureCubemap.hpp"
+
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
@@ -25,6 +27,7 @@ namespace EARenderer {
         void setProjectionMatrix(const glm::mat4& matrix);
         void setCubemap(const GLTextureCubemap& cubemap);
         void setCubemap(const GLDepthTextureCubemap& cubemap);
+        void setCubemap(const GLHDRTextureCubemap& cubemap);
     };
     
 }

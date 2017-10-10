@@ -22,8 +22,7 @@ namespace EARenderer {
         ASSERT(size.height > 0, "Cubemap texture height should be greater than 0");
         
         for(GLuint i = 0; i < 6; i++) {
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, size.width,
-                         size.height, 0, GL_RGB, GL_FLOAT, nullptr);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, size.width, size.height, 0, GL_RGB, GL_FLOAT, nullptr);
         }
     }
     

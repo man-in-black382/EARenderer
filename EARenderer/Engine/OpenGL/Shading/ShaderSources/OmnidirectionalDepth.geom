@@ -11,7 +11,7 @@ void main() {
     for (int face = 0; face < 6; ++face) {
         // Cubemap face
         gl_Layer = face;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < gl_in.length(); i++) {
             vFragPosition = gl_in[i].gl_Position;
             gl_Position = uLightSpaceMatrices[face] * vFragPosition;
             EmitVertex();

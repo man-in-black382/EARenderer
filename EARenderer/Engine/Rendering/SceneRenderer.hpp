@@ -13,21 +13,26 @@
 
 #include "Scene.hpp"
 #include "GLFramebuffer.hpp"
+#include "DefaultRenderComponentsProviding.hpp"
+#include "FrustumCascades.hpp"
+#include "Ray3D.hpp"
+
 #include "GLSLCookTorrance.hpp"
 #include "GLSLDirectionalBlinnPhong.hpp"
 #include "GLSLOmnidirectionalBlinnPhong.hpp"
 #include "GLSLFullScreenQuad.hpp"
-#include "GLDepthTexture2D.hpp"
-#include "GLDepthTextureCubemap.hpp"
-#include "GLDepthTexture2DArray.hpp"
-#include "GLTexture2DArray.hpp"
 #include "GLSLDirectionalDepth.hpp"
 #include "GLSLOmnidirectionalDepth.hpp"
 #include "GLSLSkybox.hpp"
 #include "GLSLGenericGeometry.hpp"
-#include "DefaultRenderComponentsProviding.hpp"
-#include "FrustumCascades.hpp"
-#include "Ray3D.hpp"
+#include "GLSLEquirectangularMapConversion.hpp"
+
+#include "GLDepthTexture2D.hpp"
+#include "GLDepthTextureCubemap.hpp"
+#include "GLDepthTexture2DArray.hpp"
+#include "GLHDRTexture2D.hpp"
+#include "GLHDRTextureCubemap.hpp"
+#include "GLTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -44,6 +49,12 @@ namespace EARenderer {
         GLSLDirectionalDepth mDirectionalDepthShader;
         GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
+        GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
+        
+        GLHDRTexture2D mHDREqurectangularSkybox;
+        GLTextureCubemap mHDRSkybox;
+        GLHDRTextureCubemap mHRDIrradianceMap;
+        GLFramebuffer mIBLFramebuffer;
         
         GLDepthTexture2DArray mCascadedShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
@@ -52,8 +63,7 @@ namespace EARenderer {
         // DEBUG
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
-        
-        std::unordered_set<ID> mMeshesToHighlight;
+        //
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void renderShadowMapsForPointLights();
@@ -62,17 +72,16 @@ namespace EARenderer {
         void renderSkybox();
         
         void renderClassicMeshes();
+        
+        void convertEquirectangularMapToCubemap();
+        
         void renderPBRMeshes();
         
     public:
-        SceneRenderer(Scene* scene);
+        SceneRenderer(Scene* scene, const std::string& equirectangularSkyboxPath);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
-        void setMeshHiglightEnabled(bool enabled, ID meshID);
-        void disableMeshesHighlight();
-        
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-        
         void render();
     };
     

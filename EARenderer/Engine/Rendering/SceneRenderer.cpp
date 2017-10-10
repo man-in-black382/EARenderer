@@ -17,12 +17,16 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene)
+    SceneRenderer::SceneRenderer(Scene* scene, const std::string& equirectangularSkyboxPath)
     :
     mScene(scene),
     mCascadedShadowMaps(Size2D(2048, 2048), mNumberOfCascades),
     mShadowCubeMap(Size2D(2048, 2048)),
-    mDepthFramebuffer(Size2D(2048, 2048))
+    mDepthFramebuffer(Size2D(2048, 2048)),
+    mHDREqurectangularSkybox(equirectangularSkyboxPath),
+    mHDRSkybox(Size2D(512, 512)),
+    mHRDIrradianceMap(Size2D(512, 512)),
+    mIBLFramebuffer(Size2D(512, 512))
     { }
     
 #pragma mark - Setters
@@ -30,19 +34,7 @@ namespace EARenderer {
     void SceneRenderer::setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider) {
         mDefaultRenderComponentsProvider = provider;
     }
-    
-    void SceneRenderer::setMeshHiglightEnabled(bool enabled, ID meshID) {
-        if (enabled) {
-            mMeshesToHighlight.insert(meshID);
-        } else {
-            mMeshesToHighlight.erase(meshID);
-        }
-    }
-    
-    void SceneRenderer::disableMeshesHighlight() {
-        mMeshesToHighlight.clear();
-    }
-    
+
 #pragma mark - Math
     
     bool SceneRenderer::raySelectsMesh(const Ray3D& ray, ID& meshID) {
@@ -79,9 +71,11 @@ namespace EARenderer {
     
     void SceneRenderer::renderSkybox() {
         mSkyboxShader.bind();
-        mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
-        mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-        mSkyboxShader.setCubemap(mScene->skybox()->cubemap());
+        mSkyboxShader.ensureSamplerValidity([this]() {
+            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+            mSkyboxShader.setCubemap(mHDRSkybox);
+        });
         mScene->skybox()->draw();
     }
     
@@ -205,7 +199,7 @@ namespace EARenderer {
         DirectionalLight& light = mScene->directionalLights()[lightID];
         FrustumCascades cascades = light.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
         
-        renderShadowMapsForDirectionalLights(cascades);
+//        renderShadowMapsForDirectionalLights(cascades);
         renderShadowMapsForPointLights();
         
         if (mDefaultRenderComponentsProvider) {
@@ -215,29 +209,48 @@ namespace EARenderer {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //
-        renderDirectionalLighting(cascades);
+//        renderDirectionalLighting(cascades);
         renderPointLighting();
-        //        renderSkybox();
+        renderSkybox();
     }
     
 #pragma mark Cook-Torrance
+    
+    void SceneRenderer::convertEquirectangularMapToCubemap() {
+        glDisable(GL_CULL_FACE);
+        mIBLFramebuffer.bind();
+        mIBLFramebuffer.attachTexture(mHDRSkybox);
+        mIBLFramebuffer.viewport().apply();
+        
+        mEqurectangularMapConversionShader.bind();
+        mEqurectangularMapConversionShader.ensureSamplerValidity([this]() {
+            mEqurectangularMapConversionShader.setViewProjections(CommonGeometricEntities::omnidirectionalViewProjectionMatrixSet(glm::zero<glm::vec3>(), 1.0));
+            mEqurectangularMapConversionShader.setEquirectangularEnvironmentMap(mHDREqurectangularSkybox);
+        });
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        mScene->skybox()->draw();
+    }
     
     void SceneRenderer::renderPBRMeshes() {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClearDepth(1.0);
+        
+        convertEquirectangularMapToCubemap();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
         
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
         ID lightID = *(mScene->pointLights().begin());
         PointLight& light = mScene->pointLights()[lightID];
+        
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
         
@@ -262,11 +275,14 @@ namespace EARenderer {
                 subMesh.draw();
             });
         }
+        
+        renderSkybox();
     }
     
 #pragma mark - Public access point
     
     void SceneRenderer::render() {
+//        renderClassicMeshes();
         renderPBRMeshes();
     }
     

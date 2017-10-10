@@ -979,9 +979,9 @@
 				CEBFE7011F28D54F005B898D /* OmnidirectionalDepth.vert */,
 				CEBFE7031F28D54F005B898D /* OmnidirectionalDepth.geom */,
 				CEBFE7021F28D54F005B898D /* OmnidirectionalDepth.frag */,
-				CE9A5E7B1F8B9F9C00808124 /* EquirectangularMapConversion.frag */,
-				CE9A5E7C1F8B9F9D00808124 /* EquirectangularMapConversion.geom */,
 				CE9A5E7D1F8B9F9D00808124 /* EquirectangularMapConversion.vert */,
+				CE9A5E7C1F8B9F9D00808124 /* EquirectangularMapConversion.geom */,
+				CE9A5E7B1F8B9F9C00808124 /* EquirectangularMapConversion.frag */,
 				CE5834961EB9031B009E2F61 /* FullScreenQuad.frag */,
 				CE5834971EB9031B009E2F61 /* FullScreenQuad.vert */,
 				CE5834981EB9031B009E2F61 /* GenericGeometry.frag */,
@@ -1928,6 +1928,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -1945,6 +1946,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

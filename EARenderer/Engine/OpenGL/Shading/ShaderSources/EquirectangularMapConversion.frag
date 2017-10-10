@@ -26,6 +26,7 @@ vec3 SampleSphericalMap(vec3 v) {
 }
 
 void main() {
-    vec3 sampledColor = SampleSphericalMap(normalize(vFragPosition)); // Don't forget to normalize!
-    return vec4(sampledColor, 1.0);
+    vec3 sampledColor = SampleSphericalMap(normalize(vFragPosition.xyz)); // Don't forget to normalize!
+//    oFragColor = vec4(sampledColor, 1.0);
+    oFragColor = vec4(0.2, 0.5, 0.7, 1.0);
 }
