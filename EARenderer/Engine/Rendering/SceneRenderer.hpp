@@ -52,7 +52,7 @@ namespace EARenderer {
         GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
         
         GLHDRTexture2D mHDREqurectangularSkybox;
-        GLTextureCubemap mHDRSkybox;
+        GLHDRTextureCubemap mHDRSkybox;
         GLHDRTextureCubemap mHRDIrradianceMap;
         GLFramebuffer mIBLFramebuffer;
         
@@ -74,6 +74,7 @@ namespace EARenderer {
         void renderClassicMeshes();
         
         void convertEquirectangularMapToCubemap();
+        void buildSpecularIrradianceMap();
         
         void renderPBRMeshes();
         

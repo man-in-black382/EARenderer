@@ -11,6 +11,8 @@
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
+#include "GLViewport.hpp"
+
 #include "GLTexture2D.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
@@ -19,8 +21,9 @@
 #include "GLHDRTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2DArray.hpp"
-#include "GLViewport.hpp"
+
 #include "Size2D.hpp"
+#include "Range.hpp"
 
 #include <functional>
 
@@ -30,7 +33,10 @@ namespace EARenderer {
     private:
         Size2D mSize;
         GLViewport mViewport;
+        GLint mMaximumColorAttachments;
+        GLint mMaximumDrawBuffers;
 
+        void obtainHardwareLimits();
         void attachTextureToDepthAttachment(const GLTexture& texture, int16_t layer = -1);
         void attachTextureToColorAttachment0(const GLTexture& texture, int16_t layer = -1);
         
@@ -54,6 +60,9 @@ namespace EARenderer {
         void attachTexture(const GLHDRTextureCubemap& texture);
         void attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer);
         void attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer);
+        
+        // TEST
+        void attachMipMapsOfTexture(const GLHDRTextureCubemap& texture, uint8_t mipMapCount);
     };
     
 }

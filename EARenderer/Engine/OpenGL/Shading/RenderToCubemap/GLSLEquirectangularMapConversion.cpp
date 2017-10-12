@@ -8,7 +8,9 @@
 
 #include "GLSLEquirectangularMapConversion.hpp"
 
+#include <glm/vec3.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace EARenderer {
     
@@ -16,15 +18,11 @@ namespace EARenderer {
     
     GLSLEquirectangularMapConversion::GLSLEquirectangularMapConversion()
     :
-    GLProgram("EquirectangularMapConversion.vert", "EquirectangularMapConversion.frag", "EquirectangularMapConversion.geom")
+    GLSLCubemapRendering("EquirectangularMapConversion.frag")
     { }
     
 #pragma mark - Setters
-    
-    void GLSLEquirectangularMapConversion::setViewProjections(CommonGeometricEntities::OmnidirectionalViewProjectionMatrixSet matrices) {
-        glUniformMatrix4fv(uniformByName("uViewProjectionMatrices[0]").location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
-    }
-    
+
     void GLSLEquirectangularMapConversion::setEquirectangularEnvironmentMap(const GLHDRTexture2D& map) {
         setUniformTexture("uEquirectangularMap", map);
     }

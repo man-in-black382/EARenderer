@@ -9,19 +9,15 @@
 #ifndef GLSLEquirectangularMapConversion_hpp
 #define GLSLEquirectangularMapConversion_hpp
 
-#include "GLProgram.hpp"
+#include "GLSLCubemapRendering.hpp"
 #include "GLHDRTexture2D.hpp"
-#include "CommonGeometricEntities.hpp"
 
 namespace EARenderer {
     
-    class GLSLEquirectangularMapConversion: public GLProgram {
-    public:
-        using GLProgram::GLProgram;
-        
+    class GLSLEquirectangularMapConversion: public GLSLCubemapRendering {
+    public:        
         GLSLEquirectangularMapConversion();
-        
-        void setViewProjections(CommonGeometricEntities::OmnidirectionalViewProjectionMatrixSet matrices);
+                
         void setEquirectangularEnvironmentMap(const GLHDRTexture2D& map);
     };
     

@@ -124,7 +124,7 @@ namespace EARenderer {
         ASSERT(it != mUniforms.end(), "Uniform named '" << name << "' could not be found");
         return it->second;
     }
-    
+        
 #pragma mark - Public
     
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {

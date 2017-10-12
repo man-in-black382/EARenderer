@@ -14,15 +14,24 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLHDRTextureCubemap::GLHDRTextureCubemap(const Size2D& size)
+    GLHDRTextureCubemap::GLHDRTextureCubemap(const Size2D& size, bool generateMipmaps)
     :
-    GLTexture(size, GL_TEXTURE_CUBE_MAP, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(size,
+              GL_TEXTURE_CUBE_MAP,
+              generateMipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+              GL_LINEAR,
+              GL_CLAMP_TO_EDGE,
+              GL_CLAMP_TO_EDGE)
     {
         ASSERT(size.width > 0, "Cubemap texture width should be greater than 0");
         ASSERT(size.height > 0, "Cubemap texture height should be greater than 0");
         
         for(GLuint i = 0; i < 6; i++) {
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, size.width, size.height, 0, GL_RGB, GL_FLOAT, nullptr);
+        }
+        
+        if (generateMipmaps) {
+            glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
         }
     }
     

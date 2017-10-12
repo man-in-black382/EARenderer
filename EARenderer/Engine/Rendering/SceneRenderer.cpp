@@ -25,7 +25,7 @@ namespace EARenderer {
     mDepthFramebuffer(Size2D(2048, 2048)),
     mHDREqurectangularSkybox(equirectangularSkyboxPath),
     mHDRSkybox(Size2D(512, 512)),
-    mHRDIrradianceMap(Size2D(512, 512)),
+    mHRDIrradianceMap(Size2D(512, 512), true),
     mIBLFramebuffer(Size2D(512, 512))
     { }
     
@@ -217,19 +217,24 @@ namespace EARenderer {
 #pragma mark Cook-Torrance
     
     void SceneRenderer::convertEquirectangularMapToCubemap() {
-        glDisable(GL_CULL_FACE);
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mHDRSkybox);
         mIBLFramebuffer.viewport().apply();
         
         mEqurectangularMapConversionShader.bind();
         mEqurectangularMapConversionShader.ensureSamplerValidity([this]() {
-            mEqurectangularMapConversionShader.setViewProjections(CommonGeometricEntities::omnidirectionalViewProjectionMatrixSet(glm::zero<glm::vec3>(), 1.0));
             mEqurectangularMapConversionShader.setEquirectangularEnvironmentMap(mHDREqurectangularSkybox);
         });
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mScene->skybox()->draw();
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+    }
+    
+    void SceneRenderer::buildSpecularIrradianceMap() {
+        mIBLFramebuffer.bind();
+        mIBLFramebuffer.attachMipMapsOfTexture(mHDRSkybox, 5);
+        
+        bool isComplete = mIBLFramebuffer.isComplete();
     }
     
     void SceneRenderer::renderPBRMeshes() {
@@ -240,7 +245,8 @@ namespace EARenderer {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         
-        convertEquirectangularMapToCubemap();
+//        convertEquirectangularMapToCubemap();
+        buildSpecularIrradianceMap();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();

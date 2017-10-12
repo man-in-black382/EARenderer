@@ -10,10 +10,10 @@ out vec4 vFragPosition;
 void main() {
     for (int face = 0; face < 6; ++face) {
         // Cubemap face
-        gl_Layer = face;
         for (int i = 0; i < gl_in.length(); i++) {
-            vFragPosition = gl_in[i].gl_Position;
-            gl_Position = uViewProjectionMatrices[face] * vFragPosition;
+            gl_Layer = face;
+            gl_Position = gl_in[i].gl_Position;
+            vFragPosition = uViewProjectionMatrices[face] * gl_Position;
             EmitVertex();
         }
         EndPrimitive();
