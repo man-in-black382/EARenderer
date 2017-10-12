@@ -12,6 +12,9 @@
 #include "GLSLCubemapRendering.hpp"
 #include "GLHDRTextureCubemap.hpp"
 
+// DEBUG
+#include "GLTextureCubemap.hpp"
+
 namespace EARenderer {
     
     class GLSLRadianceConvolution: public GLSLCubemapRendering {
@@ -19,6 +22,11 @@ namespace EARenderer {
         GLSLRadianceConvolution();
         
         void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
+        void setRoughness(float roughness);
+        
+        
+        // DEBUG
+        void setEnvironmentRadianceMap(const GLTextureCubemap& map);
     };
     
 }

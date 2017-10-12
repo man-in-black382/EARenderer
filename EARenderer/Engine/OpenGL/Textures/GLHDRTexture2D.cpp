@@ -30,6 +30,7 @@ namespace EARenderer {
     GLTexture(GL_TEXTURE_2D, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
     {
         int32_t width = 0, height = 0, components = 0;
+        stbi_set_flip_vertically_on_load(true);
         float *pixelData = stbi_loadf(fileName.c_str(), &width, &height, &components, STBI_default);
         
         ASSERT(pixelData, "Unable to read texture file: " << fileName);

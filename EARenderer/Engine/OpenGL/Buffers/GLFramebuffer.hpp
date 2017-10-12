@@ -37,8 +37,8 @@ namespace EARenderer {
         GLint mMaximumDrawBuffers;
 
         void obtainHardwareLimits();
-        void attachTextureToDepthAttachment(const GLTexture& texture, int16_t layer = -1);
-        void attachTextureToColorAttachment0(const GLTexture& texture, int16_t layer = -1);
+        void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
+        void attachTextureToColorAttachment0(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
         
     public:
         GLFramebuffer(const Size2D& size);
@@ -52,17 +52,14 @@ namespace EARenderer {
         bool isComplete() const;
         const GLViewport& viewport() const;
         
-        void attachTexture(const GLTexture2D& texture);
-        void attachTexture(const GLTextureCubemap& texture);
-        void attachTexture(const GLDepthTexture2D& texture);
-        void attachTexture(const GLHDRTexture2D& texture);
-        void attachTexture(const GLDepthTextureCubemap& texture);
-        void attachTexture(const GLHDRTextureCubemap& texture);
-        void attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer);
-        void attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer);
-        
-        // TEST
-        void attachMipMapsOfTexture(const GLHDRTextureCubemap& texture, uint8_t mipMapCount);
+        void attachTexture(const GLTexture2D& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLTextureCubemap& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLHDRTexture2D& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLHDRTextureCubemap& texture, uint16_t mipLevel = 0);
+        void attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer, uint16_t mipLevel = 0);
+        void attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer, uint16_t mipLevel = 0);
     };
     
 }

@@ -26,6 +26,7 @@
 #include "GLSLSkybox.hpp"
 #include "GLSLGenericGeometry.hpp"
 #include "GLSLEquirectangularMapConversion.hpp"
+#include "GLSLRadianceConvolution.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -43,27 +44,28 @@ namespace EARenderer {
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         
-        GLSLCookTorrance mCookTorranceShader;
-        GLSLDirectionalBlinnPhong mDirectionalBlinnPhongShader;
-        GLSLOmnidirectionalBlinnPhong mOmnidirectionalBlinnPhongShader;
-        GLSLDirectionalDepth mDirectionalDepthShader;
-        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
+//        GLSLDirectionalBlinnPhong mDirectionalBlinnPhongShader;
+//        GLSLOmnidirectionalBlinnPhong mOmnidirectionalBlinnPhongShader;
+//        GLSLDirectionalDepth mDirectionalDepthShader;
+//        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
+        GLSLCookTorrance mCookTorranceShader;
         GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
+        GLSLRadianceConvolution mRadianceConvolutionShader;
         
-        GLHDRTexture2D mHDREqurectangularSkybox;
-        GLHDRTextureCubemap mHDRSkybox;
-        GLHDRTextureCubemap mHRDIrradianceMap;
+        GLHDRTexture2D mRadianceMapEquirectangular;
+        GLHDRTextureCubemap mRadianceMapCube;
+        GLHDRTextureCubemap mSpecularIrradianceMap;
         GLFramebuffer mIBLFramebuffer;
         
-        GLDepthTexture2DArray mCascadedShadowMaps;
-        GLDepthTextureCubemap mShadowCubeMap;
-        GLFramebuffer mDepthFramebuffer;
-        
-        // DEBUG
-        GLSLFullScreenQuad mFSQuadShader;
-        GLSLGenericGeometry mGenericShader;
-        //
+//        GLDepthTexture2DArray mCascadedShadowMaps;
+//        GLDepthTextureCubemap mShadowCubeMap;
+//        GLFramebuffer mDepthFramebuffer;
+//
+//        // DEBUG
+//        GLSLFullScreenQuad mFSQuadShader;
+//        GLSLGenericGeometry mGenericShader;
+//        //
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void renderShadowMapsForPointLights();

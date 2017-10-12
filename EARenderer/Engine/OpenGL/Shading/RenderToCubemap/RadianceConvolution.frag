@@ -8,7 +8,6 @@ const float PI = 3.1415926535897932384626433832795;
 
 uniform samplerCube uEnvironmentMap;
 uniform float       uRoughness;
-uniform int         uRoughnessSampleCount;
 
 // Input
 
@@ -79,28 +78,35 @@ void main() {
     vec3 R = N;
     vec3 V = R;
     
-    const uint kSampleCount = 1024;
+    float a = uRoughness;
     
-    float totalWeight       = 0.0;
-    vec3 totalIrradiance    = vec3(0.0);
-    
-    for (uint i = 0; i < kSampleCount; ++i) {
-        vec2 Xi = Hammersley2D(i, kSampleCount);
-        vec3 H  = ImportanceSampleGGX(Xi, N, uRoughness);
-        // Reflect H to actually sample in light direction
-        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
-        
-        float NdotL = max(dot(N, L), 0.0);
-        if (NdotL > 0.0) {
-            totalIrradiance += texture(uEnvironmentMap, L).rgb * NdotL;
-            totalWeight     += NdotL;
-        }
-    }
-    
-    totalIrradiance = totalIrradiance / totalWeight;
-    
-    oFragColor = vec4(totalIrradiance, 1.0);
+//    const uint kSampleCount = 1024;
+//    
+//    float totalWeight       = 0.0;
+//    vec3 totalIrradiance    = vec3(0.0);
+//    
+//    for (uint i = 0; i < kSampleCount; ++i) {
+//        vec2 Xi = Hammersley2D(i, kSampleCount);
+//        vec3 H  = ImportanceSampleGGX(Xi, N, uRoughness);
+//        // Reflect H to actually sample in light direction
+//        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
+//        
+//        float NdotL = max(dot(N, L), 0.0);
+//        if (NdotL > 0.0) {
+//            totalIrradiance += texture(uEnvironmentMap, L).rgb * NdotL;
+//            totalWeight     += NdotL;
+//        }
+//    }
+//    
+//    totalIrradiance = totalIrradiance / totalWeight;
+//    
+//    oFragColor = vec4(totalIrradiance, 1.0);
     
     // DEBUG
-//    oFragColor = vec4(vFragPosition.xyz, 1.0);
+    vec4 envColor = texture(uEnvironmentMap, vec3(0.9, 0.9, 0.0));
+    if (envColor.rgb == vec3(0.0)) {
+        oFragColor = vec4(1.0, 0.2, 0.2, 1.0);
+    } else {
+        oFragColor = vec4(N, 1.0);
+    }
 }

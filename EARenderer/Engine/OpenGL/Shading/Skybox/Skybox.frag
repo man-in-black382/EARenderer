@@ -25,6 +25,6 @@ void main() {
     oFragmentColor = texture(uCubeMapTexture, oEyeDirection);
     
     if (uIsHDR) {
-        oFragmentColor = vec4(ReinhardToneMapAndGammaCorrect(oFragmentColor.rgb), 1.0);
+//        oFragmentColor = vec4(ReinhardToneMapAndGammaCorrect(oFragmentColor.rgb), 1.0);
     }
 }

@@ -27,4 +27,14 @@ namespace EARenderer {
         setUniformTexture("uEnvironmentMap", map);
     }
     
+    void GLSLRadianceConvolution::setRoughness(float roughness) {
+        glUniform1f(uniformByName("uRoughness").location(), roughness);
+    }
+    
+    // DEBUG
+    
+    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLTextureCubemap& map) {
+        setUniformTexture("uEnvironmentMap", map);
+    }
+    
 }

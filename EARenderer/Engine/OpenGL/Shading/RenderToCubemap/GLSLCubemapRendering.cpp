@@ -35,12 +35,12 @@ namespace EARenderer {
         // Don't forget to swap X directions since we negated Z
         // (usual order if Xpos then Xneg)
         std::array<glm::mat4, 6> matrices = {
-            projMat * glm::lookAt(zero, XNegative, glm::vec3(0.0, 1.0, 0.0)),
-            projMat * glm::lookAt(zero, XPositive, glm::vec3(0.0, 1.0, 0.0)),
-            projMat * glm::lookAt(zero, YPositive, glm::vec3(0.0, 0.0, -1.0)),
-            projMat * glm::lookAt(zero, YNegative, glm::vec3(0.0, 0.0, 1.0)),
-            projMat * glm::lookAt(zero, ZPositive, glm::vec3(0.0, 1.0, 0.0)),
-            projMat * glm::lookAt(zero, ZNegative, glm::vec3(0.0, 1.0, 0.0))
+            projMat * glm::lookAt(zero, XNegative, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(zero, XPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(zero, YPositive, glm::vec3(0.0, 0.0, 1.0)),
+            projMat * glm::lookAt(zero, YNegative, glm::vec3(0.0, 0.0, -1.0)),
+            projMat * glm::lookAt(zero, ZPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(zero, ZNegative, glm::vec3(0.0, -1.0, 0.0))
         };
         
         bind();
