@@ -1520,6 +1520,8 @@
 		CE70F9B61F8F8EBD00AD9027 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CE70F9B91F8F8EBD00AD9027 /* GLTexture.cpp */,
+				CE70F9C71F8F8EBD00AD9027 /* GLTexture.hpp */,
 				CE70F9BF1F8F8EBD00AD9027 /* GLDepthTexture2D.cpp */,
 				CE70F9C21F8F8EBD00AD9027 /* GLDepthTexture2D.hpp */,
 				CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */,
@@ -1532,8 +1534,6 @@
 				CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */,
 				CE70F9C51F8F8EBD00AD9027 /* GLLayeredTexture.cpp */,
 				CE70F9B71F8F8EBD00AD9027 /* GLLayeredTexture.hpp */,
-				CE70F9B91F8F8EBD00AD9027 /* GLTexture.cpp */,
-				CE70F9C71F8F8EBD00AD9027 /* GLTexture.hpp */,
 				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
 				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
 				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,

@@ -46,4 +46,10 @@ namespace EARenderer {
         glBindTexture(mBindingPoint, mName);
     }
     
+    void GLTexture::generateMipmaps() {
+        bind();
+        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glGenerateMipmap(mBindingPoint);
+    }
+    
 }

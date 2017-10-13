@@ -14,6 +14,7 @@
 
 // DEBUG
 #include "GLTextureCubemap.hpp"
+#include "GLHDRTexture2D.hpp"
 
 namespace EARenderer {
     
@@ -24,9 +25,8 @@ namespace EARenderer {
         void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
         void setRoughness(float roughness);
         
-        
         // DEBUG
-        void setEnvironmentRadianceMap(const GLTextureCubemap& map);
+        void setTestTexture(const GLHDRTexture2D& texture);
     };
     
 }

@@ -35,6 +35,7 @@ namespace EARenderer {
         const Size2D& size() const;
         
         void bind() const override;
+        void generateMipmaps();
     };
     
 }

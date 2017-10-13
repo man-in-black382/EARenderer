@@ -31,6 +31,7 @@ namespace EARenderer {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
@@ -239,6 +240,8 @@ namespace EARenderer {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
+        
+        mRadianceMapCube.generateMipmaps();
     }
     
     void SceneRenderer::buildSpecularIrradianceMap() {
@@ -246,13 +249,11 @@ namespace EARenderer {
         
         mRadianceConvolutionShader.bind();
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
-            mRadianceConvolutionShader.setEnvironmentRadianceMap(mScene->skybox()->cubemap());
-            if (int error = glGetError()) {
-                printf("Error: %d\n", error);
-            }
+            mRadianceConvolutionShader.setEnvironmentRadianceMap(mRadianceMapCube);
+            mRadianceConvolutionShader.setTestTexture(mRadianceMapEquirectangular);
         });
         
-        const int16_t kMipLevels = 1;
+        const int16_t kMipLevels = 5;
         for (int16_t mipLevel = 0; mipLevel < kMipLevels; ++mipLevel) {
             uint16_t mipWidth = 512 * std::pow(0.5, mipLevel);
             uint16_t mipHeight = 512 * std::pow(0.5, mipLevel);

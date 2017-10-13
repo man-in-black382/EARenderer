@@ -25,6 +25,7 @@ namespace EARenderer {
     
     void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLHDRTextureCubemap& map) {
         setUniformTexture("uEnvironmentMap", map);
+        glUniform1f(uniformByName("uEnvironmentResolution").location(), map.size().width);
     }
     
     void GLSLRadianceConvolution::setRoughness(float roughness) {
@@ -32,9 +33,9 @@ namespace EARenderer {
     }
     
     // DEBUG
-    
-    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLTextureCubemap& map) {
-        setUniformTexture("uEnvironmentMap", map);
+
+    void GLSLRadianceConvolution::setTestTexture(const GLHDRTexture2D& texture) {
+//        setUniformTexture("uTestTexture", texture);
     }
     
 }

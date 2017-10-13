@@ -6,8 +6,10 @@ const float PI = 3.1415926535897932384626433832795;
 
 // Uniforms
 
+uniform sampler2D   uTestTexture;
 uniform samplerCube uEnvironmentMap;
 uniform float       uRoughness;
+uniform float       uEnvironmentResolution;
 
 // Input
 
@@ -68,6 +70,20 @@ vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness) {
     return normalize(sampleVec);
 }
 
+// Trowbridge-Reitz GGX normal distribution function
+// Statistically approximates the ratio of microfacets aligned to some (halfway) vector h
+//
+float NormalDistributionGGX(float NdotH, float roughness) {
+    float a2        = roughness * roughness;
+    float NdotH2    = NdotH * NdotH;
+    
+    float nom       = a2;
+    float denom     = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom           = PI * denom * denom;
+    
+    return nom / denom;
+}
+
 void main() {
     // Since it’s a microfacet model, the shape of the distribution changes based on viewing angle to the surface,
     // so we assume that this angle is zero, i.e. n = v = r. This isotropic assumption is a source of approximation
@@ -77,36 +93,47 @@ void main() {
     vec3 N = normalize(vFragPosition.xyz);
     vec3 R = N;
     vec3 V = R;
+        
+    const uint kSampleCount = 1024;
     
-    float a = uRoughness;
+    float roughness2        = uRoughness * uRoughness;
+    float totalWeight       = 0.0;
+    vec3 totalIrradiance    = vec3(0.0);
     
-//    const uint kSampleCount = 1024;
-//    
-//    float totalWeight       = 0.0;
-//    vec3 totalIrradiance    = vec3(0.0);
-//    
-//    for (uint i = 0; i < kSampleCount; ++i) {
-//        vec2 Xi = Hammersley2D(i, kSampleCount);
-//        vec3 H  = ImportanceSampleGGX(Xi, N, uRoughness);
-//        // Reflect H to actually sample in light direction
-//        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
-//        
-//        float NdotL = max(dot(N, L), 0.0);
-//        if (NdotL > 0.0) {
-//            totalIrradiance += texture(uEnvironmentMap, L).rgb * NdotL;
-//            totalWeight     += NdotL;
-//        }
-//    }
-//    
-//    totalIrradiance = totalIrradiance / totalWeight;
-//    
-//    oFragColor = vec4(totalIrradiance, 1.0);
+    for (uint i = 0; i < kSampleCount; ++i) {
+        vec2 Xi = Hammersley2D(i, kSampleCount);
+        vec3 H  = ImportanceSampleGGX(Xi, N, uRoughness);
+        // Reflect H to actually sample in light direction
+        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
+        
+        float NdotL = max(dot(N, L), 0.0);
+        float NdotH = max(dot(N, H), 0.0);
+        float HdotV = max(dot(H, V), 0.0);
+        
+        if (NdotL > 0.0) {
+            // Fixing bright dots on convoluted map by sampling a mip level of the environment map based on the integral's PDF and the roughness:
+            // https://chetanjags.wordpress.com/2015/08/26/image-based-lighting/
+            
+            float D             = NormalDistributionGGX(NdotH, roughness2);
+            float pdf           = (D * NdotH / (4.0 * HdotV)) + 0.0001; // Propability density function
+            
+            float resolution    = uEnvironmentResolution; // resolution of source cubemap (per face)
+            float saTexel       = 4.0 * PI / (6.0 * resolution * resolution);
+            float saSample      = 1.0 / (float(kSampleCount) * pdf + 0.0001);
+            
+            float mipLevel      = uRoughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel);
+            
+            totalIrradiance     += textureLod(uEnvironmentMap, L, mipLevel).rgb * NdotL;
+            totalWeight         += NdotL;
+        }
+    }
+    
+    totalIrradiance = totalIrradiance / totalWeight;
+    
+    oFragColor = vec4(totalIrradiance, 1.0);
     
     // DEBUG
-    vec4 envColor = texture(uEnvironmentMap, vec3(0.9, 0.9, 0.0));
-    if (envColor.rgb == vec3(0.0)) {
-        oFragColor = vec4(1.0, 0.2, 0.2, 1.0);
-    } else {
-        oFragColor = vec4(N, 1.0);
-    }
+    vec4 envColor = texture(uEnvironmentMap, N.xyz);
+    vec4 testColor = texture(uTestTexture, N.xy);
+//    oFragColor = envColor;
 }

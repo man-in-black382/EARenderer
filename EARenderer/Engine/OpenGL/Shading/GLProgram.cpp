@@ -120,6 +120,7 @@ namespace EARenderer {
     }
       
     const GLUniform& GLProgram::uniformByName(const std::string& name) {
+//        return mUniforms[name];
         auto it = mUniforms.find(name);
         ASSERT(it != mUniforms.end(), "Uniform named '" << name << "' could not be found");
         return it->second;
