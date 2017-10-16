@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
+		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
 		CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8431F8F8EBD00AD9027 /* Range.cpp */; };
 		CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8441F8F8EBD00AD9027 /* Color.cpp */; };
@@ -151,6 +153,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
+		CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
+		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
 		CE70F7C51F8F8E5A00AD9027 /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE70F7DC1F8F8EBD00AD9027 /* EARenderer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EARenderer.entitlements; sourceTree = "<group>"; };
 		CE70F7E11F8F8EBD00AD9027 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumericFormatter.m; sourceTree = "<group>"; };
@@ -990,12 +995,12 @@
 		CE70F8421F8F8EBD00AD9027 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
-				CE70F8441F8F8EBD00AD9027 /* Color.cpp */,
-				CE70F8451F8F8EBD00AD9027 /* Macros.h */,
-				CE70F8461F8F8EBD00AD9027 /* Color.hpp */,
-				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
 				CE70F8481F8F8EBD00AD9027 /* BitwiseEnum.hpp */,
+				CE70F8441F8F8EBD00AD9027 /* Color.cpp */,
+				CE70F8461F8F8EBD00AD9027 /* Color.hpp */,
+				CE70F8451F8F8EBD00AD9027 /* Macros.h */,
+				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
+				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1089,10 +1094,10 @@
 		CE70F8771F8F8EBD00AD9027 /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8781F8F8EBD00AD9027 /* Cameraman.hpp */,
-				CE70F8791F8F8EBD00AD9027 /* SceneInteractor.hpp */,
-				CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */,
 				CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */,
+				CE70F8781F8F8EBD00AD9027 /* Cameraman.hpp */,
+				CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */,
+				CE70F8791F8F8EBD00AD9027 /* SceneInteractor.hpp */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -1570,7 +1575,7 @@
 				CE70F9E81F8F8EBD00AD9027 /* GLUniform.cpp */,
 				CE70F9EA1F8F8EBD00AD9027 /* GLUniform.hpp */,
 				CE70F9EB1F8F8EBD00AD9027 /* BlinnPhong */,
-				CE70FA091F8F8EBD00AD9027 /* CookTorrance */,
+				CE70FA091F8F8EBD00AD9027 /* PBR */,
 				CE70F9E21F8F8EBD00AD9027 /* FullScreenQuad */,
 				CE70FA031F8F8EBD00AD9027 /* GenericGeometry */,
 				CE70F9D71F8F8EBD00AD9027 /* RenderToCubemap */,
@@ -1589,9 +1594,6 @@
 				CE70F9D91F8F8EBD00AD9027 /* GLSLEquirectangularMapConversion.cpp */,
 				CE70F9E11F8F8EBD00AD9027 /* GLSLEquirectangularMapConversion.hpp */,
 				CE70F9DD1F8F8EBD00AD9027 /* EquirectangularMapConversion.frag */,
-				CE70F9DF1F8F8EBD00AD9027 /* GLSLRadianceConvolution.cpp */,
-				CE70F9DC1F8F8EBD00AD9027 /* GLSLRadianceConvolution.hpp */,
-				CE70F9DA1F8F8EBD00AD9027 /* RadianceConvolution.frag */,
 			);
 			path = RenderToCubemap;
 			sourceTree = "<group>";
@@ -1599,10 +1601,10 @@
 		CE70F9E21F8F8EBD00AD9027 /* FullScreenQuad */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9E31F8F8EBD00AD9027 /* GLSLFullScreenQuad.cpp */,
-				CE70F9E41F8F8EBD00AD9027 /* FullScreenQuad.vert */,
-				CE70F9E51F8F8EBD00AD9027 /* GLSLFullScreenQuad.hpp */,
 				CE70F9E61F8F8EBD00AD9027 /* FullScreenQuad.frag */,
+				CE70F9E41F8F8EBD00AD9027 /* FullScreenQuad.vert */,
+				CE70F9E31F8F8EBD00AD9027 /* GLSLFullScreenQuad.cpp */,
+				CE70F9E51F8F8EBD00AD9027 /* GLSLFullScreenQuad.hpp */,
 			);
 			path = FullScreenQuad;
 			sourceTree = "<group>";
@@ -1653,15 +1655,21 @@
 			path = GenericGeometry;
 			sourceTree = "<group>";
 		};
-		CE70FA091F8F8EBD00AD9027 /* CookTorrance */ = {
+		CE70FA091F8F8EBD00AD9027 /* PBR */ = {
 			isa = PBXGroup;
 			children = (
-				CE70FA0A1F8F8EBD00AD9027 /* CookTorrance.frag */,
-				CE70FA0D1F8F8EBD00AD9027 /* CookTorrance.vert */,
 				CE70FA0B1F8F8EBD00AD9027 /* GLSLCookTorrance.cpp */,
 				CE70FA0C1F8F8EBD00AD9027 /* GLSLCookTorrance.hpp */,
+				CE70FA0A1F8F8EBD00AD9027 /* CookTorrance.frag */,
+				CE70FA0D1F8F8EBD00AD9027 /* CookTorrance.vert */,
+				CE70F9DF1F8F8EBD00AD9027 /* GLSLRadianceConvolution.cpp */,
+				CE70F9DC1F8F8EBD00AD9027 /* GLSLRadianceConvolution.hpp */,
+				CE70F9DA1F8F8EBD00AD9027 /* RadianceConvolution.frag */,
+				CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */,
+				CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */,
+				CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */,
 			);
-			path = CookTorrance;
+			path = PBR;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1738,6 +1746,7 @@
 				CE70FA611F8F8F7400AD9027 /* DirectionalBlinnPhong.frag in Resources */,
 				CE70FA621F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.frag in Resources */,
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
+				CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */,
 				CE70FA641F8F8F7400AD9027 /* Skybox.frag in Resources */,
 				CE70FA651F8F8F7400AD9027 /* Skybox.vert in Resources */,
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
@@ -1785,6 +1794,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
 				CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,

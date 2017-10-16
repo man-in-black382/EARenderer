@@ -250,7 +250,6 @@ namespace EARenderer {
         mRadianceConvolutionShader.bind();
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
             mRadianceConvolutionShader.setEnvironmentRadianceMap(mRadianceMapCube);
-            mRadianceConvolutionShader.setTestTexture(mRadianceMapEquirectangular);
         });
         
         const int16_t kMipLevels = 5;

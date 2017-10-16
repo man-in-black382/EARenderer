@@ -20,6 +20,8 @@ namespace EARenderer {
         using GLProgram::GLProgram;
         
         GLSLCubemapRendering(const std::string& fragmentShaderName);
+        
+        virtual ~GLSLCubemapRendering() = 0;
     };
     
 }

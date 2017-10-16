@@ -36,8 +36,9 @@ namespace EARenderer {
         const GLShader* mVertexShader = nullptr;
         const GLShader* mFragmentShader = nullptr;
         const GLShader* mGeometryShader = nullptr;
+        
         std::unordered_map<std::string, GLUniform> mUniforms;
-        std::unordered_set<GLint> mUsedSamplerLocations;
+
         GLint mAvailableTextureUnits = 0;
         GLint mFreeTextureUnitIndex = 0;
         bool isModifyingUniforms = false;

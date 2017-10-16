@@ -27,8 +27,9 @@ namespace EARenderer {
     mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + geometrySourceName, GL_GEOMETRY_SHADER))
     {
         link();
-        obtainUniforms();
+        bind();
         obtainAvailableTextureUnits();
+        obtainUniforms();
     }
     
     GLProgram::~GLProgram() {
@@ -78,7 +79,15 @@ namespace EARenderer {
             glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, &size, &type, uniformNameChars.data());
             std::string name(uniformNameChars.data());
             GLint location = glGetUniformLocation(mName, &name[0]);
-            mUniforms.insert(std::make_pair(name, GLUniform(location, size, type, name)));
+            
+            GLUniform uniform = GLUniform(location, size, type, name);
+            mUniforms.insert(std::make_pair(name, uniform));
+
+            if (uniform.isSampler()) {
+                ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+                glUniform1i(uniform.location(), mFreeTextureUnitIndex);
+                mFreeTextureUnitIndex++;
+            }
         }
     }
     
@@ -113,14 +122,11 @@ namespace EARenderer {
         ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
         glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
-        glUniform1i(sampler.location(), mFreeTextureUnitIndex);
         texture.bind();
         mFreeTextureUnitIndex++;
-        mUsedSamplerLocations.insert(sampler.location());
     }
       
     const GLUniform& GLProgram::uniformByName(const std::string& name) {
-//        return mUniforms[name];
         auto it = mUniforms.find(name);
         ASSERT(it != mUniforms.end(), "Uniform named '" << name << "' could not be found");
         return it->second;
@@ -131,23 +137,11 @@ namespace EARenderer {
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
         isModifyingUniforms = true;
         mFreeTextureUnitIndex = 0;
-        mUsedSamplerLocations.clear();
-        
         closure();
         
-        // Make 1 to 1 connection for all samplers - texture units to exclude situation
-        // where 2 or more samplers are using the same texture unit
-        // when not all texture uniforms were set by user before draw call
-        for (auto& keyValuePair : mUniforms) {
-            auto& uniform = keyValuePair.second;
-            if (uniform.isSampler() && mUsedSamplerLocations.find(uniform.location()) == mUsedSamplerLocations.end()) {
-                ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
-                glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
-                glUniform1i(uniform.location(), mFreeTextureUnitIndex);
-                mFreeTextureUnitIndex++;
-            }
-        }
-        
+        // For some reason this is sometimes necessary to make GLSL sampler not to return black
+        // (in a case of radiance convolution shader sampling cubemap gives black color without following line)
+        glActiveTexture(GL_TEXTURE0 + mAvailableTextureUnits - 1);
         isModifyingUniforms = false;
     }
     

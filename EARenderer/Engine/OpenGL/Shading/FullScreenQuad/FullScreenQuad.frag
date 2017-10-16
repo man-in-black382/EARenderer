@@ -4,12 +4,12 @@
 uniform sampler2DArray uTextureArray;
 uniform int uIndex;
 
-in vec2 oTexCoords;
+in vec2 vTexCoords;
 
 out vec4 fragmentColor;
 
 void main()
 {
 //    fragmentColor = texture(uTexture, oTexCoords);
-    fragmentColor = vec4(vec3(texture(uTextureArray, vec3(oTexCoords, uIndex)).r), 1.0);
+    fragmentColor = vec4(vec3(texture(uTextureArray, vec3(vTexCoords, uIndex)).r), 1.0);
 }

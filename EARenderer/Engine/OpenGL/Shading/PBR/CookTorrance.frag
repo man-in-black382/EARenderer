@@ -89,10 +89,10 @@ float NormalDistributionGGX(vec3 N, vec3 H, float roughness) {
 // Combination of the GGX and Schlick-Beckmann approximation known as Schlick-GGX.
 //
 float GeometrySchlickGGX(float NdotV, float roughness) {
-    float r         = (roughness + 1.0);
+    float a         = (roughness + 1.0);
     
     // Here k is a remapping of roughness based on whether we're using the geometry function for either direct lighting or IBL lighting
-    float Kdirect   = (r * r) / 8.0;
+    float Kdirect   = (a * a) / 8.0;
     float nom       = NdotV;
     float denom     = NdotV * (1.0 - Kdirect) + Kdirect;
     
@@ -185,9 +185,6 @@ float FetchAOMap() {
 ////////////////////////////////////////////////////////////
 
 void main() {
-    // Based on observations by Disney and adopted by Epic Games
-    // the lighting looks more correct squaring the roughness
-    // in both the geometry and normal distribution function.
     float roughness         = FetchRoughnessMap();
     float metallic          = FetchMetallicMap();
     float ao                = FetchAOMap();

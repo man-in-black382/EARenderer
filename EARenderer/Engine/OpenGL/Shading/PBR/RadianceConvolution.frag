@@ -6,7 +6,6 @@ const float PI = 3.1415926535897932384626433832795;
 
 // Uniforms
 
-uniform sampler2D   uTestTexture;
 uniform samplerCube uEnvironmentMap;
 uniform float       uRoughness;
 uniform float       uEnvironmentResolution;
@@ -14,6 +13,7 @@ uniform float       uEnvironmentResolution;
 // Input
 
 in vec4 vFragPosition;
+in vec2 vTexCoords;
 
 // Output
 
@@ -84,7 +84,8 @@ float NormalDistributionGGX(float NdotH, float roughness) {
     return nom / denom;
 }
 
-void main() {
+// In Epic's paper known as environment map prefiltering
+vec3 IntegrateRadianceSpecular() {
     // Since it’s a microfacet model, the shape of the distribution changes based on viewing angle to the surface,
     // so we assume that this angle is zero, i.e. n = v = r. This isotropic assumption is a source of approximation
     // and it unfortunately means we don’t get lengthy reflections at grazing angles.
@@ -93,7 +94,7 @@ void main() {
     vec3 N = normalize(vFragPosition.xyz);
     vec3 R = N;
     vec3 V = R;
-        
+    
     const uint kSampleCount = 1024;
     
     float roughness2        = uRoughness * uRoughness;
@@ -117,7 +118,7 @@ void main() {
             float D             = NormalDistributionGGX(NdotH, roughness2);
             float pdf           = (D * NdotH / (4.0 * HdotV)) + 0.0001; // Propability density function
             
-            float resolution    = uEnvironmentResolution; // resolution of source cubemap (per face)
+            float resolution    = uEnvironmentResolution; // Resolution of source cubemap (per face)
             float saTexel       = 4.0 * PI / (6.0 * resolution * resolution);
             float saSample      = 1.0 / (float(kSampleCount) * pdf + 0.0001);
             
@@ -128,12 +129,9 @@ void main() {
         }
     }
     
-    totalIrradiance = totalIrradiance / totalWeight;
-    
-    oFragColor = vec4(totalIrradiance, 1.0);
-    
-    // DEBUG
-    vec4 envColor = texture(uEnvironmentMap, N.xyz);
-    vec4 testColor = texture(uTestTexture, N.xy);
-//    oFragColor = envColor;
+    return totalIrradiance / totalWeight;
+}
+
+void main() {
+    oFragColor = vec4(IntegrateRadianceSpecular(), 1.0);
 }

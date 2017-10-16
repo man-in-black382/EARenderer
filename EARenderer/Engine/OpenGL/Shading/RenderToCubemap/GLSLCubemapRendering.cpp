@@ -18,8 +18,13 @@ namespace EARenderer {
     :
     GLProgram("CubemapRendering.vert", fragmentShaderName, "CubemapRendering.geom")
     {
-        // No projection needed (because of the full screen quad in conversion shaders),
-        // only Z negation to move to NDC space correctly
+        // Cubemap's coordinate system was taken from RenderMan by Pixar
+        // because of that several adjustments are needed to match a conventional OpenGL coordinate system
+        // Following matrices are designed to do so
+        //
+        // Some details:
+        // https://stackoverflow.com/questions/33769539/what-is-the-reason-for-opengl-rotated-textures-when-cube-mapping
+        
         glm::mat4 projMat = glm::mat4(1.0);
         projMat[2][2] = -1;
         
@@ -32,8 +37,6 @@ namespace EARenderer {
         
         glm::vec3 zero = glm::zero<glm::vec3>();
         
-        // Don't forget to swap X directions since we negated Z
-        // (usual order if Xpos then Xneg)
         std::array<glm::mat4, 6> matrices = {
             projMat * glm::lookAt(zero, XNegative, glm::vec3(0.0, -1.0, 0.0)),
             projMat * glm::lookAt(zero, XPositive, glm::vec3(0.0, -1.0, 0.0)),
@@ -46,5 +49,7 @@ namespace EARenderer {
         bind();
         glUniformMatrix4fv(uniformByName("uViewProjectionMatrices[0]").location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
     }
+    
+    GLSLCubemapRendering::~GLSLCubemapRendering() { }
     
 }

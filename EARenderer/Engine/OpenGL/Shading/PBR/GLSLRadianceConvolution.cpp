@@ -32,10 +32,4 @@ namespace EARenderer {
         glUniform1f(uniformByName("uRoughness").location(), roughness);
     }
     
-    // DEBUG
-
-    void GLSLRadianceConvolution::setTestTexture(const GLHDRTexture2D& texture) {
-//        setUniformTexture("uTestTexture", texture);
-    }
-    
 }
