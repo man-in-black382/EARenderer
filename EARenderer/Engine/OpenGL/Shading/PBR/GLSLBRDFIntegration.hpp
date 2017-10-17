@@ -17,9 +17,6 @@ namespace EARenderer {
     class GLSLBRDFIntegration: public GLProgram {
     public:
         GLSLBRDFIntegration();
-        
-        void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
-        void setRoughness(float roughness);
     };
     
 }

@@ -1050,17 +1050,17 @@
 		CE70F8611F8F8EBD00AD9027 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */,
-				CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */,
 				CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */,
-				CE70F8651F8F8EBD00AD9027 /* Vertices */,
-				CE70F86E1F8F8EBD00AD9027 /* Parallelogram3D.hpp */,
-				CE70F86F1F8F8EBD00AD9027 /* Size2D.hpp */,
-				CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */,
-				CE70F8711F8F8EBD00AD9027 /* Size2D.cpp */,
-				CE70F8721F8F8EBD00AD9027 /* Rect2D.hpp */,
-				CE70F8731F8F8EBD00AD9027 /* Ray3D.hpp */,
 				CE70F8741F8F8EBD00AD9027 /* AxisAlignedBox3D.hpp */,
+				CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */,
+				CE70F86E1F8F8EBD00AD9027 /* Parallelogram3D.hpp */,
+				CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */,
+				CE70F8731F8F8EBD00AD9027 /* Ray3D.hpp */,
+				CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */,
+				CE70F8721F8F8EBD00AD9027 /* Rect2D.hpp */,
+				CE70F8711F8F8EBD00AD9027 /* Size2D.cpp */,
+				CE70F86F1F8F8EBD00AD9027 /* Size2D.hpp */,
+				CE70F8651F8F8EBD00AD9027 /* Vertices */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";

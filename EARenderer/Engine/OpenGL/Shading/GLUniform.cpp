@@ -14,9 +14,15 @@ namespace EARenderer {
     
     GLUniform::GLUniform(GLint location, GLint size, GLenum type, const std::string& name)
     :
+    GLUniform(location, size, type, -1, name)
+    { }
+    
+    GLUniform::GLUniform(GLint location, GLint size, GLenum type, GLint textureUnit, const std::string& name)
+    :
     mLocation(location),
     mSize(size),
     mType(type),
+    mTextureUnit(textureUnit),
     mName(name)
     { }
     
@@ -34,8 +40,18 @@ namespace EARenderer {
         return mType;
     }
     
+    GLint GLUniform::textureUnit() const {
+        return mTextureUnit;
+    }
+    
     const std::string& GLUniform::name() const {
         return mName;
+    }
+    
+#pragma mark - Setters
+    
+    void GLUniform::setTextureUnit(GLint unit) {
+        mTextureUnit = unit;
     }
     
 #pragma mark - Utility

@@ -6,7 +6,7 @@ const float PI = 3.1415926535897932384626433832795;
 
 // Uniforms
 
-uniform samplerCube uEnvironmentMap;
+// Nothing to do here
 
 // Input
 
@@ -128,5 +128,5 @@ vec2 IntegrateBRDF(float NdotV, float roughness)
 }
 
 void main() {
-    oFragColor = vec4(IntegrateBRDF(), 0.0, 1.0);
+    oFragColor = vec4(IntegrateBRDF(vTexCoords.s, vTexCoords.t), 0.0, 1.0);
 }

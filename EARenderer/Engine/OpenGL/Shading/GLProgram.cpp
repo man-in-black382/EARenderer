@@ -72,6 +72,7 @@ namespace EARenderer {
         GLint count = 0;
         glGetProgramiv(mName, GL_ACTIVE_UNIFORMS, &count);
         
+        GLuint textureUnit = 0;
         for (GLuint index = 0; index < count; index++) {
             std::vector<GLchar> uniformNameChars(128);
             GLint size;
@@ -79,15 +80,18 @@ namespace EARenderer {
             glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, &size, &type, uniformNameChars.data());
             std::string name(uniformNameChars.data());
             GLint location = glGetUniformLocation(mName, &name[0]);
-            
+    
             GLUniform uniform = GLUniform(location, size, type, name);
-            mUniforms.insert(std::make_pair(name, uniform));
-
+            
             if (uniform.isSampler()) {
-                ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
-                glUniform1i(uniform.location(), mFreeTextureUnitIndex);
-                mFreeTextureUnitIndex++;
+                ASSERT(textureUnit < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+                glUniform1i(uniform.location(), textureUnit);
+                uniform.setTextureUnit(textureUnit);
+                mUniforms.insert(std::make_pair(name, uniform));
+                textureUnit++;
             }
+                
+            mUniforms.insert(std::make_pair(name, uniform));
         }
     }
     
@@ -120,10 +124,9 @@ namespace EARenderer {
     void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture& texture) {
         GLUniform sampler = uniformByName(uniformName);
         ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
-        ASSERT(mFreeTextureUnitIndex < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
-        glActiveTexture(GL_TEXTURE0 + mFreeTextureUnitIndex);
+        glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
-        mFreeTextureUnitIndex++;
+        mUsedSamplerLocations.insert(sampler.location());
     }
       
     const GLUniform& GLProgram::uniformByName(const std::string& name) {
@@ -135,10 +138,10 @@ namespace EARenderer {
 #pragma mark - Public
     
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
+        mUsedSamplerLocations.clear();
         isModifyingUniforms = true;
-        mFreeTextureUnitIndex = 0;
         closure();
-        
+
         // For some reason this is sometimes necessary to make GLSL sampler not to return black
         // (in a case of radiance convolution shader sampling cubemap gives black color without following line)
         glActiveTexture(GL_TEXTURE0 + mAvailableTextureUnits - 1);

@@ -7,6 +7,8 @@
 //
 
 #include "GLTexture.hpp"
+#include "GLTexture2D.hpp"
+#include "GLTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -32,6 +34,11 @@ namespace EARenderer {
     
     GLTexture::~GLTexture() {
         glDeleteTextures(1, &mName);
+    }
+    
+    const GLTexture& GLTexture::stub() {
+        static GLTexture2DArray stub(Size2D(1, 1), 1);
+        return stub;
     }
     
 #pragma mark - Getters

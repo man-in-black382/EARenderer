@@ -32,6 +32,7 @@ namespace EARenderer {
         GLTexture& operator=(GLTexture&& rhs) = default;
         ~GLTexture() override = 0;
         
+        static const GLTexture& stub();
         const Size2D& size() const;
         
         void bind() const override;

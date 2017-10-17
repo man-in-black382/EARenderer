@@ -15,7 +15,7 @@ namespace EARenderer {
     
     class GLHDRTextureCubemap: public GLTexture {
     public:
-        GLHDRTextureCubemap(const Size2D& size, bool generateMipmaps = false);
+        GLHDRTextureCubemap(const Size2D& size);
     };
     
 }

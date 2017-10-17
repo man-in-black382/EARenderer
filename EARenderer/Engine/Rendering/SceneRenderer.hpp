@@ -27,6 +27,7 @@
 #include "GLSLGenericGeometry.hpp"
 #include "GLSLEquirectangularMapConversion.hpp"
 #include "GLSLRadianceConvolution.hpp"
+#include "GLSLBRDFIntegration.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -52,19 +53,21 @@ namespace EARenderer {
         GLSLCookTorrance mCookTorranceShader;
         GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
         GLSLRadianceConvolution mRadianceConvolutionShader;
+        GLSLBRDFIntegration mBRDFIntegrationShader;
         
-        GLHDRTexture2D mRadianceMapEquirectangular;
-        GLHDRTextureCubemap mRadianceMapCube;
+        GLHDRTexture2D mEnvironemtMapEquirectangular;
+        GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mSpecularIrradianceMap;
+        GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
         
-//        GLDepthTexture2DArray mCascadedShadowMaps;
+        GLDepthTexture2DArray mCascadedShadowMaps;
 //        GLDepthTextureCubemap mShadowCubeMap;
 //        GLFramebuffer mDepthFramebuffer;
 //
 //        // DEBUG
-//        GLSLFullScreenQuad mFSQuadShader;
-//        GLSLGenericGeometry mGenericShader;
+        GLSLFullScreenQuad mFSQuadShader;
+        GLSLGenericGeometry mGenericShader;
 //        //
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
@@ -77,6 +80,7 @@ namespace EARenderer {
         
         void convertEquirectangularMapToCubemap();
         void buildSpecularIrradianceMap();
+        void buildBRDFIntegrationMap();
         
         void renderPBRMeshes();
         
