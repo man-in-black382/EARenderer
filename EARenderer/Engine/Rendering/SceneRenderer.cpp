@@ -250,6 +250,7 @@ namespace EARenderer {
     
     void SceneRenderer::buildSpecularIrradianceMap() {
         mIBLFramebuffer.bind();
+        mIBLFramebuffer.viewport().apply();
         
         mRadianceConvolutionShader.bind();
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
@@ -258,15 +259,13 @@ namespace EARenderer {
         
         const int16_t kMipLevels = 5;
         for (int16_t mipLevel = 0; mipLevel < kMipLevels; ++mipLevel) {
-            uint16_t mipWidth = mEnvironmentMapCube.size().width * std::pow(0.5, mipLevel);
-            uint16_t mipHeight = mEnvironmentMapCube.size().height * std::pow(0.5, mipLevel);
+            Size2D mipSize = mEnvironmentMapCube.size().transformedBy(glm::vec2(std::pow(0.5, mipLevel)));
+            GLViewport(mipSize).apply();
             
             float roughness = (float)mipLevel / (float)(kMipLevels - 1);
             mRadianceConvolutionShader.setRoughness(roughness);
             
             mIBLFramebuffer.attachTexture(mSpecularIrradianceMap, mipLevel);
-            GLViewport viewport(Size2D(mipWidth, mipHeight));
-            viewport.apply();
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glDrawArrays(GL_TRIANGLES, 0, 4);
@@ -276,6 +275,7 @@ namespace EARenderer {
     void SceneRenderer::buildBRDFIntegrationMap() {
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mBRDFIntegrationMap);
+        mIBLFramebuffer.viewport().apply();
         
         mBRDFIntegrationShader.bind();
 
@@ -295,6 +295,10 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
+        
+        mCookTorranceShader.ensureSamplerValidity([this]() {
+            mCookTorranceShader.setIBLUniforms(mSpecularIrradianceMap, mBRDFIntegrationMap, 5);
+        });
         
         for (ID subMeshID : mScene->subMeshes()) {
             mCookTorranceShader.ensureSamplerValidity([&]() {
@@ -319,9 +323,10 @@ namespace EARenderer {
         }
         
         renderSkybox();
+        
 //        mFSQuadShader.bind();
 //        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mEnvironemtMapEquirectangular);
+//            mFSQuadShader.setTexture(mBRDFIntegrationMap);
 //        });
 //
 //        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

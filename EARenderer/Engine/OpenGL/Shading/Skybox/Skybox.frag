@@ -22,7 +22,7 @@ vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
 }
 
 void main() {
-    oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 1);
+    oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 0);
     
     if (uIsHDR) {
         oFragmentColor = vec4(ReinhardToneMapAndGammaCorrect(oFragmentColor.rgb), 1.0);

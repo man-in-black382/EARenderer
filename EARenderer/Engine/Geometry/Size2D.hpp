@@ -9,6 +9,8 @@
 #ifndef Size_hpp
 #define Size_hpp
 
+#include <glm/vec2.hpp>
+
 namespace EARenderer {
     
     struct Size2D {
@@ -21,6 +23,8 @@ namespace EARenderer {
         
         bool operator==(const Size2D& rhs);
         bool operator!=(const Size2D& rhs);
+        
+        Size2D transformedBy(const glm::vec2& vector) const;
     };
     
 }

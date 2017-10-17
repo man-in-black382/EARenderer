@@ -6,7 +6,7 @@ const float PI = 3.1415926535897932384626433832795;
 
 // Output
 
-out vec4 outputFragColor;
+out vec4 oFragColor;
 
 // Input
 
@@ -47,6 +47,12 @@ uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
 uniform Material uMaterial;
+
+// IBL
+uniform sampler2D uBRDFIntegrationMap;
+uniform samplerCube uSpecularIrradianceMap;
+uniform samplerCube uDiffuseIrradianceMap;
+uniform int uSpecularIrradianceMapLOD;
 
 ////////////////////////////////////////////////////////////
 //////////////////// Lighting equation /////////////////////
@@ -128,6 +134,17 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     return (Kd * albedo / PI + specular) * radiance * NdotL;
 }
 
+vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
+    vec3 R = reflect(-V, N);
+    vec3 specularIrradiance = textureLod(uSpecularIrradianceMap, R, roughness * uSpecularIrradianceMapLOD - 1).rgb;
+    vec3 F                  = FresnelSchlick(V, H, albedo, metallic);
+    vec2 envBRDF            = texture(uBRDFIntegrationMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 specular           = specularIrradiance * (F * envBRDF.x + envBRDF.y);
+    
+//    return specularIrradiance;
+    return specular;
+}
+
 ////////////////////////////////////////////////////////////
 //////////// Radiance of different light types /////////////
 ////////////////////////////////////////////////////////////
@@ -169,11 +186,7 @@ float FetchMetallicMap() {
 }
 
 float FetchRoughnessMap() {
-    // Based on observations by Disney and adopted by Epic Games
-    // the lighting looks more correct squaring the roughness
-    // in both the geometry and normal distribution function.
-    float roughness = texture(uMaterial.roughnessMap, vTexCoords.st).r;
-    return roughness * roughness;
+    return texture(uMaterial.roughnessMap, vTexCoords.st).r;
 }
 
 float FetchAOMap() {
@@ -186,6 +199,12 @@ float FetchAOMap() {
 
 void main() {
     float roughness         = FetchRoughnessMap();
+    
+    // Based on observations by Disney and adopted by Epic Games
+    // the lighting looks more correct squaring the roughness
+    // in both the geometry and normal distribution function.
+    float roughness2        = roughness * roughness;
+    
     float metallic          = FetchMetallicMap();
     float ao                = FetchAOMap();
     vec3 albedo             = FetchAlbedoMap();
@@ -194,11 +213,15 @@ void main() {
     vec3 L                  = normalize(uPointLight.position - vWorldPosition);
     vec3 H                  = normalize(L + V);
 
+    // Analytic lighting
     vec3 pointLightRadiance = PointLightRadiance(N);
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, pointLightRadiance);
+    
+    // Image based lighting
+    vec3 IBL                = IBL(N, V, H, albedo, roughness, metallic);
+    
+//    vec3 ambient            = (kD * diffuse + specular) * ao;
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(IBL);
 
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness, albedo, metallic, pointLightRadiance);
-    vec3 ambient            = vec3(0.03) * albedo * ao;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
-
-    outputFragColor         = vec4(correctColor, 1.0);    
+    oFragColor         = vec4(correctColor, 1.0);
 }

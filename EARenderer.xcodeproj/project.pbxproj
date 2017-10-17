@@ -1008,14 +1008,14 @@
 		CE70F8491F8F8EBD00AD9027 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F84A1F8F8EBD00AD9027 /* Log.cpp */,
 				CE70F84B1F8F8EBD00AD9027 /* FileManager.cpp */,
-				CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */,
-				CE70F84D1F8F8EBD00AD9027 /* FrameMeter.hpp */,
 				CE70F84E1F8F8EBD00AD9027 /* FileManager.hpp */,
 				CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */,
-				CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */,
+				CE70F84D1F8F8EBD00AD9027 /* FrameMeter.hpp */,
+				CE70F84A1F8F8EBD00AD9027 /* Log.cpp */,
 				CE70F8511F8F8EBD00AD9027 /* Log.hpp */,
+				CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */,
+				CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

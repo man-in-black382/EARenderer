@@ -13,6 +13,8 @@
 #include "PBRMaterial.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2D.hpp"
+#include "GLHDRTexture2D.hpp"
+#include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "PointLight.hpp"
 #include "Camera.hpp"
@@ -33,6 +35,9 @@ namespace EARenderer {
         void setModelMatrix(const glm::mat4& matrix);
         void setLight(const PointLight& light);
         void setMaterial(const PBRMaterial& material);
+        void setIBLUniforms(const GLHDRTextureCubemap& specularIrradianceMap,
+                            const GLHDRTexture2D& BRDFIntegrationMap,
+                            int8_t specularIrradianceMapMaxLOD);
     };
     
 }
