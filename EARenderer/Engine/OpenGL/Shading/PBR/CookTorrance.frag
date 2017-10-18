@@ -145,11 +145,10 @@ vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
     vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
-    vec3 specular           = specularIrradiance * (F * envBRDF.x + envBRDF.y);
-    
-//    return specularIrradiance;
-//    return diffuseIrradiance;
-    return specular;
+    vec3 diffuse    = diffuseIrradiance * albedo;
+    vec3 specular   = (F * envBRDF.x + envBRDF.y) * specularIrradiance;
+
+    return diffuse + specular;
 }
 
 ////////////////////////////////////////////////////////////
@@ -220,16 +219,13 @@ void main() {
     vec3 L                  = normalize(uPointLight.position - vWorldPosition);
     vec3 H                  = normalize(L + V);
 
-    // Analytic lighting
+    // Analytical lighting
     vec3 pointLightRadiance = PointLightRadiance(N);
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, pointLightRadiance);
     
     // Image based lighting
-    vec3 IBL                = IBL(N, V, H, albedo, roughness, metallic);
-    
-//    vec3 ambient            = (kD * diffuse + specular) * ao;
-    vec3 ambient            = IBL * ao;
+    vec3 ambient            = IBL(N, V, H, albedo, roughness, metallic) * ao;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
 
-    oFragColor         = vec4(correctColor, 1.0);
+    oFragColor              = vec4(correctColor, 1.0);
 }

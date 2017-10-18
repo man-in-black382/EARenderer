@@ -86,7 +86,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     
-    auto HDRColor = EARenderer::Color(3.0, 3.0, 3.0, 1.0);
+    auto HDRColor = EARenderer::Color(5.0, 5.0, 5.0, 1.0);
     EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
     
     self.scene->setCamera(camera);
@@ -95,12 +95,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.scene->setSkybox([self skybox]);
     
     [self addClassicMaterial];
-    [self addPBRMaterial];
+    [self addPBRMaterialIron];
+//    [self addPBRMaterialFloor];
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"env" ofType:@"hdr"];
+    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"factory" ofType:@"hdr"];
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, std::string(hdrSkyboxPath.UTF8String));
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
@@ -221,7 +222,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                                       std::string(bricksNormalMapPath.UTF8String)));
 }
 
-- (void)addPBRMaterial
+- (void)addPBRMaterialIron
 {
     NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
     NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
@@ -235,6 +236,23 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         std::string(metallicMapPath.UTF8String),
         std::string(roughnessMapPath.UTF8String),
         std::string(blankImagePath.UTF8String)
+    });
+}
+
+- (void)addPBRMaterialFloor
+{
+    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_basecolor" ofType:@"png"];
+//    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
+    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_normal" ofType:@"png"];
+    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_roughness" ofType:@"png"];
+    NSString *aoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_AO" ofType:@"png"];
+    
+    self.scene->PBRMaterials().insert({
+        std::string(albedoMapPath.UTF8String),
+        std::string(normalMapPath.UTF8String),
+//        std::string(metallicMapPath.UTF8String),
+        std::string(roughnessMapPath.UTF8String),
+        std::string(aoMapPath.UTF8String)
     });
 }
 

@@ -150,6 +150,11 @@
 		CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70F83C1F8F8EBD00AD9027 /* NSNumberFormatter+CustomFormatters.m */; };
 		CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8241F8F8EBD00AD9027 /* Main.storyboard */; };
 		CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */; };
+		CEAAA3961F97B6BB0029099D /* factory.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3931F97B6510029099D /* factory.hdr */; };
+		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
+		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
+		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
+		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -663,6 +668,11 @@
 		CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLNamedObject.cpp; sourceTree = "<group>"; };
 		CE70FA0F1F8F8EBD00AD9027 /* GLBindable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBindable.hpp; sourceTree = "<group>"; };
 		CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
+		CEAAA3931F97B6510029099D /* factory.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = factory.hdr; sourceTree = "<group>"; };
+		CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_roughness.png; sourceTree = "<group>"; };
+		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
+		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
+		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -880,6 +890,7 @@
 		CE70F80E1F8F8EBD00AD9027 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CEAAA3931F97B6510029099D /* factory.hdr */,
 				CE70F80F1F8F8EBD00AD9027 /* tank_texture.png */,
 				CE70F8101F8F8EBD00AD9027 /* brickwork_normal_map.jpg */,
 				CE70F8111F8F8EBD00AD9027 /* brickwork_texture.jpg */,
@@ -889,6 +900,7 @@
 				CE70F8151F8F8EBD00AD9027 /* gun.jpg */,
 				CE70F8161F8F8EBD00AD9027 /* env.hdr */,
 				CE70F8171F8F8EBD00AD9027 /* wooden-crate.jpg */,
+				CEAAA3971F97C0C40029099D /* Floor */,
 				CE70F8181F8F8EBD00AD9027 /* Rusted Iron */,
 				CE70F81D1F8F8EBD00AD9027 /* tank_normal_map.png */,
 			);
@@ -1672,6 +1684,17 @@
 			path = PBR;
 			sourceTree = "<group>";
 		};
+		CEAAA3971F97C0C40029099D /* Floor */ = {
+			isa = PBXGroup;
+			children = (
+				CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */,
+				CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */,
+				CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */,
+				CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */,
+			);
+			path = Floor;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1754,10 +1777,12 @@
 				CE70FA681F8F8F7400AD9027 /* CookTorrance.frag in Resources */,
 				CE70FA691F8F8F7400AD9027 /* CookTorrance.vert in Resources */,
 				CE70FA6A1F8F8F7400AD9027 /* tank_texture.png in Resources */,
+				CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */,
 				CE70FA6B1F8F8F7400AD9027 /* brickwork_normal_map.jpg in Resources */,
 				CE70FA6C1F8F8F7400AD9027 /* brickwork_texture.jpg in Resources */,
 				CE70FA6D1F8F8F7400AD9027 /* bricks.jpg in Resources */,
 				CE70FA6E1F8F8F7400AD9027 /* blank.jpg in Resources */,
+				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE70FA6F1F8F8F7400AD9027 /* hazard.png in Resources */,
 				CE70FA701F8F8F7400AD9027 /* gun.jpg in Resources */,
 				CE70FA711F8F8F7400AD9027 /* env.hdr in Resources */,
@@ -1767,9 +1792,12 @@
 				CE70FA741F8F8F7400AD9027 /* rustediron2_normal.png in Resources */,
 				CE70FA751F8F8F7400AD9027 /* rustediron2_basecolor.png in Resources */,
 				CE70FA761F8F8F7400AD9027 /* rustediron2_metallic.png in Resources */,
+				CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */,
 				CE70FA771F8F8F7400AD9027 /* tank_normal_map.png in Resources */,
+				CEAAA3961F97B6BB0029099D /* factory.hdr in Resources */,
 				CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */,
 				CE70FA791F8F8F7400AD9027 /* torus.obj in Resources */,
+				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
 				CE70FA7B1F8F8F7400AD9027 /* sphere.obj in Resources */,
 				CE70FA7C1F8F8F7400AD9027 /* skyboxBottom.png in Resources */,
