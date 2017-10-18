@@ -35,7 +35,8 @@ namespace EARenderer {
         void setModelMatrix(const glm::mat4& matrix);
         void setLight(const PointLight& light);
         void setMaterial(const PBRMaterial& material);
-        void setIBLUniforms(const GLHDRTextureCubemap& specularIrradianceMap,
+        void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
+                            const GLHDRTextureCubemap& specularIrradianceMap,
                             const GLHDRTexture2D& BRDFIntegrationMap,
                             int8_t specularIrradianceMapMaxLOD);
     };

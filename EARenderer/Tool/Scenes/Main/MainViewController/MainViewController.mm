@@ -76,9 +76,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     NSString *torusPath = [[NSBundle mainBundle] pathForResource:@"torus" ofType:@"obj"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String), std::string(torusPath.UTF8String) }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String), /*std::string(torusPath.UTF8String)*/ }, self.scene);
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.1f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));
     camera->lookAt(glm::vec3(0, 0, 0));
     
@@ -86,7 +86,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     
-    auto HDRColor = EARenderer::Color(20.0, 22.0, 14.0, 1.0);
+    auto HDRColor = EARenderer::Color(3.0, 3.0, 3.0, 1.0);
     EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
     
     self.scene->setCamera(camera);

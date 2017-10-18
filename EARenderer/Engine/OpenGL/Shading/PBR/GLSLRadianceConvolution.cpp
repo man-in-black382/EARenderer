@@ -32,4 +32,8 @@ namespace EARenderer {
         glUniform1f(uniformByName("uRoughness").location(), roughness);
     }
     
+    void GLSLRadianceConvolution::setAlgorithm(Algorithm algorithm) {
+        glUniform1i(uniformByName("uAlgorithm").location(), static_cast<GLint>(algorithm));
+    }
+    
 }

@@ -41,6 +41,7 @@ namespace EARenderer {
     class SceneRenderer {
     private:
         uint8_t mNumberOfCascades = 3;
+        uint8_t mNumberOfIrradianceMips = 5;
         
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
@@ -57,6 +58,7 @@ namespace EARenderer {
         
         GLHDRTexture2D mEnvironemtMapEquirectangular;
         GLHDRTextureCubemap mEnvironmentMapCube;
+        GLHDRTextureCubemap mDiffuseIrradianceMap;
         GLHDRTextureCubemap mSpecularIrradianceMap;
         GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
@@ -79,6 +81,7 @@ namespace EARenderer {
         void renderClassicMeshes();
         
         void convertEquirectangularMapToCubemap();
+        void buildDiffuseIrradianceMap();
         void buildSpecularIrradianceMap();
         void buildBRDFIntegrationMap();
         

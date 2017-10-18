@@ -16,10 +16,13 @@ namespace EARenderer {
     
     class GLSLRadianceConvolution: public GLSLCubemapRendering {
     public:
+        enum class Algorithm { diffuse = 0, specular = 1 };
+        
         GLSLRadianceConvolution();
         
         void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
         void setRoughness(float roughness);
+        void setAlgorithm(Algorithm algorithm);
     };
     
 }

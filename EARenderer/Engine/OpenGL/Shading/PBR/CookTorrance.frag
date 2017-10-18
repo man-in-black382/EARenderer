@@ -136,12 +136,19 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
 
 vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
     vec3 R = reflect(-V, N);
-    vec3 specularIrradiance = textureLod(uSpecularIrradianceMap, R, roughness * uSpecularIrradianceMapLOD - 1).rgb;
+    vec3 diffuseIrradiance  = texture(uDiffuseIrradianceMap, R).rgb;
+    vec3 specularIrradiance = textureLod(uSpecularIrradianceMap, R, roughness * (uSpecularIrradianceMapLOD - 1)).rgb;
     vec3 F                  = FresnelSchlick(V, H, albedo, metallic);
     vec2 envBRDF            = texture(uBRDFIntegrationMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    
+    vec3 Ks         = F;                // Specular (reflected) portion
+    vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
+    Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
+    
     vec3 specular           = specularIrradiance * (F * envBRDF.x + envBRDF.y);
     
 //    return specularIrradiance;
+//    return diffuseIrradiance;
     return specular;
 }
 
@@ -221,7 +228,8 @@ void main() {
     vec3 IBL                = IBL(N, V, H, albedo, roughness, metallic);
     
 //    vec3 ambient            = (kD * diffuse + specular) * ao;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(IBL);
+    vec3 ambient            = IBL * ao;
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
 
     oFragColor         = vec4(correctColor, 1.0);
 }

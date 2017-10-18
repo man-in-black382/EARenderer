@@ -44,12 +44,13 @@ namespace EARenderer {
         if (material.ambientOcclusionMap()) { setUniformTexture("uMaterial.AOMap", *material.ambientOcclusionMap()); }
     }
     
-    void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& specularIrradianceMap,
+    void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
+                                          const GLHDRTextureCubemap& specularIrradianceMap,
                                           const GLHDRTexture2D& BRDFIntegrationMap,
                                           int8_t specularIrradianceMapMaxLOD)
     {
+        setUniformTexture("uDiffuseIrradianceMap", diffuseIrradianceMap);
         setUniformTexture("uSpecularIrradianceMap", specularIrradianceMap);
-//        setUniformTexture("uDiffuseIrradianceMap",specularIrradianceMap);
         setUniformTexture("uBRDFIntegrationMap", BRDFIntegrationMap);
         glUniform1i(uniformByName("uSpecularIrradianceMapLOD").location(), specularIrradianceMapMaxLOD);
     }

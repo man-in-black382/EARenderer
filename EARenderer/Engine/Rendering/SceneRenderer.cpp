@@ -25,6 +25,7 @@ namespace EARenderer {
 //    mDepthFramebuffer(Size2D(2048, 2048)),
     mEnvironemtMapEquirectangular(equirectangularSkyboxPath),
     mEnvironmentMapCube(Size2D(512, 512)),
+    mDiffuseIrradianceMap(Size2D(32, 32)),
     mSpecularIrradianceMap(Size2D(512, 512)),
     mBRDFIntegrationMap(Size2D(512, 512)),
     mIBLFramebuffer(Size2D(512, 512))
@@ -41,6 +42,7 @@ namespace EARenderer {
         mSpecularIrradianceMap.generateMipmaps();
         
         convertEquirectangularMapToCubemap();
+        buildDiffuseIrradianceMap();
         buildSpecularIrradianceMap();
         buildBRDFIntegrationMap();
     }
@@ -90,7 +92,7 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setCubemap(mSpecularIrradianceMap);
+            mSkyboxShader.setCubemap(mEnvironmentMapCube);
         });
         mScene->skybox()->draw();
     }
@@ -248,21 +250,36 @@ namespace EARenderer {
         mEnvironmentMapCube.generateMipmaps();
     }
     
-    void SceneRenderer::buildSpecularIrradianceMap() {
+    void SceneRenderer::buildDiffuseIrradianceMap() {
         mIBLFramebuffer.bind();
-        mIBLFramebuffer.viewport().apply();
+        mIBLFramebuffer.attachTexture(mDiffuseIrradianceMap);
+        GLViewport(mDiffuseIrradianceMap.size()).apply();
         
         mRadianceConvolutionShader.bind();
+        mRadianceConvolutionShader.setAlgorithm(GLSLRadianceConvolution::Algorithm::diffuse);
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
             mRadianceConvolutionShader.setEnvironmentRadianceMap(mEnvironmentMapCube);
         });
         
-        const int16_t kMipLevels = 5;
-        for (int16_t mipLevel = 0; mipLevel < kMipLevels; ++mipLevel) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+    }
+    
+    void SceneRenderer::buildSpecularIrradianceMap() {
+        mIBLFramebuffer.bind();
+        GLViewport(mSpecularIrradianceMap.size()).apply();
+        
+        mRadianceConvolutionShader.bind();
+        mRadianceConvolutionShader.setAlgorithm(GLSLRadianceConvolution::Algorithm::specular);
+        mRadianceConvolutionShader.ensureSamplerValidity([this]() {
+            mRadianceConvolutionShader.setEnvironmentRadianceMap(mEnvironmentMapCube);
+        });
+        
+        for (int16_t mipLevel = 0; mipLevel < mNumberOfIrradianceMips; ++mipLevel) {
             Size2D mipSize = mEnvironmentMapCube.size().transformedBy(glm::vec2(std::pow(0.5, mipLevel)));
             GLViewport(mipSize).apply();
             
-            float roughness = (float)mipLevel / (float)(kMipLevels - 1);
+            float roughness = (float)mipLevel / (float)(mNumberOfIrradianceMips - 1);
             mRadianceConvolutionShader.setRoughness(roughness);
             
             mIBLFramebuffer.attachTexture(mSpecularIrradianceMap, mipLevel);
@@ -278,6 +295,7 @@ namespace EARenderer {
         mIBLFramebuffer.viewport().apply();
         
         mBRDFIntegrationShader.bind();
+        
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
@@ -295,9 +313,8 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
-        
         mCookTorranceShader.ensureSamplerValidity([this]() {
-            mCookTorranceShader.setIBLUniforms(mSpecularIrradianceMap, mBRDFIntegrationMap, 5);
+            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         
         for (ID subMeshID : mScene->subMeshes()) {
@@ -323,14 +340,6 @@ namespace EARenderer {
         }
         
         renderSkybox();
-        
-//        mFSQuadShader.bind();
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mBRDFIntegrationMap);
-//        });
-//
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        glDrawArrays(GL_TRIANGLES, 0, 4);
     }
     
 #pragma mark - Public access point
