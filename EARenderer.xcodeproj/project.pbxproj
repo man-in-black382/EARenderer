@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0B71271F9A2FD200316615 /* floor.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE0B71261F9A2FC800316615 /* floor.obj */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
@@ -158,6 +159,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE0B71261F9A2FC800316615 /* floor.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = floor.obj; sourceTree = "<group>"; };
 		CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
 		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
@@ -879,8 +881,8 @@
 			isa = PBXGroup;
 			children = (
 				CE70F80E1F8F8EBD00AD9027 /* Textures */,
-				CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */,
 				CE70F81F1F8F8EBD00AD9027 /* Models */,
+				CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */,
 				CE70F8241F8F8EBD00AD9027 /* Main.storyboard */,
 				CE70F8261F8F8EBD00AD9027 /* Skybox */,
 			);
@@ -921,6 +923,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE0B71261F9A2FC800316615 /* floor.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8211F8F8EBD00AD9027 /* torus.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
@@ -1801,6 +1804,7 @@
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
 				CE70FA7B1F8F8F7400AD9027 /* sphere.obj in Resources */,
 				CE70FA7C1F8F8F7400AD9027 /* skyboxBottom.png in Resources */,
+				CE0B71271F9A2FD200316615 /* floor.obj in Resources */,
 				CE70FA7D1F8F8F7400AD9027 /* bottom.jpg in Resources */,
 				CE70FA7E1F8F8F7400AD9027 /* left.jpg in Resources */,
 				CE70FA7F1F8F8F7400AD9027 /* top.jpg in Resources */,

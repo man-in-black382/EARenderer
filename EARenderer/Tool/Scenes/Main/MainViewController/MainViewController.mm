@@ -74,9 +74,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
     NSString *torusPath = [[NSBundle mainBundle] pathForResource:@"torus" ofType:@"obj"];
+    NSString *floorPath = [[NSBundle mainBundle] pathForResource:@"floor" ofType:@"obj"];
     
     EARenderer::ResourceManager resourceManager;
-    resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String), /*std::string(torusPath.UTF8String)*/ }, self.scene);
+    resourceManager.loadMeshesToScene({ std::string(spherePath.UTF8String), std::string(floorPath.UTF8String) }, self.scene);
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
     camera->moveTo(glm::vec3(0, 0, 1));
@@ -86,7 +87,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     
-    auto HDRColor = EARenderer::Color(5.0, 5.0, 5.0, 1.0);
+    auto HDRColor = EARenderer::Color(20.0, 20.0, 20.0, 1.0);
     EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
     
     self.scene->setCamera(camera);
@@ -95,8 +96,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.scene->setSkybox([self skybox]);
     
     [self addClassicMaterial];
-    [self addPBRMaterialIron];
-//    [self addPBRMaterialFloor];
+//    [self addPBRMaterialIron];
+    [self addPBRMaterialFloor];
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
@@ -250,7 +251,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.scene->PBRMaterials().insert({
         std::string(albedoMapPath.UTF8String),
         std::string(normalMapPath.UTF8String),
-//        std::string(metallicMapPath.UTF8String),
+        "",
         std::string(roughnessMapPath.UTF8String),
         std::string(aoMapPath.UTF8String)
     });
