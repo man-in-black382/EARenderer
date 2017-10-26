@@ -12,6 +12,12 @@
 
 namespace EARenderer {
     
+#pragma mark - Lifeycle
+    
+//    Skybox::Skybox(const std::string& equirectangularImage, bool isHDR) {
+//        
+//    }
+    
     Skybox::Skybox(const std::string& rightImagePath,
                    const std::string& leftImagePath,
                    const std::string& topImagePath,

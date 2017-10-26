@@ -35,6 +35,7 @@ namespace EARenderer {
     
     void Mesh::swap(Mesh& that) {
         std::swap(mName, that.mName);
+        std::swap(mSubMeshes, that.subMeshes());
         std::swap(mBoundingBox, that.mBoundingBox);
     }
     

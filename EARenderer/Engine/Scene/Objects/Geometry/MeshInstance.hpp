@@ -33,13 +33,13 @@ namespace EARenderer {
         bool isHighlighted() const;
         Transformation transformation() const;
         AxisAlignedBox3D boundingBox() const;
+        ID materialIDForSubMeshID(ID subMeshID) const;
         
         void setIsSelected(bool selected);
         void setIsHighlighted(bool highlighted);
         void setTransformation(const Transformation& transform);
         void setMaterialIDForSubMeshID(ID materialID, ID subMeshID);
-        const std::unordered_map<ID, ID>& subMeshMaterialMap() const;
-        
+        void setMaterialIDForAllSubmeshes(ID materialID);
     };
     
 }

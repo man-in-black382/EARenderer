@@ -10,6 +10,8 @@
 #include "ResourcePool.hpp"
 #include "Scene.hpp"
 
+#include "Macros.h"
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -18,11 +20,18 @@ namespace EARenderer {
     :
     mMeshID(meshID)
     {
-//        auto& subMeshIDs = Scene::shared().meshes()[meshID].subMeshIDs();
-        
+        // Preallocate material map
+        auto& subMeshes = ResourcePool::shared().meshes[meshID].subMeshes();
+        for (ID subMeshID : subMeshes) {
+            mSubMeshMaterialMap[subMeshID] = IDNotFound;
+        }
     }
     
 #pragma mark - Getters
+    
+    ID MeshInstance::meshID() const {
+        return mMeshID;
+    }
     
     bool MeshInstance::isSelected() const {
         return mIsSelected;
@@ -42,6 +51,13 @@ namespace EARenderer {
         return mesh.boundingBox();
     }
     
+    ID MeshInstance::materialIDForSubMeshID(ID subMeshID) const {
+        if (mSubMeshMaterialMap.find(subMeshID) == mSubMeshMaterialMap.end()) {
+            return IDNotFound;
+        }
+        return mSubMeshMaterialMap.at(subMeshID);
+    }
+
 #pragma mark - Setters
     
     void MeshInstance::setIsSelected(bool selected) {
@@ -50,6 +66,22 @@ namespace EARenderer {
     
     void MeshInstance::setIsHighlighted(bool highlighted) {
         mIsHighlighted = highlighted;
+    }
+    
+    void MeshInstance::setTransformation(const Transformation& transform) {
+        mTransformation = transform;
+    }
+    
+    void MeshInstance::setMaterialIDForSubMeshID(ID materialID, ID subMeshID) {
+        ASSERT(mSubMeshMaterialMap.find(subMeshID) != mSubMeshMaterialMap.end(), "Mesh (ID :" << mMeshID << ") doesn't contain submesh with ID " << subMeshID << " . Therefore cannot set a material for it.");
+        mSubMeshMaterialMap[subMeshID] = materialID;
+    }
+    
+    void MeshInstance::setMaterialIDForAllSubmeshes(ID materialID) {
+        for (auto& keyValuePair : mSubMeshMaterialMap) {
+            ID subMeshID = keyValuePair.first;
+            mSubMeshMaterialMap[subMeshID] = materialID;
+        }
     }
     
 }

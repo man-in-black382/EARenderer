@@ -173,6 +173,10 @@ namespace EARenderer {
         
         PackedLookupTable(PackedLookupTable&& other) {
             swap(other);
+            
+            other.mObjects = nullptr;
+            other.mObjectIDs = nullptr;
+            other.mAllocations = nullptr;
         }
         
         ~PackedLookupTable() {
@@ -321,6 +325,7 @@ namespace EARenderer {
     {
         lhs.swap(rhs);
     }
+
 }
 
 #endif /* IDLookupTable_hpp */

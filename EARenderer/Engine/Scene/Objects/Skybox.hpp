@@ -21,6 +21,8 @@ namespace EARenderer {
         GLTextureCubemap mCubemap;
         
     public:
+//        Skybox(const std::string& equirectangularImage, bool isHDR);
+        
         Skybox(const std::string& rightImagePath,
                const std::string& leftImagePath,
                const std::string& topImagePath,

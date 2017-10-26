@@ -47,7 +47,6 @@
 		CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8A01F8F8EBD00AD9027 /* tiny_obj_loader.cpp */; };
 		CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8F31F8F8EBD00AD9027 /* glm.cpp */; };
 		CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */; };
-		CE70FA371F8F8EF600AD9027 /* ResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B31F8F8EBD00AD9027 /* ResourceManager.cpp */; };
 		CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B91F8F8EBD00AD9027 /* GLTexture.cpp */; };
 		CE70FA391F8F8EF600AD9027 /* GLHDRTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9BA1F8F8EBD00AD9027 /* GLHDRTextureCubemap.cpp */; };
 		CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */; };
@@ -149,6 +148,7 @@
 		CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8241F8F8EBD00AD9027 /* Main.storyboard */; };
 		CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */; };
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
+		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
 		CEAAA3961F97B6BB0029099D /* factory.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3931F97B6510029099D /* factory.hdr */; };
 		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
@@ -580,10 +580,8 @@
 		CE70F9AC1F8F8EBD00AD9027 /* rotate_normalized_axis.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = rotate_normalized_axis.hpp; sourceTree = "<group>"; };
 		CE70F9AD1F8F8EBD00AD9027 /* projection.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = projection.inl; sourceTree = "<group>"; };
 		CE70F9AE1F8F8EBD00AD9027 /* type_aligned.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = type_aligned.hpp; sourceTree = "<group>"; };
-		CE70F9B01F8F8EBD00AD9027 /* ResourceManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourceManager.hpp; sourceTree = "<group>"; };
 		CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WavefrontMeshLoader.hpp; sourceTree = "<group>"; };
 		CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WavefrontMeshLoader.cpp; sourceTree = "<group>"; };
-		CE70F9B31F8F8EBD00AD9027 /* ResourceManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourceManager.cpp; sourceTree = "<group>"; };
 		CE70F9B51F8F8EBD00AD9027 /* GLViewport.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLViewport.hpp; sourceTree = "<group>"; };
 		CE70F9B71F8F8EBD00AD9027 /* GLLayeredTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLLayeredTexture.hpp; sourceTree = "<group>"; };
 		CE70F9B81F8F8EBD00AD9027 /* GLDepthTextureCubemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthTextureCubemap.hpp; sourceTree = "<group>"; };
@@ -665,6 +663,9 @@
 		CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
 		CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
 		CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
+		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
+		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
+		CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoSceneComposing.h; sourceTree = "<group>"; };
 		CEAAA3931F97B6510029099D /* factory.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = factory.hdr; sourceTree = "<group>"; };
 		CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_roughness.png; sourceTree = "<group>"; };
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
@@ -812,6 +813,9 @@
 			children = (
 				CE70F7F21F8F8EBD00AD9027 /* MainViewController.mm */,
 				CE70F7F31F8F8EBD00AD9027 /* MainViewController.h */,
+				CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */,
+				CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */,
+				CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */,
 			);
 			path = MainViewController;
 			sourceTree = "<group>";
@@ -1511,8 +1515,6 @@
 		CE70F9AF1F8F8EBD00AD9027 /* Resource Management */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9B31F8F8EBD00AD9027 /* ResourceManager.cpp */,
-				CE70F9B01F8F8EBD00AD9027 /* ResourceManager.hpp */,
 				CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */,
 				CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */,
 				CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */,
@@ -1844,7 +1846,6 @@
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
-				CE70FA371F8F8EF600AD9027 /* ResourceManager.cpp in Sources */,
 				CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */,
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
@@ -1865,6 +1866,7 @@
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
+				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
 				CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */,
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,

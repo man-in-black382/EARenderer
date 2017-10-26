@@ -19,7 +19,6 @@ namespace EARenderer {
     class ResourcePool {
     public:
         PackedLookupTable<Mesh> meshes;
-        PackedLookupTable<SubMesh> subMeshes;
         PackedLookupTable<PBRMaterial> materials;
         
         static ResourcePool& shared();

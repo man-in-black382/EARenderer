@@ -8,6 +8,7 @@
 
 #include "SceneRenderer.hpp"
 #include "GLShader.hpp"
+#include "ResourcePool.hpp"
 #include "Vertex1P4.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
@@ -316,27 +317,23 @@ namespace EARenderer {
             mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         
-//        for (ID subMeshID : mScene->subMeshes()) {
-//            mCookTorranceShader.ensureSamplerValidity([&]() {
-//                mCookTorranceShader.setCamera(*(mScene->camera()));
-//                mCookTorranceShader.setLight(light);
-//
-//                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-//                ID meshID = subMesh.meshID();
-//                Mesh& mesh = mScene->meshes()[meshID];
-//                ID transformID = mesh.transformID();
-//                Transformation& transform = mScene->transforms()[transformID];
-//
-//                mCookTorranceShader.setModelMatrix(transform.modelMatrix());
-//
-//                ID materialID = *(mScene->PBRMaterials().begin());
-//                PBRMaterial& material = mScene->PBRMaterials()[materialID];
-//
-//                mCookTorranceShader.setMaterial(material);
-//
-//                subMesh.draw();
-//            });
-//        }
+        for (ID meshInstanceID : mScene->meshInstances()) {
+            auto& instance = mScene->meshInstances()[meshInstanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+                
+                mCookTorranceShader.ensureSamplerValidity([&]() {
+                    mCookTorranceShader.setCamera(*(mScene->camera()));
+                    mCookTorranceShader.setLight(light);
+                    mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
+                    mCookTorranceShader.setMaterial(material);
+                    subMesh.draw();
+                });
+            }
+        }
         
         renderSkybox();
     }
