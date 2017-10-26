@@ -47,7 +47,7 @@
     NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
     NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_normal" ofType:@"png"];
     NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_roughness" ofType:@"png"];
-    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank" ofType:@"jpg"];
+    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank_white" ofType:@"jpg"];
     
     return pool->materials.insert({
         std::string(albedoMapPath.UTF8String),
@@ -64,11 +64,12 @@
     NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_normal" ofType:@"png"];
     NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_roughness" ofType:@"png"];
     NSString *aoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_AO" ofType:@"png"];
+    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank_black" ofType:@"png"];
     
     return pool->materials.insert({
         std::string(albedoMapPath.UTF8String),
         std::string(normalMapPath.UTF8String),
-        "",
+        std::string(blankImagePath.UTF8String),
         std::string(roughnessMapPath.UTF8String),
         std::string(aoMapPath.UTF8String)
     });

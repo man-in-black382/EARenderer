@@ -98,6 +98,9 @@ namespace EARenderer {
             if ((mAxesSelection.axesMask & CartesianAxis::z) == CartesianAxis::z) {
                 transform.translation += translationAlongAxis(CartesianAxis::z);
             }
+            
+            // Set instanse's transform back
+            instance.setTransformation(transform);
                         
             mMeshUpdateEvent(mAxesSelection.meshID);
         }

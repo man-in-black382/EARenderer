@@ -19,7 +19,8 @@ namespace EARenderer {
     :
     mTransforms(1000),
     mDirectionalLights(10),
-    mPointLights(10)
+    mPointLights(10),
+    mMeshInstances(1000)
     { }
     
 #pragma mark - Getters

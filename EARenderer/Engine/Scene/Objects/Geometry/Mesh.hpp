@@ -28,12 +28,6 @@ namespace EARenderer {
         
     public:
         Mesh(const std::string& filePath);
-        Mesh() = default;
-        Mesh(Mesh&& that);
-        Mesh& operator=(Mesh rhs);
-        Mesh(const Mesh& that) = delete;
-        Mesh& operator=(const Mesh& rhs) = delete;
-        ~Mesh() = default;
         
         void swap(Mesh&);
         

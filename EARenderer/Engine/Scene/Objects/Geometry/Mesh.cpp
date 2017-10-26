@@ -13,7 +13,10 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    Mesh::Mesh(const std::string& filePath) {
+    Mesh::Mesh(const std::string& filePath)
+    :
+    mSubMeshes(100)
+    {
         WavefrontMeshLoader loader(filePath);
         std::vector<SubMesh> subMeshes;
         
@@ -26,16 +29,11 @@ namespace EARenderer {
         mBaseTransform.scale = glm::vec3(1.0 / scaleDown);
     }
     
-    Mesh& Mesh::operator=(Mesh rhs) {
-        swap(rhs);
-        return *this;
-    }
-    
 #pragma mark - Swap
     
     void Mesh::swap(Mesh& that) {
         std::swap(mName, that.mName);
-        std::swap(mSubMeshes, that.subMeshes());
+        std::swap(mSubMeshes, that.mSubMeshes);
         std::swap(mBoundingBox, that.mBoundingBox);
     }
     
