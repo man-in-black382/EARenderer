@@ -7,11 +7,25 @@
 //
 
 #include "Mesh.hpp"
+#include "WavefrontMeshLoader.hpp"
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
+    
+    Mesh::Mesh(const std::string& filePath) {
+        WavefrontMeshLoader loader(filePath);
+        std::vector<SubMesh> subMeshes;
         
+        loader.load(subMeshes, mName, mBoundingBox);
+        for (auto& subMesh : subMeshes) {
+            mSubMeshes.emplace(std::move(subMesh));
+        }
+        
+        float scaleDown = mBoundingBox.diagonal() * 1.44;
+        mBaseTransform.scale = glm::vec3(1.0 / scaleDown);
+    }
+    
     Mesh& Mesh::operator=(Mesh rhs) {
         swap(rhs);
         return *this;
@@ -21,8 +35,6 @@ namespace EARenderer {
     
     void Mesh::swap(Mesh& that) {
         std::swap(mName, that.mName);
-        std::swap(mSubMeshIDs, that.mSubMeshIDs);
-        std::swap(mTransformID, that.mTransformID);
         std::swap(mBoundingBox, that.mBoundingBox);
     }
     
@@ -36,46 +48,22 @@ namespace EARenderer {
         return mName;
     }
     
-    bool Mesh::isSelected() const {
-        return mIsSelected;
-    }
-    
-    bool Mesh::isHighlighted() const {
-        return mIsHighlighted;
-    }
-    
-    const std::vector<ID>& Mesh::subMeshIDs() const {
-        return mSubMeshIDs;
-    }
-    
-    const ID Mesh::transformID() const {
-        return mTransformID;
-    }
-    
     const AxisAlignedBox3D& Mesh::boundingBox() const {
         return mBoundingBox;
+    }
+    
+    const Transformation& Mesh::baseTransform() const {
+        return mBaseTransform;
+    }
+    
+    const PackedLookupTable<SubMesh>& Mesh::subMeshes() const {
+        return mSubMeshes;
     }
     
 #pragma mark - Setters
     
     void Mesh::setName(const std::string &name) {
         mName = name;
-    }
-    
-    void Mesh::setIsSelected(bool selected) {
-        mIsSelected = selected;
-    }
-    
-    void Mesh::setIsHighlighted(bool highlighted) {
-        mIsHighlighted = highlighted;
-    }
-    
-    void Mesh::setTransformID(ID transformID) {
-        mTransformID = transformID;
-    }
-    
-    void Mesh::setSubMeshIDs(const std::vector<ID> &subMeshIDs) {
-        mSubMeshIDs = subMeshIDs;
     }
     
     void Mesh::setBoundingBox(const AxisAlignedBox3D& box) {

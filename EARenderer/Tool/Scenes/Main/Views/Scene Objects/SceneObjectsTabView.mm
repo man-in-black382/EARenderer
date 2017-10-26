@@ -20,7 +20,8 @@
 {
     self.scene = scene;
     
-    [self.meshesTab buildOutlineViewWithMeshes:&self.scene->meshes() andSubMeshes:&self.scene->subMeshes()];
+    #warning TODO: Fix later
+//    [self.meshesTab buildOutlineViewWithMeshes:&self.scene->meshes() andSubMeshes:&self.scene->subMeshes()];
 }
 
 @end

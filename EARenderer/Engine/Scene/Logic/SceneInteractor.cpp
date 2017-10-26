@@ -57,8 +57,8 @@ namespace EARenderer {
     
     void SceneInteractor::handleMouseDrag(const Input* input) {
         if (mAxesSelection.meshID != IDNotFound) {
-            Mesh& mesh = mScene->meshes()[mAxesSelection.meshID];
-            Transformation& transform = mScene->transforms()[mesh.transformID()];
+            MeshInstance& instance = mScene->meshInstances()[mAxesSelection.meshID];
+            Transformation transform = instance.transformation();
             glm::mat4 transformNoScale = transform.translationMatrix() * transform.rotationMatrix();
             glm::vec2 NDCMouseDirection = mMainViewport->NDCFromPoint(input->mousePosition()) - mMainViewport->NDCFromPoint(mPreviousMouseDragPosition);
             
@@ -127,18 +127,18 @@ namespace EARenderer {
         Ray3D cameraRay = mScene->camera()->rayFromPointOnViewport(input->mousePosition(), mMainViewport);
         
         if (mPreviouslySelectedMeshID != IDNotFound) {
-            Mesh& previousMesh = mScene->meshes()[mPreviouslySelectedMeshID];
-            previousMesh.setIsSelected(false);
+            MeshInstance& previousMeshInstance = mScene->meshInstances()[mPreviouslySelectedMeshID];
+            previousMeshInstance.setIsSelected(false);
             mMeshDeselectionEvent(mPreviouslySelectedMeshID);
             mPreviouslySelectedMeshID = IDNotFound;
         }
         
         ID selectedMeshID = IDNotFound;
         if (mSceneRenderer->raySelectsMesh(cameraRay, selectedMeshID)) {
-            Mesh& mesh = mScene->meshes()[selectedMeshID];
+            MeshInstance& meshInstance = mScene->meshInstances()[selectedMeshID];
             // Select, but unhighlight mesh
-            mesh.setIsSelected(true);
-            mesh.setIsHighlighted(false);
+            meshInstance.setIsSelected(true);
+            meshInstance.setIsHighlighted(false);
             mPreviouslySelectedMeshID = selectedMeshID;
             mMeshSelectionEvent(selectedMeshID);
         } else {

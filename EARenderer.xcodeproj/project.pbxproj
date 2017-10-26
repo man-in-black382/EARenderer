@@ -34,7 +34,6 @@
 		CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8761F8F8EBD00AD9027 /* Scene.cpp */; };
 		CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */; };
 		CE70FA281F8F8EF600AD9027 /* Cameraman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */; };
-		CE70FA291F8F8EF600AD9027 /* ClassicMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87F1F8F8EBD00AD9027 /* ClassicMaterial.cpp */; };
 		CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */; };
 		CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8821F8F8EBD00AD9027 /* Camera.cpp */; };
 		CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */; };
@@ -69,10 +68,8 @@
 		CE70FA491F8F8EF600AD9027 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9E71F8F8EBD00AD9027 /* GLShader.cpp */; };
 		CE70FA4A1F8F8EF600AD9027 /* GLUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9E81F8F8EBD00AD9027 /* GLUniform.cpp */; };
 		CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9E91F8F8EBD00AD9027 /* GLProgram.cpp */; };
-		CE70FA4C1F8F8EF600AD9027 /* GLSLDirectionalBlinnPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9EC1F8F8EBD00AD9027 /* GLSLDirectionalBlinnPhong.cpp */; };
 		CE70FA4D1F8F8EF600AD9027 /* GLSLOmnidirectionalDepth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9EF1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.cpp */; };
 		CE70FA4E1F8F8EF600AD9027 /* GLSLDirectionalDepth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9F11F8F8EBD00AD9027 /* GLSLDirectionalDepth.cpp */; };
-		CE70FA4F1F8F8EF600AD9027 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9FA1F8F8EBD00AD9027 /* GLSLOmnidirectionalBlinnPhong.cpp */; };
 		CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA021F8F8EBD00AD9027 /* GLSLSkybox.cpp */; };
 		CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA071F8F8EBD00AD9027 /* GLSLGenericGeometry.cpp */; };
 		CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA0B1F8F8EBD00AD9027 /* GLSLCookTorrance.cpp */; };
@@ -151,11 +148,13 @@
 		CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70F83C1F8F8EBD00AD9027 /* NSNumberFormatter+CustomFormatters.m */; };
 		CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8241F8F8EBD00AD9027 /* Main.storyboard */; };
 		CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */; };
+		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CEAAA3961F97B6BB0029099D /* factory.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3931F97B6510029099D /* factory.hdr */; };
 		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
+		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -290,8 +289,6 @@
 		CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInteractor.cpp; sourceTree = "<group>"; };
 		CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cameraman.cpp; sourceTree = "<group>"; };
 		CE70F87E1F8F8EBD00AD9027 /* PBRMaterial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PBRMaterial.hpp; sourceTree = "<group>"; };
-		CE70F87F1F8F8EBD00AD9027 /* ClassicMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClassicMaterial.cpp; sourceTree = "<group>"; };
-		CE70F8801F8F8EBD00AD9027 /* ClassicMaterial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClassicMaterial.hpp; sourceTree = "<group>"; };
 		CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PBRMaterial.cpp; sourceTree = "<group>"; };
 		CE70F8821F8F8EBD00AD9027 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
@@ -636,8 +633,6 @@
 		CE70F9E81F8F8EBD00AD9027 /* GLUniform.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniform.cpp; sourceTree = "<group>"; };
 		CE70F9E91F8F8EBD00AD9027 /* GLProgram.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgram.cpp; sourceTree = "<group>"; };
 		CE70F9EA1F8F8EBD00AD9027 /* GLUniform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLUniform.hpp; sourceTree = "<group>"; };
-		CE70F9EC1F8F8EBD00AD9027 /* GLSLDirectionalBlinnPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDirectionalBlinnPhong.cpp; sourceTree = "<group>"; };
-		CE70F9ED1F8F8EBD00AD9027 /* GLSLOmnidirectionalBlinnPhong.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLOmnidirectionalBlinnPhong.hpp; sourceTree = "<group>"; };
 		CE70F9EE1F8F8EBD00AD9027 /* DirectionalDepth.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = DirectionalDepth.vert; sourceTree = "<group>"; };
 		CE70F9EF1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLOmnidirectionalDepth.cpp; sourceTree = "<group>"; };
 		CE70F9F01F8F8EBD00AD9027 /* OmnidirectionalDepth.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalDepth.frag; sourceTree = "<group>"; };
@@ -648,9 +643,7 @@
 		CE70F9F51F8F8EBD00AD9027 /* GLSLDirectionalDepth.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectionalDepth.hpp; sourceTree = "<group>"; };
 		CE70F9F61F8F8EBD00AD9027 /* DirectionalDepth.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = DirectionalDepth.frag; sourceTree = "<group>"; };
 		CE70F9F71F8F8EBD00AD9027 /* DirectionalBlinnPhong.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = DirectionalBlinnPhong.frag; sourceTree = "<group>"; };
-		CE70F9F81F8F8EBD00AD9027 /* GLSLDirectionalBlinnPhong.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectionalBlinnPhong.hpp; sourceTree = "<group>"; };
 		CE70F9F91F8F8EBD00AD9027 /* OmnidirectionalBlinnPhong.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalBlinnPhong.frag; sourceTree = "<group>"; };
-		CE70F9FA1F8F8EBD00AD9027 /* GLSLOmnidirectionalBlinnPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLOmnidirectionalBlinnPhong.cpp; sourceTree = "<group>"; };
 		CE70F9FB1F8F8EBD00AD9027 /* OmnidirectionalDepth.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalDepth.vert; sourceTree = "<group>"; };
 		CE70F9FC1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLOmnidirectionalDepth.hpp; sourceTree = "<group>"; };
 		CE70F9FD1F8F8EBD00AD9027 /* GLProgram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLProgram.hpp; sourceTree = "<group>"; };
@@ -670,11 +663,15 @@
 		CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLNamedObject.cpp; sourceTree = "<group>"; };
 		CE70FA0F1F8F8EBD00AD9027 /* GLBindable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBindable.hpp; sourceTree = "<group>"; };
 		CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
+		CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
+		CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
 		CEAAA3931F97B6510029099D /* factory.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = factory.hdr; sourceTree = "<group>"; };
 		CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_roughness.png; sourceTree = "<group>"; };
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
+		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
+		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1122,11 +1119,11 @@
 			children = (
 				CE70F8821F8F8EBD00AD9027 /* Camera.cpp */,
 				CE70F8951F8F8EBD00AD9027 /* Camera.hpp */,
+				CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */,
+				CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */,
 				CE70F88E1F8F8EBD00AD9027 /* Geometry */,
 				CE70F8851F8F8EBD00AD9027 /* Lighting */,
 				CE70F87D1F8F8EBD00AD9027 /* Materials */,
-				CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */,
-				CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -1135,8 +1132,6 @@
 			isa = PBXGroup;
 			children = (
 				CE70F87E1F8F8EBD00AD9027 /* PBRMaterial.hpp */,
-				CE70F87F1F8F8EBD00AD9027 /* ClassicMaterial.cpp */,
-				CE70F8801F8F8EBD00AD9027 /* ClassicMaterial.hpp */,
 				CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */,
 			);
 			path = Materials;
@@ -1160,12 +1155,14 @@
 		CE70F88E1F8F8EBD00AD9027 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */,
+				CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */,
 				CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */,
-				CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */,
-				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
-				CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */,
-				CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */,
 				CE70F8941F8F8EBD00AD9027 /* Mesh.hpp */,
+				CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */,
+				CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */,
+				CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */,
+				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -1518,6 +1515,8 @@
 				CE70F9B01F8F8EBD00AD9027 /* ResourceManager.hpp */,
 				CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */,
 				CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */,
+				CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */,
+				CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */,
 			);
 			path = "Resource Management";
 			sourceTree = "<group>";
@@ -1627,23 +1626,19 @@
 		CE70F9EB1F8F8EBD00AD9027 /* BlinnPhong */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9EC1F8F8EBD00AD9027 /* GLSLDirectionalBlinnPhong.cpp */,
-				CE70F9ED1F8F8EBD00AD9027 /* GLSLOmnidirectionalBlinnPhong.hpp */,
-				CE70F9EE1F8F8EBD00AD9027 /* DirectionalDepth.vert */,
-				CE70F9EF1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.cpp */,
-				CE70F9F01F8F8EBD00AD9027 /* OmnidirectionalDepth.frag */,
-				CE70F9F11F8F8EBD00AD9027 /* GLSLDirectionalDepth.cpp */,
-				CE70F9F21F8F8EBD00AD9027 /* OmnidirectionalBlinnPhong.vert */,
-				CE70F9F31F8F8EBD00AD9027 /* DirectionalBlinnPhong.vert */,
-				CE70F9F41F8F8EBD00AD9027 /* OmnidirectionalDepth.geom */,
-				CE70F9F51F8F8EBD00AD9027 /* GLSLDirectionalDepth.hpp */,
-				CE70F9F61F8F8EBD00AD9027 /* DirectionalDepth.frag */,
 				CE70F9F71F8F8EBD00AD9027 /* DirectionalBlinnPhong.frag */,
-				CE70F9F81F8F8EBD00AD9027 /* GLSLDirectionalBlinnPhong.hpp */,
-				CE70F9F91F8F8EBD00AD9027 /* OmnidirectionalBlinnPhong.frag */,
-				CE70F9FA1F8F8EBD00AD9027 /* GLSLOmnidirectionalBlinnPhong.cpp */,
-				CE70F9FB1F8F8EBD00AD9027 /* OmnidirectionalDepth.vert */,
+				CE70F9F31F8F8EBD00AD9027 /* DirectionalBlinnPhong.vert */,
+				CE70F9F61F8F8EBD00AD9027 /* DirectionalDepth.frag */,
+				CE70F9EE1F8F8EBD00AD9027 /* DirectionalDepth.vert */,
+				CE70F9F11F8F8EBD00AD9027 /* GLSLDirectionalDepth.cpp */,
+				CE70F9F51F8F8EBD00AD9027 /* GLSLDirectionalDepth.hpp */,
+				CE70F9EF1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.cpp */,
 				CE70F9FC1F8F8EBD00AD9027 /* GLSLOmnidirectionalDepth.hpp */,
+				CE70F9F91F8F8EBD00AD9027 /* OmnidirectionalBlinnPhong.frag */,
+				CE70F9F21F8F8EBD00AD9027 /* OmnidirectionalBlinnPhong.vert */,
+				CE70F9F01F8F8EBD00AD9027 /* OmnidirectionalDepth.frag */,
+				CE70F9F41F8F8EBD00AD9027 /* OmnidirectionalDepth.geom */,
+				CE70F9FB1F8F8EBD00AD9027 /* OmnidirectionalDepth.vert */,
 			);
 			path = BlinnPhong;
 			sourceTree = "<group>";
@@ -1826,6 +1821,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */,
 				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
 				CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */,
@@ -1842,12 +1838,10 @@
 				CE70FA391F8F8EF600AD9027 /* GLHDRTextureCubemap.cpp in Sources */,
 				CE70FA251F8F8EF600AD9027 /* Size2D.cpp in Sources */,
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
-				CE70FA291F8F8EF600AD9027 /* ClassicMaterial.cpp in Sources */,
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
-				CE70FA4C1F8F8EF600AD9027 /* GLSLDirectionalBlinnPhong.cpp in Sources */,
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
 				CE70FA371F8F8EF600AD9027 /* ResourceManager.cpp in Sources */,
@@ -1866,7 +1860,6 @@
 				CE70FA4A1F8F8EF600AD9027 /* GLUniform.cpp in Sources */,
 				CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */,
 				CE70FA951F8F913100AD9027 /* OutlineView.m in Sources */,
-				CE70FA4F1F8F8EF600AD9027 /* GLSLOmnidirectionalBlinnPhong.cpp in Sources */,
 				CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
@@ -1876,6 +1869,7 @@
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
+				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE70FA481F8F8EF600AD9027 /* GLSLFullScreenQuad.cpp in Sources */,
 				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
@@ -2046,6 +2040,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2062,6 +2057,7 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

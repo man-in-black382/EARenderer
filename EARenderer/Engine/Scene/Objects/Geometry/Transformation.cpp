@@ -10,8 +10,11 @@
 
 #include <glm/gtc/constants.hpp>
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace EARenderer {
+    
+#pragma mark - Lifecycle
     
     Transformation::Transformation()
     :
@@ -20,12 +23,24 @@ namespace EARenderer {
     rotation(glm::quat())
     { }
     
+    Transformation::Transformation(const glm::mat4& matrix) {
+        glm::vec3 skew;
+        glm::vec4 perspective;
+        glm::decompose(matrix, scale, rotation, translation, skew, perspective);
+    }
+    
     Transformation::Transformation(glm::vec3 scale, glm::vec3 translation, glm::quat rotation)
     :
     scale(scale),
     translation(translation),
     rotation(rotation)
     { }
+    
+    Transformation Transformation::combinedWith(const Transformation& other) const {
+        return Transformation(other.modelMatrix() * modelMatrix());
+    }
+    
+#pragma mark - Getters
     
     glm::mat4 Transformation::modelMatrix() const {
         return glm::translate(translation) * glm::mat4_cast(rotation) * glm::scale(scale);

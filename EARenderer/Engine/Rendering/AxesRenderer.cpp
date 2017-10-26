@@ -115,17 +115,16 @@ namespace EARenderer {
             }
         };
         
-        for (ID meshID : mScene->meshes()) {
-            Mesh& mesh = mScene->meshes()[meshID];
-            if (!mesh.isSelected()) { continue; }
+        for (ID instanceID : mScene->meshInstances()) {
+            MeshInstance& meshInstance = mScene->meshInstances()[instanceID];
+            if (!meshInstance.isSelected()) { continue; }
             
-            Transformation& tr = mScene->transforms()[mesh.transformID()];
-            glm::mat4 worldTransform = mAxesSystem.worldTransformation(tr, mScene->camera()->position());
+            glm::mat4 worldTransform = mAxesSystem.worldTransformation(meshInstance.transformation(), mScene->camera()->position());
             
             bool areSeveralAxesSelected = false;
-            checkRectIntersection(mAxesSystem.XYSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::y, meshID, areSeveralAxesSelected);
-            checkRectIntersection(mAxesSystem.XZSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::z, meshID, areSeveralAxesSelected);
-            checkRectIntersection(mAxesSystem.YZSelectionRect().transformedBy(worldTransform), CartesianAxis::y | CartesianAxis::z, meshID, areSeveralAxesSelected);
+            checkRectIntersection(mAxesSystem.XYSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::y, instanceID, areSeveralAxesSelected);
+            checkRectIntersection(mAxesSystem.XZSelectionRect().transformedBy(worldTransform), CartesianAxis::x | CartesianAxis::z, instanceID, areSeveralAxesSelected);
+            checkRectIntersection(mAxesSystem.YZSelectionRect().transformedBy(worldTransform), CartesianAxis::y | CartesianAxis::z, instanceID, areSeveralAxesSelected);
             
             // No need to check individual axes if we found two of them already
             if (areSeveralAxesSelected) {
@@ -148,7 +147,7 @@ namespace EARenderer {
                     
                     if (worldDistance < minimumDistance) {
                         minimumDistance = worldDistance;
-                        selection = AxesSelection(axis, meshID);
+                        selection = AxesSelection(axis, instanceID);
                     }
                     
                     anySelectionOccured = true;
@@ -172,17 +171,16 @@ namespace EARenderer {
         glEnable(GL_MULTISAMPLE);
         
         mGenericGeometryShader.bind();
-        for (ID meshID : mScene->meshes()) {
-            Mesh& mesh = mScene->meshes()[meshID];
-            if (!mesh.isSelected()) { continue; }
+        for (ID meshInstanceID : mScene->meshInstances()) {
+            MeshInstance& meshInstance = mScene->meshInstances()[meshInstanceID];
+            if (!meshInstance.isSelected()) { continue; }
             
-            Transformation& tr = mScene->transforms()[mesh.transformID()];
-            glm::mat4 mvp = mScene->camera()->viewProjectionMatrix() * mAxesSystem.worldTransformation(tr, mScene->camera()->position());
+            glm::mat4 mvp = mScene->camera()->viewProjectionMatrix() * mAxesSystem.worldTransformation(meshInstance.transformation(), mScene->camera()->position());
             CartesianAxis axesToHighlight = CartesianAxis::none;
             
-            const auto& it = mAxesToHighlight.find(meshID);
+            const auto& it = mAxesToHighlight.find(meshInstanceID);
             if (it != mAxesToHighlight.end()) {
-                axesToHighlight = mAxesToHighlight.at(meshID);
+                axesToHighlight = mAxesToHighlight.at(meshInstanceID);
             }
             
             renderAxes(axesToHighlight, mvp);

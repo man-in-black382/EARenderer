@@ -130,15 +130,17 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id
 {
-    EARenderer::Mesh& mesh = self.scene->meshes()[id];
-    mesh.setIsSelected(true);
-    [self.sceneEditorTabView showMeshWithID:id];
+#warning TODO: Fix later
+//    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+//    mesh.setIsSelected(true);
+//    [self.sceneEditorTabView showMeshWithID:id];
 }
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didDeselectMeshWithID:(EARenderer::ID)id
 {
-    EARenderer::Mesh& mesh = self.scene->meshes()[id];
-    mesh.setIsSelected(false);
+    #warning TODO: Fix later
+//    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+//    mesh.setIsSelected(false);
 }
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectSubMeshWithID:(EARenderer::ID)id
@@ -148,10 +150,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)meshListTabViewItemDidDeselectAll:(MeshListTabViewItem *)item
 {
-    for (EARenderer::ID meshID : self.scene->meshes()) {
-        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
-        mesh.setIsSelected(false);
-    }
+    #warning TODO: Fix later
+//    for (EARenderer::ID meshID : self.scene->meshes()) {
+//        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
+//        mesh.setIsSelected(false);
+//    }
 }
 
 #pragma mark - Helper methods
@@ -213,48 +216,48 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)addClassicMaterial
 {
-    NSString *bricksTexturePath = [[NSBundle mainBundle] pathForResource:@"brickwork_texture" ofType:@"jpg"];
-    NSString *bricksNormalMapPath = [[NSBundle mainBundle] pathForResource:@"brickwork_normal_map" ofType:@"jpg"];
-    self.scene->classicMaterials().insert(EARenderer::ClassicMaterial({ 0.2, 0.2, 0.2 },
-                                                                      { 1.0, 1.0, 1.0 },
-                                                                      { 0.4, 0.4, 0.4 },
-                                                                      64,
-                                                                      std::string(bricksTexturePath.UTF8String),
-                                                                      std::string(bricksNormalMapPath.UTF8String)));
+//    NSString *bricksTexturePath = [[NSBundle mainBundle] pathForResource:@"brickwork_texture" ofType:@"jpg"];
+//    NSString *bricksNormalMapPath = [[NSBundle mainBundle] pathForResource:@"brickwork_normal_map" ofType:@"jpg"];
+//    self.scene->classicMaterials().insert(EARenderer::ClassicMaterial({ 0.2, 0.2, 0.2 },
+//                                                                      { 1.0, 1.0, 1.0 },
+//                                                                      { 0.4, 0.4, 0.4 },
+//                                                                      64,
+//                                                                      std::string(bricksTexturePath.UTF8String),
+//                                                                      std::string(bricksNormalMapPath.UTF8String)));
 }
 
 - (void)addPBRMaterialIron
 {
-    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
-    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
-    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_normal" ofType:@"png"];
-    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_roughness" ofType:@"png"];
-    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank" ofType:@"jpg"];
-    
-    self.scene->PBRMaterials().insert({
-        std::string(albedoMapPath.UTF8String),
-        std::string(normalMapPath.UTF8String),
-        std::string(metallicMapPath.UTF8String),
-        std::string(roughnessMapPath.UTF8String),
-        std::string(blankImagePath.UTF8String)
-    });
+//    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
+//    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
+//    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_normal" ofType:@"png"];
+//    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_roughness" ofType:@"png"];
+//    NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank" ofType:@"jpg"];
+//
+//    self.scene->PBRMaterials().insert({
+//        std::string(albedoMapPath.UTF8String),
+//        std::string(normalMapPath.UTF8String),
+//        std::string(metallicMapPath.UTF8String),
+//        std::string(roughnessMapPath.UTF8String),
+//        std::string(blankImagePath.UTF8String)
+//    });
 }
 
 - (void)addPBRMaterialFloor
 {
-    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_basecolor" ofType:@"png"];
-//    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
-    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_normal" ofType:@"png"];
-    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_roughness" ofType:@"png"];
-    NSString *aoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_AO" ofType:@"png"];
-    
-    self.scene->PBRMaterials().insert({
-        std::string(albedoMapPath.UTF8String),
-        std::string(normalMapPath.UTF8String),
-        "",
-        std::string(roughnessMapPath.UTF8String),
-        std::string(aoMapPath.UTF8String)
-    });
+//    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_basecolor" ofType:@"png"];
+////    NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
+//    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_normal" ofType:@"png"];
+//    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_roughness" ofType:@"png"];
+//    NSString *aoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_AO" ofType:@"png"];
+//
+//    self.scene->PBRMaterials().insert({
+//        std::string(albedoMapPath.UTF8String),
+//        std::string(normalMapPath.UTF8String),
+//        "",
+//        std::string(roughnessMapPath.UTF8String),
+//        std::string(aoMapPath.UTF8String)
+//    });
 }
 
 @end

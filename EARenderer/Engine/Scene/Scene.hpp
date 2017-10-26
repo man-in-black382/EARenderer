@@ -10,27 +10,24 @@
 #define Scene_hpp
 
 #include "PackedLookupTable.inl"
-#include "Mesh.hpp"
-#include "SubMesh.hpp"
+#include "MeshInstance.hpp"
 #include "Transformation.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
-#include "ClassicMaterial.hpp"
 #include "PBRMaterial.hpp"
 #include "Skybox.hpp"
+
+#include <vector>
 
 namespace EARenderer {
     
     class Scene {
     private:
-        PackedLookupTable<Mesh> mMeshes;
-        PackedLookupTable<SubMesh> mSubMeshes;
         PackedLookupTable<Transformation> mTransforms;
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;
-        PackedLookupTable<ClassicMaterial> mClassicMaterials;
-        PackedLookupTable<PBRMaterial> mPBRMaterials;
+        PackedLookupTable<MeshInstance> mMeshInstances;
         
         Camera *mCamera;
         Skybox *mSkybox;
@@ -38,14 +35,10 @@ namespace EARenderer {
     public:
         Scene();
         
-        PackedLookupTable<Mesh>& meshes();
-        PackedLookupTable<SubMesh>& subMeshes();
         PackedLookupTable<Transformation>& transforms();
-        PackedLookupTable<Camera>& cameras();
         PackedLookupTable<DirectionalLight>& directionalLights();
         PackedLookupTable<PointLight>& pointLights();
-        PackedLookupTable<ClassicMaterial>& classicMaterials();
-        PackedLookupTable<PBRMaterial>& PBRMaterials();
+        PackedLookupTable<MeshInstance>& meshInstances();
         
         void setCamera(Camera* camera);
         Camera* camera() const;

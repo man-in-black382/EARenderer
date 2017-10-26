@@ -18,8 +18,6 @@
 #include "Ray3D.hpp"
 
 #include "GLSLCookTorrance.hpp"
-#include "GLSLDirectionalBlinnPhong.hpp"
-#include "GLSLOmnidirectionalBlinnPhong.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLDirectionalDepth.hpp"
 #include "GLSLOmnidirectionalDepth.hpp"

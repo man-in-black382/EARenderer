@@ -59,14 +59,13 @@ namespace EARenderer {
         float minimumDistance = std::numeric_limits<float>::max();
         ID closestMeshID = IDNotFound;
         
-        for (ID id : mScene->meshes()) {
-            Mesh& mesh = mScene->meshes()[id];
-            Transformation& transformation = mScene->transforms()[mesh.transformID()];
-            glm::mat4 modelMatrix = transformation.modelMatrix();
+        for (ID id : mScene->meshInstances()) {
+            MeshInstance& meshInstance = mScene->meshInstances()[id];
+            glm::mat4 modelMatrix = meshInstance.transformation().modelMatrix();
             Ray3D meshLocalSpaceRay = ray.transformedBy(glm::inverse(modelMatrix));
             
             float distance = 0;
-            if (meshLocalSpaceRay.intersectsAAB(mesh.boundingBox(), distance)) {
+            if (meshLocalSpaceRay.intersectsAAB(meshInstance.boundingBox(), distance)) {
                 // Intersection distance is in the mesh's local space
                 // Scale local space ray's direction vector (which is a unit vector) accordingly
                 glm::vec3 localScaledDirection = meshLocalSpaceRay.direction * distance;
@@ -317,27 +316,27 @@ namespace EARenderer {
             mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         
-        for (ID subMeshID : mScene->subMeshes()) {
-            mCookTorranceShader.ensureSamplerValidity([&]() {
-                mCookTorranceShader.setCamera(*(mScene->camera()));
-                mCookTorranceShader.setLight(light);
-                
-                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-                ID meshID = subMesh.meshID();
-                Mesh& mesh = mScene->meshes()[meshID];
-                ID transformID = mesh.transformID();
-                Transformation& transform = mScene->transforms()[transformID];
-                
-                mCookTorranceShader.setModelMatrix(transform.modelMatrix());
-                
-                ID materialID = *(mScene->PBRMaterials().begin());
-                PBRMaterial& material = mScene->PBRMaterials()[materialID];
-                
-                mCookTorranceShader.setMaterial(material);
-                
-                subMesh.draw();
-            });
-        }
+//        for (ID subMeshID : mScene->subMeshes()) {
+//            mCookTorranceShader.ensureSamplerValidity([&]() {
+//                mCookTorranceShader.setCamera(*(mScene->camera()));
+//                mCookTorranceShader.setLight(light);
+//
+//                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
+//                ID meshID = subMesh.meshID();
+//                Mesh& mesh = mScene->meshes()[meshID];
+//                ID transformID = mesh.transformID();
+//                Transformation& transform = mScene->transforms()[transformID];
+//
+//                mCookTorranceShader.setModelMatrix(transform.modelMatrix());
+//
+//                ID materialID = *(mScene->PBRMaterials().begin());
+//                PBRMaterial& material = mScene->PBRMaterials()[materialID];
+//
+//                mCookTorranceShader.setMaterial(material);
+//
+//                subMesh.draw();
+//            });
+//        }
         
         renderSkybox();
     }

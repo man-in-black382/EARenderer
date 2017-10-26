@@ -24,7 +24,6 @@ namespace EARenderer {
         std::string mName;
         std::vector<Vertex1P1N1UV1T1BT> mVertices;
         GLVertexArray<Vertex1P1N1UV1T1BT> mVAO;
-        ID mMeshID;
         
     public:
         SubMesh();
@@ -33,11 +32,9 @@ namespace EARenderer {
         const std::string& name() const;
         std::vector<Vertex1P1N1UV1T1BT>& vertices();
         const GLVertexArray<Vertex1P1N1UV1T1BT>& VAO() const;
-        ID meshID() const;
         
         void setName(const std::string& name);
         void addVertex(const Vertex1P1N1UV1T1BT& vertex);
-        void setMeshID(ID meshID);
         void finalizeVertexBuffer();
         
         void draw() const override;
