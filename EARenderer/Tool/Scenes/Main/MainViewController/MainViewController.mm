@@ -85,7 +85,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     
     auto HDRColor = EARenderer::Color(2.0, 2.0, 2.0, 1.0);
-    EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
+    EARenderer::PointLight pointLight(glm::vec3(5, 5, -5), HDRColor);
     
     self.scene->setCamera(camera);
     self.scene->directionalLights().insert(directionalLight);
