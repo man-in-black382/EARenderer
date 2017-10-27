@@ -19,8 +19,10 @@
     // Meshes
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
+    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     
     EARenderer::ID sphereMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(spherePath.UTF8String)));
+    EARenderer::ID sponzaMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
     
     // Materials
     
@@ -29,6 +31,13 @@
     EARenderer::ID scuffedTitaniumMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
     
     // Instances
+    
+    EARenderer::MeshInstance sponzaInstance(sponzaMeshID);
+    EARenderer::Transformation sponzaTransform;
+    sponzaTransform.translation.y = -1.0;
+    sponzaTransform.scale = glm::vec3(1.0);
+    
+    sponzaInstance.setTransformation(sponzaTransform);
     
     EARenderer::MeshInstance ironSphereInstance(sphereMeshID);
     ironSphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
@@ -45,6 +54,7 @@
     t.translation.x = -0.5;
     scuffedTitaniumSphereInstance.setTransformation(t);
     
+//    scene->meshInstances().insert(sponzaInstance);
     scene->meshInstances().insert(ironSphereInstance);
     scene->meshInstances().insert(patchyCementSphereInstance);
     scene->meshInstances().insert(scuffedTitaniumSphereInstance);

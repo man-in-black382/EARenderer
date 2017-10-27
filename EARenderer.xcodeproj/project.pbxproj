@@ -18,6 +18,7 @@
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
 		CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */; };
+		CE3791891FA36DDA0049BD1B /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE3791881FA36DCB0049BD1B /* sponza.obj */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
@@ -158,6 +159,7 @@
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
+		CE3791881FA36DCB0049BD1B /* sponza.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
 		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
@@ -918,6 +920,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE3791881FA36DCB0049BD1B /* sponza.obj */,
 				CE0B71261F9A2FC800316615 /* floor.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8211F8F8EBD00AD9027 /* torus.obj */,
@@ -1770,6 +1773,7 @@
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE70FA731F8F8F7400AD9027 /* rustediron2_roughness.png in Resources */,
 				CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */,
+				CE3791891FA36DDA0049BD1B /* sponza.obj in Resources */,
 				CE70FA741F8F8F7400AD9027 /* rustediron2_normal.png in Resources */,
 				CE37917D1FA366820049BD1B /* patchy_cement1_Metallic.png in Resources */,
 				CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */,
