@@ -18,13 +18,12 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene, const std::string& equirectangularSkyboxPath)
+    SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
     mCascadedShadowMaps(Size2D(2048, 2048), mNumberOfCascades),
 //    mShadowCubeMap(Size2D(2048, 2048)),
 //    mDepthFramebuffer(Size2D(2048, 2048)),
-    mEnvironemtMapEquirectangular(equirectangularSkyboxPath),
     mEnvironmentMapCube(Size2D(512, 512)),
     mDiffuseIrradianceMap(Size2D(32, 32)),
     mSpecularIrradianceMap(Size2D(512, 512)),
@@ -92,7 +91,7 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setCubemap(mEnvironmentMapCube);
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
         });
         mScene->skybox()->draw();
     }
@@ -241,7 +240,7 @@ namespace EARenderer {
         
         mEqurectangularMapConversionShader.bind();
         mEqurectangularMapConversionShader.ensureSamplerValidity([this]() {
-            mEqurectangularMapConversionShader.setEquirectangularEnvironmentMap(mEnvironemtMapEquirectangular);
+            mEqurectangularMapConversionShader.setEquirectangularEnvironmentMap(mScene->skybox()->equirectangularMap());
         });
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

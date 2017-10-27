@@ -84,19 +84,17 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     EARenderer::DirectionalLight directionalLight(EARenderer::Color::white(), glm::vec3(0.3, -1.0, 0.7));
     
-    auto HDRColor = EARenderer::Color(20.0, 20.0, 20.0, 1.0);
+    auto HDRColor = EARenderer::Color(2.0, 2.0, 2.0, 1.0);
     EARenderer::PointLight pointLight(glm::vec3(5, 5, 5), HDRColor);
     
     self.scene->setCamera(camera);
     self.scene->directionalLights().insert(directionalLight);
     self.scene->pointLights().insert(pointLight);
-    self.scene->setSkybox([self skybox]);
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"factory" ofType:@"hdr"];
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, std::string(hdrSkyboxPath.UTF8String));
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
@@ -188,23 +186,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     NSString *directory = [shaderPath stringByDeletingLastPathComponent];
     directory = [directory stringByAppendingString:@"/"];
     return std::string(directory.UTF8String);
-}
-
-- (EARenderer::Skybox *)skybox
-{
-    NSString *right = [[NSBundle mainBundle] pathForResource:@"right" ofType:@"jpg"];
-    NSString *left = [[NSBundle mainBundle] pathForResource:@"left" ofType:@"jpg"];
-    NSString *top = [[NSBundle mainBundle] pathForResource:@"top" ofType:@"jpg"];
-    NSString *bottom = [[NSBundle mainBundle] pathForResource:@"bottom" ofType:@"jpg"];
-    NSString *front = [[NSBundle mainBundle] pathForResource:@"back" ofType:@"jpg"];
-    NSString *back = [[NSBundle mainBundle] pathForResource:@"front" ofType:@"jpg"];
-    
-    return new EARenderer::Skybox(std::string(right.UTF8String),
-                                  std::string(left.UTF8String),
-                                  std::string(top.UTF8String),
-                                  std::string(bottom.UTF8String),
-                                  std::string(front.UTF8String),
-                                  std::string(back.UTF8String));
 }
 
 @end

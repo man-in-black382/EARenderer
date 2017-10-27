@@ -11,26 +11,21 @@
 
 #include "Drawable.hpp"
 #include "GLVertexArray.inl"
-#include "GLTextureCubemap.hpp"
 #include "Vertex1P4.hpp"
+#include "GLTextureCubemap.hpp"
+#include "GLTexture2D.hpp"
+#include "GLHDRTexture2D.hpp"
 
 namespace EARenderer {
     
     class Skybox: public Drawable {
     private:
-        GLTextureCubemap mCubemap;
+        GLHDRTexture2D mEquirectangularMap;
         
     public:
-//        Skybox(const std::string& equirectangularImage, bool isHDR);
+        Skybox(const std::string& equirectangularImage);
         
-        Skybox(const std::string& rightImagePath,
-               const std::string& leftImagePath,
-               const std::string& topImagePath,
-               const std::string& bottomImagePath,
-               const std::string& frontImagePath,
-               const std::string& backImagePath);
-        
-        const GLTextureCubemap& cubemap() const;
+        const GLHDRTexture2D& equirectangularMap() const;
         
         void draw() const override;
     };

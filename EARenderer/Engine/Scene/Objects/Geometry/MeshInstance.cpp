@@ -25,6 +25,9 @@ namespace EARenderer {
         for (ID subMeshID : subMeshes) {
             mSubMeshMaterialMap[subMeshID] = IDNotFound;
         }
+        
+        Mesh& mesh = ResourcePool::shared().meshes[mMeshID];
+        mTransformation = mesh.baseTransform();
     }
     
 #pragma mark - Getters
@@ -42,8 +45,7 @@ namespace EARenderer {
     }
     
     Transformation MeshInstance::transformation() const {
-        Mesh& mesh = ResourcePool::shared().meshes[mMeshID];
-        return mTransformation.combinedWith(mesh.baseTransform());
+        return mTransformation;
     }
     
     AxisAlignedBox3D MeshInstance::boundingBox() const {

@@ -14,23 +14,18 @@ namespace EARenderer {
     
 #pragma mark - Lifeycle
     
-//    Skybox::Skybox(const std::string& equirectangularImage, bool isHDR) {
-//        
-//    }
-    
-    Skybox::Skybox(const std::string& rightImagePath,
-                   const std::string& leftImagePath,
-                   const std::string& topImagePath,
-                   const std::string& bottomImagePath,
-                   const std::string& frontImagePath,
-                   const std::string& backImagePath)
+    Skybox::Skybox(const std::string& equirectangularImage)
     :
-    mCubemap(rightImagePath, leftImagePath, topImagePath, bottomImagePath, frontImagePath, backImagePath)
+    mEquirectangularMap(GLHDRTexture2D(equirectangularImage))
     { }
-
-    const GLTextureCubemap& Skybox::cubemap() const {
-        return mCubemap;
+    
+#pragma mark - Getters
+    
+    const GLHDRTexture2D& Skybox::equirectangularMap() const {
+        return mEquirectangularMap;
     }
+    
+#pragma mark - Drawable
     
     void Skybox::draw() const {
         glDepthFunc(GL_LEQUAL);

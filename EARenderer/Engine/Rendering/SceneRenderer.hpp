@@ -54,7 +54,6 @@ namespace EARenderer {
         GLSLRadianceConvolution mRadianceConvolutionShader;
         GLSLBRDFIntegration mBRDFIntegrationShader;
         
-        GLHDRTexture2D mEnvironemtMapEquirectangular;
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
         GLHDRTextureCubemap mSpecularIrradianceMap;
@@ -86,7 +85,7 @@ namespace EARenderer {
         void renderPBRMeshes();
         
     public:
-        SceneRenderer(Scene* scene, const std::string& equirectangularSkyboxPath);
+        SceneRenderer(Scene* scene);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

@@ -35,10 +35,15 @@
     ironSphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
     
     EARenderer::MeshInstance linoleumFloorInstance(floorMeshID);
-    ironSphereInstance.setMaterialIDForAllSubmeshes(linoleumMaterialID);
+    linoleumFloorInstance.setMaterialIDForAllSubmeshes(linoleumMaterialID);
     
     scene->meshInstances().insert(ironSphereInstance);
     scene->meshInstances().insert(linoleumFloorInstance);
+    
+    // Skybox
+    
+    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"Milkyway" ofType:@"hdr"];
+    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 }
 
 - (EARenderer::ID)loadIronMaterialToPool:(EARenderer::ResourcePool *)pool
