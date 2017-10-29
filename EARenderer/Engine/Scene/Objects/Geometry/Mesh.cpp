@@ -15,7 +15,7 @@ namespace EARenderer {
     
     Mesh::Mesh(const std::string& filePath)
     :
-    mSubMeshes(100)
+    mSubMeshes(1000)
     {
         WavefrontMeshLoader loader(filePath);
         std::vector<SubMesh> subMeshes;

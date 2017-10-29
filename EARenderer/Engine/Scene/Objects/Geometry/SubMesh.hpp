@@ -22,6 +22,7 @@ namespace EARenderer {
     class SubMesh: public Drawable {
     private:
         std::string mName;
+        std::string mMaterialName;
         std::vector<Vertex1P1N1UV1T1BT> mVertices;
         GLVertexArray<Vertex1P1N1UV1T1BT> mVAO;
         
@@ -30,10 +31,12 @@ namespace EARenderer {
         SubMesh(const std::vector<Vertex1P1N1UV1T1BT>& vertices);
         
         const std::string& name() const;
+        const std::string& materialName() const;
         std::vector<Vertex1P1N1UV1T1BT>& vertices();
         const GLVertexArray<Vertex1P1N1UV1T1BT>& VAO() const;
         
         void setName(const std::string& name);
+        void setMaterialName(const std::string& name);
         void addVertex(const Vertex1P1N1UV1T1BT& vertex);
         void finalizeVertexBuffer();
         

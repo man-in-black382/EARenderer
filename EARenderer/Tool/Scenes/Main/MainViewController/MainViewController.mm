@@ -77,8 +77,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
-    camera->moveTo(glm::vec3(0, 0, 1));
-    camera->lookAt(glm::vec3(0, 0, 0));
+    camera->moveTo(glm::vec3(0, -1, 0));
+    camera->lookAt(glm::vec3(-1, -1, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     

@@ -28,7 +28,7 @@ namespace EARenderer {
     
     GLTexture2D::GLTexture2D(const std::string& fileName)
     :
-    GLTexture(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
+    GLTexture(GL_TEXTURE_2D, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_REPEAT, GL_REPEAT)
     {
         int32_t width = 0;
         int32_t height = 0;
@@ -36,6 +36,7 @@ namespace EARenderer {
         stbi_uc *pixelData = stbi_load(fileName.c_str(), &width, &height, &components, STBI_rgb_alpha);
         
         ASSERT(pixelData, "Unable to read texture file: " << fileName);
+        ASSERT(width > 0 && height > 0, "Unable to read texture file: " << fileName);
         
         mSize = Size2D(width, height);
         

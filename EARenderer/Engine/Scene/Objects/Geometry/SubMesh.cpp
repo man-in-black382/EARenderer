@@ -31,6 +31,10 @@ namespace EARenderer {
         return mName;
     }
     
+    const std::string& SubMesh::materialName() const {
+        return mMaterialName;
+    }
+    
     std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() {
         return mVertices;
     }
@@ -44,6 +48,11 @@ namespace EARenderer {
     void SubMesh::setName(const std::string &name) {
         mName = name;
     }
+    
+    void SubMesh::setMaterialName(const std::string &name) {
+        mMaterialName = name;
+    }
+
     
 #pragma mark - Other methods
     

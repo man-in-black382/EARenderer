@@ -44,6 +44,7 @@ namespace EARenderer {
         static void indexCallback(void *userData, tinyobj::index_t *indices, int numIndices);
         static void groupCallback(void *userData, const char **names, int numNames);
         static void objectCallback(void *userData, const char *name);
+        static void materialCallback(void *user_data, const char *name, int material_id);
 
         void processTriangle(const std::array<tinyobj::index_t, 3>& indices);
         void buildTangentSpace(const std::array<int32_t, 3>& positionIndices, const std::array<int32_t, 3>& texCoordIndices);

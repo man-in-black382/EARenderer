@@ -88,6 +88,15 @@ namespace EARenderer {
         }
     }
     
+    void WavefrontMeshLoader::materialCallback(void *userData, const char *name, int material_id) {
+        WavefrontMeshLoader *thisPtr = reinterpret_cast<WavefrontMeshLoader *>(userData);
+        
+        auto& lastSubMesh = thisPtr->mSubMeshes->back();
+        if (name) {
+            lastSubMesh.setMaterialName(name);
+        }
+    }
+    
 #pragma mark - Private instance functions
     
     void WavefrontMeshLoader::processTriangle(const std::array<tinyobj::index_t, 3>& indices) {
@@ -222,6 +231,7 @@ namespace EARenderer {
         cb.index_cb = indexCallback;
         cb.group_cb = groupCallback;
         cb.object_cb = objectCallback;
+        cb.usemtl_cb = materialCallback;
         
         std::string err;
         std::ifstream ifs(mMeshPath.c_str());
