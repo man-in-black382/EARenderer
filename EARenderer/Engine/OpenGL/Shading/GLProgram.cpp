@@ -87,11 +87,11 @@ namespace EARenderer {
                 ASSERT(textureUnit < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
                 glUniform1i(uniform.location(), textureUnit);
                 uniform.setTextureUnit(textureUnit);
-                mUniforms.insert(std::make_pair(name, uniform));
                 textureUnit++;
             }
-                
-            mUniforms.insert(std::make_pair(name, uniform));
+            
+            UniformNameCRC32 crc = crc32(name.c_str(), name.length());
+            mUniforms.insert(std::make_pair(crc, uniform));
         }
     }
     
@@ -121,17 +121,17 @@ namespace EARenderer {
     
 #pragma mark - Protected
     
-    void GLProgram::setUniformTexture(const std::string& uniformName, const GLTexture& texture) {
-        GLUniform sampler = uniformByName(uniformName);
+    void GLProgram::setUniformTexture(uint32_t uniformNameCRC32, const GLTexture& texture) {
+        GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
         ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
         mUsedSamplerLocations.insert(sampler.location());
     }
       
-    const GLUniform& GLProgram::uniformByName(const std::string& name) {
-        auto it = mUniforms.find(name);
-        ASSERT(it != mUniforms.end(), "Uniform named '" << name << "' could not be found");
+    const GLUniform& GLProgram::uniformByNameCRC32(uint32_t crc32) {
+        auto it = mUniforms.find(crc32);
+        ASSERT(it != mUniforms.end(), "Uniform could not be found");
         return it->second;
     }
         

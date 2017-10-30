@@ -225,7 +225,7 @@ void main() {
     
     // Image based lighting
     vec3 ambient            = IBL(N, V, H, albedo, roughness, metallic) * ao;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     oFragColor              = vec4(correctColor, 1.0);
 }

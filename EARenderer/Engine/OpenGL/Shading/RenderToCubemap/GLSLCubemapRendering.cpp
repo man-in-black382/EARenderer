@@ -47,7 +47,7 @@ namespace EARenderer {
         };
         
         bind();
-        glUniformMatrix4fv(uniformByName("uViewProjectionMatrices[0]").location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uViewProjectionMatrices[0]")).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
     }
     
     GLSLCubemapRendering::~GLSLCubemapRendering() { }

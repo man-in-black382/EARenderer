@@ -22,11 +22,11 @@ namespace EARenderer {
 #pragma mark - Setters
     
     void GLSLDirectionalDepth::setViewProjectionMatrix(const glm::mat4& matrix) {
-        glUniformMatrix4fv(uniformByName("uViewProjectionMatrix").location(), 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uViewProjectionMatrix")).location(), 1, GL_FALSE, glm::value_ptr(matrix));
     }
     
     void GLSLDirectionalDepth::setModelMatrix(const glm::mat4& matrix) {
-        glUniformMatrix4fv(uniformByName("uModelMatrix").location(), 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uModelMatrix")).location(), 1, GL_FALSE, glm::value_ptr(matrix));
     }
     
 }

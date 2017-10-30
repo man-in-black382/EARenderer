@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE37917B1FA366820049BD1B /* patchy_cement1_Ambient_Occlusion.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791771FA3667E0049BD1B /* patchy_cement1_Ambient_Occlusion.png */; };
 		CE37917C1FA366820049BD1B /* patchy_cement1_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791781FA3667F0049BD1B /* patchy_cement1_Base_Color.png */; };
 		CE37917D1FA366820049BD1B /* patchy_cement1_Metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791791FA3667F0049BD1B /* patchy_cement1_Metallic.png */; };
@@ -224,6 +225,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
+		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		CE3791761FA3667E0049BD1B /* patchy_cement1_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Normal.png; sourceTree = "<group>"; };
 		CE3791771FA3667E0049BD1B /* patchy_cement1_Ambient_Occlusion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Ambient_Occlusion.png; sourceTree = "<group>"; };
 		CE3791781FA3667F0049BD1B /* patchy_cement1_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Base_Color.png; sourceTree = "<group>"; };
@@ -1155,6 +1158,8 @@
 				CE70F8451F8F8EBD00AD9027 /* Macros.h */,
 				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
 				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
+				CE058FFF1FA73C7A00822524 /* crc.hpp */,
+				CE0590051FA77C6100822524 /* crc.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2152,6 +2157,7 @@
 				CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
+				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
@@ -2324,15 +2330,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				DEVELOPMENT_TEAM = QE23YWVJ9G;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -2341,15 +2349,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				DEVELOPMENT_TEAM = QE23YWVJ9G;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

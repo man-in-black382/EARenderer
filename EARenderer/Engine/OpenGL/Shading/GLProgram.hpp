@@ -28,16 +28,20 @@
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2DArray.hpp"
+#include "crc.hpp"
 
 namespace EARenderer {
     
     class GLProgram: public GLNamedObject, public GLBindable {
+    public:
+        using UniformNameCRC32 = uint32_t;
+        
     private:
         const GLShader* mVertexShader = nullptr;
         const GLShader* mFragmentShader = nullptr;
         const GLShader* mGeometryShader = nullptr;
         
-        std::unordered_map<std::string, GLUniform> mUniforms;
+        std::unordered_map<uint32_t, GLUniform> mUniforms;
         std::unordered_set<GLint> mUsedSamplerLocations;
         
         GLint mAvailableTextureUnits = 0;
@@ -51,8 +55,8 @@ namespace EARenderer {
     protected:
         GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
         
-        const GLUniform& uniformByName(const std::string& name);
-        void setUniformTexture(const std::string& uniformName, const GLTexture& texture);
+        const GLUniform& uniformByNameCRC32(uint32_t crc32);
+        void setUniformTexture(uint32_t uniformNameCRC32, const GLTexture& texture);
         
     public:
         using UniformModifierClosure = const std::function<void()>&;
