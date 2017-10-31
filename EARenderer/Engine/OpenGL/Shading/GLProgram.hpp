@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <type_traits>
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -32,17 +33,16 @@
 
 namespace EARenderer {
     
+    template<uint32_t expr>
+    std::integral_constant<uint32_t, expr> uint32_constant{};
+    
     class GLProgram: public GLNamedObject, public GLBindable {
-    public:
-        using UniformNameCRC32 = uint32_t;
-        
     private:
         const GLShader* mVertexShader = nullptr;
         const GLShader* mFragmentShader = nullptr;
         const GLShader* mGeometryShader = nullptr;
         
         std::unordered_map<uint32_t, GLUniform> mUniforms;
-        std::unordered_set<GLint> mUsedSamplerLocations;
         
         GLint mAvailableTextureUnits = 0;
         

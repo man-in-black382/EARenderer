@@ -24,7 +24,7 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLEquirectangularMapConversion::setEquirectangularEnvironmentMap(const GLHDRTexture2D& map) {
-        setUniformTexture(ctcrc32("uEquirectangularMap"), map);
+        setUniformTexture(uint32_constant<ctcrc32("uEquirectangularMap")>, map);
     }
     
 }

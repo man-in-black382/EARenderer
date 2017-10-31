@@ -90,7 +90,7 @@ namespace EARenderer {
                 textureUnit++;
             }
             
-            UniformNameCRC32 crc = crc32(name.c_str(), name.length());
+            uint32_t crc = crc32(name.c_str(), name.length());
             mUniforms.insert(std::make_pair(crc, uniform));
         }
     }
@@ -126,7 +126,6 @@ namespace EARenderer {
         ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
-        mUsedSamplerLocations.insert(sampler.location());
     }
       
     const GLUniform& GLProgram::uniformByNameCRC32(uint32_t crc32) {
@@ -138,7 +137,6 @@ namespace EARenderer {
 #pragma mark - Public
     
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
-        mUsedSamplerLocations.clear();
         isModifyingUniforms = true;
         closure();
 
