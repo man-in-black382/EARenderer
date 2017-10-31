@@ -17,6 +17,7 @@
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "PointLight.hpp"
+#include "DirectionalLight.hpp"
 #include "Camera.hpp"
 #include "FrustumCascades.hpp"
 
@@ -26,7 +27,7 @@
 namespace EARenderer {
     
     class GLSLCookTorrance: public GLProgram {
-        public:
+    public:
         using GLProgram::GLProgram;
         
         GLSLCookTorrance();
@@ -34,11 +35,15 @@ namespace EARenderer {
         void setCamera(const Camera& camera);
         void setModelMatrix(const glm::mat4& matrix);
         void setLight(const PointLight& light);
+        void setLight(const DirectionalLight& light);
         void setMaterial(const PBRMaterial& material);
+        
         void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
                             const GLHDRTextureCubemap& specularIrradianceMap,
                             const GLHDRTexture2D& BRDFIntegrationMap,
                             int8_t specularIrradianceMapMaxLOD);
+        
+        void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
     };
     
 }

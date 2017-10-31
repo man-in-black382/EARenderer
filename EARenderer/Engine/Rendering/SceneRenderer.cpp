@@ -21,9 +21,9 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
-    mCascadedShadowMaps(Size2D(2048, 2048), mNumberOfCascades),
-//    mShadowCubeMap(Size2D(2048, 2048)),
-//    mDepthFramebuffer(Size2D(2048, 2048)),
+    mShadowMaps(Size2D(1024, 1024), mNumberOfCascades),
+    mShadowCubeMap(Size2D(2048, 2048)),
+    mDepthFramebuffer(Size2D(2048, 2048)),
     mEnvironmentMapCube(Size2D(512, 512)),
     mDiffuseIrradianceMap(Size2D(32, 32)),
     mSpecularIrradianceMap(Size2D(512, 512)),
@@ -99,25 +99,28 @@ namespace EARenderer {
 #pragma mark Blinn-Phong
     
     void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
-//        // Fill shadow map
-//        mDirectionalDepthShader.bind();
-//
-//        for (uint8_t cascade = 0; cascade < cascades.splits.size(); cascade++) {
-//            mDepthFramebuffer.attachTextureLayer(mCascadedShadowMaps, cascade);
-//            glClear(GL_DEPTH_BUFFER_BIT);
-//
-//            for (ID subMeshID : mScene->subMeshes()) {
-//                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-//                ID meshID = subMesh.meshID();
-//                ID transformID = mScene->meshes()[meshID].transformID();
-//                Transformation& transform = mScene->transforms()[transformID];
-//
-//                mDirectionalDepthShader.setModelMatrix(transform.modelMatrix());
-//                mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
-//
-//                subMesh.draw();
-//            }
-//        }
+        // Fill shadow map
+        mDirectionalDepthShader.bind();
+        mDepthFramebuffer.bind();
+        mDepthFramebuffer.viewport().apply();
+
+        for (uint8_t cascade = 0; cascade < cascades.splits.size(); cascade++) {
+            mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            for (ID meshInstanceID : mScene->meshInstances()) {
+                auto& instance = mScene->meshInstances()[meshInstanceID];
+                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+                
+                mDirectionalDepthShader.setModelMatrix(instance.transformation().modelMatrix());
+                mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
+                
+                for (ID subMeshID : subMeshes) {
+                    auto& subMesh = subMeshes[subMeshID];
+                    subMesh.draw();
+                }
+            }
+        }
     }
     
     void SceneRenderer::renderShadowMapsForPointLights() {
@@ -301,27 +304,37 @@ namespace EARenderer {
     }
     
     void SceneRenderer::renderPBRMeshes() {
+        
+    }
+    
+#pragma mark - Public access point
+    
+    void SceneRenderer::render() {
+        ID directionalLightID = *(mScene->pointLights().begin());
+        DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
+        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
+        
+        renderShadowMapsForDirectionalLights(cascades);
+        
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
         
-        ID lightID = *(mScene->pointLights().begin());
-        PointLight& light = mScene->pointLights()[lightID];
-        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
-        mCookTorranceShader.ensureSamplerValidity([this]() {
+        mCookTorranceShader.ensureSamplerValidity([&]() {
+            mCookTorranceShader.setCamera(*(mScene->camera()));
+            mCookTorranceShader.setLight(directionalLight);
+            mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
             mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
-    
+        
         for (ID meshInstanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[meshInstanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
             
-            mCookTorranceShader.setCamera(*(mScene->camera()));
-            mCookTorranceShader.setLight(light);
             mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
             
             for (ID subMeshID : subMeshes) {
@@ -331,19 +344,20 @@ namespace EARenderer {
                 mCookTorranceShader.ensureSamplerValidity([this, &material]() {
                     mCookTorranceShader.setMaterial(material);
                 });
-            
+                
                 subMesh.draw();
             }
         }
         
         renderSkybox();
-    }
-    
-#pragma mark - Public access point
-    
-    void SceneRenderer::render() {
-//        renderClassicMeshes();
-        renderPBRMeshes();
+        
+        GLViewport(Size2D(200, 200)).apply();
+        mFSQuadShader.bind();
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mShadowMaps, 0);
+        });
+        glClear(GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
     }
     
 }

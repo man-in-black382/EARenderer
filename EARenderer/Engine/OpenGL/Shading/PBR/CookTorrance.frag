@@ -3,6 +3,11 @@
 // Constants
 
 const float PI = 3.1415926535897932384626433832795;
+const int kMaxCascades = 4;
+
+const int kLightTypeDirectional = 0;
+const int kLightTypePoint       = 1;
+const int kLightTypeSpot        = 2;
 
 // Output
 
@@ -13,6 +18,8 @@ out vec4 oFragColor;
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
+in vec4 vPosInLightSpace[kMaxCascades];
+in vec4 vPosInCameraSpace;
 
 // Uniforms
 
@@ -47,6 +54,13 @@ uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
 uniform Material uMaterial;
+
+uniform int uLightType;
+
+// Shadow mapping
+uniform sampler2DArray uShadowMapArray;
+uniform float uDepthSplits[kMaxCascades];
+uniform int uNumberOfCascades;
 
 // IBL
 uniform sampler2D uBRDFIntegrationMap;
@@ -157,11 +171,70 @@ vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
 
 vec3 PointLightRadiance(vec3 N) {
     vec3 Wi                 = normalize(uPointLight.position - vWorldPosition);     // To light vector
-    float cosTheta          = max(dot(N, Wi), 0.0);                                 // Angular attenuation
     float distance          = length(Wi);                                           // Distance from fragment to light
     float attenuation       = 1.0 / (distance * distance);                          // How much enegry has light lost at current distance
     
     return uPointLight.radiantFlux * attenuation;
+}
+
+vec3 DirectionalLightRadiance() {
+    return uDirectionalLight.radiantFlux;
+}
+
+////////////////////////////////////////////////////////////
+///////////////////////// Shadows //////////////////////////
+////////////////////////////////////////////////////////////
+
+int shadowCascadeIndex()
+{
+    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
+    // No need to transform to [0,1] range,
+    // because splits passed from client are in [-1; 1]
+    
+    float fragDepth = projCoords.z;
+    
+    for (int i = 0; i < uNumberOfCascades; ++i) {
+        if (fragDepth < uDepthSplits[i]) {
+            return i;
+        }
+    }
+}
+
+float Shadow(in vec3 N, in vec3 L)
+{
+    int shadowCascadeIndex = shadowCascadeIndex();
+    
+    // perform perspective division
+    vec3 projCoords = vPosInLightSpace[shadowCascadeIndex].xyz / vPosInLightSpace[shadowCascadeIndex].w;
+    
+    // Transformation to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
+    
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    
+    // Check whether current frag pos is in shadow
+    float bias = max(0.01 * (1.0 - dot(N, L)), 0.005);
+    
+//    float shadow = 0.0;
+//    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
+//    for(int x = -2; x <= 2; ++x) {
+//        for(int y = -2; y <= 2; ++y) {
+//            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
+//            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
+//            float unbiasedDepth = currentDepth - bias;
+//            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+//        }
+//    }
+//    shadow /= 36.0;
+//    return shadow;
+    
+    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
+    float unbiasedDepth = currentDepth - bias;
+    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -216,16 +289,32 @@ void main() {
     vec3 albedo             = FetchAlbedoMap();
     vec3 N                  = FetchNormalMap();
     vec3 V                  = normalize(uCameraPosition - vWorldPosition);
-    vec3 L                  = normalize(uPointLight.position - vWorldPosition);
+    vec3 L                  = vec3(0.0);
     vec3 H                  = normalize(L + V);
+    vec3 radiance           = vec3(0.0);
+    float shadow            = 0.0;
 
     // Analytical lighting
-    vec3 pointLightRadiance = PointLightRadiance(N);
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, pointLightRadiance);
+    
+    if (uLightType == kLightTypeDirectional) {
+        radiance    = DirectionalLightRadiance();
+        L           = -normalize(uDirectionalLight.direction);
+        shadow      = Shadow(N, L);
+    } else if (uLightType == kLightTypePoint) {
+        radiance    = PointLightRadiance(N);
+        L           = normalize(uPointLight.position - vWorldPosition);
+    } else if (uLightType == kLightTypeSpot) {
+        // Nothing to do here... yet
+    }
+    
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
+    
+    // Apply shadow factor
+    specularAndDiffuse *= 1.0 - shadow;
     
     // Image based lighting
     vec3 ambient            = IBL(N, V, H, albedo, roughness, metallic) * ao;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
 
     oFragColor              = vec4(correctColor, 1.0);
 }

@@ -38,16 +38,14 @@ namespace EARenderer {
     
     class SceneRenderer {
     private:
-        uint8_t mNumberOfCascades = 3;
+        uint8_t mNumberOfCascades = 1;
         uint8_t mNumberOfIrradianceMips = 5;
         
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
-        
-//        GLSLDirectionalBlinnPhong mDirectionalBlinnPhongShader;
-//        GLSLOmnidirectionalBlinnPhong mOmnidirectionalBlinnPhongShader;
-//        GLSLDirectionalDepth mDirectionalDepthShader;
-//        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
+    
+        GLSLDirectionalDepth mDirectionalDepthShader;
+        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
         GLSLCookTorrance mCookTorranceShader;
         GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
@@ -60,10 +58,10 @@ namespace EARenderer {
         GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
         
-        GLDepthTexture2DArray mCascadedShadowMaps;
-//        GLDepthTextureCubemap mShadowCubeMap;
-//        GLFramebuffer mDepthFramebuffer;
-//
+        GLDepthTexture2DArray mShadowMaps;
+        GLDepthTextureCubemap mShadowCubeMap;
+        GLFramebuffer mDepthFramebuffer;
+
 //        // DEBUG
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;

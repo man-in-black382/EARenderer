@@ -1,5 +1,8 @@
 #version 400 core
 
+// Constants
+const int kMaxCascades = 4;
+
 // Attributes
 
 layout (location = 0) in vec4 iPosition;
@@ -15,11 +18,17 @@ uniform mat4 uNormalMat;
 uniform mat4 uCameraSpaceMat;
 uniform vec3 uCameraPosition;
 
+/* Shadow mapping */
+uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform int uNumberOfCascades;
+
 // Output
 
 out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
+out vec4 vPosInLightSpace[kMaxCascades];
+out vec4 vPosInCameraSpace;
 
 // Functions
 
@@ -49,8 +58,11 @@ void main() {
     vWorldPosition = worldPosition.xyz;
     vTBN = orthogonalTBN();
     
-//    oToCamera = normalize(uCameraPosition - worldPosition.xyz);
+    for (int i = 0; i < uNumberOfCascades; ++i) {
+        vPosInLightSpace[i] = uLightSpaceMatrices[i] * worldPosition;
+    }
     
-    gl_Position = uCameraSpaceMat * worldPosition;
+    vPosInCameraSpace = uCameraSpaceMat * worldPosition;
+    gl_Position = vPosInCameraSpace;
     
 }

@@ -34,6 +34,13 @@ namespace EARenderer {
     void GLSLCookTorrance::setLight(const PointLight& light) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.position")>).location(), 1, glm::value_ptr(light.position()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 1);
+    }
+    
+    void GLSLCookTorrance::setLight(const DirectionalLight& light) {
+        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDirectionalLight.direction")>).location(), 1, glm::value_ptr(light.direction()));
+        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDirectionalLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 0);
     }
     
     void GLSLCookTorrance::setMaterial(const PBRMaterial& material) {
@@ -53,6 +60,14 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uSpecularIrradianceMap")>, specularIrradianceMap);
         setUniformTexture(uint32_constant<ctcrc32("uBRDFIntegrationMap")>, BRDFIntegrationMap);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uSpecularIrradianceMapLOD")>).location(), specularIrradianceMapMaxLOD);
+    }
+    
+    void GLSLCookTorrance::setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps) {
+        uint8_t numberOfCascades = cascades.splits.size();
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), numberOfCascades);
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(), static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE, reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+        glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(), numberOfCascades, reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+        setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
     }
     
 }
