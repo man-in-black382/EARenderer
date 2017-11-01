@@ -150,6 +150,9 @@
     
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
+    
+    //
+    scene->calculateBoundingBox();
 }
 
 #pragma mark - Helpers

@@ -23,6 +23,12 @@ namespace EARenderer {
     height(h)
     { }
     
+    Size2D::Size2D(float side)
+    :
+    width(side),
+    height(side)
+    { }
+    
 #pragma mark - Equality
     
     bool Size2D::operator==(const Size2D& rhs) {

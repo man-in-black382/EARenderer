@@ -21,14 +21,14 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
-    mShadowMaps(Size2D(1024, 1024), mNumberOfCascades),
-    mShadowCubeMap(Size2D(2048, 2048)),
-    mDepthFramebuffer(Size2D(2048, 2048)),
-    mEnvironmentMapCube(Size2D(512, 512)),
-    mDiffuseIrradianceMap(Size2D(32, 32)),
-    mSpecularIrradianceMap(Size2D(512, 512)),
-    mBRDFIntegrationMap(Size2D(512, 512)),
-    mIBLFramebuffer(Size2D(512, 512))
+    mShadowMaps(Size2D(1536), mNumberOfCascades),
+    mShadowCubeMap(Size2D(1536)),
+    mDepthFramebuffer(Size2D(1536)),
+    mEnvironmentMapCube(Size2D(512)),
+    mDiffuseIrradianceMap(Size2D(32)),
+    mSpecularIrradianceMap(Size2D(512)),
+    mBRDFIntegrationMap(Size2D(512)),
+    mIBLFramebuffer(Size2D(512))
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -104,7 +104,7 @@ namespace EARenderer {
         mDepthFramebuffer.bind();
         mDepthFramebuffer.viewport().apply();
 
-        for (uint8_t cascade = 0; cascade < cascades.splits.size(); cascade++) {
+        for (uint8_t cascade = 0; cascade < cascades.amount; cascade++) {
             mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
             glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -312,7 +312,8 @@ namespace EARenderer {
     void SceneRenderer::render() {
         ID directionalLightID = *(mScene->pointLights().begin());
         DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
-        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
+//        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
+        FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
         
         renderShadowMapsForDirectionalLights(cascades);
         

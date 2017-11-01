@@ -20,6 +20,7 @@ namespace EARenderer {
     struct FrustumCascades {
         std::vector<glm::mat4> lightViewProjections;
         std::vector<float> splits;
+        uint8_t amount;
     };
     
 }

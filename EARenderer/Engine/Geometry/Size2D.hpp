@@ -20,6 +20,7 @@ namespace EARenderer {
         static const Size2D& zero();
         Size2D() = default;
         Size2D(float w, float h);
+        Size2D(float side);
         
         bool operator==(const Size2D& rhs);
         bool operator!=(const Size2D& rhs);

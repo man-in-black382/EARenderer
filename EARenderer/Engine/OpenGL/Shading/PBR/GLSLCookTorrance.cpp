@@ -63,10 +63,16 @@ namespace EARenderer {
     }
     
     void GLSLCookTorrance::setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps) {
-        uint8_t numberOfCascades = cascades.splits.size();
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), numberOfCascades);
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(), static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE, reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
-        glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(), numberOfCascades, reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), cascades.amount);
+        
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(),
+                           static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE,
+                           reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+        
+        glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
+                     static_cast<GLsizei>(cascades.splits.size()),
+                     reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+        
         setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
     }
     

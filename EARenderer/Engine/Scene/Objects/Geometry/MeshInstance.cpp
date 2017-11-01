@@ -50,7 +50,7 @@ namespace EARenderer {
     
     AxisAlignedBox3D MeshInstance::boundingBox() const {
         Mesh& mesh = ResourcePool::shared().meshes[mMeshID];
-        return mesh.boundingBox();
+        return mesh.boundingBox().transformedBy(mTransformation);
     }
     
     ID MeshInstance::materialIDForSubMeshID(ID subMeshID) const {

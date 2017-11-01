@@ -76,14 +76,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     DemoScene1 *demoScene1 = [[DemoScene1 alloc] init];
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 20.f);
     camera->moveTo(glm::vec3(0, -1, 0));
     camera->lookAt(glm::vec3(-1, -1, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    auto HDRColor = EARenderer::Color(2.0, 2.0, 2.0, 1.0);
-    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(-1.0, -1.0, -1.0));
+    auto HDRColor = EARenderer::Color(12.0, 12.0, 12.0, 1.0);
+    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(-0.5, -1.0, 0.5));
     EARenderer::PointLight pointLight(glm::vec3(5, 5, -5), HDRColor);
     
     self.scene->setCamera(camera);
@@ -171,7 +171,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     }};
     
     self.sceneInteractor->meshDeselectionEvent() += { "main.controller.mesh.deselect", [self](EARenderer::ID meshID) {
-        [self.sceneObjectsTabView.meshesTab deselectMeshWithID:meshID];
+         [self.sceneObjectsTabView.meshesTab deselectMeshWithID:meshID];
     }};
     
     self.sceneInteractor->allObjectsDeselectionEvent() += { "main.controller.deselect.all", [self]() {

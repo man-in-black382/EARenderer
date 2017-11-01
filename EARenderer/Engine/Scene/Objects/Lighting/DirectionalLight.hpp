@@ -28,6 +28,7 @@ namespace EARenderer {
         
         glm::mat4 viewMatrix() const;
         FrustumCascades cascadesForCamera(const Camera& camera, uint8_t numberOfCascades) const;
+        FrustumCascades cascadesForWorldBoundingBox(const AxisAlignedBox3D& box) const;
         
         const glm::vec3& direction() const;
         void setDirection(const glm::vec3& direction);

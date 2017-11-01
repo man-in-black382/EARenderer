@@ -51,6 +51,19 @@ namespace EARenderer {
         return glm::ortho(min.x, max.x, min.y, max.y, -max.z, -min.z);
     }
     
+    std::array<glm::vec4, 8> AxisAlignedBox3D::cornerPoints() const {
+        return std::array<glm::vec4, 8> {
+            glm::vec4{ min.x, min.y, min.z, 1.f },
+            glm::vec4{ min.x, max.y, min.z, 1.f },
+            glm::vec4{ max.x, max.y, min.z, 1.f },
+            glm::vec4{ max.x, min.y, min.z, 1.f },
+            glm::vec4{ min.x, min.y, max.z, 1.f },
+            glm::vec4{ min.x, max.y, max.z, 1.f },
+            glm::vec4{ max.x, max.y, max.z, 1.f },
+            glm::vec4{ max.x, min.y, max.z, 1.f }
+        };
+    }
+    
     AxisAlignedBox3D AxisAlignedBox3D::transformedBy(const Transformation& t) const {
         return transformedBy(t.modelMatrix());
     }

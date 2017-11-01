@@ -10,6 +10,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <array>
 
@@ -59,6 +60,7 @@ namespace EARenderer {
         // Cascaded shadow maps http://ogldev.atspace.co.uk/www/tutorial49/tutorial49.html
         
         FrustumCascades cascades;
+        cascades.amount = numberOfCascades;
         
         float tanFOVV = tanf(glm::radians(camera.FOVV() / 2.f));
         float tanFOVH = tanf(glm::radians(camera.FOVH() / 2.f));
@@ -109,6 +111,26 @@ namespace EARenderer {
             
             near = far;
         }
+        
+        return cascades;
+    }
+    
+    FrustumCascades DirectionalLight::cascadesForWorldBoundingBox(const AxisAlignedBox3D& box) const {
+        FrustumCascades cascades;
+        cascades.amount = 1;
+
+        glm::mat4 lightViewMat = viewMatrix();
+        AxisAlignedBox3D slice{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
+        
+        auto cornerPoints = box.cornerPoints();
+        for (auto& point : cornerPoints) {
+            glm::vec4 p = lightViewMat * point;
+            slice.min = glm::min(slice.min, glm::vec3{p});
+            slice.max = glm::max(slice.max, glm::vec3{p});
+        }
+
+        cascades.lightViewProjections.emplace_back(slice.asFrustum() * lightViewMat);
+        cascades.splits.emplace_back(1.0);
         
         return cascades;
     }

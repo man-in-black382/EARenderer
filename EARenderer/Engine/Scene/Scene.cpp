@@ -17,18 +17,13 @@ namespace EARenderer {
     
     Scene::Scene()
     :
-    mTransforms(1000),
     mDirectionalLights(10),
     mPointLights(10),
     mMeshInstances(1000)
     { }
     
 #pragma mark - Getters
-
-    PackedLookupTable<Transformation>& Scene::transforms() {
-        return mTransforms;
-    }
-
+    
     PackedLookupTable<DirectionalLight>& Scene::directionalLights() {
         return mDirectionalLights;
     }
@@ -49,6 +44,10 @@ namespace EARenderer {
         return mSkybox;
     }
     
+    const AxisAlignedBox3D& Scene::boundingBox() const {
+        return mBoundingBox;
+    }
+    
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -57,6 +56,19 @@ namespace EARenderer {
 
     void Scene::setSkybox(Skybox* skybox) {
         mSkybox = skybox;
+    }
+    
+#pragma mark -
+    
+    void Scene::calculateBoundingBox() {
+        mBoundingBox = AxisAlignedBox3D{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() }};
+        
+        for (ID meshInstanceID : mMeshInstances) {
+            auto& instance = mMeshInstances[meshInstanceID];
+            auto boundingBox = instance.boundingBox();
+            mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
+            mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);
+        }
     }
     
 }

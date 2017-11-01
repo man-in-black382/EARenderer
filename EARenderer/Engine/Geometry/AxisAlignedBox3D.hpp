@@ -14,6 +14,8 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
+#include <array>
+
 namespace EARenderer {
     
     struct AxisAlignedBox3D {
@@ -35,6 +37,7 @@ namespace EARenderer {
          @return orthographic projection matrix
          */
         glm::mat4 asFrustum() const;
+        std::array<glm::vec4, 8> cornerPoints() const;
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;

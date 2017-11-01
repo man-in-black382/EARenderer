@@ -24,7 +24,6 @@ namespace EARenderer {
     
     class Scene {
     private:
-        PackedLookupTable<Transformation> mTransforms;
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
@@ -32,13 +31,17 @@ namespace EARenderer {
         Camera *mCamera;
         Skybox *mSkybox;
         
+        AxisAlignedBox3D mBoundingBox;
+        
     public:
         Scene();
         
-        PackedLookupTable<Transformation>& transforms();
         PackedLookupTable<DirectionalLight>& directionalLights();
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
+        
+        void calculateBoundingBox();
+        const AxisAlignedBox3D& boundingBox() const;
         
         void setCamera(Camera* camera);
         Camera* camera() const;
