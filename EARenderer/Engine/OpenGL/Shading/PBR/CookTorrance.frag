@@ -219,22 +219,22 @@ float Shadow(in vec3 N, in vec3 L)
     // Check whether current frag pos is in shadow
     float bias = max(0.01 * (1.0 - dot(N, L)), 0.005);
     
-//    float shadow = 0.0;
-//    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
-//    for(int x = -2; x <= 2; ++x) {
-//        for(int y = -2; y <= 2; ++y) {
-//            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
-//            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
-//            float unbiasedDepth = currentDepth - bias;
-//            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
-//        }
-//    }
-//    shadow /= 36.0;
-//    return shadow;
+    float shadow = 0.0;
+    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
+    for(int x = -2; x <= 2; ++x) {
+        for(int y = -2; y <= 2; ++y) {
+            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
+            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
+            float unbiasedDepth = currentDepth - bias;
+            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+        }
+    }
+    shadow /= 36.0;
+    return shadow;
     
-    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-    float unbiasedDepth = currentDepth - bias;
-    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+//    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
+//    float unbiasedDepth = currentDepth - bias;
+//    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -313,8 +313,8 @@ void main() {
     specularAndDiffuse *= 1.0 - shadow;
     
     // Image based lighting
-    vec3 ambient            = IBL(N, V, H, albedo, roughness, metallic) * ao;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse + ambient);
+    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     oFragColor              = vec4(correctColor, 1.0);
 }

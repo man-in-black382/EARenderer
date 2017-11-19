@@ -36,11 +36,6 @@ namespace EARenderer {
         glDeleteTextures(1, &mName);
     }
     
-    const GLTexture& GLTexture::stub() {
-        static GLTexture2DArray stub(Size2D(1, 1), 1);
-        return stub;
-    }
-    
 #pragma mark - Getters
     
     const Size2D& GLTexture::size() const {

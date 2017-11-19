@@ -114,7 +114,7 @@ vec3 IntegrateRadianceSpecular() {
         float HdotV = max(dot(H, V), 0.0);
         
         if (NdotL > 0.0) {
-            // Fixing bright dots on convoluted map by sampling a mip level of the environment map based on the integral's PDF and the roughness:
+            // Fixing bright dots on convoluted map by sampling a mip level of the environment map based on the integral's PDF and roughness:
             // https://chetanjags.wordpress.com/2015/08/26/image-based-lighting/
             
             float D             = NormalDistributionGGX(NdotH, roughness2);

@@ -10,12 +10,19 @@
 #define GLHDRTextureCubemap_hpp
 
 #include "GLTexture.hpp"
+#include "GLCubemapFace.hpp"
+#include "GLCubemapSampler.hpp"
 
 namespace EARenderer {
     
     class GLHDRTextureCubemap: public GLTexture {
     public:
+        using SamplerClosure = const std::function<void(const GLCubemapSampler& sampler)>&;
+        
         GLHDRTextureCubemap(const Size2D& size);
+        
+        const GLhalf* pixelBuffer(GLCubemapFace face) const;
+        void sampleTexels(SamplerClosure samplerClosure) const;
     };
     
 }

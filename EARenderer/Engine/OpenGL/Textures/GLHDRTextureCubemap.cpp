@@ -7,6 +7,7 @@
 //
 
 #include "GLHDRTextureCubemap.hpp"
+#include "GLHDRCubemapSampler.hpp"
 #include "Macros.h"
 #include "stb_image.h"
 
@@ -31,4 +32,21 @@ namespace EARenderer {
         }
     }
     
+#pragma mark - Public interface
+    
+    const GLhalf* GLHDRTextureCubemap::pixelBuffer(GLCubemapFace face) const {
+        bind();
+        GLhalf *ptr = nullptr;
+        using type = std::underlying_type<GLCubemapFace>::type;
+        type rawFace = static_cast<type>(face);
+        glGetTexImage(rawFace, 0, GL_RGB, GL_HALF_FLOAT, ptr);
+        return ptr;
+    }
+    
+    void GLHDRTextureCubemap::sampleTexels(SamplerClosure samplerClosure) const {
+        samplerClosure(GLHDRCubemapSampler(this));
+    }
+    
 }
+
+

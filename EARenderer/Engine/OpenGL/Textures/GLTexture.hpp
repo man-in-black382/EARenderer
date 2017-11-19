@@ -12,6 +12,7 @@
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
 #include "Size2D.hpp"
+#include "Color.hpp"
 
 namespace EARenderer {
     
@@ -32,7 +33,6 @@ namespace EARenderer {
         GLTexture& operator=(GLTexture&& rhs) = default;
         ~GLTexture() override = 0;
         
-        static const GLTexture& stub();
         const Size2D& size() const;
         
         void bind() const override;

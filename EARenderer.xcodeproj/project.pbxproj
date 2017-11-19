@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
+		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
+		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
+		CE2221FD1FC0B263009B6804 /* LightProbeBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */; };
+		CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */; };
 		CE37917B1FA366820049BD1B /* patchy_cement1_Ambient_Occlusion.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791771FA3667E0049BD1B /* patchy_cement1_Ambient_Occlusion.png */; };
 		CE37917C1FA366820049BD1B /* patchy_cement1_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791781FA3667F0049BD1B /* patchy_cement1_Base_Color.png */; };
 		CE37917D1FA366820049BD1B /* patchy_cement1_Metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791791FA3667F0049BD1B /* patchy_cement1_Metallic.png */; };
@@ -227,6 +231,15 @@
 /* Begin PBXFileReference section */
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
+		CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapFace.hpp; sourceTree = "<group>"; };
+		CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapSampler.hpp; sourceTree = "<group>"; };
+		CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapSampler.cpp; sourceTree = "<group>"; };
+		CE2221F81FC0B06D009B6804 /* LightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightProbe.cpp; sourceTree = "<group>"; };
+		CE2221F91FC0B06D009B6804 /* LightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbe.hpp; sourceTree = "<group>"; };
+		CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightProbeBuilder.cpp; sourceTree = "<group>"; };
+		CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbeBuilder.hpp; sourceTree = "<group>"; };
+		CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
+		CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRCubemapSampler.hpp; sourceTree = "<group>"; };
 		CE3791761FA3667E0049BD1B /* patchy_cement1_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Normal.png; sourceTree = "<group>"; };
 		CE3791771FA3667E0049BD1B /* patchy_cement1_Ambient_Occlusion.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Ambient_Occlusion.png; sourceTree = "<group>"; };
 		CE3791781FA3667F0049BD1B /* patchy_cement1_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = patchy_cement1_Base_Color.png; sourceTree = "<group>"; };
@@ -1194,6 +1207,8 @@
 				CE70F8591F8F8EBD00AD9027 /* Drawable.hpp */,
 				CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */,
 				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
+				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
+				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -1288,13 +1303,15 @@
 			isa = PBXGroup;
 			children = (
 				CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */,
-				CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */,
-				CE70F8881F8F8EBD00AD9027 /* Light.cpp */,
-				CE70F8891F8F8EBD00AD9027 /* FrustumCascades.cpp */,
-				CE70F88A1F8F8EBD00AD9027 /* Light.hpp */,
-				CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */,
 				CE70F88C1F8F8EBD00AD9027 /* DirectionalLight.hpp */,
+				CE70F8891F8F8EBD00AD9027 /* FrustumCascades.cpp */,
+				CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */,
+				CE70F8881F8F8EBD00AD9027 /* Light.cpp */,
+				CE70F88A1F8F8EBD00AD9027 /* Light.hpp */,
+				CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */,
 				CE70F88D1F8F8EBD00AD9027 /* PointLight.hpp */,
+				CE2221F81FC0B06D009B6804 /* LightProbe.cpp */,
+				CE2221F91FC0B06D009B6804 /* LightProbe.hpp */,
 			);
 			path = Lighting;
 			sourceTree = "<group>";
@@ -1690,20 +1707,25 @@
 				CE70F9C21F8F8EBD00AD9027 /* GLDepthTexture2D.hpp */,
 				CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */,
 				CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */,
-				CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */,
-				CE70F9B81F8F8EBD00AD9027 /* GLDepthTextureCubemap.hpp */,
-				CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */,
-				CE70F9C41F8F8EBD00AD9027 /* GLHDRTexture2D.hpp */,
-				CE70F9BA1F8F8EBD00AD9027 /* GLHDRTextureCubemap.cpp */,
-				CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */,
-				CE70F9C51F8F8EBD00AD9027 /* GLLayeredTexture.cpp */,
-				CE70F9B71F8F8EBD00AD9027 /* GLLayeredTexture.hpp */,
-				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
-				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
-				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
-				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
 				CE70F9C31F8F8EBD00AD9027 /* GLTextureCubemap.cpp */,
 				CE70F9BE1F8F8EBD00AD9027 /* GLTextureCubemap.hpp */,
+				CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */,
+				CE70F9B81F8F8EBD00AD9027 /* GLDepthTextureCubemap.hpp */,
+				CE70F9BA1F8F8EBD00AD9027 /* GLHDRTextureCubemap.cpp */,
+				CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */,
+				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
+				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
+				CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */,
+				CE70F9C41F8F8EBD00AD9027 /* GLHDRTexture2D.hpp */,
+				CE70F9C51F8F8EBD00AD9027 /* GLLayeredTexture.cpp */,
+				CE70F9B71F8F8EBD00AD9027 /* GLLayeredTexture.hpp */,
+				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
+				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
+				CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */,
+				CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */,
+				CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */,
+				CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */,
+				CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -2135,6 +2157,7 @@
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
+				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
@@ -2171,6 +2194,7 @@
 				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
 				CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */,
+				CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
 				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
@@ -2189,8 +2213,10 @@
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
+				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
 				CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */,
+				CE2221FD1FC0B263009B6804 /* LightProbeBuilder.cpp in Sources */,
 				CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */,
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
@@ -2334,7 +2360,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QE23YWVJ9G;
+				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -2354,7 +2380,7 @@
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = QE23YWVJ9G;
+				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
