@@ -9,6 +9,9 @@
 #ifndef Color_hpp
 #define Color_hpp
 
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+
 namespace EARenderer {
     
     struct Color {
@@ -26,6 +29,9 @@ namespace EARenderer {
         
         Color(float red, float green, float blue, float alpha);
         Color(float white, float alpha);
+        
+        glm::vec3 rgb() const;
+        glm::vec4 rgba() const;
     };
     
 }

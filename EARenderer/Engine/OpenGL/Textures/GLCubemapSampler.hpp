@@ -11,6 +11,7 @@
 
 #include "Color.hpp"
 #include "GLCubemapFace.hpp"
+#include "Size2D.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -18,12 +19,13 @@
 namespace EARenderer {
     
     class GLCubemapSampler {
-    protected:
-        void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const;
+    public:
+        static void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const;
+        static void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) const;
         
-    public:        
         virtual Color sample(const glm::vec3& direction) const = 0;
         virtual Color sample(GLCubemapFace face, int32_t x, int32_t y) const = 0;
+        
     };
     
 }

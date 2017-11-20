@@ -18,7 +18,8 @@ namespace EARenderer {
     
     class LightProbe {
     private:
-        
+        float solidAngle(int32_t x, int32_t y, const Size2D& cubeSize) const;
+        float areaIntegral(float x, float y) const;
         
     public:
         using SphericalHarmonics = std::array<glm::vec3, 9>;
@@ -26,7 +27,7 @@ namespace EARenderer {
         glm::vec3 position;
         SphericalHarmonics SHCoefficients;
         
-        void updateSphericalHarmonicsCoefficients(const GLHDRTextureCubemap& cubemap);
+        void updateSHCoefficients(const GLHDRTextureCubemap& cubemap);
     };
     
 }

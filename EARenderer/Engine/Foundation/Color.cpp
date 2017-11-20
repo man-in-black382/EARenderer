@@ -60,4 +60,14 @@ namespace EARenderer {
     a(alpha)
     { }
     
+#pragma mark - Getters
+    
+    glm::vec3 Color::rgb() const {
+        return { r, g, b };
+    }
+    
+    glm::vec4 Color::rgba() const {
+        return { r, g, b, a };
+    }
+    
 }
