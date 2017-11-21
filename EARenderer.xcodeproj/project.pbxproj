@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
 		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
@@ -229,6 +230,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
+		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapFace.hpp; sourceTree = "<group>"; };
@@ -1234,6 +1237,8 @@
 				CE70F8721F8F8EBD00AD9027 /* Rect2D.hpp */,
 				CE70F8711F8F8EBD00AD9027 /* Size2D.cpp */,
 				CE70F86F1F8F8EBD00AD9027 /* Size2D.hpp */,
+				ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */,
+				ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */,
 				CE70F8651F8F8EBD00AD9027 /* Vertices */,
 			);
 			path = Geometry;
@@ -2224,6 +2229,7 @@
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA421F8F8EF600AD9027 /* GLVertexArrayLayoutDescription.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
+				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */,
 				CE70FA911F8F912300AD9027 /* MeshListTabViewItem.mm in Sources */,
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,

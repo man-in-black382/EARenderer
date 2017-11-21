@@ -20,8 +20,8 @@ namespace EARenderer {
     
     class GLCubemapSampler {
     public:
-        static void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const;
-        static void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) const;
+        static void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords);
+        static void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector);
         
         virtual Color sample(const glm::vec3& direction) const = 0;
         virtual Color sample(GLCubemapFace face, int32_t x, int32_t y) const = 0;

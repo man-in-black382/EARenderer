@@ -9,24 +9,24 @@
 #ifndef LightProbe_hpp
 #define LightProbe_hpp
 
+#include "SphericalHarmonics.hpp"
 #include "GLHDRTextureCubemap.hpp"
 
 #include <glm/vec3.hpp>
-#include <array>
 
 namespace EARenderer {
     
     class LightProbe {
     private:
+        SphericalHarmonics mSphericalHarmonics;
+        
         float solidAngle(int32_t x, int32_t y, const Size2D& cubeSize) const;
         float areaIntegral(float x, float y) const;
         
     public:
-        using SphericalHarmonics = std::array<glm::vec3, 9>;
-        
         glm::vec3 position;
-        SphericalHarmonics SHCoefficients;
         
+        const SphericalHarmonics& sphericalHarmonics() const;
         void updateSHCoefficients(const GLHDRTextureCubemap& cubemap);
     };
     
