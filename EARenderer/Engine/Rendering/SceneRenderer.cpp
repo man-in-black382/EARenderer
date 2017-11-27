@@ -10,6 +10,7 @@
 #include "GLShader.hpp"
 #include "ResourcePool.hpp"
 #include "Vertex1P4.hpp"
+#include "Collision.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -65,7 +66,7 @@ namespace EARenderer {
             Ray3D meshLocalSpaceRay = ray.transformedBy(glm::inverse(modelMatrix));
             
             float distance = 0;
-            if (meshLocalSpaceRay.intersectsAAB(meshInstance.boundingBox(), distance)) {
+            if (Collision::RayAABB(meshLocalSpaceRay, meshInstance.boundingBox(), distance)) {
                 // Intersection distance is in the mesh's local space
                 // Scale local space ray's direction vector (which is a unit vector) accordingly
                 glm::vec3 localScaledDirection = meshLocalSpaceRay.direction * distance;

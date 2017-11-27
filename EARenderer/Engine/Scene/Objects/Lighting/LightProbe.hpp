@@ -26,6 +26,8 @@ namespace EARenderer {
     public:
         glm::vec3 position;
         
+        LightProbe(const glm::vec3& position);
+        
         const SphericalHarmonics& sphericalHarmonics() const;
         void updateSHCoefficients(const GLHDRTextureCubemap& cubemap);
     };

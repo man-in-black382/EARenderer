@@ -17,6 +17,7 @@
 #include "PointLight.hpp"
 #include "PBRMaterial.hpp"
 #include "Skybox.hpp"
+#include "LightProbe.hpp"
 
 #include <vector>
 
@@ -27,6 +28,7 @@ namespace EARenderer {
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
+        PackedLookupTable<LightProbe> mLightProbes;
         
         Camera *mCamera;
         Skybox *mSkybox;
@@ -39,6 +41,7 @@ namespace EARenderer {
         PackedLookupTable<DirectionalLight>& directionalLights();
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
+        PackedLookupTable<LightProbe>& lightProbes();
         
         void calculateBoundingBox();
         const AxisAlignedBox3D& boundingBox() const;

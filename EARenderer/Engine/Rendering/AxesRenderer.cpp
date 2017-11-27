@@ -7,6 +7,7 @@
 //
 
 #include "AxesRenderer.hpp"
+#include "Collision.hpp"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/vec3.hpp>
@@ -106,7 +107,8 @@ namespace EARenderer {
         
         auto checkRectIntersection = [&minimumDistance, &ray, &selection](const Parallelogram3D& rect, CartesianAxis axesMask, ID meshID, bool& isIntersecting) {
             float distance = 0;
-            if (ray.intersectsParallelogram(rect, distance)) {
+            
+            if (Collision::RayParallelogram(ray, rect, distance)) {
                 if (distance < minimumDistance) {
                     minimumDistance = distance;
                     selection = AxesSelection(axesMask, meshID);
@@ -137,7 +139,7 @@ namespace EARenderer {
                 Ray3D localSpaceRay = ray.transformedBy(glm::inverse(axisTransformation));
                 float distance = 0;
                 
-                if (localSpaceRay.intersectsAAB(mAxesSystem.axisBoundingBox(), distance)) {
+                if (Collision::RayAABB(localSpaceRay, mAxesSystem.axisBoundingBox(), distance)) {
                     // Intersection distance is in the mesh's local space
                     // Scale local space ray's direction vector (which is a unit vector) accordingly
                     glm::vec3 localScaledDirection = localSpaceRay.direction * distance;

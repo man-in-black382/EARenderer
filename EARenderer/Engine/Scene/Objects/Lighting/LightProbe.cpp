@@ -12,6 +12,13 @@
 
 namespace EARenderer {
     
+#pragma mark - Lifecycle
+    
+    LightProbe::LightProbe(const glm::vec3& position)
+    :
+    position(position)
+    { }
+    
 #pragma mark - Private heplers
     
     float LightProbe::solidAngle(int32_t x, int32_t y, const Size2D& cubeSize) const {

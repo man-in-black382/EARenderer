@@ -220,6 +220,9 @@
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CE81CB161FA24F6200535020 /* blank_black.png in Resources */ = {isa = PBXBuildFile; fileRef = CE81CB151FA24ED000535020 /* blank_black.png */; };
 		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
+		CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A431FCAF0090090F1EE /* Collision.cpp */; };
+		CEA95A4B1FCB00230090F1EE /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A491FCB00230090F1EE /* Triangle.cpp */; };
+		CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A4C1FCB02920090F1EE /* Interval.cpp */; };
 		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
@@ -816,6 +819,12 @@
 		CE97750E1FA5D73900F5699C /* sponzaPBR.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponzaPBR.mtl; sourceTree = "<group>"; };
 		CE97750F1FA5D73900F5699C /* Sponza_Column_a_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Column_a_diffuse.tga; sourceTree = "<group>"; };
 		CE9775101FA5D73900F5699C /* Sponza_Column_c_roughness.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Column_c_roughness.tga; sourceTree = "<group>"; };
+		CEA95A431FCAF0090090F1EE /* Collision.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Collision.cpp; sourceTree = "<group>"; };
+		CEA95A441FCAF0090090F1EE /* Collision.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Collision.hpp; sourceTree = "<group>"; };
+		CEA95A471FCAFF6A0090F1EE /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Interval.hpp; sourceTree = "<group>"; };
+		CEA95A491FCB00230090F1EE /* Triangle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle.cpp; sourceTree = "<group>"; };
+		CEA95A4A1FCB00230090F1EE /* Triangle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle.hpp; sourceTree = "<group>"; };
+		CEA95A4C1FCB02920090F1EE /* Interval.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Interval.cpp; sourceTree = "<group>"; };
 		CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_roughness.png; sourceTree = "<group>"; };
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
@@ -1227,6 +1236,8 @@
 		CE70F8611F8F8EBD00AD9027 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CEA95A491FCB00230090F1EE /* Triangle.cpp */,
+				CEA95A4A1FCB00230090F1EE /* Triangle.hpp */,
 				CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */,
 				CE70F8741F8F8EBD00AD9027 /* AxisAlignedBox3D.hpp */,
 				CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */,
@@ -1239,6 +1250,10 @@
 				CE70F86F1F8F8EBD00AD9027 /* Size2D.hpp */,
 				ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */,
 				ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */,
+				CEA95A471FCAFF6A0090F1EE /* Interval.hpp */,
+				CEA95A4C1FCB02920090F1EE /* Interval.cpp */,
+				CEA95A431FCAF0090090F1EE /* Collision.cpp */,
+				CEA95A441FCAF0090090F1EE /* Collision.hpp */,
 				CE70F8651F8F8EBD00AD9027 /* Vertices */,
 			);
 			path = Geometry;
@@ -2162,6 +2177,8 @@
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
+				CEA95A4B1FCB00230090F1EE /* Triangle.cpp in Sources */,
+				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
@@ -2189,6 +2206,7 @@
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
+				CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */,
 				CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */,
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,

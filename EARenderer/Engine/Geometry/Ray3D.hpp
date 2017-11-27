@@ -23,16 +23,6 @@ namespace EARenderer {
         
         Ray3D(const glm::vec3& origin, const glm::vec3& end);
         
-        /**
-         Checks for an intersection with axis-alligned bounding box
-         
-         @param aab axis-alligned box
-         @param distance distance from origin to intersection point
-         @return return true if an intersection occurred
-         */
-        bool intersectsAAB(const AxisAlignedBox3D& aab, float& distance) const;
-        bool intersectsParallelogram(const Parallelogram3D& parallelogram, float& distance) const;
-        
         Ray3D transformedBy(const Transformation& t) const;
         Ray3D transformedBy(const glm::mat4& m) const;
     };

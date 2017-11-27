@@ -14,17 +14,15 @@
 
 namespace EARenderer {
     
-    // All thanks to
-    // https://github.com/yuriks/SHProject
-    
     class LightProbeBuilder {
     private:
         GLHDRTextureCubemap mEnvironmentMap;
+        uint32_t mSpaceDivisionResolution;
         
     public:
-        LightProbeBuilder(const Size2D& probeCaptureResolution);
+        LightProbeBuilder(const Size2D& probeCaptureResolution, uint32_t spaceDivisionResolution);
         
-        void buildAndPlaceProbesInScene(const Scene* scene);
+        void buildAndPlaceProbesInScene(Scene* scene);
     };
     
 }

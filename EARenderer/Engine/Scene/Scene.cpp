@@ -19,7 +19,8 @@ namespace EARenderer {
     :
     mDirectionalLights(10),
     mPointLights(10),
-    mMeshInstances(1000)
+    mMeshInstances(1000),
+    mLightProbes(10000)
     { }
     
 #pragma mark - Getters
@@ -34,6 +35,10 @@ namespace EARenderer {
     
     PackedLookupTable<MeshInstance>& Scene::meshInstances() {
         return mMeshInstances;
+    }
+    
+    PackedLookupTable<LightProbe>& Scene::lightProbes() {
+        return mLightProbes;
     }
     
     Camera* Scene::camera() const {
