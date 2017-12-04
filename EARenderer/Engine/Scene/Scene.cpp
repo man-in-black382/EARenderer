@@ -53,6 +53,14 @@ namespace EARenderer {
         return mBoundingBox;
     }
     
+    const std::list<ID> Scene::staticMeshInstanceIDs() const {
+        return mStaticMeshInstanceIDs;
+    }
+    
+    const std::list<ID> Scene::dynamicMeshInstanceIDs() const {
+        return mDynamicMeshInstanceIDs;
+    }
+    
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -74,6 +82,14 @@ namespace EARenderer {
             mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
             mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);
         }
+    }
+    
+    void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
+        mStaticMeshInstanceIDs.push_back(meshInstanceID);
+    }
+    
+    void Scene::addMeshInstanceWithIDAsDynamic(ID meshInstanceID) {
+        mDynamicMeshInstanceIDs.push_back(meshInstanceID);
     }
     
 }

@@ -17,7 +17,9 @@ namespace EARenderer {
     GLSLCookTorrance::GLSLCookTorrance()
     :
     GLProgram("CookTorrance.vert", "CookTorrance.frag", "")
-    { }
+    {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShadowMappingEnabled")>).location(), GL_TRUE);
+    }
     
 #pragma mark - Setters
     

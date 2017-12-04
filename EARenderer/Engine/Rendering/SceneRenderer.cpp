@@ -311,7 +311,7 @@ namespace EARenderer {
 #pragma mark - Public access point
     
     void SceneRenderer::render() {
-        ID directionalLightID = *(mScene->pointLights().begin());
+        ID directionalLightID = *(mScene->directionalLights().begin());
         DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
 //        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
         FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
@@ -361,5 +361,7 @@ namespace EARenderer {
         glClear(GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
+    
+    
     
 }

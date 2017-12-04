@@ -18,8 +18,10 @@
 #include "PBRMaterial.hpp"
 #include "Skybox.hpp"
 #include "LightProbe.hpp"
+#include "ResourcePool.hpp"
 
 #include <vector>
+#include <list>
 
 namespace EARenderer {
     
@@ -29,6 +31,9 @@ namespace EARenderer {
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
+        
+        std::list<ID> mStaticMeshInstanceIDs;
+        std::list<ID> mDynamicMeshInstanceIDs;
         
         Camera *mCamera;
         Skybox *mSkybox;
@@ -42,6 +47,12 @@ namespace EARenderer {
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
+        
+        const std::list<ID> staticMeshInstanceIDs() const;
+        const std::list<ID> dynamicMeshInstanceIDs() const;
+        
+        void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
+        void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);
         
         void calculateBoundingBox();
         const AxisAlignedBox3D& boundingBox() const;

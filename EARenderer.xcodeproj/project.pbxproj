@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
+		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -233,6 +235,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
+		AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
+		AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -1865,6 +1870,9 @@
 				CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */,
 				CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */,
 				CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */,
+				AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */,
+				AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */,
+				AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -2133,6 +2141,7 @@
 				CE4DE20B1FA60CFE0067729A /* ChainTexture_Roughness.tga in Resources */,
 				CE4DE21F1FA60CFE0067729A /* Sponza_Column_b_diffuse.tga in Resources */,
 				CE4DE22D1FA60CFF0067729A /* Sponza_Details_diffuse.tga in Resources */,
+				AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */,
 				CE37917C1FA366820049BD1B /* patchy_cement1_Base_Color.png in Resources */,
 				CE4DE22B1FA60CFF0067729A /* Sponza_Curtain_Red_normal.tga in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
@@ -2216,6 +2225,7 @@
 				CE70FA481F8F8EF600AD9027 /* GLSLFullScreenQuad.cpp in Sources */,
 				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
+				AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */,
 				CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */,
 				CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,

@@ -11,6 +11,8 @@
 
 #include "GLProgram.hpp"
 
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 #include <string>
 
 namespace EARenderer {
@@ -20,8 +22,10 @@ namespace EARenderer {
         using GLProgram::GLProgram;
         
         GLSLCubemapRendering(const std::string& fragmentShaderName);
-        
         virtual ~GLSLCubemapRendering() = 0;
+        
+        void setModelMatrix(const glm::mat4& modelMatrix);
+        void setViewProjectionMatricesUsingCameraPosition(const glm::vec3& position);
     };
     
 }

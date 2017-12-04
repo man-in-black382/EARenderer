@@ -9,6 +9,7 @@
 #import "DemoScene1.h"
 
 #import "MeshInstance.hpp"
+#import "LightProbeBuilder.hpp"
 
 #import <string>
 
@@ -140,11 +141,11 @@
     t = scuffedTitaniumSphereInstance.transformation();
     t.translation.x = -0.5;
     scuffedTitaniumSphereInstance.setTransformation(t);
-    
-    scene->meshInstances().insert(sponzaInstance);
-    scene->meshInstances().insert(ironSphereInstance);
-    scene->meshInstances().insert(patchyCementSphereInstance);
-    scene->meshInstances().insert(scuffedTitaniumSphereInstance);
+
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
+    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(ironSphereInstance));
+    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
+    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
     
     // Skybox
     
@@ -153,6 +154,9 @@
     
     //
     scene->calculateBoundingBox();
+    
+    EARenderer::LightProbeBuilder lightProbeBuilder(EARenderer::Size2D(256), 50);
+    lightProbeBuilder.buildAndPlaceProbesInScene(scene);
 }
 
 #pragma mark - Helpers

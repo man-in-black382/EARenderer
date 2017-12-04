@@ -11,13 +11,19 @@
 
 #include "Scene.hpp"
 #include "GLHDRTextureCubemap.hpp"
+#include "GLFramebuffer.hpp"
+#include "GLSLLightProbeEnvironmentCapture.hpp"
 
 namespace EARenderer {
     
     class LightProbeBuilder {
     private:
         GLHDRTextureCubemap mEnvironmentMap;
+        GLFramebuffer mFramebuffer;
+        GLSLLightProbeEnvironmentCapture mEnvironmentCaptureShader;
         uint32_t mSpaceDivisionResolution;
+        
+        void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
         
     public:
         LightProbeBuilder(const Size2D& probeCaptureResolution, uint32_t spaceDivisionResolution);
