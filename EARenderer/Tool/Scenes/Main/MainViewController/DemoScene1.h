@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 
 #import "DemoSceneComposing.h"
+#import "LightProbeBuilder.hpp"
 
 @interface DemoScene1 : NSObject <DemoSceneComposing>
+
+@property (assign, nonatomic) EARenderer::LightProbeBuilder *lightProbeBuilder;
 
 @end

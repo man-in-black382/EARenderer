@@ -87,6 +87,14 @@ namespace EARenderer {
         glReadBuffer(GL_NONE);
     }
     
+    void GLFramebuffer::detachTextures() {
+        bind();
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0);
+    }
+    
 #pragma mark - Public
     
     void GLFramebuffer::attachTexture(const GLTexture2D& texture, uint16_t mipLevel) { attachTextureToColorAttachment0(texture, mipLevel); }

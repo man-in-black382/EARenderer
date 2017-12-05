@@ -3,7 +3,7 @@
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 18) out;
 
-uniform mat4 uModelMatrix;
+uniform mat4 uModelMat;
 uniform mat4 uViewProjectionMatrices[6];
 
 out vec4 vFragPosition;
@@ -14,7 +14,7 @@ void main() {
             // Cubemap face
             gl_Layer = face;
             gl_Position = gl_in[i].gl_Position;
-            vFragPosition = uViewProjectionMatrices[face] * uModelMatrix * gl_Position;
+            vFragPosition = uViewProjectionMatrices[face] * uModelMat * gl_Position;
             EmitVertex();
         }
         EndPrimitive();

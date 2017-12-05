@@ -73,7 +73,7 @@ namespace EARenderer {
         
         // DEBUG
         
-        LightProbe probe({ 0, 0, 0 });
+        LightProbe probe(glm::vec3(0, 0, 0), scene->boundingBox().diagonal());
         captureEnvironmentForProbe(scene, probe);
         probe.updateSHCoefficients(mEnvironmentMap);
         scene->lightProbes().emplace(probe);

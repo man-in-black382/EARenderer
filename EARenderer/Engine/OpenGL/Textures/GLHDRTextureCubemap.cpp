@@ -36,7 +36,7 @@ namespace EARenderer {
     
     const GLhalf* GLHDRTextureCubemap::pixelBuffer(GLCubemapFace face) const {
         bind();
-        GLhalf *ptr = nullptr;
+        GLhalf *ptr = new GLhalf[mSize.width * mSize.height * 3];
         using type = std::underlying_type<GLCubemapFace>::type;
         type rawFace = static_cast<type>(face);
         glGetTexImage(rawFace, 0, GL_RGB, GL_HALF_FLOAT, ptr);
@@ -44,6 +44,7 @@ namespace EARenderer {
     }
     
     void GLHDRTextureCubemap::sampleTexels(SamplerClosure samplerClosure) const {
+        bind();
         samplerClosure(GLHDRCubemapSampler(this));
     }
     

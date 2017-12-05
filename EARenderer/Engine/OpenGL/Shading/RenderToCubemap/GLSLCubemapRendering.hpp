@@ -23,9 +23,6 @@ namespace EARenderer {
         
         GLSLCubemapRendering(const std::string& fragmentShaderName);
         virtual ~GLSLCubemapRendering() = 0;
-        
-        void setModelMatrix(const glm::mat4& modelMatrix);
-        void setViewProjectionMatricesUsingCameraPosition(const glm::vec3& position);
     };
     
 }

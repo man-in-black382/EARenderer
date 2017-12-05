@@ -14,16 +14,19 @@ namespace EARenderer {
     
     GLSLLightProbeEnvironmentCapture::GLSLLightProbeEnvironmentCapture()
     :
-    EARenderer::GLSLCubemapRendering("CookTorrance.vert", "LightProbeEnvironmentCapture.frag", "CookTorrance.frag")
-    {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShadowMappingEnabled")>).location(), GL_FALSE);
-    }
+    EARenderer::GLProgram("LightProbeEnvironmentCapture.vert", "CookTorrance.frag", "LightProbeEnvironmentCapture.geom")
+    { }
     
 #pragma mark - Setters
     
+    void GLSLLightProbeEnvironmentCapture::setModelMatrix(const glm::mat4 &modelMatrix) {
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uModelMat")>).location(), 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uNormalMat")>).location(), 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(modelMatrix))));
+    }
+    
     void GLSLLightProbeEnvironmentCapture::setLightProbe(const LightProbe& probe) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(probe.position));
-        setViewProjectionMatricesUsingCameraPosition(probe.position);
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewProjectionMatrices[0]")>).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(probe.viewProjectionMatrices().data()));
     }
     
     void GLSLLightProbeEnvironmentCapture::setLight(const PointLight& light) {

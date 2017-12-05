@@ -26,6 +26,7 @@ namespace EARenderer {
         
     public:
         GLHDRCubemapSampler(const GLHDRTextureCubemap* cubemap);
+        ~GLHDRCubemapSampler();
         
         Color sample(const glm::vec3& direction) const override;
         Color sample(GLCubemapFace face, int32_t x, int32_t y) const override;

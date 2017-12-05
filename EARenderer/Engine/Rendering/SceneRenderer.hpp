@@ -34,6 +34,9 @@
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 
+// DEBUG
+#include "LightProbeBuilder.hpp"
+
 namespace EARenderer {
     
     class SceneRenderer {
@@ -87,7 +90,7 @@ namespace EARenderer {
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-        void render();
+        void render(LightProbeBuilder *lpBuilder);
     };
     
 }

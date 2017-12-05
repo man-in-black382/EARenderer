@@ -47,6 +47,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 
+// DEBUG
+@property (strong, nonatomic) DemoScene1 *demoScene;
+
 @end
 
 @implementation MainViewController
@@ -73,9 +76,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     // Temporary
     
-    DemoScene1 *demoScene1 = [[DemoScene1 alloc] init];
-    [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
-    
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 20.f);
     camera->moveTo(glm::vec3(0, -1, 0));
     camera->lookAt(glm::vec3(-1, -1, 0));
@@ -92,6 +92,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
+    
+    DemoScene1 *demoScene1 = [[DemoScene1 alloc] init];
+    [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
+    self.demoScene = demoScene1;
     
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
@@ -110,7 +114,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
     self.cameraman->updateCamera();
-    self.sceneRenderer->render();
+    self.sceneRenderer->render(self.demoScene.lightProbeBuilder);
     self.axesRenderer->render();
     
     self.fpsView.frameCharacteristics = self.frameMeter->tick();

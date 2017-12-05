@@ -23,6 +23,15 @@ namespace EARenderer {
     mNegativeZPixelBuffer(cubemap->pixelBuffer(GLCubemapFace::NegativeZ))
     { }
     
+    GLHDRCubemapSampler::~GLHDRCubemapSampler() {
+        delete mPositiveXPixelBuffer;
+        delete mNegativeXPixelBuffer;
+        delete mPositiveYPixelBuffer;
+        delete mNegativeYPixelBuffer;
+        delete mPositiveZPixelBuffer;
+        delete mNegativeZPixelBuffer;
+    }
+    
 #pragma mark - Sampling
     
     Color GLHDRCubemapSampler::sample(const glm::vec3& direction) const {

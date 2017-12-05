@@ -310,7 +310,7 @@ namespace EARenderer {
     
 #pragma mark - Public access point
     
-    void SceneRenderer::render() {
+    void SceneRenderer::render(LightProbeBuilder *lpBuilder) {
         ID directionalLightID = *(mScene->directionalLights().begin());
         DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
 //        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
@@ -351,7 +351,14 @@ namespace EARenderer {
             }
         }
         
-        renderSkybox();
+//        renderSkybox();
+        mSkyboxShader.bind();
+        mSkyboxShader.ensureSamplerValidity([this, lpBuilder]() {
+            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+            mSkyboxShader.setCubemap(lpBuilder->mEnvironmentMap);
+        });
+        mScene->skybox()->draw();
         
         GLViewport(Size2D(200, 200)).apply();
         mFSQuadShader.bind();
@@ -361,7 +368,5 @@ namespace EARenderer {
         glClear(GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
-    
-    
-    
+
 }

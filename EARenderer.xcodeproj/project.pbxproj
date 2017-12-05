@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
+		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
+		AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -238,6 +240,8 @@
 		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
 		AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
 		AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
+		AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.vert; sourceTree = "<group>"; };
+		AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapFace.cpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -1747,6 +1751,7 @@
 				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
 				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
 				CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */,
+				AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */,
 				CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */,
 				CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */,
 				CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */,
@@ -1872,6 +1877,7 @@
 				CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */,
 				AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */,
 				AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */,
+				AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */,
 				AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */,
 			);
 			path = PBR;
@@ -2089,6 +2095,7 @@
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE70FA671F8F8F7400AD9027 /* GenericGeometry.frag in Resources */,
 				CE4DE2181FA60CFE0067729A /* Sponza_Bricks_a_Roughness.tga in Resources */,
+				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
 				CE70FA681F8F8F7400AD9027 /* CookTorrance.frag in Resources */,
@@ -2194,6 +2201,7 @@
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
 				CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */,
+				AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */,
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,

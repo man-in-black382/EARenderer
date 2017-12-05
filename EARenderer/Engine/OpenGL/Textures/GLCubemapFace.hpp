@@ -22,6 +22,8 @@ namespace EARenderer {
         NegativeZ = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
     
+    GLCubemapFace CubemapFaceFromIndex(uint8_t index);
+    
 }
 
 #endif /* GLCubemapFace_hpp */

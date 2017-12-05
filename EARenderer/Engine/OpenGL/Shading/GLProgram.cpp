@@ -59,7 +59,7 @@ namespace EARenderer {
             
             if (infoLength > 1) {
                 std::vector<char> infoChars(infoLength);
-                glGetShaderInfoLog(mName, infoLength, nullptr, infoChars.data());
+                glGetProgramInfoLog(mName, infoLength, nullptr, infoChars.data());
                 std::string infoLog(infoChars.data());
                 ASSERT(isLinked, "Failed to link program: " << infoLog);
             }

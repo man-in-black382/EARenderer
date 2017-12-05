@@ -26,6 +26,7 @@
 #include "Range.hpp"
 
 #include <functional>
+#include <unordered_set>
 
 namespace EARenderer {
     
@@ -60,6 +61,8 @@ namespace EARenderer {
         void attachTexture(const GLHDRTextureCubemap& texture, uint16_t mipLevel = 0);
         void attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer, uint16_t mipLevel = 0);
         void attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer, uint16_t mipLevel = 0);
+        
+        void detachTextures();
     };
     
 }

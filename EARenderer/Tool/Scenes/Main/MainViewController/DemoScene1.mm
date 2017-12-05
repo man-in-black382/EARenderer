@@ -143,9 +143,9 @@
     scuffedTitaniumSphereInstance.setTransformation(t);
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(ironSphereInstance));
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(ironSphereInstance));
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
     
     // Skybox
     
@@ -155,8 +155,8 @@
     //
     scene->calculateBoundingBox();
     
-    EARenderer::LightProbeBuilder lightProbeBuilder(EARenderer::Size2D(256), 50);
-    lightProbeBuilder.buildAndPlaceProbesInScene(scene);
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 50);
+    self.lightProbeBuilder->buildAndPlaceProbesInScene(scene);
 }
 
 #pragma mark - Helpers

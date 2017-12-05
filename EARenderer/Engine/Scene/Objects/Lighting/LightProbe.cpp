@@ -9,14 +9,16 @@
 #include "LightProbe.hpp"
 
 #include <math.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    LightProbe::LightProbe(const glm::vec3& position)
+    LightProbe::LightProbe(const glm::vec3& position, float farClipPlane)
     :
-    position(position)
+    position(position),
+    mFarClipPlane(farClipPlane)
     { }
     
 #pragma mark - Private heplers
@@ -41,6 +43,26 @@ namespace EARenderer {
     }
     
 #pragma mark - Getters
+
+    const std::array<glm::mat4, 6> LightProbe::viewProjectionMatrices() const {
+        glm::mat4 projMat = glm::perspective(glm::radians(90.f), 1.0f, 0.01f, mFarClipPlane);
+        
+        glm::vec3 XNegative = { -1.0, 0.0, 0.0 };
+        glm::vec3 XPositive = { 1.0, 0.0, 0.0 };
+        glm::vec3 YNegative = { 0.0, -1.0, 0.0 };
+        glm::vec3 YPositive = { 0.0, 1.0, 0.0 };
+        glm::vec3 ZNegative = { 0.0, 0.0, -1.0 };
+        glm::vec3 ZPositive = { 0.0, 0.0, 1.0 };
+        
+        return {
+            projMat * glm::lookAt(position, XNegative, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, XPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, YPositive, glm::vec3(0.0, 0.0, 1.0)),
+            projMat * glm::lookAt(position, YNegative, glm::vec3(0.0, 0.0, -1.0)),
+            projMat * glm::lookAt(position, ZPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, ZNegative, glm::vec3(0.0, -1.0, 0.0))
+        };
+    }
     
     const SphericalHarmonics& LightProbe::sphericalHarmonics() const {
         return mSphericalHarmonics;
@@ -51,19 +73,19 @@ namespace EARenderer {
     void LightProbe::updateSHCoefficients(const GLHDRTextureCubemap& cubemap) {
         mSphericalHarmonics = SphericalHarmonics();
 
-        for (int8_t face = 0; face < 6; face++) {
-            for (int32_t y = 0; y < cubemap.size().height; y++) {
-                for (int32_t x = 0; x < cubemap.size().width; x++) {
-                    cubemap.sampleTexels([&](const GLCubemapSampler& sampler) {
-                        GLCubemapFace cubeFace = static_cast<GLCubemapFace>(face);
-                        Color texel = sampler.sample(cubeFace, x, y);
+        cubemap.sampleTexels([&](const GLCubemapSampler& sampler) {
+            for (int8_t face = 0; face < 6; face++) {
+                for (int32_t y = 0; y < cubemap.size().height; y++) {
+                    for (int32_t x = 0; x < cubemap.size().width; x++) {
+                        Color texel = sampler.sample(CubemapFaceFromIndex(face), x, y);
+                        printf("Sampled texel: r %f g %f b %f \n", texel.r, texel.g, texel.b);
                         float sAngle = solidAngle(x, y, cubemap.size());
                         glm::vec3 direction;
-                        sampler.computeSampleVector(cubeFace, x, y, cubemap.size(), direction);
+                        sampler.computeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
                         mSphericalHarmonics.contribute(direction, texel, sAngle);
-                    });
+                    }
                 }
             }
-        }
+        });
     }
 }

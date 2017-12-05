@@ -9,7 +9,7 @@
 #ifndef GLSLLightProbeEnvironmentCapture_hpp
 #define GLSLLightProbeEnvironmentCapture_hpp
 
-#include "GLSLCubemapRendering.hpp"
+#include "GLProgram.hpp"
 
 #include "PBRMaterial.hpp"
 #include "PointLight.hpp"
@@ -18,10 +18,11 @@
 
 namespace EARenderer {
     
-    class GLSLLightProbeEnvironmentCapture: public GLSLCubemapRendering {
+    class GLSLLightProbeEnvironmentCapture: public GLProgram {
     public:
         GLSLLightProbeEnvironmentCapture();
 
+        void setModelMatrix(const glm::mat4 &modelMatrix);
         void setLightProbe(const LightProbe& probe);
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
