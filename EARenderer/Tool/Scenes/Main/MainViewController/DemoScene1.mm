@@ -154,9 +154,6 @@
     
     //
     scene->calculateBoundingBox();
-    
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 50);
-    self.lightProbeBuilder->buildAndPlaceProbesInScene(scene);
 }
 
 #pragma mark - Helpers

@@ -29,7 +29,8 @@ namespace EARenderer {
     mDiffuseIrradianceMap(Size2D(32)),
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
-    mIBLFramebuffer(Size2D(512))
+    mIBLFramebuffer(Size2D(512)),
+    mLightProbeBuilder(Size2D(1024), 50)
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -42,10 +43,12 @@ namespace EARenderer {
         
         mSpecularIrradianceMap.generateMipmaps();
         
-        convertEquirectangularMapToCubemap();
-        buildDiffuseIrradianceMap();
-        buildSpecularIrradianceMap();
-        buildBRDFIntegrationMap();
+//        convertEquirectangularMapToCubemap();
+//        buildDiffuseIrradianceMap();
+//        buildSpecularIrradianceMap();
+//        buildBRDFIntegrationMap();
+        
+        mLightProbeBuilder.buildAndPlaceProbesInScene(scene);
     }
     
 #pragma mark - Setters
@@ -299,7 +302,6 @@ namespace EARenderer {
         
         mBRDFIntegrationShader.bind();
         
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
@@ -310,7 +312,7 @@ namespace EARenderer {
     
 #pragma mark - Public access point
     
-    void SceneRenderer::render(LightProbeBuilder *lpBuilder) {
+    void SceneRenderer::render() {
         ID directionalLightID = *(mScene->directionalLights().begin());
         DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
 //        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
@@ -353,10 +355,10 @@ namespace EARenderer {
         
 //        renderSkybox();
         mSkyboxShader.bind();
-        mSkyboxShader.ensureSamplerValidity([this, lpBuilder]() {
+        mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setCubemap(lpBuilder->mEnvironmentMap);
+            mSkyboxShader.setCubemap(mLightProbeBuilder.mEnvironmentMap);
         });
         mScene->skybox()->draw();
         

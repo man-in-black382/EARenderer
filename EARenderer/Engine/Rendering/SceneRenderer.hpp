@@ -16,6 +16,7 @@
 #include "DefaultRenderComponentsProviding.hpp"
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
+#include "LightProbeBuilder.hpp"
 
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
@@ -33,9 +34,6 @@
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
-
-// DEBUG
-#include "LightProbeBuilder.hpp"
 
 namespace EARenderer {
     
@@ -64,6 +62,8 @@ namespace EARenderer {
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
+        
+        LightProbeBuilder mLightProbeBuilder;
 
 //        // DEBUG
         GLSLFullScreenQuad mFSQuadShader;
@@ -90,7 +90,7 @@ namespace EARenderer {
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-        void render(LightProbeBuilder *lpBuilder);
+        void render();
     };
     
 }

@@ -55,12 +55,12 @@ namespace EARenderer {
         glm::vec3 ZPositive = { 0.0, 0.0, 1.0 };
         
         return {
-            projMat * glm::lookAt(position, XNegative, glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(position, XPositive, glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(position, YPositive, glm::vec3(0.0, 0.0, 1.0)),
-            projMat * glm::lookAt(position, YNegative, glm::vec3(0.0, 0.0, -1.0)),
-            projMat * glm::lookAt(position, ZPositive, glm::vec3(0.0, -1.0, 0.0)),
-            projMat * glm::lookAt(position, ZNegative, glm::vec3(0.0, -1.0, 0.0))
+            projMat * glm::lookAt(position, position + XPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, position + XNegative, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, position + YPositive, glm::vec3(0.0, 0.0, 1.0)),
+            projMat * glm::lookAt(position, position + YNegative, glm::vec3(0.0, 0.0, -1.0)),
+            projMat * glm::lookAt(position, position + ZPositive, glm::vec3(0.0, -1.0, 0.0)),
+            projMat * glm::lookAt(position, position + ZNegative, glm::vec3(0.0, -1.0, 0.0))
         };
     }
     

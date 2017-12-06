@@ -13,6 +13,4 @@
 
 @interface DemoScene1 : NSObject <DemoSceneComposing>
 
-@property (assign, nonatomic) EARenderer::LightProbeBuilder *lightProbeBuilder;
-
 @end

@@ -114,7 +114,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
     self.cameraman->updateCamera();
-    self.sceneRenderer->render(self.demoScene.lightProbeBuilder);
+    self.sceneRenderer->render();
     self.axesRenderer->render();
     
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
