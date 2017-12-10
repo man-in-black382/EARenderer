@@ -69,7 +69,10 @@ namespace EARenderer {
             glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
         }
         
-        glDrawBuffer(GL_NONE);
+        if (mDrawBuffers.empty()) {
+            glDrawBuffer(GL_NONE);
+        }
+        
         glReadBuffer(GL_NONE);
     }
     
@@ -83,6 +86,7 @@ namespace EARenderer {
             glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), mipLevel, layer);
         }
         
+        mDrawBuffers.insert(GL_COLOR_ATTACHMENT0);
         glDrawBuffer(GL_COLOR_ATTACHMENT0);
         glReadBuffer(GL_NONE);
     }
@@ -94,6 +98,7 @@ namespace EARenderer {
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0);
         glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+        mDrawBuffers.clear();
     }
     
 #pragma mark - Public

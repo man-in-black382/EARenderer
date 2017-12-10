@@ -56,8 +56,8 @@ namespace EARenderer {
     
     void LightProbeBuilder::buildAndPlaceProbesInScene(Scene* scene) {
         mFramebuffer.bind();
-        mFramebuffer.attachTexture(mDepthCubemap);
         mFramebuffer.attachTexture(mEnvironmentMap);
+        mFramebuffer.attachTexture(mDepthCubemap);
         mFramebuffer.viewport().apply();
         
 //        AxisAlignedBox3D bb = scene->boundingBox();

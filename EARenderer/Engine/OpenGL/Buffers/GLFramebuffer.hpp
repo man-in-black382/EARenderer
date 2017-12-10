@@ -37,6 +37,7 @@ namespace EARenderer {
         GLViewport mViewport;
         GLint mMaximumColorAttachments;
         GLint mMaximumDrawBuffers;
+        std::unordered_set<GLenum> mDrawBuffers;
 
         void obtainHardwareLimits();
         void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
