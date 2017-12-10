@@ -8,6 +8,8 @@
 
 #include "GLHDRCubemapSampler.hpp"
 
+#include <glm/gtc/packing.hpp>
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -53,9 +55,9 @@ namespace EARenderer {
         }
         
         int32_t offset = y * mCubemap->size().width + x * 3;
-        return Color(static_cast<float>(pixelBuffer[offset]),
-                     static_cast<float>(pixelBuffer[offset + 1]),
-                     static_cast<float>(pixelBuffer[offset + 2]),
+        return Color(glm::unpackHalf1x16(pixelBuffer[offset]),
+                     glm::unpackHalf1x16(pixelBuffer[offset + 1]),
+                     glm::unpackHalf1x16(pixelBuffer[offset + 2]),
                      1.0);
     }
     

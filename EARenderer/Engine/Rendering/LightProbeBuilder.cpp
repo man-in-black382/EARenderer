@@ -16,6 +16,8 @@ namespace EARenderer {
     :
     mEnvironmentMap(probeCaptureResolution),
     mFramebuffer(probeCaptureResolution),
+    mDepthRenderbuffer(probeCaptureResolution),
+    mDepthCubemap(probeCaptureResolution),
     mSpaceDivisionResolution(spaceDivisionResolution)
     { }
     
@@ -54,6 +56,7 @@ namespace EARenderer {
     
     void LightProbeBuilder::buildAndPlaceProbesInScene(Scene* scene) {
         mFramebuffer.bind();
+        mFramebuffer.attachTexture(mDepthCubemap);
         mFramebuffer.attachTexture(mEnvironmentMap);
         mFramebuffer.viewport().apply();
         
@@ -75,7 +78,7 @@ namespace EARenderer {
         
         LightProbe probe(glm::vec3(0.0, 0.0, 0.0), 100);
         captureEnvironmentForProbe(scene, probe);
-//        probe.updateSHCoefficients(mEnvironmentMap);
+        probe.updateSHCoefficients(mEnvironmentMap);
         scene->lightProbes().emplace(probe);
     }
     

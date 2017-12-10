@@ -87,12 +87,13 @@ namespace EARenderer {
         glReadBuffer(GL_NONE);
     }
     
-    void GLFramebuffer::detachTextures() {
+    void GLFramebuffer::detachAllAttachments() {
         bind();
         glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0);
         glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0, 0);
         glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0);
         glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
     }
     
 #pragma mark - Public
@@ -105,5 +106,10 @@ namespace EARenderer {
     void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel) { attachTextureToDepthAttachment(texture, mipLevel); }
     void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer, uint16_t mipLevel) { attachTextureToColorAttachment0(textures, mipLevel, layer); }
     void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer, uint16_t mipLevel) { attachTextureToDepthAttachment(textures, mipLevel, layer); }
+    
+    void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
+        renderbuffer.bind();
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
+    }
     
 }

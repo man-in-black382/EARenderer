@@ -23,6 +23,7 @@ namespace EARenderer {
     };
     
     GLCubemapFace CubemapFaceFromIndex(uint8_t index);
+    uint8_t IndexFromCubemapFace(GLCubemapFace face);
     
 }
 

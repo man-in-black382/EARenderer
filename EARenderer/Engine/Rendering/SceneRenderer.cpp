@@ -30,7 +30,7 @@ namespace EARenderer {
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
-    mLightProbeBuilder(Size2D(1024), 50)
+    mLightProbeBuilder(Size2D(256), 50)
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);

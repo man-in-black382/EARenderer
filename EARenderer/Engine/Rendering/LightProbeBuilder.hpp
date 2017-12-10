@@ -12,6 +12,7 @@
 #include "Scene.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLFramebuffer.hpp"
+#include "GLDepthRenderbuffer.hpp"
 #include "GLSLLightProbeEnvironmentCapture.hpp"
 
 namespace EARenderer {
@@ -19,6 +20,8 @@ namespace EARenderer {
     class LightProbeBuilder {
     private:
         GLFramebuffer mFramebuffer;
+        GLDepthRenderbuffer mDepthRenderbuffer;
+        GLDepthTextureCubemap mDepthCubemap;
         GLSLLightProbeEnvironmentCapture mEnvironmentCaptureShader;
         uint32_t mSpaceDivisionResolution;
         

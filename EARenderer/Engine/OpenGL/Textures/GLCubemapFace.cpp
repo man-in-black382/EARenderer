@@ -22,4 +22,16 @@ namespace EARenderer {
         }
     }
     
+    uint8_t IndexFromCubemapFace(GLCubemapFace face) {
+        switch (face) {
+            default:
+            case GLCubemapFace::PositiveX: return 0;
+            case GLCubemapFace::NegativeX: return 1;
+            case GLCubemapFace::PositiveY: return 2;
+            case GLCubemapFace::NegativeY: return 3;
+            case GLCubemapFace::PositiveZ: return 4;
+            case GLCubemapFace::NegativeZ: return 5;
+        }
+    }
+    
 }

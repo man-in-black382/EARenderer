@@ -231,6 +231,8 @@
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
+		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
+		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC7B03F1FA635800097CFDE /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B03E1FA635780097CFDE /* sponza.obj */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
@@ -838,6 +840,10 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
+		CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
+		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
+		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
+		CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC7B03E1FA635780097CFDE /* sponza.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
@@ -1768,6 +1774,10 @@
 				CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */,
 				CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */,
 				CE70F9D31F8F8EBD00AD9027 /* GLFramebuffer.hpp */,
+				CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */,
+				CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */,
+				CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */,
+				CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */,
 				CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.inl */,
 				CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.inl */,
 				CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */,
@@ -2250,9 +2260,11 @@
 				CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */,
 				CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */,
 				CE70FA8E1F8F912300AD9027 /* FPSView.mm in Sources */,
+				CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */,
 				CE70FA9A1F8F913100AD9027 /* AppDelegate.m in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
+				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,
 				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
 				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
