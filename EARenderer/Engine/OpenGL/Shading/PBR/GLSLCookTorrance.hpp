@@ -20,6 +20,7 @@
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
 #include "FrustumCascades.hpp"
+#include "LightProbe.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -36,6 +37,7 @@ namespace EARenderer {
         void setModelMatrix(const glm::mat4& matrix);
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
+        void setLightProbe(const LightProbe& lightProbe);
         void setMaterial(const PBRMaterial& material);
         
         void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,

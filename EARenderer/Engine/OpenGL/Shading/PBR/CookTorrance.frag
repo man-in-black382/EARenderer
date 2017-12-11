@@ -9,6 +9,14 @@ const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
+// Spherical harmonics
+
+const float kC1 = 0.429043;
+const float kC2 = 0.511664;
+const float kC3 = 0.743125;
+const float kC4 = 0.886227;
+const float kC5 = 0.247708;
+
 // Output
 
 out vec4 oFragColor;
@@ -48,6 +56,18 @@ struct Material {
     sampler2D AOMap; // Ambient occlusion
 };
 
+struct SH {
+    vec3 L00;
+    vec3 L11;
+    vec3 L10;
+    vec3 L1_1;
+    vec3 L21;
+    vec3 L2_1;
+    vec3 L2_2;
+    vec3 L20;
+    vec3 L22;
+};
+
 uniform vec3 uCameraPosition;
 
 uniform DirectionalLight uDirectionalLight;
@@ -62,11 +82,46 @@ uniform sampler2DArray uShadowMapArray;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 
+// Shperical harmonics
+
+uniform SH uSphericalHarmonics;
+uniform bool uShouldEvaluateSphericalHarmonics;
+
 // IBL
 uniform sampler2D uBRDFIntegrationMap;
 uniform samplerCube uSpecularIrradianceMap;
 uniform samplerCube uDiffuseIrradianceMap;
 uniform int uSpecularIrradianceMapLOD;
+
+////////////////////////////////////////////////////////////
+/////////////////// Spherical harmonics ////////////////////
+////////////////////////////////////////////////////////////
+
+mat4 SHEvaluationMatrix(int colorComponent) {
+    int c = colorComponent;
+    SH sh = uSphericalHarmonics;
+    
+    return mat4(vec4(kC1 * sh.L22[c],   kC1 * sh.L2_2[c],  kC1 * sh.L21[c],  kC2 * sh.L11[c]),
+                vec4(kC1 * sh.L2_2[c],  -kC1 * sh.L22[c],  kC1 * sh.L2_1[c], kC2 * sh.L1_1[c]),
+                vec4(kC1 * sh.L21[c],   kC1 * sh.L2_1[c],  kC3 * sh.L20[c],  kC2 * sh.L10[c]),
+                vec4(kC2 * sh.L11[c],   kC2 * sh.L1_1[c],  kC2 * sh.L10[c],  kC4 * sh.L00[c] - kC5 * sh.L20[c]));
+}
+
+float SHRadiance(vec3 direction, int component) {
+    SH sh = uSphericalHarmonics;
+    int c = component;
+    
+    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
+            kC3 * sh.L20[c] * (direction.z * direction.z) +
+            kC4 * sh.L00[c] -
+            kC5 * sh.L20[c] +
+            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
+            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+}
+
+vec3 EvaluateSphericalHarmonics(vec3 direction) {
+    return vec3(SHRadiance(direction, 0), SHRadiance(direction, 1), SHRadiance(direction, 2));
+}
 
 ////////////////////////////////////////////////////////////
 //////////////////// Lighting equation /////////////////////
@@ -145,7 +200,9 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
-    return (Kd * albedo / PI + specular) * radiance * NdotL;
+    vec3 SHDiffuse  = uShouldEvaluateSphericalHarmonics ? EvaluateSphericalHarmonics(N) : vec3(1.0);
+    
+    return (Kd * albedo * SHDiffuse / PI + specular) * radiance * NdotL;
 }
 
 vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
@@ -316,6 +373,6 @@ void main() {
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-//    oFragColor              = vec4(correctColor, 1.0);
-    oFragColor              = vec4(albedo, 1.0);
+    oFragColor              = vec4(correctColor, 1.0);
+//    oFragColor              = vec4(albedo, 1.0);
 }

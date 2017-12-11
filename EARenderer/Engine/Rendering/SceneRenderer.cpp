@@ -327,11 +327,14 @@ namespace EARenderer {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        const LightProbe& probe = mScene->lightProbes()[*mScene->lightProbes().begin()];
+        
         mCookTorranceShader.bind();
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mCookTorranceShader.setLightProbe(probe);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         
