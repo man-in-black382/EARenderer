@@ -10,7 +10,6 @@ const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
 // Spherical harmonics
-
 const float kC1 = 0.429043;
 const float kC2 = 0.511664;
 const float kC3 = 0.743125;
@@ -200,9 +199,17 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
-    vec3 SHDiffuse  = uShouldEvaluateSphericalHarmonics ? EvaluateSphericalHarmonics(N) : vec3(1.0);
+    return (Kd * albedo / PI + specular) * radiance * NdotL;
     
-    return (Kd * albedo * SHDiffuse / PI + specular) * radiance * NdotL;
+//    vec3 SHDiffuse  = uShouldEvaluateSphericalHarmonics ? EvaluateSphericalHarmonics(N) : vec3(1.0);
+//
+//    if (uShouldEvaluateSphericalHarmonics) {
+//        return SHDiffuse;
+//    } else {
+//
+//    }
+    
+//    return (Kd * albedo * SHDiffuse / PI + specular) * radiance * NdotL;
 }
 
 vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
@@ -372,7 +379,10 @@ void main() {
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
-
-    oFragColor              = vec4(correctColor, 1.0);
-//    oFragColor              = vec4(albedo, 1.0);
+    
+    if (uShouldEvaluateSphericalHarmonics) {
+        oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
+    } else {
+        oFragColor = vec4(correctColor, 1.0);
+    }
 }

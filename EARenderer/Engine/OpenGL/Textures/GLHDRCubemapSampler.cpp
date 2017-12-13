@@ -54,7 +54,7 @@ namespace EARenderer {
             case GLCubemapFace::NegativeZ: pixelBuffer = mNegativeZPixelBuffer; break;
         }
         
-        int32_t offset = y * mCubemap->size().width + x * 3;
+        int32_t offset = y * mCubemap->size().width + x * 4;
         return Color(glm::unpackHalf1x16(pixelBuffer[offset]),
                      glm::unpackHalf1x16(pixelBuffer[offset + 1]),
                      glm::unpackHalf1x16(pixelBuffer[offset + 2]),

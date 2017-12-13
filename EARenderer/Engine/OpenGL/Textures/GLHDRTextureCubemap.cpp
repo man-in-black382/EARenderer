@@ -36,10 +36,16 @@ namespace EARenderer {
     
     const GLhalf* GLHDRTextureCubemap::pixelBuffer(GLCubemapFace face) const {
         bind();
-        GLhalf *ptr = new GLhalf[mSize.width * mSize.height * 3];
+        
+        // Despite the fact that texture is being 3-component we treat it as 4-component as stated in the OpenGL docs:
+        //
+        // Three-component textures are treated as RGBA buffers with red set to component zero,
+        // green set to component one, blue set to component two, and alpha set to 1
+        GLhalf *ptr = new GLhalf[mSize.width * mSize.height * 4];
+        
         using type = std::underlying_type<GLCubemapFace>::type;
         type rawFace = static_cast<type>(face);
-        glGetTexImage(rawFace, 0, GL_RGB, GL_HALF_FLOAT, ptr);
+        glGetTexImage(rawFace, 0, GL_RGBA, GL_HALF_FLOAT, ptr);
         return ptr;
     }
     
