@@ -11,9 +11,6 @@
 #include <math.h>
 #include <glm/gtc/matrix_transform.hpp>
 
-#warning DEBUG
-#include <stb_image.h>
-
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -81,12 +78,14 @@ namespace EARenderer {
                 for (int32_t y = 0; y < cubemap.size().height; y++) {
                     for (int32_t x = 0; x < cubemap.size().width; x++) {
                         Color texel = sampler.sample(CubemapFaceFromIndex(face), x, y);
-                        if (face == 0) {
-                            printf("Face: %d Texel: %f %f %f %f\n", face, texel.r, texel.g, texel.b, texel.a);
-                        }
+//                        if (face == 0) {
+//                            printf("Face: %d Texel: %f %f %f\n", face, texel.r, texel.g, texel.b);
+//                        }
                         float sAngle = solidAngle(x, y, cubemap.size());
                         glm::vec3 direction;
                         sampler.computeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
+//                        printf("Direction %f %f %f for face %d xy %d %d\n", direction.x, direction.y, direction.z, face, x, y);
+                        direction = glm::normalize(direction);
                         mSphericalHarmonics.contribute(direction, texel, sAngle);
                     }
                 }

@@ -119,6 +119,9 @@ float SHRadiance(vec3 direction, int component) {
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
+//    vec4 directionT = vec4(direction, 1.0);
+//    vec4 result = SHEvaluationMatrix(0) * directionT + SHEvaluationMatrix(1) * directionT + SHEvaluationMatrix(2) * directionT;
+//    return vec3(result);
     return vec3(SHRadiance(direction, 0), SHRadiance(direction, 1), SHRadiance(direction, 2));
 }
 
@@ -199,17 +202,11 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
-    return (Kd * albedo / PI + specular) * radiance * NdotL;
-    
-//    vec3 SHDiffuse  = uShouldEvaluateSphericalHarmonics ? EvaluateSphericalHarmonics(N) : vec3(1.0);
-//
-//    if (uShouldEvaluateSphericalHarmonics) {
-//        return SHDiffuse;
-//    } else {
-//
-//    }
-    
-//    return (Kd * albedo * SHDiffuse / PI + specular) * radiance * NdotL;
+    vec3 diffuse    = Kd * albedo / PI * NdotL;
+    diffuse         += uShouldEvaluateSphericalHarmonics ? Kd * EvaluateSphericalHarmonics(N) : vec3(0.0);
+    specular        *= NdotL;
+
+    return (diffuse + specular) * radiance;
 }
 
 vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
@@ -283,22 +280,22 @@ float Shadow(in vec3 N, in vec3 L)
     // Check whether current frag pos is in shadow
     float bias = max(0.01 * (1.0 - dot(N, L)), 0.005);
     
-    float shadow = 0.0;
-    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
-    for(int x = -2; x <= 2; ++x) {
-        for(int y = -2; y <= 2; ++y) {
-            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
-            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
-            float unbiasedDepth = currentDepth - bias;
-            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
-        }
-    }
-    shadow /= 36.0;
-    return shadow;
+//    float shadow = 0.0;
+//    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
+//    for(int x = -2; x <= 2; ++x) {
+//        for(int y = -2; y <= 2; ++y) {
+//            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
+//            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
+//            float unbiasedDepth = currentDepth - bias;
+//            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+//        }
+//    }
+//    shadow /= 36.0;
+//    return shadow;
     
-//    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-//    float unbiasedDepth = currentDepth - bias;
-//    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
+    float unbiasedDepth = currentDepth - bias;
+    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
 }
 
 ////////////////////////////////////////////////////////////
@@ -309,6 +306,14 @@ vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
     vec3 mappedColor = color / (color + vec3(1.0));
     vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.2));
     return gammaCorrectedColor;
+}
+
+vec3 ReinhardToneMap(vec3 color) {
+    return color / (color + vec3(1.0));
+}
+
+vec3 GammaCorrect(vec3 color) {
+    return pow(color, vec3(1.0 / 2.2));
 }
 
 vec3 LinearFromSRGB(vec3 sRGB) {
@@ -378,11 +383,14 @@ void main() {
     
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
+    vec3 correctColor       = uShouldEvaluateSphericalHarmonics ? ReinhardToneMapAndGammaCorrect(specularAndDiffuse) : specularAndDiffuse;
     
-    if (uShouldEvaluateSphericalHarmonics) {
-        oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
-    } else {
-        oFragColor = vec4(correctColor, 1.0);
-    }
+//    if (uShouldEvaluateSphericalHarmonics) {
+////        oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
+//        oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(N)), 1.0);
+//    } else {
+//        oFragColor = vec4(specularAndDiffuse, 1.0);
+//    }
+    
+    oFragColor = vec4(correctColor, 1.0);
 }

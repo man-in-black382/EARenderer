@@ -139,6 +139,8 @@ namespace EARenderer {
 
         mRotation = glm::zero<glm::vec2>();
         mMouseMoveDirection = glm::zero<glm::vec3>();
+        
+//        printf("Camera %f %f %f\n", mCamera->position().x, mCamera->position().y, mCamera->position().z);
     }
     
 }

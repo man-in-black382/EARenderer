@@ -9,6 +9,7 @@
 #include "GLCubemapSampler.hpp"
 
 #include <glm/common.hpp>
+#include <glm/gtc/constants.hpp>
 
 namespace EARenderer {
 
@@ -49,20 +50,20 @@ namespace EARenderer {
         float s = ((float)x + 0.5f) / faceSize.width * 2.0f - 1.0f;
         float t = ((float)y + 0.5f) / faceSize.height * 2.0f - 1.0f;
         
-        float z = 0.0f;
+        sampleVector = glm::zero<glm::vec3>();
         
         switch (face) {
-            case GLCubemapFace::PositiveZ: x =  s; y = -t; z =  1; break;
-            case GLCubemapFace::NegativeZ: x = -s; y = -t; z = -1; break;
-            case GLCubemapFace::NegativeX: x = -1; y = -t; z =  s; break;
-            case GLCubemapFace::PositiveX: x =  1; y = -t; z = -s; break;
-            case GLCubemapFace::PositiveY: x =  s; y =  1; z =  t; break;
-            case GLCubemapFace::NegativeY: x =  s; y = -1; z = -t; break;
+            case GLCubemapFace::PositiveZ: sampleVector.x =  s; sampleVector.y = -t; sampleVector.z =  1; break;
+            case GLCubemapFace::NegativeZ: sampleVector.x = -s; sampleVector.y = -t; sampleVector.z = -1; break;
+            case GLCubemapFace::NegativeX: sampleVector.x = -1; sampleVector.y = -t; sampleVector.z =  s; break;
+            case GLCubemapFace::PositiveX: sampleVector.x =  1; sampleVector.y = -t; sampleVector.z = -s; break;
+            case GLCubemapFace::PositiveY: sampleVector.x =  s; sampleVector.y =  1; sampleVector.z =  t; break;
+            case GLCubemapFace::NegativeY: sampleVector.x =  s; sampleVector.y = -1; sampleVector.z = -t; break;
         }
         
         // Normalize vector
-        float invLen = 1.0f / sqrtf(x*x + y*y + z*z);
-        sampleVector = glm::vec3(x * invLen, y * invLen, z * invLen);
+        float invLen = 1.0f / sqrtf(sampleVector.x * sampleVector.x + sampleVector.y * sampleVector.y + sampleVector.z * sampleVector.z);
+        sampleVector = glm::vec3(sampleVector.x * invLen, sampleVector.y * invLen, sampleVector.z * invLen);
     }
     
 }

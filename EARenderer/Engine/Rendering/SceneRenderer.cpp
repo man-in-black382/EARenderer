@@ -22,15 +22,15 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
-    mShadowMaps(Size2D(1536), mNumberOfCascades),
-    mShadowCubeMap(Size2D(1536)),
-    mDepthFramebuffer(Size2D(1536)),
+    mShadowMaps(Size2D(1024), mNumberOfCascades),
+    mShadowCubeMap(Size2D(1024)),
+    mDepthFramebuffer(Size2D(1024)),
     mEnvironmentMapCube(Size2D(512)),
     mDiffuseIrradianceMap(Size2D(32)),
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
-    mLightProbeBuilder(Size2D(256), 50)
+    mLightProbeBuilder(Size2D(64), 50)
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);

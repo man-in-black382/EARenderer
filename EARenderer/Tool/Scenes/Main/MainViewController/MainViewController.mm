@@ -82,8 +82,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    auto HDRColor = EARenderer::Color(12.0, 12.0, 12.0, 1.0);
-    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(-0.5, -1.0, 0.5));
+    auto HDRColor = EARenderer::Color(3.0, 3.0, 3.0, 1.0);
+    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(-0.8, -1.0, 0.1));
     EARenderer::PointLight pointLight(glm::vec3(5, 5, -5), HDRColor);
     
     self.scene->setCamera(camera);
