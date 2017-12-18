@@ -10,7 +10,6 @@
 #define Skybox_hpp
 
 #include "Drawable.hpp"
-#include "GLVertexArray.inl"
 #include "Vertex1P4.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLTexture2D.hpp"

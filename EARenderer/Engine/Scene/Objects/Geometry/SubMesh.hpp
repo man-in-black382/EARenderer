@@ -11,9 +11,9 @@
 
 #include <vector>
 #include "Vertex1P1N1UV1T1BT.hpp"
-#include "GLVertexArrayBuffer.inl"
+#include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
-#include "GLVertexArray.inl"
+#include "GLVertexArray.hpp"
 #include "Drawable.hpp"
 #include "PackedLookupTable.inl"
 

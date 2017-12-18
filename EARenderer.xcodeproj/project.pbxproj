@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC6647C21FE7C10500732D7D /* GLBufferTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6647C01FE7C10500732D7D /* GLBufferTexture.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
 		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
@@ -239,6 +240,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC6647C01FE7C10500732D7D /* GLBufferTexture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLBufferTexture.cpp; sourceTree = "<group>"; };
+		AC6647C11FE7C10500732D7D /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
 		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
 		AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
 		AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
@@ -692,9 +695,9 @@
 		CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexArrayLayoutDescription.cpp; sourceTree = "<group>"; };
 		CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLFramebuffer.cpp; sourceTree = "<group>"; };
 		CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLElementArrayBuffer.hpp; sourceTree = "<group>"; };
-		CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLVertexArrayBuffer.inl; sourceTree = "<group>"; };
-		CE70F9D01F8F8EBD00AD9027 /* GLBuffer.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLBuffer.inl; sourceTree = "<group>"; };
-		CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLVertexArray.inl; sourceTree = "<group>"; };
+		CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArrayBuffer.hpp; sourceTree = "<group>"; };
+		CE70F9D01F8F8EBD00AD9027 /* GLBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBuffer.hpp; sourceTree = "<group>"; };
+		CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArray.hpp; sourceTree = "<group>"; };
 		CE70F9D21F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArrayLayoutDescription.hpp; sourceTree = "<group>"; };
 		CE70F9D31F8F8EBD00AD9027 /* GLFramebuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLFramebuffer.hpp; sourceTree = "<group>"; };
 		CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLElementArrayBuffer.cpp; sourceTree = "<group>"; };
@@ -1769,17 +1772,19 @@
 		CE70F9CB1F8F8EBD00AD9027 /* Buffers */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9D01F8F8EBD00AD9027 /* GLBuffer.inl */,
+				CE70F9D01F8F8EBD00AD9027 /* GLBuffer.hpp */,
 				CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */,
 				CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */,
+				CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.hpp */,
+				AC6647C01FE7C10500732D7D /* GLBufferTexture.cpp */,
+				AC6647C11FE7C10500732D7D /* GLBufferTexture.hpp */,
+				CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.hpp */,
 				CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */,
 				CE70F9D31F8F8EBD00AD9027 /* GLFramebuffer.hpp */,
 				CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */,
 				CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */,
 				CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */,
 				CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */,
-				CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.inl */,
-				CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.inl */,
 				CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */,
 				CE70F9D21F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.hpp */,
 			);
@@ -2284,6 +2289,7 @@
 				CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */,
 				CE70FA461F8F8EF600AD9027 /* GLSLEquirectangularMapConversion.cpp in Sources */,
 				CE70FA1A1F8F8EF600AD9027 /* AxesSystem.cpp in Sources */,
+				AC6647C21FE7C10500732D7D /* GLBufferTexture.cpp in Sources */,
 				CE70FA3B1F8F8EF600AD9027 /* GLTexture2DArray.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,7 +12,7 @@
 #include "Macros.h"
 
 #include "Vertex1P3.hpp"
-#include "GLVertexArray.inl"
+#include "GLVertexArray.hpp"
 
 #include "AxisAlignedBox3D.hpp"
 #include "Parallelogram3D.hpp"

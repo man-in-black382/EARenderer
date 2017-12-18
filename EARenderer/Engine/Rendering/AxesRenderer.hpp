@@ -15,7 +15,7 @@
 
 #include "Color.hpp"
 #include "Vertex1P3.hpp"
-#include "GLVertexArray.inl"
+#include "GLVertexArray.hpp"
 #include "GLSLGenericGeometry.hpp"
 #include "Scene.hpp"
 #include "AxesSystem.hpp"

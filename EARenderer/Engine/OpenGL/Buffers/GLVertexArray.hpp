@@ -14,7 +14,7 @@
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
-#include "GLVertexArrayBuffer.inl"
+#include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArrayLayoutDescription.hpp"
 

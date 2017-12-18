@@ -14,7 +14,7 @@
 
 #include "Vertex1P3.hpp"
 #include "AxisAlignedBox3D.hpp"
-#include "GLVertexArray.inl"
+#include "GLVertexArray.hpp"
 #include "Drawable.hpp"
 
 namespace EARenderer {
