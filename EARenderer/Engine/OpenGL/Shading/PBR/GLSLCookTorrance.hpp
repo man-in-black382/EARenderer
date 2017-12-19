@@ -37,7 +37,6 @@ namespace EARenderer {
         void setModelMatrix(const glm::mat4& matrix);
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
-        void setLightProbe(const LightProbe& lightProbe);
         void setMaterial(const PBRMaterial& material);
         
         void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
@@ -46,6 +45,7 @@ namespace EARenderer {
                             int8_t specularIrradianceMapMaxLOD);
         
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
+        void setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture);
     };
     
 }

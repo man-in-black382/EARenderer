@@ -83,7 +83,7 @@ uniform int uNumberOfCascades;
 
 // Shperical harmonics
 
-uniform SH uSphericalHarmonics;
+uniform samplerBuffer uSphericalHarmonicsBuffer;
 uniform bool uShouldEvaluateSphericalHarmonics;
 
 // IBL
@@ -96,18 +96,29 @@ uniform int uSpecularIrradianceMapLOD;
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
 
-mat4 SHEvaluationMatrix(int colorComponent) {
-    int c = colorComponent;
-    SH sh = uSphericalHarmonics;
+//
+// Unpacks spherical harmonics coefficients
+// from the corresponding sample buffer
+//
+SH UnpackSH(int index) {
+    SH sh;
+
+    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
+    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
+    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
+    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
+    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
+    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
+    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
+    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
+    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
     
-    return mat4(vec4(kC1 * sh.L22[c],   kC1 * sh.L2_2[c],  kC1 * sh.L21[c],  kC2 * sh.L11[c]),
-                vec4(kC1 * sh.L2_2[c],  -kC1 * sh.L22[c],  kC1 * sh.L2_1[c], kC2 * sh.L1_1[c]),
-                vec4(kC1 * sh.L21[c],   kC1 * sh.L2_1[c],  kC3 * sh.L20[c],  kC2 * sh.L10[c]),
-                vec4(kC2 * sh.L11[c],   kC2 * sh.L1_1[c],  kC2 * sh.L10[c],  kC4 * sh.L00[c] - kC5 * sh.L20[c]));
+    return sh;
+    
+//    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
 }
 
-float SHRadiance(vec3 direction, int component) {
-    SH sh = uSphericalHarmonics;
+float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
     
     return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
@@ -119,10 +130,8 @@ float SHRadiance(vec3 direction, int component) {
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
-//    vec4 directionT = vec4(direction, 1.0);
-//    vec4 result = SHEvaluationMatrix(0) * directionT + SHEvaluationMatrix(1) * directionT + SHEvaluationMatrix(2) * directionT;
-//    return vec3(result);
-    return vec3(SHRadiance(direction, 0), SHRadiance(direction, 1), SHRadiance(direction, 2));
+    SH sh = UnpackSH(0);
+    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
 ////////////////////////////////////////////////////////////
@@ -384,13 +393,6 @@ void main() {
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = uShouldEvaluateSphericalHarmonics ? ReinhardToneMapAndGammaCorrect(specularAndDiffuse) : specularAndDiffuse;
-    
-//    if (uShouldEvaluateSphericalHarmonics) {
-////        oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
-//        oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(N)), 1.0);
-//    } else {
-//        oFragColor = vec4(specularAndDiffuse, 1.0);
-//    }
-    
+
     oFragColor = vec4(correctColor, 1.0);
 }

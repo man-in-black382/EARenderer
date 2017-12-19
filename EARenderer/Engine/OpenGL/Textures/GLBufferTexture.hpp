@@ -16,42 +16,61 @@
 namespace EARenderer {
     
     template <typename BufferDataType>
-    class GLBufferTextureAbstract: public GLNamedObject, public GLBindable {
+    class GLBufferTexture: public GLNamedObject, public GLBindable {
     private:
         GLTextureBuffer<BufferDataType> mBuffer;
         
     public:
-        GLBufferTextureAbstract(GLenum internalFormat)
+        GLBufferTexture(GLenum internalFormat)
         :
         mBuffer(internalFormat)
         {
             glGenTextures(1, &mName);
         }
         
-        virtual ~GLBufferTextureAbstract() = 0;
+        virtual ~GLBufferTexture() = 0;
         
         void bind() const override {
             glBindTexture(GL_TEXTURE_BUFFER, mName);
             mBuffer.bind();
         }
+        
+        GLTextureBuffer<BufferDataType>& buffer() {
+            return mBuffer;
+        }
     };
         
     template <typename BufferDataType>
-    GLBufferTextureAbstract<BufferDataType>::~GLBufferTextureAbstract() {
+    GLBufferTexture<BufferDataType>::~GLBufferTexture() {
         glDeleteTextures(1, &mName);
     }
     
     // Specializing by data type
     
-    class GLIntegerBufferTexture: public GLBufferTextureAbstract<int32_t> {
+    template <typename BufferDataType>
+    class GLIntegerBufferTexture: public GLBufferTexture<BufferDataType> {
     public:
-        GLIntegerBufferTexture() : GLBufferTextureAbstract<int32_t>(GL_R32I) { }
+        GLIntegerBufferTexture() : GLBufferTexture<BufferDataType>(GL_R32I) { }
     };
     
-    class GLFloatBufferTexture: public GLBufferTextureAbstract<float> {
+    template <typename BufferDataType>
+    class GLFloatBufferTexture: public GLBufferTexture<BufferDataType> {
     public:
-        GLFloatBufferTexture() : GLBufferTextureAbstract<float>(GL_R32F) { }
+        GLFloatBufferTexture() : GLBufferTexture<BufferDataType>(GL_R32F) { }
     };
+    
+    template <typename BufferDataType>
+    class GLFloat3BufferTexture: public GLBufferTexture<BufferDataType> {
+        public:
+        GLFloat3BufferTexture() : GLBufferTexture<BufferDataType>(GL_RGB32F) { }
+    };
+    
+    template <typename BufferDataType>
+    class GLFloat4BufferTexture: public GLBufferTexture<BufferDataType> {
+        public:
+        GLFloat4BufferTexture() : GLBufferTexture<BufferDataType>(GL_RGBA32F) { }
+    };
+    
     
 }
 

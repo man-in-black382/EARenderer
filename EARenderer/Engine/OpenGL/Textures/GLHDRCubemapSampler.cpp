@@ -62,11 +62,11 @@ namespace EARenderer {
         
 //        switch (face) {
 //            case GLCubemapFace::PositiveX: return Color(1.0, 0.0, 0.0, 1.0);
-//            case GLCubemapFace::NegativeX: return Color(0.0, 1.0, 0.0, 1.0);
-//            case GLCubemapFace::PositiveY: return Color(0.0, 0.0, 0.0, 1.0);
-//            case GLCubemapFace::NegativeY: return Color(0.0, 0.0, 0.0, 1.0);
-//            case GLCubemapFace::PositiveZ: return Color(0.0, 0.0, 0.0, 1.0);
-//            case GLCubemapFace::NegativeZ: return Color(0.0, 0.0, 0.0, 1.0);
+//            case GLCubemapFace::NegativeX: return Color(1.0, 0.0, 0.0, 1.0);
+//            case GLCubemapFace::PositiveY: return Color(0.0, 1.0, 0.0, 1.0);
+//            case GLCubemapFace::NegativeY: return Color(0.0, 1.0, 0.0, 1.0);
+//            case GLCubemapFace::PositiveZ: return Color(0.0, 0.0, 1.0, 1.0);
+//            case GLCubemapFace::NegativeZ: return Color(0.0, 0.0, 1.0, 1.0);
 //        }
     }
     

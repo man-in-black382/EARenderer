@@ -240,6 +240,7 @@
 
 /* Begin PBXFileReference section */
 		AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
+		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
 		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
 		AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
@@ -1773,6 +1774,7 @@
 			isa = PBXGroup;
 			children = (
 				CE70F9D01F8F8EBD00AD9027 /* GLBuffer.hpp */,
+				AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */,
 				CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */,
 				CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */,
 				CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.hpp */,

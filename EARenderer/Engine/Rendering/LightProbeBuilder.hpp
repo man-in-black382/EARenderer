@@ -25,8 +25,6 @@ namespace EARenderer {
         GLDepthTextureCubemap mDepthCubemap;
         GLSLLightProbeEnvironmentCapture mEnvironmentCaptureShader;
         uint32_t mSpaceDivisionResolution;
-        GLFloatBufferTexture mLightProbeSHBufferTexture;
-        GLIntegerBufferTexture mLightProbeIndicesBufferTexture;
         
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
         

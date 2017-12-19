@@ -26,6 +26,7 @@ namespace EARenderer {
         { }
         
         void bind() const override {
+            GLBuffer<DataType>::bind();
             glTexBuffer(GL_TEXTURE_BUFFER, mInternalFormat, GLBuffer<DataType>::mName);
         }
     };

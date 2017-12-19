@@ -18,7 +18,7 @@ namespace EARenderer {
     :
     GLProgram("CookTorrance.vert", "CookTorrance.frag", "")
     {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_TRUE);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
     }
     
 #pragma mark - Setters
@@ -43,20 +43,6 @@ namespace EARenderer {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDirectionalLight.direction")>).location(), 1, glm::value_ptr(light.direction()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDirectionalLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 0);
-    }
-    
-    void GLSLCookTorrance::setLightProbe(const LightProbe& lightProbe) {
-        SphericalHarmonics sh = lightProbe.sphericalHarmonics();
-        
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L00")>).location(), 1, glm::value_ptr(sh.L00()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L11")>).location(), 1, glm::value_ptr(sh.L11()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L10")>).location(), 1, glm::value_ptr(sh.L10()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L1_1")>).location(), 1, glm::value_ptr(sh.L1_1()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L21")>).location(), 1, glm::value_ptr(sh.L21()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L2_1")>).location(), 1, glm::value_ptr(sh.L2_1()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L2_2")>).location(), 1, glm::value_ptr(sh.L2_2()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L20")>).location(), 1, glm::value_ptr(sh.L20()));
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uSphericalHarmonics.L22")>).location(), 1, glm::value_ptr(sh.L22()));
     }
     
     void GLSLCookTorrance::setMaterial(const PBRMaterial& material) {
@@ -90,6 +76,10 @@ namespace EARenderer {
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
         
         setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
+    }
+    
+    void GLSLCookTorrance::setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture) {
+        setUniformTexture(uint32_constant<ctcrc32("uSphericalHarmonicsBuffer")>, SHTexture);
     }
     
 }

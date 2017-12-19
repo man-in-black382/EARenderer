@@ -30,7 +30,7 @@ namespace EARenderer {
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
-    mLightProbeBuilder(Size2D(16), 50)
+    mLightProbeBuilder(Size2D(128), 50)
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -327,14 +327,12 @@ namespace EARenderer {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        const LightProbe& probe = mScene->lightProbes()[*mScene->lightProbes().begin()];
-        
         mCookTorranceShader.bind();
+        mCookTorranceShader.setSphericalHarmonicsBufferTexture(mScene->sphericalHarmonicsBufferTexture());
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
-            mCookTorranceShader.setLightProbe(probe);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         

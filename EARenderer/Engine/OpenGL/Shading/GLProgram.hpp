@@ -29,6 +29,7 @@
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2DArray.hpp"
+#include "GLBufferTexture.hpp"
 #include "crc.hpp"
 
 namespace EARenderer {
@@ -57,6 +58,13 @@ namespace EARenderer {
         
         const GLUniform& uniformByNameCRC32(uint32_t crc32);
         void setUniformTexture(uint32_t uniformNameCRC32, const GLTexture& texture);
+        
+        template <typename BufferDataType>
+        void setUniformTexture(uint32_t uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
+            GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
+            glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
+            bufferTexture.bind();
+        }
         
     public:
         using UniformModifierClosure = const std::function<void()>&;

@@ -19,6 +19,7 @@
 #include "Skybox.hpp"
 #include "LightProbe.hpp"
 #include "ResourcePool.hpp"
+#include "GLBufferTexture.hpp"
 
 #include <vector>
 #include <list>
@@ -31,6 +32,8 @@ namespace EARenderer {
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
+        
+        GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
         std::list<ID> mStaticMeshInstanceIDs;
         std::list<ID> mDynamicMeshInstanceIDs;
@@ -48,8 +51,10 @@ namespace EARenderer {
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
         
-        const std::list<ID> staticMeshInstanceIDs() const;
-        const std::list<ID> dynamicMeshInstanceIDs() const;
+        GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
+        
+        const std::list<ID>& staticMeshInstanceIDs() const;
+        const std::list<ID>& dynamicMeshInstanceIDs() const;
         
         void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
         void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);

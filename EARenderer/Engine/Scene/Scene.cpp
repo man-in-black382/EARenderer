@@ -53,11 +53,15 @@ namespace EARenderer {
         return mBoundingBox;
     }
     
-    const std::list<ID> Scene::staticMeshInstanceIDs() const {
+    GLFloat3BufferTexture<SphericalHarmonics>& Scene::sphericalHarmonicsBufferTexture() {
+        return mSphericalHarmonicsBufferTexture;
+    }
+    
+    const std::list<ID>& Scene::staticMeshInstanceIDs() const {
         return mStaticMeshInstanceIDs;
     }
     
-    const std::list<ID> Scene::dynamicMeshInstanceIDs() const {
+    const std::list<ID>& Scene::dynamicMeshInstanceIDs() const {
         return mDynamicMeshInstanceIDs;
     }
     

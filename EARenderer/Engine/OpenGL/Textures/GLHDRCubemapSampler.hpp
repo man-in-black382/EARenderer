@@ -16,6 +16,8 @@ namespace EARenderer {
     
     class GLHDRCubemapSampler: public GLCubemapSampler {
     private:
+        friend GLHDRTextureCubemap;
+        
         const GLHDRTextureCubemap *mCubemap;
         const GLhalf *mPositiveXPixelBuffer = nullptr;
         const GLhalf *mNegativeXPixelBuffer = nullptr;
@@ -24,8 +26,9 @@ namespace EARenderer {
         const GLhalf *mPositiveZPixelBuffer = nullptr;
         const GLhalf *mNegativeZPixelBuffer = nullptr;
         
-    public:
         GLHDRCubemapSampler(const GLHDRTextureCubemap* cubemap);
+        
+    public:
         ~GLHDRCubemapSampler();
         
         Color sample(const glm::vec3& direction) const override;
