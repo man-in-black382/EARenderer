@@ -8,6 +8,8 @@
 
 #include "Triangle.hpp"
 
+#include <glm/gtx/transform.hpp>
+
 namespace EARenderer {
   
 #pragma mark - Lifecycle
@@ -16,5 +18,11 @@ namespace EARenderer {
     :
     a(p1), b(p2), c(p3)
     { }
+    
+#pragma mark - Math
+    
+    float Triangle::area() const {
+        return glm::length(glm::cross(p2 - p1, p3 - p1)) / 2.0f;
+    }
     
 }

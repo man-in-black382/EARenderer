@@ -33,6 +33,8 @@ namespace EARenderer {
         
         Triangle() = default;
         Triangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+        
+        float area() const;
     };
     
 }
