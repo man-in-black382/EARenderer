@@ -95,7 +95,8 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+//            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+            mSkyboxShader.setCubemap(mLightProbeBuilder.mEnvironmentMap);
         });
         mScene->skybox()->draw();
     }
@@ -241,14 +242,7 @@ namespace EARenderer {
             }
         }
         
-//        renderSkybox();
-        mSkyboxShader.bind();
-        mSkyboxShader.ensureSamplerValidity([this]() {
-            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
-            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setCubemap(mLightProbeBuilder.mEnvironmentMap);
-        });
-        mScene->skybox()->draw();
+        renderSkybox();
 
         // Drawing shadow map layer
 //        GLViewport(Size2D(200, 200)).apply();

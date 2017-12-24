@@ -122,7 +122,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
     self.axesRenderer->render();
-//    self.surfelRenderer->render();
+    self.surfelRenderer->render();
     
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

@@ -83,7 +83,7 @@ uniform int uNumberOfCascades;
 
 // Shperical harmonics
 
-//uniform samplerBuffer uSphericalHarmonicsBuffer;
+uniform samplerBuffer uSphericalHarmonicsBuffer;
 uniform bool uShouldEvaluateSphericalHarmonics;
 
 // IBL
@@ -100,39 +100,39 @@ uniform int uSpecularIrradianceMapLOD;
 // Unpacks spherical harmonics coefficients
 // from the corresponding sample buffer
 //
-//SH UnpackSH(int index) {
-//    SH sh;
-//
-//    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
-//    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
-//    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
-//    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
-//    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
-//    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
-//    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
-//    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
-//    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
-//
-//    return sh;
-//
-////    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
-//}
-//
-//float SHRadiance(SH sh, vec3 direction, int component) {
-//    int c = component;
-//
-//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-//            kC3 * sh.L20[c] * (direction.z * direction.z) +
-//            kC4 * sh.L00[c] -
-//            kC5 * sh.L20[c] +
-//            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-//            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
-//}
-//
-//vec3 EvaluateSphericalHarmonics(vec3 direction) {
-//    SH sh = UnpackSH(0);
-//    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
-//}
+SH UnpackSH(int index) {
+    SH sh;
+
+    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
+    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
+    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
+    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
+    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
+    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
+    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
+    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
+    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
+
+    return sh;
+
+//    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
+}
+
+float SHRadiance(SH sh, vec3 direction, int component) {
+    int c = component;
+
+    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
+            kC3 * sh.L20[c] * (direction.z * direction.z) +
+            kC4 * sh.L00[c] -
+            kC5 * sh.L20[c] +
+            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
+            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+}
+
+vec3 EvaluateSphericalHarmonics(vec3 direction) {
+    SH sh = UnpackSH(0);
+    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+}
 
 ////////////////////////////////////////////////////////////
 //////////////////// Lighting equation /////////////////////

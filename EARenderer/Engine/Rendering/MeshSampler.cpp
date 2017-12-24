@@ -141,7 +141,6 @@ namespace EARenderer {
             }
         }
         
-        
         return points;
     }
     

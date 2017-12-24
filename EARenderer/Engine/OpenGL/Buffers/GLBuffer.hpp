@@ -67,7 +67,7 @@ namespace EARenderer {
         
         void initialize(const DataType *data, uint64_t size) {
             bind();
-            glBufferData(mBindingPoint, size * sizeof(DataType), data, GL_DYNAMIC_READ);
+            glBufferData(mBindingPoint, size * sizeof(DataType), data, GL_STATIC_DRAW);
             mSize = size;
         }
         

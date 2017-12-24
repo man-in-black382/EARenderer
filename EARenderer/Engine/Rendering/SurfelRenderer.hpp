@@ -19,7 +19,7 @@ namespace EARenderer {
         Scene *mScene;
         ResourcePool *mResourcePool;
         ID mMeshInstanceID;
-//        GLVertexArray<glm::vec3> mVAO;
+        GLVertexArray<glm::vec3> mVAO;
         std::vector<glm::vec3> mPoints;
         GLSLGenericGeometry mGenericGeometryShader;
         

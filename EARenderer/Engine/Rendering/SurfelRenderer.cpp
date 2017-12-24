@@ -20,15 +20,15 @@ namespace EARenderer {
         MeshInstance& instance = scene->meshInstances()[meshInstanceID];
         MeshSampler sampler(scene, resourcePool);
         mPoints = sampler.samplePointsOnMesh(instance.meshID());
-//        mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
-//            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
-//        }));
+        mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
+        }));
         
         glEnable(GL_PROGRAM_POINT_SIZE);
     }
     
     void SurfelRenderer::render() {
-//        mVAO.bind();
+        mVAO.bind();
         mGenericGeometryShader.bind();
         
         auto& instance = mScene->meshInstances()[mMeshInstanceID];
