@@ -81,16 +81,13 @@ namespace EARenderer {
 //        }
 //    }
     
-    MeshSampler::MeshSampler(Scene *scene, ResourcePool *resourcePool)
+    MeshSampler::MeshSampler(ResourcePool *resourcePool)
     :
-    mScene(scene),
     mResourcePool(resourcePool)
-    {
-        
-    }
+    { }
     
     std::vector<glm::vec3> MeshSampler::samplePointsOnMesh(ID meshID) {
-        const uint32_t kPointCount = 100;
+        const uint32_t kPointCount = 200;
         std::vector<glm::vec3> points;
         points.reserve(kPointCount);
         

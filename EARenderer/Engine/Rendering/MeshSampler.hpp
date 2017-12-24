@@ -19,11 +19,10 @@ namespace EARenderer {
     
     class MeshSampler {
     private:
-        Scene *mScene;
         ResourcePool *mResourcePool;
         
     public:
-        MeshSampler(Scene *scene, ResourcePool *resourcePool);
+        MeshSampler(ResourcePool *resourcePool);
         
         std::vector<glm::vec3> samplePointsOnMesh(ID meshID);
     };

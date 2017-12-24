@@ -18,7 +18,7 @@ namespace EARenderer {
     mMeshInstanceID(meshInstanceID)
     {
         MeshInstance& instance = scene->meshInstances()[meshInstanceID];
-        MeshSampler sampler(scene, resourcePool);
+        MeshSampler sampler(resourcePool);
         mPoints = sampler.samplePointsOnMesh(instance.meshID());
         mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
