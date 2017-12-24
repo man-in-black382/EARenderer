@@ -143,9 +143,11 @@
     scuffedTitaniumSphereInstance.setTransformation(t);
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(ironSphereInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+    
+    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
+    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
     
     // Skybox
     

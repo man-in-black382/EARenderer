@@ -71,12 +71,7 @@ namespace EARenderer {
 //        //
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
-        void renderShadowMapsForPointLights();
-        void renderDirectionalLighting(const FrustumCascades& cascades);
-        void renderPointLighting();
         void renderSkybox();
-        
-        void renderClassicMeshes();
         
         void convertEquirectangularMapToCubemap();
         void buildDiffuseIrradianceMap();

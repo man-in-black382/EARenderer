@@ -22,12 +22,10 @@ namespace EARenderer {
         Scene *mScene;
         ResourcePool *mResourcePool;
         
-        uint32_t mProbabilityDensity;
-        
     public:
-        MeshSampler(Scene *scene, ResourcePool *resourcePool, uint32_t probabilityDensity);
+        MeshSampler(Scene *scene, ResourcePool *resourcePool);
         
-        std::vector<glm::vec3> samplePointsForMesh(ID meshID);
+        std::vector<glm::vec3> samplePointsOnMesh(ID meshID);
     };
     
 }

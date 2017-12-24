@@ -48,7 +48,7 @@ namespace EARenderer {
 //        buildSpecularIrradianceMap();
 //        buildBRDFIntegrationMap();
         
-        mLightProbeBuilder.buildAndPlaceProbesInScene(scene);
+//        mLightProbeBuilder.buildAndPlaceProbesInScene(scene);
     }
     
 #pragma mark - Setters
@@ -100,8 +100,6 @@ namespace EARenderer {
         mScene->skybox()->draw();
     }
     
-#pragma mark Blinn-Phong
-    
     void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
         // Fill shadow map
         mDirectionalDepthShader.bind();
@@ -125,117 +123,6 @@ namespace EARenderer {
                 }
             }
         }
-    }
-    
-    void SceneRenderer::renderShadowMapsForPointLights() {
-//        mOmnidirectionalDepthShader.bind();
-//        mDepthFramebuffer.attachTexture(mShadowCubeMap);
-//
-//        glClear(GL_DEPTH_BUFFER_BIT);
-//
-//        for (ID subMeshID : mScene->subMeshes()) {
-//            SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-//            ID meshID = subMesh.meshID();
-//            ID transformID = mScene->meshes()[meshID].transformID();
-//            Transformation& transform = mScene->transforms()[transformID];
-//            ID lightID = *(mScene->pointLights().begin());
-//            PointLight& light = mScene->pointLights()[lightID];
-//
-//            mOmnidirectionalDepthShader.setModelMatrix(transform.modelMatrix());
-//            mOmnidirectionalDepthShader.setLight(light);
-//
-//            subMesh.draw();
-//        }
-    }
-    
-    void SceneRenderer::renderDirectionalLighting(const FrustumCascades& cascades) {
-//        ID lightID = *(mScene->directionalLights().begin());
-//        DirectionalLight& light = mScene->directionalLights()[lightID];
-//
-//        mDirectionalBlinnPhongShader.bind();
-//
-//        for (ID subMeshID : mScene->subMeshes()) {
-//            mDirectionalBlinnPhongShader.ensureSamplerValidity([&]() {
-//                mDirectionalBlinnPhongShader.setCamera(*(mScene->camera()));
-//                mDirectionalBlinnPhongShader.setDirectionalLight(light);
-//                mDirectionalBlinnPhongShader.setShadowMaps(mCascadedShadowMaps);
-//                mDirectionalBlinnPhongShader.setShadowCascades(cascades);
-//
-//                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-//                ID meshID = subMesh.meshID();
-//                Mesh& mesh = mScene->meshes()[meshID];
-//                ID transformID = mesh.transformID();
-//                Transformation& transform = mScene->transforms()[transformID];
-//
-//                mDirectionalBlinnPhongShader.setModelMatrix(transform.modelMatrix());
-//
-//                ID materialID = *(mScene->classicMaterials().begin());
-//                ClassicMaterial& material = mScene->classicMaterials()[materialID];
-//
-//                mDirectionalBlinnPhongShader.setMaterial(material);
-//                mDirectionalBlinnPhongShader.setHighlightColor(mesh.isHighlighted() ? Color::gray() : Color::black());
-//
-//                subMesh.draw();
-//            });
-//        }
-    }
-    
-    void SceneRenderer::renderPointLighting() {
-//        mOmnidirectionalBlinnPhongShader.bind();
-//
-//        for (ID subMeshID : mScene->subMeshes()) {
-//            mOmnidirectionalBlinnPhongShader.ensureSamplerValidity([&]() {
-//                SubMesh& subMesh = mScene->subMeshes()[subMeshID];
-//                ID meshID = subMesh.meshID();
-//                Mesh& mesh = mScene->meshes()[meshID];
-//                ID transformID = mesh.transformID();
-//                Transformation& transform = mScene->transforms()[transformID];
-//
-//                ID lightID = *(mScene->directionalLights().begin());
-//                PointLight& light = mScene->pointLights()[lightID];
-//
-//                mOmnidirectionalBlinnPhongShader.setModelMatrix(transform.modelMatrix());
-//                mOmnidirectionalBlinnPhongShader.setCamera(*(mScene->camera()));
-//                mOmnidirectionalBlinnPhongShader.setPointLight(light);
-//                mOmnidirectionalBlinnPhongShader.setShadowMap(mShadowCubeMap);
-//
-//                ID materialID = *(mScene->classicMaterials().begin());
-//                ClassicMaterial& material = mScene->classicMaterials()[materialID];
-//
-//                mOmnidirectionalBlinnPhongShader.setMaterial(material);
-//
-//                subMesh.draw();
-//            });
-//        }
-    }
-    
-    void SceneRenderer::renderClassicMeshes() {
-//        glEnable(GL_CULL_FACE);
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-//        glClearColor(0.0, 0.0, 0.0, 1.0);
-//
-//        mDepthFramebuffer.bind();
-//        mDepthFramebuffer.viewport().apply();
-//
-//        ID lightID = *(mScene->directionalLights().begin());
-//        DirectionalLight& light = mScene->directionalLights()[lightID];
-//        FrustumCascades cascades = light.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
-//
-////        renderShadowMapsForDirectionalLights(cascades);
-//        renderShadowMapsForPointLights();
-//
-//        if (mDefaultRenderComponentsProvider) {
-//            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-//            mDefaultRenderComponentsProvider->defaultViewport().apply();
-//        }
-//
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        //
-////        renderDirectionalLighting(cascades);
-//        renderPointLighting();
-//        renderSkybox();
     }
     
 #pragma mark Cook-Torrance
@@ -328,7 +215,7 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
-        mCookTorranceShader.setSphericalHarmonicsBufferTexture(mScene->sphericalHarmonicsBufferTexture());
+//        mCookTorranceShader.setSphericalHarmonicsBufferTexture(mScene->sphericalHarmonicsBufferTexture());
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
@@ -362,14 +249,15 @@ namespace EARenderer {
             mSkyboxShader.setCubemap(mLightProbeBuilder.mEnvironmentMap);
         });
         mScene->skybox()->draw();
-        
-        GLViewport(Size2D(200, 200)).apply();
-        mFSQuadShader.bind();
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(mShadowMaps, 0);
-        });
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 4);
+
+        // Drawing shadow map layer
+//        GLViewport(Size2D(200, 200)).apply();
+//        mFSQuadShader.bind();
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(mShadowMaps, 0);
+//        });
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//        glDrawArrays(GL_TRIANGLES, 0, 4);
     }
 
 }

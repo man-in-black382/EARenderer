@@ -236,6 +236,7 @@
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC7B03F1FA635800097CFDE /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B03E1FA635780097CFDE /* sponza.obj */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
+		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
 /* End PBXBuildFile section */
 
@@ -852,6 +853,8 @@
 		CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC7B03E1FA635780097CFDE /* sponza.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
+		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
+		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
 		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1244,6 +1247,8 @@
 				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
 				AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */,
 				AC9B6BBF1FED3874006CC12E /* MeshSampler.hpp */,
+				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
+				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -2269,6 +2274,7 @@
 				CE70FA921F8F912300AD9027 /* LightListTabViewItem.mm in Sources */,
 				CE70FA2E1F8F8EF600AD9027 /* PointLight.cpp in Sources */,
 				CE70FA3F1F8F8EF600AD9027 /* GLLayeredTexture.cpp in Sources */,
+				CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */,
 				CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */,
 				CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */,
 				CE70FA8E1F8F912300AD9027 /* FPSView.mm in Sources */,

@@ -13,4 +13,6 @@
 
 @interface DemoScene1 : NSObject <DemoSceneComposing>
 
+@property (assign, nonatomic, readonly) EARenderer::ID sphereMeshInstanceID;
+
 @end

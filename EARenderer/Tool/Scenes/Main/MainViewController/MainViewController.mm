@@ -25,6 +25,7 @@
 #import "FileManager.hpp"
 #import "FrameMeter.hpp"
 #import "Throttle.hpp"
+#import "SurfelRenderer.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -46,6 +47,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::Cameraman *cameraman;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
+@property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
 
 // DEBUG
 @property (strong, nonatomic) DemoScene1 *demoScene;
@@ -108,6 +110,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
     
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene,
+                                                         &EARenderer::ResourcePool::shared(),
+                                                         self.demoScene.sphereMeshInstanceID);
+    
     [self subscribeForEvents];
 }
 
@@ -116,6 +122,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
     self.axesRenderer->render();
+//    self.surfelRenderer->render();
     
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }
