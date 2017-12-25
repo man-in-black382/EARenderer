@@ -8,78 +8,13 @@
 
 #include "MeshSampler.hpp"
 #include "Triangle.hpp"
+#include "LowDiscrepancySequence.hpp"
 
 #include <random>
 
+#define NUM_SAMPLES 100
+
 namespace EARenderer {
-    
-//    void TestHammersley1D (size_t truncateBits)
-//    {
-//        // calculate the sample points
-//        std::array<float, NUM_SAMPLES> samples;
-//        size_t sampleInt = 0;
-//        for (size_t i = 0; i < NUM_SAMPLES; ++i)
-//        {
-//            size_t n = i >> truncateBits;
-//            float base = 1.0f / 2.0f;
-//            samples[i] = 0.0f;
-//            while (n)
-//            {
-//                if (n & 1)
-//                    samples[i] += base;
-//                n /= 2;
-//                base /= 2.0f;
-//            }
-//        }
-//    }
-//
-//    void TestHammersley2D (size_t truncateBits)
-//    {
-//        // figure out how many bits we are working in.
-//        size_t value = 1;
-//        size_t numBits = 0;
-//        while (value < NUM_SAMPLES)
-//        {
-//            value *= 2;
-//            ++numBits;
-//        }
-//
-//        // calculate the sample points
-//        std::array<std::array<float, 2>, NUM_SAMPLES> samples;
-//        size_t sampleInt = 0;
-//        for (size_t i = 0; i < NUM_SAMPLES; ++i)
-//        {
-//            // x axis
-//            samples[i][0] = 0.0f;
-//            {
-//                size_t n = i >> truncateBits;
-//                float base = 1.0f / 2.0f;
-//                while (n)
-//                {
-//                    if (n & 1)
-//                        samples[i][0] += base;
-//                    n /= 2;
-//                    base /= 2.0f;
-//                }
-//            }
-//
-//            // y axis
-//            samples[i][1] = 0.0f;
-//            {
-//                size_t n = i >> truncateBits;
-//                size_t mask = size_t(1) << (numBits - 1 - truncateBits);
-//
-//                float base = 1.0f / 2.0f;
-//                while (mask)
-//                {
-//                    if (n & mask)
-//                        samples[i][1] += base;
-//                    mask /= 2;
-//                    base /= 2.0f;
-//                }
-//            }
-//        }
-//    }
     
     MeshSampler::MeshSampler(ResourcePool *resourcePool)
     :

@@ -12,6 +12,7 @@
 		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
 		AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */; };
 		AC9B6BC01FED3874006CC12E /* MeshSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */; };
+		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -251,6 +252,8 @@
 		AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapFace.cpp; sourceTree = "<group>"; };
 		AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshSampler.cpp; sourceTree = "<group>"; };
 		AC9B6BBF1FED3874006CC12E /* MeshSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshSampler.hpp; sourceTree = "<group>"; };
+		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
+		AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LowDiscrepancySequence.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -1209,6 +1212,8 @@
 				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
 				CE058FFF1FA73C7A00822524 /* crc.hpp */,
 				CE0590051FA77C6100822524 /* crc.cpp */,
+				AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */,
+				AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2235,6 +2240,7 @@
 				CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */,
 				CE70FA491F8F8EF600AD9027 /* GLShader.cpp in Sources */,
 				CE70FA931F8F912300AD9027 /* SceneGLView.mm in Sources */,
+				AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */,
 				CE70FA451F8F8EF600AD9027 /* GLSLCubemapRendering.cpp in Sources */,
 				CE70FA531F8F8EF600AD9027 /* GLNamedObject.cpp in Sources */,
 				CE70FA8D1F8F912300AD9027 /* SceneEditorTabView.mm in Sources */,
