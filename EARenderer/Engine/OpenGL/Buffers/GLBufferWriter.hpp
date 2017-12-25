@@ -34,6 +34,7 @@ namespace EARenderer {
         
     public:
         void writeAt(uint64_t index, const DataType& data) {
+            ASSERT(mBufferSize > 0, "Attempt to write to a zero-sized buffer. Did you forget to allocate space for data first?");
             ASSERT(index < mBufferSize, "Index out of range. Attempt to write to an OpenGL buffer outside of its boundaries.");
             mData[index] = data;
         }

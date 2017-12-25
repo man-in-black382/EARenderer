@@ -17,7 +17,10 @@ namespace EARenderer {
     template <typename Vertex>
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
-        GLVertexArrayBuffer() : GLBuffer<Vertex>(GL_ARRAY_BUFFER) { }
+        GLVertexArrayBuffer()
+        :
+        GLBuffer<Vertex>(GL_ARRAY_BUFFER, GL_STATIC_DRAW)
+        { }
     };
     
 }

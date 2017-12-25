@@ -21,6 +21,7 @@ namespace EARenderer {
     class GLBuffer: public GLNamedObject, public GLBindable {
     private:
         GLint mBindingPoint;
+        GLenum mUsageMode;
         uint64_t mSize;
         
     public:
@@ -31,9 +32,10 @@ namespace EARenderer {
         
 #pragma mark - Lifecycle
         
-        GLBuffer(GLint bindingPoint)
+        GLBuffer(GLint bindingPoint, GLenum usageMode)
         :
-        mBindingPoint(bindingPoint)
+        mBindingPoint(bindingPoint),
+        mUsageMode(usageMode)
         {
             glGenBuffers(1, &mName);
         }
@@ -61,13 +63,13 @@ namespace EARenderer {
         
         void initialize(const std::vector<DataType>& data) {
             bind();
-            glBufferData(mBindingPoint, data.size() * sizeof(DataType), data.data(), GL_STATIC_DRAW);
+            glBufferData(mBindingPoint, data.size() * sizeof(DataType), data.data(), mUsageMode);
             mSize = data.size();
         }
         
         void initialize(const DataType *data, uint64_t size) {
             bind();
-            glBufferData(mBindingPoint, size * sizeof(DataType), data, GL_STATIC_DRAW);
+            glBufferData(mBindingPoint, size * sizeof(DataType), data, mUsageMode);
             mSize = size;
         }
         

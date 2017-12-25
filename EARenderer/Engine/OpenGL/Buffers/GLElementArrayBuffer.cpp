@@ -12,7 +12,7 @@ namespace EARenderer {
     
     GLElementArrayBuffer::GLElementArrayBuffer()
     :
-    GLBuffer<GLushort>(GL_ELEMENT_ARRAY_BUFFER)
+    GLBuffer<GLushort>(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW)
     { }
     
 }
