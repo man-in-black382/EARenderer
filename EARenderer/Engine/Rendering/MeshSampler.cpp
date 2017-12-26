@@ -10,10 +10,6 @@
 #include "Triangle.hpp"
 #include "LowDiscrepancySequence.hpp"
 
-#include <random>
-
-#define NUM_SAMPLES 100
-
 namespace EARenderer {
     
     MeshSampler::MeshSampler(ResourcePool *resourcePool)
@@ -22,14 +18,10 @@ namespace EARenderer {
     { }
     
     std::vector<glm::vec3> MeshSampler::samplePointsOnMesh(ID meshID) {
-        const uint32_t kPointCount = 200;
+        const uint32_t kPointCount = 256;
         std::vector<glm::vec3> points;
         points.reserve(kPointCount);
-        
-        std::random_device rd;
-        std::mt19937 mt(rd());
-        std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-        
+
         Mesh& mesh = mResourcePool->meshes[meshID];
         for (ID subMeshID : mesh.subMeshes()) {
             SubMesh& subMesh = mesh.subMeshes()[subMeshID];
@@ -49,7 +41,7 @@ namespace EARenderer {
             }
             
             for (int32_t i = 0; i < kPointCount; i++) {
-                float randomNumber = dist(mt);
+                float randomNumber = LowDiscrepancySequence::Hammersley1D(i, kPointCount);
                 float cumulativePropability = 0.0f;
                 
                 for (int32_t j = 0; j < probabilities.size(); j++) {
@@ -60,8 +52,10 @@ namespace EARenderer {
                         auto& B = subMesh.vertices()[j * 3 + 1].position;
                         auto& C = subMesh.vertices()[j * 3 + 2].position;
 
-                        float r1 = dist(mt);
-                        float r2 = dist(mt);
+                        auto hammersley2D = LowDiscrepancySequence::Hammersley2D(i, kPointCount);
+ 
+                        float r1 = std::get<0>(hammersley2D);
+                        float r2 = std::get<1>(hammersley2D);
                         float r1root = sqrtf(r1);
                         
                         // P = (1 − √r1)A + √r1(1 − r2)B + √r1r2C
