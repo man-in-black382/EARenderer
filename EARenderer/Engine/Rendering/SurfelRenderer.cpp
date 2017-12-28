@@ -7,7 +7,7 @@
 //
 
 #include "SurfelRenderer.hpp"
-#include "MeshSampler.hpp"
+#include "SurfelGenerator.hpp"
 
 namespace EARenderer {
     
@@ -17,27 +17,27 @@ namespace EARenderer {
     mResourcePool(resourcePool),
     mMeshInstanceID(meshInstanceID)
     {
-        MeshInstance& instance = scene->meshInstances()[meshInstanceID];
-        MeshSampler sampler(resourcePool);
-        mPoints = sampler.samplePointsOnMesh(instance.meshID());
-        mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
-        }));
-        
-        glEnable(GL_PROGRAM_POINT_SIZE);
+//        MeshInstance& instance = scene->meshInstances()[meshInstanceID];
+//        SurfelGenerator sampler(resourcePool);
+//        mPoints = sampler.samplePointsOnMesh(instance.meshID());
+//        mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
+//            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
+//        }));
+//
+//        glEnable(GL_PROGRAM_POINT_SIZE);
     }
     
     void SurfelRenderer::render() {
-        mVAO.bind();
-        mGenericGeometryShader.bind();
-        
-        auto& instance = mScene->meshInstances()[mMeshInstanceID];
-        auto mvp = mScene->camera()->viewProjectionMatrix() * instance.transformation().modelMatrix();
-        
-        mGenericGeometryShader.setModelViewProjectionMatrix(mvp);
-        mGenericGeometryShader.setColor(Color::red());
-        
-        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mPoints.size()));
+//        mVAO.bind();
+//        mGenericGeometryShader.bind();
+//
+//        auto& instance = mScene->meshInstances()[mMeshInstanceID];
+//        auto mvp = mScene->camera()->viewProjectionMatrix() * instance.transformation().modelMatrix();
+//
+//        mGenericGeometryShader.setModelViewProjectionMatrix(mvp);
+//        mGenericGeometryShader.setColor(Color::red());
+//
+//        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mPoints.size()));
     }
     
 }

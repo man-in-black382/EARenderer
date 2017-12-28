@@ -26,6 +26,7 @@
 #import "FrameMeter.hpp"
 #import "Throttle.hpp"
 #import "SurfelRenderer.hpp"
+#import "SurfelGenerator.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -48,6 +49,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
+@property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
 
 // DEBUG
 @property (strong, nonatomic) DemoScene1 *demoScene;
@@ -107,8 +109,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
                                                            self.scene,
                                                            self.axesRenderer,
-                                                           self.sceneRenderer,
+                                                            self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
+    
+    self.surfelGenerator = new EARenderer::SurfelGenerator(&EARenderer::ResourcePool::shared());
+    self.surfelGenerator->generateStaticGeometrySurfels(self.scene);
     
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene,
                                                          &EARenderer::ResourcePool::shared(),

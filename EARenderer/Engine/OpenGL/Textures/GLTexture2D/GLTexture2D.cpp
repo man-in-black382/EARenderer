@@ -51,7 +51,21 @@ namespace EARenderer {
         glTexImage2D(GL_TEXTURE_2D, 0, texComponents, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
         stbi_image_free(pixelData);
         
-        glGenerateMipmap(GL_TEXTURE_2D);
+        generateMipmaps();
     };
+    
+#pragma mark - Sampling
+    
+    const GLubyte* GLTexture2D::pixelBuffer() const {
+        bind();
+        GLubyte *ptr = new GLubyte[mSize.width * mSize.height * 4];
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+        return ptr;
+    }
+    
+    void GLTexture2D::sampleTexels(SamplerClosure samplerClosure) const {
+        bind();
+        samplerClosure(GLTexture2DSampler(this));
+    }
  
 }

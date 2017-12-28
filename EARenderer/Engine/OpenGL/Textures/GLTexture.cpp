@@ -10,6 +10,8 @@
 #include "GLTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
 
+#include <cmath>
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -42,6 +44,10 @@ namespace EARenderer {
         return mSize;
     }
     
+    uint16_t GLTexture::mipMapsCount() const {
+        return mMipMapsCount;
+    }
+    
 #pragma mark - Binding
     
     void GLTexture::bind() const {
@@ -52,6 +58,7 @@ namespace EARenderer {
         bind();
         glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glGenerateMipmap(mBindingPoint);
+        mMipMapsCount = floor(std::log2(std::max(mSize.width, mSize.height)));
     }
     
 }

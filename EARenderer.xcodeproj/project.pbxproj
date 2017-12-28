@@ -11,8 +11,10 @@
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
 		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
 		AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */; };
-		AC9B6BC01FED3874006CC12E /* MeshSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */; };
+		AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */; };
 		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
+		ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */; };
+		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -250,10 +252,14 @@
 		AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
 		AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.vert; sourceTree = "<group>"; };
 		AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapFace.cpp; sourceTree = "<group>"; };
-		AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshSampler.cpp; sourceTree = "<group>"; };
-		AC9B6BBF1FED3874006CC12E /* MeshSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshSampler.hpp; sourceTree = "<group>"; };
+		AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelGenerator.cpp; sourceTree = "<group>"; };
+		AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelGenerator.hpp; sourceTree = "<group>"; };
 		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
 		AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LowDiscrepancySequence.hpp; sourceTree = "<group>"; };
+		ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture2DSampler.cpp; sourceTree = "<group>"; };
+		ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DSampler.hpp; sourceTree = "<group>"; };
+		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
+		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -873,6 +879,94 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		ACB0AA431FF4EC3500CD6A11 /* GLTexture2D */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
+				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
+				ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */,
+				ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */,
+			);
+			path = GLTexture2D;
+			sourceTree = "<group>";
+		};
+		ACB0AA441FF4EC4500CD6A11 /* GLDepthTexture2D */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9BF1F8F8EBD00AD9027 /* GLDepthTexture2D.cpp */,
+				CE70F9C21F8F8EBD00AD9027 /* GLDepthTexture2D.hpp */,
+			);
+			path = GLDepthTexture2D;
+			sourceTree = "<group>";
+		};
+		ACB0AA451FF4EC5300CD6A11 /* GLDepthTexture2DArray */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */,
+				CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */,
+			);
+			path = GLDepthTexture2DArray;
+			sourceTree = "<group>";
+		};
+		ACB0AA461FF4EC6500CD6A11 /* GLTextureCubemap */ = {
+			isa = PBXGroup;
+			children = (
+				CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */,
+				AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */,
+				CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */,
+				CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */,
+				CE70F9C31F8F8EBD00AD9027 /* GLTextureCubemap.cpp */,
+				CE70F9BE1F8F8EBD00AD9027 /* GLTextureCubemap.hpp */,
+			);
+			path = GLTextureCubemap;
+			sourceTree = "<group>";
+		};
+		ACB0AA471FF4EC6E00CD6A11 /* GLDepthTextureCubemap */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */,
+				CE70F9B81F8F8EBD00AD9027 /* GLDepthTextureCubemap.hpp */,
+			);
+			path = GLDepthTextureCubemap;
+			sourceTree = "<group>";
+		};
+		ACB0AA481FF4EC7700CD6A11 /* GLHDRTextureCubemap */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9BA1F8F8EBD00AD9027 /* GLHDRTextureCubemap.cpp */,
+				CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */,
+				CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */,
+				CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */,
+			);
+			path = GLHDRTextureCubemap;
+			sourceTree = "<group>";
+		};
+		ACB0AA491FF4EC8600CD6A11 /* GLHDRTexture2D */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */,
+				CE70F9C41F8F8EBD00AD9027 /* GLHDRTexture2D.hpp */,
+			);
+			path = GLHDRTexture2D;
+			sourceTree = "<group>";
+		};
+		ACB0AA4A1FF4EC9100CD6A11 /* GLTexture2DArray */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
+				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
+			);
+			path = GLTexture2DArray;
+			sourceTree = "<group>";
+		};
+		ACB0AA4B1FF4ECD400CD6A11 /* GLBufferTexture */ = {
+			isa = PBXGroup;
+			children = (
+				AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */,
+			);
+			path = GLBufferTexture;
+			sourceTree = "<group>";
+		};
 		CE3791741FA366640049BD1B /* Patchy Cement */ = {
 			isa = PBXGroup;
 			children = (
@@ -1250,8 +1344,8 @@
 				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
 				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
 				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
-				AC9B6BBE1FED3874006CC12E /* MeshSampler.cpp */,
-				AC9B6BBF1FED3874006CC12E /* MeshSampler.hpp */,
+				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
+				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
 				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
 				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
 			);
@@ -1380,6 +1474,8 @@
 				CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */,
 				CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */,
 				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
+				ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */,
+				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -1756,31 +1852,17 @@
 			children = (
 				CE70F9B91F8F8EBD00AD9027 /* GLTexture.cpp */,
 				CE70F9C71F8F8EBD00AD9027 /* GLTexture.hpp */,
-				CE70F9BF1F8F8EBD00AD9027 /* GLDepthTexture2D.cpp */,
-				CE70F9C21F8F8EBD00AD9027 /* GLDepthTexture2D.hpp */,
-				CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */,
-				CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */,
-				CE70F9C31F8F8EBD00AD9027 /* GLTextureCubemap.cpp */,
-				CE70F9BE1F8F8EBD00AD9027 /* GLTextureCubemap.hpp */,
-				CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */,
-				CE70F9B81F8F8EBD00AD9027 /* GLDepthTextureCubemap.hpp */,
-				CE70F9BA1F8F8EBD00AD9027 /* GLHDRTextureCubemap.cpp */,
-				CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */,
-				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
-				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
-				CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */,
-				CE70F9C41F8F8EBD00AD9027 /* GLHDRTexture2D.hpp */,
 				CE70F9C51F8F8EBD00AD9027 /* GLLayeredTexture.cpp */,
 				CE70F9B71F8F8EBD00AD9027 /* GLLayeredTexture.hpp */,
-				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
-				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
-				CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */,
-				AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */,
-				CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */,
-				CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */,
-				CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */,
-				CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */,
-				AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */,
+				ACB0AA431FF4EC3500CD6A11 /* GLTexture2D */,
+				ACB0AA491FF4EC8600CD6A11 /* GLHDRTexture2D */,
+				ACB0AA441FF4EC4500CD6A11 /* GLDepthTexture2D */,
+				ACB0AA4A1FF4EC9100CD6A11 /* GLTexture2DArray */,
+				ACB0AA451FF4EC5300CD6A11 /* GLDepthTexture2DArray */,
+				ACB0AA461FF4EC6500CD6A11 /* GLTextureCubemap */,
+				ACB0AA481FF4EC7700CD6A11 /* GLHDRTextureCubemap */,
+				ACB0AA471FF4EC6E00CD6A11 /* GLDepthTextureCubemap */,
+				ACB0AA4B1FF4ECD400CD6A11 /* GLBufferTexture */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -2208,6 +2290,7 @@
 				CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */,
 				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
+				ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */,
 				CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
@@ -2259,7 +2342,7 @@
 				CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */,
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,
-				AC9B6BC01FED3874006CC12E /* MeshSampler.cpp in Sources */,
+				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
@@ -2280,6 +2363,7 @@
 				CE70FA921F8F912300AD9027 /* LightListTabViewItem.mm in Sources */,
 				CE70FA2E1F8F8EF600AD9027 /* PointLight.cpp in Sources */,
 				CE70FA3F1F8F8EF600AD9027 /* GLLayeredTexture.cpp in Sources */,
+				ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */,
 				CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */,
 				CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */,
 				CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */,

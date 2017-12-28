@@ -58,6 +58,10 @@ namespace EARenderer {
         return glm::translate(translation);
     }
     
+    glm::mat4 Transformation::normalMatrix() const {
+        return glm::transpose(glm::inverse(modelMatrix()));
+    }
+    
     glm::mat4 Transformation::inverseScaleMatrix() const {
         return glm::inverse(glm::scale(scale));
     }

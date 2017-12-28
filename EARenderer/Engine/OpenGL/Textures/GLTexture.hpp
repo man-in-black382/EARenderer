@@ -22,6 +22,7 @@ namespace EARenderer {
         
     protected:
         Size2D mSize;
+        uint16_t mMipMapsCount = 0;
     
         GLTexture(GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
         GLTexture(const Size2D& size, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
@@ -34,6 +35,7 @@ namespace EARenderer {
         ~GLTexture() override = 0;
         
         const Size2D& size() const;
+        uint16_t mipMapsCount() const;
         
         void bind() const override;
         void generateMipmaps();

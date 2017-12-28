@@ -10,6 +10,7 @@
 #define Vertex1P1N1UV1T1BT_hpp
 
 #include "Vertex1P1N1UV.hpp"
+#include "Transformation.hpp"
 
 namespace EARenderer {
     
@@ -30,6 +31,8 @@ namespace EARenderer {
                            const glm::vec3& normal,
                            const glm::vec3& tangent,
                            const glm::vec3& bitangent);
+        
+        Vertex1P1N1UV1T1BT transformedBy(const Transformation& t);
     };
     
 }
