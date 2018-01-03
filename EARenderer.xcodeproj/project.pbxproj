@@ -228,6 +228,12 @@
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CE81CB161FA24F6200535020 /* blank_black.png in Resources */ = {isa = PBXBuildFile; fileRef = CE81CB151FA24ED000535020 /* blank_black.png */; };
 		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
+		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
+		CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */; };
+		CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */; };
+		CE9617771FF83CCD00A5E9FC /* SurfelRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */; };
+		CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */; };
+		CE96177A1FF83E5200A5E9FC /* SurfelRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */; };
 		CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A431FCAF0090090F1EE /* Collision.cpp */; };
 		CEA95A4B1FCB00230090F1EE /* Triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A491FCB00230090F1EE /* Triangle.cpp */; };
 		CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A4C1FCB02920090F1EE /* Interval.cpp */; };
@@ -769,6 +775,15 @@
 		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
 		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
 		CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoSceneComposing.h; sourceTree = "<group>"; };
+		CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleRenderer.cpp; sourceTree = "<group>"; };
+		CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TriangleRenderer.hpp; sourceTree = "<group>"; };
+		CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleRendering.geom; sourceTree = "<group>"; };
+		CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLTriangleRendering.cpp; sourceTree = "<group>"; };
+		CE9617721FF8287A00A5E9FC /* GLSLTriangleRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLTriangleRendering.hpp; sourceTree = "<group>"; };
+		CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.geom; sourceTree = "<group>"; };
+		CE9617751FF83CCD00A5E9FC /* GLSLSurfelRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelRendering.hpp; sourceTree = "<group>"; };
+		CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelRendering.cpp; sourceTree = "<group>"; };
+		CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.vert; sourceTree = "<group>"; };
 		CE9774C41FA5D72D00F5699C /* Sponza_Details_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Details_diffuse.tga; sourceTree = "<group>"; };
 		CE9774C51FA5D72D00F5699C /* Sponza_Thorn_roughness.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Thorn_roughness.tga; sourceTree = "<group>"; };
 		CE9774C61FA5D72D00F5699C /* Vase_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Vase_diffuse.tga; sourceTree = "<group>"; };
@@ -1330,6 +1345,8 @@
 		CE70F8521F8F8EBD00AD9027 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */,
+				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
 				CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */,
 				CE70F8571F8F8EBD00AD9027 /* AxesRenderer.hpp */,
 				CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */,
@@ -1340,14 +1357,14 @@
 				CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */,
 				CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */,
 				CE70F8591F8F8EBD00AD9027 /* Drawable.hpp */,
-				CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */,
-				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
 				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
 				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
 				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
 				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
 				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
 				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
+				CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */,
+				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -1901,7 +1918,7 @@
 				CE70F9EB1F8F8EBD00AD9027 /* BlinnPhong */,
 				CE70FA091F8F8EBD00AD9027 /* PBR */,
 				CE70F9E21F8F8EBD00AD9027 /* FullScreenQuad */,
-				CE70FA031F8F8EBD00AD9027 /* GenericGeometry */,
+				CE70FA031F8F8EBD00AD9027 /* Debug */,
 				CE70F9D71F8F8EBD00AD9027 /* RenderToCubemap */,
 				CE70F9FE1F8F8EBD00AD9027 /* Skybox */,
 			);
@@ -1964,15 +1981,22 @@
 			path = Skybox;
 			sourceTree = "<group>";
 		};
-		CE70FA031F8F8EBD00AD9027 /* GenericGeometry */ = {
+		CE70FA031F8F8EBD00AD9027 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
 				CE70FA061F8F8EBD00AD9027 /* GenericGeometry.frag */,
 				CE70FA051F8F8EBD00AD9027 /* GenericGeometry.vert */,
 				CE70FA071F8F8EBD00AD9027 /* GLSLGenericGeometry.cpp */,
 				CE70FA041F8F8EBD00AD9027 /* GLSLGenericGeometry.hpp */,
+				CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */,
+				CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */,
+				CE9617721FF8287A00A5E9FC /* GLSLTriangleRendering.hpp */,
+				CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */,
+				CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */,
+				CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */,
+				CE9617751FF83CCD00A5E9FC /* GLSLSurfelRendering.hpp */,
 			);
-			path = GenericGeometry;
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		CE70FA091F8F8EBD00AD9027 /* PBR */ = {
@@ -2160,6 +2184,7 @@
 				CE70FA591F8F8F7400AD9027 /* FullScreenQuad.vert in Resources */,
 				CE4DE24E1FA60CFF0067729A /* VasePlant_roughness.tga in Resources */,
 				CE81CB161FA24F6200535020 /* blank_black.png in Resources */,
+				CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */,
 				CE4DE2291FA60CFF0067729A /* Sponza_Curtain_metallic.tga in Resources */,
 				CE70FA5A1F8F8F7400AD9027 /* FullScreenQuad.frag in Resources */,
 				CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */,
@@ -2168,6 +2193,7 @@
 				CE4DE22F1FA60CFF0067729A /* Sponza_Details_normal.tga in Resources */,
 				CE70FA5B1F8F8F7400AD9027 /* DirectionalDepth.vert in Resources */,
 				CE4DE2271FA60CFF0067729A /* Sponza_Curtain_Green_diffuse.tga in Resources */,
+				CE96177A1FF83E5200A5E9FC /* SurfelRendering.vert in Resources */,
 				CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */,
 				CE70FA5C1F8F8F7400AD9027 /* OmnidirectionalDepth.frag in Resources */,
 				CE4DE20C1FA60CFE0067729A /* copyright.txt in Resources */,
@@ -2247,6 +2273,7 @@
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
+				CE9617771FF83CCD00A5E9FC /* SurfelRendering.geom in Resources */,
 				CE4DE2381FA60CFF0067729A /* Sponza_Fabric_roughness.tga in Resources */,
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
@@ -2309,6 +2336,7 @@
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
 				CEA95A4B1FCB00230090F1EE /* Triangle.cpp in Sources */,
 				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
+				CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
@@ -2319,6 +2347,7 @@
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
+				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
 				CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */,
 				CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */,
 				CE70FA491F8F8EF600AD9027 /* GLShader.cpp in Sources */,
@@ -2334,6 +2363,7 @@
 				CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
+				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
 				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,

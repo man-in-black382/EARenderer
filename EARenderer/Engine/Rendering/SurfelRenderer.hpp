@@ -10,7 +10,8 @@
 #define SurfelRenderer_hpp
 
 #include "Scene.hpp"
-#include "GLSLGenericGeometry.hpp"
+#include "GLSLSurfelRendering.hpp"
+#include "Surfel.hpp"
 
 namespace EARenderer {
     
@@ -18,13 +19,12 @@ namespace EARenderer {
     private:
         Scene *mScene;
         ResourcePool *mResourcePool;
-        ID mMeshInstanceID;
-        GLVertexArray<glm::vec3> mVAO;
-        std::vector<glm::vec3> mPoints;
-        GLSLGenericGeometry mGenericGeometryShader;
+        GLVertexArray<Surfel> mVAO;
+        std::vector<Surfel> mSurfels;
+        GLSLSurfelRendering mSurfelRenderingShader;
         
     public:
-        SurfelRenderer(Scene* scene, ResourcePool* resourcePool, ID meshInstanceID);
+        SurfelRenderer(Scene* scene, ResourcePool* resourcePool);
         
         void render();
     };

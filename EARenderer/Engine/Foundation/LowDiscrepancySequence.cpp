@@ -8,6 +8,8 @@
 
 #include "LowDiscrepancySequence.hpp"
 
+#include <glm/gtc/constants.hpp>
+
 namespace EARenderer {
     
     float LowDiscrepancySequence::Hammersley1D(int64_t sample, int64_t totalSamples, size_t truncateBits) {
@@ -26,8 +28,8 @@ namespace EARenderer {
         return result;
     }
     
-    std::tuple<float, float> LowDiscrepancySequence::Hammersley2D(int64_t sample, int64_t totalSamples, size_t truncateBits) {
-        auto result = std::make_tuple(0.0f, 0.0f);
+    glm::vec2 LowDiscrepancySequence::Hammersley2D(int64_t sample, int64_t totalSamples, size_t truncateBits) {
+        auto result = glm::zero<glm::vec2>();
         
         // Figure out how many bits we are working in.
         size_t value = 1;
@@ -45,7 +47,7 @@ namespace EARenderer {
             
             while (n) {
                 if (n & 1) {
-                    std::get<0>(result) += base;
+                    result.x += base;
                 }
                 n /= 2;
                 base /= 2.0f;
@@ -60,7 +62,7 @@ namespace EARenderer {
             
             while (mask) {
                 if (n & mask) {
-                    std::get<1>(result) += base;
+                    result.y += base;
                 }
                 mask /= 2;
                 base /= 2.0f;

@@ -30,16 +30,18 @@ namespace EARenderer {
             float totalSurfaceArea = 0.0f;
         };
         
-        uint16_t mSamplePointsPerMesh = 256;
+        uint16_t mSamplePointsPerMesh = 128;
         
         std::unordered_map<ID, std::vector<Surfel>> mMeshSurfelsMap;
         ResourcePool *mResourcePool;
         
         SurfelIntermediateData prepareDataForSubMeshSurfelGeneration(SubMesh& subMesh, MeshInstance& containingInstance);
-        Surfel generateSurfel(SubMesh& subMesh, SurfelIntermediateData intermediateData, uint32_t pickedTriangleIndex, float barycentric1, float barycentric2, float barycentric3);
+        Surfel generateSurfel(SubMesh& subMesh, SurfelIntermediateData& intermediateData, uint32_t pickedTriangleIndex, const glm::vec2& randomPair);
         std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:
+        // DEBUG
+        std::vector<Surfel> surfels;
         
         SurfelGenerator(ResourcePool *resourcePool);
         

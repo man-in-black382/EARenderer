@@ -21,9 +21,11 @@
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
     NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
+    NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
     
     EARenderer::ID sphereMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(spherePath.UTF8String)));
     EARenderer::ID sponzaMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
+    EARenderer::ID planeMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(planePath.UTF8String)));
 
     // Materials
     
@@ -141,8 +143,14 @@
     t = scuffedTitaniumSphereInstance.transformation();
     t.translation.x = -0.5;
     scuffedTitaniumSphereInstance.setTransformation(t);
-
-    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
+    
+    EARenderer::MeshInstance planeInstance(planeMeshID);
+    planeInstance.setMaterialIDForAllSubmeshes(patchyCementMaterialID);
+    t.translation.y = 0.5;
+    planeInstance.setTransformation(t);
+    
+//    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(planeInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
     

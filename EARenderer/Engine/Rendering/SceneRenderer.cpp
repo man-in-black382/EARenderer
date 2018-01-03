@@ -243,15 +243,6 @@ namespace EARenderer {
         }
         
         renderSkybox();
-
-        // Drawing shadow map layer
-//        GLViewport(Size2D(200, 200)).apply();
-//        mFSQuadShader.bind();
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mShadowMaps, 0);
-//        });
-//        glClear(GL_DEPTH_BUFFER_BIT);
-//        glDrawArrays(GL_TRIANGLES, 0, 4);
     }
 
 }

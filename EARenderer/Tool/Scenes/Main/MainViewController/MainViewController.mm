@@ -27,6 +27,7 @@
 #import "Throttle.hpp"
 #import "SurfelRenderer.hpp"
 #import "SurfelGenerator.hpp"
+#import "TriangleRenderer.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -50,6 +51,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
 @property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
+@property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
 
 // DEBUG
 @property (strong, nonatomic) DemoScene1 *demoScene;
@@ -112,12 +114,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                             self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
     
-    self.surfelGenerator = new EARenderer::SurfelGenerator(&EARenderer::ResourcePool::shared());
-    self.surfelGenerator->generateStaticGeometrySurfels(self.scene);
+//    self.surfelGenerator = new EARenderer::SurfelGenerator(&EARenderer::ResourcePool::shared());
+//    self.surfelGenerator->generateStaticGeometrySurfels(self.scene);
     
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene,
-                                                         &EARenderer::ResourcePool::shared(),
-                                                         self.demoScene.sphereMeshInstanceID);
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, &EARenderer::ResourcePool::shared());
+    self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, &EARenderer::ResourcePool::shared());
     
     [self subscribeForEvents];
 }
@@ -126,8 +127,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
-    self.axesRenderer->render();
+//    self.axesRenderer->render();
     self.surfelRenderer->render();
+    self.triangleRenderer->render();
     
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

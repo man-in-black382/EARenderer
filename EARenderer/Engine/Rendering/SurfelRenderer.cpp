@@ -11,33 +11,31 @@
 
 namespace EARenderer {
     
-    SurfelRenderer::SurfelRenderer(Scene* scene, ResourcePool* resourcePool, ID meshInstanceID)
+    SurfelRenderer::SurfelRenderer(Scene* scene, ResourcePool* resourcePool)
     :
     mScene(scene),
-    mResourcePool(resourcePool),
-    mMeshInstanceID(meshInstanceID)
+    mResourcePool(resourcePool)
     {
-//        MeshInstance& instance = scene->meshInstances()[meshInstanceID];
-//        SurfelGenerator sampler(resourcePool);
-//        mPoints = sampler.samplePointsOnMesh(instance.meshID());
-//        mVAO.initialize(mPoints, GLVertexArrayLayoutDescription({
-//            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
-//        }));
-//
-//        glEnable(GL_PROGRAM_POINT_SIZE);
+        SurfelGenerator generator(resourcePool);
+        generator.generateStaticGeometrySurfels(scene);
+        mSurfels = generator.surfels;
+        mVAO.initialize(generator.surfels, GLVertexArrayLayoutDescription({
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
+            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
+        }));
+
+        glEnable(GL_PROGRAM_POINT_SIZE);
     }
     
     void SurfelRenderer::render() {
-//        mVAO.bind();
-//        mGenericGeometryShader.bind();
-//
-//        auto& instance = mScene->meshInstances()[mMeshInstanceID];
-//        auto mvp = mScene->camera()->viewProjectionMatrix() * instance.transformation().modelMatrix();
-//
-//        mGenericGeometryShader.setModelViewProjectionMatrix(mvp);
-//        mGenericGeometryShader.setColor(Color::red());
-//
-//        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mPoints.size()));
+        mVAO.bind();
+        mSurfelRenderingShader.bind();
+
+        auto mvp = mScene->camera()->viewProjectionMatrix();
+        mSurfelRenderingShader.setModelViewProjectionMatrix(mvp);
+        mSurfelRenderingShader.setColor(Color(1.0, 0.2, 0.3, 1.0));
+
+        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mSurfels.size()));
     }
     
 }

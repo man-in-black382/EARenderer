@@ -10,7 +10,7 @@
 #define LowDiscrepancySequence_hpp
 
 #include <stdlib.h>
-#include <tuple>
+#include <glm/vec2.hpp>
 
 namespace EARenderer {
     
@@ -19,7 +19,7 @@ namespace EARenderer {
     class LowDiscrepancySequence {
     public:
         static float Hammersley1D(int64_t sample, int64_t totalSamples, size_t truncateBits = 0);
-        static std::tuple<float, float> Hammersley2D(int64_t sample, int64_t totalSamples, size_t truncateBits = 0);
+        static glm::vec2 Hammersley2D(int64_t sample, int64_t totalSamples, size_t truncateBits = 0);
     };
     
 }
