@@ -266,6 +266,7 @@
 		ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DSampler.hpp; sourceTree = "<group>"; };
 		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
+		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -982,6 +983,41 @@
 			path = GLBufferTexture;
 			sourceTree = "<group>";
 		};
+		ACE7A9721FFE553B0023DB7C /* Baking */ = {
+			isa = PBXGroup;
+			children = (
+				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
+				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
+				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
+				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
+				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
+			);
+			path = Baking;
+			sourceTree = "<group>";
+		};
+		ACE7A9731FFE55620023DB7C /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */,
+				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
+				CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */,
+				CE70F8571F8F8EBD00AD9027 /* AxesRenderer.hpp */,
+				CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */,
+				CE70F8541F8F8EBD00AD9027 /* AxesSelection.hpp */,
+				CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */,
+				CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */,
+				CE70F8551F8F8EBD00AD9027 /* BoxVisualizer.cpp */,
+				CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */,
+				CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */,
+				CE70F8591F8F8EBD00AD9027 /* Drawable.hpp */,
+				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
+				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
+				CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */,
+				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
+			);
+			path = Runtime;
+			sourceTree = "<group>";
+		};
 		CE3791741FA366640049BD1B /* Patchy Cement */ = {
 			isa = PBXGroup;
 			children = (
@@ -1345,26 +1381,8 @@
 		CE70F8521F8F8EBD00AD9027 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */,
-				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
-				CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */,
-				CE70F8571F8F8EBD00AD9027 /* AxesRenderer.hpp */,
-				CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */,
-				CE70F8541F8F8EBD00AD9027 /* AxesSelection.hpp */,
-				CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */,
-				CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */,
-				CE70F8551F8F8EBD00AD9027 /* BoxVisualizer.cpp */,
-				CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */,
-				CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */,
-				CE70F8591F8F8EBD00AD9027 /* Drawable.hpp */,
-				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
-				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
-				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
-				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
-				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
-				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
-				CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */,
-				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
+				ACE7A9731FFE55620023DB7C /* Runtime */,
+				ACE7A9721FFE553B0023DB7C /* Baking */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";

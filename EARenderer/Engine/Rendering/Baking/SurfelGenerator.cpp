@@ -9,6 +9,7 @@
 #include "SurfelGenerator.hpp"
 #include "Triangle.hpp"
 #include "LowDiscrepancySequence.hpp"
+#include "LogarithmicBin.hpp"
 
 #include <random>
 
