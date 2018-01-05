@@ -152,7 +152,7 @@
 //    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(planeInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
     
     _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
     scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);

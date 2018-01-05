@@ -12,31 +12,36 @@
 #include "Scene.hpp"
 #include "ResourcePool.hpp"
 #include "Surfel.hpp"
+#include "LogarithmicBin.hpp"
+#include "Triangle.hpp"
 
 #include <vector>
 #include <unordered_map>
+#include <random>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
     
     class SurfelGenerator {
     private:
-        
-        struct SurfelIntermediateData {
-            std::vector<float> trianglePickProbabilities;
-            std::vector<glm::vec3> transformedPositions;
-            std::vector<glm::vec3> transformedNormals;
-            std::vector<glm::vec3> lowFrequencyAlbedoValues;
-            float totalSurfaceArea = 0.0f;
+        struct TransformedVertex {
+            Triangle triangle;
+            std::array<glm::vec3, 3> normals;
+            std::array<glm::vec3, 3> albedoValues;
+            std::array<glm::vec2, 3> UVs;
+            
+            TransformedVertex(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv);
         };
         
-        uint16_t mSamplePointsPerMesh = 128;
+        uint16_t mSamplePointsPerMesh = 256;
         
+        std::mt19937 mEngine;
+        std::uniform_real_distribution<float> mDistribution;
         std::unordered_map<ID, std::vector<Surfel>> mMeshSurfelsMap;
         ResourcePool *mResourcePool;
         
-        SurfelIntermediateData prepareDataForSubMeshSurfelGeneration(SubMesh& subMesh, MeshInstance& containingInstance);
-        Surfel generateSurfel(SubMesh& subMesh, SurfelIntermediateData& intermediateData, uint32_t pickedTriangleIndex, const glm::vec2& randomPair);
+        LogarithmicBin<TransformedVertex> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
+        Surfel generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedVertex>& transformedVerticesBin);
         std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:
