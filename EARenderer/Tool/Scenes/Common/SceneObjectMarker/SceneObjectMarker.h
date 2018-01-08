@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PackedLookupTable.inl"
+#import "PackedLookupTable.hpp"
 
 typedef NS_ENUM(NSUInteger, SceneObjectMarkerType) {
     SceneObjectMarkerTypeMesh,

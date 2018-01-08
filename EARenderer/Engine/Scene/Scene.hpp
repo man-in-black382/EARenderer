@@ -9,7 +9,7 @@
 #ifndef Scene_hpp
 #define Scene_hpp
 
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 #include "MeshInstance.hpp"
 #include "Transformation.hpp"
 #include "Camera.hpp"

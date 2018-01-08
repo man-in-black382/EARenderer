@@ -10,7 +10,7 @@
 #define AxesSelection_hpp
 
 #include "AxesSystem.hpp"
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 
 namespace EARenderer {
     

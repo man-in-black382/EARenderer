@@ -10,7 +10,7 @@
 
 #import "Mesh.hpp"
 #import "SubMesh.hpp"
-#import "PackedLookupTable.inl"
+#import "PackedLookupTable.hpp"
 
 @class MeshListTabViewItem;
 

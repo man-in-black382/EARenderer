@@ -47,7 +47,7 @@ namespace EARenderer {
         int32_t index(float weight) {
             // I believe that formula for index calculation presented in the article is incorrect
             // I changed it to log2f(weight / mMinWeight)
-            return mMinWeight > 0.0f ? log2f(weight / mMinWeight) : log2f(weight);
+            return mMinWeight == 0.0f ? log2f(weight) : log2f(weight / mMinWeight);
         }
         
         float binMinWeight(int32_t index) {

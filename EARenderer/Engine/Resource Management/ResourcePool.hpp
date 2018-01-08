@@ -9,7 +9,7 @@
 #ifndef ResourcePool_hpp
 #define ResourcePool_hpp
 
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 #include "Mesh.hpp"
 #include "SubMesh.hpp"
 #include "PBRMaterial.hpp"

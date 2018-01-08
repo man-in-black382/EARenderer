@@ -13,7 +13,7 @@
 #include <string>
 
 #include "AxisAlignedBox3D.hpp"
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 #include "BoxVisualizer.hpp"
 #include "SubMesh.hpp"
 

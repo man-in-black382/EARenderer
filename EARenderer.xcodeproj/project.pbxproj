@@ -376,7 +376,7 @@
 		CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DefaultRenderComponentsProviding.hpp; sourceTree = "<group>"; };
 		CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSystem.hpp; sourceTree = "<group>"; };
 		CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxVisualizer.hpp; sourceTree = "<group>"; };
-		CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = PackedLookupTable.inl; sourceTree = "<group>"; };
+		CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PackedLookupTable.hpp; sourceTree = "<group>"; };
 		CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect2D.cpp; sourceTree = "<group>"; };
 		CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray3D.cpp; sourceTree = "<group>"; };
 		CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
@@ -779,6 +779,7 @@
 		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
 		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
 		CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoSceneComposing.h; sourceTree = "<group>"; };
+		CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHash.hpp; sourceTree = "<group>"; };
 		CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleRenderer.cpp; sourceTree = "<group>"; };
 		CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TriangleRenderer.hpp; sourceTree = "<group>"; };
 		CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleRendering.geom; sourceTree = "<group>"; };
@@ -991,7 +992,6 @@
 			children = (
 				CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */,
 				CE2221FC1FC0B263009B6804 /* LightProbeBuilder.hpp */,
-				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
 				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
 				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
 			);
@@ -1395,7 +1395,9 @@
 		CE70F85F1F8F8EBD00AD9027 /* Containers */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.inl */,
+				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
+				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
+				CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */,
 			);
 			path = Containers;
 			sourceTree = "<group>";

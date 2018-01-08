@@ -9,7 +9,7 @@
 #import "MeshListTabViewItem.h"
 
 #import "Scene.hpp"
-#import "PackedLookupTable.inl"
+#import "PackedLookupTable.hpp"
 #import "SceneObjectMarker.h"
 
 @interface MeshListTabViewItem () <NSOutlineViewDataSource, NSOutlineViewDelegate>

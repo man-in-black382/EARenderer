@@ -9,7 +9,7 @@
 #ifndef RenderableEntity_hpp
 #define RenderableEntity_hpp
 
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 #include "Transformation.hpp"
 #include "AxisAlignedBox3D.hpp"
 

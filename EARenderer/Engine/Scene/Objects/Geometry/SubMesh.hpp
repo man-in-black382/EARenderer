@@ -15,7 +15,7 @@
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArray.hpp"
 #include "Drawable.hpp"
-#include "PackedLookupTable.inl"
+#include "PackedLookupTable.hpp"
 
 namespace EARenderer {
 
