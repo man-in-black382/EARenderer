@@ -9,6 +9,7 @@
 #include "SurfelGenerator.hpp"
 #include "Triangle.hpp"
 #include "LowDiscrepancySequence.hpp"
+#include "Measurement.hpp"
 
 #include <random>
 
@@ -63,15 +64,18 @@ namespace EARenderer {
             
             Triangle triangle(A, B, C);
             
-            transformedVertices.push_back(TransformedVertex(triangle,
-                                                            transformedNormals,
-                                                            std::array<glm::vec3, 3>({ glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0) }),
-                                                            std::array<glm::vec2, 3>({ vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords } )));
-            
             float area = triangle.area();
             
-            minimumArea = std::min(minimumArea, area);
-            maximumArea = std::max(maximumArea, area);
+            // There is very likely to be degenerate triangles which we don't need
+            if (area > 0.0f) {
+                transformedVertices.push_back(TransformedVertex(triangle,
+                                                                transformedNormals,
+                                                                std::array<glm::vec3, 3>({ glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0) }),
+                                                                std::array<glm::vec2, 3>({ vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords } )));
+                
+                minimumArea = std::min(minimumArea, area);
+                maximumArea = std::max(maximumArea, area);
+            }
         }
         
         LogarithmicBin<TransformedVertex> bin(minimumArea, maximumArea);
@@ -79,7 +83,7 @@ namespace EARenderer {
         for (auto& transformedVertex : transformedVertices) {
             bin.insert(transformedVertex, transformedVertex.triangle.area());
         }
-
+        
         return bin;
     }
     
@@ -96,15 +100,15 @@ namespace EARenderer {
             r = 1.0f - r;
             s = 1.0f - s;
         }
-
+        
         glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * r) + (ac * s));
         //barycentric1 * A + barycentric2 * B + barycentric3 * C;
-//        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
-//        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
+        //        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
+        //        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
         
         float singleSurfelArea = transformedVerticesBin.totalWeight() / transformedVerticesBin.size();
         
-//        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
+        //        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
         return Surfel(position, glm::vec3(0), glm::vec3(0), glm::vec2(0), singleSurfelArea);
     }
     
@@ -114,16 +118,12 @@ namespace EARenderer {
         auto& mesh = mResourcePool->meshes[instance.meshID()];
         
         for (ID subMeshID : mesh.subMeshes()) {
-            printf("Processing submesh %d\n", subMeshID);
-            
             auto& subMesh = mesh.subMeshes()[subMeshID];
+            printf("Processing submesh %d %s\n", subMeshID, subMesh.name().c_str());
             
             printf("Constructing logarithmic bin...\n");
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             printf("Logarithmic bin constructed\n");
-            
-//            uint32_t pointsCount = intermediateData.totalSurfaceArea;
-//            printf("Points count for submesh %d - %d\n", subMeshID, pointsCount);
             
             for (int32_t i = 0; i < mSamplePointsPerMesh; i++) {
                 surfels.emplace_back(generateSurfel(subMesh, bin));

@@ -109,6 +109,7 @@
 		CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
+		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
 		CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8431F8F8EBD00AD9027 /* Range.cpp */; };
 		CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8441F8F8EBD00AD9027 /* Color.cpp */; };
@@ -292,6 +293,8 @@
 		CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
 		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
+		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
+		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
 		CE70F7C51F8F8E5A00AD9027 /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE70F7DC1F8F8EBD00AD9027 /* EARenderer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EARenderer.entitlements; sourceTree = "<group>"; };
 		CE70F7E11F8F8EBD00AD9027 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumericFormatter.m; sourceTree = "<group>"; };
@@ -1359,6 +1362,8 @@
 				CE0590051FA77C6100822524 /* crc.cpp */,
 				AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */,
 				AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */,
+				CE5C5E242000CA04004D2B4E /* Measurement.cpp */,
+				CE5C5E252000CA04004D2B4E /* Measurement.hpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -2394,6 +2399,7 @@
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
+				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,
 				CE70FA481F8F8EF600AD9027 /* GLSLFullScreenQuad.cpp in Sources */,
 				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,

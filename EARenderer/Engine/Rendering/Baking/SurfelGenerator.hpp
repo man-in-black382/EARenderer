@@ -33,7 +33,7 @@ namespace EARenderer {
             TransformedVertex(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv);
         };
         
-        uint16_t mSamplePointsPerMesh = 256;
+        uint16_t mSamplePointsPerMesh = 128;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

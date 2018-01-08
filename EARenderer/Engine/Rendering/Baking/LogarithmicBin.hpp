@@ -45,19 +45,17 @@ namespace EARenderer {
         uint64_t mSize = 0;
         
         int32_t index(float weight) {
-            float delta = mMaxWeight - mMinWeight;
-            if (fabs(delta) > 0.0001) {
-                return log2f(delta / weight);
-            }
-            return 0;
+            // I believe that formula for index calculation presented in the article is incorrect
+            // I changed it to log2f(weight / mMinWeight)
+            return mMinWeight > 0.0f ? log2f(weight / mMinWeight) : log2f(weight);
         }
         
         float binMinWeight(int32_t index) {
-            return mMinWeight * powf((float)index, (float)index);
+            return mMinWeight * powf(2.0f, (float)index);
         }
         
         float binMaxWeight(int32_t index) {
-            return mMinWeight * powf((float)index, (float)(index + 1));
+            return mMinWeight * powf(2.0f, (float)(index + 1));
         }
         
     public:
@@ -68,7 +66,7 @@ namespace EARenderer {
         mEngine(std::random_device()()),
         mDistribution(0.0f, 1.0f)
         {
-            ASSERT(maxWeight > minWeight, "Maximum weight in LogarithmicBin must be larger than minimum weight!");
+            ASSERT(maxWeight >= minWeight, "Maximum weight in LogarithmicBin must be larger than minimum weight!");
         }
         
         LogarithmicBin(float maxWeight) : LogarithmicBin(0.0f, maxWeight) { }
@@ -83,7 +81,7 @@ namespace EARenderer {
         
         void insert(const T& object, float weight) {
             ASSERT(weight >= mMinWeight && weight <= mMaxWeight, "Weight " << weight << " is outside of bounds [" << mMinWeight << ", " << mMaxWeight << "]");
-            printf("Inserting at index %d. Object weight %f\n", index(weight), weight);
+            
             auto& bin = mBins[index(weight)];
             bin.objects.push_back({ object, weight });
             bin.totalWeight += weight;
@@ -92,11 +90,6 @@ namespace EARenderer {
         }
 
         const T& random() {
-            for (auto& indexBinPair : mBins) {
-                printf("Bin %d weight %f\n", indexBinPair.first, indexBinPair.second.totalWeight);
-            }
-            printf("\n\n\n");
-            
             float randomWeight = mDistribution(mEngine);
             float accumulatedWeight = 0.0f;
             
@@ -104,6 +97,8 @@ namespace EARenderer {
             const Bin* randomBin = nullptr;
             const BinObject* randomBinObject = nullptr;
             
+            // Perform linear search of a random bin based on a probability
+            // proportional to bin's total weight
             for (auto& indexBinPair : mBins) {
                 accumulatedWeight += indexBinPair.second.totalWeight / mTotalWeight;
                 if (randomWeight < accumulatedWeight) {
@@ -113,11 +108,18 @@ namespace EARenderer {
                 }
             }
             
+            // Choose an object within the bin based on rejection sampling:
+            // Pick an object at random within the bin and then accept it with probability At/Bmax,
+            // where At is the object’s weight, and Bmax is the maximum weight of objects assigned to the bin.
+            // Repeat until an object is accepted.
+            //
             while (!randomBinObject) {
                 int32_t randomObjectIndex = mDistribution(mEngine) * randomBin->objects.size();
                 randomWeight = mDistribution(mEngine);
                 const BinObject& rbo = randomBin->objects[randomObjectIndex];
-                if (randomWeight < binMaxWeight(randomBinIndex)) {
+                float probability = rbo.weight / binMaxWeight(randomBinIndex);
+
+                if (randomWeight < probability) {
                     randomBinObject = &rbo;
                 }
             }

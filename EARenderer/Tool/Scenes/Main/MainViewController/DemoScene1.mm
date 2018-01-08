@@ -149,7 +149,7 @@
     t.translation.y = 0.5;
     planeInstance.setTransformation(t);
     
-//    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(planeInstance));
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
