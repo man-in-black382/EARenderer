@@ -9,13 +9,15 @@
 #ifndef SubMesh_hpp
 #define SubMesh_hpp
 
-#include <vector>
 #include "Vertex1P1N1UV1T1BT.hpp"
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArray.hpp"
 #include "Drawable.hpp"
 #include "PackedLookupTable.hpp"
+#include "AxisAlignedBox3D.hpp"
+
+#include <vector>
 
 namespace EARenderer {
 
@@ -24,6 +26,7 @@ namespace EARenderer {
         std::string mName;
         std::string mMaterialName;
         std::vector<Vertex1P1N1UV1T1BT> mVertices;
+        AxisAlignedBox3D mBoundingBox;
         GLVertexArray<Vertex1P1N1UV1T1BT> mVAO;
         
     public:
@@ -33,6 +36,7 @@ namespace EARenderer {
         const std::string& name() const;
         const std::string& materialName() const;
         std::vector<Vertex1P1N1UV1T1BT>& vertices();
+        const AxisAlignedBox3D& boundingBox() const;
         const GLVertexArray<Vertex1P1N1UV1T1BT>& VAO() const;
         
         void setName(const std::string& name);

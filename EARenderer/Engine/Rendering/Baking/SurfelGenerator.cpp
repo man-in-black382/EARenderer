@@ -43,6 +43,8 @@ namespace EARenderer {
         
         std::vector<TransformedVertex> transformedVertices;
         
+        SpatialHash<Triangle> spaticalHash(subMesh.boundingBox().transformedBy(containingInstance.transformation()), 10);
+        
         // Calculate triangle areas, transform positions and normals using
         // mesh instance's model transformation
         for (int32_t i = 0; i < subMesh.vertices().size(); i += 3) {
@@ -75,7 +77,14 @@ namespace EARenderer {
                 
                 minimumArea = std::min(minimumArea, area);
                 maximumArea = std::max(maximumArea, area);
+                
+                spaticalHash.insert(triangle, A);
             }
+        }
+        
+        int i = 0;
+        for (auto& it : spaticalHash) {
+            printf("Triangle %d\n", i++);
         }
         
         LogarithmicBin<TransformedVertex> bin(minimumArea, maximumArea);
@@ -144,6 +153,8 @@ namespace EARenderer {
         }
         
         printf("Surfel generation finished!\n");
+        
+        SpatialHash<Triangle> hash(AxisAlignedBox3D::unit(), 10);
     }
     
 }

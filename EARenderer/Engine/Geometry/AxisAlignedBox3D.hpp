@@ -19,16 +19,17 @@
 namespace EARenderer {
     
     struct AxisAlignedBox3D {
-        glm::vec3 min;
-        glm::vec3 max;
+        glm::vec3 min = glm::zero<glm::vec3>();
+        glm::vec3 max = glm::zero<glm::vec3>();
         
         static const AxisAlignedBox3D& zero();
         static const AxisAlignedBox3D& unit();
+        static const AxisAlignedBox3D& maximum();
         
-        AxisAlignedBox3D();
+        AxisAlignedBox3D()= default;
         AxisAlignedBox3D(const glm::vec3& min, const glm::vec3& max);
         
-        const float diagonal() const;
+        float diagonal() const;
         
         /**
          Represents box as an orthographic projection matrix
@@ -41,6 +42,7 @@ namespace EARenderer {
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;
+        bool containsPoint(const glm::vec3& point);
     };
         
 }

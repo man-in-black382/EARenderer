@@ -8,6 +8,7 @@
 
 #include "AxisAlignedBox3D.hpp"
 
+#include <limits>
 #include <glm/detail/func_geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec4.hpp>
@@ -26,13 +27,14 @@ namespace EARenderer {
         return b;
     }
     
-#pragma mark - Lifecycle
+    const AxisAlignedBox3D& AxisAlignedBox3D::maximum() {
+        auto min = glm::vec3(std::numeric_limits<float>::lowest());
+        auto max = glm::vec3(std::numeric_limits<float>::max());
+        static AxisAlignedBox3D b(min, max);
+        return b;
+    }
     
-    AxisAlignedBox3D::AxisAlignedBox3D()
-    :
-    min(glm::zero<glm::vec3>()),
-    max(glm::zero<glm::vec3>())
-    { }
+#pragma mark - Lifecycle
     
     AxisAlignedBox3D::AxisAlignedBox3D(const glm::vec3& min, const glm::vec3& max)
     :
@@ -42,12 +44,12 @@ namespace EARenderer {
     
 #pragma mark - Math
     
-    const float AxisAlignedBox3D::diagonal() const {
+    float AxisAlignedBox3D::diagonal() const {
         return glm::length(max - min);
     }
     
     glm::mat4 AxisAlignedBox3D::asFrustum() const {
-        // Z component shenanigans cuz of NDC and world handedness inconsistency
+        // Z component shenanigans due to NDC and world handedness inconsistency
         return glm::ortho(min.x, max.x, min.y, max.y, -max.z, -min.z);
     }
     
@@ -76,6 +78,12 @@ namespace EARenderer {
         newMin /= newMin.w;
         newMax /= newMax.w;
         return { glm::vec3(newMin), glm::vec3(newMax) };
+    }
+    
+    bool AxisAlignedBox3D::containsPoint(const glm::vec3& point) {
+        return point.x > min.x && point.x < max.x &&
+        point.y > min.y && point.y < max.y &&
+        point.z > min.z && point.z < max.z;
     }
     
 }

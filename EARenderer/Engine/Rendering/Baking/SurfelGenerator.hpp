@@ -14,6 +14,7 @@
 #include "Surfel.hpp"
 #include "LogarithmicBin.hpp"
 #include "Triangle.hpp"
+#include "SpatialHash.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -37,7 +38,6 @@ namespace EARenderer {
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
-        std::unordered_map<ID, std::vector<Surfel>> mMeshSurfelsMap;
         ResourcePool *mResourcePool;
         
         LogarithmicBin<TransformedVertex> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
