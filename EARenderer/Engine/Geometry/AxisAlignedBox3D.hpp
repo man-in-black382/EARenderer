@@ -24,7 +24,7 @@ namespace EARenderer {
         
         static const AxisAlignedBox3D& zero();
         static const AxisAlignedBox3D& unit();
-        static const AxisAlignedBox3D& maximum();
+        static const AxisAlignedBox3D& maximumReversed();
         
         AxisAlignedBox3D()= default;
         AxisAlignedBox3D(const glm::vec3& min, const glm::vec3& max);

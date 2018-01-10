@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <stdexcept>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
@@ -30,7 +31,7 @@ namespace EARenderer {
         
 #pragma mark - Forward iterator
         
-        class iterator {
+        class ForwardIterator {
         private:
             friend SpatialHash;
             
@@ -38,19 +39,34 @@ namespace EARenderer {
             using VectorIterator = typename std::vector<T>::iterator;
             
             MapIterator mMapIterator;
+            MapIterator mMapEndIterator;
             VectorIterator mCurrentVectorIterator;
             
-            iterator(MapIterator i) : mMapIterator(i), mCurrentVectorIterator(i->second.begin()) { }
-            iterator(MapIterator mapIterator, VectorIterator vectorIterator) : mMapIterator(mapIterator), mCurrentVectorIterator(vectorIterator) { }
+            ForwardIterator(MapIterator i, MapIterator endIterator)
+            :
+            mMapIterator(i),
+            mMapEndIterator(endIterator)
+            {
+                if (i != endIterator) {
+                    mCurrentVectorIterator = i->second.begin();
+                }
+            }
             
         public:
-            iterator& operator++() {
-                // Increment iterator of current vector if it had not reached its end already
+            ForwardIterator& operator++() {
+                if (mMapIterator == mMapEndIterator) {
+                    throw std::out_of_range("Incrementing an iterator which had reached the end already");
+                }
+                
                 if (mCurrentVectorIterator != mMapIterator->second.end()) {
+                    // Increment iterator of current vector if it had not reached its end already
                     mCurrentVectorIterator++;
-                } else { // Move on to next vector otherwise
+                } else {
+                    // Move on to the next vector otherwise
                     mMapIterator++;
-                    mCurrentVectorIterator = mMapIterator->second.begin();
+                    if (mMapIterator != mMapEndIterator) {
+                        mCurrentVectorIterator = mMapIterator->second.begin();
+                    }
                 }
                 return *this;
             }
@@ -58,16 +74,32 @@ namespace EARenderer {
             T& operator*() {
                 return *mCurrentVectorIterator;
             }
-
-            bool operator!=(const iterator& other) const {
-                return mMapIterator != other.mMapIterator || mCurrentVectorIterator != other.mCurrentVectorIterator;
+            
+            T* operator->() {
+                return &(*mCurrentVectorIterator);
+            }
+            
+            const T& operator*() const {
+                return *mCurrentVectorIterator;
+            }
+            
+            const T* operator->() const {
+                return &(*mCurrentVectorIterator);
             }
 
+            bool operator!=(const ForwardIterator& other) const {
+                // Don't touch vector's itereator if we're at the end of unordered_map
+                if (mMapIterator == mMapEndIterator) {
+                    return mMapIterator != other.mMapIterator;
+                } else {
+                    return mMapIterator != other.mMapIterator || mCurrentVectorIterator != other.mCurrentVectorIterator;
+                }
+            }
         };
         
 #pragma mark - Range iterator
         
-        class range_iterator {
+        class RangeIterator {
             
         };
 
@@ -85,10 +117,36 @@ namespace EARenderer {
         Cell cell(const glm::vec3& position) const {
             return std::make_tuple(cellIndex(0, position.x), cellIndex(1, position.y), cellIndex(2, position.z));
         }
-
-    public:
+        
+        bool isCellValid(const Cell& cell) const {
+            int32_t x = std::get<0>(cell);
+            int32_t y = std::get<1>(cell);
+            int32_t z = std::get<2>(cell);
+            
+            return (x >= 0 && x < mResolution) && (y >= 0 && y < mResolution) && (z >= 0 && z < mResolution);
+        }
+        
+        std::vector<Cell> neighbours(const Cell& cell) const {
+            std::vector<Cell> neighbours;
+            std::array<int32_t, 2> indices{ -1, 1 };
+            
+            for (int32_t x : indices) {
+                for (int32_t y : indices) {
+                    for (int32_t z : indices) {
+                        Cell cell = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
+                        if (isCellValid(cell)) {
+                            neighbours.push_back(cell);
+                        }
+                    }
+                }
+            }
+            
+            return neighbours;
+        }
         
 #pragma mark - Class public contents
+        
+        public:
         
 #pragma mark Lifecycle
         
@@ -96,35 +154,38 @@ namespace EARenderer {
         :
         mBoundaries(boundaries),
         mResolution(resolution)
-        {
-//            mObjects[std::make_tuple(0, 0, 0)] = std::vector<T>();
-        }
+        { }
         
 #pragma mark Modifiers
         
         void insert(const T& object, const glm::vec3& position) {
-            ASSERT(mBoundaries.containsPoint(position), "Attempt to insert an object outside of spatial hash's boundaries");
+            if (!mBoundaries.containsPoint(position)) {
+                throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
+            }
+            printf("Inserting at position %d\n", cell(position));
             mObjects[cell(position)].push_back(object);
         }
         
 #pragma mark Iteration
         
-        iterator begin() {
-            return iterator(mObjects.begin());
+        ForwardIterator begin() {
+            return ForwardIterator(mObjects.begin(), mObjects.end());
         }
         
-        iterator end() {
-            return mObjects.empty() ? begin() : iterator(mObjects.end(), mObjects.end()->second.end());
+        ForwardIterator end() {
+            auto n = neighbours(std::make_tuple(0, 0, 0));
+            
+            return ForwardIterator(mObjects.end(), mObjects.end());
         }
     };
     
     template<typename T>
-    typename SpatialHash<T>::iterator begin(const SpatialHash<T>& hash) {
+    typename SpatialHash<T>::ForwardIterator begin(const SpatialHash<T>& hash) {
         return hash.begin();
     }
     
     template<typename T>
-    typename SpatialHash<T>::iterator end(const SpatialHash<T>& hash) {
+    typename SpatialHash<T>::ForwardIterator end(const SpatialHash<T>& hash) {
         return hash.end();
     }
     

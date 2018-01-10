@@ -14,14 +14,14 @@ namespace EARenderer {
 
     SubMesh::SubMesh()
     :
-    mBoundingBox(AxisAlignedBox3D::maximum()),
+    mBoundingBox(AxisAlignedBox3D::maximumReversed()),
     mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>())
     { }
     
     SubMesh::SubMesh(const std::vector<Vertex1P1N1UV1T1BT>& vertices)
     :
     mVertices(vertices),
-    mBoundingBox(AxisAlignedBox3D::maximum()),
+    mBoundingBox(AxisAlignedBox3D::maximumReversed()),
     mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>())
     {
         finalizeVertexBuffer();

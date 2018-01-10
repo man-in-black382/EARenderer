@@ -27,9 +27,9 @@ namespace EARenderer {
         return b;
     }
     
-    const AxisAlignedBox3D& AxisAlignedBox3D::maximum() {
-        auto min = glm::vec3(std::numeric_limits<float>::lowest());
-        auto max = glm::vec3(std::numeric_limits<float>::max());
+    const AxisAlignedBox3D& AxisAlignedBox3D::maximumReversed() {
+        auto min = glm::vec3(std::numeric_limits<float>::max());
+        auto max = glm::vec3(std::numeric_limits<float>::lowest());
         static AxisAlignedBox3D b(min, max);
         return b;
     }
