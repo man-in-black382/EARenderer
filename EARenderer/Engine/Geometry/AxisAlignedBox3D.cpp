@@ -81,9 +81,9 @@ namespace EARenderer {
     }
     
     bool AxisAlignedBox3D::containsPoint(const glm::vec3& point) {
-        return point.x > min.x && point.x < max.x &&
-        point.y > min.y && point.y < max.y &&
-        point.z > min.z && point.z < max.z;
+        return point.x >= min.x && point.x <= max.x &&
+        point.y >= min.y && point.y <= max.y &&
+        point.z >= min.z && point.z <= max.z;
     }
     
 }

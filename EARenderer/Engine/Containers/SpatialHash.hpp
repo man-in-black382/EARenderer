@@ -128,14 +128,17 @@ namespace EARenderer {
         
         std::vector<Cell> neighbours(const Cell& cell) const {
             std::vector<Cell> neighbours;
-            std::array<int32_t, 2> indices{ -1, 1 };
             
-            for (int32_t x : indices) {
-                for (int32_t y : indices) {
-                    for (int32_t z : indices) {
-                        Cell cell = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
-                        if (isCellValid(cell)) {
-                            neighbours.push_back(cell);
+            for (int32_t x = -1; x <= 1; ++x) {
+                for (int32_t y = -1; y <= 1; ++y) {
+                    for (int32_t z = -1; z <= 1; ++z) {
+                        if (x == 0 && y == 0 && z == 0) {
+                            continue;
+                        }
+                        
+                        Cell neighbour = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
+                        if (isCellValid(neighbour) && mObjects.find(neighbour) != mObjects.end()) {
+                            neighbours.push_back(neighbour);
                         }
                     }
                 }
@@ -162,7 +165,6 @@ namespace EARenderer {
             if (!mBoundaries.containsPoint(position)) {
                 throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
             }
-            printf("Inserting at position %d\n", cell(position));
             mObjects[cell(position)].push_back(object);
         }
         
@@ -173,8 +175,6 @@ namespace EARenderer {
         }
         
         ForwardIterator end() {
-            auto n = neighbours(std::make_tuple(0, 0, 0));
-            
             return ForwardIterator(mObjects.end(), mObjects.end());
         }
     };
