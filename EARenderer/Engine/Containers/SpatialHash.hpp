@@ -100,7 +100,61 @@ namespace EARenderer {
 #pragma mark - Range iterator
         
         class RangeIterator {
+        private:
+            friend SpatialHash;
             
+            using ObjectsVectorIterator = typename std::vector<T>::iterator;
+            using ObjectsVectorIteratorPair = std::tuple<ObjectsVectorIterator, ObjectsVectorIterator>;
+            
+            std::vector<ObjectsVectorIteratorPair> mObjectsVectorIteratorPairs;
+            typename std::vector<ObjectsVectorIteratorPair>::iterator mCurrentIterator;
+            
+            RangeIterator(const std::vector<ObjectsVectorIteratorPair>& vectorIteratorPairs) : mObjectsVectorIteratorPairs(vectorIteratorPairs) { }
+            
+        public:
+            RangeIterator& operator++() {
+                if (mCurrentIterator == mObjectsVectorIteratorPairs.end()) {
+                    throw std::out_of_range("Incrementing an iterator which had reached the end already");
+                }
+                
+                auto& current = std::get<0>(*mCurrentIterator);
+                auto& end = std::get<1>(*mCurrentIterator);
+                
+                current == end ? mCurrentIterator++ : current++;
+                
+//                if () {
+//                    ;
+//                } else {
+//                    ;
+//                }
+                
+                return *this;
+            }
+            
+//            T& operator*() {
+//                return *mCurrentVectorIterator;
+//            }
+//
+//            T* operator->() {
+//                return &(*mCurrentVectorIterator);
+//            }
+//
+//            const T& operator*() const {
+//                return *mCurrentVectorIterator;
+//            }
+//
+//            const T* operator->() const {
+//                return &(*mCurrentVectorIterator);
+//            }
+//
+//            bool operator!=(const RangeIterator& other) const {
+//                // Don't touch vector's itereator if we're at the end of unordered_map
+//                if (mMapIterator == mMapEndIterator) {
+//                    return mMapIterator != other.mMapIterator;
+//                } else {
+//                    return mMapIterator != other.mMapIterator || mCurrentVectorIterator != other.mCurrentVectorIterator;
+//                }
+//            }
         };
 
 #pragma mark - Class private contents
