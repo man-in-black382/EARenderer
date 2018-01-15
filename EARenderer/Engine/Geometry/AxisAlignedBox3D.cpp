@@ -23,7 +23,12 @@ namespace EARenderer {
     }
     
     const AxisAlignedBox3D& AxisAlignedBox3D::unit() {
-        static AxisAlignedBox3D b(glm::vec3(1.0), glm::vec3(1.0));
+        static AxisAlignedBox3D b(glm::vec3(0.0), glm::vec3(1.0));
+        return b;
+    }
+    
+    const AxisAlignedBox3D& AxisAlignedBox3D::NDC() {
+        static AxisAlignedBox3D b(glm::vec3(-1.0), glm::vec3(1.0));
         return b;
     }
     

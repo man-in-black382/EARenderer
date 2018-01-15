@@ -29,7 +29,8 @@ namespace EARenderer {
         using Cell = std::tuple<int32_t, int32_t, int32_t>;
         using Objects = std::vector<T>;
         
-#pragma mark - Forward iterator
+#pragma mark - Nested types
+#pragma mark Forward iterator
         
         class ForwardIterator {
         private:
@@ -97,67 +98,103 @@ namespace EARenderer {
             }
         };
         
-#pragma mark - Range iterator
-        
-        class RangeIterator {
+#pragma mark Range iterator
+
+        class Range {
+        public:
+            
+            class Iterator {
+            private:
+                friend SpatialHash;
+                friend Range;
+                
+                using CellObjectsIterator = typename std::vector<T>::iterator;
+                using CellBeginEndPair = std::pair<CellObjectsIterator, CellObjectsIterator>;
+                
+                std::vector<CellBeginEndPair> mCellBeginEndPairs;
+                size_t mCurrentPairIndex = 0;
+                
+                Iterator(const std::vector<CellBeginEndPair>& vectorIteratorPairs) : mCellBeginEndPairs(vectorIteratorPairs) { }
+                
+                void moveToEnd() {
+                    if (mCellBeginEndPairs.empty()) {
+                        return;
+                    }
+                    
+                    mCurrentPairIndex = mCellBeginEndPairs.size() - 1;
+                    auto& end = mCellBeginEndPairs[mCurrentPairIndex].second;
+                    mCellBeginEndPairs[mCurrentPairIndex] = std::make_pair(end, end);
+                }
+                
+            public:
+                Iterator& operator++() {
+                    auto& pair = mCellBeginEndPairs[mCurrentPairIndex];
+                    auto& current = pair.first;
+                    auto& end = pair.second;
+                    
+                    if (current == end) {
+                        if (mCurrentPairIndex == mCellBeginEndPairs.size() - 1) {
+                            throw std::out_of_range("Incrementing an iterator which had reached the end already");
+                        }
+                        mCurrentPairIndex++;
+                    } else {
+                        current++;
+                    }
+
+                    return *this;
+                }
+                
+                T& operator*() {
+                    return *(mCellBeginEndPairs[mCurrentPairIndex].first);
+                }
+                
+                T* operator->() {
+                    return &(*(mCellBeginEndPairs[mCurrentPairIndex].first));
+                }
+                
+                const T& operator*() const {
+                    return *mCellBeginEndPairs[mCurrentPairIndex].first;
+                }
+                
+                const T* operator->() const {
+                    return &(*mCellBeginEndPairs[mCurrentPairIndex].first);
+                }
+                
+                bool operator!=(const Iterator& other) const {
+                    if (mCellBeginEndPairs.empty()) {
+                        return mCurrentPairIndex != other.mCurrentPairIndex;
+                    } else {
+                        return mCurrentPairIndex != other.mCurrentPairIndex ||
+                        mCellBeginEndPairs[mCurrentPairIndex].first != other.mCellBeginEndPairs[other.mCurrentPairIndex].first;
+                    }
+                }
+            };
+            
         private:
             friend SpatialHash;
             
-            using ObjectsVectorIterator = typename std::vector<T>::iterator;
-            using ObjectsVectorIteratorPair = std::tuple<ObjectsVectorIterator, ObjectsVectorIterator>;
+            Iterator mBegin;
+            Iterator mEnd;
             
-            std::vector<ObjectsVectorIteratorPair> mObjectsVectorIteratorPairs;
-            typename std::vector<ObjectsVectorIteratorPair>::iterator mCurrentIterator;
-            
-            RangeIterator(const std::vector<ObjectsVectorIteratorPair>& vectorIteratorPairs) : mObjectsVectorIteratorPairs(vectorIteratorPairs) { }
-            
-        public:
-            RangeIterator& operator++() {
-                if (mCurrentIterator == mObjectsVectorIteratorPairs.end()) {
-                    throw std::out_of_range("Incrementing an iterator which had reached the end already");
-                }
-                
-                auto& current = std::get<0>(*mCurrentIterator);
-                auto& end = std::get<1>(*mCurrentIterator);
-                
-                current == end ? mCurrentIterator++ : current++;
-                
-//                if () {
-//                    ;
-//                } else {
-//                    ;
-//                }
-                
-                return *this;
+            Range(const std::vector<typename Iterator::CellBeginEndPair>& cellBeginEndPairs)
+            :
+            mBegin(cellBeginEndPairs),
+            mEnd(cellBeginEndPairs)
+            {
+                mEnd.moveToEnd();
             }
             
-//            T& operator*() {
-//                return *mCurrentVectorIterator;
-//            }
-//
-//            T* operator->() {
-//                return &(*mCurrentVectorIterator);
-//            }
-//
-//            const T& operator*() const {
-//                return *mCurrentVectorIterator;
-//            }
-//
-//            const T* operator->() const {
-//                return &(*mCurrentVectorIterator);
-//            }
-//
-//            bool operator!=(const RangeIterator& other) const {
-//                // Don't touch vector's itereator if we're at the end of unordered_map
-//                if (mMapIterator == mMapEndIterator) {
-//                    return mMapIterator != other.mMapIterator;
-//                } else {
-//                    return mMapIterator != other.mMapIterator || mCurrentVectorIterator != other.mCurrentVectorIterator;
-//                }
-//            }
+        public:
+            Iterator begin() {
+                return mBegin;
+            }
+            
+            Iterator end() {
+                return mEnd;
+            }
         };
 
-#pragma mark - Class private contents
+#pragma mark - SpatialHash's private contents
         
         std::unordered_map<Cell, Objects> mObjects;
         AxisAlignedBox3D mBoundaries;
@@ -201,7 +238,7 @@ namespace EARenderer {
             return neighbours;
         }
         
-#pragma mark - Class public contents
+#pragma mark - SpatialHash's public contents
         
         public:
         
@@ -220,6 +257,17 @@ namespace EARenderer {
                 throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
             }
             mObjects[cell(position)].push_back(object);
+        }
+        
+        Range neighbours(const glm::vec3& position) {
+            auto neighbourCells = neighbours(cell(position));
+            std::vector<typename Range::Iterator::CellBeginEndPair> neighbourIteratorPairs;
+            for (auto& cell : neighbourCells) {
+                auto& objectsInCell = mObjects[cell];
+                neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));
+            }
+
+            return Range(neighbourIteratorPairs);
         }
         
 #pragma mark Iteration

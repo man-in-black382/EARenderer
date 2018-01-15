@@ -24,6 +24,7 @@ namespace EARenderer {
         
         static const AxisAlignedBox3D& zero();
         static const AxisAlignedBox3D& unit();
+        static const AxisAlignedBox3D& NDC();
         static const AxisAlignedBox3D& maximumReversed();
         
         AxisAlignedBox3D()= default;

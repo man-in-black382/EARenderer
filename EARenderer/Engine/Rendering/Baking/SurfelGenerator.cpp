@@ -30,7 +30,18 @@ namespace EARenderer {
     mEngine(std::random_device()()),
     mDistribution(0.0f, 1.0f),
     mResourcePool(resourcePool)
-    { }
+    {
+        auto box = AxisAlignedBox3D::unit();
+        SpatialHash<float> spaticalHash(box, 2);
+        
+        for (int i = 0; i < 100; i++) {
+            spaticalHash.insert(i, glm::vec3(0));
+        }
+        
+        for (auto& number : spaticalHash.neighbours(glm::vec3(0.6))) {
+            printf("Number: %f\n", number);
+        }
+    }
     
 #pragma mark - Private helpers
     
@@ -42,8 +53,6 @@ namespace EARenderer {
         float maximumArea = std::numeric_limits<float>::lowest();
         
         std::vector<TransformedVertex> transformedVertices;
-        
-        SpatialHash<Triangle> spaticalHash(subMesh.boundingBox().transformedBy(containingInstance.transformation()), 10);
         
         // Calculate triangle areas, transform positions and normals using
         // mesh instance's model transformation
@@ -76,15 +85,8 @@ namespace EARenderer {
                                                                 std::array<glm::vec2, 3>({ vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords } )));
                 
                 minimumArea = std::min(minimumArea, area);
-                maximumArea = std::max(maximumArea, area);
-                
-                spaticalHash.insert(triangle, A);
+                maximumArea = std::max(maximumArea, area);                
             }
-        }
-        
-        int i = 0;
-        for (auto& it : spaticalHash) {
-            printf("Triangle %d\n", i++);
         }
         
         LogarithmicBin<TransformedVertex> bin(minimumArea, maximumArea);
