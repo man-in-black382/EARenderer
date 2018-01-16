@@ -10,6 +10,7 @@
 #define Triangle_hpp
 
 #include <glm/vec3.hpp>
+#include <array>
 
 namespace EARenderer {
     
@@ -35,6 +36,7 @@ namespace EARenderer {
         Triangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
         
         float area() const;
+        std::array<Triangle, 4> split() const;
     };
     
 }

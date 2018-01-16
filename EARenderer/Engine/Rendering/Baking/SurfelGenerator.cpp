@@ -38,7 +38,7 @@ namespace EARenderer {
             spaticalHash.insert(i, glm::vec3(0));
         }
         
-        for (auto& number : spaticalHash.neighbours(glm::vec3(0.6))) {
+        for (auto& number : spaticalHash.neighbours(glm::vec3(0.5))) {
             printf("Number: %f\n", number);
         }
     }
@@ -99,7 +99,7 @@ namespace EARenderer {
     }
     
     Surfel SurfelGenerator::generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedVertex>& transformedVerticesBin) {
-        auto& randomTransformedVertex = transformedVerticesBin.random();
+        auto& randomTransformedVertex = *transformedVerticesBin.random();
         
         auto ab = randomTransformedVertex.triangle.b - randomTransformedVertex.triangle.a;
         auto ac = randomTransformedVertex.triangle.c - randomTransformedVertex.triangle.a;

@@ -25,4 +25,17 @@ namespace EARenderer {
         return glm::length(glm::cross(p2 - p1, p3 - p1)) / 2.0f;
     }
     
+    std::array<Triangle, 4> Triangle::split() const {
+        glm::vec3 halfAB = (a + b) / 2.0f;
+        glm::vec3 halfAC = (a + c) / 2.0f;
+        glm::vec3 halfBC = (b + c) / 2.0f;
+        
+        return {
+            Triangle(a, halfAB, halfAC),
+            Triangle(halfAB, b, halfBC),
+            Triangle(halfBC, c, halfAC),
+            Triangle(halfAB, halfAC, halfBC)
+        };
+    }
+    
 }
