@@ -24,7 +24,7 @@ namespace EARenderer {
         const GLTexture2D *mTexture;
         const GLubyte *mPixelBuffer = nullptr;
         
-        GLTexture2DSampler(const GLTexture2D* texture);
+        GLTexture2DSampler(const GLTexture2D* texture, int32_t mipLevel);
         
     public:
         ~GLTexture2DSampler();

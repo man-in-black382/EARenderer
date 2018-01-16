@@ -15,10 +15,10 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLTexture2DSampler::GLTexture2DSampler(const GLTexture2D* texture)
+    GLTexture2DSampler::GLTexture2DSampler(const GLTexture2D* texture, int32_t mipLevel)
     :
     mTexture(texture),
-    mPixelBuffer(texture->pixelBuffer())
+    mPixelBuffer(texture->pixelBuffer(mipLevel))
     { }
     
     GLTexture2DSampler::~GLTexture2DSampler() {

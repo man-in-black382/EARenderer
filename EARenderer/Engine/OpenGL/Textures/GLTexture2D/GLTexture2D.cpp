@@ -56,16 +56,16 @@ namespace EARenderer {
     
 #pragma mark - Sampling
     
-    const GLubyte* GLTexture2D::pixelBuffer() const {
+    const GLubyte* GLTexture2D::pixelBuffer(int32_t mipLevel) const {
         bind();
         GLubyte *ptr = new GLubyte[mSize.width * mSize.height * 4];
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+        glGetTexImage(GL_TEXTURE_2D, mipLevel, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
         return ptr;
     }
     
-    void GLTexture2D::sampleTexels(SamplerClosure samplerClosure) const {
+    void GLTexture2D::sampleTexels(SamplerClosure samplerClosure, int32_t mipLevel) const {
         bind();
-        samplerClosure(GLTexture2DSampler(this));
+        samplerClosure(GLTexture2DSampler(this, mipLevel));
     }
  
 }
