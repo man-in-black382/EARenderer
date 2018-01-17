@@ -9,7 +9,7 @@
 #ifndef LogarithmicBin_hpp
 #define LogarithmicBin_hpp
 
-#include <vector>
+#include <unordered_set>
 #include <unordered_map>
 #include <random>
 
@@ -25,19 +25,22 @@ namespace EARenderer {
         
 #pragma mark - Nested types
         
+        using Index = uint64_t;
+        
         struct BinObject {
             T object;
             float weight = 0.0f;
+            
+            BinObject(const T& object, float weight) : object(object), weight(weight) { }
         };
     	
         struct Bin {
-            std::vector<BinObject> objects;
+            std::unordered_map<Index, BinObject> objects;
             float totalWeight = 0.0f;
         };
         
-        using BinIndex = int32_t;
-        using MapIterator = typename std::unordered_map<BinIndex, Bin>::iterator;
-        using VectorIterator = typename std::vector<BinObject>::iterator;
+        using MapIterator = typename std::unordered_map<Index, Bin>::iterator;
+        using NestedMapIterator = typename std::unordered_map<Index, BinObject>::iterator;
         
 #pragma mark Forward iterator
         
@@ -48,17 +51,14 @@ namespace EARenderer {
             
             MapIterator mMapIterator;
             MapIterator mMapEndIterator;
-            VectorIterator mCurrentVectorIterator;
+            NestedMapIterator mNestedMapIterator;
             
-            ForwardIterator(MapIterator i, MapIterator endIterator, size_t advance = 0)
+            ForwardIterator(MapIterator i, MapIterator endIterator, NestedMapIterator binIterator)
             :
             mMapIterator(i),
-            mMapEndIterator(endIterator)
-            {
-                if (i != endIterator) {
-                    mCurrentVectorIterator = i->second.objects.begin() + advance;
-                }
-            }
+            mMapEndIterator(endIterator),
+            mNestedMapIterator(binIterator)
+            { }
             
         public:
             ForwardIterator& operator++() {
@@ -66,33 +66,33 @@ namespace EARenderer {
                     throw std::out_of_range("Incrementing an iterator which had reached the end already");
                 }
                 
-                if (mCurrentVectorIterator != mMapIterator->second.end()) {
+                if (mNestedMapIterator != mMapIterator->second.end()) {
                     // Increment iterator of current vector if it had not reached its end already
-                    mCurrentVectorIterator++;
+                    mNestedMapIterator++;
                 } else {
                     // Move on to the next vector otherwise
                     mMapIterator++;
                     if (mMapIterator != mMapEndIterator) {
-                        mCurrentVectorIterator = mMapIterator->second.begin();
+                        mNestedMapIterator = mMapIterator->second.begin();
                     }
                 }
                 return *this;
             }
             
             T& operator*() {
-                return mCurrentVectorIterator->object;
+                return mNestedMapIterator->second.object;
             }
-            
+
             T* operator->() {
-                return &mCurrentVectorIterator->object;
+                return &mNestedMapIterator->second.object;
             }
             
             const T& operator*() const {
-                return mCurrentVectorIterator->object;
+                return mNestedMapIterator->second.object;
             }
             
             const T* operator->() const {
-                return &mCurrentVectorIterator->object;
+                return &mNestedMapIterator->second.object;
             }
             
             bool operator!=(const ForwardIterator& other) const {
@@ -100,7 +100,7 @@ namespace EARenderer {
                 if (mMapIterator == mMapEndIterator) {
                     return mMapIterator != other.mMapIterator;
                 } else {
-                    return mMapIterator != other.mMapIterator || mCurrentVectorIterator != other.mCurrentVectorIterator;
+                    return mMapIterator != other.mMapIterator || mNestedMapIterator != other.mCurrentSetIterator;
                 }
             }
         };
@@ -110,12 +110,15 @@ namespace EARenderer {
     private:
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
-        std::unordered_map<BinIndex, Bin> mBins;
+        std::unordered_map<Index, Bin> mBins;
         
         float mMinWeight = 0.0f;
         float mMaxWeight = 0.0f;
         float mTotalWeight = 0.0f;
         uint64_t mSize = 0;
+        
+        // Since unordered_set doesn't work with templates we replace it with unordered_map and use this counter as key
+        uint64_t mInsertionCounter = 0;
         
         int32_t index(float weight) {
             // I believe that formula for index calculation presented in the article is incorrect
@@ -123,11 +126,11 @@ namespace EARenderer {
             return mMinWeight == 0.0f ? log2f(weight) : log2f(weight / mMinWeight);
         }
         
-        float binMinWeight(int32_t index) {
+        float binMinWeight(Index index) {
             return mMinWeight * powf(2.0f, (float)index);
         }
         
-        float binMaxWeight(int32_t index) {
+        float binMaxWeight(Index index) {
             return mMinWeight * powf(2.0f, (float)(index + 1));
         }
         
@@ -154,21 +157,31 @@ namespace EARenderer {
             return mSize;
         }
         
+        bool empty() const {
+            return mSize == 0;
+        }
+        
         void insert(const T& object, float weight) {
             ASSERT(weight >= mMinWeight && weight <= mMaxWeight, "Weight " << weight << " is outside of bounds [" << mMinWeight << ", " << mMaxWeight << "]");
             
             auto& bin = mBins[index(weight)];
-            bin.objects.push_back({ object, weight });
+            bin.objects.insert(std::make_pair(mInsertionCounter, BinObject(object, weight)));
             bin.totalWeight += weight;
             mSize++;
+            mInsertionCounter++;
             mTotalWeight += weight;
+        }
+        
+        void erase(const ForwardIterator& it) {
+            auto& bin = it.mMapIterator->second;
+            bin.objects.erase(it.mNestedMapIterator);
         }
 
         ForwardIterator random() {
             float randomWeight = mDistribution(mEngine);
             float accumulatedWeight = 0.0f;
-            
-            int32_t randomBinIndex = 0;
+
+            Index randomBinIndex = 0;
             MapIterator randomBinIt;
             
             // Perform linear search of a random bin based on a probability
@@ -183,36 +196,37 @@ namespace EARenderer {
                 }
             }
             
-            int32_t randomBinObjectIndex = 0;
-            const BinObject* randomBinObject = nullptr;
+            Index randomBinObjectIndex = 0;
+            NestedMapIterator randomBinIterator;
             
             // Choose an object within the bin based on rejection sampling:
             // Pick an object at random within the bin and then accept it with probability At/Bmax,
             // where At is the object’s weight, and Bmax is the maximum weight of objects assigned to the bin.
             // Repeat until an object is accepted.
             //
-            while (!randomBinObject) {
+            while (true) {
                 randomBinObjectIndex = mDistribution(mEngine) * randomBinIt->second.objects.size();
                 randomWeight = mDistribution(mEngine);
-                const BinObject& rbo = randomBinIt->second.objects[randomBinObjectIndex];
-                float probability = rbo.weight / binMaxWeight(randomBinIndex);
+                randomBinIterator = std::next(randomBinIt->second.objects.begin(), randomBinObjectIndex);
+                
+                float probability = randomBinIterator->second.weight / binMaxWeight(randomBinIndex);
 
                 if (randomWeight < probability) {
-                    randomBinObject = &rbo;
+                    break;
                 }
             }
             
-            return ForwardIterator(randomBinIt, mBins.end(), randomBinObjectIndex);
+            return ForwardIterator(randomBinIt, mBins.end(), randomBinIterator);
         }
         
 #pragma mark Iteration
         
         ForwardIterator begin() {
-            return ForwardIterator(mBins.begin(), mBins.end());
+            return ForwardIterator(mBins.begin(), mBins.end(), mBins.begin()->second.begin());
         }
         
         ForwardIterator end() {
-            return ForwardIterator(mBins.end(), mBins.end());
+            return ForwardIterator(mBins.end(), mBins.end(), mBins.end()->second.end());
         }
     };
     

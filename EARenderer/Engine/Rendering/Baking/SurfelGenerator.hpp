@@ -25,23 +25,35 @@ namespace EARenderer {
     
     class SurfelGenerator {
     private:
-        struct TransformedVertex {
+        struct TransformedTriangleData {
             Triangle triangle;
             std::array<glm::vec3, 3> normals;
             std::array<glm::vec3, 3> albedoValues;
             std::array<glm::vec2, 3> UVs;
             
-            TransformedVertex(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv);
+            TransformedTriangleData(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv);
         };
         
-        uint16_t mSamplePointsPerMesh = 128;
+        struct SurfelCandidate {
+            using BinIterator = LogarithmicBin<TransformedTriangleData>::ForwardIterator;
+            
+            glm::vec3 position;
+            glm::vec3 barycentricCoordinates;
+            BinIterator logarithmicBinIterator;
+            
+            SurfelCandidate(const glm::vec3& position, const glm::vec3& barycentric, BinIterator iterator);
+        };
+        
+        uint16_t mPointDensityPerUnitArea = 64;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
         ResourcePool *mResourcePool;
         
-        LogarithmicBin<TransformedVertex> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
-        Surfel generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedVertex>& transformedVerticesBin);
+        glm::vec3 randomBarycentricCoordinates();
+        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
+        SurfelCandidate generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        Surfel generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
         std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:

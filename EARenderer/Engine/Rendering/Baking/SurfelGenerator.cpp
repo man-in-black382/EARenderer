@@ -17,12 +17,19 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SurfelGenerator::TransformedVertex::TransformedVertex(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv)
+    SurfelGenerator::TransformedTriangleData::TransformedTriangleData(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv)
     :
     triangle(t),
     normals(n),
     albedoValues(a),
     UVs(uv)
+    { }
+    
+    SurfelGenerator::SurfelCandidate::SurfelCandidate(const glm::vec3& position, const glm::vec3& barycentric, BinIterator iterator)
+    :
+    position(position),
+    barycentricCoordinates(barycentric),
+    logarithmicBinIterator(iterator)
     { }
     
     SurfelGenerator::SurfelGenerator(ResourcePool *resourcePool)
@@ -45,14 +52,28 @@ namespace EARenderer {
     
 #pragma mark - Private helpers
     
-    LogarithmicBin<SurfelGenerator::TransformedVertex> SurfelGenerator::constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance) {
+    glm::vec3 SurfelGenerator::randomBarycentricCoordinates() {
+        float r = mDistribution(mEngine);
+        float s = mDistribution(mEngine);
+        
+        if (r + s >= 1.0f) {
+            r = 1.0f - r;
+            s = 1.0f - s;
+        }
+        
+        float t = 1.0f - r - s;
+        
+        return { r, s, t };
+    }
+    
+    LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance) {
         glm::mat4 modelMatrix = containingInstance.transformation().modelMatrix();
         glm::mat4 normalMatrix = containingInstance.transformation().normalMatrix();
         
         float minimumArea = std::numeric_limits<float>::max();
         float maximumArea = std::numeric_limits<float>::lowest();
         
-        std::vector<TransformedVertex> transformedVertices;
+        std::vector<TransformedTriangleData> transformedVertices;
         
         // Calculate triangle areas, transform positions and normals using
         // mesh instance's model transformation
@@ -79,7 +100,7 @@ namespace EARenderer {
             
             // There is very likely to be degenerate triangles which we don't need
             if (area > 0.0f) {
-                transformedVertices.push_back(TransformedVertex(triangle,
+                transformedVertices.push_back(TransformedTriangleData(triangle,
                                                                 transformedNormals,
                                                                 std::array<glm::vec3, 3>({ glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0) }),
                                                                 std::array<glm::vec2, 3>({ vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords } )));
@@ -89,7 +110,7 @@ namespace EARenderer {
             }
         }
         
-        LogarithmicBin<TransformedVertex> bin(minimumArea, maximumArea);
+        LogarithmicBin<TransformedTriangleData> bin(minimumArea, maximumArea);
         
         for (auto& transformedVertex : transformedVertices) {
             bin.insert(transformedVertex, transformedVertex.triangle.area());
@@ -98,21 +119,28 @@ namespace EARenderer {
         return bin;
     }
     
-    Surfel SurfelGenerator::generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedVertex>& transformedVerticesBin) {
+    SurfelGenerator::SurfelCandidate SurfelGenerator::generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
+        auto&& it = transformedVerticesBin.random();
+        auto& randomTransformedVertex = *it;
+        
+        auto ab = randomTransformedVertex.triangle.b - randomTransformedVertex.triangle.a;
+        auto ac = randomTransformedVertex.triangle.c - randomTransformedVertex.triangle.a;
+        
+        glm::vec3 barycentric = randomBarycentricCoordinates();
+        glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * barycentric.x) + (ac * barycentric.y));
+        
+        return { position, barycentric, it };
+    }
+    
+    Surfel SurfelGenerator::generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
         auto& randomTransformedVertex = *transformedVerticesBin.random();
         
         auto ab = randomTransformedVertex.triangle.b - randomTransformedVertex.triangle.a;
         auto ac = randomTransformedVertex.triangle.c - randomTransformedVertex.triangle.a;
         
-        float r = mDistribution(mEngine);       //  % along ab
-        float s = mDistribution(mEngine);       //  % along ac
+        glm::vec3 barycentric = randomBarycentricCoordinates();
         
-        if (r + s >= 1.0f) {
-            r = 1.0f - r;
-            s = 1.0f - s;
-        }
-        
-        glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * r) + (ac * s));
+        glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * barycentric.x) + (ac * barycentric.y));
         //barycentric1 * A + barycentric2 * B + barycentric3 * C;
         //        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
         //        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
@@ -136,7 +164,14 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             printf("Logarithmic bin constructed\n");
             
-            for (int32_t i = 0; i < mSamplePointsPerMesh; i++) {
+            float subMeshTotalArea = bin.totalWeight();
+            int32_t numberOfPointsToGenerate = subMeshTotalArea * mPointDensityPerUnitArea;
+            
+//            while (!bin.empty()) {
+//
+//            }
+            
+            for (int32_t i = 0; i < numberOfPointsToGenerate; i++) {
                 surfels.emplace_back(generateSurfel(subMesh, bin));
             }
         }
