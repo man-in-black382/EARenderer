@@ -53,7 +53,7 @@ namespace EARenderer {
         glm::vec3 randomBarycentricCoordinates();
         LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
         SurfelCandidate generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
-        Surfel generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        Surfel generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
         std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:

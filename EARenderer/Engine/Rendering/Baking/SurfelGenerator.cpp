@@ -37,18 +37,7 @@ namespace EARenderer {
     mEngine(std::random_device()()),
     mDistribution(0.0f, 1.0f),
     mResourcePool(resourcePool)
-    {
-        auto box = AxisAlignedBox3D::unit();
-        SpatialHash<float> spaticalHash(box, 2);
-        
-        for (int i = 0; i < 100; i++) {
-            spaticalHash.insert(i, glm::vec3(0));
-        }
-        
-        for (auto& number : spaticalHash.neighbours(glm::vec3(0.5))) {
-            printf("Number: %f\n", number);
-        }
-    }
+    { }
     
 #pragma mark - Private helpers
     
@@ -121,26 +110,20 @@ namespace EARenderer {
     
     SurfelGenerator::SurfelCandidate SurfelGenerator::generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
         auto&& it = transformedVerticesBin.random();
-        auto& randomTransformedVertex = *it;
+        auto& randomTriangleData = *it;
         
-        auto ab = randomTransformedVertex.triangle.b - randomTransformedVertex.triangle.a;
-        auto ac = randomTransformedVertex.triangle.c - randomTransformedVertex.triangle.a;
+        auto ab = randomTriangleData.triangle.b - randomTriangleData.triangle.a;
+        auto ac = randomTriangleData.triangle.c - randomTriangleData.triangle.a;
         
         glm::vec3 barycentric = randomBarycentricCoordinates();
-        glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * barycentric.x) + (ac * barycentric.y));
+        glm::vec3 position = randomTriangleData.triangle.a + ((ab * barycentric.x) + (ac * barycentric.y));
         
         return { position, barycentric, it };
     }
     
-    Surfel SurfelGenerator::generateSurfel(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
-        auto& randomTransformedVertex = *transformedVerticesBin.random();
+    Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
+//        auto& triangleData = *surfelCandidate.logarithmicBinIterator;
         
-        auto ab = randomTransformedVertex.triangle.b - randomTransformedVertex.triangle.a;
-        auto ac = randomTransformedVertex.triangle.c - randomTransformedVertex.triangle.a;
-        
-        glm::vec3 barycentric = randomBarycentricCoordinates();
-        
-        glm::vec3 position = randomTransformedVertex.triangle.a + ((ab * barycentric.x) + (ac * barycentric.y));
         //barycentric1 * A + barycentric2 * B + barycentric3 * C;
         //        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
         //        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
@@ -148,7 +131,7 @@ namespace EARenderer {
         float singleSurfelArea = transformedVerticesBin.totalWeight() / transformedVerticesBin.size();
         
         //        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
-        return Surfel(position, glm::vec3(0), glm::vec3(0), glm::vec2(0), singleSurfelArea);
+        return Surfel(surfelCandidate.position, glm::vec3(0), glm::vec3(0), glm::vec2(0), singleSurfelArea);
     }
     
     std::vector<Surfel> SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
@@ -167,13 +150,13 @@ namespace EARenderer {
             float subMeshTotalArea = bin.totalWeight();
             int32_t numberOfPointsToGenerate = subMeshTotalArea * mPointDensityPerUnitArea;
             
-//            while (!bin.empty()) {
-//
-//            }
-            
-            for (int32_t i = 0; i < numberOfPointsToGenerate; i++) {
-                surfels.emplace_back(generateSurfel(subMesh, bin));
+            while (!bin.empty()) {
+                
             }
+            
+//            for (int32_t i = 0; i < numberOfPointsToGenerate; i++) {
+//                surfels.emplace_back(generateSurfel(subMesh, bin));
+//            }
         }
         
         return surfels;
