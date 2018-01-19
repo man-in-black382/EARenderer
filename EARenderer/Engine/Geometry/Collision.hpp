@@ -13,6 +13,7 @@
 #include "AxisAlignedBox3D.hpp"
 #include "Ray3D.hpp"
 #include "Triangle.hpp"
+#include "Sphere.hpp"
 
 namespace EARenderer {
     
@@ -27,6 +28,7 @@ namespace EARenderer {
         static bool TriangleAABB(const Triangle& t, const AxisAlignedBox3D& a);
         static bool RayAABB(const Ray3D& ray, const AxisAlignedBox3D& aabb, float& distance);
         static bool RayParallelogram(const Ray3D& ray, const Parallelogram3D& parallelogram, float& distance);
+        static bool SphereContainsTriangle(const Sphere& sphere, const Triangle& triangle);
     };
     
 }

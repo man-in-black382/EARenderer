@@ -135,14 +135,29 @@ namespace EARenderer {
     bool Collision::RayParallelogram(const Ray3D& ray, const Parallelogram3D& parallelogram, float& distance) {
         glm::vec3 normal = parallelogram.normal();
         float dirDotNorm = glm::dot(ray.direction, normal);
-        if (fabs(dirDotNorm) < 0.001) { return false; }
+        
+        if (fabs(dirDotNorm) < 0.001) {
+            return false;
+        }
+        
         distance = glm::dot((parallelogram.corner - ray.origin), normal) / dirDotNorm;
+        
         glm::vec3 intersectionPoint = ray.origin + distance * ray.direction;
         glm::vec3 cornerToIntersectionVec = intersectionPoint - parallelogram.corner;
+        
         float projection1 = glm::dot(cornerToIntersectionVec, glm::normalize(parallelogram.side1));
         float projection2 = glm::dot(cornerToIntersectionVec, glm::normalize(parallelogram.side2));
+        
         return (projection1 > 0 && projection1 < glm::length(parallelogram.side1) &&
                 projection2 > 0 && projection2 < glm::length(parallelogram.side2));
+    }
+    
+    bool Collision::SphereContainsTriangle(const Sphere& sphere, const Triangle& triangle) {
+        float ao = glm::length(triangle.a - sphere.center);
+        float bo = glm::length(triangle.b - sphere.center);
+        float co = glm::length(triangle.c - sphere.center);
+        
+        return ao <= sphere.radius && bo <= sphere.radius && co <= sphere.radius;
     }
     
 }

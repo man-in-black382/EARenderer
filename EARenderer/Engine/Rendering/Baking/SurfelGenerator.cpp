@@ -10,6 +10,8 @@
 #include "Triangle.hpp"
 #include "LowDiscrepancySequence.hpp"
 #include "Measurement.hpp"
+#include "Sphere.hpp"
+#include "Collision.hpp"
 
 #include <random>
 
@@ -147,16 +149,52 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             printf("Logarithmic bin constructed\n");
             
-            float subMeshTotalArea = bin.totalWeight();
-            int32_t numberOfPointsToGenerate = subMeshTotalArea * mPointDensityPerUnitArea;
+            auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
+            SpatialHash<Surfel> surfels(boundingBox, 1);
             
+            // Actual algorithm that uniformly distributes surfels on geometry
             while (!bin.empty()) {
+                // Algorithm selects an active triangle F with probability proportional to its area.
+                // It then chooses a random point p on the triangle and makes it a surfel candidate.
+                SurfelCandidate surfelCandidate = generateSurfelCandidate(subMesh, bin);
                 
+                // Checks to see if surfel candidate meets the minimum distance requirement with respect to the current surfel set
+                bool minimumDistanceRequirementMet = true;
+                
+                for (auto& surfel : surfels) {
+                    if (glm::length(surfel.position - surfelCandidate.position) < mMinimumSurfelDistance) {
+                        minimumDistanceRequirementMet = false;
+                        break;
+                    }
+                }
+                
+                // If the minimum distance requirement is met, the algorithm computes all missing information
+                // for the surfel condidate and then adds the resultant surfel to the surfel set
+                if (minimumDistanceRequirementMet) {
+                    surfels.insert(generateSurfel(surfelCandidate, bin), surfelCandidate.position);
+                }
+                
+                auto& surfelTriangle = surfelCandidate.logarithmicBinIterator->triangle;
+                bool triangleCoveredCompletely = false;
+                
+                for (auto& surfel : surfels) {
+                    Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
+                    if (Collision::SphereContainsTriangle(enclosingSphere, surfelTriangle)) {
+                        triangleCoveredCompletely = true;
+                        break;
+                    }
+                }
+                
+                if (triangleCoveredCompletely) {
+                    bin.erase(surfelCandidate.logarithmicBinIterator);
+                } else {
+                    auto subTriangles = surfelTriangle.split();
+                    bin.erase(surfelCandidate.logarithmicBinIterator);
+                    for (auto& subTriangle : subTriangles) {
+//                        bin.insert(subTriangle, <#float weight#>)
+                    }
+                }
             }
-            
-//            for (int32_t i = 0; i < numberOfPointsToGenerate; i++) {
-//                surfels.emplace_back(generateSurfel(subMesh, bin));
-//            }
         }
         
         return surfels;

@@ -44,7 +44,7 @@ namespace EARenderer {
             SurfelCandidate(const glm::vec3& position, const glm::vec3& barycentric, BinIterator iterator);
         };
         
-        uint16_t mPointDensityPerUnitArea = 64;
+        float mMinimumSurfelDistance = 0.001;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

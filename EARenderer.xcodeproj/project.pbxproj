@@ -15,6 +15,7 @@
 		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
 		ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */; };
 		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
+		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -269,6 +270,8 @@
 		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
+		ACF8B7792012462200BCA351 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
+		ACF8B77A2012462200BCA351 /* Sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sphere.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -1409,6 +1412,8 @@
 			children = (
 				CEA95A491FCB00230090F1EE /* Triangle.cpp */,
 				CEA95A4A1FCB00230090F1EE /* Triangle.hpp */,
+				ACF8B7792012462200BCA351 /* Sphere.cpp */,
+				ACF8B77A2012462200BCA351 /* Sphere.hpp */,
 				CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */,
 				CE70F8741F8F8EBD00AD9027 /* AxisAlignedBox3D.hpp */,
 				CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */,
@@ -1433,14 +1438,14 @@
 		CE70F8651F8F8EBD00AD9027 /* Vertices */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8661F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.cpp */,
-				CE70F8671F8F8EBD00AD9027 /* Vertex1P3.cpp */,
-				CE70F8681F8F8EBD00AD9027 /* Vertex1P1N1UV.hpp */,
-				CE70F8691F8F8EBD00AD9027 /* Vertex1P4.cpp */,
 				CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N1UV.cpp */,
-				CE70F86B1F8F8EBD00AD9027 /* Vertex1P3.hpp */,
-				CE70F86C1F8F8EBD00AD9027 /* Vertex1P4.hpp */,
+				CE70F8681F8F8EBD00AD9027 /* Vertex1P1N1UV.hpp */,
+				CE70F8661F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.cpp */,
 				CE70F86D1F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.hpp */,
+				CE70F8671F8F8EBD00AD9027 /* Vertex1P3.cpp */,
+				CE70F86B1F8F8EBD00AD9027 /* Vertex1P3.hpp */,
+				CE70F8691F8F8EBD00AD9027 /* Vertex1P4.cpp */,
+				CE70F86C1F8F8EBD00AD9027 /* Vertex1P4.hpp */,
 			);
 			path = Vertices;
 			sourceTree = "<group>";
@@ -2345,6 +2350,7 @@
 				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
 				ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */,
+				ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */,
 				CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
