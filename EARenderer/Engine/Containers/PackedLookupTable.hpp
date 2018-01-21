@@ -37,21 +37,21 @@ namespace EARenderer {
         // Storage for objects
         // Objects are contiguous, and always packed to the start of the storage.
         // Objects can be relocated in this storage thanks to the separate list of allocations.
-        size_t mObjectsCount;
-        size_t mCapacity;
-        T* mObjects;
+        size_t mObjectsCount = 0;
+        size_t mCapacity = 0;
+        T* mObjects = nullptr;
         
         // The allocation ID of each object in the object array (1-1 mapping)
-        ID* mObjectIDs;
+        ID* mObjectIDs = nullptr;
         
         // FIFO queue to allocate objects with least ID reuse possible
-        Allocation* mAllocations;
+        Allocation* mAllocations = nullptr;
         
         // Last possible free allocation slot
-        uint16_t mLastAllocationIndex;
+        uint16_t mLastAllocationIndex = -1;
         
         // The next index struct to use for an allocation
-        uint16_t mNextAllocationIndex;
+        uint16_t mNextAllocationIndex = -1;
         
         Allocation* popFreeAllocation() {
             
@@ -103,16 +103,16 @@ namespace EARenderer {
             ID* mCurrentObjectID;
         };
         
-        PackedLookupTable()
-        :
-        mObjectsCount(0),
-        mCapacity(0),
-        mObjects(nullptr),
-        mObjectIDs(nullptr),
-        mAllocations(nullptr),
-        mLastAllocationIndex(-1),
-        mNextAllocationIndex(-1)
-        { }
+//        PackedLookupTable()
+//        :
+//        mObjectsCount(0),
+//        mCapacity(0),
+//        mObjects(nullptr),
+//        mObjectIDs(nullptr),
+//        mAllocations(nullptr),
+//        mLastAllocationIndex(-1),
+//        mNextAllocationIndex(-1)
+//        { }
         
         PackedLookupTable(size_t capacity) {
             // -1 because index 0xFFFF is reserved as a tombstone

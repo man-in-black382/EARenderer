@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <vector>
 #include <stdexcept>
+#include <limits>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
@@ -202,6 +203,9 @@ namespace EARenderer {
         
         int32_t cellIndex(int32_t axis, float positionOnAxis) const {
             float delta = mBoundaries.max[axis] - mBoundaries.min[axis];
+            if (fabs(delta) < 1e-09) {
+                return 0;
+            }
             return (positionOnAxis - mBoundaries.min[axis]) / delta * mResolution;
         }
         
@@ -273,6 +277,7 @@ namespace EARenderer {
 #pragma mark Iteration
         
         ForwardIterator begin() {
+//            printf("Requesting begin iterator for %d objects\n", mObjects.begin()->second.size());
             return ForwardIterator(mObjects.begin(), mObjects.end());
         }
         

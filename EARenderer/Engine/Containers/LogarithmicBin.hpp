@@ -149,6 +149,14 @@ namespace EARenderer {
         
         LogarithmicBin(float maxWeight) : LogarithmicBin(0.0f, maxWeight) { }
         
+        float minWeight() const {
+            return mMinWeight;
+        }
+        
+        float maxWeight() const {
+            return mMaxWeight;
+        }
+        
         float totalWeight() const {
             return mTotalWeight;
         }
@@ -164,17 +172,36 @@ namespace EARenderer {
         void insert(const T& object, float weight) {
             ASSERT(weight >= mMinWeight && weight <= mMaxWeight, "Weight " << weight << " is outside of bounds [" << mMinWeight << ", " << mMaxWeight << "]");
             
-            auto& bin = mBins[index(weight)];
+            Index i = index(weight);
+            auto& bin = mBins[i];
             bin.objects.insert(std::make_pair(mInsertionCounter, BinObject(object, weight)));
             bin.totalWeight += weight;
             mSize++;
             mInsertionCounter++;
             mTotalWeight += weight;
+            
+//            printf("Inserting, new size is %llu, total weight is %f\n", mSize, mTotalWeight);
         }
         
         void erase(const ForwardIterator& it) {
             auto& bin = it.mMapIterator->second;
+            mTotalWeight -= it.mNestedMapIterator->second.weight;
+            bin.totalWeight -= it.mNestedMapIterator->second.weight;
+            mSize--;
             bin.objects.erase(it.mNestedMapIterator);
+            
+            // Floating point errors may cause negative weights
+//            if (mTotalWeight < 0.0f) {
+//                mTotalWeight = 0.0f;
+//            }
+//            
+//            if (bin.totalWeight < 0.0f) {
+//                bin.totalWeight = 0.0f;
+//            }
+            
+            if (mSize == 0) {
+                printf("Erasing, new size is %llu, total weight is %f\n", mSize, mTotalWeight);
+            }
         }
 
         ForwardIterator random() {
@@ -184,16 +211,33 @@ namespace EARenderer {
             Index randomBinIndex = 0;
             MapIterator randomBinIt;
             
+            bool anyFound = false;
+            
             // Perform linear search of a random bin based on a probability
             // proportional to bin's total weight
             for (auto it = mBins.begin(); it != mBins.end(); ++it) {
                 accumulatedWeight += it->second.totalWeight / mTotalWeight;
                 
+                if (it->second.objects.empty()) {
+                    continue;
+                }
+                
+                randomBinIndex = it->first;
+                randomBinIt = it;
+                
                 if (randomWeight < accumulatedWeight) {
-                    randomBinIndex = it->first;
-                    randomBinIt = it;
+                    anyFound = true;
                     break;
                 }
+            }
+            
+            if (!anyFound) {
+                printf("Linear search haven't found anything\n");
+                float total = 0.0f;
+                for (auto& bin : mBins) {
+                    total += bin.second.totalWeight;
+                }
+                printf("Weight of all bins is %f, total weight is %f\n", total, mTotalWeight);                
             }
             
             Index randomBinObjectIndex = 0;
@@ -209,6 +253,7 @@ namespace EARenderer {
                 randomWeight = mDistribution(mEngine);
                 randomBinIterator = std::next(randomBinIt->second.objects.begin(), randomBinObjectIndex);
                 
+//                printf("Accessing iterator %p, second %p\n", &randomBinIterator, &randomBinIterator->second);
                 float probability = randomBinIterator->second.weight / binMaxWeight(randomBinIndex);
 
                 if (randomWeight < probability) {

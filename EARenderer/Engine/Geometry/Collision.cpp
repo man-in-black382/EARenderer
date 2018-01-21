@@ -15,7 +15,7 @@ namespace EARenderer {
     
 #pragma mark - Private
     
-    Interval Collision::GetInterval(const Triangle& triangle, const glm::vec3& axis) {
+    Interval Collision::GetInterval(const Triangle3D& triangle, const glm::vec3& axis) {
         Interval result;
         
         result.min = glm::dot(axis, triangle.points[0]);
@@ -56,7 +56,7 @@ namespace EARenderer {
         return result;
     }
     
-    bool Collision::OverlapOnAxis(const AxisAlignedBox3D& aabb, const Triangle& triangle, const glm::vec3& axis) {
+    bool Collision::OverlapOnAxis(const AxisAlignedBox3D& aabb, const Triangle3D& triangle, const glm::vec3& axis) {
         Interval a = GetInterval(aabb, axis);
         Interval b = GetInterval(triangle, axis);
         return ((b.min <= a.max) && (a.min <= b.max));
@@ -64,7 +64,7 @@ namespace EARenderer {
     
 #pragma mark - Public
     
-    bool Collision::TriangleAABB(const Triangle& t, const AxisAlignedBox3D& a) {
+    bool Collision::TriangleAABB(const Triangle3D& t, const AxisAlignedBox3D& a) {
         // Compute the edge vectors of the triangle  (ABC)
         glm::vec3 f0 = t.b - t.a;
         glm::vec3 f1 = t.c - t.b;
@@ -152,7 +152,7 @@ namespace EARenderer {
                 projection2 > 0 && projection2 < glm::length(parallelogram.side2));
     }
     
-    bool Collision::SphereContainsTriangle(const Sphere& sphere, const Triangle& triangle) {
+    bool Collision::SphereContainsTriangle(const Sphere& sphere, const Triangle3D& triangle) {
         float ao = glm::length(triangle.a - sphere.center);
         float bo = glm::length(triangle.b - sphere.center);
         float co = glm::length(triangle.c - sphere.center);

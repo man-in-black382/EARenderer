@@ -18,8 +18,8 @@ namespace EARenderer {
     {
         SurfelGenerator generator(resourcePool);
         generator.generateStaticGeometrySurfels(scene);
-        mSurfels = generator.surfels;
-        mVAO.initialize(generator.surfels, GLVertexArrayLayoutDescription({
+        mSurfels = generator.mSurfels;
+        mVAO.initialize(generator.mSurfels, GLVertexArrayLayoutDescription({
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
         }));

@@ -13,7 +13,8 @@
 #include "ResourcePool.hpp"
 #include "Surfel.hpp"
 #include "LogarithmicBin.hpp"
-#include "Triangle.hpp"
+#include "Triangle2D.hpp"
+#include "Triangle3D.hpp"
 #include "SpatialHash.hpp"
 
 #include <vector>
@@ -26,12 +27,15 @@ namespace EARenderer {
     class SurfelGenerator {
     private:
         struct TransformedTriangleData {
-            Triangle triangle;
-            std::array<glm::vec3, 3> normals;
-            std::array<glm::vec3, 3> albedoValues;
-            std::array<glm::vec2, 3> UVs;
+            Triangle3D positions;
+            Triangle3D normals;
+            Triangle3D albedoValues;
+            Triangle2D UVs;
             
-            TransformedTriangleData(const Triangle& t, const std::array<glm::vec3, 3>& n, const std::array<glm::vec3, 3> a, const std::array<glm::vec2, 3> uv);
+            TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals,
+                                    const Triangle3D& albedos, const Triangle2D& UVs);
+            
+            std::array<TransformedTriangleData, 4> split() const;
         };
         
         struct SurfelCandidate {
@@ -51,14 +55,20 @@ namespace EARenderer {
         ResourcePool *mResourcePool;
         
         glm::vec3 randomBarycentricCoordinates();
+        
         LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
+        
+        bool isTriangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels);
+        
         SurfelCandidate generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        
         Surfel generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        
         std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:
         // DEBUG
-        std::vector<Surfel> surfels;
+        std::vector<Surfel> mSurfels;
         
         SurfelGenerator(ResourcePool *resourcePool);
         

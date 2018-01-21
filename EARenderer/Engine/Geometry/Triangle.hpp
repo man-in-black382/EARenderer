@@ -14,29 +14,29 @@
 
 namespace EARenderer {
     
+    template <typename Point>
     struct Triangle {
         union {
             struct {
-                glm::vec3 a;
-                glm::vec3 b;
-                glm::vec3 c;
+                Point a;
+                Point b;
+                Point c;
             };
 
             struct {
-                glm::vec3 p1;
-                glm::vec3 p2;
-                glm::vec3 p3;
+                Point p1;
+                Point p2;
+                Point p3;
             };
             
-            glm::vec3 points[3];
-            float values[9];
+            std::array<Point, 3> points;
+            std::array<float, 3 * sizeof(Point) / sizeof(float)> values;
         };
         
         Triangle() = default;
-        Triangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3);
+        Triangle(const Point& p1, const Point& p2, const Point& p3) : a(p1), b(p2), c(p3) { }
         
-        float area() const;
-        std::array<Triangle, 4> split() const;
+        virtual float area() const = 0;
     };
     
 }
