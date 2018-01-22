@@ -71,6 +71,16 @@ namespace EARenderer {
         };
     }
     
+    float AxisAlignedBox3D::smallestDimensionLength() const {
+        float minXY = std::min(fabs(max.x - min.x), fabs(max.y - min.y));
+        return std::min(fabs(max.z - min.z), minXY);
+    }
+    
+    float AxisAlignedBox3D::largestDimensionLength() const {
+        float maxXY = std::max(fabs(max.x - min.x), fabs(max.y - min.y));
+        return std::max(fabs(max.z - min.z), maxXY);
+    }
+    
     AxisAlignedBox3D AxisAlignedBox3D::transformedBy(const Transformation& t) const {
         return transformedBy(t.modelMatrix());
     }

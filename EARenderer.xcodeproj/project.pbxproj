@@ -253,6 +253,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AC0636D42015E0560065DEB7 /* StringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StringUtils.hpp; sourceTree = "<group>"; };
 		AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
@@ -1388,6 +1389,7 @@
 				CE70F8511F8F8EBD00AD9027 /* Log.hpp */,
 				CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */,
 				CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */,
+				AC0636D42015E0560065DEB7 /* StringUtils.hpp */,
 			);
 			path = Utils;
 			sourceTree = "<group>";

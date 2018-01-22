@@ -117,27 +117,37 @@ namespace EARenderer {
             maximumArea = std::max(maximumArea, area);
         }
         
-        LogarithmicBin<TransformedTriangleData> bin(minimumArea / 100, maximumArea);
+        const float kTriangleSubdivisionFactor = 10.0f;
+        LogarithmicBin<TransformedTriangleData> bin(minimumArea / kTriangleSubdivisionFactor, maximumArea);
         
-        for (auto& transformedVertex : transformedTriangleProperties) {
-            bin.insert(transformedVertex, transformedVertex.positions.area());
+        for (auto& transformedTriangle : transformedTriangleProperties) {
+            bin.insert(transformedTriangle, transformedTriangle.positions.area());
         }
         
         return bin;
     }
     
-    bool SurfelGenerator::isTriangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
+    bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
         bool triangleCoveredCompletely = false;
-        
-        for (auto& surfel : surfels) {
+        for (auto& surfel : surfels.neighbours(triangle.p1)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
                 triangleCoveredCompletely = true;
                 break;
             }
         }
-        
         return triangleCoveredCompletely;
+    }
+    
+    bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels) {
+        bool minimumDistanceRequirementMet = true;
+        for (auto& surfel : surfels.neighbours(candidate.position)) {
+            if (glm::length(surfel.position - candidate.position) < mMinimumSurfelDistance) {
+                minimumDistanceRequirementMet = false;
+                break;
+            }
+        }
+        return minimumDistanceRequirementMet;
     }
     
     SurfelGenerator::SurfelCandidate SurfelGenerator::generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
@@ -176,7 +186,12 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
             
-            SpatialHash<Surfel> surfelSpatialHash(boundingBox, 1);
+            const int8_t kSurfelCountPerSpaceCell = 10;
+            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() / mMinimumSurfelDistance / kSurfelCountPerSpaceCell;
+            
+            printf("Suggested division resolution is %d\n", spaceDivisionResolution);
+            
+            SpatialHash<Surfel> surfelSpatialHash(boundingBox, std::max(spaceDivisionResolution, 1));
 
             // Actual algorithm that uniformly distributes surfels on geometry
             while (!bin.empty()) {
@@ -185,18 +200,10 @@ namespace EARenderer {
                 SurfelCandidate surfelCandidate = generateSurfelCandidate(subMesh, bin);
 
                 // Checks to see if surfel candidate meets the minimum distance requirement with respect to the current surfel set
-                bool minimumDistanceRequirementMet = true;
-
-                for (auto& surfel : surfelSpatialHash) {
-                    if (glm::length(surfel.position - surfelCandidate.position) < mMinimumSurfelDistance) {
-                        minimumDistanceRequirementMet = false;
-                        break;
-                    }
-                }
 
                 // If the minimum distance requirement is met, the algorithm computes all missing information
                 // for the surfel candidate and then adds the resultant surfel to the surfel set
-                if (minimumDistanceRequirementMet) {
+                if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate, surfelSpatialHash)) {
                     surfelSpatialHash.insert(generateSurfel(surfelCandidate, bin), surfelCandidate.position);
                 }
 
@@ -204,28 +211,33 @@ namespace EARenderer {
                 auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
                 float triangleArea = surfelPositionTriangle.area();
 
-                if (isTriangleCompletelyCovered(surfelPositionTriangle, surfelSpatialHash)) {
+                if (triangleCompletelyCovered(surfelPositionTriangle, surfelSpatialHash)) {
                     // If triangle is covered, it is discarded
                     bin.erase(surfelCandidate.logarithmicBinIterator);
                 } else {
                     // Otherwise, we split it into a number of child triangles and
-                    // add the uncovered triangles back to the
+                    // add the uncovered triangles back to the list of active triangles
                     bin.erase(surfelCandidate.logarithmicBinIterator);
                     
                     auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
                     for (auto& subTriangle : subTriangles) {
                         float subTriangleArea = triangleArea / 4.0f;
-                        bool covered = isTriangleCompletelyCovered(subTriangle.positions, surfelSpatialHash);
-                        bool tooSmall = subTriangleArea <= bin.minWeight();
+                        bool covered = triangleCompletelyCovered(subTriangle.positions, surfelSpatialHash);
+                        bool lessThanBinMinimum = subTriangleArea <= bin.minWeight();
+                        bool lessThanAreaOfMinimumCircle = subTriangleArea < M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
                         
-                        if (!covered && !tooSmall) {
+                        if (!covered && !lessThanBinMinimum && !lessThanAreaOfMinimumCircle) {
                             bin.insert(subTriangle, subTriangleArea);
                         }
                     }
+                    
+//                    printf("Inserted sub triangles with area %f, mimimum area %f\n", triangleArea / 4, bin.minWeight());
                 }
+                
+//                printf("Elements left in bin: %llu\n", bin.size());
+                
+                // Repeat until there are no more triangles
             }
-            
-            printf("");
             
             // Flatten surfels to a vector
             for (auto& surfel : surfelSpatialHash) {
@@ -240,9 +252,11 @@ namespace EARenderer {
     
     void SurfelGenerator::generateStaticGeometrySurfels(Scene *scene) {
         for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
-            auto& meshInstance = scene->meshInstances()[meshInstanceID];
-            auto batch = generateSurflesOnMeshInstance(meshInstance);
-            mSurfels.insert(mSurfels.end(), batch.begin(), batch.end());
+            Measurement::executionTime("Surfel generation took", [&]() {
+                auto& meshInstance = scene->meshInstances()[meshInstanceID];
+                auto batch = generateSurflesOnMeshInstance(meshInstance);
+                mSurfels.insert(mSurfels.end(), batch.begin(), batch.end());
+            });
         }
     }
     

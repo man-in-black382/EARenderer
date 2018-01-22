@@ -11,7 +11,6 @@
 
 #include "TupleHash.hpp"
 #include "AxisAlignedBox3D.hpp"
-#include "Macros.h"
 
 #include <unordered_map>
 #include <vector>
@@ -60,16 +59,15 @@ namespace EARenderer {
                     throw std::out_of_range("Incrementing an iterator which had reached the end already");
                 }
                 
-                if (mCurrentVectorIterator != mMapIterator->second.end()) {
-                    // Increment iterator of current vector if it had not reached its end already
-                    mCurrentVectorIterator++;
-                } else {
-                    // Move on to the next vector otherwise
+                mCurrentVectorIterator++;
+                
+                if (mCurrentVectorIterator == mMapIterator->second.end()) {
                     mMapIterator++;
                     if (mMapIterator != mMapEndIterator) {
                         mCurrentVectorIterator = mMapIterator->second.begin();
                     }
                 }
+                
                 return *this;
             }
 
@@ -227,10 +225,6 @@ namespace EARenderer {
             for (int32_t x = -1; x <= 1; ++x) {
                 for (int32_t y = -1; y <= 1; ++y) {
                     for (int32_t z = -1; z <= 1; ++z) {
-                        if (x == 0 && y == 0 && z == 0) {
-                            continue;
-                        }
-                        
                         Cell neighbour = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
                         if (isCellValid(neighbour) && mObjects.find(neighbour) != mObjects.end()) {
                             neighbours.push_back(neighbour);
@@ -277,7 +271,6 @@ namespace EARenderer {
 #pragma mark Iteration
         
         ForwardIterator begin() {
-//            printf("Requesting begin iterator for %d objects\n", mObjects.begin()->second.size());
             return ForwardIterator(mObjects.begin(), mObjects.end());
         }
         

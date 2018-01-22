@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <random>
 
-#include "Macros.h"
+#include "StringUtils.hpp"
 
 namespace EARenderer {
     
@@ -123,7 +123,7 @@ namespace EARenderer {
         int32_t index(float weight) {
             // I believe that formula for index calculation presented in the article is incorrect
             // I changed it to log2f(weight / mMinWeight)
-            return mMinWeight == 0.0f ? log2f(weight) : log2f(weight / mMinWeight);
+            return log2f(weight / mMinWeight);
         }
         
         float binMinWeight(Index index) {
@@ -144,7 +144,9 @@ namespace EARenderer {
         mEngine(std::random_device()()),
         mDistribution(0.0f, 1.0f)
         {
-            ASSERT(maxWeight >= minWeight, "Maximum weight in LogarithmicBin must be larger than minimum weight!");
+            if (maxWeight < minWeight) {
+                throw std::invalid_argument(string_format("Maximum weight (%f) in LogarithmicBin must be larger than minimum weight (%f)!\n", maxWeight, minWeight));
+            }
         }
         
         LogarithmicBin(float maxWeight) : LogarithmicBin(0.0f, maxWeight) { }
@@ -170,7 +172,9 @@ namespace EARenderer {
         }
         
         void insert(const T& object, float weight) {
-            ASSERT(weight >= mMinWeight && weight <= mMaxWeight, "Weight " << weight << " is outside of bounds [" << mMinWeight << ", " << mMaxWeight << "]");
+            if (weight < mMinWeight || weight > mMaxWeight) {
+                throw std::invalid_argument(string_format("Weigth %f is outside of bounds [%f, %f]\n", weight, mMinWeight, mMaxWeight));
+            }
             
             Index i = index(weight);
             auto& bin = mBins[i];
@@ -179,8 +183,6 @@ namespace EARenderer {
             mSize++;
             mInsertionCounter++;
             mTotalWeight += weight;
-            
-//            printf("Inserting, new size is %llu, total weight is %f\n", mSize, mTotalWeight);
         }
         
         void erase(const ForwardIterator& it) {
@@ -191,16 +193,12 @@ namespace EARenderer {
             bin.objects.erase(it.mNestedMapIterator);
             
             // Floating point errors may cause negative weights
-//            if (mTotalWeight < 0.0f) {
-//                mTotalWeight = 0.0f;
-//            }
-//            
-//            if (bin.totalWeight < 0.0f) {
-//                bin.totalWeight = 0.0f;
-//            }
+            if (mTotalWeight < 0.0f) {
+                mTotalWeight = 0.0f;
+            }
             
-            if (mSize == 0) {
-                printf("Erasing, new size is %llu, total weight is %f\n", mSize, mTotalWeight);
+            if (bin.totalWeight < 0.0f) {
+                bin.totalWeight = 0.0f;
             }
         }
 
@@ -210,8 +208,6 @@ namespace EARenderer {
 
             Index randomBinIndex = 0;
             MapIterator randomBinIt;
-            
-            bool anyFound = false;
             
             // Perform linear search of a random bin based on a probability
             // proportional to bin's total weight
@@ -226,20 +222,10 @@ namespace EARenderer {
                 randomBinIt = it;
                 
                 if (randomWeight < accumulatedWeight) {
-                    anyFound = true;
                     break;
                 }
             }
-            
-            if (!anyFound) {
-                printf("Linear search haven't found anything\n");
-                float total = 0.0f;
-                for (auto& bin : mBins) {
-                    total += bin.second.totalWeight;
-                }
-                printf("Weight of all bins is %f, total weight is %f\n", total, mTotalWeight);                
-            }
-            
+
             Index randomBinObjectIndex = 0;
             NestedMapIterator randomBinIterator;
             
@@ -253,7 +239,6 @@ namespace EARenderer {
                 randomWeight = mDistribution(mEngine);
                 randomBinIterator = std::next(randomBinIt->second.objects.begin(), randomBinObjectIndex);
                 
-//                printf("Accessing iterator %p, second %p\n", &randomBinIterator, &randomBinIterator->second);
                 float probability = randomBinIterator->second.weight / binMaxWeight(randomBinIndex);
 
                 if (randomWeight < probability) {

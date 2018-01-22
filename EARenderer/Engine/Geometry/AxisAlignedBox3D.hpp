@@ -40,6 +40,8 @@ namespace EARenderer {
          */
         glm::mat4 asFrustum() const;
         std::array<glm::vec4, 8> cornerPoints() const;
+        float smallestDimensionLength() const;
+        float largestDimensionLength() const;
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;

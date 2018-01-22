@@ -20,19 +20,17 @@ namespace EARenderer {
     public:
         using Work = std::function<void()>;
         
-        static uint64_t executionTime(const Work& work, bool print = false, const std::string& printPrefix = "") {
+        static uint64_t executionTime(const std::string& printPrefix, const Work& work) {
             auto t1 = std::chrono::high_resolution_clock::now();
             work();
             auto t2 = std::chrono::high_resolution_clock::now();
             
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
             
-            if (print) {
-                if (printPrefix.length()) {
-                    printf("%s ", printPrefix.c_str());
-                }
-                printf("%lld microseconds\n", duration);
+            if (printPrefix.length()) {
+                printf("%s ", printPrefix.c_str());
             }
+            printf("%lld microseconds\n", duration);
             
             return duration;
         }

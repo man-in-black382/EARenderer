@@ -979,27 +979,27 @@
                                 </connections>
                             </tabView>
                             <openGLView depthSize="24bit" antiAliasingType="multisample" rendererType="accelerated" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
-                                <rect key="frame" x="2" y="0.0" width="1020" height="474"/>
+                                <rect key="frame" x="2" y="0.0" width="1300" height="474"/>
                             </openGLView>
                             <tabView type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="o3E-Ow-U6b" customClass="SceneEditorTabView">
-                                <rect key="frame" x="1022" y="0.0" width="280" height="474"/>
+                                <rect key="frame" x="1302" y="0.0" width="0.0" height="474"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="280" id="YHh-TR-Cn5"/>
+                                    <constraint firstAttribute="width" id="YHh-TR-Cn5"/>
                                 </constraints>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
                                     <tabViewItem label="Mesh" identifier="1" id="Q6w-3f-6br" customClass="MeshEditingTabViewItem">
-                                        <view key="view" id="f4d-fO-pnS">
-                                            <rect key="frame" x="0.0" y="0.0" width="280" height="474"/>
+                                        <view key="view" ambiguous="YES" id="f4d-fO-pnS">
+                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="474"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <scrollView wantsLayer="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uPO-5f-Rac">
+                                                <scrollView wantsLayer="YES" ambiguous="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uPO-5f-Rac">
                                                     <rect key="frame" x="0.0" y="0.0" width="280" height="474"/>
-                                                    <clipView key="contentView" id="uUd-KI-vRW" customClass="FlippedClipView">
+                                                    <clipView key="contentView" ambiguous="YES" id="uUd-KI-vRW" customClass="FlippedClipView">
                                                         <rect key="frame" x="1" y="1" width="278" height="472"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <view translatesAutoresizingMaskIntoConstraints="NO" id="7ps-WS-3pd">
+                                                            <view ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7ps-WS-3pd">
                                                                 <rect key="frame" x="0.0" y="125" width="278" height="303"/>
                                                                 <subviews>
                                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Vkr-Db-cl2">
@@ -1010,7 +1010,7 @@
                                                                         </constraints>
                                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="mesh" id="tzA-FO-ruz"/>
                                                                     </imageView>
-                                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="tIm-Jf-XTB" userLabel="Separator" customClass="ColoredView">
+                                                                    <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tIm-Jf-XTB" userLabel="Separator" customClass="ColoredView">
                                                                         <rect key="frame" x="0.0" y="232" width="278" height="1"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="1" id="ge9-wX-npe"/>
@@ -1029,7 +1029,7 @@
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3LB-xl-tO0" userLabel="Translation Stack View">
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3LB-xl-tO0" userLabel="Translation Stack View">
                                                                         <rect key="frame" x="65" y="176" width="203" height="32"/>
                                                                         <subviews>
                                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d3D-Xb-fNZ">
@@ -1158,7 +1158,7 @@
                                                                             <real value="3.4028234663852886e+38"/>
                                                                         </customSpacing>
                                                                     </stackView>
-                                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="zVe-dD-B7U" userLabel="Separator" customClass="ColoredView">
+                                                                    <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zVe-dD-B7U" userLabel="Separator" customClass="ColoredView">
                                                                         <rect key="frame" x="0.0" y="66" width="278" height="1"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="1" id="lVe-Ty-am9"/>
@@ -1177,7 +1177,7 @@
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="hWq-Pt-oAS" userLabel="Separator" customClass="ColoredView">
+                                                                    <customView ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWq-Pt-oAS" userLabel="Separator" customClass="ColoredView">
                                                                         <rect key="frame" x="0.0" y="167" width="278" height="1"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="1" id="i3Z-MR-nVp"/>
@@ -1196,7 +1196,7 @@
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yfx-3i-Zjx">
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yfx-3i-Zjx">
                                                                         <rect key="frame" x="37" y="127" width="26" height="14"/>
                                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Axis" id="476-Hi-YGK">
                                                                             <font key="font" metaFont="smallSystem"/>
@@ -1204,7 +1204,7 @@
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Olq-6m-Iik" userLabel="Rotation Axis Stack View">
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Olq-6m-Iik" userLabel="Rotation Axis Stack View">
                                                                         <rect key="frame" x="65" y="111" width="203" height="32"/>
                                                                         <subviews>
                                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9eo-e0-Q4P">
@@ -1333,7 +1333,7 @@
                                                                             <real value="3.4028234663852886e+38"/>
                                                                         </customSpacing>
                                                                     </stackView>
-                                                                    <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWB-GB-L95" userLabel="Rotation Angle Stack View">
+                                                                    <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWB-GB-L95" userLabel="Rotation Angle Stack View">
                                                                         <rect key="frame" x="65" y="75" width="65" height="32"/>
                                                                         <subviews>
                                                                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a0l-rr-FyK" userLabel="Rotation Angle - Text Field">
@@ -1371,7 +1371,7 @@
                                                                             <real value="3.4028234663852886e+38"/>
                                                                         </customSpacing>
                                                                     </stackView>
-                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U5a-rD-xW1">
+                                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U5a-rD-xW1">
                                                                         <rect key="frame" x="29" y="91" width="34" height="14"/>
                                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Angle" id="WNk-hW-Xdi">
                                                                             <font key="font" metaFont="smallSystem"/>
@@ -1379,7 +1379,7 @@
                                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                         </textFieldCell>
                                                                     </textField>
-                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dom-7u-4WK" userLabel="Scale Stack View">
+                                                                    <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="4" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" ambiguous="YES" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dom-7u-4WK" userLabel="Scale Stack View">
                                                                         <rect key="frame" x="65" y="10" width="203" height="32"/>
                                                                         <subviews>
                                                                             <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DN3-tl-vfp">
@@ -1509,7 +1509,7 @@
                                                                         </customSpacing>
                                                                     </stackView>
                                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hPl-mX-Lfb">
-                                                                        <rect key="frame" x="68" y="259" width="202" height="17"/>
+                                                                        <rect key="frame" x="68" y="259" width="31" height="17"/>
                                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Mesh" id="Cyz-fp-CZJ">
                                                                             <font key="font" size="11" name="Menlo-Regular"/>
                                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
