@@ -8,6 +8,7 @@ layout (location = 4) in float iArea;
 
 uniform mat4 uModelViewProjection;
 
+out vec3 gNormal;
 out float gArea;
 
 // TBN matrix used to rotate triangle fan (surfel disk) in geometry shader
@@ -21,6 +22,7 @@ out float gArea;
 //}
 
 void main() {
+    gNormal = iNormal;
     gArea = iArea;
     gl_Position = uModelViewProjection * vec4(iPosition, 1.0);
 }

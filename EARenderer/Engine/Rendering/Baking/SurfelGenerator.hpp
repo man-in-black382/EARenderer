@@ -49,15 +49,16 @@ namespace EARenderer {
             using BinIterator = LogarithmicBin<TransformedTriangleData>::ForwardIterator;
             
             glm::vec3 position;
+            glm::vec3 normal;
             glm::vec3 barycentricCoordinates;
             BinIterator logarithmicBinIterator;
             
-            SurfelCandidate(const glm::vec3& position, const glm::vec3& barycentric, BinIterator iterator);
+            SurfelCandidate(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& barycentric, BinIterator iterator);
         };
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 0.04;
+        float mMinimumSurfelDistance = 0.5;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

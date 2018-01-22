@@ -28,9 +28,10 @@ namespace EARenderer {
     UVs(UVs)
     { }
     
-    SurfelGenerator::SurfelCandidate::SurfelCandidate(const glm::vec3& position, const glm::vec3& barycentric, BinIterator iterator)
+    SurfelGenerator::SurfelCandidate::SurfelCandidate(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& barycentric, BinIterator iterator)
     :
     position(position),
+    normal(normal),
     barycentricCoordinates(barycentric),
     logarithmicBinIterator(iterator)
     { }
@@ -117,7 +118,7 @@ namespace EARenderer {
             maximumArea = std::max(maximumArea, area);
         }
         
-        const float kTriangleSubdivisionFactor = 10.0f;
+        const float kTriangleSubdivisionFactor = 1000.0f;
         LogarithmicBin<TransformedTriangleData> bin(minimumArea / kTriangleSubdivisionFactor, maximumArea);
         
         for (auto& transformedTriangle : transformedTriangleProperties) {
@@ -142,6 +143,12 @@ namespace EARenderer {
     bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels) {
         bool minimumDistanceRequirementMet = true;
         for (auto& surfel : surfels.neighbours(candidate.position)) {
+            // Ignore surfel/candidate looking in the opposite directions to avoid tests
+            // with surfels located on another side of a thin mesh (a wall for example)
+            if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
+                continue;
+            }
+            
             if (glm::length(surfel.position - candidate.position) < mMinimumSurfelDistance) {
                 minimumDistanceRequirementMet = false;
                 break;
@@ -157,10 +164,14 @@ namespace EARenderer {
         auto ab = randomTriangleData.positions.b - randomTriangleData.positions.a;
         auto ac = randomTriangleData.positions.c - randomTriangleData.positions.a;
         
+        auto Nab = randomTriangleData.normals.b - randomTriangleData.normals.a;
+        auto Nac = randomTriangleData.normals.c - randomTriangleData.normals.a;
+        
         glm::vec3 barycentric = randomBarycentricCoordinates();
         glm::vec3 position = randomTriangleData.positions.a + ((ab * barycentric.x) + (ac * barycentric.y));
+        glm::vec3 normal = glm::normalize(randomTriangleData.normals.a + ((Nab * barycentric.x) + (Nac * barycentric.y)));
         
-        return { position, barycentric, it };
+        return { position, normal, barycentric, it };
     }
     
     Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
@@ -173,7 +184,7 @@ namespace EARenderer {
         float singleSurfelArea = transformedVerticesBin.totalWeight() / transformedVerticesBin.size();
         
         //        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
-        return Surfel(surfelCandidate.position, glm::vec3(0), glm::vec3(0), glm::vec2(0), singleSurfelArea);
+        return Surfel(surfelCandidate.position, surfelCandidate.normal, glm::vec3(0), glm::vec2(0), singleSurfelArea);
     }
     
     std::vector<Surfel> SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
@@ -187,7 +198,7 @@ namespace EARenderer {
             auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
             
             const int8_t kSurfelCountPerSpaceCell = 10;
-            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() / mMinimumSurfelDistance / kSurfelCountPerSpaceCell;
+            int32_t spaceDivisionResolution = 1;//boundingBox.largestDimensionLength() / mMinimumSurfelDistance;
             
             printf("Suggested division resolution is %d\n", spaceDivisionResolution);
             
@@ -223,10 +234,9 @@ namespace EARenderer {
                     for (auto& subTriangle : subTriangles) {
                         float subTriangleArea = triangleArea / 4.0f;
                         bool covered = triangleCompletelyCovered(subTriangle.positions, surfelSpatialHash);
-                        bool lessThanBinMinimum = subTriangleArea <= bin.minWeight();
-                        bool lessThanAreaOfMinimumCircle = subTriangleArea < M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
+                        bool lessThanBinMinimum = subTriangleArea < bin.minWeight();
                         
-                        if (!covered && !lessThanBinMinimum && !lessThanAreaOfMinimumCircle) {
+                        if (!covered && !lessThanBinMinimum) {
                             bin.insert(subTriangle, subTriangleArea);
                         }
                     }

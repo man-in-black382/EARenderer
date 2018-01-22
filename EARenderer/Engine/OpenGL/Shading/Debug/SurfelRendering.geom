@@ -5,7 +5,8 @@
 layout (points) in;
 layout (points, max_vertices = 1) out;
 
-in vec3 gArea[];
+in vec3 gNormal[];
+in float gArea[];
 
 void main() {
     
@@ -17,8 +18,10 @@ void main() {
 //    }
 //    glEnd();
     
-    gl_Position = gl_in[0].gl_Position;
-    gl_PointSize = 2.5;
+//    vec4 displacement = vec4(normalize(gNormal[0]) * 0.001, 0.0);
+    gl_Position = gl_in[0].gl_Position;// + displacement;
+    
+    gl_PointSize = 5.0;
     EmitVertex();
     EndPrimitive();
 }
