@@ -118,7 +118,7 @@ namespace EARenderer {
             maximumArea = std::max(maximumArea, area);
         }
         
-        const float kTriangleSubdivisionFactor = 1000.0f;
+        const float kTriangleSubdivisionFactor = 10.0f;
         LogarithmicBin<TransformedTriangleData> bin(minimumArea / kTriangleSubdivisionFactor, maximumArea);
         
         for (auto& transformedTriangle : transformedTriangleProperties) {
@@ -197,8 +197,8 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
             
-            const int8_t kSurfelCountPerSpaceCell = 10;
-            int32_t spaceDivisionResolution = 1;//boundingBox.largestDimensionLength() / mMinimumSurfelDistance;
+            const int8_t kSurfelCountPerSpaceCell = 5;
+            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() / mMinimumSurfelDistance / kSurfelCountPerSpaceCell;
             
             printf("Suggested division resolution is %d\n", spaceDivisionResolution);
             
@@ -240,13 +240,7 @@ namespace EARenderer {
                             bin.insert(subTriangle, subTriangleArea);
                         }
                     }
-                    
-//                    printf("Inserted sub triangles with area %f, mimimum area %f\n", triangleArea / 4, bin.minWeight());
                 }
-                
-//                printf("Elements left in bin: %llu\n", bin.size());
-                
-                // Repeat until there are no more triangles
             }
             
             // Flatten surfels to a vector

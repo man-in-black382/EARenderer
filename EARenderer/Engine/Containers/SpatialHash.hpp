@@ -100,15 +100,15 @@ namespace EARenderer {
 #pragma mark Range iterator
 
         class Range {
-        public:
+        private:
+            using CellObjectsIterator = typename std::vector<T>::iterator;
+            using CellBeginEndPair = std::pair<CellObjectsIterator, CellObjectsIterator>;
             
+        public:
             class Iterator {
             private:
                 friend SpatialHash;
                 friend Range;
-                
-                using CellObjectsIterator = typename std::vector<T>::iterator;
-                using CellBeginEndPair = std::pair<CellObjectsIterator, CellObjectsIterator>;
                 
                 std::vector<CellBeginEndPair> mCellBeginEndPairs;
                 size_t mCurrentPairIndex = 0;
@@ -137,7 +137,7 @@ namespace EARenderer {
                         }
                         mCurrentPairIndex++;
                     } else {
-                        current++;
+                        ++current;
                     }
 
                     return *this;
@@ -175,7 +175,7 @@ namespace EARenderer {
             Iterator mBegin;
             Iterator mEnd;
             
-            Range(const std::vector<typename Iterator::CellBeginEndPair>& cellBeginEndPairs)
+            Range(const std::vector<CellBeginEndPair>& cellBeginEndPairs)
             :
             mBegin(cellBeginEndPairs),
             mEnd(cellBeginEndPairs)
@@ -204,7 +204,8 @@ namespace EARenderer {
             if (fabs(delta) < 1e-09) {
                 return 0;
             }
-            return (positionOnAxis - mBoundaries.min[axis]) / delta * mResolution;
+            int32_t index = (positionOnAxis - mBoundaries.min[axis]) / delta * (mResolution - 1);
+            return index;
         }
         
         Cell cell(const glm::vec3& position) const {
@@ -226,6 +227,7 @@ namespace EARenderer {
                 for (int32_t y = -1; y <= 1; ++y) {
                     for (int32_t z = -1; z <= 1; ++z) {
                         Cell neighbour = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
+
                         if (isCellValid(neighbour) && mObjects.find(neighbour) != mObjects.end()) {
                             neighbours.push_back(neighbour);
                         }
@@ -259,12 +261,11 @@ namespace EARenderer {
         
         Range neighbours(const glm::vec3& position) {
             auto neighbourCells = neighbours(cell(position));
-            std::vector<typename Range::Iterator::CellBeginEndPair> neighbourIteratorPairs;
+            std::vector<typename Range::CellBeginEndPair> neighbourIteratorPairs;
             for (auto& cell : neighbourCells) {
                 auto& objectsInCell = mObjects[cell];
                 neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));
             }
-
             return Range(neighbourIteratorPairs);
         }
         

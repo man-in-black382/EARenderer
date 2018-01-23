@@ -240,7 +240,7 @@ namespace EARenderer {
                 randomBinIterator = std::next(randomBinIt->second.objects.begin(), randomBinObjectIndex);
                 
                 float probability = randomBinIterator->second.weight / binMaxWeight(randomBinIndex);
-
+                
                 if (randomWeight < probability) {
                     break;
                 }

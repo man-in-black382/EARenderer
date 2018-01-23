@@ -149,8 +149,10 @@
     t.translation.y = 0.5;
     planeInstance.setTransformation(t);
     
+    
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
-    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(planeInstance));
+    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
+    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
     scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
     
@@ -158,6 +160,10 @@
     scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
     
     // Skybox
+    
+    scene->meshInstances().erase(planeInstanceID);
+    
+    std::next(scene->meshInstances().begin(), 10);
     
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));

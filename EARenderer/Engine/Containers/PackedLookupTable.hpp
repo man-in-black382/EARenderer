@@ -13,6 +13,8 @@
 #include <utility>
 #include <assert.h>
 
+// http://bitsquid.blogspot.ca/2011/09/managing-decoupling-part-4-id-lookup.html
+
 namespace EARenderer {
     
     typedef uint32_t ID;
@@ -102,18 +104,7 @@ namespace EARenderer {
         private:
             ID* mCurrentObjectID;
         };
-        
-//        PackedLookupTable()
-//        :
-//        mObjectsCount(0),
-//        mCapacity(0),
-//        mObjects(nullptr),
-//        mObjectIDs(nullptr),
-//        mAllocations(nullptr),
-//        mLastAllocationIndex(-1),
-//        mNextAllocationIndex(-1)
-//        { }
-        
+
         PackedLookupTable(size_t capacity) {
             // -1 because index 0xFFFF is reserved as a tombstone
             assert(capacity < 0x10000 - 1);
