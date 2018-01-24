@@ -12,6 +12,10 @@
 #include <stdlib.h>
 #include <utility>
 #include <assert.h>
+#include <stdexcept>
+#include <limits>
+
+#include "StringUtils.hpp"
 
 // http://bitsquid.blogspot.ca/2011/09/managing-decoupling-part-4-id-lookup.html
 
@@ -23,6 +27,8 @@ namespace EARenderer {
     template <typename T>
     class PackedLookupTable {
     private:
+        
+#pragma mark - Private
         
         struct Allocation {
             ID objectID;
@@ -40,7 +46,8 @@ namespace EARenderer {
         // Objects are contiguous, and always packed to the start of the storage.
         // Objects can be relocated in this storage thanks to the separate list of allocations.
         size_t mObjectsCount = 0;
-        size_t mCapacity = 0;
+        uint16_t mCapacity = 0;
+        uint16_t mMaxCapacity = std::numeric_limits<uint16_t>::max();
         T* mObjects = nullptr;
         
         // The allocation ID of each object in the object array (1-1 mapping)
@@ -56,6 +63,11 @@ namespace EARenderer {
         uint16_t mNextAllocationIndex = -1;
         
         Allocation* popFreeAllocation() {
+            // Reserve more memory if needed
+            if (mObjectsCount == mCapacity) {
+                reserve(mCapacity * 2);
+                mAllocations[mLastAllocationIndex].nextAllocationIndex = mObjectsCount;
+            }
             
             assert(mObjectsCount < mCapacity);
             
@@ -78,33 +90,34 @@ namespace EARenderer {
         
     public:
         
-        struct iterator
-        {
-            iterator(ID* in)
-            {
+#pragma mark - Public
+#pragma mark Iterator
+        
+        struct Iterator {
+        private:
+            ID* mCurrentObjectID;
+            
+        public:
+            Iterator(ID* in) {
                 mCurrentObjectID = in;
             }
             
-            iterator& operator++()
-            {
+            Iterator& operator++() {
                 mCurrentObjectID++;
                 return *this;
             }
             
-            ID operator*()
-            {
+            ID operator*() {
                 return *mCurrentObjectID;
             }
             
-            bool operator!=(const iterator& other) const
-            {
+            bool operator!=(const Iterator& other) const {
                 return mCurrentObjectID != other.mCurrentObjectID;
             }
-            
-        private:
-            ID* mCurrentObjectID;
         };
 
+#pragma mark - Lifecycle
+        
         PackedLookupTable(size_t capacity) {
             // -1 because index 0xFFFF is reserved as a tombstone
             assert(capacity < 0x10000 - 1);
@@ -179,19 +192,32 @@ namespace EARenderer {
             delete[] mAllocations;
         }
         
+        void swap(PackedLookupTable& other) {
+            std::swap(mObjectsCount, other.mObjectsCount);
+            std::swap(mCapacity, other.mCapacity);
+            std::swap(mObjects, other.mObjects);
+            std::swap(mObjectIDs, other.mObjectIDs);
+            std::swap(mAllocations, other.mAllocations);
+            std::swap(mLastAllocationIndex, other.mLastAllocationIndex);
+            std::swap(mNextAllocationIndex, other.mNextAllocationIndex);
+        }
+        
+#pragma mark - Operators
+        
         PackedLookupTable& operator=(PackedLookupTable rhs) {
             swap(rhs);
             return *this;
         }
         
-        T& operator[](ID id) const
-        {
+        T& operator[](ID id) const {
             // grab the allocation corresponding to this ID
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
             
             // grab the object associated with the allocation
             return *(mObjects + allocation->objectIndex);
         }
+        
+#pragma mark - Modifiers
         
         ID insert(const T& object) {
             Allocation* allocation = popFreeAllocation();
@@ -208,8 +234,7 @@ namespace EARenderer {
         }
         
         template<class... Args>
-        ID emplace(Args&&... args)
-        {
+        ID emplace(Args&&... args) {
             Allocation* allocation = popFreeAllocation();
             T* o = mObjects + allocation->objectIndex;
             new (o) T(std::forward<Args>(args)...);
@@ -227,8 +252,9 @@ namespace EARenderer {
         }
         
         void erase(ID id) {
-            
-            assert(contains(id));
+            if (!contains(id)) {
+                throw std::invalid_argument(string_format("There is no object with ID %d\n", id));
+            }
             
             // grab the allocation to delete
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
@@ -237,17 +263,18 @@ namespace EARenderer {
             T* object = mObjects + allocation->objectIndex;
             
             // if necessary, move (aka swap) the last object into the location of the object to erase, then unconditionally delete the last object
-            if (allocation->objectIndex != mObjectsCount - 1)
-            {
+            if (allocation->objectIndex != mObjectsCount - 1) {
                 T* last = mObjects + mObjectsCount - 1;
                 *object = std::move(*last);
                 object = last;
                 
                 // since the last object was moved into the deleted location, the associated object ID array's value must also be moved similarly
-                mObjectIDs[allocation->objectIndex] = mObjectIDs[mObjectsCount - 1];
+                ID lastObjectID = mObjectIDs[mObjectsCount - 1];
+                mObjectIDs[allocation->objectIndex] = lastObjectID;
                 
                 // since the last object has changed location, its allocation needs to be updated to the new location.
-                mAllocations[mObjectIDs[allocation->objectIndex] & ObjectIDIndexMask].objectIndex = allocation->objectIndex;
+                uint16_t lastAllocationIndex = lastObjectID & ObjectIDIndexMask;
+                mAllocations[lastAllocationIndex].objectIndex = allocation->objectIndex;
             }
             
             // destroy the removed object and pop it from the array
@@ -262,51 +289,80 @@ namespace EARenderer {
             allocation->objectIndex = DeadObjectIndex;
         }
         
-        void swap(PackedLookupTable& other)
-        {
-            std::swap(mObjectsCount, other.mObjectsCount);
-            std::swap(mCapacity, other.mCapacity);
-            std::swap(mObjects, other.mObjects);
-            std::swap(mObjectIDs, other.mObjectIDs);
-            std::swap(mAllocations, other.mAllocations);
-            std::swap(mLastAllocationIndex, other.mLastAllocationIndex);
-            std::swap(mNextAllocationIndex, other.mNextAllocationIndex);
+        void reserve(uint16_t capacity) {
+            if (mCapacity == mMaxCapacity) {
+                throw std::length_error(string_format("Cannot reserve more memory. Maximum capacity (%d) has already been reached\n", mMaxCapacity));
+            }
+            
+            uint16_t newCapacity = std::min(capacity, mMaxCapacity);
+
+            T* objects = reinterpret_cast<T*>(new char[newCapacity * sizeof(T)]);
+            ID* objectIDs = new ID[newCapacity];
+            Allocation* allocations = new Allocation[newCapacity];
+            
+            for (size_t i = 0; i < mObjectsCount; ++i) {
+                objects[i] = std::move(mObjects[i]);
+                mObjects[i].~T();
+            }
+            
+            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
+            memcpy(allocations, mAllocations, mCapacity * sizeof(Allocation));
+            
+            for (size_t i = mCapacity; i < newCapacity; ++i) {
+                allocations[i].objectID = static_cast<ID>(i);
+                allocations[i].objectIndex = DeadObjectIndex;
+                allocations[i].nextAllocationIndex = (uint16_t)(i + 1);
+            }
+            
+            // Link last allocation to the new memory chunk
+            allocations[mLastAllocationIndex].nextAllocationIndex = mCapacity;
+            allocations[newCapacity - 1].nextAllocationIndex = mLastAllocationIndex;
+            mNextAllocationIndex = mObjectsCount;
+            
+            delete [] mObjects;
+            delete [] mObjectIDs;
+            delete [] mAllocations;
+            
+            mObjects = objects;
+            mObjectIDs = objectIDs;
+            mAllocations = allocations;
+            
+            mCapacity = newCapacity;
         }
         
-        iterator begin() const
-        {
-            return iterator{ mObjectIDs };
-        }
+#pragma mark - Accessors
         
-        iterator end() const
-        {
-            return iterator{ mObjectIDs + mObjectsCount };
-        }
-        
-        bool empty() const
-        {
+        bool empty() const {
             return mObjectsCount == 0;
         }
         
-        size_t size() const
-        {
+        size_t size() const {
             return mObjectsCount;
         }
         
-        size_t capacity() const
-        {
+        size_t capacity() const {
             return mCapacity;
+        }
+        
+#pragma mark - Iteration
+        
+        Iterator begin() const {
+            return Iterator{ mObjectIDs };
+        }
+        
+        Iterator end() const {
+            return Iterator{ mObjectIDs + mObjectsCount };
         }
     };
     
     template<typename T>
-    typename PackedLookupTable<T>::iterator begin(const PackedLookupTable<T>& fl)
+    typename PackedLookupTable<T>::Iterator begin(const PackedLookupTable<T>& fl)
     {
         return fl.begin();
     }
     
     template<typename T>
-    typename PackedLookupTable<T>::iterator end(const PackedLookupTable<T>& fl)
+    typename PackedLookupTable<T>::Iterator end(const PackedLookupTable<T>& fl)
     {
         return fl.end();
     }
