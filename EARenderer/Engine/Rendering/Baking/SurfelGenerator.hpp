@@ -46,7 +46,7 @@ namespace EARenderer {
         };
         
         struct SurfelCandidate {
-            using BinIterator = LogarithmicBin<TransformedTriangleData>::ForwardIterator;
+            using BinIterator = LogarithmicBin<TransformedTriangleData>::Iterator;
             
             glm::vec3 position;
             glm::vec3 normal;
@@ -58,7 +58,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 0.1;
+        float mMinimumSurfelDistance = 0.8;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

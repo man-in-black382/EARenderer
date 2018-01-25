@@ -98,16 +98,25 @@ namespace EARenderer {
             ID* mCurrentObjectID;
             
         public:
-            Iterator(ID* in) {
-                mCurrentObjectID = in;
-            }
+            Iterator(ID* in) : mCurrentObjectID(in) { }
             
             Iterator& operator++() {
                 mCurrentObjectID++;
                 return *this;
             }
             
-            ID operator*() {
+            Iterator& operator+=(size_t offset) {
+                mCurrentObjectID += offset;
+                return *this;
+            }
+            
+            Iterator operator+(size_t offset) {
+                Iterator copy(*this);
+                copy += offset;
+                return copy;
+            }
+            
+            ID operator*() const {
                 return *mCurrentObjectID;
             }
             
@@ -117,6 +126,8 @@ namespace EARenderer {
         };
 
 #pragma mark - Lifecycle
+        
+        PackedLookupTable() : PackedLookupTable(100) { }
         
         PackedLookupTable(size_t capacity) {
             // -1 because index 0xFFFF is reserved as a tombstone
@@ -209,6 +220,14 @@ namespace EARenderer {
             return *this;
         }
         
+        T& operator[](ID id) {
+            // grab the allocation corresponding to this ID
+            Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
+            
+            // grab the object associated with the allocation
+            return *(mObjects + allocation->objectIndex);
+        }
+        
         T& operator[](ID id) const {
             // grab the allocation corresponding to this ID
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
@@ -297,36 +316,36 @@ namespace EARenderer {
             uint16_t newCapacity = std::min(capacity, mMaxCapacity);
 
             T* objects = reinterpret_cast<T*>(new char[newCapacity * sizeof(T)]);
+            char* oldObjectsCharPtr = reinterpret_cast<char*>(mObjects);
             ID* objectIDs = new ID[newCapacity];
             Allocation* allocations = new Allocation[newCapacity];
             
             for (size_t i = 0; i < mObjectsCount; ++i) {
                 objects[i] = std::move(mObjects[i]);
-                mObjects[i].~T();
             }
             
             memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
             memcpy(allocations, mAllocations, mCapacity * sizeof(Allocation));
-            
+
             for (size_t i = mCapacity; i < newCapacity; ++i) {
                 allocations[i].objectID = static_cast<ID>(i);
                 allocations[i].objectIndex = DeadObjectIndex;
                 allocations[i].nextAllocationIndex = (uint16_t)(i + 1);
             }
-            
+
             // Link last allocation to the new memory chunk
             allocations[mLastAllocationIndex].nextAllocationIndex = mCapacity;
             allocations[newCapacity - 1].nextAllocationIndex = mLastAllocationIndex;
             mNextAllocationIndex = mObjectsCount;
-            
-            delete [] mObjects;
+
+            delete [] oldObjectsCharPtr;
             delete [] mObjectIDs;
             delete [] mAllocations;
-            
+
             mObjects = objects;
             mObjectIDs = objectIDs;
             mAllocations = allocations;
-            
+
             mCapacity = newCapacity;
         }
         

@@ -161,6 +161,8 @@ namespace EARenderer {
         auto&& it = transformedVerticesBin.random();
         auto& randomTriangleData = *it;
         
+        it->split();
+        
         auto ab = randomTriangleData.positions.b - randomTriangleData.positions.a;
         auto ac = randomTriangleData.positions.c - randomTriangleData.positions.a;
         
@@ -171,6 +173,12 @@ namespace EARenderer {
         glm::vec3 position = randomTriangleData.positions.a + ((ab * barycentric.x) + (ac * barycentric.y));
         glm::vec3 normal = glm::normalize(randomTriangleData.normals.a + ((Nab * barycentric.x) + (Nac * barycentric.y)));
         
+        if (position.x > 1000 || position.y > 1000 || position.z > 1000) {
+            printf(" ");
+        } else {
+            printf("Position is ok\n");
+        }
+         
         return { position, normal, barycentric, it };
     }
     
@@ -228,9 +236,11 @@ namespace EARenderer {
                 } else {
                     // Otherwise, we split it into a number of child triangles and
                     // add the uncovered triangles back to the list of active triangles
+                    
+                    // Access first, only then erase!!
+                    auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
                     bin.erase(surfelCandidate.logarithmicBinIterator);
                     
-                    auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
                     for (auto& subTriangle : subTriangles) {
                         float subTriangleArea = triangleArea / 4.0f;
                         bool covered = triangleCompletelyCovered(subTriangle.positions, surfelSpatialHash);

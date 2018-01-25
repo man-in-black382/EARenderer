@@ -170,9 +170,9 @@
     
     strings.erase(thirdID);
     
-    strings.emplace("sixth");
-    strings.emplace("seventh");
-    strings.emplace("eighth");
+//    strings.emplace("sixth");
+//    strings.emplace("seventh");
+//    strings.emplace("eighth");
         
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));

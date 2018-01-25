@@ -16,6 +16,7 @@
 #include <vector>
 #include <stdexcept>
 #include <limits>
+
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
