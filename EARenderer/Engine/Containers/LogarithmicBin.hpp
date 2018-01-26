@@ -39,7 +39,7 @@ namespace EARenderer {
             PackedLookupTable<BinObject> objects;
             float totalWeight = 0.0f;
             
-            Bin() : objects(65000) { }
+            Bin() : objects(1000) { }
         };
         
         using BinsIterator = typename std::unordered_map<Index, Bin>::iterator;
@@ -92,7 +92,7 @@ namespace EARenderer {
                 ID id = *mBinObjectsIterator;
                 Bin& bin = mBinsIterator->second;
                 BinObject& binObject = bin.objects[id];
-                return &binObject.object;
+                return &(binObject.object);
             }
             
             const T& operator*() const {
@@ -106,7 +106,7 @@ namespace EARenderer {
                 ID id = *mBinObjectsIterator;
                 Bin& bin = mBinsIterator->second;
                 BinObject& binObject = bin.objects[id];
-                return &binObject.object;
+                return &(binObject.object);
             }
             
             bool operator!=(const Iterator& other) const {
@@ -263,10 +263,6 @@ namespace EARenderer {
             }
             
             Iterator i = Iterator(randomBinIterator, mBins.end(), binObjectsIterator);
-            
-            auto& o = *i;
-            auto copy = o;
-            
             return i;
         }
         

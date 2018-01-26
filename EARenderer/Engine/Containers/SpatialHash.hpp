@@ -131,14 +131,16 @@ namespace EARenderer {
                     auto& pair = mCellBeginEndPairs[mCurrentPairIndex];
                     auto& current = pair.first;
                     auto& end = pair.second;
+
+                    if (current == end && mCurrentPairIndex == mCellBeginEndPairs.size() - 1) {
+                        throw std::out_of_range("Incrementing an iterator which had reached the end already");
+                    }
                     
+                    current++;
                     if (current == end) {
-                        if (mCurrentPairIndex == mCellBeginEndPairs.size() - 1) {
-                            throw std::out_of_range("Incrementing an iterator which had reached the end already");
+                        if (mCurrentPairIndex != mCellBeginEndPairs.size() - 1) {
+                            mCurrentPairIndex++;
                         }
-                        mCurrentPairIndex++;
-                    } else {
-                        ++current;
                     }
 
                     return *this;
@@ -155,17 +157,19 @@ namespace EARenderer {
                 const T& operator*() const {
                     return *mCellBeginEndPairs[mCurrentPairIndex].first;
                 }
-                
+            
                 const T* operator->() const {
                     return &(*mCellBeginEndPairs[mCurrentPairIndex].first);
                 }
                 
                 bool operator!=(const Iterator& other) const {
+                    bool indexNotEqual = mCurrentPairIndex != other.mCurrentPairIndex;
+                    
                     if (mCellBeginEndPairs.empty()) {
-                        return mCurrentPairIndex != other.mCurrentPairIndex;
+                        return indexNotEqual;
                     } else {
-                        return mCurrentPairIndex != other.mCurrentPairIndex ||
-                        mCellBeginEndPairs[mCurrentPairIndex].first != other.mCellBeginEndPairs[other.mCurrentPairIndex].first;
+                        bool iteratorsNotEqual = mCellBeginEndPairs[mCurrentPairIndex].first != other.mCellBeginEndPairs[other.mCurrentPairIndex].first;
+                        return indexNotEqual || iteratorsNotEqual;
                     }
                 }
             };

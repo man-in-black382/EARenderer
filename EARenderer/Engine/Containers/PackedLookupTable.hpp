@@ -66,7 +66,6 @@ namespace EARenderer {
             // Reserve more memory if needed
             if (mObjectsCount == mCapacity) {
                 reserve(mCapacity * 2);
-                mAllocations[mLastAllocationIndex].nextAllocationIndex = mObjectsCount;
             }
             
             assert(mObjectsCount < mCapacity);
@@ -126,8 +125,6 @@ namespace EARenderer {
         };
 
 #pragma mark - Lifecycle
-        
-        PackedLookupTable() : PackedLookupTable(100) { }
         
         PackedLookupTable(size_t capacity) {
             // -1 because index 0xFFFF is reserved as a tombstone
@@ -316,16 +313,16 @@ namespace EARenderer {
             uint16_t newCapacity = std::min(capacity, mMaxCapacity);
 
             T* objects = reinterpret_cast<T*>(new char[newCapacity * sizeof(T)]);
-            char* oldObjectsCharPtr = reinterpret_cast<char*>(mObjects);
             ID* objectIDs = new ID[newCapacity];
             Allocation* allocations = new Allocation[newCapacity];
             
             for (size_t i = 0; i < mObjectsCount; ++i) {
                 objects[i] = std::move(mObjects[i]);
+                allocations[i] = std::move(mAllocations[i]);
+                objectIDs[i] = mObjectIDs[i];
             }
             
-            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
-            memcpy(allocations, mAllocations, mCapacity * sizeof(Allocation));
+//            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
 
             for (size_t i = mCapacity; i < newCapacity; ++i) {
                 allocations[i].objectID = static_cast<ID>(i);
@@ -334,11 +331,12 @@ namespace EARenderer {
             }
 
             // Link last allocation to the new memory chunk
-            allocations[mLastAllocationIndex].nextAllocationIndex = mCapacity;
-            allocations[newCapacity - 1].nextAllocationIndex = mLastAllocationIndex;
+            allocations[mLastAllocationIndex].nextAllocationIndex = mObjectsCount;
+            allocations[newCapacity - 1].nextAllocationIndex = 0;
             mNextAllocationIndex = mObjectsCount;
+            mLastAllocationIndex = newCapacity - 1;
 
-            delete [] oldObjectsCharPtr;
+            delete [] (char*)mObjects;
             delete [] mObjectIDs;
             delete [] mAllocations;
 

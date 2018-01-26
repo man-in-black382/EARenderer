@@ -130,7 +130,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
         bool triangleCoveredCompletely = false;
-        for (auto& surfel : surfels.neighbours(triangle.p1)) {
+        for (auto& surfel : surfels) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
                 triangleCoveredCompletely = true;
@@ -142,7 +142,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels) {
         bool minimumDistanceRequirementMet = true;
-        for (auto& surfel : surfels.neighbours(candidate.position)) {
+        for (auto& surfel : surfels) {
             // Ignore surfel/candidate looking in the opposite directions to avoid tests
             // with surfels located on another side of a thin mesh (a wall for example)
             if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
@@ -161,8 +161,6 @@ namespace EARenderer {
         auto&& it = transformedVerticesBin.random();
         auto& randomTriangleData = *it;
         
-        it->split();
-        
         auto ab = randomTriangleData.positions.b - randomTriangleData.positions.a;
         auto ac = randomTriangleData.positions.c - randomTriangleData.positions.a;
         
@@ -172,13 +170,7 @@ namespace EARenderer {
         glm::vec3 barycentric = randomBarycentricCoordinates();
         glm::vec3 position = randomTriangleData.positions.a + ((ab * barycentric.x) + (ac * barycentric.y));
         glm::vec3 normal = glm::normalize(randomTriangleData.normals.a + ((Nab * barycentric.x) + (Nac * barycentric.y)));
-        
-        if (position.x > 1000 || position.y > 1000 || position.z > 1000) {
-            printf(" ");
-        } else {
-            printf("Position is ok\n");
-        }
-         
+
         return { position, normal, barycentric, it };
     }
     
