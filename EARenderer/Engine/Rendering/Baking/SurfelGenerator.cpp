@@ -73,7 +73,7 @@ namespace EARenderer {
         return { r, s, t };
     }
     
-    LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance) {
+    LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(const SubMesh& subMesh, MeshInstance& containingInstance) {
         glm::mat4 modelMatrix = containingInstance.transformation().modelMatrix();
         glm::mat4 normalMatrix = containingInstance.transformation().normalMatrix();
         
@@ -118,7 +118,7 @@ namespace EARenderer {
             maximumArea = std::max(maximumArea, area);
         }
         
-        const float kTriangleSubdivisionFactor = 10.0f;
+        const float kTriangleSubdivisionFactor = 7.0f;
         LogarithmicBin<TransformedTriangleData> bin(minimumArea / kTriangleSubdivisionFactor, maximumArea);
         
         for (auto& transformedTriangle : transformedTriangleProperties) {
@@ -130,7 +130,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
         bool triangleCoveredCompletely = false;
-        for (auto& surfel : surfels) {
+        for (auto& surfel : surfels.neighbours(triangle.p1)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
                 triangleCoveredCompletely = true;
@@ -142,7 +142,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels) {
         bool minimumDistanceRequirementMet = true;
-        for (auto& surfel : surfels) {
+        for (auto& surfel : surfels.neighbours(candidate.position)) {
             // Ignore surfel/candidate looking in the opposite directions to avoid tests
             // with surfels located on another side of a thin mesh (a wall for example)
             if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
@@ -157,7 +157,7 @@ namespace EARenderer {
         return minimumDistanceRequirementMet;
     }
     
-    SurfelGenerator::SurfelCandidate SurfelGenerator::generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
+    SurfelGenerator::SurfelCandidate SurfelGenerator::generateSurfelCandidate(const SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
         auto&& it = transformedVerticesBin.random();
         auto& randomTriangleData = *it;
         
@@ -197,8 +197,8 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
             
-            const int8_t kSurfelCountPerSpaceCell = 5;
-            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() / mMinimumSurfelDistance / kSurfelCountPerSpaceCell;
+            const int8_t kSurfelCountPerSpaceCell = 15;
+            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() * 1.0f / mMinimumSurfelDistance;// / kSurfelCountPerSpaceCell;
             
             printf("Suggested division resolution is %d\n", spaceDivisionResolution);
             

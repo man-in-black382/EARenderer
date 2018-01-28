@@ -58,7 +58,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 1.0;
+        float mMinimumSurfelDistance = 0.7;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
@@ -80,7 +80,7 @@ namespace EARenderer {
          @param containingInstance Mesh instance that applies transformation and materials to underlying sub mesh
          @return A logarithmic bin containing sub mesh's triangle data (positions, normals, albedo values and texture coordinates)
          */
-        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(SubMesh& subMesh, MeshInstance& containingInstance);
+        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(const SubMesh& subMesh, MeshInstance& containingInstance);
         
         /**
          Checks to see whether triangle is completely covered by any surfel from existing surfel set
@@ -108,7 +108,7 @@ namespace EARenderer {
          @param transformedVerticesBin Bin that holds all transformed triangle data of the sub mesh
          @return A surfel candidate ready to participate in validity tests
          */
-        SurfelCandidate generateSurfelCandidate(SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        SurfelCandidate generateSurfelCandidate(const SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
         
         /**
          Computes all necessary data for a surfel candidate (normal, albedo, uv and an area) to transform it into a full-fledged surfel

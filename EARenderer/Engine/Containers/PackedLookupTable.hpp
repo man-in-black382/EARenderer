@@ -42,6 +42,9 @@ namespace EARenderer {
         // Used to mark an allocation as owning no object
         static const uint16_t DeadObjectIndex = 0xFFFF;
         
+        // Used to mark an allocation as owning no object
+        static const uint16_t NotAnIndex = -1;
+        
         // Storage for objects
         // Objects are contiguous, and always packed to the start of the storage.
         // Objects can be relocated in this storage thanks to the separate list of allocations.
@@ -64,7 +67,7 @@ namespace EARenderer {
         
         Allocation* popFreeAllocation() {
             // Reserve more memory if needed
-            if (mObjectsCount == mCapacity) {
+            if (mNextAllocationIndex == NotAnIndex) {
                 reserve(mCapacity * 2);
             }
             
@@ -73,9 +76,9 @@ namespace EARenderer {
             // pop an allocation from the FIFO
             Allocation* allocation = &mAllocations[mNextAllocationIndex];
             mNextAllocationIndex = allocation->nextAllocationIndex;
-            
+
             // increment the allocation count in the 16 MSBs without modifying the allocation's index (in the 16 LSBs)
-            allocation->objectID += 0x10000;
+//            allocation->objectID += 0x10000;
             
             // always allocate the object at the end of the storage
             allocation->objectIndex = mObjectsCount;
@@ -149,7 +152,7 @@ namespace EARenderer {
             }
             
             if (mCapacity > 0) {
-                mAllocations[mCapacity - 1].nextAllocationIndex = 0;
+                mAllocations[mCapacity - 1].nextAllocationIndex = NotAnIndex;
             }
             
             mLastAllocationIndex = mCapacity - 1;
@@ -192,7 +195,7 @@ namespace EARenderer {
         }
         
         ~PackedLookupTable() {
-            for (size_t i = 0; i < mCapacity; i++) {
+            for (size_t i = 0; i < mObjectsCount; i++) {
                 mObjects[i].~T();
             }
             delete[] ((char*)mObjects);
@@ -220,12 +223,12 @@ namespace EARenderer {
         T& operator[](ID id) {
             // grab the allocation corresponding to this ID
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
-            
+                        
             // grab the object associated with the allocation
             return *(mObjects + allocation->objectIndex);
         }
         
-        T& operator[](ID id) const {
+        const T& operator[](ID id) const {
             // grab the allocation corresponding to this ID
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
             
@@ -262,7 +265,7 @@ namespace EARenderer {
             Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
             
             // * NON-conservative test that the IDs match (if the allocation has been reused 2^16 times, it'll loop over)
-            // * Also check that the object is hasn't already been deallocated.
+            // * Also check that the object hasn't already been deallocated.
             // * This'll prevent an object that was just freed from appearing to be contained, but still doesn't disambiguate between two objects with the same ID (see first bullet point)
             return allocation->objectID == id && allocation->objectIndex != DeadObjectIndex;
         }
@@ -273,7 +276,8 @@ namespace EARenderer {
             }
             
             // grab the allocation to delete
-            Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
+            size_t eresableAllocationIndex = id & ObjectIDIndexMask;
+            Allocation* allocation = &mAllocations[eresableAllocationIndex];
             
             // grab the object for this allocation
             T* object = mObjects + allocation->objectIndex;
@@ -287,7 +291,7 @@ namespace EARenderer {
                 // since the last object was moved into the deleted location, the associated object ID array's value must also be moved similarly
                 ID lastObjectID = mObjectIDs[mObjectsCount - 1];
                 mObjectIDs[allocation->objectIndex] = lastObjectID;
-                
+
                 // since the last object has changed location, its allocation needs to be updated to the new location.
                 uint16_t lastAllocationIndex = lastObjectID & ObjectIDIndexMask;
                 mAllocations[lastAllocationIndex].objectIndex = allocation->objectIndex;
@@ -297,12 +301,19 @@ namespace EARenderer {
             object->~T();
             mObjectsCount--;
             
+            uint16_t deletedAllocationIndex = allocation->objectID & ObjectIDIndexMask;
+            
+            if (mNextAllocationIndex == NotAnIndex) {
+                mNextAllocationIndex = deletedAllocationIndex;
+            }
+            
             // push the deleted allocation onto the FIFO
-            mAllocations[mLastAllocationIndex].nextAllocationIndex = allocation->objectID & ObjectIDIndexMask;
-            mLastAllocationIndex = allocation->objectID & ObjectIDIndexMask;
+            mAllocations[mLastAllocationIndex].nextAllocationIndex = deletedAllocationIndex;
+            mLastAllocationIndex = deletedAllocationIndex;
             
             // put a tombstone where the allocation used to point to an object index
             allocation->objectIndex = DeadObjectIndex;
+            allocation->nextAllocationIndex = NotAnIndex;
         }
         
         void reserve(uint16_t capacity) {
@@ -315,14 +326,10 @@ namespace EARenderer {
             T* objects = reinterpret_cast<T*>(new char[newCapacity * sizeof(T)]);
             ID* objectIDs = new ID[newCapacity];
             Allocation* allocations = new Allocation[newCapacity];
-            
-            for (size_t i = 0; i < mObjectsCount; ++i) {
-                objects[i] = std::move(mObjects[i]);
-                allocations[i] = std::move(mAllocations[i]);
-                objectIDs[i] = mObjectIDs[i];
-            }
-            
-//            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
+
+            memcpy((char *)objects, (char *)mObjects, mObjectsCount * sizeof(T));
+            memcpy(allocations, mAllocations, mObjectsCount * sizeof(mAllocations));
+            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
 
             for (size_t i = mCapacity; i < newCapacity; ++i) {
                 allocations[i].objectID = static_cast<ID>(i);
@@ -332,11 +339,11 @@ namespace EARenderer {
 
             // Link last allocation to the new memory chunk
             allocations[mLastAllocationIndex].nextAllocationIndex = mObjectsCount;
-            allocations[newCapacity - 1].nextAllocationIndex = 0;
+            allocations[newCapacity - 1].nextAllocationIndex = NotAnIndex;
             mNextAllocationIndex = mObjectsCount;
             mLastAllocationIndex = newCapacity - 1;
 
-            delete [] (char*)mObjects;
+            delete [] (char *)mObjects;
             delete [] mObjectIDs;
             delete [] mAllocations;
 

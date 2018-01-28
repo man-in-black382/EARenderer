@@ -137,6 +137,7 @@ namespace EARenderer {
                     }
                     
                     current++;
+
                     if (current == end) {
                         if (mCurrentPairIndex != mCellBeginEndPairs.size() - 1) {
                             mCurrentPairIndex++;

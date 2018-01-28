@@ -41,6 +41,10 @@ namespace EARenderer {
         return mVertices;
     }
     
+    const std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() const {
+        return mVertices;
+    }
+    
     const AxisAlignedBox3D& SubMesh::boundingBox() const {
         return mBoundingBox;
     }

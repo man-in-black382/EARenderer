@@ -36,6 +36,7 @@ namespace EARenderer {
         const std::string& name() const;
         const std::string& materialName() const;
         std::vector<Vertex1P1N1UV1T1BT>& vertices();
+        const std::vector<Vertex1P1N1UV1T1BT>& vertices() const;
         const AxisAlignedBox3D& boundingBox() const;
         const GLVertexArray<Vertex1P1N1UV1T1BT>& VAO() const;
         

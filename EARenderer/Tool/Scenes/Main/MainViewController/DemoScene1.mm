@@ -160,20 +160,7 @@
     scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
     
     // Skybox
-    
-    EARenderer::PackedLookupTable<std::string> strings(6);
-    strings.emplace("first");
-    strings.emplace("second");
-    EARenderer::ID thirdID = strings.emplace("third");
-    strings.emplace("fourth");
-    strings.emplace("fifth");
-    
-    strings.erase(thirdID);
-    
-//    strings.emplace("sixth");
-//    strings.emplace("seventh");
-//    strings.emplace("eighth");
-        
+
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
     
