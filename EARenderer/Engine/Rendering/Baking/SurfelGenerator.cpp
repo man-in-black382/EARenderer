@@ -197,9 +197,13 @@ namespace EARenderer {
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
             auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
             
-            const int8_t kSurfelCountPerSpaceCell = 15;
-            int32_t spaceDivisionResolution = boundingBox.largestDimensionLength() * 1.0f / mMinimumSurfelDistance;// / kSurfelCountPerSpaceCell;
+            const int8_t preferredSurfelCountPerSpatialHashCell = 5;
+            float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
+            float surfelsPerLongestBBDimension = boundingBox.largestDimensionLength() * surfelsPerUnitLength;
+            int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
             
+            printf("Largest dimension %f\n", boundingBox.largestDimensionLength());
+            printf("Total surfels per longest dimension %f\n", surfelsPerLongestBBDimension);
             printf("Suggested division resolution is %d\n", spaceDivisionResolution);
             
             SpatialHash<Surfel> surfelSpatialHash(boundingBox, std::max(spaceDivisionResolution, 1));
@@ -264,6 +268,7 @@ namespace EARenderer {
                 mSurfels.insert(mSurfels.end(), batch.begin(), batch.end());
             });
         }
+        
     }
     
 }

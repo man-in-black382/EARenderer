@@ -122,8 +122,7 @@ namespace EARenderer {
                     }
                     
                     mCurrentPairIndex = mCellBeginEndPairs.size() - 1;
-                    auto& end = mCellBeginEndPairs[mCurrentPairIndex].second;
-                    mCellBeginEndPairs[mCurrentPairIndex] = std::make_pair(end, end);
+                    mCellBeginEndPairs[mCurrentPairIndex].first = mCellBeginEndPairs[mCurrentPairIndex].second;
                 }
                 
             public:
