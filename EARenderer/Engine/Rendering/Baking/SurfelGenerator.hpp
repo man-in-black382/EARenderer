@@ -62,7 +62,9 @@ namespace EARenderer {
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
-        ResourcePool *mResourcePool;
+        SpatialHash<Surfel> *mSurfelSpatialHash = nullptr;
+        ResourcePool *mResourcePool = nullptr;
+        Scene *mScene = nullptr;
         
 #pragma mark - Member functions
         
@@ -125,15 +127,12 @@ namespace EARenderer {
          @param instance An instance on which surfels will be generated on
          @return Vector containing all generated surfels
          */
-        std::vector<Surfel> generateSurflesOnMeshInstance(MeshInstance& instance);
+        void generateSurflesOnMeshInstance(MeshInstance& instance);
         
     public:
-        // DEBUG
-        std::vector<Surfel> mSurfels;
+        SurfelGenerator(ResourcePool *resourcePool, Scene *scene);
         
-        SurfelGenerator(ResourcePool *resourcePool);
-        
-        void generateStaticGeometrySurfels(Scene *scene);
+        void generateStaticGeometrySurfels();
     };
     
 }

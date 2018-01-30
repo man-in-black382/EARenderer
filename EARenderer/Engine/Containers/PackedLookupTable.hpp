@@ -368,6 +368,10 @@ namespace EARenderer {
             return mCapacity;
         }
         
+        const T* data() const {
+            return mObjects;
+        }
+        
 #pragma mark - Iteration
         
         Iterator begin() const {

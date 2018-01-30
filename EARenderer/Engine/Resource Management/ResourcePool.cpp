@@ -19,8 +19,8 @@ namespace EARenderer {
     
     ResourcePool::ResourcePool()
     :
-    meshes(1000),
-    materials(1000)
+    meshes(100),
+    materials(100)
     { }
     
 }

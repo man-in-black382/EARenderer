@@ -20,6 +20,7 @@
 #include "LightProbe.hpp"
 #include "ResourcePool.hpp"
 #include "GLBufferTexture.hpp"
+#include "Surfel.hpp"
 
 #include <vector>
 #include <list>
@@ -32,6 +33,7 @@ namespace EARenderer {
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
+        PackedLookupTable<Surfel> mSurfels;
         
         GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
@@ -50,6 +52,7 @@ namespace EARenderer {
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
+        PackedLookupTable<Surfel>& surfels();
         
         GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
         

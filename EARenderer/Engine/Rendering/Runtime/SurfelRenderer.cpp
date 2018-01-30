@@ -16,10 +16,7 @@ namespace EARenderer {
     mScene(scene),
     mResourcePool(resourcePool)
     {
-        SurfelGenerator generator(resourcePool);
-        generator.generateStaticGeometrySurfels(scene);
-        mSurfels = generator.mSurfels;
-        mVAO.initialize(generator.mSurfels, GLVertexArrayLayoutDescription({
+        mVAO.initialize(scene->surfels().data(), scene->surfels().size(), GLVertexArrayLayoutDescription({
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
             static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
         }));
@@ -35,7 +32,7 @@ namespace EARenderer {
         mSurfelRenderingShader.setModelViewProjectionMatrix(mvp);
         mSurfelRenderingShader.setColor(Color(1.0, 0.2, 0.3, 1.0));
 
-        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mSurfels.size()));
+        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfels().size()));
     }
     
 }

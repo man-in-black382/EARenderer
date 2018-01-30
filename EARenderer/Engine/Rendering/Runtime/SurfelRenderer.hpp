@@ -20,7 +20,6 @@ namespace EARenderer {
         Scene *mScene;
         ResourcePool *mResourcePool;
         GLVertexArray<Surfel> mVAO;
-        std::vector<Surfel> mSurfels;
         GLSLSurfelRendering mSurfelRenderingShader;
         
     public:

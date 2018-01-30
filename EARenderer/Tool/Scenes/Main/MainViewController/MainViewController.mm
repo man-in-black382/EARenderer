@@ -76,6 +76,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     EARenderer::FileManager::shared().setShaderSourceFolderPath([self shadersDirectory]);
     
+    EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
+    
     self.scene = new EARenderer::Scene();
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
@@ -114,11 +116,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                             self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
     
-//    self.surfelGenerator = new EARenderer::SurfelGenerator(&EARenderer::ResourcePool::shared());
-//    self.surfelGenerator->generateStaticGeometrySurfels(self.scene);
+    self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
+    self.surfelGenerator->generateStaticGeometrySurfels();
     
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, &EARenderer::ResourcePool::shared());
-    self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, &EARenderer::ResourcePool::shared());
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
+    self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     
     [self subscribeForEvents];
 }

@@ -36,11 +36,12 @@ namespace EARenderer {
     logarithmicBinIterator(iterator)
     { }
     
-    SurfelGenerator::SurfelGenerator(ResourcePool *resourcePool)
+    SurfelGenerator::SurfelGenerator(ResourcePool *resourcePool, Scene *scene)
     :
     mEngine(std::random_device()()),
     mDistribution(0.0f, 1.0f),
-    mResourcePool(resourcePool)
+    mResourcePool(resourcePool),
+    mScene(scene)
     { }
     
 #pragma mark - Private helpers
@@ -187,26 +188,12 @@ namespace EARenderer {
         return Surfel(surfelCandidate.position, surfelCandidate.normal, glm::vec3(0), glm::vec2(0), singleSurfelArea);
     }
     
-    std::vector<Surfel> SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
-        std::vector<Surfel> surfels;
-        
+    void SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
         auto& mesh = mResourcePool->meshes[instance.meshID()];
         
         for (ID subMeshID : mesh.subMeshes()) {
             auto& subMesh = mesh.subMeshes()[subMeshID];
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
-            auto boundingBox = subMesh.boundingBox().transformedBy(instance.transformation());
-            
-            const int8_t preferredSurfelCountPerSpatialHashCell = 5;
-            float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
-            float surfelsPerLongestBBDimension = boundingBox.largestDimensionLength() * surfelsPerUnitLength;
-            int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
-            
-            printf("Largest dimension %f\n", boundingBox.largestDimensionLength());
-            printf("Total surfels per longest dimension %f\n", surfelsPerLongestBBDimension);
-            printf("Suggested division resolution is %d\n", spaceDivisionResolution);
-            
-            SpatialHash<Surfel> surfelSpatialHash(boundingBox, std::max(spaceDivisionResolution, 1));
 
             // Actual algorithm that uniformly distributes surfels on geometry
             while (!bin.empty()) {
@@ -218,15 +205,19 @@ namespace EARenderer {
 
                 // If the minimum distance requirement is met, the algorithm computes all missing information
                 // for the surfel candidate and then adds the resultant surfel to the surfel set
-                if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate, surfelSpatialHash)) {
-                    surfelSpatialHash.insert(generateSurfel(surfelCandidate, bin), surfelCandidate.position);
+                if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate, *mSurfelSpatialHash)) {
+                    auto surfel = generateSurfel(surfelCandidate, bin);
+                    mSurfelSpatialHash->insert(surfel, surfelCandidate.position);
+                    mScene->surfels().insert(surfel);
+                    
+                    printf("Surfel accepted\n")
                 }
 
                 // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
                 auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
                 float triangleArea = surfelPositionTriangle.area();
 
-                if (triangleCompletelyCovered(surfelPositionTriangle, surfelSpatialHash)) {
+                if (triangleCompletelyCovered(surfelPositionTriangle, *mSurfelSpatialHash)) {
                     // If triangle is covered, it is discarded
                     bin.erase(surfelCandidate.logarithmicBinIterator);
                 } else {
@@ -239,7 +230,7 @@ namespace EARenderer {
                     
                     for (auto& subTriangle : subTriangles) {
                         float subTriangleArea = triangleArea / 4.0f;
-                        bool covered = triangleCompletelyCovered(subTriangle.positions, surfelSpatialHash);
+                        bool covered = triangleCompletelyCovered(subTriangle.positions, *mSurfelSpatialHash);
                         bool lessThanBinMinimum = subTriangleArea < bin.minWeight();
                         
                         if (!covered && !lessThanBinMinimum) {
@@ -248,27 +239,31 @@ namespace EARenderer {
                     }
                 }
             }
-            
-            // Flatten surfels to a vector
-            for (auto& surfel : surfelSpatialHash) {
-                surfels.push_back(surfel);
-            }
-        }
-        
-        return surfels;
+        }        
     }
     
 #pragma mark - Public interface
     
-    void SurfelGenerator::generateStaticGeometrySurfels(Scene *scene) {
-        for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
+    void SurfelGenerator::generateStaticGeometrySurfels() {
+        const int8_t preferredSurfelCountPerSpatialHashCell = 10;
+        float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
+        float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
+        int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
+        
+        printf("Largest dimension %f\n", mScene->boundingBox().largestDimensionLength());
+        printf("Total surfels per longest dimension %f\n", surfelsPerLongestBBDimension);
+        printf("Suggested division resolution is %d\n", spaceDivisionResolution);
+        
+        mSurfelSpatialHash = new SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
+        
+        for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
             Measurement::executionTime("Surfel generation took", [&]() {
-                auto& meshInstance = scene->meshInstances()[meshInstanceID];
-                auto batch = generateSurflesOnMeshInstance(meshInstance);
-                mSurfels.insert(mSurfels.end(), batch.begin(), batch.end());
+                auto& meshInstance = mScene->meshInstances()[meshInstanceID];
+                generateSurflesOnMeshInstance(meshInstance);
             });
         }
         
+        delete mSurfelSpatialHash;
     }
     
 }

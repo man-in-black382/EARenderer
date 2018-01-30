@@ -10,6 +10,7 @@
 
 #import "MeshInstance.hpp"
 #import "LightProbeBuilder.hpp"
+#import "SurfelGenerator.hpp"
 
 #import <string>
 
@@ -148,7 +149,6 @@
     planeInstance.setMaterialIDForAllSubmeshes(patchyCementMaterialID);
     t.translation.y = 0.5;
     planeInstance.setTransformation(t);
-    
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
     EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
