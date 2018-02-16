@@ -21,7 +21,7 @@
 
 namespace EARenderer {
     
-    typedef uint32_t ID;
+    typedef uint64_t ID;
     static ID IDNotFound = 0;
     
     template <typename T>
@@ -32,25 +32,22 @@ namespace EARenderer {
         
         struct Allocation {
             ID objectID;
-            uint16_t objectIndex;
-            uint16_t nextAllocationIndex;
+            uint64_t objectIndex;
+            uint64_t nextAllocationIndex;
         };
         
-        // Used to extract the allocation index from an object id
-        static const uint16_t ObjectIDIndexMask = 0xFFFF;
+        // Used to mark an allocation as owning no object
+        static const uint64_t DeadObjectIndex = -1;
         
         // Used to mark an allocation as owning no object
-        static const uint16_t DeadObjectIndex = 0xFFFF;
-        
-        // Used to mark an allocation as owning no object
-        static const uint16_t NotAnIndex = -1;
+        static const uint64_t NotAnIndex = -1;
         
         // Storage for objects
         // Objects are contiguous, and always packed to the start of the storage.
         // Objects can be relocated in this storage thanks to the separate list of allocations.
         size_t mObjectsCount = 0;
-        uint16_t mCapacity = 0;
-        uint16_t mMaxCapacity = std::numeric_limits<uint16_t>::max();
+        uint64_t mCapacity = 0;
+        uint64_t mMaxCapacity = std::numeric_limits<uint64_t>::max();
         T* mObjects = nullptr;
         
         // The allocation ID of each object in the object array (1-1 mapping)
@@ -60,10 +57,10 @@ namespace EARenderer {
         Allocation* mAllocations = nullptr;
         
         // Last possible free allocation slot
-        uint16_t mLastAllocationIndex = -1;
+        uint64_t mLastAllocationIndex = NotAnIndex;
         
         // The next index struct to use for an allocation
-        uint16_t mNextAllocationIndex = -1;
+        uint64_t mNextAllocationIndex = NotAnIndex;
         
         Allocation* popFreeAllocation() {
             // Reserve more memory if needed
@@ -77,9 +74,6 @@ namespace EARenderer {
             Allocation* allocation = &mAllocations[mNextAllocationIndex];
             mNextAllocationIndex = allocation->nextAllocationIndex;
 
-            // increment the allocation count in the 16 MSBs without modifying the allocation's index (in the 16 LSBs)
-//            allocation->objectID += 0x10000;
-            
             // always allocate the object at the end of the storage
             allocation->objectIndex = mObjectsCount;
             mObjectsCount++;
@@ -130,9 +124,6 @@ namespace EARenderer {
 #pragma mark - Lifecycle
         
         PackedLookupTable(size_t capacity) {
-            // -1 because index 0xFFFF is reserved as a tombstone
-            assert(capacity < 0x10000 - 1);
-            
             mObjectsCount = 0;
             mCapacity = capacity;
             
@@ -148,7 +139,7 @@ namespace EARenderer {
             for (size_t i = 0; i < mCapacity; i++) {
                 mAllocations[i].objectID = static_cast<ID>(i);
                 mAllocations[i].objectIndex = DeadObjectIndex;
-                mAllocations[i].nextAllocationIndex = (uint16_t)(i + 1);
+                mAllocations[i].nextAllocationIndex = static_cast<uint64_t>(i + 1);
             }
             
             if (mCapacity > 0) {
@@ -167,7 +158,7 @@ namespace EARenderer {
             mObjects = reinterpret_cast<T*>(new char[other.mCapacity * sizeof(T)]);
             assert(mObjects);
             
-            mObjectIDs = new uint32_t[other.mCapacity];
+            mObjectIDs = new ID[other.mCapacity];
             assert(mObjectIDs);
             
             mAllocations = new Allocation[other.mCapacity];
@@ -222,7 +213,7 @@ namespace EARenderer {
         
         T& operator[](ID id) {
             // grab the allocation corresponding to this ID
-            Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
+            Allocation* allocation = &mAllocations[id];
                         
             // grab the object associated with the allocation
             return *(mObjects + allocation->objectIndex);
@@ -230,7 +221,7 @@ namespace EARenderer {
         
         const T& operator[](ID id) const {
             // grab the allocation corresponding to this ID
-            Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
+            Allocation* allocation = &mAllocations[id];
             
             // grab the object associated with the allocation
             return *(mObjects + allocation->objectIndex);
@@ -261,13 +252,9 @@ namespace EARenderer {
         }
         
         bool contains(ID id) const {
-            // grab the allocation by grabbing the allocation index from the id's LSBs
-            Allocation* allocation = &mAllocations[id & ObjectIDIndexMask];
-            
-            // * NON-conservative test that the IDs match (if the allocation has been reused 2^16 times, it'll loop over)
-            // * Also check that the object hasn't already been deallocated.
-            // * This'll prevent an object that was just freed from appearing to be contained, but still doesn't disambiguate between two objects with the same ID (see first bullet point)
-            return allocation->objectID == id && allocation->objectIndex != DeadObjectIndex;
+            Allocation* allocation = &mAllocations[id];
+            bool contains = allocation->objectID == id && allocation->objectIndex != DeadObjectIndex;
+            return contains;
         }
         
         void erase(ID id) {
@@ -276,7 +263,7 @@ namespace EARenderer {
             }
             
             // grab the allocation to delete
-            size_t eresableAllocationIndex = id & ObjectIDIndexMask;
+            ID eresableAllocationIndex = id;
             Allocation* allocation = &mAllocations[eresableAllocationIndex];
             
             // grab the object for this allocation
@@ -293,7 +280,7 @@ namespace EARenderer {
                 mObjectIDs[allocation->objectIndex] = lastObjectID;
 
                 // since the last object has changed location, its allocation needs to be updated to the new location.
-                uint16_t lastAllocationIndex = lastObjectID & ObjectIDIndexMask;
+                uint64_t lastAllocationIndex = lastObjectID;
                 mAllocations[lastAllocationIndex].objectIndex = allocation->objectIndex;
             }
             
@@ -301,7 +288,7 @@ namespace EARenderer {
             object->~T();
             mObjectsCount--;
             
-            uint16_t deletedAllocationIndex = allocation->objectID & ObjectIDIndexMask;
+            uint64_t deletedAllocationIndex = allocation->objectID;
             
             if (mNextAllocationIndex == NotAnIndex) {
                 mNextAllocationIndex = deletedAllocationIndex;
@@ -316,25 +303,25 @@ namespace EARenderer {
             allocation->nextAllocationIndex = NotAnIndex;
         }
         
-        void reserve(uint16_t capacity) {
+        void reserve(uint64_t capacity) {
             if (mCapacity == mMaxCapacity) {
                 throw std::length_error(string_format("Cannot reserve more memory. Maximum capacity (%d) has already been reached\n", mMaxCapacity));
             }
             
-            uint16_t newCapacity = std::min(capacity, mMaxCapacity);
+            uint64_t newCapacity = std::min(capacity, mMaxCapacity);
 
             T* objects = reinterpret_cast<T*>(new char[newCapacity * sizeof(T)]);
             ID* objectIDs = new ID[newCapacity];
             Allocation* allocations = new Allocation[newCapacity];
 
             memcpy((char *)objects, (char *)mObjects, mObjectsCount * sizeof(T));
-            memcpy(allocations, mAllocations, mObjectsCount * sizeof(mAllocations));
-            memcpy(objectIDs, mObjectIDs, mObjectsCount * sizeof(ID));
+            memcpy(allocations, mAllocations, mCapacity * sizeof(Allocation));
+            memcpy(objectIDs, mObjectIDs, mCapacity * sizeof(ID));
 
             for (size_t i = mCapacity; i < newCapacity; ++i) {
                 allocations[i].objectID = static_cast<ID>(i);
                 allocations[i].objectIndex = DeadObjectIndex;
-                allocations[i].nextAllocationIndex = (uint16_t)(i + 1);
+                allocations[i].nextAllocationIndex = static_cast<uint64_t>(i + 1);
             }
 
             // Link last allocation to the new memory chunk

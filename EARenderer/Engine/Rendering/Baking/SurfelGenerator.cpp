@@ -209,8 +209,6 @@ namespace EARenderer {
                     auto surfel = generateSurfel(surfelCandidate, bin);
                     mSurfelSpatialHash->insert(surfel, surfelCandidate.position);
                     mScene->surfels().insert(surfel);
-                    
-                    printf("Surfel accepted\n")
                 }
 
                 // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
@@ -245,7 +243,7 @@ namespace EARenderer {
 #pragma mark - Public interface
     
     void SurfelGenerator::generateStaticGeometrySurfels() {
-        const int8_t preferredSurfelCountPerSpatialHashCell = 10;
+        const int8_t preferredSurfelCountPerSpatialHashCell = 1;
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
         int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
