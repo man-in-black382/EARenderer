@@ -58,7 +58,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 0.2;
+        float mMinimumSurfelDistance = 0.1;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
@@ -67,7 +67,14 @@ namespace EARenderer {
         Scene *mScene = nullptr;
         
 #pragma mark - Member functions
-        
+
+        /**
+         Calculates an optimal minimum area of subdivided triangles based on the minimum desired distance between surfels
+
+         @return A minimum triangle area which shouldn't be exceeded when splitting triangle into 4 smaller children
+         */
+        float optimalMinimumSubdivisionArea() const;
+
         /**
          Generates 3 random numbers between 0 and 1
 
@@ -125,7 +132,6 @@ namespace EARenderer {
          Generates surfels for a single mesh instance
 
          @param instance An instance on which surfels will be generated on
-         @return Vector containing all generated surfels
          */
         void generateSurflesOnMeshInstance(MeshInstance& instance);
         

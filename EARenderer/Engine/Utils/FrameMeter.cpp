@@ -26,7 +26,7 @@ namespace EARenderer {
             mFrameCharacteristics.frameTimeMillisecons = mThrottle.cooldown() / mPassedFrames;
             mPassedFrames = 0;
         });
-        return mFrameCharacteristics;;
+        return mFrameCharacteristics;
     }
     
 }

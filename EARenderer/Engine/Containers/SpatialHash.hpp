@@ -233,7 +233,10 @@ namespace EARenderer {
                     for (int32_t z = -1; z <= 1; ++z) {
                         Cell neighbour = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
 
-                        if (isCellValid(neighbour) && mObjects.find(neighbour) != mObjects.end()) {
+                        bool valid = isCellValid(neighbour);
+                        bool present = mObjects.find(neighbour) != mObjects.end();
+
+                        if (valid && present) {
                             neighbours.push_back(neighbour);
                         }
                     }

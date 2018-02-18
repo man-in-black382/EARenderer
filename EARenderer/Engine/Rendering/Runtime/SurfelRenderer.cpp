@@ -30,7 +30,7 @@ namespace EARenderer {
 
         auto mvp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setModelViewProjectionMatrix(mvp);
-        mSurfelRenderingShader.setColor(Color(1.0, 0.2, 0.3, 1.0));
+        mSurfelRenderingShader.setColor(Color(0.2, 1.0, 0.3, 1.0));
 
         glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfels().size()));
     }

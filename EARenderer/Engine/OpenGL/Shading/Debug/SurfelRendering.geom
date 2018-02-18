@@ -3,7 +3,7 @@
 // Layout
 
 layout (points) in;
-layout (points, max_vertices = 1) out;
+layout (line_strip, max_vertices = 4) out;
 
 in vec3 gNormal[];
 in float gArea[];
@@ -19,10 +19,22 @@ void main() {
 //    glEnd();
     
 //    vec4 displacement = vec4(normalize(gNormal[0]) * 0.001, 0.0);
-    gl_Position = gl_in[0].gl_Position;// + displacement;
-    
-    gl_PointSize = 5.0;
+//    gl_Position = gl_in[0].gl_Position;// + displacement;
+
+//    gl_PointSize = 5.0;
+
+    gl_Position = gl_in[0].gl_Position + vec4(0.05, 0.05, 0.0, 0.0);
     EmitVertex();
+    gl_Position = gl_in[0].gl_Position + vec4(-0.05, -0.05, 0.0, 0.0);
+    EmitVertex();
+
+    EndPrimitive();
+
+    gl_Position = gl_in[0].gl_Position + vec4(-0.05, 0.05, 0.0, 0.0);
+    EmitVertex();
+    gl_Position = gl_in[0].gl_Position + vec4(0.05, -0.05, 0.0, 0.0);
+    EmitVertex();
+
     EndPrimitive();
 }
 

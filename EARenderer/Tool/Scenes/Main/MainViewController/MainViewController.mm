@@ -121,7 +121,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    
+
     [self subscribeForEvents];
 }
 

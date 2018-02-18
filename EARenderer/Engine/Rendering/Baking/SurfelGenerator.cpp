@@ -59,7 +59,11 @@ namespace EARenderer {
             TransformedTriangleData( splittedPositions[3], splittedNormals[3], splittedAlbedos[3], splittedUVs[3] )
         };
     }
-    
+
+    float SurfelGenerator::optimalMinimumSubdivisionArea() const {
+        return M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance / 4.0;
+    }
+
     glm::vec3 SurfelGenerator::randomBarycentricCoordinates() {
         float r = mDistribution(mEngine);
         float s = mDistribution(mEngine);
@@ -85,7 +89,7 @@ namespace EARenderer {
         
         // Calculate triangle areas, transform positions and normals using
         // mesh instance's model transformation
-        for (int32_t i = 0; i < subMesh.vertices().size(); i += 3) {
+        for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
             auto& vertex0 = subMesh.vertices()[i];
             auto& vertex1 = subMesh.vertices()[i + 1];
             auto& vertex2 = subMesh.vertices()[i + 2];
@@ -98,7 +102,7 @@ namespace EARenderer {
             float area = triangle.area();
             
             // There is very likely to be degenerate triangles which we don't need
-            if (area == 0.0) {
+            if (area <= 1e-06) {
                 continue;
             }
             
@@ -118,12 +122,21 @@ namespace EARenderer {
             minimumArea = std::min(minimumArea, area);
             maximumArea = std::max(maximumArea, area);
         }
-        
-        const float kTriangleSubdivisionFactor = 7.0f;
-        LogarithmicBin<TransformedTriangleData> bin(minimumArea / kTriangleSubdivisionFactor, maximumArea);
-        
+
+        // Truncate minimum area to optimal value regardless of whether it was larger or smaller than optimum.
+        // It will largely reduce the amount of triangles that need to be processed and checked for coverage
+        // in the most critical and computation-heavy part of the algorithm.
+        float optimalArea = optimalMinimumSubdivisionArea();
+        bool minimumAreaTruncated = minimumArea < optimalArea;
+        minimumArea = optimalArea;
+
+        // Also truncate maximum area if it's smaller than optimal one.
+        maximumArea = std::max(maximumArea, optimalArea);
+
+        LogarithmicBin<TransformedTriangleData> bin(minimumArea, maximumArea);
+
         for (auto& transformedTriangle : transformedTriangleProperties) {
-            bin.insert(transformedTriangle, transformedTriangle.positions.area());
+            bin.insert(transformedTriangle, minimumAreaTruncated ? minimumArea : transformedTriangle.positions.area());
         }
         
         return bin;
@@ -149,8 +162,11 @@ namespace EARenderer {
             if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
                 continue;
             }
-            
-            if (glm::length(surfel.position - candidate.position) < mMinimumSurfelDistance) {
+
+            float length2 = glm::length2(surfel.position - candidate.position);
+            float minimumDistance2 = mMinimumSurfelDistance * mMinimumSurfelDistance;
+
+            if (length2 < minimumDistance2) {
                 minimumDistanceRequirementMet = false;
                 break;
             }
@@ -182,7 +198,7 @@ namespace EARenderer {
         //        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
         //        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
         
-        float singleSurfelArea = transformedVerticesBin.totalWeight() / transformedVerticesBin.size();
+        float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
         //        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
         return Surfel(surfelCandidate.position, surfelCandidate.normal, glm::vec3(0), glm::vec2(0), singleSurfelArea);
@@ -214,6 +230,7 @@ namespace EARenderer {
                 // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
                 auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
                 float triangleArea = surfelPositionTriangle.area();
+                float subTriangleArea = triangleArea / 4.0f;
 
                 if (triangleCompletelyCovered(surfelPositionTriangle, *mSurfelSpatialHash)) {
                     // If triangle is covered, it is discarded
@@ -221,17 +238,20 @@ namespace EARenderer {
                 } else {
                     // Otherwise, we split it into a number of child triangles and
                     // add the uncovered triangles back to the list of active triangles
-                    
+
+                    // Discard triangles that are too small
+                    if (subTriangleArea < bin.minWeight()) {
+                        bin.erase(surfelCandidate.logarithmicBinIterator);
+                        continue;
+                    }
+
                     // Access first, only then erase!!
                     auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
                     bin.erase(surfelCandidate.logarithmicBinIterator);
-                    
+
                     for (auto& subTriangle : subTriangles) {
-                        float subTriangleArea = triangleArea / 4.0f;
-                        bool covered = triangleCompletelyCovered(subTriangle.positions, *mSurfelSpatialHash);
-                        bool lessThanBinMinimum = subTriangleArea < bin.minWeight();
-                        
-                        if (!covered && !lessThanBinMinimum) {
+                        // Uncovered triangle goes back to the bin
+                        if (!triangleCompletelyCovered(subTriangle.positions, *mSurfelSpatialHash)) {
                             bin.insert(subTriangle, subTriangleArea);
                         }
                     }
@@ -247,10 +267,6 @@ namespace EARenderer {
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
         int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
-        
-        printf("Largest dimension %f\n", mScene->boundingBox().largestDimensionLength());
-        printf("Total surfels per longest dimension %f\n", surfelsPerLongestBBDimension);
-        printf("Suggested division resolution is %d\n", spaceDivisionResolution);
         
         mSurfelSpatialHash = new SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
         
