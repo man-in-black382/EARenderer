@@ -115,7 +115,7 @@ namespace EARenderer {
         4, 7, 6
     }
     {
-        GLVertexArrayLayoutDescription layout({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) });
+        std::vector<GLVertexAttribute> layout { GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()) };
         mAxisVAO.initialize(mAxisVertices, 13, mAxisVertexIndices, 51, layout);
         mSegmentVAO.initialize(mSegmentVertices, 8, mSegmentVertexIndices, 36, layout);
         

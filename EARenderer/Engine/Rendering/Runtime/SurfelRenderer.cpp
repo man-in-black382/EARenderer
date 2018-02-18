@@ -16,10 +16,10 @@ namespace EARenderer {
     mScene(scene),
     mResourcePool(resourcePool)
     {
-        mVAO.initialize(scene->surfels().data(), scene->surfels().size(), GLVertexArrayLayoutDescription({
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
-        }));
+        mVAO.initialize(scene->surfels().data(), scene->surfels().size(), {
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+        });
 
         glEnable(GL_PROGRAM_POINT_SIZE);
     }

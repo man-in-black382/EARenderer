@@ -60,7 +60,7 @@ namespace EARenderer {
         mVertices.emplace_back(p3);
         
         mVAO = new GLVertexArray<Vertex1P3>();
-        mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
+        mVAO->initialize(mVertices, { GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()) });
     }
     
     BoxVisualizer::BoxVisualizer(const std::array<glm::vec4, 8>& cornerPoints) {
@@ -102,7 +102,7 @@ namespace EARenderer {
         mVertices.emplace_back(cornerPoints[4]);
         
         mVAO = new GLVertexArray<Vertex1P3>();
-        mVAO->initialize(mVertices, GLVertexArrayLayoutDescription({ static_cast<int>(glm::vec3::length() * sizeof(GLfloat)) }));
+        mVAO->initialize(mVertices, { GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()) });
     }
     
     BoxVisualizer::BoxVisualizer(BoxVisualizer&& that)

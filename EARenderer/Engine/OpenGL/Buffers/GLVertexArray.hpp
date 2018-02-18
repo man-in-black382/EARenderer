@@ -16,7 +16,7 @@
 #include "GLBindable.hpp"
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
-#include "GLVertexArrayLayoutDescription.hpp"
+#include "GLVertexAttribute.hpp"
 
 namespace EARenderer {
     
@@ -41,35 +41,36 @@ namespace EARenderer {
         void bind() const override {
             glBindVertexArray(mName);
         }
-        
+
         void initialize(const Vertex *vertices, uint64_t verticesSize,
                         const GLushort *indices, uint64_t indicesSize,
-                        const GLVertexArrayLayoutDescription& layoutDescription)
+                        const std::vector<GLVertexAttribute>& attributes)
         {
             bind();
-            
+
             mVertexBuffer.initialize(vertices, verticesSize);
             if (indices) { mIndexBuffer.initialize(indices, indicesSize); }
-            
+
             GLuint offset = 0;
-            for (GLuint location = 0; location < layoutDescription.getAttributeSizes().size(); location++) {
+            for (GLuint location = 0; location < attributes.size(); location++) {
                 glEnableVertexAttribArray(location);
-                GLsizei attributeSize = layoutDescription.getAttributeSizes()[location];
-                glVertexAttribPointer(location, attributeSize / sizeof(GLfloat), GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
-                offset += attributeSize;
+                const GLVertexAttribute& attribute = attributes[location];
+                glVertexAttribPointer(location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
+                glVertexAttribDivisor(location, attribute.divisor);
+                offset += attribute.bytes;
             }
         }
-        
-        void initialize(const Vertex *vertices, uint64_t verticesSize, const GLVertexArrayLayoutDescription& layoutDescription) {
-            initialize(vertices, verticesSize, nullptr, 0, layoutDescription);
+
+        void initialize(const Vertex *vertices, uint64_t verticesSize, const std::vector<GLVertexAttribute>& attributes) {
+            initialize(vertices, verticesSize, nullptr, 0, attributes);
         }
         
-        void initialize(const std::vector<Vertex>& vertices, const GLVertexArrayLayoutDescription& layoutDescription) {
-            initialize(vertices.data(), vertices.size(), nullptr, 0, layoutDescription);
+        void initialize(const std::vector<Vertex>& vertices, const std::vector<GLVertexAttribute>& attributes) {
+            initialize(vertices.data(), vertices.size(), nullptr, 0, attributes);
         }
         
-        void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const GLVertexArrayLayoutDescription& layoutDescription) {
-            initialize(vertices.data(), vertices.size(), nullptr, 0, layoutDescription);
+        void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const std::vector<GLVertexAttribute>& attributes) {
+            initialize(vertices.data(), vertices.size(), nullptr, 0, attributes);
         }
     };
     

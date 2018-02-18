@@ -8,8 +8,6 @@
 
 #include "SubMesh.hpp"
 
-#include "GLVertexArrayLayoutDescription.hpp"
-
 namespace EARenderer {
 
     SubMesh::SubMesh()
@@ -73,13 +71,13 @@ namespace EARenderer {
     }
     
     void SubMesh::finalizeVertexBuffer() {
-        mVAO.initialize(mVertices, GLVertexArrayLayoutDescription({
-            static_cast<int>(glm::vec4::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat)),
-            static_cast<int>(glm::vec3::length() * sizeof(GLfloat))
-        }));
+        mVAO.initialize(mVertices, {
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec4), glm::vec4::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+        });
     }
     
     void SubMesh::draw() const {

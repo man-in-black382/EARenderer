@@ -31,6 +31,7 @@
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
 		CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */; };
+		CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */; };
 		CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775011FA5D73700F5699C /* Background_Albedo.tga */; };
 		CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775091FA5D73800F5699C /* Background_Normal.tga */; };
 		CE4DE2071FA60CFE0067729A /* Background_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774CC1FA5D72E00F5699C /* Background_roughness.tga */; };
@@ -160,7 +161,6 @@
 		CE70FA3F1F8F8EF600AD9027 /* GLLayeredTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9C51F8F8EBD00AD9027 /* GLLayeredTexture.cpp */; };
 		CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */; };
 		CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */; };
-		CE70FA421F8F8EF600AD9027 /* GLVertexArrayLayoutDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */; };
 		CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */; };
 		CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */; };
 		CE70FA451F8F8EF600AD9027 /* GLSLCubemapRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9D81F8F8EBD00AD9027 /* GLSLCubemapRendering.cpp */; };
@@ -296,6 +296,8 @@
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
+		CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
+		CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexAttribute.cpp; sourceTree = "<group>"; };
 		CE53ED052012759C00A03146 /* Triangle2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle2D.cpp; sourceTree = "<group>"; };
 		CE53ED062012759C00A03146 /* Triangle2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle2D.hpp; sourceTree = "<group>"; };
 		CE53ED08201275B900A03146 /* Triangle3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle3D.cpp; sourceTree = "<group>"; };
@@ -725,13 +727,11 @@
 		CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTextureCubemap.hpp; sourceTree = "<group>"; };
 		CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthTexture2DArray.hpp; sourceTree = "<group>"; };
 		CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture2D.cpp; sourceTree = "<group>"; };
-		CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexArrayLayoutDescription.cpp; sourceTree = "<group>"; };
 		CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLFramebuffer.cpp; sourceTree = "<group>"; };
 		CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLElementArrayBuffer.hpp; sourceTree = "<group>"; };
 		CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArrayBuffer.hpp; sourceTree = "<group>"; };
 		CE70F9D01F8F8EBD00AD9027 /* GLBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBuffer.hpp; sourceTree = "<group>"; };
 		CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArray.hpp; sourceTree = "<group>"; };
-		CE70F9D21F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArrayLayoutDescription.hpp; sourceTree = "<group>"; };
 		CE70F9D31F8F8EBD00AD9027 /* GLFramebuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLFramebuffer.hpp; sourceTree = "<group>"; };
 		CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLElementArrayBuffer.cpp; sourceTree = "<group>"; };
 		CE70F9D51F8F8EBD00AD9027 /* GLNamedObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLNamedObject.hpp; sourceTree = "<group>"; };
@@ -1941,8 +1941,8 @@
 				CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */,
 				CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */,
 				CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */,
-				CE70F9CC1F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.cpp */,
-				CE70F9D21F8F8EBD00AD9027 /* GLVertexArrayLayoutDescription.hpp */,
+				CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */,
+				CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */,
 			);
 			path = Buffers;
 			sourceTree = "<group>";
@@ -2388,6 +2388,7 @@
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
+				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
 				CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */,
 				CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */,
@@ -2457,7 +2458,6 @@
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
 				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
-				CE70FA421F8F8EF600AD9027 /* GLVertexArrayLayoutDescription.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */,

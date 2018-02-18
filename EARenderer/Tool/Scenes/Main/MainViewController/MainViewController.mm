@@ -75,6 +75,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
     EARenderer::FileManager::shared().setShaderSourceFolderPath([self shadersDirectory]);
+    EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
     EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
     
@@ -197,6 +198,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneInteractor->allObjectsDeselectionEvent() += { "main.controller.deselect.all", [self]() {
         [self.sceneObjectsTabView.meshesTab deselectAll];
     }};
+}
+
+- (std::string)resourceDirectory {
+    return std::string([[NSBundle mainBundle] resourcePath].UTF8String);
 }
 
 - (std::string)shadersDirectory
