@@ -35,10 +35,6 @@ namespace EARenderer {
         return mMaterialName;
     }
     
-    std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() {
-        return mVertices;
-    }
-    
     const std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() const {
         return mVertices;
     }
@@ -48,6 +44,14 @@ namespace EARenderer {
     }
     
     const GLVertexArray<Vertex1P1N1UV1T1BT>& SubMesh::VAO() const {
+        return mVAO;
+    }
+
+    std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() {
+        return mVertices;
+    }
+
+    GLVertexArray<Vertex1P1N1UV1T1BT>& SubMesh::VAO() {
         return mVAO;
     }
     

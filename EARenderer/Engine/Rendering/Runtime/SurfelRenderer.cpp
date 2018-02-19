@@ -8,13 +8,18 @@
 
 #include "SurfelRenderer.hpp"
 #include "SurfelGenerator.hpp"
+#include "WavefrontMeshLoader.hpp"
+#include "FileManager.hpp"
 
 namespace EARenderer {
-    
+
+#pragma mark - Lifecycle
+
     SurfelRenderer::SurfelRenderer(Scene* scene, ResourcePool* resourcePool)
     :
     mScene(scene),
-    mResourcePool(resourcePool)
+    mResourcePool(resourcePool),
+    mSphere(FileManager::shared().resourceRootPath() + "_engine_resource_sphere.obj")
     {
         mVAO.initialize(scene->surfels().data(), scene->surfels().size(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -23,7 +28,15 @@ namespace EARenderer {
 
         glEnable(GL_PROGRAM_POINT_SIZE);
     }
-    
+
+#pragma mark - Private heplers
+
+    void SurfelRenderer::appendTransformationBufferToSphere() {
+        
+    }
+
+#pragma mark - Public interface
+
     void SurfelRenderer::render() {
         mVAO.bind();
         mSurfelRenderingShader.bind();

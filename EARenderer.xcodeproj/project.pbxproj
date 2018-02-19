@@ -11,6 +11,7 @@
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
 		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
 		AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */; };
+		AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = AC8F7DFB203AF676004CD033 /* sphere.obj */; };
 		AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */; };
 		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
 		ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */; };
@@ -206,7 +207,7 @@
 		CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8201F8F8EBD00AD9027 /* suzanne.obj */; };
 		CE70FA791F8F8F7400AD9027 /* torus.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8211F8F8EBD00AD9027 /* torus.obj */; };
 		CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8221F8F8EBD00AD9027 /* plane.obj */; };
-		CE70FA7B1F8F8F7400AD9027 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8231F8F8EBD00AD9027 /* sphere.obj */; };
+		CE70FA7B1F8F8F7400AD9027 /* _engine_resource_sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */; };
 		CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7E41F8F8EBD00AD9027 /* SceneObjectMarker.mm */; };
 		CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7F21F8F8EBD00AD9027 /* MainViewController.mm */; };
 		CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7F91F8F8EBD00AD9027 /* DefaultRenderComponentsProvider.mm */; };
@@ -263,6 +264,7 @@
 		AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
 		AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.vert; sourceTree = "<group>"; };
 		AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapFace.cpp; sourceTree = "<group>"; };
+		AC8F7DFB203AF676004CD033 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelGenerator.cpp; sourceTree = "<group>"; };
 		AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelGenerator.hpp; sourceTree = "<group>"; };
 		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
@@ -350,7 +352,7 @@
 		CE70F8201F8F8EBD00AD9027 /* suzanne.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = suzanne.obj; sourceTree = "<group>"; };
 		CE70F8211F8F8EBD00AD9027 /* torus.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = torus.obj; sourceTree = "<group>"; };
 		CE70F8221F8F8EBD00AD9027 /* plane.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plane.obj; sourceTree = "<group>"; };
-		CE70F8231F8F8EBD00AD9027 /* sphere.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
+		CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = _engine_resource_sphere.obj; sourceTree = "<group>"; };
 		CE70F8251F8F8EBD00AD9027 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE70F8341F8F8EBD00AD9027 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE70F8351F8F8EBD00AD9027 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -908,6 +910,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AC8F7DFA203AF63F004CD033 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		ACB0AA431FF4EC3500CD6A11 /* GLTexture2D */ = {
 			isa = PBXGroup;
 			children = (
@@ -1289,7 +1299,7 @@
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8211F8F8EBD00AD9027 /* torus.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
-				CE70F8231F8F8EBD00AD9027 /* sphere.obj */,
+				AC8F7DFB203AF676004CD033 /* sphere.obj */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1334,6 +1344,7 @@
 		CE70F83E1F8F8EBD00AD9027 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				AC8F7DFA203AF63F004CD033 /* Resources */,
 				CE70F83F1F8F8EBD00AD9027 /* Input */,
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
 				CE70F8491F8F8EBD00AD9027 /* Utils */,
@@ -2332,6 +2343,7 @@
 				AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */,
 				CE37917C1FA366820049BD1B /* patchy_cement1_Base_Color.png in Resources */,
 				CE4DE22B1FA60CFF0067729A /* Sponza_Curtain_Red_normal.tga in Resources */,
+				AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
 				CE4DE2471FA60CFF0067729A /* Vase_normal.tga in Resources */,
@@ -2340,7 +2352,7 @@
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
-				CE70FA7B1F8F8F7400AD9027 /* sphere.obj in Resources */,
+				CE70FA7B1F8F8F7400AD9027 /* _engine_resource_sphere.obj in Resources */,
 				CE4DE24A1FA60CFF0067729A /* VaseHanging_normal.tga in Resources */,
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
 				CE4DE2161FA60CFE0067729A /* Sponza_Bricks_a_Albedo.tga in Resources */,

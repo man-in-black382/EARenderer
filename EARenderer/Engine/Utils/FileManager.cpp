@@ -22,10 +22,6 @@ namespace EARenderer {
     const std::string& FileManager::resourceRootPath() const {
         return mResourceRootPath;
     }
-
-    const std::string& FileManager::shaderSourceFolderPath() const {
-        return mShaderSourceFolderPath;
-    }
     
 #pragma mark - Setters
 
@@ -33,8 +29,4 @@ namespace EARenderer {
         mResourceRootPath = path;
     }
 
-    void FileManager::setShaderSourceFolderPath(const std::string& path) {
-        mShaderSourceFolderPath = path;
-    }
-    
 }

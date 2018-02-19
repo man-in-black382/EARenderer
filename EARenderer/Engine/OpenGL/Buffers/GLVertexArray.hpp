@@ -11,6 +11,7 @@
 
 #include <OpenGL/gl3.h>
 #include <vector>
+#include <stdexcept>
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"
@@ -27,6 +28,9 @@ namespace EARenderer {
         GLElementArrayBuffer mIndexBuffer;
         
     public:
+
+#pragma mark - Lifecycle
+
         GLVertexArray() {
             glGenVertexArrays(1, &mName);
         }
@@ -37,10 +41,14 @@ namespace EARenderer {
         
         GLVertexArray(GLVertexArray&& that) = default;
         GLVertexArray& operator=(GLVertexArray&& rhs) = default;
-        
+
+#pragma mark - Binbable
+
         void bind() const override {
             glBindVertexArray(mName);
         }
+
+#pragma mark - Lazy initialization
 
         void initialize(const Vertex *vertices, uint64_t verticesSize,
                         const GLushort *indices, uint64_t indicesSize,
@@ -71,6 +79,23 @@ namespace EARenderer {
         
         void initialize(const std::vector<Vertex>& vertices, const std::vector<GLushort>& indices, const std::vector<GLVertexAttribute>& attributes) {
             initialize(vertices.data(), vertices.size(), nullptr, 0, attributes);
+        }
+
+        template <typename T>
+        void useExternalBuffer(const GLVertexArrayBuffer<T>& bufffer, const std::vector<GLVertexAttribute>& attributes) {
+            bind();
+
+            GLuint offset = 0;
+            for (auto& attribute : attributes) {
+                if (attribute.location == GLVertexAttribute::LocationAutomatic) {
+                    throw std::logic_error("You're trying to use external buffer with attribute's location set to Automatic which will probably override attributes taken from internal buffer and replacing data at location 0 and so forth");
+                }
+
+                glEnableVertexAttribArray(attribute.location);
+                glVertexAttribPointer(location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(T), reinterpret_cast<void *>(offset));
+                glVertexAttribDivisor(location, attribute.divisor);
+                offset += attribute.bytes;
+            }
         }
     };
     

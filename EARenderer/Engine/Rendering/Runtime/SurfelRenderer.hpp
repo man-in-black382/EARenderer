@@ -19,9 +19,12 @@ namespace EARenderer {
     private:
         Scene *mScene;
         ResourcePool *mResourcePool;
+        Mesh mSphere;
         GLVertexArray<Surfel> mVAO;
         GLSLSurfelRendering mSurfelRenderingShader;
-        
+
+        void appendTransformationBufferToSphere();
+
     public:
         SurfelRenderer(Scene* scene, ResourcePool* resourcePool);
         

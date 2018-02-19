@@ -28,10 +28,8 @@ namespace EARenderer {
         static FileManager& shared();
 
         const std::string& resourceRootPath() const;
-        const std::string& shaderSourceFolderPath() const;
         
         void setResourceRootPath(const std::string& path);
-        void setShaderSourceFolderPath(const std::string& path);
     };
     
 }

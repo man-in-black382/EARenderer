@@ -14,12 +14,15 @@
 namespace EARenderer {
 
     struct GLVertexAttribute {
+        static const GLint LocationAutomatic;
+
+        GLint location = LocationAutomatic;
         GLint bytes;
         GLint components;
         GLint divisor;
 
         GLVertexAttribute(GLint sizeInBytes, GLint componentCount);
-        GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor);
+        GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor, GLint location);
 
         /**
          Factory function providing attribute unique for every vertex (default OpenGL behaviour)
@@ -28,7 +31,7 @@ namespace EARenderer {
          @param componentCount number of attribute's components
          @return attribute with divisor parameter set to 0
          */
-        static GLVertexAttribute UniqueAttribute(GLint sizeInBytes, GLint componentCount);
+        static GLVertexAttribute UniqueAttribute(GLint sizeInBytes, GLint componentCount, GLint location = LocationAutomatic);
 
         /**
          Factory function providing attribute which will be shared between vertices of the same instance in instanced rendering mode
@@ -37,7 +40,7 @@ namespace EARenderer {
          @param componentCount number of attribute's components
          @return attribute with divisor parameter set to 1
          */
-        static GLVertexAttribute SharedAttribute(GLint sizeInBytes, GLint componentCount);
+        static GLVertexAttribute SharedAttribute(GLint sizeInBytes, GLint componentCount, GLint location = LocationAutomatic);
     };
 
 }

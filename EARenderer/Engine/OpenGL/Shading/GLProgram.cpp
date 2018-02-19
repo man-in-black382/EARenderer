@@ -22,9 +22,9 @@ namespace EARenderer {
     GLProgram::GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName)
     :
     GLNamedObject(glCreateProgram()),
-    mVertexShader(vertexSourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + vertexSourceName, GL_VERTEX_SHADER)),
-    mFragmentShader(fragmentSourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + fragmentSourceName, GL_FRAGMENT_SHADER)),
-    mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().shaderSourceFolderPath() + geometrySourceName, GL_GEOMETRY_SHADER))
+    mVertexShader(vertexSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + vertexSourceName, GL_VERTEX_SHADER)),
+    mFragmentShader(fragmentSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + fragmentSourceName, GL_FRAGMENT_SHADER)),
+    mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + geometrySourceName, GL_GEOMETRY_SHADER))
     {
         link();
         bind();

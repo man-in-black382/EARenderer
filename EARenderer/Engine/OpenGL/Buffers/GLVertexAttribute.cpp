@@ -10,6 +10,10 @@
 
 namespace EARenderer {
 
+#pragma mark - Constants
+
+    const GLint GLVertexAttribute::LocationAutomatic = -1;
+
 #pragma mark - Lifecycle
 
     GLVertexAttribute::GLVertexAttribute(GLint sizeInBytes, GLint componentCount)
@@ -18,19 +22,19 @@ namespace EARenderer {
     components(componentCount)
     { }
 
-    GLVertexAttribute::GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor)
+    GLVertexAttribute::GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor, GLint location)
     :
     bytes(sizeInBytes),
     components(componentCount),
     divisor(divisor)
     { }
 
-    GLVertexAttribute GLVertexAttribute::UniqueAttribute(GLint sizeInBytes, GLint componentCount) {
-        return GLVertexAttribute(sizeInBytes, componentCount, 0);
+    GLVertexAttribute GLVertexAttribute::UniqueAttribute(GLint sizeInBytes, GLint componentCount, GLint location) {
+        return GLVertexAttribute(sizeInBytes, componentCount, 0, location);
     }
 
-    GLVertexAttribute GLVertexAttribute::SharedAttribute(GLint sizeInBytes, GLint componentCount) {
-        return GLVertexAttribute(sizeInBytes, componentCount, 1);
+    GLVertexAttribute GLVertexAttribute::SharedAttribute(GLint sizeInBytes, GLint componentCount, GLint location) {
+        return GLVertexAttribute(sizeInBytes, componentCount, 1, location);
     }
 
 }
