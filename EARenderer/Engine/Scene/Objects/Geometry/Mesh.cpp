@@ -58,6 +58,10 @@ namespace EARenderer {
     const PackedLookupTable<SubMesh>& Mesh::subMeshes() const {
         return mSubMeshes;
     }
+
+    PackedLookupTable<SubMesh>& Mesh::subMeshes() {
+        return mSubMeshes;
+    }
     
 #pragma mark - Setters
     

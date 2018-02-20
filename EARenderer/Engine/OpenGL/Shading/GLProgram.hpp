@@ -20,6 +20,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "GLNamedObject.hpp"
+#include "GLVertexAttribute.hpp"
 #include "GLUniform.hpp"
 #include "GLShader.hpp"
 #include "GLBindable.hpp"
@@ -38,29 +39,34 @@ namespace EARenderer {
     std::integral_constant<uint32_t, expr> uint32_constant{};
     
     class GLProgram: public GLNamedObject, public GLBindable {
+    protected:
+        using VertexAttributeName = std::string;
+        using CRC32 = uint32_t;
+
     private:
         const GLShader* mVertexShader = nullptr;
         const GLShader* mFragmentShader = nullptr;
         const GLShader* mGeometryShader = nullptr;
-        
-        std::unordered_map<uint32_t, GLUniform> mUniforms;
+
+        std::unordered_map<VertexAttributeName, GLVertexAttribute> mVertexAttributes;
+        std::unordered_map<CRC32, GLUniform> mUniforms;
         
         GLint mAvailableTextureUnits = 0;
         
         bool isModifyingUniforms = false;
         
         void link();
+        void obtainVertexAttributes();
         void obtainUniforms();
         void obtainAvailableTextureUnits();
         
     protected:
         GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
-        
-        const GLUniform& uniformByNameCRC32(uint32_t crc32);
-        void setUniformTexture(uint32_t uniformNameCRC32, const GLTexture& texture);
+
+        void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture);
         
         template <typename BufferDataType>
-        void setUniformTexture(uint32_t uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
+        void setUniformTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
             GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
             glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
             bufferTexture.bind();
@@ -78,6 +84,9 @@ namespace EARenderer {
         
         void bind() const override;
         bool validateState() const;
+
+        const GLVertexAttribute& vertexAttributeByName(const std::string& name);
+        const GLUniform& uniformByNameCRC32(CRC32 crc32);
         
         /**
          You should use this function for setting up uniform sampler values.

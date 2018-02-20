@@ -88,4 +88,10 @@ namespace EARenderer {
         mVAO.bind();
         glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(mVertices.size()));
     }
+
+    void SubMesh::drawInstanced(size_t instanceCount) {
+        mVAO.bind();
+        glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(mVertices.size()), static_cast<GLsizei>(instanceCount));
+    }
+
 }

@@ -13,9 +13,12 @@
 
 namespace EARenderer {
     
-    class GLSLSurfelRendering: public GLSLGenericGeometry {
+    class GLSLSurfelRendering: public GLProgram {
     public:
         GLSLSurfelRendering();
+
+        void setViewProjectionMatrix(const glm::mat4& mvp);
+        void setSurfelRadius(float radius);
     };
     
 }

@@ -3,36 +3,70 @@
 // Layout
 
 layout (points) in;
-layout (line_strip, max_vertices = 4) out;
+layout (triangle_strip, max_vertices = 4) out;
+
+// Input
 
 in vec3 gNormal[];
 in float gArea[];
 
+// Uniforms
+
+uniform mat4 uViewProjectionMatrix;
+uniform float uRadius;
+
+// Outputs
+out vec4 iCenter;
+out vec4 iCurrent;
+
+// Rotation matrix used to orient surfel disk around surfel's normal
+mat3 TBN() {
+    vec3 worldUp = vec3(0.0, 1.0, 0.0);
+    vec3 N = gNormal[0];
+    vec3 right = normalize(cross(N, worldUp));
+    vec3 up = normalize(cross(right, N));
+
+    return mat3(right, up, N);
+}
+
 void main() {
-    
-//    glBegin( GL_TRIANGLE_FAN );
-//    glVertex2f(x, y);
-//    for( int n = 0; n <= segments; ++n ) {
-//        float const t = 2 * M_PI * (float)n / (float)segments;
-//        glVertex2f(x + sin(t) * r, y + cos(t) * r);
-//    }
-//    glEnd();
-    
-//    vec4 displacement = vec4(normalize(gNormal[0]) * 0.001, 0.0);
-//    gl_Position = gl_in[0].gl_Position;// + displacement;
 
-//    gl_PointSize = 5.0;
+    mat4 rotationMatrix = mat4(TBN());
 
-    gl_Position = gl_in[0].gl_Position + vec4(0.05, 0.05, 0.0, 0.0);
-    EmitVertex();
-    gl_Position = gl_in[0].gl_Position + vec4(-0.05, -0.05, 0.0, 0.0);
+    vec4 a = gl_in[0].gl_Position;
+    iCenter = a;
+    a.x -= uRadius;
+    a.y -= uRadius;
+    a.z = 0.0;
+    iCurrent = a;
+    gl_Position = uViewProjectionMatrix * rotationMatrix * a;
     EmitVertex();
 
-    EndPrimitive();
-
-    gl_Position = gl_in[0].gl_Position + vec4(-0.05, 0.05, 0.0, 0.0);
+    vec4 b = gl_in[0].gl_Position;
+    iCenter = b;
+    b.x += uRadius;
+    b.y -= uRadius;
+    b.z = 0.0;
+    iCurrent = b;
+    gl_Position = uViewProjectionMatrix * rotationMatrix * b;
     EmitVertex();
-    gl_Position = gl_in[0].gl_Position + vec4(0.05, -0.05, 0.0, 0.0);
+
+    vec4 d = gl_in[0].gl_Position;
+    iCenter = d;
+    d.x -= uRadius;
+    d.y += uRadius;
+    d.z = 0.0;
+    iCurrent = d;
+    gl_Position = uViewProjectionMatrix * rotationMatrix * d;
+    EmitVertex();
+
+    vec4 c = gl_in[0].gl_Position;
+    iCenter = c;
+    c.x += uRadius;
+    c.y += uRadius;
+    c.z = 0.0;
+    iCurrent = c;
+    gl_Position = uViewProjectionMatrix * rotationMatrix * c;
     EmitVertex();
 
     EndPrimitive();

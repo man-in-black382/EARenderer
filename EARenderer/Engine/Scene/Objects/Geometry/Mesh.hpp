@@ -35,6 +35,8 @@ namespace EARenderer {
         const AxisAlignedBox3D& boundingBox() const;
         const Transformation& baseTransform() const;
         const PackedLookupTable<SubMesh>& subMeshes() const;
+
+        PackedLookupTable<SubMesh>& subMeshes();
         
         void setName(const std::string& name);
         void setTransformID(ID transformID);

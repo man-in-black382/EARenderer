@@ -26,7 +26,8 @@ namespace EARenderer {
     :
     bytes(sizeInBytes),
     components(componentCount),
-    divisor(divisor)
+    divisor(divisor),
+    location(location)
     { }
 
     GLVertexAttribute GLVertexAttribute::UniqueAttribute(GLint sizeInBytes, GLint componentCount, GLint location) {

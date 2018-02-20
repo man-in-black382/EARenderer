@@ -34,7 +34,6 @@ namespace EARenderer {
         glm::mat4 inverseScaleMatrix() const;
         glm::mat4 inverseRotationMatrix() const;
         glm::mat4 inverseTranslationMatrix() const;
-
     };
     
 }

@@ -26,7 +26,11 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void FileManager::setResourceRootPath(const std::string& path) {
-        mResourceRootPath = path;
+        if (path.back() == '/') {
+            mResourceRootPath = path;
+        } else {
+            mResourceRootPath = path + "/";
+        }
     }
 
 }

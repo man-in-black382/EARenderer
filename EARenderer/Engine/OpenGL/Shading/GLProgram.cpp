@@ -8,10 +8,11 @@
 
 #include "GLProgram.hpp"
 #include "FileManager.hpp"
-#include "Macros.h"
+#include "StringUtils.hpp"
 
 #include <vector>
 #include <sstream>
+#include <stdexcept>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -29,6 +30,7 @@ namespace EARenderer {
         link();
         bind();
         obtainAvailableTextureUnits();
+        obtainVertexAttributes();
         obtainUniforms();
     }
     
@@ -61,13 +63,32 @@ namespace EARenderer {
                 std::vector<char> infoChars(infoLength);
                 glGetProgramInfoLog(mName, infoLength, nullptr, infoChars.data());
                 std::string infoLog(infoChars.data());
-                ASSERT(isLinked, "Failed to link program: " << infoLog);
+
+                if (!isLinked) {
+                    throw std::runtime_error(string_format("Failed to link program: %s", infoLog.c_str()));
+                }
             }
             
-            ASSERT(isLinked, "Failed to link program");
+            if (!isLinked) {
+                throw std::runtime_error("Failed to link program");
+            }
         }
     }
-    
+
+    void GLProgram::obtainVertexAttributes() {
+        GLint count = 0;
+        glGetProgramiv(mName, GL_ACTIVE_ATTRIBUTES, &count);
+
+        for (GLuint index = 0; index < count; index++) {
+            std::vector<GLchar> attributeNameChars(128);
+            GLint size;
+            GLenum type;
+            glGetActiveAttrib(mName, index, static_cast<GLsizei>(attributeNameChars.size()), nullptr, &size, &type, attributeNameChars.data());
+            std::string name(attributeNameChars.data());
+//            GLint location = glGetAttribLocation(mName, &name[0]);
+        }
+    }
+
     void GLProgram::obtainUniforms() {
         GLint count = 0;
         glGetProgramiv(mName, GL_ACTIVE_UNIFORMS, &count);
@@ -84,7 +105,9 @@ namespace EARenderer {
             GLUniform uniform = GLUniform(location, size, type, name);
             
             if (uniform.isSampler()) {
-                ASSERT(textureUnit < mAvailableTextureUnits, "Exceeded the number of available texture units (" << mAvailableTextureUnits << ")");
+                if (textureUnit >= mAvailableTextureUnits) {
+                    throw std::runtime_error(string_format("Exceeded the number of available texture units (%d)", mAvailableTextureUnits));
+                }
                 glUniform1i(uniform.location(), textureUnit);
                 uniform.setTextureUnit(textureUnit);
                 textureUnit++;
@@ -121,21 +144,33 @@ namespace EARenderer {
     
 #pragma mark - Protected
     
-    void GLProgram::setUniformTexture(uint32_t uniformNameCRC32, const GLTexture& texture) {
+    void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture) {
         GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
-        ASSERT(isModifyingUniforms, "You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
+        if (!isModifyingUniforms) {
+            throw std::logic_error("You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
+        }
         glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
     }
-      
-    const GLUniform& GLProgram::uniformByNameCRC32(uint32_t crc32) {
-        auto it = mUniforms.find(crc32);
-        ASSERT(it != mUniforms.end(), "Uniform could not be found");
-        return it->second;
-    }
     
 #pragma mark - Public
-    
+
+    const GLVertexAttribute& GLProgram::vertexAttributeByName(const std::string& name) {
+        auto it = mVertexAttributes.find(name);
+        if (it == mVertexAttributes.end()) {
+            throw std::invalid_argument(string_format("Vertex attribute '%s' souldn't be found", name.c_str()));
+        }
+        return it->second;
+    }
+
+    const GLUniform& GLProgram::uniformByNameCRC32(CRC32 crc32) {
+        auto it = mUniforms.find(crc32);
+        if (it == mUniforms.end()) {
+            throw std::invalid_argument("Uniform couldn't be found");
+        }
+        return it->second;
+    }
+
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
         isModifyingUniforms = true;
         closure();

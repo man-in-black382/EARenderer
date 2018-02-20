@@ -10,6 +10,9 @@
 #include "SurfelGenerator.hpp"
 #include "WavefrontMeshLoader.hpp"
 #include "FileManager.hpp"
+#include "GLVertexAttribute.hpp"
+
+#include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
 
@@ -18,32 +21,28 @@ namespace EARenderer {
     SurfelRenderer::SurfelRenderer(Scene* scene, ResourcePool* resourcePool)
     :
     mScene(scene),
-    mResourcePool(resourcePool),
-    mSphere(FileManager::shared().resourceRootPath() + "_engine_resource_sphere.obj")
+    mResourcePool(resourcePool)
     {
-        mVAO.initialize(scene->surfels().data(), scene->surfels().size(), {
+        mSurfelsVAO.initialize(scene->surfels().data(), scene->surfels().size(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
         });
 
         glEnable(GL_PROGRAM_POINT_SIZE);
     }
 
-#pragma mark - Private heplers
-
-    void SurfelRenderer::appendTransformationBufferToSphere() {
-        
-    }
-
 #pragma mark - Public interface
 
     void SurfelRenderer::render() {
-        mVAO.bind();
+        mSurfelsVAO.bind();
         mSurfelRenderingShader.bind();
 
-        auto mvp = mScene->camera()->viewProjectionMatrix();
-        mSurfelRenderingShader.setModelViewProjectionMatrix(mvp);
-        mSurfelRenderingShader.setColor(Color(0.2, 1.0, 0.3, 1.0));
+        auto vp = mScene->camera()->viewProjectionMatrix();
+        mSurfelRenderingShader.setViewProjectionMatrix(vp);
+        mSurfelRenderingShader.setSurfelRadius(0.1);
 
         glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfels().size()));
     }

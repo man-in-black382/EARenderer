@@ -82,8 +82,9 @@ namespace EARenderer {
         }
 
         template <typename T>
-        void useExternalBuffer(const GLVertexArrayBuffer<T>& bufffer, const std::vector<GLVertexAttribute>& attributes) {
+        void useExternalBuffer(const GLVertexArrayBuffer<T>& buffer, const std::vector<GLVertexAttribute>& attributes) {
             bind();
+            buffer.bind();
 
             GLuint offset = 0;
             for (auto& attribute : attributes) {
@@ -92,8 +93,8 @@ namespace EARenderer {
                 }
 
                 glEnableVertexAttribArray(attribute.location);
-                glVertexAttribPointer(location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(T), reinterpret_cast<void *>(offset));
-                glVertexAttribDivisor(location, attribute.divisor);
+                glVertexAttribPointer(attribute.location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(T), reinterpret_cast<void *>(offset));
+                glVertexAttribDivisor(attribute.location, attribute.divisor);
                 offset += attribute.bytes;
             }
         }

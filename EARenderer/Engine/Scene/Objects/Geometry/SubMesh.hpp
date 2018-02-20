@@ -48,6 +48,7 @@ namespace EARenderer {
         void finalizeVertexBuffer();
         
         void draw() const override;
+        void drawInstanced(size_t instanceCount);
     };
     
 }

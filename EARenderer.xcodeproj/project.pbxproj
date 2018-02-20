@@ -15,6 +15,8 @@
 		AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */; };
 		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
 		ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */; };
+		ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = ACCCC1E0203C802500905557 /* SurfelRendering.geom */; };
+		ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = ACCCC1E2203C859400905557 /* SurfelRendering.frag */; };
 		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
 		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
@@ -236,7 +238,6 @@
 		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
 		CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */; };
 		CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */; };
-		CE9617771FF83CCD00A5E9FC /* SurfelRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */; };
 		CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */; };
 		CE96177A1FF83E5200A5E9FC /* SurfelRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */; };
 		CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A431FCAF0090090F1EE /* Collision.cpp */; };
@@ -271,6 +272,8 @@
 		AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LowDiscrepancySequence.hpp; sourceTree = "<group>"; };
 		ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture2DSampler.cpp; sourceTree = "<group>"; };
 		ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DSampler.hpp; sourceTree = "<group>"; };
+		ACCCC1E0203C802500905557 /* SurfelRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.geom; sourceTree = "<group>"; };
+		ACCCC1E2203C859400905557 /* SurfelRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.frag; sourceTree = "<group>"; };
 		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
@@ -797,7 +800,6 @@
 		CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleRendering.geom; sourceTree = "<group>"; };
 		CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLTriangleRendering.cpp; sourceTree = "<group>"; };
 		CE9617721FF8287A00A5E9FC /* GLSLTriangleRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLTriangleRendering.hpp; sourceTree = "<group>"; };
-		CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.geom; sourceTree = "<group>"; };
 		CE9617751FF83CCD00A5E9FC /* GLSLSurfelRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelRendering.hpp; sourceTree = "<group>"; };
 		CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelRendering.cpp; sourceTree = "<group>"; };
 		CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.vert; sourceTree = "<group>"; };
@@ -2044,7 +2046,8 @@
 				CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */,
 				CE9617721FF8287A00A5E9FC /* GLSLTriangleRendering.hpp */,
 				CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */,
-				CE9617741FF83CCD00A5E9FC /* SurfelRendering.geom */,
+				ACCCC1E0203C802500905557 /* SurfelRendering.geom */,
+				ACCCC1E2203C859400905557 /* SurfelRendering.frag */,
 				CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */,
 				CE9617751FF83CCD00A5E9FC /* GLSLSurfelRendering.hpp */,
 			);
@@ -2325,7 +2328,6 @@
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
-				CE9617771FF83CCD00A5E9FC /* SurfelRendering.geom in Resources */,
 				CE4DE2381FA60CFF0067729A /* Sponza_Fabric_roughness.tga in Resources */,
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
@@ -2342,11 +2344,13 @@
 				CE4DE22D1FA60CFF0067729A /* Sponza_Details_diffuse.tga in Resources */,
 				AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */,
 				CE37917C1FA366820049BD1B /* patchy_cement1_Base_Color.png in Resources */,
+				ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */,
 				CE4DE22B1FA60CFF0067729A /* Sponza_Curtain_Red_normal.tga in Resources */,
 				AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
 				CE4DE2471FA60CFF0067729A /* Vase_normal.tga in Resources */,
+				ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */,
 				CE4DE2171FA60CFE0067729A /* Sponza_Bricks_a_Normal.tga in Resources */,
 				CE4DE23B1FA60CFF0067729A /* Sponza_FlagPole_roughness.tga in Resources */,
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
