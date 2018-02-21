@@ -16,15 +16,14 @@ uniform mat4 uViewProjectionMatrix;
 uniform float uRadius;
 
 // Outputs
-out vec4 iCenter;
-out vec4 iCurrent;
+out vec4 iCurrentPosition;
 
 // Rotation matrix used to orient surfel disk around surfel's normal
-mat4 TBN() {
-    vec3 worldUp = vec3(0.0, 1.0, 0.0);
-    vec3 zAxis = normalize(gNormal[0]);
+mat4 RotationMatrix() {
+    vec3 worldUp = vec3(0.0, -1.0, 0.0);
+    vec3 zAxis = gNormal[0];
     vec3 xAxis = normalize(cross(worldUp, zAxis));
-    vec3 yAxis = normalize(cross(zAxis, xAxis));
+    vec3 yAxis = cross(zAxis, xAxis);
 
     return mat4(vec4(xAxis, 0.0),
                 vec4(yAxis, 0.0),
@@ -33,54 +32,41 @@ mat4 TBN() {
 }
 
 void main() {
-//    mat4 rotationMatrix = mat4(TBN());
-    mat4 rotationMatrix = mat4(1.0);
+    mat4 rotationMatrix = RotationMatrix();
+    vec4 surfelPosition = gl_in[0].gl_Position;
 
-    vec4 a = gl_in[0].gl_Position;
-    iCenter = a;
-    a.x -= uRadius;
-    a.y -= uRadius;
-//    a.z = 0.0;
-    iCurrent = a;
-    gl_Position = uViewProjectionMatrix * rotationMatrix * a;
+    vec4 a = vec4(-uRadius, -uRadius, 0.0, 1.0);
+    iCurrentPosition = a;
+    a = rotationMatrix * a;
+    a = a + surfelPosition;
+    a = uViewProjectionMatrix * a;
+    gl_Position = a;
     EmitVertex();
 
-    vec4 b = gl_in[0].gl_Position;
-    iCenter = b;
-    b.x -= uRadius;
-    b.y += uRadius;
-//    b.z = 0.0;
-    iCurrent = b;
-    gl_Position = uViewProjectionMatrix * rotationMatrix * b;
+    vec4 b = vec4(-uRadius, uRadius, 0.0, 1.0);
+    iCurrentPosition = b;
+    b = rotationMatrix * b;
+    b = b + surfelPosition;
+    b = uViewProjectionMatrix * b;
+    gl_Position = b;
     EmitVertex();
 
-    vec4 c = gl_in[0].gl_Position;
-    iCenter = c;
-    c.x += uRadius;
-    c.y -= uRadius;
-//    c.z = 0.0;
-    iCurrent = c;
-    gl_Position = uViewProjectionMatrix * rotationMatrix * c;
+    vec4 c = vec4(uRadius, -uRadius, 0.0, 1.0);
+    iCurrentPosition = c;
+    c = rotationMatrix * c;
+    c = c + surfelPosition;
+    c = uViewProjectionMatrix * c;
+    gl_Position = c;
     EmitVertex();
 
-    vec4 d = gl_in[0].gl_Position;
-    iCenter = d;
-    d.x += uRadius;
-    d.y += uRadius;
-//    d.z = 0.0;
-    iCurrent = d;
-    gl_Position = uViewProjectionMatrix * rotationMatrix * d;
+    vec4 d = vec4(uRadius, uRadius, 0.0, 1.0);
+    iCurrentPosition = d;
+    d = rotationMatrix * d;
+    d = d + surfelPosition;
+    d = uViewProjectionMatrix * d;
+    gl_Position = d;
     EmitVertex();
 
     EndPrimitive();
-
-//    gl_Position = uViewProjectionMatrix * gl_in[0].gl_Position;
-//    EmitVertex();
-//
-//    gl_Position = uViewProjectionMatrix * (gl_in[0].gl_Position + vec4(gNormal[0], 0.0) * vec4(0.1));
-//    EmitVertex();
-//
-//    EndPrimitive();
-
 }
 

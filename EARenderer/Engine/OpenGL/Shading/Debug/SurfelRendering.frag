@@ -1,7 +1,6 @@
 #version 400 core
 
-in vec4 iCenter;
-in vec4 iCurrent;
+in vec4 iCurrentPosition;
 
 uniform float uRadius;
 
@@ -9,7 +8,8 @@ out vec4 oFragColor;
 
 void main() {
     // Draw a circle
-    if (length(iCurrent - iCenter) > uRadius) {
+    // Don't forget to exclude W component from length calculation
+    if (length(iCurrentPosition.xyz) > uRadius) {
         discard;
     }
 

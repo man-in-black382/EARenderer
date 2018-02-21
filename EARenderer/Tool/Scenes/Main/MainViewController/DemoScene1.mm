@@ -152,12 +152,12 @@
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
     EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
-    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
-    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
-    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
-    
-    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
-    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
+//    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
+//    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+//    
+//    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
+//    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
     
     // Skybox
 
