@@ -9,9 +9,9 @@ out vec4 oFragColor;
 void main() {
     // Draw a circle
     // Don't forget to exclude W component from length calculation
-    if (length(iCurrentPosition.xyz) > uRadius) {
+    if (length(iCurrentPosition.xy) > uRadius) {
         discard;
     }
 
-    oFragColor = vec4(0.2, 1.0, 0.4, 1.0);
+    oFragColor = vec4(0.5, 1.0, 0.8, 1.0);
 }

@@ -137,7 +137,9 @@ namespace EARenderer {
         
     public:
         SurfelGenerator(ResourcePool *resourcePool, Scene *scene);
-        
+
+        float minimumDistanceBetweenSurfels() const;
+
         void generateStaticGeometrySurfels();
     };
     

@@ -144,7 +144,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
         bool triangleCoveredCompletely = false;
-        for (auto& surfel : surfels.neighbours(triangle.p1)) {
+        for (auto& surfel : surfels.neighbours(triangle.p2)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
                 triangleCoveredCompletely = true;
@@ -261,9 +261,13 @@ namespace EARenderer {
     }
     
 #pragma mark - Public interface
-    
+
+    float SurfelGenerator::minimumDistanceBetweenSurfels() const {
+        return mMinimumSurfelDistance;
+    }
+
     void SurfelGenerator::generateStaticGeometrySurfels() {
-        const int8_t preferredSurfelCountPerSpatialHashCell = 1;
+        const float preferredSurfelCountPerSpatialHashCell = 1.5;
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
         int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;

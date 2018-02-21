@@ -20,8 +20,13 @@ out vec4 iCurrentPosition;
 
 // Rotation matrix used to orient surfel disk around surfel's normal
 mat4 RotationMatrix() {
-    vec3 worldUp = vec3(0.0, -1.0, 0.0);
-    vec3 zAxis = gNormal[0];
+    vec3 worldUp = vec3(0.0, 1.0, 0.0);
+    vec3 zAxis = -gNormal[0];
+
+    if (abs(zAxis.x) < 0.000001 && abs(zAxis.z) < 0.000001) {
+        worldUp = vec3(0.0, 0.0, 1.0);
+    }
+
     vec3 xAxis = normalize(cross(worldUp, zAxis));
     vec3 yAxis = cross(zAxis, xAxis);
 
@@ -34,8 +39,9 @@ mat4 RotationMatrix() {
 void main() {
     mat4 rotationMatrix = RotationMatrix();
     vec4 surfelPosition = gl_in[0].gl_Position;
+    float zDisplacement = -uRadius / 10.0;
 
-    vec4 a = vec4(-uRadius, -uRadius, 0.0, 1.0);
+    vec4 a = vec4(-uRadius, -uRadius, zDisplacement, 0.0);
     iCurrentPosition = a;
     a = rotationMatrix * a;
     a = a + surfelPosition;
@@ -43,7 +49,7 @@ void main() {
     gl_Position = a;
     EmitVertex();
 
-    vec4 b = vec4(-uRadius, uRadius, 0.0, 1.0);
+    vec4 b = vec4(-uRadius, uRadius, zDisplacement, 0.0);
     iCurrentPosition = b;
     b = rotationMatrix * b;
     b = b + surfelPosition;
@@ -51,7 +57,7 @@ void main() {
     gl_Position = b;
     EmitVertex();
 
-    vec4 c = vec4(uRadius, -uRadius, 0.0, 1.0);
+    vec4 c = vec4(uRadius, -uRadius, zDisplacement, 0.0);
     iCurrentPosition = c;
     c = rotationMatrix * c;
     c = c + surfelPosition;
@@ -59,7 +65,7 @@ void main() {
     gl_Position = c;
     EmitVertex();
 
-    vec4 d = vec4(uRadius, uRadius, 0.0, 1.0);
+    vec4 d = vec4(uRadius, uRadius, zDisplacement, 0.0);
     iCurrentPosition = d;
     d = rotationMatrix * d;
     d = d + surfelPosition;
