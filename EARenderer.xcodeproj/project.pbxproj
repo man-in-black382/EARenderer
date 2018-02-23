@@ -19,6 +19,7 @@
 		ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = ACCCC1E2203C859400905557 /* SurfelRendering.frag */; };
 		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
 		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
+		ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
@@ -279,6 +280,8 @@
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
 		ACF8B7792012462200BCA351 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
 		ACF8B77A2012462200BCA351 /* Sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sphere.hpp; sourceTree = "<group>"; };
+		ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLPipelineState.cpp; sourceTree = "<group>"; };
+		ACFF0D8D20402260005A9700 /* GLPipelineState.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLPipelineState.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
@@ -1907,6 +1910,8 @@
 			isa = PBXGroup;
 			children = (
 				CE70FA0F1F8F8EBD00AD9027 /* GLBindable.hpp */,
+				ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */,
+				ACFF0D8D20402260005A9700 /* GLPipelineState.hpp */,
 				CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */,
 				CE70F9D51F8F8EBD00AD9027 /* GLNamedObject.hpp */,
 				CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */,
@@ -2393,6 +2398,7 @@
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
 				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
+				ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */,
 				CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,

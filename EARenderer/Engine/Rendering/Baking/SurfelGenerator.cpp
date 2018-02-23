@@ -19,12 +19,10 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SurfelGenerator::TransformedTriangleData::TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals,
-                                                                      const Triangle3D& albedos, const Triangle2D& UVs)
+    SurfelGenerator::TransformedTriangleData::TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals, const Triangle2D& UVs)
     :
     positions(positions),
     normals(normals),
-    albedoValues(albedos),
     UVs(UVs)
     { }
     
@@ -32,7 +30,7 @@ namespace EARenderer {
     :
     position(position),
     normal(normal),
-    barycentricCoordinates(barycentric),
+    barycentricCoordinate(barycentric),
     logarithmicBinIterator(iterator)
     { }
     
@@ -49,14 +47,13 @@ namespace EARenderer {
     std::array<SurfelGenerator::TransformedTriangleData, 4> SurfelGenerator::TransformedTriangleData::split() const {
         auto splittedPositions = positions.split();
         auto splittedNormals = normals.split();
-        auto splittedAlbedos = albedoValues.split();
         auto splittedUVs = UVs.split();
         
         return {
-            TransformedTriangleData( splittedPositions[0], splittedNormals[0], splittedAlbedos[0], splittedUVs[0] ),
-            TransformedTriangleData( splittedPositions[1], splittedNormals[1], splittedAlbedos[1], splittedUVs[1] ),
-            TransformedTriangleData( splittedPositions[2], splittedNormals[2], splittedAlbedos[2], splittedUVs[2] ),
-            TransformedTriangleData( splittedPositions[3], splittedNormals[3], splittedAlbedos[3], splittedUVs[3] )
+            TransformedTriangleData( splittedPositions[0], splittedNormals[0], splittedUVs[0] ),
+            TransformedTriangleData( splittedPositions[1], splittedNormals[1], splittedUVs[1] ),
+            TransformedTriangleData( splittedPositions[2], splittedNormals[2], splittedUVs[2] ),
+            TransformedTriangleData( splittedPositions[3], splittedNormals[3], splittedUVs[3] )
         };
     }
 
@@ -101,7 +98,7 @@ namespace EARenderer {
             
             float area = triangle.area();
             
-            // There is very likely to be degenerate triangles which we don't need
+            // There is very likely to be degenerate triangles which we don't want
             if (area <= 1e-06) {
                 continue;
             }
@@ -110,14 +107,11 @@ namespace EARenderer {
             Triangle3D normals(normalMatrix * glm::vec4(vertex0.normal, 0.0),
                                normalMatrix * glm::vec4(vertex1.normal, 0.0),
                                normalMatrix * glm::vec4(vertex2.normal, 0.0));
-            
-            // Low-frequency albedo values
-            Triangle3D albedos(glm::vec3(0.0), glm::vec3(0.0), glm::vec3(0.0)); // This is a stub just for now
-            
+
             // Texture coordinates as is
             Triangle2D UVs(vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords);
 
-            transformedTriangleProperties.emplace_back(TransformedTriangleData(triangle, normals, albedos, UVs ));
+            transformedTriangleProperties.emplace_back(TransformedTriangleData(triangle, normals, UVs ));
             
             minimumArea = std::min(minimumArea, area);
             maximumArea = std::max(maximumArea, area);
@@ -142,9 +136,9 @@ namespace EARenderer {
         return bin;
     }
     
-    bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels) {
+    bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle) {
         bool triangleCoveredCompletely = false;
-        for (auto& surfel : surfels.neighbours(triangle.p2)) {
+        for (auto& surfel : mSurfelSpatialHash->neighbours(triangle.p2)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
                 triangleCoveredCompletely = true;
@@ -154,9 +148,9 @@ namespace EARenderer {
         return triangleCoveredCompletely;
     }
     
-    bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels) {
+    bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate) {
         bool minimumDistanceRequirementMet = true;
-        for (auto& surfel : surfels.neighbours(candidate.position)) {
+        for (auto& surfel : mSurfelSpatialHash->neighbours(candidate.position)) {
             // Ignore surfel/candidate looking in the opposite directions to avoid tests
             // with surfels located on another side of a thin mesh (a wall for example)
             if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
@@ -191,17 +185,18 @@ namespace EARenderer {
         return { position, normal, barycentric, it };
     }
     
-    Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin) {
-//        auto& triangleData = *surfelCandidate.logarithmicBinIterator;
-        
-        //barycentric1 * A + barycentric2 * B + barycentric3 * C;
-        //        glm::vec3 normal = barycentric1 * Na + barycentric2 * Nb + barycentric3 * Nc;
-        //        glm::vec2 uv = barycentric1 * glm::vec2(vertex0.textureCoords) + barycentric2 * glm::vec2(vertex1.textureCoords) + barycentric3 * glm::vec2(vertex2.textureCoords);
+    Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin, const GLTexture2DSampler& albedoMapSampler) {
+        TransformedTriangleData& triangleData = *surfelCandidate.logarithmicBinIterator;
+
+        glm::vec2 uv = triangleData.UVs.p1 * surfelCandidate.barycentricCoordinate.x +
+                        triangleData.UVs.p2 * surfelCandidate.barycentricCoordinate.y +
+                        triangleData.UVs.p3 * surfelCandidate.barycentricCoordinate.z;
+
+        Color albedo = albedoMapSampler.sample(uv.x, uv.y);
         
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
-        //        return Surfel(position, normal, glm::vec3(0), uv, singleSurfelArea);
-        return Surfel(surfelCandidate.position, surfelCandidate.normal, glm::vec3(0), glm::vec2(0), singleSurfelArea);
+        return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);
     }
     
     void SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
@@ -209,54 +204,62 @@ namespace EARenderer {
         
         for (ID subMeshID : mesh.subMeshes()) {
             auto& subMesh = mesh.subMeshes()[subMeshID];
+            auto& material = mResourcePool->materials[instance.materialIDForSubMeshID(subMeshID)];
+
             auto bin = constructSubMeshVertexDataBin(subMesh, instance);
 
-            // Actual algorithm that uniformly distributes surfels on geometry
-            while (!bin.empty()) {
-                // Algorithm selects an active triangle F with probability proportional to its area.
-                // It then chooses a random point p on the triangle and makes it a surfel candidate.
-                SurfelCandidate surfelCandidate = generateSurfelCandidate(subMesh, bin);
+            // Sample higher mip level to get rid of high frequency color information
+            // It will be better to use low-frequency, blurred albedo texture since this algorithm is all about diffuse GI
+            auto mipLevel = material.albedoMap()->mipMapsCount() / 2;
 
-                // Checks to see if surfel candidate meets the minimum distance requirement with respect to the current surfel set
+            material.albedoMap()->sampleTexels(mipLevel, [&](const GLTexture2DSampler& sampler) {
+                // Actual algorithm that uniformly distributes surfels on geometry
+                while (!bin.empty()) {
+                    // Algorithm selects an active triangle F with probability proportional to its area.
+                    // It then chooses a random point p on the triangle and makes it a surfel candidate.
+                    SurfelCandidate surfelCandidate = generateSurfelCandidate(subMesh, bin);
 
-                // If the minimum distance requirement is met, the algorithm computes all missing information
-                // for the surfel candidate and then adds the resultant surfel to the surfel set
-                if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate, *mSurfelSpatialHash)) {
-                    auto surfel = generateSurfel(surfelCandidate, bin);
-                    mSurfelSpatialHash->insert(surfel, surfelCandidate.position);
-                    mScene->surfels().insert(surfel);
-                }
+                    // Checks to see if surfel candidate meets the minimum distance requirement with respect to the current surfel set
 
-                // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
-                auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
-                float triangleArea = surfelPositionTriangle.area();
-                float subTriangleArea = triangleArea / 4.0f;
-
-                if (triangleCompletelyCovered(surfelPositionTriangle, *mSurfelSpatialHash)) {
-                    // If triangle is covered, it is discarded
-                    bin.erase(surfelCandidate.logarithmicBinIterator);
-                } else {
-                    // Otherwise, we split it into a number of child triangles and
-                    // add the uncovered triangles back to the list of active triangles
-
-                    // Discard triangles that are too small
-                    if (subTriangleArea < bin.minWeight()) {
-                        bin.erase(surfelCandidate.logarithmicBinIterator);
-                        continue;
+                    // If the minimum distance requirement is met, the algorithm computes all missing information
+                    // for the surfel candidate and then adds the resultant surfel to the surfel set
+                    if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate)) {
+                        auto surfel = generateSurfel(surfelCandidate, bin, sampler);
+                        mSurfelSpatialHash->insert(surfel, surfelCandidate.position);
+                        mScene->surfels().insert(surfel);
                     }
 
-                    // Access first, only then erase!!
-                    auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
-                    bin.erase(surfelCandidate.logarithmicBinIterator);
+                    // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
+                    auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
+                    float triangleArea = surfelPositionTriangle.area();
+                    float subTriangleArea = triangleArea / 4.0f;
 
-                    for (auto& subTriangle : subTriangles) {
-                        // Uncovered triangle goes back to the bin
-                        if (!triangleCompletelyCovered(subTriangle.positions, *mSurfelSpatialHash)) {
-                            bin.insert(subTriangle, subTriangleArea);
+                    if (triangleCompletelyCovered(surfelPositionTriangle)) {
+                        // If triangle is covered, it is discarded
+                        bin.erase(surfelCandidate.logarithmicBinIterator);
+                    } else {
+                        // Otherwise, we split it into a number of child triangles and
+                        // add the uncovered triangles back to the list of active triangles
+
+                        // Discard triangles that are too small
+                        if (subTriangleArea < bin.minWeight()) {
+                            bin.erase(surfelCandidate.logarithmicBinIterator);
+                            continue;
+                        }
+
+                        // Access first, only then erase!!
+                        auto subTriangles = surfelCandidate.logarithmicBinIterator->split();
+                        bin.erase(surfelCandidate.logarithmicBinIterator);
+
+                        for (auto& subTriangle : subTriangles) {
+                            // Uncovered triangle goes back to the bin
+                            if (!triangleCompletelyCovered(subTriangle.positions)) {
+                                bin.insert(subTriangle, subTriangleArea);
+                            }
                         }
                     }
                 }
-            }
+            });
         }        
     }
     

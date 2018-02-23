@@ -36,11 +36,9 @@ namespace EARenderer {
         struct TransformedTriangleData {
             Triangle3D positions;
             Triangle3D normals;
-            Triangle3D albedoValues;
             Triangle2D UVs;
             
-            TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals,
-                                    const Triangle3D& albedos, const Triangle2D& UVs);
+            TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals, const Triangle2D& UVs);
             
             std::array<TransformedTriangleData, 4> split() const;
         };
@@ -50,7 +48,7 @@ namespace EARenderer {
             
             glm::vec3 position;
             glm::vec3 normal;
-            glm::vec3 barycentricCoordinates;
+            glm::vec3 barycentricCoordinate;
             BinIterator logarithmicBinIterator;
             
             SurfelCandidate(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& barycentric, BinIterator iterator);
@@ -95,19 +93,17 @@ namespace EARenderer {
          Checks to see whether triangle is completely covered by any surfel from existing surfel set
 
          @param triangle Test subject
-         @param surfels All generated surfels up to this point
          @return Bool value indicating whether triangle is covered
          */
-        bool triangleCompletelyCovered(Triangle3D& triangle, SpatialHash<Surfel>& surfels);
+        bool triangleCompletelyCovered(Triangle3D& triangle);
         
         /**
          Checks to see whether surfel candidate is far enough from all the already generated surfels
 
          @param candidate Test subject
-         @param surfels A set of surfels
          @return Bool value indicating whether surfel candidate is far enough to be accepted as a full-fledged surfel
          */
-        bool surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate, SpatialHash<Surfel>& surfels);
+        bool surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate);
         
         /**
          Generates a surfel candidate with minimum amount of data required to perform routines deciding
@@ -126,7 +122,7 @@ namespace EARenderer {
          @param transformedVerticesBin Bin that holds all transformed triangle data of the sub mesh on which candidate was generated on
          @return Surfel ready to be added to a scene and participate in rendering
          */
-        Surfel generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
+        Surfel generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin, const GLTexture2DSampler& albedoMapSampler);
         
         /**
          Generates surfels for a single mesh instance

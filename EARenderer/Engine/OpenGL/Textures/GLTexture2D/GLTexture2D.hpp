@@ -25,8 +25,9 @@ namespace EARenderer {
         
         GLTexture2D(const Size2D& size);
         GLTexture2D(const std::string& fileName);
-        
-        void sampleTexels(SamplerClosure samplerClosure, int32_t mipLevel = 0) const;
+
+        void sampleTexels(SamplerClosure samplerClosure) const;
+        void sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const;
     };
     
 }

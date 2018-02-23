@@ -7,10 +7,12 @@ layout (location = 3) in vec2 iUV;
 layout (location = 4) in float iArea;
 
 out vec3 gNormal;
+out vec3 gAlbedo;
 out float gArea;
 
 void main() {
     gNormal = iNormal;
+    gAlbedo = iAlbedo;
     gArea = iArea;
     gl_Position = vec4(iPosition, 1.0);
 }

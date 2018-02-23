@@ -62,8 +62,12 @@ namespace EARenderer {
         glGetTexImage(GL_TEXTURE_2D, mipLevel, GL_RGBA, GL_UNSIGNED_BYTE, ptr);
         return ptr;
     }
-    
-    void GLTexture2D::sampleTexels(SamplerClosure samplerClosure, int32_t mipLevel) const {
+
+    void GLTexture2D::sampleTexels(SamplerClosure samplerClosure) const {
+        sampleTexels(0, samplerClosure);
+    }
+
+    void GLTexture2D::sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const {
         bind();
         samplerClosure(GLTexture2DSampler(this, mipLevel));
     }

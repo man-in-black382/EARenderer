@@ -8,6 +8,7 @@ layout (triangle_strip, max_vertices = 4) out;
 // Input
 
 in vec3 gNormal[];
+in vec3 gAlbedo[];
 in float gArea[];
 
 // Uniforms
@@ -16,7 +17,8 @@ uniform mat4 uViewProjectionMatrix;
 uniform float uRadius;
 
 // Outputs
-out vec4 iCurrentPosition;
+out vec4 vCurrentPosition;
+out vec3 vAlbedo;
 
 // Rotation matrix used to orient surfel disk around surfel's normal
 mat4 RotationMatrix() {
@@ -26,7 +28,7 @@ mat4 RotationMatrix() {
     if (abs(zAxis.x) < 0.000001 && abs(zAxis.z) < 0.000001) {
         worldUp = vec3(0.0, 0.0, 1.0);
     }
-
+  
     vec3 xAxis = normalize(cross(worldUp, zAxis));
     vec3 yAxis = cross(zAxis, xAxis);
 
@@ -42,7 +44,8 @@ void main() {
     float zDisplacement = -uRadius / 10.0;
 
     vec4 a = vec4(-uRadius, -uRadius, zDisplacement, 0.0);
-    iCurrentPosition = a;
+    vCurrentPosition = a;
+    vAlbedo = gAlbedo[0];
     a = rotationMatrix * a;
     a = a + surfelPosition;
     a = uViewProjectionMatrix * a;
@@ -50,7 +53,8 @@ void main() {
     EmitVertex();
 
     vec4 b = vec4(-uRadius, uRadius, zDisplacement, 0.0);
-    iCurrentPosition = b;
+    vCurrentPosition = b;
+    vAlbedo = gAlbedo[0];
     b = rotationMatrix * b;
     b = b + surfelPosition;
     b = uViewProjectionMatrix * b;
@@ -58,7 +62,8 @@ void main() {
     EmitVertex();
 
     vec4 c = vec4(uRadius, -uRadius, zDisplacement, 0.0);
-    iCurrentPosition = c;
+    vCurrentPosition = c;
+    vAlbedo = gAlbedo[0];
     c = rotationMatrix * c;
     c = c + surfelPosition;
     c = uViewProjectionMatrix * c;
@@ -66,7 +71,8 @@ void main() {
     EmitVertex();
 
     vec4 d = vec4(uRadius, uRadius, zDisplacement, 0.0);
-    iCurrentPosition = d;
+    vCurrentPosition = d;
+    vAlbedo = gAlbedo[0];
     d = rotationMatrix * d;
     d = d + surfelPosition;
     d = uViewProjectionMatrix * d;

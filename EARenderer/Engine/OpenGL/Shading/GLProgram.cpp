@@ -158,7 +158,7 @@ namespace EARenderer {
     const GLVertexAttribute& GLProgram::vertexAttributeByName(const std::string& name) {
         auto it = mVertexAttributes.find(name);
         if (it == mVertexAttributes.end()) {
-            throw std::invalid_argument(string_format("Vertex attribute '%s' souldn't be found", name.c_str()));
+            throw std::invalid_argument(string_format("Vertex attribute '%s' couldn't be found", name.c_str()));
         }
         return it->second;
     }
