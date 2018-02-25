@@ -90,8 +90,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     
-    auto HDRColor = EARenderer::Color(3.0, 3.0, 3.0, 1.0);
-    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(-0.8, -1.0, 0.1));
+    auto HDRColor = EARenderer::Color(10.0, 10.0, 10.0);
+    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(0.0, -1.0, -0.1));
     EARenderer::PointLight pointLight(glm::vec3(5, 5, -5), HDRColor);
     
     self.scene->setCamera(camera);
@@ -113,7 +113,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
                                                            self.scene,
                                                            self.axesRenderer,
-                                                            self.sceneRenderer,
+                                                           self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
@@ -130,7 +130,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render();
+//    self.surfelRenderer->render();
 //    self.triangleRenderer->render();
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();

@@ -389,12 +389,12 @@ void main() {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
     
     // Apply shadow factor
-//    specularAndDiffuse *= 1.0 - shadow;
-    
+    specularAndDiffuse *= 1.0 - shadow;
+
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = uShouldEvaluateSphericalHarmonics ? ReinhardToneMapAndGammaCorrect(specularAndDiffuse) : specularAndDiffuse;
 
-//    oFragColor = vec4(correctColor, 1.0);
-    oFragColor = vec4(GammaCorrect(albedo), 1.0);
+    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(specularAndDiffuse), 1.0);
+//    oFragColor = vec4(GammaCorrect(albedo), 1.0);
 }

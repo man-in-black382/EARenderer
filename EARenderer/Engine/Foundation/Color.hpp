@@ -28,6 +28,7 @@ namespace EARenderer {
         static const Color& green();
         
         Color(float red, float green, float blue, float alpha);
+        Color(float red, float green, float blue);
         Color(float white, float alpha);
         
         glm::vec3 rgb() const;

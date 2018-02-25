@@ -51,6 +51,14 @@ namespace EARenderer {
     b(blue),
     a(alpha)
     { }
+
+    Color::Color(float red, float green, float blue)
+    :
+    r(red),
+    g(green),
+    b(blue),
+    a(1.0)
+    { }
     
     Color::Color(float white, float alpha)
     :
