@@ -56,7 +56,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 0.1;
+        float mMinimumSurfelDistance = 0.075;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

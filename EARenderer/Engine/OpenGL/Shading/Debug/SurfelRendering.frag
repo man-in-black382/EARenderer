@@ -18,5 +18,5 @@ void main() {
         discard;
     }
 
-    oFragColor = vec4(GammaCorrect(vAlbedo), 1.0);
+    oFragColor = vec4(vAlbedo, 1.0);
 }

@@ -84,7 +84,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     // Temporary
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 20.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
     camera->moveTo(glm::vec3(0, 1, 0));
     camera->lookAt(glm::vec3(-1, -1, 0));
     
@@ -118,7 +118,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
-    
+
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 

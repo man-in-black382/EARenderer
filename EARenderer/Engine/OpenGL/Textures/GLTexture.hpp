@@ -14,6 +14,9 @@
 #include "Size2D.hpp"
 #include "Color.hpp"
 
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+
 namespace EARenderer {
     
     class GLTexture: public GLNamedObject, public GLBindable {
@@ -33,7 +36,10 @@ namespace EARenderer {
         GLTexture(GLTexture&& that) = default;
         GLTexture& operator=(GLTexture&& rhs) = default;
         ~GLTexture() override = 0;
-        
+
+        static glm::vec2 wrapCoordinates(const glm::vec2& uv);
+        static glm::vec3 wrapCoordinates(const glm::vec3& uvr);
+
         const Size2D& size() const;
         uint16_t mipMapsCount() const;
         

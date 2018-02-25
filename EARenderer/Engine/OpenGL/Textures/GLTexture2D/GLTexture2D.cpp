@@ -33,6 +33,7 @@ namespace EARenderer {
         int32_t width = 0;
         int32_t height = 0;
         int32_t components = 0;
+        stbi_set_flip_vertically_on_load(true);
         stbi_uc *pixelData = stbi_load(fileName.c_str(), &width, &height, &components, STBI_rgb_alpha);
         
         ASSERT(pixelData, "Unable to read texture file: " << fileName);

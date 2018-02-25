@@ -188,12 +188,16 @@ namespace EARenderer {
     Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin, const GLTexture2DSampler& albedoMapSampler) {
         TransformedTriangleData& triangleData = *surfelCandidate.logarithmicBinIterator;
 
-        glm::vec2 uv = triangleData.UVs.p1 * surfelCandidate.barycentricCoordinate.x +
-                        triangleData.UVs.p2 * surfelCandidate.barycentricCoordinate.y +
-                        triangleData.UVs.p3 * surfelCandidate.barycentricCoordinate.z;
+        glm::vec2 p1p2 = triangleData.UVs.p2 - triangleData.UVs.p1;
+        glm::vec2 p1p3 = triangleData.UVs.p3 - triangleData.UVs.p1;
 
-        Color albedo = albedoMapSampler.sample(uv.x, uv.y);
-        
+        glm::vec2 uv = triangleData.UVs.p1 +
+                       p1p2 * surfelCandidate.barycentricCoordinate.x +
+                       p1p3 * surfelCandidate.barycentricCoordinate.y;
+
+        uv = GLTexture::wrapCoordinates(uv);
+
+        Color albedo = albedoMapSampler.sample(uv);
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);
@@ -210,7 +214,7 @@ namespace EARenderer {
 
             // Sample higher mip level to get rid of high frequency color information
             // It will be better to use low-frequency, blurred albedo texture since this algorithm is all about diffuse GI
-            auto mipLevel = material.albedoMap()->mipMapsCount() / 2;
+            int32_t mipLevel = material.albedoMap()->mipMapsCount() * 0.6;
 
             material.albedoMap()->sampleTexels(mipLevel, [&](const GLTexture2DSampler& sampler) {
                 // Actual algorithm that uniformly distributes surfels on geometry

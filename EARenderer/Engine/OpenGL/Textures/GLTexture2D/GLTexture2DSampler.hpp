@@ -10,6 +10,7 @@
 #define GLTexture2DSampler_hpp
 
 #include "Color.hpp"
+#include "Size2D.hpp"
 
 #include <OpenGL/gl3.h>
 
@@ -23,6 +24,7 @@ namespace EARenderer {
         
         const GLTexture2D *mTexture;
         const GLubyte *mPixelBuffer = nullptr;
+        Size2D mMipSize;
         
         GLTexture2DSampler(const GLTexture2D* texture, int32_t mipLevel);
         
@@ -30,6 +32,7 @@ namespace EARenderer {
         ~GLTexture2DSampler();
         
         Color sample(int32_t x, int32_t y) const;
+        Color sample(const glm::vec2& normalizedCoords) const;
     };
     
 }

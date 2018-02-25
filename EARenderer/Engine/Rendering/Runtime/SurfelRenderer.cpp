@@ -42,7 +42,7 @@ namespace EARenderer {
 
         auto vp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
-        mSurfelRenderingShader.setSurfelRadius(0.05);
+        mSurfelRenderingShader.setSurfelRadius(0.0375);
 
         glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfels().size()));
     }

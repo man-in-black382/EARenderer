@@ -44,7 +44,9 @@ namespace EARenderer {
             rightImagePath, leftImagePath, topImagePath,
             bottomImagePath, frontImagePath, backImagePath
         };
-        
+
+        stbi_set_flip_vertically_on_load(true);
+
         for(GLuint i = 0; i < 6; i++) {
             stbi_uc *pixelData = stbi_load(paths[i].c_str(), &width, &height, &components, STBI_rgb_alpha);
             ASSERT(pixelData, "Unable to read texture file: " << rightImagePath);

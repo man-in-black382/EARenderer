@@ -43,8 +43,7 @@ mat3 orthogonalTBN() {
 void main() {
     vec4 worldPosition = uModelMat * iPosition;
     
-    // Flip texture Y coordinate, because loaded images are flipped vertically
-    vs_out.vTexCoords = vec3(iTexCoords.s, 1.0 - iTexCoords.t, iTexCoords.r);
+    vs_out.vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vs_out.vTBN = orthogonalTBN();
     
     for (int i = 0; i < uNumberOfCascades; ++i) {

@@ -54,7 +54,7 @@ void main() {
     vec4 worldPosition = uModelMat * iPosition;
     
     // Flip texture Y coordinate, because loaded images are flipped vertically
-    vTexCoords = vec3(iTexCoords.s, 1.0 - iTexCoords.t, iTexCoords.r);
+    vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vWorldPosition = worldPosition.xyz;
     vTBN = orthogonalTBN();
     

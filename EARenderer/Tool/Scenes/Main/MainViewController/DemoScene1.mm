@@ -151,7 +151,7 @@
     planeInstance.setTransformation(t);
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
-    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
+//    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
 //    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
 //    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
 //    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
@@ -231,18 +231,12 @@
 
 - (EARenderer::ID)loadPatchyCementMaterialToPool:(EARenderer::ResourcePool *)pool
 {
-    NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"patchy_cement1_Base_Color" ofType:@"png"];
-    NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"patchy_cement1_Normal" ofType:@"png"];
-    NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"patchy_cement1_Roughness" ofType:@"png"];
-    NSString *aoMapPath = [[NSBundle mainBundle] pathForResource:@"patchy_cement1_Ambient_Occlusion" ofType:@"png"];
-    NSString *metallicImagePath = [[NSBundle mainBundle] pathForResource:@"patchy_cement1_Metallic" ofType:@"png"];
-    
     return pool->materials.insert({
-        std::string(albedoMapPath.UTF8String),
-        std::string(normalMapPath.UTF8String),
-        std::string(metallicImagePath.UTF8String),
-        std::string(roughnessMapPath.UTF8String),
-        std::string(aoMapPath.UTF8String)
+        [self pathForResource:@"patchy_cement1_Base_Color.png"],
+        [self pathForResource:@"patchy_cement1_Normal.png"],
+        [self pathForResource:@"patchy_cement1_Roughness.png"],
+        [self pathForResource:@"patchy_cement1_Ambient_Occlusion.png"],
+        [self pathForResource:@"patchy_cement1_Metallic.png"]
     });
 }
 

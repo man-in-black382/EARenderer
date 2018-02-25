@@ -37,6 +37,30 @@ namespace EARenderer {
     GLTexture::~GLTexture() {
         glDeleteTextures(1, &mName);
     }
+
+#pragma mark - Static
+
+    glm::vec2 GLTexture::wrapCoordinates(const glm::vec2& uv) {
+        float uFract = uv.x - (long)uv.x;
+        float vFract = uv.y - (long)uv.y;
+
+        uFract += 1;
+        vFract += 1;
+
+        return { uFract - (long)uFract, vFract - (long)vFract };
+    }
+
+    glm::vec3 GLTexture::wrapCoordinates(const glm::vec3& uvr) {
+        float uFract = uvr.x - (long)uvr.x;
+        float vFract = uvr.y - (long)uvr.y;
+        float rFract = uvr.z - (long)uvr.z;
+
+        uFract += 1;
+        vFract += 1;
+        rFract += 1;
+
+        return { uFract - (long)uFract, vFract - (long)vFract, rFract - (long)rFract };
+    }
     
 #pragma mark - Getters
     
