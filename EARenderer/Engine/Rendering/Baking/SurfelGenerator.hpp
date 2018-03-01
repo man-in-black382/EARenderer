@@ -16,6 +16,7 @@
 #include "Triangle2D.hpp"
 #include "Triangle3D.hpp"
 #include "SpatialHash.hpp"
+#include "SparseOctree.hpp"
 
 #include <vector>
 #include <unordered_map>

@@ -42,6 +42,7 @@ namespace EARenderer {
         std::array<glm::vec4, 8> cornerPoints() const;
         float smallestDimensionLength() const;
         float largestDimensionLength() const;
+        glm::vec3 center() const;
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;

@@ -279,6 +279,7 @@
 		ACCCC1E2203C859400905557 /* SurfelRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.frag; sourceTree = "<group>"; };
 		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
+		ACE0274020454DAA004A9A13 /* SparseOctree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctree.hpp; sourceTree = "<group>"; };
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
 		ACF8B7792012462200BCA351 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
 		ACF8B77A2012462200BCA351 /* Sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sphere.hpp; sourceTree = "<group>"; };
@@ -1431,6 +1432,7 @@
 				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
 				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
 				CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */,
+				ACE0274020454DAA004A9A13 /* SparseOctree.hpp */,
 			);
 			path = Containers;
 			sourceTree = "<group>";

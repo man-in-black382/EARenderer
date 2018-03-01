@@ -80,6 +80,10 @@ namespace EARenderer {
         float maxXY = std::max(fabs(max.x - min.x), fabs(max.y - min.y));
         return std::max(fabs(max.z - min.z), maxXY);
     }
+
+    glm::vec3 AxisAlignedBox3D::center() const {
+        return (min + max) / 2.f;
+    }
     
     AxisAlignedBox3D AxisAlignedBox3D::transformedBy(const Transformation& t) const {
         return transformedBy(t.modelMatrix());
