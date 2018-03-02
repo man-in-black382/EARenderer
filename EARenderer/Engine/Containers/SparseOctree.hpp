@@ -24,6 +24,9 @@ namespace EARenderer {
 //    template <typename T>
     class SparseOctree {
     private:
+
+#pragma mark - Private nested types
+
         using NodeIndex = uint64_t;
         using BitMask = uint8_t;
 
@@ -56,34 +59,122 @@ namespace EARenderer {
         std::unordered_map<NodeIndex, Node> mNodes;
         std::stack<TraversalStackFrame> mTraversalStack;
 
+#pragma mark - Private functions
+
         glm::mat4 localNormalizedSpaceMatrix() const {
             glm::mat4 translation = glm::translate(-mBoundingBox.center());
             glm::vec3 bbAxisLengths = mBoundingBox.max - mBoundingBox.min;
             glm::mat4 scale = glm::scale(2.f / bbAxisLengths);
-            return scale + translation;
+            return scale * translation;
         }
 
         BitMask signMask(const glm::vec3& valueTriple) const {
             BitMask mask = 0;
+
             if (valueTriple.x < 0.0) { mask |= XBitMask; }
             if (valueTriple.y < 0.0) { mask |= YBitMask; }
             if (valueTriple.z < 0.0) { mask |= ZBitMask; }
+
             return mask;
         }
 
+        BitMask sortMaskByMinimum(const glm::vec3& valueTriple) const {
+            BitMask mask = 0;
+
+            float minimum = std::min(valueTriple.x, valueTriple.y);
+            minimum = std::min(minimum, valueTriple.z);
+
+            if (valueTriple.x == minimum) { mask |= XBitMask; }
+            if (valueTriple.y == minimum) { mask |= YBitMask; }
+            if (valueTriple.z == minimum) { mask |= ZBitMask; }
+
+            return mask;
+        }
+
+        BitMask sortMaskByMaximum(const glm::vec3& valueTriple) const {
+            BitMask mask = 0;
+
+            float maximum = std::max(valueTriple.x, valueTriple.y);
+            maximum = std::max(maximum, valueTriple.z);
+
+            if (valueTriple.x == maximum) { mask |= XBitMask; }
+            if (valueTriple.y == maximum) { mask |= YBitMask; }
+            if (valueTriple.z == maximum) { mask |= ZBitMask; }
+
+            return mask;
+        }
+
+        void pushChildNodes(const TraversalStackFrame& currentFrame,
+                            const glm::vec3& t,
+                            BitMask signMaskA,
+                            BitMask signMaskB,
+                            BitMask p_first,
+                            BitMask p_last,
+                            size_t planeIntersectionCounter)
+        {
+            NodeIndex childIndex = 0;
+
+            if (planeIntersectionCounter == 3) {
+                // TODO: check for node presense
+
+                childIndex = signMaskB;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.z, currentFrame.t_out));
+
+                childIndex = signMaskB ^ p_last;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.y, t.z));
+
+                childIndex = signMaskA ^ p_first;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.x, t.y));
+
+                childIndex = signMaskA;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+
+            } else if (planeIntersectionCounter == 2) {
+
+                childIndex = signMaskB;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.y, currentFrame.t_out));
+
+                childIndex = signMaskA ^ p_first;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.x, t.y));
+
+                childIndex = signMaskA;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+
+            } else if (planeIntersectionCounter == 1) {
+
+                childIndex = signMaskB;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, t.x, currentFrame.t_out));
+
+                childIndex = signMaskA;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+
+            } else {
+
+                childIndex = signMaskA;
+                mTraversalStack.push(TraversalStackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, currentFrame.t_out));
+
+            }
+        }
+
     public:
+
+#pragma mark - Public interface
+#pragma mark - Lifecycle
+
         SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth)
         :
         mBoundingBox(boundingBox),
         mMaximumDepth(maximumDepth)
         { }
 
+#pragma mark - Traversal
+
         void raymarch(const Ray3D& ray) {
             glm::mat4 localSpaceMat = localNormalizedSpaceMatrix();
 
             // Intersection points
             float t0 = 0.f;
-            float t1 = 1.f;
+            float t1 = 1.7677;//1.f;
 
             glm::vec3 a = ray.origin + t0 * ray.direction;
             glm::vec3 b = ray.origin + t1 * ray.direction;
@@ -97,7 +188,7 @@ namespace EARenderer {
             mTraversalStack.push(TraversalStackFrame(0, 0, 0.f, 1.f));
 
             while (!mTraversalStack.empty()) {
-                auto stackFrame = mTraversalStack.top();
+                const auto& stackFrame = mTraversalStack.top();
                 mTraversalStack.pop();
 
                 glm::vec3 p_in = (1.f - stackFrame.t_in) * a + stackFrame.t_out * b;
@@ -109,8 +200,6 @@ namespace EARenderer {
 
                 glm::vec3 t(std::numeric_limits<float>::max());
                 size_t planeIntersectionCounter = 0;
-
-//                BitMask p_first =
 
                 if (signMaskC & XBitMask) {
                     t.x = ((float)stackFrame.depth - a.x) / ab.x;
@@ -126,6 +215,11 @@ namespace EARenderer {
                     t.z = ((float)stackFrame.depth - a.z) / ab.z;
                     planeIntersectionCounter++;
                 }
+
+                BitMask p_first = sortMaskByMinimum(t);
+                BitMask p_last = sortMaskByMaximum(t);
+
+                pushChildNodes(stackFrame, t, signMaskA, signMaskB, p_first, p_last, planeIntersectionCounter);
             }
         }
 

@@ -13,6 +13,8 @@
 #include "Sphere.hpp"
 #include "Collision.hpp"
 
+#include "SparseOctree.hpp"
+
 #include <random>
 
 namespace EARenderer {
@@ -274,6 +276,10 @@ namespace EARenderer {
     }
 
     void SurfelGenerator::generateStaticGeometrySurfels() {
+        Ray3D ray({ -0.75, -0.75, -1 }, { 1.25, -0.75, 1 });
+        SparseOctree octree(AxisAlignedBox3D({ -1, -1, -1 }, { 1, 1, 1 }), 3);
+        octree.raymarch(ray);
+
         const float preferredSurfelCountPerSpatialHashCell = 1.5;
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
