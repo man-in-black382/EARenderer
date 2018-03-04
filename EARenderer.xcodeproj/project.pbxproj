@@ -800,6 +800,18 @@
 		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
 		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
 		CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoSceneComposing.h; sourceTree = "<group>"; };
+		CE895F8C204C060C00E63140 /* SparseOctreeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeImpl.hpp; sourceTree = "<group>"; };
+		CE895F8E204C0B5300E63140 /* SparseOctreeNodeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeNodeImpl.hpp; sourceTree = "<group>"; };
+		CE895F8F204C0C0800E63140 /* SparseOctreeIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeIteratorImpl.hpp; sourceTree = "<group>"; };
+		CE895F90204C0C2500E63140 /* SparseOctreeStackFrameImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeStackFrameImpl.hpp; sourceTree = "<group>"; };
+		CE895F92204C0D4500E63140 /* PackedLookupTableImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PackedLookupTableImpl.hpp; sourceTree = "<group>"; };
+		CE895F93204C111E00E63140 /* PackedLookupTableIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PackedLookupTableIteratorImpl.hpp; sourceTree = "<group>"; };
+		CE895F95204C145500E63140 /* LogarithmicBinImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBinImpl.hpp; sourceTree = "<group>"; };
+		CE895F96204C17BF00E63140 /* LogarithmicBinIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBinIteratorImpl.hpp; sourceTree = "<group>"; };
+		CE895F98204C1A0D00E63140 /* SpatialHashImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashImpl.hpp; sourceTree = "<group>"; };
+		CE895F99204C414900E63140 /* SpatialHashForwardIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashForwardIteratorImpl.hpp; sourceTree = "<group>"; };
+		CE895F9A204C429D00E63140 /* SpatialHashRangeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashRangeImpl.hpp; sourceTree = "<group>"; };
+		CE895F9B204C43D800E63140 /* SpatialHashRangeIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashRangeIteratorImpl.hpp; sourceTree = "<group>"; };
 		CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHash.hpp; sourceTree = "<group>"; };
 		CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleRenderer.cpp; sourceTree = "<group>"; };
 		CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TriangleRenderer.hpp; sourceTree = "<group>"; };
@@ -1429,10 +1441,10 @@
 		CE70F85F1F8F8EBD00AD9027 /* Containers */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
-				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
-				CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */,
-				ACE0274020454DAA004A9A13 /* SparseOctree.hpp */,
+				CE895F97204C19B600E63140 /* SpatialHash */,
+				CE895F91204C0CEE00E63140 /* PackedLookupTable */,
+				CE895F8D204C087700E63140 /* SparseOctree */,
+				CE895F94204C137000E63140 /* LogarithmicBin */,
 			);
 			path = Containers;
 			sourceTree = "<group>";
@@ -2086,6 +2098,50 @@
 				AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */,
 			);
 			path = PBR;
+			sourceTree = "<group>";
+		};
+		CE895F8D204C087700E63140 /* SparseOctree */ = {
+			isa = PBXGroup;
+			children = (
+				ACE0274020454DAA004A9A13 /* SparseOctree.hpp */,
+				CE895F8C204C060C00E63140 /* SparseOctreeImpl.hpp */,
+				CE895F8E204C0B5300E63140 /* SparseOctreeNodeImpl.hpp */,
+				CE895F8F204C0C0800E63140 /* SparseOctreeIteratorImpl.hpp */,
+				CE895F90204C0C2500E63140 /* SparseOctreeStackFrameImpl.hpp */,
+			);
+			path = SparseOctree;
+			sourceTree = "<group>";
+		};
+		CE895F91204C0CEE00E63140 /* PackedLookupTable */ = {
+			isa = PBXGroup;
+			children = (
+				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
+				CE895F92204C0D4500E63140 /* PackedLookupTableImpl.hpp */,
+				CE895F93204C111E00E63140 /* PackedLookupTableIteratorImpl.hpp */,
+			);
+			path = PackedLookupTable;
+			sourceTree = "<group>";
+		};
+		CE895F94204C137000E63140 /* LogarithmicBin */ = {
+			isa = PBXGroup;
+			children = (
+				ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */,
+				CE895F95204C145500E63140 /* LogarithmicBinImpl.hpp */,
+				CE895F96204C17BF00E63140 /* LogarithmicBinIteratorImpl.hpp */,
+			);
+			path = LogarithmicBin;
+			sourceTree = "<group>";
+		};
+		CE895F97204C19B600E63140 /* SpatialHash */ = {
+			isa = PBXGroup;
+			children = (
+				CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */,
+				CE895F98204C1A0D00E63140 /* SpatialHashImpl.hpp */,
+				CE895F99204C414900E63140 /* SpatialHashForwardIteratorImpl.hpp */,
+				CE895F9A204C429D00E63140 /* SpatialHashRangeImpl.hpp */,
+				CE895F9B204C43D800E63140 /* SpatialHashRangeIteratorImpl.hpp */,
+			);
+			path = SpatialHash;
 			sourceTree = "<group>";
 		};
 		CE9774C31FA5D71A00F5699C /* Sponza PRB Texture Set */ = {
