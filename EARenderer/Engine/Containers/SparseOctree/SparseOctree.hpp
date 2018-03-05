@@ -68,8 +68,8 @@ namespace EARenderer {
         // (Original bitmasks are: 100 for X, 010 for Y and 001 for Z)
         //
         static constexpr BitMask XBitMask = 0b100;
-        static constexpr BitMask YBitMask = 0b010;
-        static constexpr BitMask ZBitMask = 0b001;
+        static constexpr BitMask YBitMask = 0b001;
+        static constexpr BitMask ZBitMask = 0b010;
 
         //   ORDER OF CHILDREN
         //

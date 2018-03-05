@@ -166,8 +166,8 @@ namespace EARenderer {
         //            glm::vec3 a = ray.origin + t0 * ray.direction;
         //            glm::vec3 b = ray.origin + t1 * ray.direction;
 
-        glm::vec3 a { -1, -1, -1 };
-        glm::vec3 b { 0.1, -1, 1 };
+        glm::vec3 a { -0.1, -1, -1 };
+        glm::vec3 b { 0.5, 0.3, 1 };
 
         // Transform to voxelspace
         a = localSpaceMat * glm::vec4(a, 1.0);
@@ -190,16 +190,12 @@ namespace EARenderer {
             d.y = stackFrame.nodeIndex & YBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
             d.z = stackFrame.nodeIndex & ZBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
 
-            d += stackFrame.planesOffset;
-            stackFrame.planesOffset = d;
+            if (depth >= mMaximumDepth) {
+                continue;
+            }
 
-            printf("t_in %f t_out %f \n", stackFrame.t_in, stackFrame.t_out);
-            printf("p_in %f %f %f\n", p_in.x, p_in.y, p_in.z);
-            printf("p_out %f %f %f\n", p_out.x, p_out.y, p_out.z);
-            printf("Depth %d, plane offset x %f y %f z %f \n\n", stackFrame.depth, d.x, d.y, d.z);
-
-            BitMask signMaskA = signMask(p_in - d);
-            BitMask signMaskB = signMask(p_out - d);
+            BitMask signMaskA = signMask(p_in + d);
+            BitMask signMaskB = signMask(p_out + d);
             BitMask signMaskC = signMaskA ^ signMaskB;
 
             glm::vec3 t(std::numeric_limits<float>::max());
