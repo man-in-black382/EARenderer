@@ -53,8 +53,9 @@ namespace EARenderer {
             uint8_t depth;
             float t_in;
             float t_out;
+            glm::vec3 planesOffset;
 
-            StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out);
+            StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out, const glm::vec3& planesOffset);
         };
 
         struct Iterator {
@@ -67,8 +68,8 @@ namespace EARenderer {
         // (Original bitmasks are: 100 for X, 010 for Y and 001 for Z)
         //
         static constexpr BitMask XBitMask = 0b100;
-        static constexpr BitMask YBitMask = 0b001;
-        static constexpr BitMask ZBitMask = 0b010;
+        static constexpr BitMask YBitMask = 0b010;
+        static constexpr BitMask ZBitMask = 0b001;
 
         //   ORDER OF CHILDREN
         //
@@ -88,6 +89,7 @@ namespace EARenderer {
         AxisAlignedBox3D mBoundingBox;
         std::unordered_map<NodeIndex, Node> mNodes;
         std::stack<StackFrame> mTraversalStack;
+        std::vector<float> mCuttingPlaneOffsets;
 
 #pragma mark - Private functions
 
@@ -116,11 +118,7 @@ namespace EARenderer {
 #pragma mark - Public interface
 #pragma mark - Lifecycle
 
-        SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth)
-        :
-        mBoundingBox(boundingBox),
-        mMaximumDepth(maximumDepth)
-        { }
+        SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth);
 
 #pragma mark - Traversal
 

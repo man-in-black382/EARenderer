@@ -12,12 +12,13 @@
 namespace EARenderer {
 
     template <typename T>
-    SparseOctree<T>::StackFrame::StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out)
+    SparseOctree<T>::StackFrame::StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out, const glm::vec3& planesOffset)
     :
     nodeIndex(nodeIndex),
     depth(nodeDepth),
     t_in(t_in),
-    t_out(t_out)
+    t_out(t_out),
+    planesOffset(planesOffset)
     { }
 
 }

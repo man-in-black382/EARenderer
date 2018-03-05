@@ -276,11 +276,11 @@ namespace EARenderer {
     }
 
     void SurfelGenerator::generateStaticGeometrySurfels() {
-//        Ray3D ray1({ -0.75, -0.75, -1 }, { 1.25, -0.75, 1 });
-//        Ray3D ray2({ -0.75, -0.75, -0.75 }, { -0.75, -0.75, 0.75 });
-//        Ray3D ray3({ -0.75, -0.75, -0.75 }, { -0.75, -0.75, -0.1 });
-//        SparseOctree<float> octree(AxisAlignedBox3D({ -1, -1, -1 }, { 1, 1, 1 }), 3);
-////        octree.raymarch(ray3);
+        Ray3D ray1({ -0.75, -0.75, -1 }, { 1.25, -0.75, 1 });
+        Ray3D ray2({ -0.75, -0.75, -0.75 }, { -0.75, -0.75, 0.75 });
+        Ray3D ray3({ -0.75, -0.75, -0.75 }, { -0.75, -0.75, -0.1 });
+        SparseOctree<float> octree(AxisAlignedBox3D({ -1, -1, -1 }, { 1, 1, 1 }), 3);
+        octree.raymarch(ray3);
 
         const float preferredSurfelCountPerSpatialHashCell = 1.5;
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;

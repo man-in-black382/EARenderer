@@ -11,6 +11,23 @@
 
 namespace EARenderer {
 
+#pragma mark - Lifecycle
+
+    template <typename T>
+    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth)
+    :
+    mBoundingBox(boundingBox),
+    mMaximumDepth(maximumDepth)
+    {
+        // Root node shoud have 0 offset
+        mCuttingPlaneOffsets.emplace_back(0.0);
+        for (size_t depth = 1; depth <= maximumDepth; depth++) {
+            mCuttingPlaneOffsets.emplace_back(1.0 / std::pow(2, depth));
+        }
+    }
+
+#pragma mark - Internal logic
+
     template <typename T>
     glm::mat4
     SparseOctree<T>::localNormalizedSpaceMatrix() const {
@@ -27,8 +44,9 @@ namespace EARenderer {
         uint8_t rootDepth = 0;
         float rootT1 = 0.0;
         float rootT2 = 1.0;
+        glm::vec3 planesOffset(0.0);
 
-        mTraversalStack.push(StackFrame(rootNodeIndex, rootDepth, rootT1, rootT2));
+        mTraversalStack.push(StackFrame(rootNodeIndex, rootDepth, rootT1, rootT2, planesOffset));
     }
 
     template <typename T>
@@ -98,40 +116,40 @@ namespace EARenderer {
             // TODO: check for node presense
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, currentFrame.t_out));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, currentFrame.t_out, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskB ^ p_last);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, t.z));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, t.x, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskA ^ p_first);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, t.y));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
 
         } else if (planeIntersectionCounter == 2) {
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, currentFrame.t_out));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, currentFrame.t_out, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskA ^ p_first);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, t.y));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
 
         } else if (planeIntersectionCounter == 1) {
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, currentFrame.t_out));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, currentFrame.t_out, currentFrame.planesOffset));
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.x));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
 
         } else {
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, currentFrame.t_out));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, currentFrame.t_out, currentFrame.planesOffset));
 
         }
     }
@@ -148,8 +166,8 @@ namespace EARenderer {
         //            glm::vec3 a = ray.origin + t0 * ray.direction;
         //            glm::vec3 b = ray.origin + t1 * ray.direction;
 
-        glm::vec3 a { 1, 0.5, 1 };
-        glm::vec3 b { 0.9, -0.1, 0.1 };
+        glm::vec3 a { -1, -1, -1 };
+        glm::vec3 b { 0.1, -1, 1 };
 
         // Transform to voxelspace
         a = localSpaceMat * glm::vec4(a, 1.0);
@@ -167,25 +185,38 @@ namespace EARenderer {
             glm::vec3 p_in = (1.f - stackFrame.t_in) * a + stackFrame.t_in * b;
             glm::vec3 p_out = (1.f - stackFrame.t_out) * a + stackFrame.t_out * b;
 
-            BitMask signMaskA = signMask(p_in + depth);
-            BitMask signMaskB = signMask(p_out + depth);
+            glm::vec3 d;
+            d.x = stackFrame.nodeIndex & XBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
+            d.y = stackFrame.nodeIndex & YBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
+            d.z = stackFrame.nodeIndex & ZBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
+
+            d += stackFrame.planesOffset;
+            stackFrame.planesOffset = d;
+
+            printf("t_in %f t_out %f \n", stackFrame.t_in, stackFrame.t_out);
+            printf("p_in %f %f %f\n", p_in.x, p_in.y, p_in.z);
+            printf("p_out %f %f %f\n", p_out.x, p_out.y, p_out.z);
+            printf("Depth %d, plane offset x %f y %f z %f \n\n", stackFrame.depth, d.x, d.y, d.z);
+
+            BitMask signMaskA = signMask(p_in - d);
+            BitMask signMaskB = signMask(p_out - d);
             BitMask signMaskC = signMaskA ^ signMaskB;
 
             glm::vec3 t(std::numeric_limits<float>::max());
             size_t planeIntersectionCounter = 0;
 
             if (signMaskC & XBitMask) {
-                t.x = (depth - a.x) / ab.x;
+                t.x = (d.x - a.x) / ab.x;
                 planeIntersectionCounter++;
             }
 
             if (signMaskC & YBitMask) {
-                t.y = (depth - a.y) / ab.y;
+                t.y = (d.y - a.y) / ab.y;
                 planeIntersectionCounter++;
             }
 
             if (signMaskC & ZBitMask) {
-                t.z = (depth - a.z) / ab.z;
+                t.z = (d.z - a.z) / ab.z;
                 planeIntersectionCounter++;
             }
 
