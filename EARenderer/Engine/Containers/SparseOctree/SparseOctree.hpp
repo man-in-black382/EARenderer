@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include <stack>
 #include <vector>
+#include <functional>
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -27,6 +28,9 @@ namespace EARenderer {
 
     template <typename T>
     class SparseOctree {
+    public:
+        using ContainmentDetector = std::function<bool(const T& object, const AxisAlignedBox3D& nodeBoundingBox)>;
+
     private:
 
 #pragma mark - Private nested types
@@ -40,6 +44,7 @@ namespace EARenderer {
             uint16_t mChildInfo = 0;
 
         public:
+            AxisAlignedBox3D boundingBox;
             std::vector<T> objects;
 
             void setChildPresent(BitMask childIndex, bool isPresent);
@@ -53,9 +58,9 @@ namespace EARenderer {
             uint8_t depth;
             float t_in;
             float t_out;
-            glm::vec3 planesOffset;
 
-            StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out, const glm::vec3& planesOffset);
+            StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth);
+            StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out);
         };
 
         struct Iterator {
@@ -85,11 +90,13 @@ namespace EARenderer {
 
 #pragma mark - Private members
 
+        size_t mDepthCap = 10;
         size_t mMaximumDepth;
         AxisAlignedBox3D mBoundingBox;
         std::unordered_map<NodeIndex, Node> mNodes;
         std::stack<StackFrame> mTraversalStack;
         std::vector<float> mCuttingPlaneOffsets;
+        ContainmentDetector mContainmentDetector;
 
 #pragma mark - Private functions
 
@@ -113,16 +120,28 @@ namespace EARenderer {
                             BitMask p_last,
                             size_t planeIntersectionCounter);
 
+#pragma mark - Public interface
+
     public:
 
-#pragma mark - Public interface
 #pragma mark - Lifecycle
 
-        SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth);
+        SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth, const ContainmentDetector& containmentDetector);
+
+#pragma mark - Building
+
+        void insert(const T& object);
+
+        void insert(T&& object);
+
+        template<class... Args>
+        void emplace(Args&&... args);
 
 #pragma mark - Traversal
 
         void raymarch(const Ray3D& ray);
+
+        void raymarch(const glm::vec3& p0, const glm::vec3& p1);
     };
 
 }

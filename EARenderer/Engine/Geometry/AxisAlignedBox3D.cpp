@@ -84,7 +84,21 @@ namespace EARenderer {
     glm::vec3 AxisAlignedBox3D::center() const {
         return (min + max) / 2.f;
     }
-    
+
+    std::array<AxisAlignedBox3D, 8> AxisAlignedBox3D::octet() const {
+        glm::vec3 c = center();
+        return {
+            AxisAlignedBox3D{ min, c },
+            AxisAlignedBox3D{ { c.x, min.y, min.z }, { max.x, c.y, c.z } },
+            AxisAlignedBox3D{ { min.x, c.y, min.z }, { c.x, max.y, c.z } },
+            AxisAlignedBox3D{ { c.x, c.y, min.z }, { max.x, max.y, c.z } },
+            AxisAlignedBox3D{ { min.x, min.y, c.z }, { c.x, c.y, max.z } },
+            AxisAlignedBox3D{ { c.x, min.y, c.z }, { max.x, c.y, max.z } },
+            AxisAlignedBox3D{ { min.x, c.y, c.z }, { c.x, max.y, max.z } },
+            AxisAlignedBox3D{ c, max }
+        };
+    }
+
     AxisAlignedBox3D AxisAlignedBox3D::transformedBy(const Transformation& t) const {
         return transformedBy(t.modelMatrix());
     }

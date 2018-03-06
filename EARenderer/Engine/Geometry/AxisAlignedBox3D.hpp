@@ -43,6 +43,22 @@ namespace EARenderer {
         float smallestDimensionLength() const;
         float largestDimensionLength() const;
         glm::vec3 center() const;
+
+        /**
+         Splits into 8 sub-boxes of equal size
+         The order is:
+          Bottom-Front-Left
+          Bottom-Front-Right
+          Top-Front-Left
+          Top-Front-Right
+          Bottom-Back-Left
+          Bottom-Back-Right
+          Top-Back-Left
+          Top-Back-Right
+
+         @return array of sub-boxes
+         */
+        std::array<AxisAlignedBox3D, 8> octet() const;
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;

@@ -9,16 +9,25 @@
 #ifndef SparseOctreeImpl_h
 #define SparseOctreeImpl_h
 
+#include <stdexcept>
+
+#include "StringUtils.hpp"
+
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
     template <typename T>
-    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth)
+    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth, const ContainmentDetector& containmentDetector)
     :
     mBoundingBox(boundingBox),
-    mMaximumDepth(maximumDepth)
+    mMaximumDepth(maximumDepth),
+    mContainmentDetector(containmentDetector)
     {
+        if (maximumDepth > mDepthCap) {
+            throw std::invalid_argument(string_format("Octree maximum depth is %d, you requested %d", mDepthCap, maximumDepth));
+        }
+
         // Root node shoud have 0 offset
         mCuttingPlaneOffsets.emplace_back(0.0);
         for (size_t depth = 1; depth <= maximumDepth; depth++) {
@@ -44,9 +53,8 @@ namespace EARenderer {
         uint8_t rootDepth = 0;
         float rootT1 = 0.0;
         float rootT2 = 1.0;
-        glm::vec3 planesOffset(0.0);
 
-        mTraversalStack.push(StackFrame(rootNodeIndex, rootDepth, rootT1, rootT2, planesOffset));
+        mTraversalStack.push(StackFrame(rootNodeIndex, rootDepth, rootT1, rootT2));
     }
 
     template <typename T>
@@ -102,12 +110,12 @@ namespace EARenderer {
     template <typename T>
     void
     SparseOctree<T>::pushChildNodes(const StackFrame& currentFrame,
-                                         const glm::vec3& t,
-                                         BitMask signMaskA,
-                                         BitMask signMaskB,
-                                         BitMask p_first,
-                                         BitMask p_last,
-                                         size_t planeIntersectionCounter)
+                                    const glm::vec3& t,
+                                    BitMask signMaskA,
+                                    BitMask signMaskB,
+                                    BitMask p_first,
+                                    BitMask p_last,
+                                    size_t planeIntersectionCounter)
     {
         NodeIndex parentIndex = currentFrame.nodeIndex;
         NodeIndex childIndex = 0;
@@ -116,72 +124,139 @@ namespace EARenderer {
             // TODO: check for node presense
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, currentFrame.t_out, currentFrame.planesOffset));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.x, currentFrame.t_out));
 
             childIndex = appendChildIndex(parentIndex, signMaskB ^ p_last);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, t.x, currentFrame.planesOffset));
+            if (mTraversalStack.top().nodeIndex != childIndex) {
+                mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, t.x));
+            }
 
             childIndex = appendChildIndex(parentIndex, signMaskA ^ p_first);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y, currentFrame.planesOffset));
+            if (mTraversalStack.top().nodeIndex != childIndex) {
+                mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y));
+            }
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
+            if (mTraversalStack.top().nodeIndex != childIndex) {
+                mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z));
+            }
 
         } else if (planeIntersectionCounter == 2) {
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, currentFrame.t_out, currentFrame.planesOffset));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.y, currentFrame.t_out));
 
             childIndex = appendChildIndex(parentIndex, signMaskA ^ p_first);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y, currentFrame.planesOffset));
+            if (mTraversalStack.top().nodeIndex != childIndex) {
+                mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, t.y));
+            }
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
+            if (mTraversalStack.top().nodeIndex != childIndex) {
+                mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z));
+            }
 
         } else if (planeIntersectionCounter == 1) {
 
             childIndex = appendChildIndex(parentIndex, signMaskB);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, currentFrame.t_out, currentFrame.planesOffset));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, t.z, currentFrame.t_out));
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z, currentFrame.planesOffset));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, t.z));
 
         } else {
 
             childIndex = appendChildIndex(parentIndex, signMaskA);
-            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, currentFrame.t_out, currentFrame.planesOffset));
+            mTraversalStack.push(StackFrame(childIndex, currentFrame.depth + 1, currentFrame.t_in, currentFrame.t_out));
 
+        }
+    }
+
+#pragma mark - Building
+
+    template <typename T>
+    void
+    SparseOctree<T>::insert(const T& object) {
+        std::unordered_map<uint8_t, BitMask> childBoxChildNodeCorrespondenceMap({
+            std::make_pair(0, 7),
+            std::make_pair(1, 3),
+            std::make_pair(2, 6),
+            std::make_pair(3, 2),
+            std::make_pair(4, 5),
+            std::make_pair(5, 1),
+            std::make_pair(6, 4),
+            std::make_pair(7, 0),
+        });
+
+        StackFrame stackFrame(1, 0);
+
+        while (true) {
+            Node& node = mNodes[stackFrame.nodeIndex];
+            std::array<AxisAlignedBox3D, 8> childBoxes = node.boundingBox.octet();
+
+            bool anyChildContainsObject = false;
+
+            for (size_t i = 0; i < 8; i++) {
+                bool boxContainsObject = mContainmentDetector(object, childBoxes[i]);
+                if (boxContainsObject) {
+                    NodeIndex childIndex = appendChildIndex(stackFrame.nodeIndex, childBoxChildNodeCorrespondenceMap[i]);
+                    stackFrame = StackFrame(childIndex, stackFrame.depth + 1);
+                    anyChildContainsObject = true;
+                    break;
+                }
+            }
+
+            if (!anyChildContainsObject || stackFrame.depth >= mMaximumDepth) {
+                node.objects.push_back(object);
+                break;
+            }
         }
     }
 
     template <typename T>
     void
-    SparseOctree<T>::raymarch(const Ray3D& ray) {
+    SparseOctree<T>::insert(T&& object) {
+
+    }
+
+    template <typename T>
+    template<class... Args>
+    void
+    SparseOctree<T>::emplace(Args&&... args) {
+//        Allocation* allocation = popFreeAllocation();
+//        T* o = mObjects + allocation->objectIndex;
+//        new (o) T(std::forward<Args>(args)...);
+//        return allocation->objectID;
+    }
+
+#pragma mark - Traversal
+
+    template <typename T>
+    void
+    SparseOctree<T>::raymarch(const glm::vec3& p0, const glm::vec3& p1) {
         glm::mat4 localSpaceMat = localNormalizedSpaceMatrix();
 
-        // Intersection points
-        float t0 = 0.f;
-        float t1 = 1.0;//1.7677;//1.f;
-
-        //            glm::vec3 a = ray.origin + t0 * ray.direction;
-        //            glm::vec3 b = ray.origin + t1 * ray.direction;
-
-        glm::vec3 a { -0.1, -1, -1 };
-        glm::vec3 b { 0.5, 0.3, 1 };
-
         // Transform to voxelspace
-        a = localSpaceMat * glm::vec4(a, 1.0);
-        b = localSpaceMat * glm::vec4(b, 1.0);
+        glm::vec3 a = localSpaceMat * glm::vec4(p0, 1.0);
+        glm::vec3 b = localSpaceMat * glm::vec4(p1, 1.0);
 
         glm::vec3 ab = b - a;
+
+        glm::vec3 invA = 1.f / a;
+        glm::vec3 a_ab = a / ab;
 
         pushRootNode();
 
         while (!mTraversalStack.empty()) {
-            auto stackFrame = mTraversalStack.top();
+            StackFrame stackFrame = mTraversalStack.top();
             mTraversalStack.pop();
 
-            float depth = stackFrame.depth;
+            printf("Index %d\n", stackFrame.nodeIndex);
+
+            if (stackFrame.depth >= mMaximumDepth) {
+                continue;
+            }
+
             glm::vec3 p_in = (1.f - stackFrame.t_in) * a + stackFrame.t_in * b;
             glm::vec3 p_out = (1.f - stackFrame.t_out) * a + stackFrame.t_out * b;
 
@@ -189,10 +264,6 @@ namespace EARenderer {
             d.x = stackFrame.nodeIndex & XBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
             d.y = stackFrame.nodeIndex & YBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
             d.z = stackFrame.nodeIndex & ZBitMask ? -mCuttingPlaneOffsets[stackFrame.depth] : mCuttingPlaneOffsets[stackFrame.depth];
-
-            if (depth >= mMaximumDepth) {
-                continue;
-            }
 
             BitMask signMaskA = signMask(p_in + d);
             BitMask signMaskB = signMask(p_out + d);
@@ -202,17 +273,17 @@ namespace EARenderer {
             size_t planeIntersectionCounter = 0;
 
             if (signMaskC & XBitMask) {
-                t.x = (d.x - a.x) / ab.x;
+                t.x = d.x * invA.x - a_ab.x;
                 planeIntersectionCounter++;
             }
 
             if (signMaskC & YBitMask) {
-                t.y = (d.y - a.y) / ab.y;
+                t.y = d.y * invA.y - a_ab.y;
                 planeIntersectionCounter++;
             }
 
             if (signMaskC & ZBitMask) {
-                t.z = (d.z - a.z) / ab.z;
+                t.z = d.z * invA.z - a_ab.z;
                 planeIntersectionCounter++;
             }
 
@@ -221,6 +292,17 @@ namespace EARenderer {
 
             pushChildNodes(stackFrame, t, signMaskA, signMaskB, p_first, p_last, planeIntersectionCounter);
         }
+    }
+
+    template <typename T>
+    void
+    SparseOctree<T>::raymarch(const Ray3D& ray) {
+        // Extend ray's end point to ensure that it reaches all across the bounding box
+        float t1 = mBoundingBox.diagonal();
+        glm::vec3 a = ray.origin;
+        glm::vec3 b = ray.origin + ray.direction * t1;
+
+        raymarch(a, b);
     }
 
 }
