@@ -119,7 +119,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            &EARenderer::GLViewport::main());
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-//    self.surfelGenerator->generateStaticGeometrySurfels();
+    self.surfelGenerator->generateStaticGeometrySurfels();
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);

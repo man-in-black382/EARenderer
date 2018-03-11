@@ -934,6 +934,7 @@
 		CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshTriangleRef.hpp; sourceTree = "<group>"; };
 		CEFB7A2E205578E400364550 /* Plane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Plane.cpp; sourceTree = "<group>"; };
 		CEFB7A2F205578E400364550 /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Plane.hpp; sourceTree = "<group>"; };
+		CEFB7A3120559EAA00364550 /* SpatialHashCellImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpatialHashCellImpl.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2161,9 +2162,10 @@
 			children = (
 				CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */,
 				CE895F98204C1A0D00E63140 /* SpatialHashImpl.hpp */,
+				CEFB7A3120559EAA00364550 /* SpatialHashCellImpl.h */,
+				CE895F9B204C43D800E63140 /* SpatialHashRangeIteratorImpl.hpp */,
 				CE895F99204C414900E63140 /* SpatialHashForwardIteratorImpl.hpp */,
 				CE895F9A204C429D00E63140 /* SpatialHashRangeImpl.hpp */,
-				CE895F9B204C43D800E63140 /* SpatialHashRangeIteratorImpl.hpp */,
 			);
 			path = SpatialHash;
 			sourceTree = "<group>";

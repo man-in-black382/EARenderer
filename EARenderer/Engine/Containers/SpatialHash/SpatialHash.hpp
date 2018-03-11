@@ -27,10 +27,31 @@ namespace EARenderer {
         
 #pragma mark - Type aliases
         
-        using Cell = std::tuple<int32_t, int32_t, int32_t>;
+//        using Cell = std::tuple<int32_t, int32_t, int32_t>;
         using Objects = std::vector<T>;
         
 #pragma mark - Nested types
+#pragma mark Cell
+
+        struct Cell {
+        private:
+            uint64_t mHash = 0;
+
+        public:
+            Cell() = default;
+            Cell(uint16_t x, uint16_t y, uint16_t z);
+
+            uint64_t hash() const;
+
+            void encodeX(uint16_t x);
+            void encodeY(uint16_t x);
+            void encodeZ(uint16_t x);
+
+            uint16_t decodeX() const;
+            uint16_t decodeY() const;
+            uint16_t decodeZ() const;
+        };
+
 #pragma mark Forward iterator
         
         class ForwardIterator {
@@ -110,15 +131,15 @@ namespace EARenderer {
 
 #pragma mark - SpatialHash's private contents
         
-        std::unordered_map<Cell, Objects> mObjects;
+        std::unordered_map<uint64_t, Objects> mObjects;
         AxisAlignedBox3D mBoundaries;
-        uint32_t mResolution;
+        uint16_t mResolution;
         
-        int32_t cellIndex(int32_t axis, float positionOnAxis) const;
+        uint16_t cellIndex(int32_t axis, float positionOnAxis) const;
         
         Cell cell(const glm::vec3& position) const;
         
-        bool isCellValid(const Cell& cell) const;
+        bool isCellValid(uint16_t x, uint16_t y, uint16_t z) const;
         
         std::vector<Cell> neighbours(const Cell& cell) const;
         
@@ -154,6 +175,7 @@ namespace EARenderer {
 }
 
 #include "SpatialHashImpl.hpp"
+#include "SpatialHashCellImpl.h"
 #include "SpatialHashForwardIteratorImpl.hpp"
 #include "SpatialHashRangeImpl.hpp"
 #include "SpatialHashRangeIteratorImpl.hpp"

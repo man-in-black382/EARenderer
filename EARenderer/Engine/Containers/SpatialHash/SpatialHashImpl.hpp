@@ -25,7 +25,7 @@ namespace EARenderer {
 #pragma mark - Accessors
 
     template <typename T>
-    int32_t
+    uint16_t
     SpatialHash<T>::cellIndex(int32_t axis, float positionOnAxis) const {
         float delta = mBoundaries.max[axis] - mBoundaries.min[axis];
         if (fabs(delta) < 1e-09) {
@@ -38,16 +38,16 @@ namespace EARenderer {
     template <typename T>
     typename SpatialHash<T>::Cell
     SpatialHash<T>::cell(const glm::vec3& position) const {
-        return std::make_tuple(cellIndex(0, position.x), cellIndex(1, position.y), cellIndex(2, position.z));
+        Cell cell;
+        cell.encodeX(cellIndex(0, position.x));
+        cell.encodeY(cellIndex(1, position.y));
+        cell.encodeZ(cellIndex(2, position.z));
+        return cell;
     }
 
     template <typename T>
     bool
-    SpatialHash<T>::isCellValid(const Cell& cell) const {
-        int32_t x = std::get<0>(cell);
-        int32_t y = std::get<1>(cell);
-        int32_t z = std::get<2>(cell);
-
+    SpatialHash<T>::isCellValid(uint16_t x, uint16_t y, uint16_t z) const {
         return (x >= 0 && x < mResolution) && (y >= 0 && y < mResolution) && (z >= 0 && z < mResolution);
     }
 
@@ -56,16 +56,25 @@ namespace EARenderer {
     SpatialHash<T>::neighbours(const Cell& cell) const {
         std::vector<Cell> neighbours;
 
-        for (int32_t x = -1; x <= 1; ++x) {
-            for (int32_t y = -1; y <= 1; ++y) {
-                for (int32_t z = -1; z <= 1; ++z) {
-                    Cell neighbour = std::make_tuple(std::get<0>(cell) + x, std::get<1>(cell) + y, std::get<2>(cell) + z);
+        uint16_t cx = cell.decodeX();
+        uint16_t cy = cell.decodeY();
+        uint16_t cz = cell.decodeZ();
 
-                    bool valid = isCellValid(neighbour);
-                    bool present = mObjects.find(neighbour) != mObjects.end();
+        for (uint16_t x = -1; x <= 1; ++x) {
+            for (uint16_t y = -1; y <= 1; ++y) {
+                for (uint16_t z = -1; z <= 1; ++z) {
+                    uint16_t newX = cx + x;
+                    uint16_t newY = cy + y;
+                    uint16_t newZ = cz + z;
 
-                    if (valid && present) {
-                        neighbours.push_back(neighbour);
+                    bool valid = isCellValid(newX, newY, newZ);
+
+                    if (valid) {
+                        Cell neighbour(newX, newY, newZ);
+                        bool present = mObjects.find(neighbour.hash()) != mObjects.end();
+                        if (present) {
+                            neighbours.push_back(neighbour);
+                        }
                     }
                 }
             }
@@ -82,7 +91,7 @@ namespace EARenderer {
         if (!mBoundaries.contains(position)) {
             throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
         }
-        mObjects[cell(position)].push_back(object);
+        mObjects[cell(position).hash()].push_back(object);
     }
 
     template <typename T>
@@ -91,7 +100,7 @@ namespace EARenderer {
         auto neighbourCells = neighbours(cell(position));
         std::vector<typename Range::CellBeginEndPair> neighbourIteratorPairs;
         for (auto& cell : neighbourCells) {
-            auto& objectsInCell = mObjects[cell];
+            auto& objectsInCell = mObjects[cell.hash()];
             neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));
         }
         return Range(neighbourIteratorPairs);
