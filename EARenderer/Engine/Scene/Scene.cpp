@@ -11,6 +11,9 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp>
 
+#include "Collision.hpp"
+#include "Measurement.hpp"
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -21,7 +24,10 @@ namespace EARenderer {
     mPointLights(10),
     mMeshInstances(1000),
     mLightProbes(10000),
-    mSurfels(10000)
+    mSurfels(10000),
+    mOctree(SparseOctree<MeshTriangleRef>(AxisAlignedBox3D::zero(), 0,
+                                 [](auto&& object, auto&& nodeBoundingBox) { return false; },
+                                 [](auto&& object, auto&& ray) { return false; }))
     { }
     
 #pragma mark - Getters
@@ -44,6 +50,10 @@ namespace EARenderer {
     
     PackedLookupTable<Surfel>& Scene::surfels() {
         return mSurfels;
+    }
+
+    SparseOctree<MeshTriangleRef>& Scene::octree() {
+        return mOctree;
     }
     
     Camera* Scene::camera() const {
@@ -83,7 +93,7 @@ namespace EARenderer {
 #pragma mark -
     
     void Scene::calculateBoundingBox() {
-        mBoundingBox = AxisAlignedBox3D{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() }};
+        mBoundingBox = AxisAlignedBox3D::maximumReversed();
         
         for (ID meshInstanceID : mMeshInstances) {
             auto& instance = mMeshInstances[meshInstanceID];
@@ -91,6 +101,41 @@ namespace EARenderer {
             mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
             mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);
         }
+    }
+
+    void Scene::buildStaticGeometryOctree() {
+        auto containment = [&](const MeshTriangleRef& ref, const AxisAlignedBox3D& nodeBoundingBox) {
+            return nodeBoundingBox.contains(ref.triangle);
+        };
+
+        auto collision = [&](const MeshTriangleRef& ref, const Ray3D& ray) {
+            float distance = 0;
+            return Collision::RayTriangle(ray, ref.triangle, distance);
+        };
+
+        mOctree = SparseOctree<MeshTriangleRef>(mBoundingBox, mOctreeDepth, containment, collision);
+
+        Measurement::executionTime("Octree generation took", [&]() {
+            for (ID meshInstanceID : mStaticMeshInstanceIDs) {
+                auto& meshInstance = mMeshInstances[meshInstanceID];
+                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+
+                auto modelMatrix = meshInstance.modelMatrix();
+
+                for (ID subMeshID : mesh.subMeshes()) {
+                    auto& subMesh = mesh.subMeshes()[subMeshID];
+
+                    for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
+                        Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
+                                            modelMatrix * subMesh.vertices()[i + 1].position,
+                                            modelMatrix * subMesh.vertices()[i + 2].position);
+
+                        MeshTriangleRef ref({ meshInstanceID, subMeshID, triangle });
+                        mOctree.insert(ref);
+                    }
+                }
+            }
+        });
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

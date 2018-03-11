@@ -28,6 +28,7 @@
 #import "SurfelRenderer.hpp"
 #import "SurfelGenerator.hpp"
 #import "TriangleRenderer.hpp"
+#import "BoxRenderer.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -52,6 +53,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
 @property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
 @property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
+@property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
 
 // DEBUG
 @property (strong, nonatomic) DemoScene1 *demoScene;
@@ -117,10 +119,16 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            &EARenderer::GLViewport::main());
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.surfelGenerator->generateStaticGeometrySurfels();
+//    self.surfelGenerator->generateStaticGeometrySurfels();
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
+
+//    std::vector<EARenderer::AxisAlignedBox3D> boxes;
+//    for (auto& box : EARenderer::AxisAlignedBox3D::unit().octet()) {
+//        boxes.push_back(box);
+//    }
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene);
 
     [self subscribeForEvents];
 }
@@ -130,8 +138,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render();
+//    self.surfelRenderer->render();
 //    self.triangleRenderer->render();
+    self.boxRenderer->render();
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

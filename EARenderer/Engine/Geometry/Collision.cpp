@@ -63,7 +63,36 @@ namespace EARenderer {
     }
     
 #pragma mark - Public
-    
+
+    glm::vec3 Collision::Barycentric(const glm::vec3& point, const Triangle3D& triangle) {
+        glm::vec3 ap = point - triangle.a;
+        glm::vec3 bp = point - triangle.b;
+        glm::vec3 cp = point - triangle.c;
+
+        glm::vec3 ab = triangle.b - triangle.a;
+        glm::vec3 ac = triangle.c - triangle.a;
+        glm::vec3 bc = triangle.c - triangle.b;
+        glm::vec3 cb = triangle.b - triangle.c;
+        glm::vec3 ca = triangle.a - triangle.c;
+
+        glm::vec3 v = ab - Project(ab, cb);
+        float a = 1.0f - (glm::dot(v, ap) / glm::dot(v, ab));
+
+        v = bc - Project(bc, ac);
+        float b = 1.0f - (glm::dot(v, bp) / glm::dot(v, bc));
+
+        v = ca - Project(ca, ab);
+        float c = 1.0f - (glm::dot(v, cp) / glm::dot(v, ca));
+
+        return glm::vec3(a, b, c);
+    }
+
+    glm::vec3 Collision::Project(const glm::vec3& first, const glm::vec3& second) {
+        float dot = glm::dot(first, second);
+        float magSq = glm::length2(second);
+        return second * (dot / magSq);
+    }
+
     bool Collision::TriangleAABB(const Triangle3D& t, const AxisAlignedBox3D& a) {
         // Compute the edge vectors of the triangle  (ABC)
         glm::vec3 f0 = t.b - t.a;
@@ -151,13 +180,45 @@ namespace EARenderer {
         return (projection1 > 0 && projection1 < glm::length(parallelogram.side1) &&
                 projection2 > 0 && projection2 < glm::length(parallelogram.side2));
     }
-    
-    bool Collision::SphereContainsTriangle(const Sphere& sphere, const Triangle3D& triangle) {
-        float ao = glm::length(triangle.a - sphere.center);
-        float bo = glm::length(triangle.b - sphere.center);
-        float co = glm::length(triangle.c - sphere.center);
-        
-        return ao <= sphere.radius && bo <= sphere.radius && co <= sphere.radius;
+
+    bool Collision::RayPlane(const Ray3D& ray, const Plane& plane, float& distance) {
+        float nd = glm::dot(ray.direction, plane.normal);
+        float pn = glm::dot(ray.origin, plane.normal);
+
+        if (nd >= 0.0f) {
+            return false;
+        }
+
+        float t = (plane.distance - pn) / nd;
+
+        if (t >= 0.0f) {
+            distance = t;
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Collision::RayTriangle(const Ray3D& ray, const Triangle3D& triangle, float& distance) {
+        Plane plane(triangle);
+
+        float t = 0;
+        if (!RayPlane(ray, plane, t)) {
+            return false;
+        }
+
+        glm::vec3 result = ray.origin + ray.direction * t;
+        glm::vec3 barycentric = Barycentric(result, triangle);
+
+        if (barycentric.x >= 0.0f && barycentric.x <= 1.0f &&
+            barycentric.y >= 0.0f && barycentric.y <= 1.0f &&
+            barycentric.z >= 0.0f && barycentric.z <= 1.0f)
+        {
+            distance = t;
+            return true;
+        }
+
+        return false;
     }
     
 }

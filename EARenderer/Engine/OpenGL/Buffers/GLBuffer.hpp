@@ -22,7 +22,7 @@ namespace EARenderer {
     private:
         GLint mBindingPoint;
         GLenum mUsageMode;
-        uint64_t mSize;
+        size_t mSize;
         
     public:
         
@@ -49,7 +49,7 @@ namespace EARenderer {
         
 #pragma mark - Getters
         
-        uint64_t size() const {
+        size_t size() const {
             return mSize;
         }
         

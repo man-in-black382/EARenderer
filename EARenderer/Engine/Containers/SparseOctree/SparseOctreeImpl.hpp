@@ -18,11 +18,15 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     template <typename T>
-    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth, const ContainmentDetector& containmentDetector)
+    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox,
+                                  size_t maximumDepth,
+                                  const ContainmentDetector& containmentDetector,
+                                  const CollisionDetector& collisionDetector)
     :
     mBoundingBox(boundingBox),
     mMaximumDepth(maximumDepth),
-    mContainmentDetector(containmentDetector)
+    mContainmentDetector(containmentDetector),
+    mCollisionDetector(collisionDetector)
     {
         if (maximumDepth > mDepthCap) {
             throw std::invalid_argument(string_format("Octree maximum depth is %d, you requested %d", mDepthCap, maximumDepth));
@@ -49,7 +53,7 @@ namespace EARenderer {
     template <typename T>
     void
     SparseOctree<T>::pushRootNode() {
-        NodeIndex rootNodeIndex = 0b1;
+        NodeIndex rootNodeIndex = RootNodeIndex;
         uint8_t rootDepth = 0;
         float rootT1 = 0.0;
         float rootT2 = 1.0;
@@ -188,18 +192,28 @@ namespace EARenderer {
             std::make_pair(7, 0),
         });
 
-        StackFrame stackFrame(1, 0);
+        StackFrame stackFrame(RootNodeIndex, 0);
+        AxisAlignedBox3D nodeBoundingBox = mBoundingBox;
+
+//        printf("Inserting object in the octree\n");
 
         while (true) {
+//            printf("Traversing through node %d\n", stackFrame.nodeIndex);
+
             Node& node = mNodes[stackFrame.nodeIndex];
+            node.boundingBox = nodeBoundingBox;
             std::array<AxisAlignedBox3D, 8> childBoxes = node.boundingBox.octet();
 
             bool anyChildContainsObject = false;
+            BitMask childNodeMask = 0;
 
             for (size_t i = 0; i < 8; i++) {
                 bool boxContainsObject = mContainmentDetector(object, childBoxes[i]);
                 if (boxContainsObject) {
-                    NodeIndex childIndex = appendChildIndex(stackFrame.nodeIndex, childBoxChildNodeCorrespondenceMap[i]);
+                    childNodeMask = childBoxChildNodeCorrespondenceMap[i];
+                    nodeBoundingBox = childBoxes[i];
+                    node.setChildPresent(childNodeMask, true);
+                    NodeIndex childIndex = appendChildIndex(stackFrame.nodeIndex, childNodeMask);
                     stackFrame = StackFrame(childIndex, stackFrame.depth + 1);
                     anyChildContainsObject = true;
                     break;
@@ -207,26 +221,10 @@ namespace EARenderer {
             }
 
             if (!anyChildContainsObject || stackFrame.depth >= mMaximumDepth) {
-                node.objects.push_back(object);
+                node.objects.emplace_back(object);
                 break;
             }
         }
-    }
-
-    template <typename T>
-    void
-    SparseOctree<T>::insert(T&& object) {
-
-    }
-
-    template <typename T>
-    template<class... Args>
-    void
-    SparseOctree<T>::emplace(Args&&... args) {
-//        Allocation* allocation = popFreeAllocation();
-//        T* o = mObjects + allocation->objectIndex;
-//        new (o) T(std::forward<Args>(args)...);
-//        return allocation->objectID;
     }
 
 #pragma mark - Traversal

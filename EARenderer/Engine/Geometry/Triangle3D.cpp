@@ -15,6 +15,10 @@ namespace EARenderer {
     float Triangle3D::area() const {
         return glm::length(glm::cross(c - a, b - a)) / 2.0f;
     }
+
+    glm::vec3 Triangle3D::normal() const {
+        return glm::normalize(glm::cross(c - a, b - a));
+    }
     
     std::array<Triangle3D, 4> Triangle3D::split() const {
         glm::vec3 halfAB = (a + b) / 2.0f;

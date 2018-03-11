@@ -43,6 +43,10 @@ namespace EARenderer {
     bool MeshInstance::isHighlighted() const {
         return mIsHighlighted;
     }
+
+    const glm::mat4& MeshInstance::modelMatrix() const {
+        return mModelMatrix;
+    }
     
     Transformation MeshInstance::transformation() const {
         return mTransformation;
@@ -72,6 +76,7 @@ namespace EARenderer {
     
     void MeshInstance::setTransformation(const Transformation& transform) {
         mTransformation = transform;
+        mModelMatrix = transform.modelMatrix();
     }
     
     void MeshInstance::setMaterialIDForSubMeshID(ID materialID, ID subMeshID) {

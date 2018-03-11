@@ -126,7 +126,6 @@
 		CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */; };
 		CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */; };
 		CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */; };
-		CE70FA191F8F8EF600AD9027 /* BoxVisualizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8551F8F8EBD00AD9027 /* BoxVisualizer.cpp */; };
 		CE70FA1A1F8F8EF600AD9027 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */; };
 		CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */; };
 		CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */; };
@@ -236,6 +235,10 @@
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CE81CB161FA24F6200535020 /* blank_black.png in Resources */ = {isa = PBXBuildFile; fileRef = CE81CB151FA24ED000535020 /* blank_black.png */; };
 		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
+		CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE82DAED20511A4C00329E2E /* GLSLCubeRendering.cpp */; };
+		CE82DAF320511ABB00329E2E /* CubeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE82DAF020511ABB00329E2E /* CubeRendering.vert */; };
+		CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE82DAF220511ABB00329E2E /* CubeSidesRendering.geom */; };
+		CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */; };
 		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
 		CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */; };
 		CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */; };
@@ -255,6 +258,9 @@
 		CECD853F2041FF9800966766 /* debug2.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853E2041FF9800966766 /* debug2.png */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
+		CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */; };
+		CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */; };
+		CEFB7A30205578E400364550 /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2E205578E400364550 /* Plane.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -389,7 +395,6 @@
 		CE70F8511F8F8EBD00AD9027 /* Log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Log.hpp; sourceTree = "<group>"; };
 		CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneRenderer.cpp; sourceTree = "<group>"; };
 		CE70F8541F8F8EBD00AD9027 /* AxesSelection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSelection.hpp; sourceTree = "<group>"; };
-		CE70F8551F8F8EBD00AD9027 /* BoxVisualizer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxVisualizer.cpp; sourceTree = "<group>"; };
 		CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSystem.cpp; sourceTree = "<group>"; };
 		CE70F8571F8F8EBD00AD9027 /* AxesRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesRenderer.hpp; sourceTree = "<group>"; };
 		CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesRenderer.cpp; sourceTree = "<group>"; };
@@ -398,7 +403,6 @@
 		CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSelection.cpp; sourceTree = "<group>"; };
 		CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DefaultRenderComponentsProviding.hpp; sourceTree = "<group>"; };
 		CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSystem.hpp; sourceTree = "<group>"; };
-		CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxVisualizer.hpp; sourceTree = "<group>"; };
 		CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PackedLookupTable.hpp; sourceTree = "<group>"; };
 		CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect2D.cpp; sourceTree = "<group>"; };
 		CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray3D.cpp; sourceTree = "<group>"; };
@@ -800,6 +804,12 @@
 		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
 		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
 		CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoSceneComposing.h; sourceTree = "<group>"; };
+		CE82DAED20511A4C00329E2E /* GLSLCubeRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLCubeRendering.cpp; sourceTree = "<group>"; };
+		CE82DAEE20511A4C00329E2E /* GLSLCubeRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLCubeRendering.hpp; sourceTree = "<group>"; };
+		CE82DAF020511ABB00329E2E /* CubeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeRendering.vert; sourceTree = "<group>"; };
+		CE82DAF220511ABB00329E2E /* CubeSidesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeSidesRendering.geom; sourceTree = "<group>"; };
+		CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxRenderer.cpp; sourceTree = "<group>"; };
+		CE82DAF7205122FA00329E2E /* BoxRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxRenderer.hpp; sourceTree = "<group>"; };
 		CE895F8C204C060C00E63140 /* SparseOctreeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeImpl.hpp; sourceTree = "<group>"; };
 		CE895F8E204C0B5300E63140 /* SparseOctreeNodeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeNodeImpl.hpp; sourceTree = "<group>"; };
 		CE895F8F204C0C0800E63140 /* SparseOctreeIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeIteratorImpl.hpp; sourceTree = "<group>"; };
@@ -919,6 +929,11 @@
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
 		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
+		CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeEdgesRendering.geom; sourceTree = "<group>"; };
+		CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshTriangleRef.cpp; sourceTree = "<group>"; };
+		CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshTriangleRef.hpp; sourceTree = "<group>"; };
+		CEFB7A2E205578E400364550 /* Plane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Plane.cpp; sourceTree = "<group>"; };
+		CEFB7A2F205578E400364550 /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Plane.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1050,14 +1065,14 @@
 				CE70F8541F8F8EBD00AD9027 /* AxesSelection.hpp */,
 				CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */,
 				CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */,
-				CE70F8551F8F8EBD00AD9027 /* BoxVisualizer.cpp */,
-				CE70F85E1F8F8EBD00AD9027 /* BoxVisualizer.hpp */,
 				CE70F85C1F8F8EBD00AD9027 /* DefaultRenderComponentsProviding.hpp */,
 				CE70F8591F8F8EBD00AD9027 /* Drawable.hpp */,
 				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
 				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
 				CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */,
 				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
+				CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */,
+				CE82DAF7205122FA00329E2E /* BoxRenderer.hpp */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -1443,6 +1458,7 @@
 			children = (
 				CE895F97204C19B600E63140 /* SpatialHash */,
 				CE895F91204C0CEE00E63140 /* PackedLookupTable */,
+				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
 				CE895F8D204C087700E63140 /* SparseOctree */,
 				CE895F94204C137000E63140 /* LogarithmicBin */,
 			);
@@ -1452,6 +1468,8 @@
 		CE70F8611F8F8EBD00AD9027 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CEFB7A2E205578E400364550 /* Plane.cpp */,
+				CEFB7A2F205578E400364550 /* Plane.hpp */,
 				CEA95A4A1FCB00230090F1EE /* Triangle.hpp */,
 				CE53ED052012759C00A03146 /* Triangle2D.cpp */,
 				CE53ED062012759C00A03146 /* Triangle2D.hpp */,
@@ -1520,6 +1538,8 @@
 		CE70F87C1F8F8EBD00AD9027 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
+				CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */,
+				CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */,
 				CE70F8821F8F8EBD00AD9027 /* Camera.cpp */,
 				CE70F8951F8F8EBD00AD9027 /* Camera.hpp */,
 				CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */,
@@ -2075,6 +2095,11 @@
 				ACCCC1E2203C859400905557 /* SurfelRendering.frag */,
 				CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */,
 				CE9617751FF83CCD00A5E9FC /* GLSLSurfelRendering.hpp */,
+				CE82DAF020511ABB00329E2E /* CubeRendering.vert */,
+				CE82DAF220511ABB00329E2E /* CubeSidesRendering.geom */,
+				CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */,
+				CE82DAED20511A4C00329E2E /* GLSLCubeRendering.cpp */,
+				CE82DAEE20511A4C00329E2E /* GLSLCubeRendering.hpp */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2115,7 +2140,6 @@
 		CE895F91204C0CEE00E63140 /* PackedLookupTable */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
 				CE895F92204C0D4500E63140 /* PackedLookupTableImpl.hpp */,
 				CE895F93204C111E00E63140 /* PackedLookupTableIteratorImpl.hpp */,
 			);
@@ -2371,6 +2395,7 @@
 				CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */,
 				CE4DE2421FA60CFF0067729A /* Sponza_Thorn_diffuse.tga in Resources */,
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
+				CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */,
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,
@@ -2383,6 +2408,7 @@
 				CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */,
 				CE70FA741F8F8F7400AD9027 /* rustediron2_normal.png in Resources */,
 				CE4DE23C1FA60CFF0067729A /* Sponza_Floor_diffuse.tga in Resources */,
+				CE82DAF320511ABB00329E2E /* CubeRendering.vert in Resources */,
 				CE37917D1FA366820049BD1B /* patchy_cement1_Metallic.png in Resources */,
 				CE4DE2341FA60CFF0067729A /* Sponza_Fabric_Green_normal.tga in Resources */,
 				CE4DE2071FA60CFE0067729A /* Background_roughness.tga in Resources */,
@@ -2420,6 +2446,7 @@
 				AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
+				CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */,
 				CE4DE2471FA60CFF0067729A /* Vase_normal.tga in Resources */,
 				ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */,
 				CE4DE2171FA60CFE0067729A /* Sponza_Bricks_a_Normal.tga in Resources */,
@@ -2451,7 +2478,6 @@
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
 				CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */,
-				CE70FA191F8F8EF600AD9027 /* BoxVisualizer.cpp in Sources */,
 				CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */,
 				CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */,
 				CE70FA4E1F8F8EF600AD9027 /* GLSLDirectionalDepth.cpp in Sources */,
@@ -2460,6 +2486,7 @@
 				CE70FA1E1F8F8EF600AD9027 /* Ray3D.cpp in Sources */,
 				CE70FA391F8F8EF600AD9027 /* GLHDRTextureCubemap.cpp in Sources */,
 				CE70FA251F8F8EF600AD9027 /* Size2D.cpp in Sources */,
+				CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */,
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
@@ -2476,6 +2503,7 @@
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
+				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
 				CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */,
@@ -2543,11 +2571,13 @@
 				CE2221FD1FC0B263009B6804 /* LightProbeBuilder.cpp in Sources */,
 				CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */,
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,
+				CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */,
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
 				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
+				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */,
 				CE70FA911F8F912300AD9027 /* MeshListTabViewItem.mm in Sources */,
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,

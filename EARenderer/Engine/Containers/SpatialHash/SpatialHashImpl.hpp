@@ -9,6 +9,8 @@
 #ifndef SpatialHashImpl_h
 #define SpatialHashImpl_h
 
+#include "Collision.hpp"
+
 namespace EARenderer {
 
 #pragma mark Lifecycle
@@ -77,7 +79,7 @@ namespace EARenderer {
     template <typename T>
     void
     SpatialHash<T>::insert(const T& object, const glm::vec3& position) {
-        if (!mBoundaries.containsPoint(position)) {
+        if (!mBoundaries.contains(position)) {
             throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
         }
         mObjects[cell(position)].push_back(object);

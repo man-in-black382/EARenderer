@@ -154,11 +154,11 @@
 //    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
 //    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
 //    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
-//    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
-//    
-//    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
-//    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
-    
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+
+    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
+    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
+
     // Skybox
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
@@ -166,6 +166,7 @@
     
     //
     scene->calculateBoundingBox();
+    scene->buildStaticGeometryOctree();
 }
 
 #pragma mark - Helpers

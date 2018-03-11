@@ -113,7 +113,7 @@ namespace EARenderer {
             // Texture coordinates as is
             Triangle2D UVs(vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords);
 
-            transformedTriangleProperties.emplace_back(TransformedTriangleData(triangle, normals, UVs ));
+            transformedTriangleProperties.emplace_back(TransformedTriangleData(triangle, normals, UVs));
             
             minimumArea = std::min(minimumArea, area);
             maximumArea = std::max(maximumArea, area);
@@ -142,7 +142,7 @@ namespace EARenderer {
         bool triangleCoveredCompletely = false;
         for (auto& surfel : mSurfelSpatialHash->neighbours(triangle.p2)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
-            if (Collision::SphereContainsTriangle(enclosingSphere, triangle)) {
+            if (enclosingSphere.contains(triangle)) {
                 triangleCoveredCompletely = true;
                 break;
             }
@@ -276,15 +276,6 @@ namespace EARenderer {
     }
 
     void SurfelGenerator::generateStaticGeometrySurfels() {
-        Ray3D ray1({ -0.75, -0.75, -1 }, { 1.25, -0.75, 1 });
-        Ray3D ray2({ -0.75, -0.75, -0.75 }, { -0.75, -0.75, 0.75 });
-        Ray3D ray3({ -5, -5, -5 }, { -5, -5, -1 });
-        SparseOctree<float> octree(AxisAlignedBox3D({ -10, -10, -10 }, { 10, 10, 10 }), 3, [](const float& object, const AxisAlignedBox3D& nodeBoundingBox) {
-            return true;
-        });
-//        octree.raymarch({ 2, -2, -12 }, { -2, -2, 12 });
-        octree.raymarch(ray3);
-
         const float preferredSurfelCountPerSpatialHashCell = 1.5;
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;

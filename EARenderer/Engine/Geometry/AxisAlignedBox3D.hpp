@@ -10,6 +10,7 @@
 #define Box_hpp
 
 #include "Transformation.hpp"
+#include "Triangle3D.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -43,6 +44,8 @@ namespace EARenderer {
         float smallestDimensionLength() const;
         float largestDimensionLength() const;
         glm::vec3 center() const;
+        bool contains(const glm::vec3& point) const;
+        bool contains(const Triangle3D& triangle) const;
 
         /**
          Splits into 8 sub-boxes of equal size
@@ -62,7 +65,6 @@ namespace EARenderer {
         
         AxisAlignedBox3D transformedBy(const Transformation& t) const;
         AxisAlignedBox3D transformedBy(const glm::mat4& m) const;
-        bool containsPoint(const glm::vec3& point);
     };
         
 }

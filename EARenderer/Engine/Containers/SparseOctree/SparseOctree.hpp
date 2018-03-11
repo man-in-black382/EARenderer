@@ -30,6 +30,7 @@ namespace EARenderer {
     class SparseOctree {
     public:
         using ContainmentDetector = std::function<bool(const T& object, const AxisAlignedBox3D& nodeBoundingBox)>;
+        using CollisionDetector = std::function<bool(const T& object, const Ray3D& ray)>;
 
     private:
 
@@ -37,6 +38,8 @@ namespace EARenderer {
 
         using NodeIndex = uint32_t;
         using BitMask = uint8_t;
+
+        static const NodeIndex RootNodeIndex = 0b1;
 
         struct Node {
         private:
@@ -97,6 +100,7 @@ namespace EARenderer {
         std::stack<StackFrame> mTraversalStack;
         std::vector<float> mCuttingPlaneOffsets;
         ContainmentDetector mContainmentDetector;
+        CollisionDetector mCollisionDetector;
 
 #pragma mark - Private functions
 
@@ -126,16 +130,14 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-        SparseOctree(const AxisAlignedBox3D& boundingBox, size_t maximumDepth, const ContainmentDetector& containmentDetector);
+        SparseOctree(const AxisAlignedBox3D& boundingBox,
+                     size_t maximumDepth,
+                     const ContainmentDetector& containmentDetector,
+                     const CollisionDetector& collisionDetector);
 
 #pragma mark - Building
 
         void insert(const T& object);
-
-        void insert(T&& object);
-
-        template<class... Args>
-        void emplace(Args&&... args);
 
 #pragma mark - Traversal
 

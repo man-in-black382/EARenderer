@@ -21,6 +21,8 @@
 #include "ResourcePool.hpp"
 #include "GLBufferTexture.hpp"
 #include "Surfel.hpp"
+#include "SparseOctree.hpp"
+#include "MeshTriangleRef.hpp"
 
 #include <vector>
 #include <list>
@@ -29,11 +31,15 @@ namespace EARenderer {
     
     class Scene {
     private:
+        size_t mOctreeDepth = 6;
+
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
         PackedLookupTable<Surfel> mSurfels;
+
+        SparseOctree<MeshTriangleRef> mOctree;
         
         GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
@@ -53,6 +59,8 @@ namespace EARenderer {
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
         PackedLookupTable<Surfel>& surfels();
+
+        SparseOctree<MeshTriangleRef>& octree();
         
         GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
         
@@ -61,8 +69,9 @@ namespace EARenderer {
         
         void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
         void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);
-        
         void calculateBoundingBox();
+        void buildStaticGeometryOctree();
+
         const AxisAlignedBox3D& boundingBox() const;
         
         void setCamera(Camera* camera);

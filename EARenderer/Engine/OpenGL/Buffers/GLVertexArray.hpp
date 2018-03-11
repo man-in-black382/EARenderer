@@ -89,7 +89,7 @@ namespace EARenderer {
             GLuint offset = 0;
             for (auto& attribute : attributes) {
                 if (attribute.location == GLVertexAttribute::LocationAutomatic) {
-                    throw std::logic_error("You're trying to use external buffer with attribute's location set to Automatic which will probably override attributes taken from internal buffer and replacing data at location 0 and so forth");
+                    throw std::logic_error("You're trying to use external buffer with attribute's location set to Automatic which will probably override attributes taken from internal buffer and replace data at location 0 and so forth");
                 }
 
                 glEnableVertexAttribArray(attribute.location);
@@ -97,6 +97,16 @@ namespace EARenderer {
                 glVertexAttribDivisor(attribute.location, attribute.divisor);
                 offset += attribute.bytes;
             }
+        }
+
+#pragma mark - Getters
+
+        const GLVertexArrayBuffer<Vertex>& vertexBuffer() const {
+            return mVertexBuffer;
+        }
+
+        const GLVertexArrayBuffer<Vertex>& indexBuffer() const {
+            return mIndexBuffer;
         }
     };
     

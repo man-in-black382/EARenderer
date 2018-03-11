@@ -85,6 +85,16 @@ namespace EARenderer {
         return (min + max) / 2.f;
     }
 
+    bool AxisAlignedBox3D::contains(const glm::vec3& point) const {
+        return point.x >= min.x && point.x <= max.x &&
+        point.y >= min.y && point.y <= max.y &&
+        point.z >= min.z && point.z <= max.z;
+    }
+
+    bool AxisAlignedBox3D::contains(const Triangle3D& triangle) const {
+        return contains(triangle.a) && contains(triangle.b) && contains(triangle.c);
+    }
+
     std::array<AxisAlignedBox3D, 8> AxisAlignedBox3D::octet() const {
         glm::vec3 c = center();
         return {
@@ -111,12 +121,6 @@ namespace EARenderer {
         newMin /= newMin.w;
         newMax /= newMax.w;
         return { glm::vec3(newMin), glm::vec3(newMax) };
-    }
-    
-    bool AxisAlignedBox3D::containsPoint(const glm::vec3& point) {
-        return point.x >= min.x && point.x <= max.x &&
-        point.y >= min.y && point.y <= max.y &&
-        point.z >= min.z && point.z <= max.z;
     }
     
 }

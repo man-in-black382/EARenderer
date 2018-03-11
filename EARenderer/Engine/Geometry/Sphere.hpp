@@ -9,6 +9,8 @@
 #ifndef Sphere_hpp
 #define Sphere_hpp
 
+#include "Triangle3D.hpp"
+
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
@@ -18,6 +20,9 @@ namespace EARenderer {
         float radius;
         
         Sphere(const glm::vec3& c, float r);
+
+        bool contains(const glm::vec3& point) const;
+        bool contains(const Triangle3D& triangle) const;
     };
     
 }

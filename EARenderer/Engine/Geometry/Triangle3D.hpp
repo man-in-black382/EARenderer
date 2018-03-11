@@ -19,6 +19,7 @@ namespace EARenderer {
         using Triangle<glm::vec3>::Triangle;
         
         float area() const override;
+        glm::vec3 normal() const;
         std::array<Triangle3D, 4> split() const;
     };
     
