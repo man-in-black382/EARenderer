@@ -58,10 +58,12 @@ namespace EARenderer {
 #pragma mark - Member variables
         
         float mMinimumSurfelDistance = 0.075;
+        float mClusteringThreshold = 1000.0;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
-        SpatialHash<Surfel> *mSurfelSpatialHash = nullptr;
+        PackedLookupTable<Surfel> mSurfelFlatStorage;
+        SpatialHash<Surfel> mSurfelSpatialHash;
         ResourcePool *mResourcePool = nullptr;
         Scene *mScene = nullptr;
         
@@ -131,6 +133,10 @@ namespace EARenderer {
          @param instance An instance on which surfels will be generated on
          */
         void generateSurflesOnMeshInstance(MeshInstance& instance);
+
+        bool surfelsAlike(const Surfel& first, const Surfel& second);
+
+        void formClusters();
         
     public:
         SurfelGenerator(ResourcePool *resourcePool, Scene *scene);

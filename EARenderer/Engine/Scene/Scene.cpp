@@ -24,7 +24,6 @@ namespace EARenderer {
     mPointLights(10),
     mMeshInstances(1000),
     mLightProbes(10000),
-    mSurfels(10000),
     mOctree(SparseOctree<MeshTriangleRef>(AxisAlignedBox3D::zero(), 0,
                                  [](auto&& object, auto&& nodeBoundingBox) { return false; },
                                  [](auto&& object, auto&& ray) { return false; }))
@@ -47,9 +46,13 @@ namespace EARenderer {
     PackedLookupTable<LightProbe>& Scene::lightProbes() {
         return mLightProbes;
     }
-    
-    PackedLookupTable<Surfel>& Scene::surfels() {
+
+    std::vector<Surfel>& Scene::surfels() {
         return mSurfels;
+    }
+
+    std::vector<SurfelCluster>& Scene::surfelClusters() {
+        return mSurfelClusters;
     }
 
     SparseOctree<MeshTriangleRef>& Scene::octree() {
@@ -115,27 +118,25 @@ namespace EARenderer {
 
         mOctree = SparseOctree<MeshTriangleRef>(mBoundingBox, mOctreeDepth, containment, collision);
 
-        Measurement::executionTime("Octree generation took", [&]() {
-            for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-                auto& meshInstance = mMeshInstances[meshInstanceID];
-                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+        for (ID meshInstanceID : mStaticMeshInstanceIDs) {
+            auto& meshInstance = mMeshInstances[meshInstanceID];
+            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
 
-                auto modelMatrix = meshInstance.modelMatrix();
+            auto modelMatrix = meshInstance.modelMatrix();
 
-                for (ID subMeshID : mesh.subMeshes()) {
-                    auto& subMesh = mesh.subMeshes()[subMeshID];
+            for (ID subMeshID : mesh.subMeshes()) {
+                auto& subMesh = mesh.subMeshes()[subMeshID];
+                
+                for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
+                    Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
+                                        modelMatrix * subMesh.vertices()[i + 1].position,
+                                        modelMatrix * subMesh.vertices()[i + 2].position);
 
-                    for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
-                        Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
-                                            modelMatrix * subMesh.vertices()[i + 1].position,
-                                            modelMatrix * subMesh.vertices()[i + 2].position);
-
-                        MeshTriangleRef ref({ meshInstanceID, subMeshID, triangle });
-                        mOctree.insert(ref);
-                    }
+                    MeshTriangleRef ref({ meshInstanceID, subMeshID, triangle });
+                    mOctree.insert(ref);
                 }
             }
-        });
+        }
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

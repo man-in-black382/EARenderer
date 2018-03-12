@@ -224,24 +224,24 @@ namespace EARenderer {
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         
-//        for (ID meshInstanceID : mScene->meshInstances()) {
-//            auto& instance = mScene->meshInstances()[meshInstanceID];
-//            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-//
-//            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
-//
-//            for (ID subMeshID : subMeshes) {
-//                auto& subMesh = subMeshes[subMeshID];
-//                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
-//
-//                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
-//                    mCookTorranceShader.setMaterial(material);
-//                });
-//
-//                subMesh.draw();
-//            }
-//        }
-//
+        for (ID meshInstanceID : mScene->meshInstances()) {
+            auto& instance = mScene->meshInstances()[meshInstanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
+
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+
+                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
+                    mCookTorranceShader.setMaterial(material);
+                });
+
+                subMesh.draw();
+            }
+        }
+
 //        renderSkybox();
     }
 

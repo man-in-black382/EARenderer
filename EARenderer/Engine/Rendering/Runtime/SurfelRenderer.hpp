@@ -12,6 +12,9 @@
 #include "Scene.hpp"
 #include "GLSLSurfelRendering.hpp"
 #include "Surfel.hpp"
+#include "SurfelCluster.hpp"
+
+#include <vector>
 
 namespace EARenderer {
     
@@ -20,7 +23,7 @@ namespace EARenderer {
         Scene *mScene;
         ResourcePool *mResourcePool;
         
-        GLVertexArray<Surfel> mSurfelsVAO;
+        std::vector<GLVertexArray<Surfel>> mSurfelClusterVAOs;
         GLSLSurfelRendering mSurfelRenderingShader;
 
     public:

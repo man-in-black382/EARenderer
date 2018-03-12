@@ -23,28 +23,31 @@ namespace EARenderer {
     mScene(scene),
     mResourcePool(resourcePool)
     {
-        mSurfelsVAO.initialize(scene->surfels().data(), scene->surfels().size(), {
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
-        });
-
-        glEnable(GL_PROGRAM_POINT_SIZE);
+        for (auto& cluster : scene->surfelClusters()) {
+            mSurfelClusterVAOs.emplace_back();
+            mSurfelClusterVAOs.back().initialize(scene->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
+            });
+        }
     }
 
 #pragma mark - Public interface
 
     void SurfelRenderer::render() {
-        mSurfelsVAO.bind();
         mSurfelRenderingShader.bind();
 
         auto vp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
         mSurfelRenderingShader.setSurfelRadius(0.0375);
 
-        glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfels().size()));
+        for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
+            mSurfelClusterVAOs[i].bind();
+            glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfelClusters()[i].surfelCount));
+        }
     }
     
 }

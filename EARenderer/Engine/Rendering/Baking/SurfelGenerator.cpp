@@ -16,6 +16,7 @@
 #include "SparseOctree.hpp"
 
 #include <random>
+#include <limits>
 
 namespace EARenderer {
     
@@ -41,7 +42,9 @@ namespace EARenderer {
     mEngine(std::random_device()()),
     mDistribution(0.0f, 1.0f),
     mResourcePool(resourcePool),
-    mScene(scene)
+    mScene(scene),
+    mSurfelSpatialHash(AxisAlignedBox3D::zero(), 1),
+    mSurfelFlatStorage(10000)
     { }
     
 #pragma mark - Private helpers
@@ -140,7 +143,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle) {
         bool triangleCoveredCompletely = false;
-        for (auto& surfel : mSurfelSpatialHash->neighbours(triangle.p2)) {
+        for (auto& surfel : mSurfelSpatialHash.neighbours(triangle.p2)) {
             Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
             if (enclosingSphere.contains(triangle)) {
                 triangleCoveredCompletely = true;
@@ -152,7 +155,7 @@ namespace EARenderer {
     
     bool SurfelGenerator::surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate) {
         bool minimumDistanceRequirementMet = true;
-        for (auto& surfel : mSurfelSpatialHash->neighbours(candidate.position)) {
+        for (auto& surfel : mSurfelSpatialHash.neighbours(candidate.position)) {
             // Ignore surfel/candidate looking in the opposite directions to avoid tests
             // with surfels located on another side of a thin mesh (a wall for example)
             if (glm::dot(surfel.normal, candidate.normal) < 0.0) {
@@ -231,8 +234,8 @@ namespace EARenderer {
                     // for the surfel candidate and then adds the resultant surfel to the surfel set
                     if (surfelCandidateMeetsMinimumDistanceRequirement(surfelCandidate)) {
                         auto surfel = generateSurfel(surfelCandidate, bin, sampler);
-                        mSurfelSpatialHash->insert(surfel, surfelCandidate.position);
-                        mScene->surfels().insert(surfel);
+                        mSurfelSpatialHash.insert(surfel, surfelCandidate.position);
+                        mSurfelFlatStorage.insert(surfel);
                     }
 
                     // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
@@ -266,7 +269,58 @@ namespace EARenderer {
                     }
                 }
             });
-        }        
+        }
+    }
+
+    bool SurfelGenerator::surfelsAlike(const Surfel& first, const Surfel& second) {
+        float totalError = 0.0f;
+
+        // Position difference: squared euclidean distance (cm^2)
+        glm::vec3 distError = first.position - second.position;
+        totalError = dot(distError, distError) / 15.0f;
+
+        // Normal difference based on angle
+        // Opposite normals result in a very high error
+        float dotP = std::max(glm::dot(first.normal, second.normal), 0.0f);
+        float normalDifference = (1 - dotP) * 10000.0f;
+
+        totalError += normalDifference;
+        return totalError <= mClusteringThreshold;
+    }
+
+    void SurfelGenerator::formClusters() {
+        std::vector<ID> idsToDelete;
+
+        while (mSurfelFlatStorage.size()) {
+            printf("Surfel container's size is %zu\n", mSurfelFlatStorage.size());
+
+            SurfelCluster cluster(mScene->surfels().size(), 0);
+
+            ID firstSurfelID = *mSurfelFlatStorage.begin();
+            mScene->surfels().push_back(mSurfelFlatStorage[firstSurfelID]);
+            mSurfelFlatStorage.erase(firstSurfelID);
+
+            auto& lastSurfel = mScene->surfels().back();
+
+            for (auto it = mSurfelFlatStorage.begin(); it != mSurfelFlatStorage.end(); ++it) {
+                auto& nextSurfel = mSurfelFlatStorage[*it];
+
+                if (surfelsAlike(lastSurfel, nextSurfel)) {
+                    mScene->surfels().push_back(nextSurfel);
+                    idsToDelete.push_back(*it);
+                    cluster.surfelCount++;
+                }
+            }
+
+            printf("Ids to delete size is %zu\n", idsToDelete.size());
+            for (ID id : idsToDelete) {
+                mSurfelFlatStorage.erase(id);
+            }
+
+            idsToDelete.clear();
+
+            mScene->surfelClusters().push_back(cluster);
+        }
     }
     
 #pragma mark - Public interface
@@ -281,16 +335,17 @@ namespace EARenderer {
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
         int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
         
-        mSurfelSpatialHash = new SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
+        mSurfelSpatialHash = SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
+        mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
         
         for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
-            Measurement::executionTime("Surfel generation took", [&]() {
-                auto& meshInstance = mScene->meshInstances()[meshInstanceID];
-                generateSurflesOnMeshInstance(meshInstance);
-            });
+            auto& meshInstance = mScene->meshInstances()[meshInstanceID];
+            generateSurflesOnMeshInstance(meshInstance);
         }
-        
-        delete mSurfelSpatialHash;
+
+        formClusters();
+
+        printf("");
     }
     
 }

@@ -21,6 +21,7 @@
 #include "ResourcePool.hpp"
 #include "GLBufferTexture.hpp"
 #include "Surfel.hpp"
+#include "SurfelCluster.hpp"
 #include "SparseOctree.hpp"
 #include "MeshTriangleRef.hpp"
 
@@ -37,7 +38,9 @@ namespace EARenderer {
         PackedLookupTable<PointLight> mPointLights;
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
-        PackedLookupTable<Surfel> mSurfels;
+
+        std::vector<Surfel> mSurfels;
+        std::vector<SurfelCluster> mSurfelClusters;
 
         SparseOctree<MeshTriangleRef> mOctree;
         
@@ -58,7 +61,9 @@ namespace EARenderer {
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
-        PackedLookupTable<Surfel>& surfels();
+
+        std::vector<Surfel>& surfels();
+        std::vector<SurfelCluster>& surfelClusters();
 
         SparseOctree<MeshTriangleRef>& octree();
         

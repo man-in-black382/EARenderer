@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC62416B205657AD009B36DF /* SurfelCluster.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
 		AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */; };
@@ -268,6 +269,8 @@
 		AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
+		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
+		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
 		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
 		AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
@@ -1459,7 +1462,6 @@
 			children = (
 				CE895F97204C19B600E63140 /* SpatialHash */,
 				CE895F91204C0CEE00E63140 /* PackedLookupTable */,
-				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
 				CE895F8D204C087700E63140 /* SparseOctree */,
 				CE895F94204C137000E63140 /* LogarithmicBin */,
 			);
@@ -1574,6 +1576,10 @@
 				CE70F88D1F8F8EBD00AD9027 /* PointLight.hpp */,
 				CE2221F81FC0B06D009B6804 /* LightProbe.cpp */,
 				CE2221F91FC0B06D009B6804 /* LightProbe.hpp */,
+				ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */,
+				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
+				AC62416B205657AD009B36DF /* SurfelCluster.cpp */,
+				AC62416C205657AD009B36DF /* SurfelCluster.hpp */,
 			);
 			path = Lighting;
 			sourceTree = "<group>";
@@ -1589,8 +1595,6 @@
 				CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */,
 				CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */,
 				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
-				ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */,
-				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
 			);
 			path = Geometry;
 			sourceTree = "<group>";
@@ -2141,6 +2145,7 @@
 		CE895F91204C0CEE00E63140 /* PackedLookupTable */ = {
 			isa = PBXGroup;
 			children = (
+				CE70F8601F8F8EBD00AD9027 /* PackedLookupTable.hpp */,
 				CE895F92204C0D4500E63140 /* PackedLookupTableImpl.hpp */,
 				CE895F93204C111E00E63140 /* PackedLookupTableIteratorImpl.hpp */,
 			);
@@ -2525,6 +2530,7 @@
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
 				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
 				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
+				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
@@ -2717,6 +2723,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -2737,6 +2744,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				GCC_OPTIMIZATION_LEVEL = s;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

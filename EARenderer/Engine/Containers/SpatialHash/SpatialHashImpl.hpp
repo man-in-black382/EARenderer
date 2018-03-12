@@ -19,7 +19,8 @@ namespace EARenderer {
     SpatialHash<T>::SpatialHash(const AxisAlignedBox3D& boundaries, uint32_t resolution)
     :
     mBoundaries(boundaries),
-    mResolution(resolution)
+    mResolution(resolution),
+    mSize(0)
     { }
 
 #pragma mark - Accessors
@@ -60,9 +61,9 @@ namespace EARenderer {
         uint16_t cy = cell.decodeY();
         uint16_t cz = cell.decodeZ();
 
-        for (uint16_t x = -1; x <= 1; ++x) {
-            for (uint16_t y = -1; y <= 1; ++y) {
-                for (uint16_t z = -1; z <= 1; ++z) {
+        for (int8_t x = -1; x <= 1; ++x) {
+            for (int8_t y = -1; y <= 1; ++y) {
+                for (int8_t z = -1; z <= 1; ++z) {
                     uint16_t newX = cx + x;
                     uint16_t newY = cy + y;
                     uint16_t newZ = cz + z;
@@ -92,6 +93,14 @@ namespace EARenderer {
             throw std::out_of_range("Attempt to insert an object outside of spatial hash's boundaries");
         }
         mObjects[cell(position).hash()].push_back(object);
+        mSize++;
+    }
+
+    template <typename T>
+    void
+    SpatialHash<T>::erase(const ForwardIterator& it) {
+        it.mMapIterator->second.erase(it.mCurrentVectorIterator);
+        mSize--;
     }
 
     template <typename T>
@@ -104,6 +113,11 @@ namespace EARenderer {
             neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));
         }
         return Range(neighbourIteratorPairs);
+    }
+
+    template <typename T>
+    size_t SpatialHash<T>::size() const {
+        return mObjects.size();
     }
 
 #pragma mark Iteration

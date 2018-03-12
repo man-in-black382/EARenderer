@@ -27,7 +27,6 @@ namespace EARenderer {
         
 #pragma mark - Type aliases
         
-//        using Cell = std::tuple<int32_t, int32_t, int32_t>;
         using Objects = std::vector<T>;
         
 #pragma mark - Nested types
@@ -58,7 +57,7 @@ namespace EARenderer {
         private:
             friend SpatialHash;
             
-            using MapIterator = typename std::unordered_map<Cell, Objects>::iterator;
+            using MapIterator = typename std::unordered_map<uint64_t, Objects>::iterator;
             using VectorIterator = typename std::vector<T>::iterator;
             
             MapIterator mMapIterator;
@@ -134,6 +133,7 @@ namespace EARenderer {
         std::unordered_map<uint64_t, Objects> mObjects;
         AxisAlignedBox3D mBoundaries;
         uint16_t mResolution;
+        size_t mSize;
         
         uint16_t cellIndex(int32_t axis, float positionOnAxis) const;
         
@@ -152,8 +152,12 @@ namespace EARenderer {
 #pragma mark Modifiers
         
         void insert(const T& object, const glm::vec3& position);
+
+        void erase(const ForwardIterator& it);
         
         Range neighbours(const glm::vec3& position);
+
+        size_t size() const;
         
 #pragma mark Iteration
         

@@ -29,6 +29,7 @@
 #import "SurfelGenerator.hpp"
 #import "TriangleRenderer.hpp"
 #import "BoxRenderer.hpp"
+#import "Measurement.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -86,7 +87,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     // Temporary
     
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.01f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 50.f);
     camera->moveTo(glm::vec3(0, 1, 0));
     camera->lookAt(glm::vec3(-1, -1, 0));
     
@@ -106,6 +107,12 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     DemoScene1 *demoScene1 = [[DemoScene1 alloc] init];
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene1;
+
+    self.scene->calculateBoundingBox();
+
+    EARenderer::Measurement::executionTime("Octree generation took", [&]() {
+        self.scene->buildStaticGeometryOctree();
+    });
     
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
@@ -119,15 +126,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            &EARenderer::GLViewport::main());
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.surfelGenerator->generateStaticGeometrySurfels();
+
+    EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
+        self.surfelGenerator->generateStaticGeometrySurfels();
+    });
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 
-//    std::vector<EARenderer::AxisAlignedBox3D> boxes;
-//    for (auto& box : EARenderer::AxisAlignedBox3D::unit().octet()) {
-//        boxes.push_back(box);
-//    }
     self.boxRenderer = new EARenderer::BoxRenderer(self.scene);
 
     [self subscribeForEvents];
@@ -138,9 +144,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-//    self.surfelRenderer->render();
+    self.surfelRenderer->render();
 //    self.triangleRenderer->render();
-    self.boxRenderer->render();
+//    self.boxRenderer->render();
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }
