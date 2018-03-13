@@ -21,6 +21,13 @@ namespace EARenderer {
     mBinObjectsIterator(binObjectsIterator)
     { }
 
+    template <typename T>
+    LogarithmicBin<T>::Iterator::Iterator(BinsIterator endIterator)
+    :
+    mBinsIterator(endIterator),
+    mBinsEndIterator(endIterator)
+    { }
+
 #pragma mark - Operators
 
     template <typename T>
@@ -83,9 +90,9 @@ namespace EARenderer {
     LogarithmicBin<T>::Iterator::operator!=(const Iterator& other) const {
         // Don't touch vector's itereator if we're at the end of unordered_map
         if (mBinsIterator == mBinsEndIterator) {
-            return mBinsIterator != other.mMapIterator;
+            return mBinsIterator != other.mBinsIterator;
         } else {
-            return mBinsIterator != other.mMapIterator || mBinObjectsIterator != other.mNestedMapIterator;
+            return mBinsIterator != other.mBinsIterator || mBinObjectsIterator != other.mBinObjectsIterator;
         }
     }
 

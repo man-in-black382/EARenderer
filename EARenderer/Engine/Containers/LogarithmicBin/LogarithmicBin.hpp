@@ -57,6 +57,7 @@ namespace EARenderer {
             BinObjectsIterator mBinObjectsIterator;
             
             Iterator(BinsIterator i, BinsIterator endIterator, BinObjectsIterator binObjectsIterator);
+            Iterator(BinsIterator endIterator);
             
         public:
             Iterator& operator++();

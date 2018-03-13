@@ -32,6 +32,9 @@ namespace EARenderer {
         using ContainmentDetector = std::function<bool(const T& object, const AxisAlignedBox3D& nodeBoundingBox)>;
         using CollisionDetector = std::function<bool(const T& object, const Ray3D& ray)>;
 
+        using BoundingBoxRef = const AxisAlignedBox3D&;
+        using ObjectRef = const T&;
+
     private:
 
 #pragma mark - Private nested types
@@ -64,10 +67,6 @@ namespace EARenderer {
 
             StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth);
             StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out);
-        };
-
-        struct Iterator {
-
         };
 
         // In the original article authors use right-handed coordinate system with Z axis
@@ -128,6 +127,30 @@ namespace EARenderer {
 
     public:
 
+        struct Iterator {
+        private:
+            friend SparseOctree;
+
+            using MapIterator = typename std::unordered_map<NodeIndex, Node>::iterator;
+            using VectorIterator = typename std::vector<T>::iterator;
+
+            MapIterator mNodesIterator;
+            MapIterator mNodesEndIterator;
+            VectorIterator mNodeObjectsIterator;
+
+            Iterator(MapIterator i, MapIterator endIterator, VectorIterator nodeObjectsIterator);
+            Iterator(MapIterator endIterator);
+
+        public:
+            Iterator& operator++();
+
+            std::pair<BoundingBoxRef, ObjectRef> operator*() const;
+
+            std::pair<BoundingBoxRef, ObjectRef> operator->() const;
+
+            bool operator!=(const Iterator& other) const;
+        };
+
 #pragma mark - Lifecycle
 
         SparseOctree(const AxisAlignedBox3D& boundingBox,
@@ -144,7 +167,24 @@ namespace EARenderer {
         void raymarch(const Ray3D& ray);
 
         void raymarch(const glm::vec3& p0, const glm::vec3& p1);
+
+#pragma mark - Iteration
+
+        Iterator begin();
+
+        Iterator end();
+
     };
+
+    template<typename T>
+    typename SparseOctree<T>::Iterator begin(const SparseOctree<T>& tree) {
+        return tree.begin();
+    }
+
+    template<typename T>
+    typename SparseOctree<T>::Iterator end(const SparseOctree<T>& tree) {
+        return tree.end();
+    }
 
 }
 

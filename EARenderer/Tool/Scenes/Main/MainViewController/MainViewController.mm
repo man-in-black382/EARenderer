@@ -131,7 +131,12 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene);
+    std::vector<EARenderer::AxisAlignedBox3D> boxes;
+    for (auto node : self.scene->octree()) {
+        auto& boundingBox = node.first;
+        boxes.push_back(boundingBox);
+    }
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), boxes);
 
     [self subscribeForEvents];
 }
@@ -143,7 +148,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.axesRenderer->render();
     self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters);
 //    self.triangleRenderer->render();
-//    self.boxRenderer->render();
+    self.boxRenderer->render();
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

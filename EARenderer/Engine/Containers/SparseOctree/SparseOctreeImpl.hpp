@@ -303,6 +303,20 @@ namespace EARenderer {
         raymarch(a, b);
     }
 
+#pragma mark Iteration
+
+    template <typename T>
+    typename SparseOctree<T>::Iterator
+    SparseOctree<T>::begin() {
+        return Iterator(mNodes.begin(), mNodes.end(), mNodes.begin()->second.objects.begin());
+    }
+
+    template <typename T>
+    typename SparseOctree<T>::Iterator
+    SparseOctree<T>::end() {
+        return Iterator(mNodes.end());
+    }
+
 }
 
 #endif /* SparseOctreeImpl_h */

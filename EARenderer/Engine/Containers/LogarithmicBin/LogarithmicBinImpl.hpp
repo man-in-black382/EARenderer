@@ -185,7 +185,7 @@ namespace EARenderer {
     template <typename T>
     typename LogarithmicBin<T>::Iterator
     LogarithmicBin<T>::end() {
-        return Iterator(mBins.end(), mBins.end(), mBins.end()->second.objects.end());
+        return Iterator(mBins.end());
     }
 
 }
