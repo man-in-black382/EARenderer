@@ -53,13 +53,15 @@ namespace EARenderer {
     }
 
     template <typename T>
-    std::vector<typename SpatialHash<T>::Cell>
+    std::array<typename SpatialHash<T>::Cell, 27>
     SpatialHash<T>::neighbours(const Cell& cell) const {
-        std::vector<Cell> neighbours;
+        std::array<typename SpatialHash<T>::Cell, 27> neighbours;
 
         uint16_t cx = cell.decodeX();
         uint16_t cy = cell.decodeY();
         uint16_t cz = cell.decodeZ();
+
+        size_t neighbourIndex = 0;
 
         for (int8_t x = -1; x <= 1; ++x) {
             for (int8_t y = -1; y <= 1; ++y) {
@@ -74,11 +76,15 @@ namespace EARenderer {
                         Cell neighbour(newX, newY, newZ);
                         bool present = mObjects.find(neighbour.hash()) != mObjects.end();
                         if (present) {
-                            neighbours.push_back(neighbour);
+                            neighbours[neighbourIndex] = neighbour;
                         }
                     }
                 }
             }
+        }
+
+        if (neighbourIndex < neighbours.max_size() - 1) {
+            neighbours[neighbourIndex + 1] = Cell::InvalidCell();
         }
 
         return neighbours;
@@ -107,7 +113,7 @@ namespace EARenderer {
     typename SpatialHash<T>::Range
     SpatialHash<T>::neighbours(const glm::vec3& position) {
         auto neighbourCells = neighbours(cell(position));
-        std::vector<typename Range::CellBeginEndPair> neighbourIteratorPairs;
+        std::array<typename Range::CellBeginEndPair, 27> neighbourIteratorPairs;
         for (auto& cell : neighbourCells) {
             auto& objectsInCell = mObjects[cell.hash()];
             neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));

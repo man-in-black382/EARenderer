@@ -126,10 +126,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            &EARenderer::GLViewport::main());
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-
-    EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
-        self.surfelGenerator->generateStaticGeometrySurfels();
-    });
+    self.surfelGenerator->generateStaticGeometrySurfels();
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
@@ -144,7 +141,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render();
+    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters);
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render();
 

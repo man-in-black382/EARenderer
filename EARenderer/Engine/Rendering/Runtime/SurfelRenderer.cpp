@@ -14,6 +14,8 @@
 
 #include <glm/gtx/transform.hpp>
 
+#include <random>
+
 namespace EARenderer {
 
 #pragma mark - Lifecycle
@@ -23,6 +25,10 @@ namespace EARenderer {
     mScene(scene),
     mResourcePool(resourcePool)
     {
+        std::random_device device;
+        std::mt19937 engine(device());
+        std::uniform_real_distribution<float> distribution(0.0, 1.0);
+
         for (auto& cluster : scene->surfelClusters()) {
             mSurfelClusterVAOs.emplace_back();
             mSurfelClusterVAOs.back().initialize(scene->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
@@ -32,13 +38,20 @@ namespace EARenderer {
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
             });
+
+            mSurfelClusterColors.emplace_back(Color(distribution(engine), distribution(engine), distribution(engine)));
         }
     }
 
 #pragma mark - Public interface
 
-    void SurfelRenderer::render() {
+    void SurfelRenderer::render(Mode renderingMode) {
         mSurfelRenderingShader.bind();
+
+        switch (renderingMode) {
+            case Mode::Default: mSurfelRenderingShader.setShouldUseExternalColor(false);
+            case Mode::Clusters: mSurfelRenderingShader.setShouldUseExternalColor(true);
+        }
 
         auto vp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
@@ -46,6 +59,7 @@ namespace EARenderer {
 
         for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
             mSurfelClusterVAOs[i].bind();
+            mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
             glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfelClusters()[i].surfelCount));
         }
     }

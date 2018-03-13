@@ -10,6 +10,7 @@
 #define GLSLSurfelRendering_hpp
 
 #include "GLSLGenericGeometry.hpp"
+#include "Color.hpp"
 
 namespace EARenderer {
     
@@ -19,6 +20,8 @@ namespace EARenderer {
 
         void setViewProjectionMatrix(const glm::mat4& mvp);
         void setSurfelRadius(float radius);
+        void setShouldUseExternalColor(bool useExternalColor);
+        void setExternalColor(const Color& externalColor);
     };
     
 }

@@ -14,7 +14,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     template <typename T>
-    SpatialHash<T>::Range::Iterator::Iterator(const std::vector<CellBeginEndPair>& vectorIteratorPairs)
+    SpatialHash<T>::Range::Iterator::Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs)
     :
     mCellBeginEndPairs(vectorIteratorPairs)
     { }

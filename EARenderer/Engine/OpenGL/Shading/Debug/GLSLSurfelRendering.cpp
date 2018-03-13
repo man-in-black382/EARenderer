@@ -26,5 +26,13 @@ namespace EARenderer {
     void GLSLSurfelRendering::setSurfelRadius(float radius) {
         glUniform1f(uniformByNameCRC32(ctcrc32("uRadius")).location(), radius);
     }
+
+    void GLSLSurfelRendering::setShouldUseExternalColor(bool useExternalColor) {
+        glUniform1i(uniformByNameCRC32(ctcrc32("uUseExternalColor")).location(), useExternalColor);
+    }
+
+    void GLSLSurfelRendering::setExternalColor(const Color& externalColor) {
+        glUniform4fv(uniformByNameCRC32(ctcrc32("uExternalColor")).location(), 1, reinterpret_cast<const float *>(&externalColor));
+    }
     
 }

@@ -40,6 +40,12 @@ namespace EARenderer {
             Cell() = default;
             Cell(uint16_t x, uint16_t y, uint16_t z);
 
+            static Cell InvalidCell() {
+                static Cell c;
+                c.mHash = -1;
+                return c;
+            }
+
             uint64_t hash() const;
 
             void encodeX(uint16_t x);
@@ -49,6 +55,9 @@ namespace EARenderer {
             uint16_t decodeX() const;
             uint16_t decodeY() const;
             uint16_t decodeZ() const;
+
+            bool operator==(Cell that) const;
+            bool operator!=(Cell that) const;
         };
 
 #pragma mark Forward iterator
@@ -93,10 +102,10 @@ namespace EARenderer {
                 friend SpatialHash;
                 friend Range;
                 
-                std::vector<CellBeginEndPair> mCellBeginEndPairs;
+                std::array<CellBeginEndPair, 27> mCellBeginEndPairs;
                 size_t mCurrentPairIndex = 0;
                 
-                Iterator(const std::vector<CellBeginEndPair>& vectorIteratorPairs);
+                Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs);
                 
                 void moveToEnd();
                 
@@ -120,7 +129,7 @@ namespace EARenderer {
             Iterator mBegin;
             Iterator mEnd;
             
-            Range(const std::vector<CellBeginEndPair>& cellBeginEndPairs);
+            Range(const std::array<CellBeginEndPair, 27>& cellBeginEndPairs);
             
         public:
             Iterator begin();
@@ -141,7 +150,7 @@ namespace EARenderer {
         
         bool isCellValid(uint16_t x, uint16_t y, uint16_t z) const;
         
-        std::vector<Cell> neighbours(const Cell& cell) const;
+        std::array<Cell, 27> neighbours(const Cell& cell) const;
         
 #pragma mark - SpatialHash's public contents
 #pragma mark Lifecycle

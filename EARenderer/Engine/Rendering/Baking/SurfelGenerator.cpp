@@ -277,12 +277,12 @@ namespace EARenderer {
 
         // Position difference: squared euclidean distance (cm^2)
         glm::vec3 distError = first.position - second.position;
-        totalError = dot(distError, distError) / 15.0f;
+        totalError = dot(distError, distError) / 80.0f;
 
         // Normal difference based on angle
         // Opposite normals result in a very high error
         float dotP = std::max(glm::dot(first.normal, second.normal), 0.0f);
-        float normalDifference = (1 - dotP) * 10000.0f;
+        float normalDifference = (1 - dotP) * 20000.0f;
 
         totalError += normalDifference;
         return totalError <= mClusteringThreshold;
@@ -292,8 +292,6 @@ namespace EARenderer {
         std::vector<ID> idsToDelete;
 
         while (mSurfelFlatStorage.size()) {
-            printf("Surfel container's size is %zu\n", mSurfelFlatStorage.size());
-
             SurfelCluster cluster(mScene->surfels().size(), 0);
 
             ID firstSurfelID = *mSurfelFlatStorage.begin();
@@ -305,14 +303,23 @@ namespace EARenderer {
             for (auto it = mSurfelFlatStorage.begin(); it != mSurfelFlatStorage.end(); ++it) {
                 auto& nextSurfel = mSurfelFlatStorage[*it];
 
-                if (surfelsAlike(lastSurfel, nextSurfel)) {
+                bool alikeToAllSurfelsInCluster = true;
+
+                for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
+                    auto& surfel = mScene->surfels()[i];
+                    if (!surfelsAlike(surfel, nextSurfel)) {
+                        alikeToAllSurfelsInCluster = false;
+                        break;
+                    }
+                }
+
+                if (alikeToAllSurfelsInCluster) {
                     mScene->surfels().push_back(nextSurfel);
                     idsToDelete.push_back(*it);
                     cluster.surfelCount++;
                 }
             }
 
-            printf("Ids to delete size is %zu\n", idsToDelete.size());
             for (ID id : idsToDelete) {
                 mSurfelFlatStorage.erase(id);
             }
@@ -321,6 +328,8 @@ namespace EARenderer {
 
             mScene->surfelClusters().push_back(cluster);
         }
+
+        printf("Formed %lu clusters\n", mScene->surfelClusters().size());
     }
     
 #pragma mark - Public interface
@@ -334,18 +343,20 @@ namespace EARenderer {
         float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
         float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
         int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
-        
+
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
-        
-        for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
-            auto& meshInstance = mScene->meshInstances()[meshInstanceID];
-            generateSurflesOnMeshInstance(meshInstance);
-        }
 
-        formClusters();
+        EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
+            for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
+                auto& meshInstance = mScene->meshInstances()[meshInstanceID];
+                generateSurflesOnMeshInstance(meshInstance);
+            }
+        });
 
-        printf("");
+        EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
+            formClusters();
+        });
     }
     
 }

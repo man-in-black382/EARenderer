@@ -4,6 +4,8 @@ in vec4 vCurrentPosition;
 in vec3 vAlbedo;
 
 uniform float uRadius;
+uniform bool uUseExternalColor;
+uniform vec4 uExternalColor;
 
 out vec4 oFragColor;
 
@@ -18,5 +20,5 @@ void main() {
         discard;
     }
 
-    oFragColor = vec4(vAlbedo, 1.0);
+    oFragColor = uUseExternalColor ? uExternalColor : vec4(vAlbedo, 1.0);
 }
