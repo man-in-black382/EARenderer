@@ -112,13 +112,22 @@ namespace EARenderer {
     template <typename T>
     typename SpatialHash<T>::Range
     SpatialHash<T>::neighbours(const glm::vec3& position) {
-        auto neighbourCells = neighbours(cell(position));
+
+        std::array<Cell, 27> neighbourCells = neighbours(cell(position));
         std::array<typename Range::CellBeginEndPair, 27> neighbourIteratorPairs;
-        for (auto& cell : neighbourCells) {
-            auto& objectsInCell = mObjects[cell.hash()];
-            neighbourIteratorPairs.emplace_back(std::make_pair(objectsInCell.begin(), objectsInCell.end()));
+
+        size_t neighboursCount = 0;
+        for (size_t i = 0; i < neighbourCells.max_size(); i++) {
+            if (neighbourCells[i] == Cell::InvalidCell()) {
+                break;
+            }
+
+            auto& objectsInCell = mObjects[neighbourCells[i].hash()];
+            neighbourIteratorPairs[i] = std::make_pair(objectsInCell.begin(), objectsInCell.end());
+            neighboursCount++;
         }
-        return Range(neighbourIteratorPairs);
+
+        return Range(neighbourIteratorPairs, neighboursCount);
     }
 
     template <typename T>

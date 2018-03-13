@@ -355,7 +355,7 @@ namespace EARenderer {
         });
 
         EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
-            formClusters();
+//            formClusters();
         });
     }
     

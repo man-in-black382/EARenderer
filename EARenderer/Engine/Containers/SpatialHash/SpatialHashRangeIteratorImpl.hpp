@@ -14,19 +14,20 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     template <typename T>
-    SpatialHash<T>::Range::Iterator::Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs)
+    SpatialHash<T>::Range::Iterator::Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs, size_t pairsCount)
     :
-    mCellBeginEndPairs(vectorIteratorPairs)
+    mCellBeginEndPairs(vectorIteratorPairs),
+    mPairsCount(pairsCount)
     { }
 
     template <typename T>
     void
     SpatialHash<T>::Range::Iterator::moveToEnd() {
-        if (mCellBeginEndPairs.empty()) {
+        if (mPairsCount == 0) {
             return;
         }
 
-        mCurrentPairIndex = mCellBeginEndPairs.size() - 1;
+        mCurrentPairIndex = mPairsCount - 1;
         mCellBeginEndPairs[mCurrentPairIndex].first = mCellBeginEndPairs[mCurrentPairIndex].second;
     }
 
@@ -46,7 +47,7 @@ namespace EARenderer {
         current++;
 
         if (current == end) {
-            if (mCurrentPairIndex != mCellBeginEndPairs.size() - 1) {
+            if (mCurrentPairIndex != mPairsCount - 1) {
                 mCurrentPairIndex++;
             }
         }
@@ -83,7 +84,7 @@ namespace EARenderer {
     SpatialHash<T>::Range::Iterator::operator!=(const Iterator& other) const {
         bool indexNotEqual = mCurrentPairIndex != other.mCurrentPairIndex;
 
-        if (mCellBeginEndPairs.empty()) {
+        if (mPairsCount == 0) {
             return indexNotEqual;
         } else {
             bool iteratorsNotEqual = mCellBeginEndPairs[mCurrentPairIndex].first != other.mCellBeginEndPairs[other.mCurrentPairIndex].first;

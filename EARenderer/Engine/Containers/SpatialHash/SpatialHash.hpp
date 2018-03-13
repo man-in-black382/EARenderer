@@ -40,11 +40,7 @@ namespace EARenderer {
             Cell() = default;
             Cell(uint16_t x, uint16_t y, uint16_t z);
 
-            static Cell InvalidCell() {
-                static Cell c;
-                c.mHash = -1;
-                return c;
-            }
+            static Cell InvalidCell();
 
             uint64_t hash() const;
 
@@ -104,8 +100,9 @@ namespace EARenderer {
                 
                 std::array<CellBeginEndPair, 27> mCellBeginEndPairs;
                 size_t mCurrentPairIndex = 0;
+                size_t mPairsCount;
                 
-                Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs);
+                Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs, size_t pairsCount);
                 
                 void moveToEnd();
                 
@@ -129,7 +126,7 @@ namespace EARenderer {
             Iterator mBegin;
             Iterator mEnd;
             
-            Range(const std::array<CellBeginEndPair, 27>& cellBeginEndPairs);
+            Range(const std::array<CellBeginEndPair, 27>& cellBeginEndPairs, size_t pairsCount);
             
         public:
             Iterator begin();
