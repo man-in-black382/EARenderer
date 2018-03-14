@@ -70,6 +70,10 @@ namespace EARenderer {
     const AxisAlignedBox3D& Scene::boundingBox() const {
         return mBoundingBox;
     }
+
+    const AxisAlignedBox3D& Scene::lightBakingVolume() const {
+        return mLightBakingVolume;
+    }
     
     GLFloat3BufferTexture<SphericalHarmonics>& Scene::sphericalHarmonicsBufferTexture() {
         return mSphericalHarmonicsBufferTexture;
@@ -92,6 +96,10 @@ namespace EARenderer {
     void Scene::setSkybox(Skybox* skybox) {
         mSkybox = skybox;
     }
+
+    void Scene::setLightBakingVolume(const AxisAlignedBox3D& volume) {
+        mLightBakingVolume = volume;
+    }
     
 #pragma mark -
     
@@ -104,6 +112,8 @@ namespace EARenderer {
             mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
             mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);
         }
+
+        mLightBakingVolume = mBoundingBox;
     }
 
     void Scene::buildStaticGeometryOctree() {

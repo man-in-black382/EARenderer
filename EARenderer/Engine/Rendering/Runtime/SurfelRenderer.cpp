@@ -27,7 +27,7 @@ namespace EARenderer {
     {
         std::random_device device;
         std::mt19937 engine(device());
-        std::uniform_real_distribution<float> distribution(0.0, 1.0);
+        std::uniform_real_distribution<float> distribution(0.3, 1.0);
 
         for (auto& cluster : scene->surfelClusters()) {
             mSurfelClusterVAOs.emplace_back();
@@ -45,17 +45,17 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    void SurfelRenderer::render(Mode renderingMode) {
+    void SurfelRenderer::render(Mode renderingMode, float surfelRadius) {
         mSurfelRenderingShader.bind();
 
         switch (renderingMode) {
-            case Mode::Default: mSurfelRenderingShader.setShouldUseExternalColor(false);
-            case Mode::Clusters: mSurfelRenderingShader.setShouldUseExternalColor(true);
+            case Mode::Default: mSurfelRenderingShader.setShouldUseExternalColor(false); break;
+            case Mode::Clusters: mSurfelRenderingShader.setShouldUseExternalColor(true); break;
         }
 
         auto vp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
-        mSurfelRenderingShader.setSurfelRadius(0.0375);
+        mSurfelRenderingShader.setSurfelRadius(surfelRadius);
 
         for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
             mSurfelClusterVAOs[i].bind();

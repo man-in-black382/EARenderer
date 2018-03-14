@@ -76,6 +76,8 @@ namespace EARenderer {
          */
         float optimalMinimumSubdivisionArea() const;
 
+        uint32_t spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D& workingVolume) const;
+
         /**
          Generates 3 random numbers between 0 and 1
 

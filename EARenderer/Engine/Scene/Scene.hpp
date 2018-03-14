@@ -53,6 +53,7 @@ namespace EARenderer {
         Skybox *mSkybox;
         
         AxisAlignedBox3D mBoundingBox;
+        AxisAlignedBox3D mLightBakingVolume;
         
     public:
         Scene();
@@ -78,6 +79,9 @@ namespace EARenderer {
         void buildStaticGeometryOctree();
 
         const AxisAlignedBox3D& boundingBox() const;
+
+        void setLightBakingVolume(const AxisAlignedBox3D& volume);
+        const AxisAlignedBox3D& lightBakingVolume() const;
         
         void setCamera(Camera* camera);
         Camera* camera() const;

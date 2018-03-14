@@ -11,6 +11,7 @@
 #import "MeshInstance.hpp"
 #import "LightProbeBuilder.hpp"
 #import "SurfelGenerator.hpp"
+#import "Measurement.hpp"
 
 #import <string>
 
@@ -163,6 +164,15 @@
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
+
+    scene->calculateBoundingBox();
+
+    glm::mat4 bbScale = glm::scale(glm::vec3(0.9));
+    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
+
+    EARenderer::Measurement::executionTime("Octree generation took", [&]() {
+        scene->buildStaticGeometryOctree();
+    });
 }
 
 #pragma mark - Helpers

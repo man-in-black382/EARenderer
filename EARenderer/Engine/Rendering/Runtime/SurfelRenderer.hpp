@@ -32,7 +32,7 @@ namespace EARenderer {
 
         SurfelRenderer(Scene* scene, ResourcePool* resourcePool);
         
-        void render(Mode renderingMode);
+        void render(Mode renderingMode, float surfelRadius);
     };
     
 }

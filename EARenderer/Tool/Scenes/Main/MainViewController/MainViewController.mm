@@ -107,12 +107,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     DemoScene1 *demoScene1 = [[DemoScene1 alloc] init];
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene1;
-
-    self.scene->calculateBoundingBox();
-
-    EARenderer::Measurement::executionTime("Octree generation took", [&]() {
-        self.scene->buildStaticGeometryOctree();
-    });
     
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
@@ -132,11 +126,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 
     std::vector<EARenderer::AxisAlignedBox3D> boxes;
-    for (auto node : self.scene->octree()) {
-        auto& boundingBox = node.first;
-        boxes.push_back(boundingBox);
-    }
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), boxes);
+//    for (auto node : self.scene->octree()) {
+//        auto& boundingBox = node.first;
+//        boxes.push_back(boundingBox);
+//    }
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
 
     [self subscribeForEvents];
 }
@@ -146,7 +140,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters);
+    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
     self.boxRenderer->render();
 

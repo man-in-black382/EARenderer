@@ -77,6 +77,7 @@ namespace EARenderer {
                         bool present = mObjects.find(neighbour.hash()) != mObjects.end();
                         if (present) {
                             neighbours[neighbourIndex] = neighbour;
+                            neighbourIndex++;
                         }
                     }
                 }
@@ -106,6 +107,9 @@ namespace EARenderer {
     void
     SpatialHash<T>::erase(const ForwardIterator& it) {
         it.mMapIterator->second.erase(it.mCurrentVectorIterator);
+        if (it.mMapIterator->second.size() == 0) {
+            mObjects.erase(it.mMapIterator);
+        }
         mSize--;
     }
 

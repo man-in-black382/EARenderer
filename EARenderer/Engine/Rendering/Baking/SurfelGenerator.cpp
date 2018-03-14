@@ -79,6 +79,13 @@ namespace EARenderer {
         
         return { r, s, t };
     }
+
+    uint32_t SurfelGenerator::spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D& workingVolume) const {
+        float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
+        float surfelsPerLongestBBDimension = workingVolume.largestDimensionLength() * surfelsPerUnitLength;
+        uint32_t spaceDivisionResolution = surfelsPerLongestBBDimension / surfelCountPerCellDimension;
+        return std::max(spaceDivisionResolution, (uint32_t)1);
+    }
     
     LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(const SubMesh& subMesh, MeshInstance& containingInstance) {
         glm::mat4 modelMatrix = containingInstance.transformation().modelMatrix();
@@ -228,6 +235,12 @@ namespace EARenderer {
                     // It then chooses a random point p on the triangle and makes it a surfel candidate.
                     SurfelCandidate surfelCandidate = generateSurfelCandidate(subMesh, bin);
 
+                    // Get rid of triangles that lie outside of scene's baking volume
+                    if (!mScene->lightBakingVolume().contains(surfelCandidate.position)) {
+                        bin.erase(surfelCandidate.logarithmicBinIterator);
+                        continue;
+                    }
+
                     // Checks to see if surfel candidate meets the minimum distance requirement with respect to the current surfel set
 
                     // If the minimum distance requirement is met, the algorithm computes all missing information
@@ -277,12 +290,12 @@ namespace EARenderer {
 
         // Position difference: squared euclidean distance (cm^2)
         glm::vec3 distError = first.position - second.position;
-        totalError = dot(distError, distError) / 80.0f;
+        totalError = glm::dot(distError, distError) * 20.f;
 
         // Normal difference based on angle
         // Opposite normals result in a very high error
         float dotP = std::max(glm::dot(first.normal, second.normal), 0.0f);
-        float normalDifference = (1 - dotP) * 20000.0f;
+        float normalDifference = (1 - dotP) * 10000.0f;
 
         totalError += normalDifference;
         return totalError <= mClusteringThreshold;
@@ -292,19 +305,21 @@ namespace EARenderer {
         std::vector<ID> idsToDelete;
 
         while (mSurfelFlatStorage.size()) {
-            SurfelCluster cluster(mScene->surfels().size(), 0);
+            // Allocate cluster with count of 1 since we're immediately inserting 1 surfel
+            SurfelCluster cluster(mScene->surfels().size(), 1);
 
+            // Push random surfel to a cluster
             ID firstSurfelID = *mSurfelFlatStorage.begin();
             mScene->surfels().push_back(mSurfelFlatStorage[firstSurfelID]);
             mSurfelFlatStorage.erase(firstSurfelID);
 
-            auto& lastSurfel = mScene->surfels().back();
-
+            // Iterate over all left surfels
             for (auto it = mSurfelFlatStorage.begin(); it != mSurfelFlatStorage.end(); ++it) {
                 auto& nextSurfel = mSurfelFlatStorage[*it];
 
                 bool alikeToAllSurfelsInCluster = true;
 
+                // Determine if the surfel is similar to all the surfels in the current cluster
                 for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
                     auto& surfel = mScene->surfels()[i];
                     if (!surfelsAlike(surfel, nextSurfel)) {
@@ -313,6 +328,8 @@ namespace EARenderer {
                     }
                 }
 
+                // If surfel meets similarity criteria
+                // we push it to the cluster and remove from surfel list
                 if (alikeToAllSurfelsInCluster) {
                     mScene->surfels().push_back(nextSurfel);
                     idsToDelete.push_back(*it);
@@ -320,13 +337,19 @@ namespace EARenderer {
                 }
             }
 
+            // Remove all clustered surfels from surfel list
             for (ID id : idsToDelete) {
                 mSurfelFlatStorage.erase(id);
             }
 
             idsToDelete.clear();
 
+            // Push cluster to cluster list
             mScene->surfelClusters().push_back(cluster);
+
+            // Then repear until all surfels are asigned to clusters
+
+            printf("Formed cluster of size %zu\n", cluster.surfelCount);
         }
 
         printf("Formed %lu clusters\n", mScene->surfelClusters().size());
@@ -339,12 +362,7 @@ namespace EARenderer {
     }
 
     void SurfelGenerator::generateStaticGeometrySurfels() {
-        const float preferredSurfelCountPerSpatialHashCell = 1.5;
-        float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
-        float surfelsPerLongestBBDimension = mScene->boundingBox().largestDimensionLength() * surfelsPerUnitLength;
-        int32_t spaceDivisionResolution = surfelsPerLongestBBDimension / preferredSurfelCountPerSpatialHashCell;
-
-        mSurfelSpatialHash = SpatialHash<Surfel>(mScene->boundingBox(), std::max(spaceDivisionResolution, 1));
+        mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
         EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
@@ -355,7 +373,7 @@ namespace EARenderer {
         });
 
         EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
-//            formClusters();
+            formClusters();
         });
     }
     
