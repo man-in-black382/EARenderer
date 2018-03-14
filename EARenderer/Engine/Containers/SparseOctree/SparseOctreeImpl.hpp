@@ -201,8 +201,8 @@ namespace EARenderer {
 //            printf("Traversing through node %d\n", stackFrame.nodeIndex);
 
             Node& node = mNodes[stackFrame.nodeIndex];
-            node.boundingBox = nodeBoundingBox;
-            std::array<AxisAlignedBox3D, 8> childBoxes = node.boundingBox.octet();
+            node.mBoundingBox = nodeBoundingBox;
+            std::array<AxisAlignedBox3D, 8> childBoxes = node.mBoundingBox.octet();
 
             bool anyChildContainsObject = false;
             BitMask childNodeMask = 0;
@@ -221,7 +221,7 @@ namespace EARenderer {
             }
 
             if (!anyChildContainsObject || stackFrame.depth >= mMaximumDepth) {
-                node.objects.emplace_back(object);
+                node.mObjects.emplace_back(object);
                 break;
             }
         }
@@ -308,7 +308,7 @@ namespace EARenderer {
     template <typename T>
     typename SparseOctree<T>::Iterator
     SparseOctree<T>::begin() {
-        return Iterator(mNodes.begin(), mNodes.end(), mNodes.begin()->second.objects.begin());
+        return Iterator(mNodes.begin(), mNodes.end());
     }
 
     template <typename T>

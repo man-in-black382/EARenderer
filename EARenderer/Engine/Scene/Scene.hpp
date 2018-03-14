@@ -32,7 +32,7 @@ namespace EARenderer {
     
     class Scene {
     private:
-        size_t mOctreeDepth = 6;
+        size_t mOctreeDepth = 5;
 
         PackedLookupTable<DirectionalLight> mDirectionalLights;
         PackedLookupTable<PointLight> mPointLights;

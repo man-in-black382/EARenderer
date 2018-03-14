@@ -49,6 +49,18 @@ namespace EARenderer {
         return mChildInfo & mask;
     }
 
+    template <typename T>
+    const AxisAlignedBox3D&
+    SparseOctree<T>::Node::boundingBox() const {
+        return mBoundingBox;
+    }
+
+    template <typename T>
+    const std::vector<T>&
+    SparseOctree<T>::Node::objects() const {
+        return mObjects;
+    }
+
 }
 
 #endif /* SparseOctreeNodeImpl_h */

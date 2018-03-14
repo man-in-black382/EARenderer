@@ -21,20 +21,19 @@ namespace EARenderer {
 
     class BoxRenderer {
     private:
-        enum class Mode { Sides, Edges, Full };
-
         const Camera *mCamera;
         std::vector<glm::vec3> mPoints;
         GLSLCubeRendering mBoxSidesRenderingShader;
         GLSLCubeRendering mBoxEdgesRenderingShader;
         GLVertexArray<glm::vec3> mVAO;
-        Mode mRenderingMode;
 
     public:
+        enum class Mode { Sides, Edges, Full };
+
         BoxRenderer(const Camera *camera, const std::vector<AxisAlignedBox3D>& boxes);
         BoxRenderer(Scene *scene);
 
-        void render();
+        void render(Mode renderingMode);
     };
 
 }

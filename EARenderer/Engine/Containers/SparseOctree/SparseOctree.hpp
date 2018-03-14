@@ -32,32 +32,38 @@ namespace EARenderer {
         using ContainmentDetector = std::function<bool(const T& object, const AxisAlignedBox3D& nodeBoundingBox)>;
         using CollisionDetector = std::function<bool(const T& object, const Ray3D& ray)>;
 
-        using BoundingBoxRef = const AxisAlignedBox3D&;
-        using ObjectRef = const T&;
-
     private:
 
-#pragma mark - Private nested types
+#pragma mark - Nested types
 
         using NodeIndex = uint32_t;
         using BitMask = uint8_t;
 
         static const NodeIndex RootNodeIndex = 0b1;
 
+    public:
+
         struct Node {
         private:
+            friend SparseOctree;
+
             // 8 MSB - child presence mask, 8 LSB - leaf mask
             uint16_t mChildInfo = 0;
 
-        public:
-            AxisAlignedBox3D boundingBox;
-            std::vector<T> objects;
+            AxisAlignedBox3D mBoundingBox;
+            std::vector<T> mObjects;
 
             void setChildPresent(BitMask childIndex, bool isPresent);
             void setChildLeaf(BitMask childIndex, bool isLeaf);
             bool isChildPresent(BitMask childIndex) const;
             bool isChildLeaf(BitMask childIndex) const;
+
+        public:
+            const AxisAlignedBox3D& boundingBox() const;
+            const std::vector<T>& objects() const;
         };
+
+    private:
 
         struct StackFrame {
             NodeIndex nodeIndex;
@@ -136,17 +142,16 @@ namespace EARenderer {
 
             MapIterator mNodesIterator;
             MapIterator mNodesEndIterator;
-            VectorIterator mNodeObjectsIterator;
 
-            Iterator(MapIterator i, MapIterator endIterator, VectorIterator nodeObjectsIterator);
+            Iterator(MapIterator i, MapIterator endIterator);
             Iterator(MapIterator endIterator);
 
         public:
             Iterator& operator++();
 
-            std::pair<BoundingBoxRef, ObjectRef> operator*() const;
+            const Node& operator*() const;
 
-            std::pair<BoundingBoxRef, ObjectRef> operator->() const;
+            const Node* operator->() const;
 
             bool operator!=(const Iterator& other) const;
         };

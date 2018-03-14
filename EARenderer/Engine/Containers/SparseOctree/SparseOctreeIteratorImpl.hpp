@@ -14,11 +14,10 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     template <typename T>
-    SparseOctree<T>::Iterator::Iterator(MapIterator i, MapIterator endIterator, VectorIterator nodeObjectsIterator)
+    SparseOctree<T>::Iterator::Iterator(MapIterator i, MapIterator endIterator)
     :
     mNodesIterator(i),
-    mNodesEndIterator(endIterator),
-    mNodeObjectsIterator(nodeObjectsIterator)
+    mNodesEndIterator(endIterator)
     { }
 
     template <typename T>
@@ -37,42 +36,27 @@ namespace EARenderer {
             throw std::out_of_range("Incrementing an iterator which had reached the end already");
         }
 
-        mNodeObjectsIterator++;
-
-        if (mNodeObjectsIterator == mNodesIterator->second.objects.end()) {
-            mNodesIterator++;
-            if (mNodesIterator != mNodesEndIterator) {
-                mNodeObjectsIterator = mNodesIterator->second.objects.begin();
-            }
-        }
+        mNodesIterator++;
 
         return *this;
     }
 
     template <typename T>
-    std::pair<typename SparseOctree<T>::BoundingBoxRef, typename SparseOctree<T>::ObjectRef>
+    const typename SparseOctree<T>::Node&
     SparseOctree<T>::Iterator::operator*() const {
-        printf("Accessing node: %d, objects count %lu\n", mNodesIterator->first, mNodesIterator->second.objects.size());
-        return std::make_pair(mNodesIterator->second.boundingBox,
-                              *mNodeObjectsIterator);
+        return mNodesIterator->second;
     }
 
     template <typename T>
-    std::pair<typename SparseOctree<T>::BoundingBoxRef, typename SparseOctree<T>::ObjectRef>
+    const typename SparseOctree<T>::Node*
     SparseOctree<T>::Iterator::operator->() const {
-        return std::make_pair(mNodesIterator->second.boundingBox,
-                              *mNodeObjectsIterator);
+        return &(mNodesIterator->second);
     }
 
     template <typename T>
     bool
     SparseOctree<T>::Iterator::operator!=(const Iterator& other) const {
-        // Don't touch vector's itereator if we're at the end of unordered_map
-        if (mNodesIterator == mNodesEndIterator) {
-            return mNodesIterator != other.mNodesIterator;
-        } else {
-            return mNodesIterator != other.mNodesIterator || mNodeObjectsIterator != other.mNodeObjectsIterator;
-        }
+        return mNodesIterator != other.mNodesIterator;
     }
 
 }
