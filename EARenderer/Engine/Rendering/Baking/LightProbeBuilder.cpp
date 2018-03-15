@@ -52,27 +52,24 @@ namespace EARenderer {
         }
     }
 
-    float LightProbeBuilder::surfelClusterSolidAngle(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
-        float solidAngle = 0.0;
+    float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint) {
+        //        for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
+        //            const Surfel& surfel = scene->surfels()[i];
 
-        for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-            const Surfel& surfel = scene->surfels()[i];
+        glm::vec3 Wps = surfel.position - standpoint;
+        float area2 = surfel.area * surfel.area;
+        float distance2 = glm::length2(Wps);
 
-            glm::vec3 Wps = surfel.position - standpoint;
-            float area2 = surfel.area * surfel.area;
-            float distance2 = glm::length2(Wps);
+        float distanceTerm = std::min(area2 / distance2, 1.f);
+        float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
+        float visibilityTest = 0.0;
 
-            float distanceTerm = std::min(area2 / distance2, 1.f);
-            float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
-            float visibilityTest = 0.0;
-
-            // Save ray casts if surfel's facing away from the standpoint
-            if (visibilityTerm > 0.0) {
-                visibilityTest = scene->octree().raymarch(standpoint, surfel.position) ? 1.0 : 0.0;
-            }
+        // Save ray casts if surfel's facing away from the standpoint
+        if (visibilityTerm > 0.0) {
+            visibilityTest = scene->octree().raymarch(standpoint, surfel.position) ? 1.0 : 0.0;
         }
 
-        return solidAngle;
+        return distanceTerm * visibilityTerm * visibilityTest;
     }
 
     SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {

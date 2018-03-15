@@ -27,7 +27,7 @@ namespace EARenderer {
         uint32_t mSpaceDivisionResolution;
         
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
-        float surfelClusterSolidAngle(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
+        float surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint);
         SurfelClusterProjection projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
         
     public:
