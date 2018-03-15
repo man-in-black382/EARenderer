@@ -230,7 +230,7 @@ namespace EARenderer {
 #pragma mark - Traversal
 
     template <typename T>
-    void
+    bool
     SparseOctree<T>::raymarch(const glm::vec3& p0, const glm::vec3& p1) {
         glm::mat4 localSpaceMat = localNormalizedSpaceMatrix();
 
@@ -249,7 +249,14 @@ namespace EARenderer {
             StackFrame stackFrame = mTraversalStack.top();
             mTraversalStack.pop();
 
-            printf("Index %d\n", stackFrame.nodeIndex);
+            Node& node = mNodes[stackFrame.nodeIndex];
+            for (T& object : node.mObjects) {
+                bool collisionDetected = mCollisionDetector(object, Ray3D(p0, p1));
+                if (collisionDetected) {
+                    mTraversalStack = std::stack<StackFrame>();
+                    return true;
+                }
+            }
 
             if (stackFrame.depth >= mMaximumDepth) {
                 continue;
@@ -290,17 +297,19 @@ namespace EARenderer {
 
             pushChildNodes(stackFrame, t, signMaskA, signMaskB, p_first, p_last, planeIntersectionCounter);
         }
+
+        return false;
     }
 
     template <typename T>
-    void
+    bool
     SparseOctree<T>::raymarch(const Ray3D& ray) {
         // Extend ray's end point to ensure that it reaches all across the bounding box
         float t1 = mBoundingBox.diagonal();
         glm::vec3 a = ray.origin;
         glm::vec3 b = ray.origin + ray.direction * t1;
 
-        raymarch(a, b);
+        return raymarch(a, b);
     }
 
 #pragma mark Iteration

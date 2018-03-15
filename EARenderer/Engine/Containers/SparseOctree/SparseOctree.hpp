@@ -169,9 +169,9 @@ namespace EARenderer {
 
 #pragma mark - Traversal
 
-        void raymarch(const Ray3D& ray);
+        bool raymarch(const Ray3D& ray);
 
-        void raymarch(const glm::vec3& p0, const glm::vec3& p1);
+        bool raymarch(const glm::vec3& p0, const glm::vec3& p1);
 
 #pragma mark - Iteration
 

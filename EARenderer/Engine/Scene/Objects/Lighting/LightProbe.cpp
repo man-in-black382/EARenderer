@@ -14,7 +14,12 @@
 namespace EARenderer {
     
 #pragma mark - Lifecycle
-    
+
+    LightProbe::LightProbe(const glm::vec3& position)
+    :
+    position(position)
+    { }
+
     LightProbe::LightProbe(const glm::vec3& position, float farClipPlane)
     :
     position(position),

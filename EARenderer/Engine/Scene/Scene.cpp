@@ -55,6 +55,10 @@ namespace EARenderer {
         return mSurfelClusters;
     }
 
+    std::vector<SurfelClusterProjection>& Scene::surfelClusterProjections() {
+        return mSurfelClusterProjections;
+    }
+
     SparseOctree<MeshTriangleRef>& Scene::octree() {
         return mOctree;
     }

@@ -141,7 +141,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.axesRenderer->render();
     self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
-    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Edges);
+//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Edges);
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

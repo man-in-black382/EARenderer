@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */; };
+		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
 		AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC62416B205657AD009B36DF /* SurfelCluster.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
@@ -268,6 +270,10 @@
 		AC0636D42015E0560065DEB7 /* StringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StringUtils.hpp; sourceTree = "<group>"; };
 		AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
+		AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelClusterProjection.cpp; sourceTree = "<group>"; };
+		AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelClusterProjection.hpp; sourceTree = "<group>"; };
+		AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbe.cpp; sourceTree = "<group>"; };
+		AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbe.hpp; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
@@ -1519,10 +1525,10 @@
 		CE70F8751F8F8EBD00AD9027 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8771F8F8EBD00AD9027 /* Logic */,
-				CE70F87C1F8F8EBD00AD9027 /* Objects */,
 				CE70F8761F8F8EBD00AD9027 /* Scene.cpp */,
 				CE70F8961F8F8EBD00AD9027 /* Scene.hpp */,
+				CE70F8771F8F8EBD00AD9027 /* Logic */,
+				CE70F87C1F8F8EBD00AD9027 /* Objects */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -1580,6 +1586,10 @@
 				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
 				AC62416B205657AD009B36DF /* SurfelCluster.cpp */,
 				AC62416C205657AD009B36DF /* SurfelCluster.hpp */,
+				AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */,
+				AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */,
+				AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */,
+				AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */,
 			);
 			path = Lighting;
 			sourceTree = "<group>";
@@ -2484,6 +2494,7 @@
 				CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
+				AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */,
 				CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */,
 				CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */,
 				CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */,
@@ -2540,6 +2551,7 @@
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,
 				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
+				AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,

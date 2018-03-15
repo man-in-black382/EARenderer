@@ -27,6 +27,8 @@ namespace EARenderer {
         uint32_t mSpaceDivisionResolution;
         
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
+        float surfelClusterSolidAngle(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
+        SurfelClusterProjection projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
         
     public:
         GLHDRTextureCubemap mEnvironmentMap;
@@ -34,6 +36,7 @@ namespace EARenderer {
         LightProbeBuilder(const Size2D& probeCaptureResolution, uint32_t spaceDivisionResolution);
         
         void buildAndPlaceProbesInScene(Scene* scene);
+        void buildAndPlaceProbesForDynamicGeometry(Scene *scene);
     };
     
 }

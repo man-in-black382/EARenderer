@@ -28,7 +28,9 @@ namespace EARenderer {
         
     public:
         glm::vec3 position;
-        
+        glm::vec3 normal;
+
+        LightProbe(const glm::vec3& position);
         LightProbe(const glm::vec3& position, float farClipPlane);
         
         const std::array<glm::mat4, 6> viewProjectionMatrices() const;

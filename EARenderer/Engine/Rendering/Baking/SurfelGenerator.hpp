@@ -136,7 +136,7 @@ namespace EARenderer {
          */
         void generateSurflesOnMeshInstance(MeshInstance& instance);
 
-        bool surfelsAlike(const Surfel& first, const Surfel& second);
+        bool surfelsAlike(const Surfel& first, const Surfel& second, float workingVolumeMaximumExtent2);
 
         void formClusters();
         

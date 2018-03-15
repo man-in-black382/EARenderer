@@ -285,24 +285,19 @@ namespace EARenderer {
         }
     }
 
-    bool SurfelGenerator::surfelsAlike(const Surfel& first, const Surfel& second) {
-        float totalError = 0.0f;
+    bool SurfelGenerator::surfelsAlike(const Surfel& first, const Surfel& second, float workingVolumeMaximumExtent2) {
+        float normDistance2 = glm::length2(first.position - second.position) / workingVolumeMaximumExtent2;
+        float normalDeviation = glm::dot(first.normal, second.normal);
 
-        // Position difference: squared euclidean distance (cm^2)
-        glm::vec3 distError = first.position - second.position;
-        totalError = glm::dot(distError, distError) * 20.f;
+        const float Cn = 0.1;
+        const float Cb = 0.01;
 
-        // Normal difference based on angle
-        // Opposite normals result in a very high error
-        float dotP = std::max(glm::dot(first.normal, second.normal), 0.0f);
-        float normalDifference = (1 - dotP) * 10000.0f;
-
-        totalError += normalDifference;
-        return totalError <= mClusteringThreshold;
+        return normDistance2 <= Cb && normalDeviation > Cn;
     }
 
     void SurfelGenerator::formClusters() {
         std::vector<ID> idsToDelete;
+        float extent2 = mScene->lightBakingVolume().largestDimensionLength() * mScene->lightBakingVolume().largestDimensionLength();
 
         while (mSurfelFlatStorage.size()) {
             // Allocate cluster with count of 1 since we're immediately inserting 1 surfel
@@ -322,7 +317,7 @@ namespace EARenderer {
                 // Determine if the surfel is similar to all the surfels in the current cluster
                 for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
                     auto& surfel = mScene->surfels()[i];
-                    if (!surfelsAlike(surfel, nextSurfel)) {
+                    if (!surfelsAlike(surfel, nextSurfel, extent2)) {
                         alikeToAllSurfelsInCluster = false;
                         break;
                     }

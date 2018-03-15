@@ -24,6 +24,7 @@
 #include "SurfelCluster.hpp"
 #include "SparseOctree.hpp"
 #include "MeshTriangleRef.hpp"
+#include "SurfelClusterProjection.hpp"
 
 #include <vector>
 #include <list>
@@ -41,6 +42,7 @@ namespace EARenderer {
 
         std::vector<Surfel> mSurfels;
         std::vector<SurfelCluster> mSurfelClusters;
+        std::vector<SurfelClusterProjection> mSurfelClusterProjections;
 
         SparseOctree<MeshTriangleRef> mOctree;
         
@@ -65,6 +67,7 @@ namespace EARenderer {
 
         std::vector<Surfel>& surfels();
         std::vector<SurfelCluster>& surfelClusters();
+        std::vector<SurfelClusterProjection>& surfelClusterProjections();
 
         SparseOctree<MeshTriangleRef>& octree();
         
