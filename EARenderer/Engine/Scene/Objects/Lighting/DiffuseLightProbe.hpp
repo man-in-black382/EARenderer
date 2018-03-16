@@ -16,9 +16,15 @@
 namespace EARenderer {
 
     struct DiffuseLightProbe {
-        SphericalHarmonics skySH;
-        size_t surfelClusterProjectionGroupOffset;
-        size_t surfelClusterProjectionGroupCount;
+        glm::vec3 position;
+        glm::vec3 normal;
+        size_t surfelClusterProjectionGroupOffset = 0;
+        size_t surfelClusterProjectionGroupCount = 0;
+        SphericalHarmonics skySphericalHarmonics;
+
+        DiffuseLightProbe() = default;
+        DiffuseLightProbe(const glm::vec3& position);
+        DiffuseLightProbe(const glm::vec3& position, const glm::vec3& normal);
     };
 
 }

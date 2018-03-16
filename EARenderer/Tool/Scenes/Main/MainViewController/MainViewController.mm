@@ -30,6 +30,7 @@
 #import "TriangleRenderer.hpp"
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
+#import "LightProbeBuilder.hpp"
 
 #import "GLLayeredTexture.hpp"
 
@@ -53,6 +54,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
 @property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
+@property (assign, nonatomic) EARenderer::LightProbeBuilder *lightProbeBuilder;
 @property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
 @property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
 
@@ -121,6 +123,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
+
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 10);
+    self.lightProbeBuilder->buildAndPlaceProbesForDynamicGeometry(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);

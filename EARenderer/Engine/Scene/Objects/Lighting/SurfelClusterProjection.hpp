@@ -14,8 +14,8 @@
 namespace EARenderer {
 
     struct SurfelClusterProjection {
-        size_t surfelClusterIndex;
-        SphericalHarmonics sh;
+        size_t surfelClusterIndex = 0;
+        SphericalHarmonics sphericalHarmonics;
     };
 
 }

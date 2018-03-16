@@ -14,8 +14,8 @@
 namespace EARenderer {
 
     struct SurfelCluster {
-        size_t surfelOffset;
-        size_t surfelCount;
+        size_t surfelOffset = 0;
+        size_t surfelCount = 0;
 
         SurfelCluster(size_t offset, size_t count);
     };

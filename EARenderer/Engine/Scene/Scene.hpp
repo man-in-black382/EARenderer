@@ -18,6 +18,7 @@
 #include "PBRMaterial.hpp"
 #include "Skybox.hpp"
 #include "LightProbe.hpp"
+#include "DiffuseLightProbe.hpp"
 #include "ResourcePool.hpp"
 #include "GLBufferTexture.hpp"
 #include "Surfel.hpp"
@@ -43,6 +44,7 @@ namespace EARenderer {
         std::vector<Surfel> mSurfels;
         std::vector<SurfelCluster> mSurfelClusters;
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
+        std::vector<DiffuseLightProbe> mDiffuseLightProbes;
 
         SparseOctree<MeshTriangleRef> mOctree;
         
@@ -68,6 +70,7 @@ namespace EARenderer {
         std::vector<Surfel>& surfels();
         std::vector<SurfelCluster>& surfelClusters();
         std::vector<SurfelClusterProjection>& surfelClusterProjections();
+        std::vector<DiffuseLightProbe>& diffuseLightProbes();
 
         SparseOctree<MeshTriangleRef>& octree();
         
