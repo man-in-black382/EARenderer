@@ -167,11 +167,12 @@
 
     scene->calculateBoundingBox();
 
-    glm::mat4 bbScale = glm::scale(glm::vec3(0.9));
+    glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
     scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
-    EARenderer::Measurement::executionTime("Octree generation took", [&]() {
-        scene->buildStaticGeometryOctree();
+    printf("Generating Embree BVH...\n");
+    EARenderer::Measurement::executionTime("Embree BVH generation took", [&]() {
+        scene->buildStaticGeometryRaytracer();
     });
 }
 

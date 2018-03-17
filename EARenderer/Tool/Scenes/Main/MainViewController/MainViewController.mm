@@ -124,17 +124,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
 
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 10);
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 6);
     self.lightProbeBuilder->buildAndPlaceProbesForDynamicGeometry(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 
-    std::vector<EARenderer::AxisAlignedBox3D> boxes;
-    for (auto& node : self.scene->octree()) {
-        boxes.push_back(node.boundingBox());
-    }
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), boxes);
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
 
     [self subscribeForEvents];
 }
@@ -146,7 +142,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.axesRenderer->render();
     self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
-//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Edges);
+    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

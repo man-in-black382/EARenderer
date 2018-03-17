@@ -14,24 +14,42 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D>&& triangles)
+    EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D>& triangles)
     :
     mDevice(rtcNewDevice(nullptr)),
-    mScene(rtcNewScene(mDevice)),
-    mGeometry(rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE))
+    mScene(rtcNewScene(mDevice))
     {
-        Triangle3D *bufferPtr = reinterpret_cast<Triangle3D *>(rtcSetNewGeometryBuffer(mGeometry,
-                                                                                       RTC_BUFFER_TYPE_VERTEX,
-                                                                                       0,
-                                                                                       RTC_FORMAT_FLOAT3,
-                                                                                       sizeof(Triangle3D),
-                                                                                       triangles.size()));
+        RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-        std::copy(triangles.begin(), triangles.end(), bufferPtr);
+        glm::vec3 *vertexBuffer = (glm::vec3 *)rtcSetNewGeometryBuffer(geometry,
+                                                                       RTC_BUFFER_TYPE_VERTEX,
+                                                                       0,
+                                                                       RTC_FORMAT_FLOAT3,
+                                                                       sizeof(glm::vec3),
+                                                                       triangles.size() * 3);
 
-        rtcCommitGeometry(mGeometry);
-        rtcAttachGeometry(mScene, mGeometry);
-        rtcReleaseGeometry(mGeometry);
+        uint32_t* indexBuffer = (uint32_t *)rtcSetNewGeometryBuffer(geometry,
+                                                                    RTC_BUFFER_TYPE_INDEX,
+                                                                    0,
+                                                                    RTC_FORMAT_UINT3,
+                                                                    sizeof(uint32_t) * 3,
+                                                                    triangles.size());
+
+        if (vertexBuffer && indexBuffer) {
+            for (size_t i = 0; i < triangles.size(); ++i) {
+                uint32_t index = (uint32_t)i * 3;
+                vertexBuffer[index] = triangles[i].p1;
+                vertexBuffer[index + 1] = triangles[i].p2;
+                vertexBuffer[index + 2] = triangles[i].p3;
+
+                indexBuffer[index] = index;
+                indexBuffer[index + 1] = index + 1;
+                indexBuffer[index + 2] = index + 2;
+            }
+        }
+
+        rtcCommitGeometry(geometry);
+        rtcAttachGeometry(mScene, geometry);
         rtcCommitScene(mScene);
 
         rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_ROBUST);
@@ -39,9 +57,31 @@ namespace EARenderer {
         rtcSetDeviceErrorFunction(mDevice, deviceErrorCallback, this);
     }
 
+    EmbreeRayTracer::EmbreeRayTracer(EmbreeRayTracer&& that) {
+        swap(that);
+    }
+
     EmbreeRayTracer::~EmbreeRayTracer() {
         rtcReleaseScene(mScene);
         rtcReleaseDevice(mDevice);
+    }
+
+#pragma mark - Operators
+
+    EmbreeRayTracer& EmbreeRayTracer::operator=(EmbreeRayTracer rhs) {
+        swap(rhs);
+        return *this;
+    }
+
+#pragma mark - Swap
+
+    void EmbreeRayTracer::swap(EmbreeRayTracer& that) {
+        std::swap(mDevice, that.mDevice);
+        std::swap(mScene, that.mScene);
+    }
+
+    void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs) {
+        lhs.swap(rhs);
     }
 
 #pragma mark - Callbacks
@@ -70,6 +110,7 @@ namespace EARenderer {
         ray.tnear = 0.f;
         ray.tfar = distance;
         ray.flags = 0;
+        ray.mask = -1;
 
         rtcOccluded1(mScene, &context, &ray);
 

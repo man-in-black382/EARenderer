@@ -48,6 +48,7 @@ namespace EARenderer {
         std::vector<DiffuseLightProbe> mDiffuseLightProbes;
 
         SparseOctree<MeshTriangleRef> mOctree;
+        EmbreeRayTracer mRaytracer;
         
         GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
@@ -74,6 +75,7 @@ namespace EARenderer {
         std::vector<DiffuseLightProbe>& diffuseLightProbes();
 
         SparseOctree<MeshTriangleRef>& octree();
+        EmbreeRayTracer& rayTracer();
         
         GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
         
@@ -84,6 +86,7 @@ namespace EARenderer {
         void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);
         void calculateBoundingBox();
         void buildStaticGeometryOctree();
+        void buildStaticGeometryRaytracer();
 
         const AxisAlignedBox3D& boundingBox() const;
 

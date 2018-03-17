@@ -343,11 +343,7 @@ namespace EARenderer {
             mScene->surfelClusters().push_back(cluster);
 
             // Then repear until all surfels are asigned to clusters
-
-            printf("Formed cluster of size %zu\n", cluster.surfelCount);
         }
-
-        printf("Formed %lu clusters\n", mScene->surfelClusters().size());
     }
     
 #pragma mark - Public interface
@@ -360,6 +356,7 @@ namespace EARenderer {
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
+        printf("Generating surfels...\n");
         EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
             for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
                 auto& meshInstance = mScene->meshInstances()[meshInstanceID];
@@ -367,6 +364,7 @@ namespace EARenderer {
             }
         });
 
+        printf("Generating surfel clusters...\n");
         EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
             formClusters();
         });

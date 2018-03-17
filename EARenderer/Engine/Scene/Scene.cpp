@@ -28,10 +28,9 @@ namespace EARenderer {
     mLightProbes(10000),
     mOctree(SparseOctree<MeshTriangleRef>(AxisAlignedBox3D::zero(), 0,
                                  [](auto&& object, auto&& nodeBoundingBox) { return false; },
-                                 [](auto&& object, auto&& ray) { return false; }))
-    {
-        rtcNewBVH(0);
-    }
+                                 [](auto&& object, auto&& ray) { return false; })),
+    mRaytracer({})
+    { }
     
 #pragma mark - Getters
     
@@ -69,6 +68,10 @@ namespace EARenderer {
 
     SparseOctree<MeshTriangleRef>& Scene::octree() {
         return mOctree;
+    }
+
+    EmbreeRayTracer& Scene::rayTracer() {
+        return mRaytracer;
     }
     
     Camera* Scene::camera() const {
@@ -159,6 +162,29 @@ namespace EARenderer {
                 }
             }
         }
+    }
+
+    void Scene::buildStaticGeometryRaytracer() {
+        std::vector<Triangle3D> triangles;
+
+        for (ID meshInstanceID : mStaticMeshInstanceIDs) {
+            auto& meshInstance = mMeshInstances[meshInstanceID];
+            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+
+            auto modelMatrix = meshInstance.modelMatrix();
+
+            for (ID subMeshID : mesh.subMeshes()) {
+                auto& subMesh = mesh.subMeshes()[subMeshID];
+
+                for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
+                    triangles.emplace_back(modelMatrix * subMesh.vertices()[i].position,
+                                           modelMatrix * subMesh.vertices()[i + 1].position,
+                                           modelMatrix * subMesh.vertices()[i + 2].position);
+                }
+            }
+        }
+
+        mRaytracer = EmbreeRayTracer(triangles);
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

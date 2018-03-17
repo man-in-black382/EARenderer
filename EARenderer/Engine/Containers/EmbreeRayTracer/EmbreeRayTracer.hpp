@@ -22,21 +22,22 @@ namespace EARenderer {
     private:
         RTCDevice mDevice = nullptr;
         RTCScene mScene = nullptr;
-        RTCGeometry mGeometry = nullptr;
 
         static void deviceErrorCallback(void* userPtr, enum RTCError code, const char* str);
 
     public:
-        EmbreeRayTracer(const std::vector<Triangle3D>&& triangles);
-        EmbreeRayTracer(const EmbreeRayTracer& that) = default;
-        EmbreeRayTracer(EmbreeRayTracer&& that) = default;
-        EmbreeRayTracer& operator=(const EmbreeRayTracer& rhs) = default;
-        EmbreeRayTracer& operator=(EmbreeRayTracer&& rhs) = default;
+        EmbreeRayTracer(const std::vector<Triangle3D>& triangles);
+        EmbreeRayTracer(const EmbreeRayTracer& that) = delete;
+        EmbreeRayTracer(EmbreeRayTracer&& that);
+        EmbreeRayTracer& operator=(EmbreeRayTracer rhs);
         ~EmbreeRayTracer();
+
+        void swap(EmbreeRayTracer& that);
 
         bool lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1);
     };
 
+    void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs);
 }
 
 #endif /* EmbreeRayTracer_hpp */

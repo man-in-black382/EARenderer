@@ -65,7 +65,7 @@ namespace EARenderer {
 
         // Save ray casts if surfel's facing away from the standpoint
         if (visibilityTerm > 0.0) {
-            visibilityTest = scene->octree().raymarch(standpoint, surfel.position) ? 1.0 : 0.0;
+            visibilityTest = scene->rayTracer().lineSegmentOccluded(standpoint, surfel.position) ? 1.0 : 0.0;
         }
 
         return distanceTerm * visibilityTerm * visibilityTest;
@@ -93,20 +93,15 @@ namespace EARenderer {
         probe.surfelClusterProjectionGroupOffset = scene->surfelClusterProjections().size();
 
         for (size_t i = 0; i < scene->surfelClusters().size(); i++) {
-            Measurement::executionTime(string_format("%ld cluster projection took", i), [&]() {
+            SurfelCluster &cluster = scene->surfelClusters()[i];
+            SurfelClusterProjection projection = projectSurfelCluster(scene, cluster, probe.position);
 
-                SurfelCluster &cluster = scene->surfelClusters()[i];
-                SurfelClusterProjection projection = projectSurfelCluster(scene, cluster, probe.position);
-
-                if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
-                    projection.surfelClusterIndex = i;
-                    scene->surfelClusterProjections().push_back(projection);
-                    probe.surfelClusterProjectionGroupCount++;
-                } else {
-                    printf("Projection is not accepted!\n");
-                }
-
-            });
+            // Only accept projections with non-zero SH
+            if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
+                projection.surfelClusterIndex = i;
+                scene->surfelClusterProjections().push_back(projection);
+                probe.surfelClusterProjectionGroupCount++;
+            }
         }
     }
 
@@ -149,15 +144,16 @@ namespace EARenderer {
         AxisAlignedBox3D bb = scene->lightBakingVolume();
         glm::vec3 step = (bb.max - bb.min) / (float)mSpaceDivisionResolution;
 
+        printf("Building grid probes...\n");
         Measurement::executionTime("Grid probes placement took", [&]() {
             for (float x = bb.min.x; x < bb.max.x; x += step.x) {
                 for (float y = bb.min.y; y < bb.max.y; y += step.y) {
                     for (float z = bb.min.z; z < bb.max.z; z += step.z) {
-                        Measurement::executionTime("Probe clusters projection took", [&]() {
-                            DiffuseLightProbe probe({ x, y, z });
-                            projectSurfelClustersOnProbe(scene, probe);
-                            scene->diffuseLightProbes().push_back(probe);
-                        });
+
+                        DiffuseLightProbe probe({ x, y, z });
+                        projectSurfelClustersOnProbe(scene, probe);
+                        scene->diffuseLightProbes().push_back(probe);
+
                     }
                 }
             }
