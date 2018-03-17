@@ -9,6 +9,7 @@
 #include "SphericalHarmonics.hpp"
 
 #include <glm.hpp>
+#include <glm/gtc/epsilon.hpp>
 
 namespace EARenderer {
     
@@ -57,32 +58,63 @@ namespace EARenderer {
     }
     
 #pragma mark -
-    
-    void SphericalHarmonics::contribute(const glm::vec3& direction, const Color& color, float weight) {
-        glm::vec3 rgb = color.rgb();
-        
+
+    void SphericalHarmonics::normalize() {
+        float factor = 1.0 / (4.0 * M_PI); // Unit sphere has 4Pi steradians
+        mL00 *= factor;
+        mL1_1 *= factor;
+        mL10 *= factor;
+        mL11 *= factor;
+        mL2_2 *= factor;
+        mL2_1 *= factor;
+        mL21 *= factor;
+        mL20 *= factor;
+        mL22 *= factor;
+    }
+
+    float SphericalHarmonics::magnitude() const {
+        return std::sqrt(magnitude2());
+    }
+
+    float SphericalHarmonics::magnitude2() const {
+        return glm::dot(mL00, mL00) +
+        glm::dot(mL1_1, mL1_1) +
+        glm::dot(mL10, mL10) +
+        glm::dot(mL11, mL11) +
+        glm::dot(mL2_2, mL2_2) +
+        glm::dot(mL2_1, mL2_1) +
+        glm::dot(mL21, mL21) +
+        glm::dot(mL20, mL20) +
+        glm::dot(mL22, mL22);
+    }
+
+    void SphericalHarmonics::contribute(const glm::vec3& direction, const glm::vec3& value, float weight) {
         // l, m = 0, 0
-        mL00 += rgb * Y00 * weight;
-        
+        mL00 += value * Y00 * weight;
+
         // l, m = 1, -1
-        mL1_1 += rgb * Y1_1 * direction.y * weight;
+        mL1_1 += value * Y1_1 * direction.y * weight;
         // l, m = 1, 0
-        mL10 += rgb * Y10 * direction.z * weight;
+        mL10 += value * Y10 * direction.z * weight;
         // l, m = 1, 1
-        mL11 += rgb * Y11 * direction.x * weight;
-        
+        mL11 += value * Y11 * direction.x * weight;
+
         // l, m = 2, -2
-        mL2_2 += rgb * Y2_2 * (direction.x * direction.y) * weight;
+        mL2_2 += value * Y2_2 * (direction.x * direction.y) * weight;
         // l, m = 2, -1
-        mL2_1 += rgb * Y2_1 * (direction.y * direction.z) * weight;
+        mL2_1 += value * Y2_1 * (direction.y * direction.z) * weight;
         // l, m = 2, 1
-        mL21 += rgb * Y21 * (direction.x * direction.z) * weight;
-        
+        mL21 += value * Y21 * (direction.x * direction.z) * weight;
+
         // l, m = 2, 0
-        mL20 += rgb * Y20 * (3.0f * direction.z * direction.z - 1.0f) * weight;
-        
+        mL20 += value * Y20 * (3.0f * direction.z * direction.z - 1.0f) * weight;
+
         // l, m = 2, 2
-        mL22 += rgb * Y22 * (direction.x * direction.x - direction.y * direction.y) * weight;
+        mL22 += value * Y22 * (direction.x * direction.x - direction.y * direction.y) * weight;
+    }
+
+    void SphericalHarmonics::contribute(const glm::vec3& direction, const Color& color, float weight) {
+        contribute(direction, color.rgb(), weight);
     }
 
 }

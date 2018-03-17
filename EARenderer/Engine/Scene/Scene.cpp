@@ -63,6 +63,10 @@ namespace EARenderer {
         return mSurfelClusterProjections;
     }
 
+    std::vector<DiffuseLightProbe>& Scene::diffuseLightProbes() {
+        return mDiffuseLightProbes;
+    }
+
     SparseOctree<MeshTriangleRef>& Scene::octree() {
         return mOctree;
     }

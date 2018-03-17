@@ -56,7 +56,13 @@ namespace EARenderer {
         const glm::vec3& L2_2() const;
         const glm::vec3& L20() const;
         const glm::vec3& L22() const;
-        
+
+        void normalize();
+
+        float magnitude() const;
+        float magnitude2() const;
+
+        void contribute(const glm::vec3& direction, const glm::vec3& value, float weight);
         void contribute(const glm::vec3& direction, const Color& color, float weight);
     };
     

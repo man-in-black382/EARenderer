@@ -29,6 +29,7 @@ namespace EARenderer {
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
         float surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint);
         SurfelClusterProjection projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
+        void projectSurfelClustersOnProbe(Scene* scene, DiffuseLightProbe& probe);
         
     public:
         GLHDRTextureCubemap mEnvironmentMap;

@@ -7,6 +7,8 @@
 //
 
 #include "LightProbeBuilder.hpp"
+#include "Measurement.hpp"
+#include "StringUtils.hpp"
 
 namespace EARenderer {
     
@@ -53,9 +55,6 @@ namespace EARenderer {
     }
 
     float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint) {
-        //        for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-        //            const Surfel& surfel = scene->surfels()[i];
-
         glm::vec3 Wps = surfel.position - standpoint;
         float area2 = surfel.area * surfel.area;
         float distance2 = glm::length2(Wps);
@@ -75,7 +74,40 @@ namespace EARenderer {
     SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
         SurfelClusterProjection projection;
 
+        for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
+            Surfel& surfel = scene->surfels()[i];
+            glm::vec3 Wps_norm = glm::normalize(surfel.position - standpoint);
+            float solidAngle = surfelSolidAngle(scene, surfel, standpoint);
+
+            if (solidAngle > 0.0) {
+                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo, solidAngle);
+            }
+        }
+
+        projection.sphericalHarmonics.normalize();
+
         return projection;
+    }
+
+    void LightProbeBuilder::projectSurfelClustersOnProbe(Scene* scene, DiffuseLightProbe& probe) {
+        probe.surfelClusterProjectionGroupOffset = scene->surfelClusterProjections().size();
+
+        for (size_t i = 0; i < scene->surfelClusters().size(); i++) {
+            Measurement::executionTime(string_format("%ld cluster projection took", i), [&]() {
+
+                SurfelCluster &cluster = scene->surfelClusters()[i];
+                SurfelClusterProjection projection = projectSurfelCluster(scene, cluster, probe.position);
+
+                if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
+                    projection.surfelClusterIndex = i;
+                    scene->surfelClusterProjections().push_back(projection);
+                    probe.surfelClusterProjectionGroupCount++;
+                } else {
+                    printf("Projection is not accepted!\n");
+                }
+
+            });
+        }
     }
 
 #pragma mark - Public interface
@@ -115,18 +147,21 @@ namespace EARenderer {
 
     void LightProbeBuilder::buildAndPlaceProbesForDynamicGeometry(Scene *scene) {
         AxisAlignedBox3D bb = scene->lightBakingVolume();
-        glm::vec3 step { bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z };
-        step /= mSpaceDivisionResolution;
+        glm::vec3 step = (bb.max - bb.min) / (float)mSpaceDivisionResolution;
 
-        for (float x = bb.min.x; x < bb.max.x; x += step.x) {
-            for (float y = bb.min.y; y < bb.max.y; y += step.y) {
-                for (float z = bb.min.z; z < bb.max.z; z += step.z) {
-
-
-
+        Measurement::executionTime("Grid probes placement took", [&]() {
+            for (float x = bb.min.x; x < bb.max.x; x += step.x) {
+                for (float y = bb.min.y; y < bb.max.y; y += step.y) {
+                    for (float z = bb.min.z; z < bb.max.z; z += step.z) {
+                        Measurement::executionTime("Probe clusters projection took", [&]() {
+                            DiffuseLightProbe probe({ x, y, z });
+                            projectSurfelClustersOnProbe(scene, probe);
+                            scene->diffuseLightProbes().push_back(probe);
+                        });
+                    }
                 }
             }
-        }
+        });
     }
     
 }
