@@ -14,6 +14,8 @@
 #include "Collision.hpp"
 #include "Measurement.hpp"
 
+#include <rtcore.h>
+
 namespace EARenderer {
     
 #pragma mark - Lifecycle
@@ -27,7 +29,9 @@ namespace EARenderer {
     mOctree(SparseOctree<MeshTriangleRef>(AxisAlignedBox3D::zero(), 0,
                                  [](auto&& object, auto&& nodeBoundingBox) { return false; },
                                  [](auto&& object, auto&& ray) { return false; }))
-    { }
+    {
+        rtcNewBVH(0);
+    }
     
 #pragma mark - Getters
     

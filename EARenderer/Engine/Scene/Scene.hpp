@@ -25,6 +25,7 @@
 #include "SparseOctree.hpp"
 #include "MeshTriangleRef.hpp"
 #include "SurfelClusterProjection.hpp"
+#include "EmbreeRayTracer.hpp"
 
 #include <vector>
 #include <list>

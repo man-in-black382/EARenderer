@@ -242,6 +242,15 @@
 		CE82DAF320511ABB00329E2E /* CubeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE82DAF020511ABB00329E2E /* CubeRendering.vert */; };
 		CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE82DAF220511ABB00329E2E /* CubeSidesRendering.geom */; };
 		CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */; };
+		CE891B89205C50D900D2B09D /* rtcore_geometry.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B7B205C50D800D2B09D /* rtcore_geometry.isph */; };
+		CE891B8A205C50D900D2B09D /* rtcore_common.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B7C205C50D800D2B09D /* rtcore_common.isph */; };
+		CE891B8B205C50D900D2B09D /* rtcore.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B7E205C50D800D2B09D /* rtcore.isph */; };
+		CE891B8C205C50D900D2B09D /* rtcore_ray.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B84205C50D900D2B09D /* rtcore_ray.isph */; };
+		CE891B8D205C50D900D2B09D /* rtcore_device.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B85205C50D900D2B09D /* rtcore_device.isph */; };
+		CE891B8E205C50D900D2B09D /* rtcore_buffer.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B86205C50D900D2B09D /* rtcore_buffer.isph */; };
+		CE891B8F205C50D900D2B09D /* rtcore_scene.isph in Resources */ = {isa = PBXBuildFile; fileRef = CE891B88205C50D900D2B09D /* rtcore_scene.isph */; };
+		CE891BB7205C59FB00D2B09D /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE891BB6205C59FB00D2B09D /* libembree3.3.0.0.dylib */; };
+		CE891BBB205D1EA100D2B09D /* EmbreeRayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */; };
 		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
 		CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */; };
 		CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */; };
@@ -819,6 +828,25 @@
 		CE82DAF220511ABB00329E2E /* CubeSidesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeSidesRendering.geom; sourceTree = "<group>"; };
 		CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoxRenderer.cpp; sourceTree = "<group>"; };
 		CE82DAF7205122FA00329E2E /* BoxRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BoxRenderer.hpp; sourceTree = "<group>"; };
+		CE891B79205C50D800D2B09D /* rtcore_device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_device.h; sourceTree = "<group>"; };
+		CE891B7A205C50D800D2B09D /* rtcore_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_version.h; sourceTree = "<group>"; };
+		CE891B7B205C50D800D2B09D /* rtcore_geometry.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_geometry.isph; sourceTree = "<group>"; };
+		CE891B7C205C50D800D2B09D /* rtcore_common.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_common.isph; sourceTree = "<group>"; };
+		CE891B7D205C50D800D2B09D /* rtcore_scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_scene.h; sourceTree = "<group>"; };
+		CE891B7E205C50D800D2B09D /* rtcore.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore.isph; sourceTree = "<group>"; };
+		CE891B7F205C50D900D2B09D /* rtcore_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_buffer.h; sourceTree = "<group>"; };
+		CE891B80205C50D900D2B09D /* rtcore_builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_builder.h; sourceTree = "<group>"; };
+		CE891B81205C50D900D2B09D /* rtcore_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_common.h; sourceTree = "<group>"; };
+		CE891B82205C50D900D2B09D /* rtcore_ray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_ray.h; sourceTree = "<group>"; };
+		CE891B83205C50D900D2B09D /* rtcore_geometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore_geometry.h; sourceTree = "<group>"; };
+		CE891B84205C50D900D2B09D /* rtcore_ray.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_ray.isph; sourceTree = "<group>"; };
+		CE891B85205C50D900D2B09D /* rtcore_device.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_device.isph; sourceTree = "<group>"; };
+		CE891B86205C50D900D2B09D /* rtcore_buffer.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_buffer.isph; sourceTree = "<group>"; };
+		CE891B87205C50D900D2B09D /* rtcore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtcore.h; sourceTree = "<group>"; };
+		CE891B88205C50D900D2B09D /* rtcore_scene.isph */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = rtcore_scene.isph; sourceTree = "<group>"; };
+		CE891BB6205C59FB00D2B09D /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.0.0.dylib; sourceTree = "<group>"; };
+		CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EmbreeRayTracer.cpp; sourceTree = "<group>"; };
+		CE891BBA205D1EA100D2B09D /* EmbreeRayTracer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = EmbreeRayTracer.hpp; sourceTree = "<group>"; };
 		CE895F8C204C060C00E63140 /* SparseOctreeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeImpl.hpp; sourceTree = "<group>"; };
 		CE895F8E204C0B5300E63140 /* SparseOctreeNodeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeNodeImpl.hpp; sourceTree = "<group>"; };
 		CE895F8F204C0C0800E63140 /* SparseOctreeIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctreeIteratorImpl.hpp; sourceTree = "<group>"; };
@@ -951,6 +979,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE891BB7205C59FB00D2B09D /* libembree3.3.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1115,6 +1144,7 @@
 			children = (
 				CE70F7C71F8F8E5A00AD9027 /* EARenderer */,
 				CE70F7C61F8F8E5A00AD9027 /* Products */,
+				CE891BB4205C54C800D2B09D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1466,6 +1496,7 @@
 		CE70F85F1F8F8EBD00AD9027 /* Containers */ = {
 			isa = PBXGroup;
 			children = (
+				CE891BB8205D1E8B00D2B09D /* EmbreeRayTracer */,
 				CE895F97204C19B600E63140 /* SpatialHash */,
 				CE895F91204C0CEE00E63140 /* PackedLookupTable */,
 				CE895F8D204C087700E63140 /* SparseOctree */,
@@ -1620,6 +1651,7 @@
 		CE70F8991F8F8EBD00AD9027 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				CE891B78205C50C400D2B09D /* embree */,
 				CE70F89A1F8F8EBD00AD9027 /* stb */,
 				CE70F89C1F8F8EBD00AD9027 /* obj_loader */,
 				CE70F8A21F8F8EBD00AD9027 /* glm */,
@@ -2140,6 +2172,46 @@
 			path = PBR;
 			sourceTree = "<group>";
 		};
+		CE891B78205C50C400D2B09D /* embree */ = {
+			isa = PBXGroup;
+			children = (
+				CE891BB6205C59FB00D2B09D /* libembree3.3.0.0.dylib */,
+				CE891B7F205C50D900D2B09D /* rtcore_buffer.h */,
+				CE891B86205C50D900D2B09D /* rtcore_buffer.isph */,
+				CE891B80205C50D900D2B09D /* rtcore_builder.h */,
+				CE891B81205C50D900D2B09D /* rtcore_common.h */,
+				CE891B7C205C50D800D2B09D /* rtcore_common.isph */,
+				CE891B79205C50D800D2B09D /* rtcore_device.h */,
+				CE891B85205C50D900D2B09D /* rtcore_device.isph */,
+				CE891B83205C50D900D2B09D /* rtcore_geometry.h */,
+				CE891B7B205C50D800D2B09D /* rtcore_geometry.isph */,
+				CE891B82205C50D900D2B09D /* rtcore_ray.h */,
+				CE891B84205C50D900D2B09D /* rtcore_ray.isph */,
+				CE891B7D205C50D800D2B09D /* rtcore_scene.h */,
+				CE891B88205C50D900D2B09D /* rtcore_scene.isph */,
+				CE891B7A205C50D800D2B09D /* rtcore_version.h */,
+				CE891B87205C50D900D2B09D /* rtcore.h */,
+				CE891B7E205C50D800D2B09D /* rtcore.isph */,
+			);
+			path = embree;
+			sourceTree = "<group>";
+		};
+		CE891BB4205C54C800D2B09D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CE891BB8205D1E8B00D2B09D /* EmbreeRayTracer */ = {
+			isa = PBXGroup;
+			children = (
+				CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */,
+				CE891BBA205D1EA100D2B09D /* EmbreeRayTracer.hpp */,
+			);
+			path = EmbreeRayTracer;
+			sourceTree = "<group>";
+		};
 		CE895F8D204C087700E63140 /* SparseOctree */ = {
 			isa = PBXGroup;
 			children = (
@@ -2349,6 +2421,7 @@
 				CE70FA591F8F8F7400AD9027 /* FullScreenQuad.vert in Resources */,
 				CE4DE24E1FA60CFF0067729A /* VasePlant_roughness.tga in Resources */,
 				CE81CB161FA24F6200535020 /* blank_black.png in Resources */,
+				CE891B8D205C50D900D2B09D /* rtcore_device.isph in Resources */,
 				CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */,
 				CE4DE2291FA60CFF0067729A /* Sponza_Curtain_metallic.tga in Resources */,
 				CE70FA5A1F8F8F7400AD9027 /* FullScreenQuad.frag in Resources */,
@@ -2365,6 +2438,7 @@
 				CE70FA5D1F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.vert in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
+				CE891B8C205C50D900D2B09D /* rtcore_ray.isph in Resources */,
 				CE70FA5E1F8F8F7400AD9027 /* DirectionalBlinnPhong.vert in Resources */,
 				CE4DE2211FA60CFE0067729A /* Sponza_Column_b_roughness.tga in Resources */,
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
@@ -2381,10 +2455,12 @@
 				CE70FA611F8F8F7400AD9027 /* DirectionalBlinnPhong.frag in Resources */,
 				CE4DE20F1FA60CFE0067729A /* Lion_Albedo.tga in Resources */,
 				CE4DE2151FA60CFE0067729A /* Sponza_Arch_roughness.tga in Resources */,
+				CE891B8A205C50D900D2B09D /* rtcore_common.isph in Resources */,
 				CE70FA621F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.frag in Resources */,
 				CE4DE20A1FA60CFE0067729A /* ChainTexture_Normal.tga in Resources */,
 				CE4DE2281FA60CFF0067729A /* Sponza_Curtain_Green_normal.tga in Resources */,
 				CE4DE22C1FA60CFF0067729A /* Sponza_Curtain_roughness.tga in Resources */,
+				CE891B8F205C50D900D2B09D /* rtcore_scene.isph in Resources */,
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
 				CE4DE21E1FA60CFE0067729A /* Sponza_Column_a_roughness.tga in Resources */,
@@ -2438,10 +2514,12 @@
 				CE4DE2411FA60CFF0067729A /* Sponza_Roof_roughness.tga in Resources */,
 				CE4DE2491FA60CFF0067729A /* VaseHanging_diffuse.tga in Resources */,
 				CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */,
+				CE891B89205C50D900D2B09D /* rtcore_geometry.isph in Resources */,
 				CE4DE21A1FA60CFE0067729A /* Sponza_Ceiling_normal.tga in Resources */,
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
+				CE891B8E205C50D900D2B09D /* rtcore_buffer.isph in Resources */,
 				CE4DE2381FA60CFF0067729A /* Sponza_Fabric_roughness.tga in Resources */,
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
@@ -2461,6 +2539,7 @@
 				ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */,
 				CE4DE22B1FA60CFF0067729A /* Sponza_Curtain_Red_normal.tga in Resources */,
 				AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */,
+				CE891B8B205C50D900D2B09D /* rtcore.isph in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
 				CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */,
@@ -2487,6 +2566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */,
+				CE891BBB205D1EA100D2B09D /* EmbreeRayTracer.cpp in Sources */,
 				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
 				ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */,
@@ -2739,6 +2819,10 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2760,6 +2844,10 @@
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
