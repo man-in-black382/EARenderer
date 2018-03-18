@@ -18,12 +18,18 @@ namespace EARenderer {
                              const std::string& roughnessMapPath,
                              const std::string& ambientOcclusionMapPath)
     :
-    mAlbedoMap(albedoMapPath.length() != 0 ? new GLTexture2D(albedoMapPath) : nullptr),
-    mNormalMap(normalMapPath.length() != 0 ? new GLTexture2D(normalMapPath) : nullptr),
-    mMetallicMap(metallicMapPath.length() != 0 ? new GLTexture2D(metallicMapPath) : nullptr),
-    mRoughnessMap(roughnessMapPath.length() != 0 ? new GLTexture2D(roughnessMapPath) : nullptr),
-    mAmbientOcclusionMap(ambientOcclusionMapPath.length() != 0 ? new GLTexture2D(ambientOcclusionMapPath) : nullptr)
-    { }
+    mAlbedoMap(albedoMapPath.length() != 0 ? new GLLDRTexture2D(albedoMapPath) : nullptr),
+    mNormalMap(normalMapPath.length() != 0 ? new GLLDRTexture2D(normalMapPath) : nullptr),
+    mMetallicMap(metallicMapPath.length() != 0 ? new GLLDRTexture2D(metallicMapPath) : nullptr),
+    mRoughnessMap(roughnessMapPath.length() != 0 ? new GLLDRTexture2D(roughnessMapPath) : nullptr),
+    mAmbientOcclusionMap(ambientOcclusionMapPath.length() != 0 ? new GLLDRTexture2D(ambientOcclusionMapPath) : nullptr)
+    {
+        if (albedoMapPath.length()) mAlbedoMap->generateMipmaps();
+        if (normalMapPath.length()) mNormalMap->generateMipmaps();
+        if (metallicMapPath.length()) mMetallicMap->generateMipmaps();
+        if (roughnessMapPath.length()) mRoughnessMap->generateMipmaps();
+        if (ambientOcclusionMapPath.length()) mAmbientOcclusionMap->generateMipmaps();
+    }
     
     PBRMaterial::PBRMaterial(PBRMaterial&& that)
     :
@@ -69,23 +75,23 @@ namespace EARenderer {
     
 #pragma mark - Getters
 
-    const GLTexture2D* PBRMaterial::albedoMap() const {
+    const GLLDRTexture2D* PBRMaterial::albedoMap() const {
         return mAlbedoMap;
     }
     
-    const GLTexture2D* PBRMaterial::normalMap() const {
+    const GLLDRTexture2D* PBRMaterial::normalMap() const {
         return mNormalMap;
     }
     
-    const GLTexture2D* PBRMaterial::metallicMap() const {
+    const GLLDRTexture2D* PBRMaterial::metallicMap() const {
         return mMetallicMap;
     }
     
-    const GLTexture2D* PBRMaterial::roughnessMap() const {
+    const GLLDRTexture2D* PBRMaterial::roughnessMap() const {
         return mRoughnessMap;
     }
     
-    const GLTexture2D* PBRMaterial::ambientOcclusionMap() const {
+    const GLLDRTexture2D* PBRMaterial::ambientOcclusionMap() const {
         return mAmbientOcclusionMap;
     }
     

@@ -32,8 +32,6 @@
 #import "Measurement.hpp"
 #import "LightProbeBuilder.hpp"
 
-#import "GLLayeredTexture.hpp"
-
 static float const FrequentEventsThrottleCooldownMS = 100;
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
@@ -140,7 +138,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
     self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 

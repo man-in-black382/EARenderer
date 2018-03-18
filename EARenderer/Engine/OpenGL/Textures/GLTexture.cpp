@@ -16,26 +16,52 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLTexture::GLTexture(GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT)
+    GLTexture::GLTexture(GLenum bindingPoint)
     :
-    GLTexture(Size2D::zero(), bindingPoint, minFilter, magFilter, wrapModeS, wrapModeT)
+    GLTexture(Size2D::zero(), bindingPoint)
     { }
     
-    GLTexture::GLTexture(const Size2D& size, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT)
+    GLTexture::GLTexture(const Size2D& size, GLenum bindingPoint)
     :
     mSize(size),
     mBindingPoint(bindingPoint)
     {
         glGenTextures(1, &mName);
         bind();
-        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, minFilter);
-        glTexParameteri(mBindingPoint, GL_TEXTURE_MAG_FILTER, magFilter);
-        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_S, wrapModeS);
-        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_T, wrapModeT);
     }
     
     GLTexture::~GLTexture() {
         glDeleteTextures(1, &mName);
+    }
+
+#pragma mark - Protected helpers
+
+    void GLTexture::setFilter(Filter filter) {
+        GLint glMinFilter = 0;
+        GLint glMagFilter = 0;
+
+        switch (filter) {
+            case Filter::None: glMinFilter = glMagFilter = GL_NEAREST; break;
+            case Filter::Bilinear: glMinFilter = glMagFilter = GL_LINEAR; break;
+            case Filter::Trilinear: glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR; break;
+        }
+
+        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, glMinFilter);
+        glTexParameteri(mBindingPoint, GL_TEXTURE_MAG_FILTER, glMagFilter);
+    }
+
+    void GLTexture::setWrapMode(WrapMode wrapMode) {
+        GLint wrap = 0;
+
+        switch (wrapMode) {
+            case WrapMode::Repeat: wrap = GL_REPEAT; break;
+            case WrapMode::ClampToEdge: wrap = GL_CLAMP_TO_EDGE; break;
+            case WrapMode::ClampToBorder: wrap = GL_CLAMP_TO_BORDER; break;
+        }
+
+        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_S, wrap);
+        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_T, wrap);
+//        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
     }
 
 #pragma mark - Static

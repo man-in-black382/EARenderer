@@ -9,23 +9,25 @@
 #ifndef CubemapSampler_hpp
 #define CubemapSampler_hpp
 
+#include "GLTextureSampler.hpp"
 #include "Color.hpp"
 #include "GLCubemapFace.hpp"
-#include "Size2D.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
     
-    class GLCubemapSampler {
+    class GLCubemapSampler: public GLTextureSampler {
+    protected:
+        using GLTextureSampler::GLTextureSampler;
+
     public:
-        static void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords);
-        static void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector);
+        void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const;
+        void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) const;
         
         virtual Color sample(const glm::vec3& direction) const = 0;
         virtual Color sample(GLCubemapFace face, int32_t x, int32_t y) const = 0;
-        
     };
     
 }

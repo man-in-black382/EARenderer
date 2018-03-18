@@ -20,6 +20,10 @@
 namespace EARenderer {
     
     class GLTexture: public GLNamedObject, public GLBindable {
+    public:
+        enum class Filter { None, Bilinear, Trilinear };
+        enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
+
     private:
         GLenum mBindingPoint;
         
@@ -27,8 +31,11 @@ namespace EARenderer {
         Size2D mSize;
         uint16_t mMipMapsCount = 0;
     
-        GLTexture(GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
-        GLTexture(const Size2D& size, GLenum bindingPoint, GLint minFilter, GLint magFilter, GLint wrapModeS, GLint wrapModeT);
+        GLTexture(GLenum bindingPoint);
+        GLTexture(const Size2D& size, GLenum bindingPoint);
+
+        void setFilter(Filter filter);
+        void setWrapMode(WrapMode wrapMode);
         
     public:
         GLTexture(const GLTexture& that) = default;

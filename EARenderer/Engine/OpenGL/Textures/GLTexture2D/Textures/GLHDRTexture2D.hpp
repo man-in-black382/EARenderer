@@ -9,14 +9,15 @@
 #ifndef GLHDRTexture2D_hpp
 #define GLHDRTexture2D_hpp
 
-#include "GLTexture.hpp"
+#include "GLTexture2D.hpp"
 
 namespace EARenderer {
     
-    class GLHDRTexture2D: public GLTexture {
+    class GLHDRTexture2D: public GLTexture2D {
     public:
-        GLHDRTexture2D(const Size2D& size);
-        GLHDRTexture2D(const std::string& fileName);
+        GLHDRTexture2D(const Size2D& size, Filter filter = Filter::Trilinear);
+        GLHDRTexture2D(const std::string& imagePath);
+        ~GLHDRTexture2D() = default;
     };
     
 }

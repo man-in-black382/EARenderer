@@ -13,17 +13,17 @@
 
 #include <glm/vec3.hpp>
 
-#include "GLTexture2D.hpp"
+#include "GLLDRTexture2D.hpp"
 
 namespace EARenderer {
     
     class PBRMaterial {
         private:
-        GLTexture2D *mAlbedoMap = nullptr;
-        GLTexture2D *mNormalMap = nullptr;
-        GLTexture2D *mMetallicMap = nullptr;
-        GLTexture2D *mRoughnessMap = nullptr;
-        GLTexture2D *mAmbientOcclusionMap = nullptr;
+        GLLDRTexture2D *mAlbedoMap = nullptr;
+        GLLDRTexture2D *mNormalMap = nullptr;
+        GLLDRTexture2D *mMetallicMap = nullptr;
+        GLLDRTexture2D *mRoughnessMap = nullptr;
+        GLLDRTexture2D *mAmbientOcclusionMap = nullptr;
         
         public:
         PBRMaterial(const std::string& albedoMapPath = "",
@@ -39,11 +39,11 @@ namespace EARenderer {
         
         void swap(PBRMaterial& that);
         
-        const GLTexture2D* albedoMap() const;
-        const GLTexture2D* normalMap() const;
-        const GLTexture2D* metallicMap() const;
-        const GLTexture2D* roughnessMap() const;
-        const GLTexture2D* ambientOcclusionMap() const;
+        const GLLDRTexture2D* albedoMap() const;
+        const GLLDRTexture2D* normalMap() const;
+        const GLLDRTexture2D* metallicMap() const;
+        const GLLDRTexture2D* roughnessMap() const;
+        const GLLDRTexture2D* ambientOcclusionMap() const;
         
     };
     

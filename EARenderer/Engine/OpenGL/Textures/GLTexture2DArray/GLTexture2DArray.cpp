@@ -7,27 +7,47 @@
 //
 
 #include "GLTexture2DArray.hpp"
-#include "Macros.h"
 
 #include <OpenGL/gl3ext.h>
+#include <stdexcept>
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLTexture2DArray::GLTexture2DArray(const Size2D& size, GLsizei layers)
+    GLTexture2DArray::GLTexture2DArray()
     :
-    GLLayeredTexture(size, layers, GL_TEXTURE_2D_ARRAY, GL_LINEAR, GL_LINEAR, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE)
-    {
-        ASSERT(size.width > 0, "Texture 2d array width should be greater than 0");
-        ASSERT(size.height > 0, "Texture 2d array height should be greater than 0");
+    GLTexture(GL_TEXTURE_2D_ARRAY)
+    { }
+
+    GLTexture2DArray::~GLTexture2DArray() { }
+
+    void GLTexture2DArray::initialize(const Size2D& size, size_t layers, Filter filter, WrapMode wrapMode, GLint internalFormat) {
+        if (size.width <= 0.0 || size.height <= 0.0) {
+            throw std::invalid_argument("2D texture array size must not be zero");
+        }
+
+        if (layers == 0) {
+            throw std::invalid_argument("2D texture array must have non-zero layer count");
+        }
+
+        mSize = size;
 
         glTexStorage3D(GL_TEXTURE_2D_ARRAY,
                        1, // No mipmaps (1 means that there is only one base image level)
-                       GL_RGBA8, // Internal format
+                       internalFormat, // Internal format
                        size.width, // Width
                        size.height, // Height
-                       layers); // Number of layers (elements, textures) in the array
+                       (GLint)layers); // Number of layers (elements, textures) in the array
+
+        setFilter(filter);
+        setWrapMode(wrapMode);
+    }
+
+#pragma mark - Getters
+
+    size_t GLTexture2DArray::layers() const {
+        return mLayers;
     }
     
 }

@@ -78,7 +78,7 @@ namespace EARenderer {
     void LightProbe::updateSHCoefficients(const GLHDRTextureCubemap& cubemap) {
         mSphericalHarmonics = SphericalHarmonics();
 
-        cubemap.sampleTexels([&](const GLCubemapSampler& sampler) {
+        cubemap.sampleTexels(0, [&](const GLCubemapSampler& sampler) {
             for (int8_t face = 0; face < 6; face++) {
                 for (int32_t y = 0; y < cubemap.size().height; y++) {
                     for (int32_t x = 0; x < cubemap.size().width; x++) {

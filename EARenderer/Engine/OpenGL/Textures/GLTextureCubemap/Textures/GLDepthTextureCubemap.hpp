@@ -9,13 +9,14 @@
 #ifndef GLDepthTextureCubemap_hpp
 #define GLDepthTextureCubemap_hpp
 
-#include "GLTexture.hpp"
+#include "GLTextureCubemap.hpp"
 
 namespace EARenderer {
     
-    class GLDepthTextureCubemap: public GLTexture {
+    class GLDepthTextureCubemap: public GLTextureCubemap {
     public:
         GLDepthTextureCubemap(const Size2D& size);
+        ~GLDepthTextureCubemap() = default;
     };
     
 }

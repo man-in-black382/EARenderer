@@ -9,13 +9,14 @@
 #ifndef GLDepthTexture2D_hpp
 #define GLDepthTexture2D_hpp
 
-#include "GLTexture.hpp"
+#include "GLTexture2D.hpp"
 
 namespace EARenderer {
     
-    class GLDepthTexture2D: public GLTexture {
+    class GLDepthTexture2D: public GLTexture2D {
     public:
         GLDepthTexture2D(const Size2D& size);
+        ~GLDepthTexture2D() = default;
     };
     
 }
