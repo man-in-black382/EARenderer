@@ -44,9 +44,9 @@ namespace EARenderer {
 
 #pragma mark - Sampling
 
-    void GLLDRTexture2D::sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const {
+    GLLDRTexture2DSampler GLLDRTexture2D::sampleTexels(int32_t mipLevel) const {
         bind();
-        samplerClosure(GLLDRTexture2DSampler(*this, mipLevel));
+        return GLLDRTexture2DSampler(*this, mipLevel);
     }
 
 }

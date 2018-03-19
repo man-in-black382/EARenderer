@@ -22,9 +22,9 @@ namespace EARenderer {
     
 #pragma mark - Public interface
 
-    void GLHDRTextureCubemap::sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const {
+    GLHDRCubemapSampler GLHDRTextureCubemap::sampleTexels(int32_t mipLevel) const {
         bind();
-        samplerClosure(GLHDRCubemapSampler(*this, mipLevel));
+        return GLHDRCubemapSampler(*this, mipLevel);
     }
 
 }

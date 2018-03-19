@@ -27,9 +27,11 @@
 #include "MeshTriangleRef.hpp"
 #include "SurfelClusterProjection.hpp"
 #include "EmbreeRayTracer.hpp"
+#include "GLHDRTexture2DArray.hpp"
 
 #include <vector>
 #include <list>
+#include <memory>
 
 namespace EARenderer {
     
@@ -47,9 +49,10 @@ namespace EARenderer {
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
         std::vector<DiffuseLightProbe> mDiffuseLightProbes;
 
-        SparseOctree<MeshTriangleRef> mOctree;
-        EmbreeRayTracer mRaytracer;
-        
+        std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
+        std::shared_ptr<EmbreeRayTracer> mRaytracer;
+        std::shared_ptr<GLHDRTexture2DArray> mSurfelGBuffer;
+
         GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
         std::list<ID> mStaticMeshInstanceIDs;
@@ -74,11 +77,12 @@ namespace EARenderer {
         std::vector<SurfelClusterProjection>& surfelClusterProjections();
         std::vector<DiffuseLightProbe>& diffuseLightProbes();
 
-        SparseOctree<MeshTriangleRef>& octree();
-        EmbreeRayTracer& rayTracer();
+        std::shared_ptr<SparseOctree<MeshTriangleRef>> octree();
+        std::shared_ptr<EmbreeRayTracer> rayTracer();
         
         GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
-        
+        std::shared_ptr<GLHDRTexture2DArray> surfelGBuffer();
+
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;
         
@@ -87,6 +91,7 @@ namespace EARenderer {
         void calculateBoundingBox();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
+        void packSurfelsToGBuffer();
 
         const AxisAlignedBox3D& boundingBox() const;
 

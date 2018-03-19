@@ -121,6 +121,7 @@
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
 		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
+		CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
 		CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8431F8F8EBD00AD9027 /* Range.cpp */; };
 		CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8441F8F8EBD00AD9027 /* Color.cpp */; };
@@ -345,6 +346,8 @@
 		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
+		CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTexture2DArray.cpp; sourceTree = "<group>"; };
+		CE6DD45D20601D2700F8E3FA /* GLHDRTexture2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTexture2DArray.hpp; sourceTree = "<group>"; };
 		CE70F7C51F8F8E5A00AD9027 /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE70F7DC1F8F8EBD00AD9027 /* EARenderer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EARenderer.entitlements; sourceTree = "<group>"; };
 		CE70F7E11F8F8EBD00AD9027 /* NumericFormatter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NumericFormatter.m; sourceTree = "<group>"; };
@@ -1028,6 +1031,8 @@
 			children = (
 				CE70F9BD1F8F8EBD00AD9027 /* GLTexture2DArray.cpp */,
 				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
+				CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */,
+				CE6DD45D20601D2700F8E3FA /* GLHDRTexture2DArray.hpp */,
 				CE70F9BB1F8F8EBD00AD9027 /* GLDepthTexture2DArray.cpp */,
 				CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */,
 			);
@@ -2651,6 +2656,7 @@
 				AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */,
 				CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */,
 				CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */,
+				CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
 				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,

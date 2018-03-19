@@ -77,20 +77,19 @@ namespace EARenderer {
 
     void LightProbe::updateSHCoefficients(const GLHDRTextureCubemap& cubemap) {
         mSphericalHarmonics = SphericalHarmonics();
+        GLHDRCubemapSampler sampler = cubemap.sampleTexels();
 
-        cubemap.sampleTexels(0, [&](const GLCubemapSampler& sampler) {
-            for (int8_t face = 0; face < 6; face++) {
-                for (int32_t y = 0; y < cubemap.size().height; y++) {
-                    for (int32_t x = 0; x < cubemap.size().width; x++) {
-                        Color texel = sampler.sample(CubemapFaceFromIndex(face), x, y);
-                        float sAngle = solidAngle(x, y, cubemap.size());
-                        glm::vec3 direction;
-                        sampler.computeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
-                        direction = glm::normalize(direction);
-                        mSphericalHarmonics.contribute(direction, texel, sAngle);
-                    }
+        for (int8_t face = 0; face < 6; face++) {
+            for (int32_t y = 0; y < cubemap.size().height; y++) {
+                for (int32_t x = 0; x < cubemap.size().width; x++) {
+                    Color texel = sampler.sample(CubemapFaceFromIndex(face), x, y);
+                    float sAngle = solidAngle(x, y, cubemap.size());
+                    glm::vec3 direction;
+                    sampler.computeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
+                    direction = glm::normalize(direction);
+                    mSphericalHarmonics.contribute(direction, texel, sAngle);
                 }
             }
-        });
+        }
     }
 }

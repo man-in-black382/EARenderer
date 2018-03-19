@@ -11,7 +11,6 @@
 
 #include "GLTexture.hpp"
 #include "GLCubemapFace.hpp"
-#include "GLCubemapSampler.hpp"
 
 #include <array>
 
@@ -26,10 +25,6 @@ namespace EARenderer {
     public:
         GLTextureCubemap();
         virtual ~GLTextureCubemap() = 0;
-
-        using SamplerClosure = const std::function<void(const GLCubemapSampler& sampler)>&;
-
-        virtual void sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const;
     };
     
 }

@@ -10,6 +10,7 @@
 #define GLHDRTextureCubemap_hpp
 
 #include "GLTextureCubemap.hpp"
+#include "GLHDRCubemapSampler.hpp"
 
 namespace EARenderer {
     
@@ -18,7 +19,7 @@ namespace EARenderer {
         GLHDRTextureCubemap(const Size2D& size, Filter filter = Filter::Trilinear);
         ~GLHDRTextureCubemap() = default;
 
-        void sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const override;
+        GLHDRCubemapSampler sampleTexels(int32_t mipLevel = 0) const;
     };
     
 }

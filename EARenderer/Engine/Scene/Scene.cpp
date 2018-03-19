@@ -25,11 +25,7 @@ namespace EARenderer {
     mDirectionalLights(10),
     mPointLights(10),
     mMeshInstances(1000),
-    mLightProbes(10000),
-    mOctree(SparseOctree<MeshTriangleRef>(AxisAlignedBox3D::zero(), 0,
-                                 [](auto&& object, auto&& nodeBoundingBox) { return false; },
-                                 [](auto&& object, auto&& ray) { return false; })),
-    mRaytracer({})
+    mLightProbes(10000)
     { }
     
 #pragma mark - Getters
@@ -66,11 +62,11 @@ namespace EARenderer {
         return mDiffuseLightProbes;
     }
 
-    SparseOctree<MeshTriangleRef>& Scene::octree() {
+    std::shared_ptr<SparseOctree<MeshTriangleRef>> Scene::octree() {
         return mOctree;
     }
 
-    EmbreeRayTracer& Scene::rayTracer() {
+    std::shared_ptr<EmbreeRayTracer> Scene::rayTracer() {
         return mRaytracer;
     }
     
@@ -92,6 +88,10 @@ namespace EARenderer {
     
     GLFloat3BufferTexture<SphericalHarmonics>& Scene::sphericalHarmonicsBufferTexture() {
         return mSphericalHarmonicsBufferTexture;
+    }
+
+    std::shared_ptr<GLHDRTexture2DArray> Scene::surfelGBuffer() {
+        return mSurfelGBuffer;
     }
     
     const std::list<ID>& Scene::staticMeshInstanceIDs() const {
@@ -141,7 +141,7 @@ namespace EARenderer {
             return Collision::RayTriangle(ray, ref.triangle, distance);
         };
 
-        mOctree = SparseOctree<MeshTriangleRef>(mBoundingBox, mOctreeDepth, containment, collision);
+        mOctree = std::shared_ptr<SparseOctree<MeshTriangleRef>>(new SparseOctree<MeshTriangleRef>(mBoundingBox, mOctreeDepth, containment, collision));
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto& meshInstance = mMeshInstances[meshInstanceID];
@@ -158,7 +158,7 @@ namespace EARenderer {
                                         modelMatrix * subMesh.vertices()[i + 2].position);
 
                     MeshTriangleRef ref({ meshInstanceID, subMeshID, triangle });
-                    mOctree.insert(ref);
+                    mOctree->insert(ref);
                 }
             }
         }
@@ -184,7 +184,25 @@ namespace EARenderer {
             }
         }
 
-        mRaytracer = EmbreeRayTracer(triangles);
+        mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
+    }
+
+    void Scene::packSurfelsToGBuffer() {
+        std::vector<std::vector<glm::vec3>> bufferData;
+        std::vector<glm::vec3> positions;
+        std::vector<glm::vec3> normals;
+        std::vector<glm::vec3> albedos;
+        std::vector<glm::vec3> uvs;
+
+        for (auto& surfel : mSurfels) {
+            positions.emplace_back(surfel.position);
+            normals.emplace_back(surfel.normal);
+            albedos.emplace_back(surfel.albedo);
+            uvs.push_back({ surfel.uv.x, surfel.uv.y, 0.0 });
+        }
+
+        bufferData.emplace_back(positions, normals, albedos, uvs);
+        mSurfelGBuffer = std::shared_ptr<GLHDRTexture2DArray>(new GLHDRTexture2DArray(bufferData));
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

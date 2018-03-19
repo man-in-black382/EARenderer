@@ -37,10 +37,4 @@ namespace EARenderer {
         setWrapMode(wrapMode);
     }
 
-#pragma mark - Public interface
-    
-    void GLTextureCubemap::sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const {
-        throw std::runtime_error("You must override sampleTexels function");
-    }
-
 }

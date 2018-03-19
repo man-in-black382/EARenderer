@@ -22,10 +22,6 @@ namespace EARenderer {
     public:
         GLTexture2D();
         virtual ~GLTexture2D() = 0;
-
-        using SamplerClosure = const std::function<void(const GLTexture2DSampler& sampler)>&;
-
-        virtual void sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const;
     };
     
 }

@@ -40,10 +40,4 @@ namespace EARenderer {
         setWrapMode(wrapMode);
     }
 
-#pragma mark - Sampling
-
-    void GLTexture2D::sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const {
-        throw std::runtime_error("You must override sampleTexels function");
-    }
-
 }

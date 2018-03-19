@@ -11,6 +11,8 @@
 
 #include "GLTexture.hpp"
 
+#include <vector>
+
 namespace EARenderer {
     
     class GLTexture2DArray: public GLTexture {
@@ -18,6 +20,8 @@ namespace EARenderer {
         size_t mLayers = 0;
 
         void initialize(const Size2D& size, size_t layers, Filter filter, WrapMode wrapMode, GLint internalFormat);
+        void initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
+                        const std::vector<void *> pixelData);
 
     public:
         GLTexture2DArray();

@@ -10,6 +10,7 @@
 #define GLLDRTexture2D_hpp
 
 #include "GLTexture2D.hpp"
+#include "GLLDRTexture2DSampler.hpp"
 
 namespace EARenderer {
 
@@ -19,7 +20,7 @@ namespace EARenderer {
         GLLDRTexture2D(const std::string& imagePath);
         ~GLLDRTexture2D() = default;
 
-        void sampleTexels(int32_t mipLevel, SamplerClosure samplerClosure) const override;
+        GLLDRTexture2DSampler sampleTexels(int32_t mipLevel = 0) const;
     };
 
 }
