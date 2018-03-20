@@ -89,10 +89,6 @@ namespace EARenderer {
     GLFloat3BufferTexture<SphericalHarmonics>& Scene::sphericalHarmonicsBufferTexture() {
         return mSphericalHarmonicsBufferTexture;
     }
-
-    std::shared_ptr<GLHDRTexture2DArray> Scene::surfelGBuffer() {
-        return mSurfelGBuffer;
-    }
     
     const std::list<ID>& Scene::staticMeshInstanceIDs() const {
         return mStaticMeshInstanceIDs;
@@ -185,24 +181,6 @@ namespace EARenderer {
         }
 
         mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
-    }
-
-    void Scene::packSurfelsToGBuffer() {
-        std::vector<std::vector<glm::vec3>> bufferData;
-        std::vector<glm::vec3> positions;
-        std::vector<glm::vec3> normals;
-        std::vector<glm::vec3> albedos;
-        std::vector<glm::vec3> uvs;
-
-        for (auto& surfel : mSurfels) {
-            positions.emplace_back(surfel.position);
-            normals.emplace_back(surfel.normal);
-            albedos.emplace_back(surfel.albedo);
-            uvs.push_back({ surfel.uv.x, surfel.uv.y, 0.0 });
-        }
-
-        bufferData.emplace_back(positions, normals, albedos, uvs);
-        mSurfelGBuffer = std::shared_ptr<GLHDRTexture2DArray>(new GLHDRTexture2DArray(bufferData));
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

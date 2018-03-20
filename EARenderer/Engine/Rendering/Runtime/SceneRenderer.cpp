@@ -30,7 +30,7 @@ namespace EARenderer {
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
-    mLightProbeBuilder(Size2D(128), 50)
+    mSurfelsGBuffer(surfelsGBufferData())
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -95,8 +95,7 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-//            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
-            mSkyboxShader.setCubemap(mLightProbeBuilder.mEnvironmentMap);
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
         });
         mScene->skybox()->draw();
     }
@@ -193,9 +192,22 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
-    
-    void SceneRenderer::renderPBRMeshes() {
-        
+
+    std::vector<std::vector<glm::vec3>> SceneRenderer::surfelsGBufferData() const {
+        std::vector<std::vector<glm::vec3>> bufferData;
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+
+        for (auto& surfel : mScene->surfels()) {
+            bufferData[0].emplace_back(surfel.position);
+            bufferData[1].emplace_back(surfel.normal);
+            bufferData[2].emplace_back(surfel.albedo);
+            bufferData[3].emplace_back(surfel.uv.x, surfel.uv.y, 0.0);
+        }
+
+        return bufferData;
     }
     
 #pragma mark - Public access point
@@ -243,6 +255,30 @@ namespace EARenderer {
         }
 
 //        renderSkybox();
+    }
+
+    void SceneRenderer::renderSurfelsGBuffer() {
+        mFSQuadShader.bind();
+
+        float defaultViewportWidth = mDefaultRenderComponentsProvider->defaultViewport().frame().size.width;
+        Rect2D viewportRect(Size2D(200, 200));
+
+        for (size_t i = 0; i < mSurfelsGBuffer.layers(); i++) {
+            GLViewport(viewportRect).apply();
+
+            mFSQuadShader.ensureSamplerValidity([this, i]() {
+                mFSQuadShader.setTexture(mSurfelsGBuffer, i);
+            });
+
+            glDrawArrays(GL_TRIANGLES, 0, 4);
+
+            if ((viewportRect.origin.x + 200) > defaultViewportWidth) {
+                viewportRect.origin.x = 0.0;
+                viewportRect.origin.y += 200;
+            } else {
+                viewportRect.origin.x += 200.0;
+            }
+        }
     }
 
 }

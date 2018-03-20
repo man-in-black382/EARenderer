@@ -108,11 +108,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene1;
     
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
-    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
-    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
-    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
-    
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
                                                            self.scene,
                                                            self.axesRenderer,
@@ -127,6 +122,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
+
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
+    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
+    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
+    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
     self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
 

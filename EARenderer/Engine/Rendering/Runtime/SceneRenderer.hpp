@@ -30,6 +30,7 @@
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
+#include "GLHDRTexture2DArray.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
@@ -58,12 +59,12 @@ namespace EARenderer {
         GLHDRTextureCubemap mSpecularIrradianceMap;
         GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
+
+        GLHDRTexture2DArray mSurfelsGBuffer;
         
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
-        
-        LightProbeBuilder mLightProbeBuilder;
 
 //        // DEBUG
         GLSLFullScreenQuad mFSQuadShader;
@@ -77,15 +78,17 @@ namespace EARenderer {
         void buildDiffuseIrradianceMap();
         void buildSpecularIrradianceMap();
         void buildBRDFIntegrationMap();
-        
-        void renderPBRMeshes();
-        
+
+        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
+                
     public:
         SceneRenderer(Scene* scene);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
         void render();
+
+        void renderSurfelsGBuffer();
     };
     
 }

@@ -25,10 +25,7 @@ namespace EARenderer {
         GLSLFullScreenQuad();
         
         void setTexture(const GLTexture2D& texture);
-        void setTexture(const GLHDRTexture2D& texture);
-        void setTexture(const GLDepthTexture2D& texture);
         void setTexture(const GLTexture2DArray& texture, uint8_t index);
-        void setTexture(const GLDepthTexture2DArray& texture, uint8_t index);
     };
     
 }

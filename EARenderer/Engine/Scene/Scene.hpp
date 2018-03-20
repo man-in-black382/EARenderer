@@ -51,7 +51,6 @@ namespace EARenderer {
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
         std::shared_ptr<EmbreeRayTracer> mRaytracer;
-        std::shared_ptr<GLHDRTexture2DArray> mSurfelGBuffer;
 
         GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
         
@@ -81,7 +80,6 @@ namespace EARenderer {
         std::shared_ptr<EmbreeRayTracer> rayTracer();
         
         GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
-        std::shared_ptr<GLHDRTexture2DArray> surfelGBuffer();
 
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;
@@ -91,7 +89,6 @@ namespace EARenderer {
         void calculateBoundingBox();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
-        void packSurfelsToGBuffer();
 
         const AxisAlignedBox3D& boundingBox() const;
 

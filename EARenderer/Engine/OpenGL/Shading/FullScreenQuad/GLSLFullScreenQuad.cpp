@@ -24,23 +24,7 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_FALSE);
     }
     
-    void GLSLFullScreenQuad::setTexture(const GLHDRTexture2D& texture) {
-        setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_FALSE);
-    }
-    
-    void GLSLFullScreenQuad::setTexture(const GLDepthTexture2D& texture) {
-        setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_FALSE);
-    }
-    
     void GLSLFullScreenQuad::setTexture(const GLTexture2DArray& texture, uint8_t index) {
-        setUniformTexture(uint32_constant<ctcrc32("uTextureArray")>, texture);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uIndex")>).location(), index);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_TRUE);
-    }
-    
-    void GLSLFullScreenQuad::setTexture(const GLDepthTexture2DArray& texture, uint8_t index) {
         setUniformTexture(uint32_constant<ctcrc32("uTextureArray")>, texture);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uIndex")>).location(), index);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_TRUE);
