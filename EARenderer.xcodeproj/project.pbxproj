@@ -274,6 +274,8 @@
 		CECD853F2041FF9800966766 /* debug2.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853E2041FF9800966766 /* debug2.png */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
+		CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */; };
+		CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF4DBF12062D43400A68C09 /* GLSLSurfelLighting.cpp */; };
 		CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */; };
 		CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */; };
 		CEFB7A30205578E400364550 /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2E205578E400364550 /* Plane.cpp */; };
@@ -978,6 +980,9 @@
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
 		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
+		CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelLighting.frag; sourceTree = "<group>"; };
+		CEF4DBF12062D43400A68C09 /* GLSLSurfelLighting.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelLighting.cpp; sourceTree = "<group>"; };
+		CEF4DBF22062D43400A68C09 /* GLSLSurfelLighting.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelLighting.hpp; sourceTree = "<group>"; };
 		CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeEdgesRendering.geom; sourceTree = "<group>"; };
 		CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshTriangleRef.cpp; sourceTree = "<group>"; };
 		CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshTriangleRef.hpp; sourceTree = "<group>"; };
@@ -2128,6 +2133,9 @@
 				AC859C251FD5830000227038 /* GLSLLightProbeEnvironmentCapture.hpp */,
 				AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */,
 				AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */,
+				CEF4DBF12062D43400A68C09 /* GLSLSurfelLighting.cpp */,
+				CEF4DBF22062D43400A68C09 /* GLSLSurfelLighting.hpp */,
+				CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -2456,6 +2464,7 @@
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
+				CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */,
 				CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */,
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
 				CE4DE2191FA60CFE0067729A /* Sponza_Ceiling_diffuse.tga in Resources */,
@@ -2695,6 +2704,7 @@
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
 				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */,
+				CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */,
 				CE70FA911F8F912300AD9027 /* MeshListTabViewItem.mm in Sources */,
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,
 				CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */,

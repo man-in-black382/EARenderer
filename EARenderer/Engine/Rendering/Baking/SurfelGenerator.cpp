@@ -362,11 +362,13 @@ namespace EARenderer {
                 generateSurflesOnMeshInstance(meshInstance);
             }
         });
+        printf("Generated %lu surfels\n\n", mSurfelSpatialHash.size());
 
         printf("Generating surfel clusters...\n");
         EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
             formClusters();
         });
+        printf("Generated %lu clusters\n\n", mScene->surfelClusters().size());
     }
     
 }

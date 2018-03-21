@@ -108,12 +108,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [demoScene1 loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene1;
     
-    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
-                                                           self.scene,
-                                                           self.axesRenderer,
-                                                           self.sceneRenderer,
-                                                           &EARenderer::GLViewport::main());
-    
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
 
@@ -125,6 +119,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
+
+    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
+                                                           self.scene,
+                                                           self.axesRenderer,
+                                                           self.sceneRenderer,
+                                                           &EARenderer::GLViewport::main());
+
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
@@ -137,10 +138,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
+    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
-    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     self.fpsView.frameCharacteristics = self.frameMeter->tick();
 }

@@ -27,10 +27,10 @@ namespace EARenderer {
             pixelData.push_back(layerData.data());
         }
 
-        float powerOf2Squared = std::sqrt(powerOf2);
-        size_t dimensionLength = std::ceil(std::pow(2, powerOf2Squared));
+        powerOf2 = std::ceil(powerOf2);
+        size_t dimensionLength = std::sqrt(std::pow(2, powerOf2));
 
-        initialize(Size2D(dimensionLength, dimensionLength), Filter::Bilinear, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
+        initialize(Size2D(dimensionLength, dimensionLength), Filter::None, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
     }
 
 }

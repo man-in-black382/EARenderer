@@ -31,6 +31,7 @@ namespace EARenderer {
             throw std::invalid_argument("2D texture array must have non-zero layer count");
         }
 
+        mLayers = layers;
         mSize = size;
 
         glTexStorage3D(GL_TEXTURE_2D_ARRAY,
@@ -45,32 +46,15 @@ namespace EARenderer {
     }
 
     void GLTexture2DArray::initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type, const std::vector<void *> pixelData) {
-        if (size.width <= 0.0 || size.height <= 0.0) {
-            throw std::invalid_argument("2D texture array size must not be zero");
-        }
 
-        if (pixelData.size() == 0) {
-            throw std::invalid_argument("2D texture array must have non-zero layer count");
-        }
-
-        mSize = size;
+        initialize(size, pixelData.size(), filter, wrapMode, internalFormat);
 
         for (size_t i = 0; i < pixelData.size(); i++) {
             void *pixels = pixelData[i];
-            glTexImage3D(GL_TEXTURE_2D_ARRAY,
-                         0, // Mip level
-                         internalFormat,
-                         size.width,
-                         size.height,
-                         (GLsizei)i, // Current layer
-                         0, // Border. Must be 0.
-                         format,
-                         type,
-                         pixels);
+            glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, (GLint)i,
+                            size.width, size.height, 1,
+                            format, type, pixels);
         }
-
-        setFilter(filter);
-        setWrapMode(wrapMode);
     }
 
 #pragma mark - Getters

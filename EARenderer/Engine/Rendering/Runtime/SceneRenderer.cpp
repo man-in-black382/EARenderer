@@ -30,7 +30,8 @@ namespace EARenderer {
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
-    mSurfelsGBuffer(surfelsGBufferData())
+    mSurfelsGBuffer(surfelsGBufferData()),
+    mSurfelsLuminanceMap(mSurfelsGBuffer.size())
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -209,7 +210,7 @@ namespace EARenderer {
 
         return bufferData;
     }
-    
+
 #pragma mark - Public access point
     
     void SceneRenderer::render() {
@@ -254,14 +255,16 @@ namespace EARenderer {
             }
         }
 
-//        renderSkybox();
+        renderSkybox();
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
+        glDisable(GL_DEPTH_TEST);
+
         mFSQuadShader.bind();
 
         float defaultViewportWidth = mDefaultRenderComponentsProvider->defaultViewport().frame().size.width;
-        Rect2D viewportRect(Size2D(200, 200));
+        Rect2D viewportRect(Size2D(400, 400));
 
         for (size_t i = 0; i < mSurfelsGBuffer.layers(); i++) {
             GLViewport(viewportRect).apply();
@@ -272,13 +275,15 @@ namespace EARenderer {
 
             glDrawArrays(GL_TRIANGLES, 0, 4);
 
-            if ((viewportRect.origin.x + 200) > defaultViewportWidth) {
+            if ((viewportRect.origin.x + 400) > defaultViewportWidth) {
                 viewportRect.origin.x = 0.0;
-                viewportRect.origin.y += 200;
+                viewportRect.origin.y += 400;
             } else {
-                viewportRect.origin.x += 200.0;
+                viewportRect.origin.x += 400.0;
             }
         }
+
+        glEnable(GL_DEPTH_TEST);
     }
 
 }

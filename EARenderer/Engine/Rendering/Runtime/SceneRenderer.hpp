@@ -27,6 +27,7 @@
 #include "GLSLEquirectangularMapConversion.hpp"
 #include "GLSLRadianceConvolution.hpp"
 #include "GLSLBRDFIntegration.hpp"
+#include "GLSLSurfelLighting.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -53,6 +54,7 @@ namespace EARenderer {
         GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
         GLSLRadianceConvolution mRadianceConvolutionShader;
         GLSLBRDFIntegration mBRDFIntegrationShader;
+        GLSLSurfelLighting mSurfelLightingShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
@@ -61,7 +63,8 @@ namespace EARenderer {
         GLFramebuffer mIBLFramebuffer;
 
         GLHDRTexture2DArray mSurfelsGBuffer;
-        
+        GLHDRTexture2D mSurfelsLuminanceMap;
+
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
