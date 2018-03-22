@@ -14,8 +14,6 @@
 #include "Collision.hpp"
 #include "Measurement.hpp"
 
-#include <rtcore.h>
-
 namespace EARenderer {
     
 #pragma mark - Lifecycle
