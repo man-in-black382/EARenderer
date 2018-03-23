@@ -45,4 +45,8 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 1);
     }
 
+    void GLSLSurfelLighting::setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer) {
+        setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
+    }
+
 }

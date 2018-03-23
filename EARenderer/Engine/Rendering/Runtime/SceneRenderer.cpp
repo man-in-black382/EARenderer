@@ -31,7 +31,8 @@ namespace EARenderer {
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
     mSurfelsGBuffer(surfelsGBufferData()),
-    mSurfelsLuminanceMap(mSurfelsGBuffer.size())
+    mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
+    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size())
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -124,6 +125,22 @@ namespace EARenderer {
                 }
             }
         }
+    }
+
+    void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
+        ID directionalLightID = *(mScene->directionalLights().begin());
+        DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
+
+        mSurfelLightingShader.bind();
+        mSurfelsLuminanceFramebuffer.bind();
+        mSurfelsLuminanceFramebuffer.viewport().apply();
+
+        mSurfelLightingShader.setLight(directionalLight);
+        mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
+        mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
     }
     
 #pragma mark Cook-Torrance
@@ -220,6 +237,7 @@ namespace EARenderer {
         FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
         
         renderShadowMapsForDirectionalLights(cascades);
+        relightSurfels(cascades);
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
@@ -262,6 +280,7 @@ namespace EARenderer {
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
 
         float defaultViewportWidth = mDefaultRenderComponentsProvider->defaultViewport().frame().size.width;
         Rect2D viewportRect(Size2D(400, 400));
@@ -283,6 +302,23 @@ namespace EARenderer {
             }
         }
 
+        glEnable(GL_DEPTH_TEST);
+    }
+
+    void SceneRenderer::renderLurfelLuminances() {
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        Rect2D viewportRect(Size2D(400, 400));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mSurfelsLuminanceMap);
+        });
+
+        glDrawArrays(GL_TRIANGLES, 0, 4);
         glEnable(GL_DEPTH_TEST);
     }
 

@@ -11,6 +11,7 @@
 
 #include "GLProgram.hpp"
 #include "GLDepthTexture2DArray.hpp"
+#include "GLHDRTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
 
@@ -23,6 +24,7 @@ namespace EARenderer {
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
+        void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
     };
 
 }

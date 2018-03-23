@@ -29,5 +29,9 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uIndex")>).location(), index);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_TRUE);
     }
+
+    void GLSLFullScreenQuad::setApplyToneMapping(bool toneMap) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldApplyToneMapping")>).location(), toneMap);
+    }
     
 }

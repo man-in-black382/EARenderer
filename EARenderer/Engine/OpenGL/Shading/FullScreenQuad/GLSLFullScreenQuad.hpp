@@ -26,6 +26,7 @@ namespace EARenderer {
         
         void setTexture(const GLTexture2D& texture);
         void setTexture(const GLTexture2DArray& texture, uint8_t index);
+        void setApplyToneMapping(bool toneMap);
     };
     
 }

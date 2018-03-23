@@ -64,6 +64,7 @@ namespace EARenderer {
 
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLHDRTexture2D mSurfelsLuminanceMap;
+        GLFramebuffer mSurfelsLuminanceFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
@@ -75,6 +76,7 @@ namespace EARenderer {
 //        //
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
+        void relightSurfels(const FrustumCascades& cascades);
         void renderSkybox();
         
         void convertEquirectangularMapToCubemap();
@@ -92,6 +94,7 @@ namespace EARenderer {
         void render();
 
         void renderSurfelsGBuffer();
+        void renderLurfelLuminances();
     };
     
 }
