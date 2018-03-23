@@ -44,6 +44,9 @@ namespace EARenderer {
         glDepthFunc(GL_LEQUAL);
         
         mSpecularIrradianceMap.generateMipmaps();
+
+        mSurfelsLuminanceFramebuffer.bind();
+        mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         
 //        convertEquirectangularMapToCubemap();
 //        buildDiffuseIrradianceMap();
@@ -136,8 +139,10 @@ namespace EARenderer {
         mSurfelsLuminanceFramebuffer.viewport().apply();
 
         mSurfelLightingShader.setLight(directionalLight);
-        mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
-        mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+        mSurfelLightingShader.ensureSamplerValidity([&]() {
+            mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+        });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
@@ -277,6 +282,10 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+        }
+        
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
@@ -305,7 +314,11 @@ namespace EARenderer {
         glEnable(GL_DEPTH_TEST);
     }
 
-    void SceneRenderer::renderLurfelLuminances() {
+    void SceneRenderer::renderSurfelLuminances() {
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+        }
+
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();

@@ -17,12 +17,13 @@ vec3 ReinhardToneMap(vec3 color) {
 void main()
 {
     if (uShouldSampleArray) {
-        oFragColor = vec4(vec3(texture(uTextureArray, vec3(vTexCoords, uIndex))), 1.0);
+        vec3 coords = vec3(vTexCoords, uIndex);
+        oFragColor = vec4(texture(uTextureArray, coords).rgb, 1.0);
     } else {
-        oFragColor = texture(uTexture, vTexCoords);
+        oFragColor = vec4(texture(uTexture, vTexCoords).rgb, 1.0);
     }
 
     if (uShouldApplyToneMapping) {
-        oFragColor = ReinhardToneMap(oFragColor.rgb, oFragColor.a);
+        oFragColor = vec4(ReinhardToneMap(oFragColor.rgb), oFragColor.a);
     }
 }

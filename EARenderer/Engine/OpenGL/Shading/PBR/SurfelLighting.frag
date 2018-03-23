@@ -71,6 +71,7 @@ uniform int uLightType;
 uniform sampler2DArray uShadowMapArray;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
+uniform mat4 uLightSpaceMatrices[kMaxCascades];
 
 // Shperical harmonics
 
@@ -82,39 +83,39 @@ uniform int uNumberOfCascades;
 // Unpacks spherical harmonics coefficients
 // from the corresponding sample buffer
 //
-SH UnpackSH(int index) {
-    SH sh;
-
-    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
-    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
-    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
-    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
-    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
-    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
-    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
-    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
-    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
-
-    return sh;
-
-    //    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
-}
-
-float SHRadiance(SH sh, vec3 direction, int component) {
-    int c = component;
-
-    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-    kC3 * sh.L20[c] * (direction.z * direction.z) +
-    kC4 * sh.L00[c] -
-    kC5 * sh.L20[c] +
-    2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-    2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
-}
-
-vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = UnpackSH(0);
-    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
-}
+//SH UnpackSH(int index) {
+//    SH sh;
+//
+//    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
+//    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
+//    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
+//    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
+//    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
+//    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
+//    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
+//    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
+//    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
+//
+//    return sh;
+//
+//    //    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
+//}
+//
+//float SHRadiance(SH sh, vec3 direction, int component) {
+//    int c = component;
+//
+//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
+//    kC3 * sh.L20[c] * (direction.z * direction.z) +
+//    kC4 * sh.L00[c] -
+//    kC5 * sh.L20[c] +
+//    2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
+//    2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+//}
+//
+//vec3 EvaluateSphericalHarmonics(vec3 direction) {
+//    SH sh = UnpackSH(0);
+//    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+//}
 
 ////////////////////////////////////////////////////////////
 //////////// Radiance of different light types /////////////
@@ -138,25 +139,28 @@ vec3 DirectionalLightRadiance() {
 
 int shadowCascadeIndex()
 {
-    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
-    // No need to transform to [0,1] range,
-    // because splits passed from client are in [-1; 1]
+//    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
+//    // No need to transform to [0,1] range,
+//    // because splits passed from client are in [-1; 1]
+//
+//    float fragDepth = projCoords.z;
+//
+//    for (int i = 0; i < uNumberOfCascades; ++i) {
+//        if (fragDepth < uDepthSplits[i]) {
+//            return i;
+//        }
+//    }
 
-    float fragDepth = projCoords.z;
-
-    for (int i = 0; i < uNumberOfCascades; ++i) {
-        if (fragDepth < uDepthSplits[i]) {
-            return i;
-        }
-    }
+    return 0;
 }
 
-float Shadow(in vec3 N, in vec3 L)
+float Shadow(in vec3 N, in vec3 L, in vec3 worldPosition)
 {
     int shadowCascadeIndex = shadowCascadeIndex();
 
+    vec4 lightSpacePosition = uLightSpaceMatrices[shadowCascadeIndex] * vec4(worldPosition, 1.0);
     // perform perspective division
-    vec3 projCoords = vPosInLightSpace[shadowCascadeIndex].xyz / vPosInLightSpace[shadowCascadeIndex].w;
+    vec3 projCoords = lightSpacePosition.xyz / lightSpacePosition.w;
 
     // Transformation to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
@@ -215,19 +219,22 @@ vec3 LinearFromSRGB(vec3 sRGB) {
 ////////////////////////////////////////////////////////////
 
 void main() {
-    vec3 position           = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
-    vec3 albedo             = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexAlbedo)).rgb;
-    vec3 N                  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
-    vec3 L                  = vec3(0.0);
-    vec3 radiance           = vec3(0.0);
-    float shadow            = 0.0;
+    int shadowMapsCount = uNumberOfCascades; // Stub to prevent from failing to compile on cpu side
+    float split = uDepthSplits[0];  // Stub to prevent from failing to compile on cpu side
+
+    vec3 position  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
+    vec3 albedo    = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexAlbedo)).rgb;
+    vec3 N         = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
+    vec3 L         = vec3(0.0);
+    vec3 radiance  = vec3(0.0);
+    float shadow   = 0.0;
 
     // Analytical lighting
 
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = Shadow(N, L);
+        shadow      = Shadow(N, L, position);
     } else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N, position);
         L           = normalize(uPointLight.position - position);
@@ -235,7 +242,7 @@ void main() {
         // Nothing to do here... yet
     }
 
-    vec3 NdotL              = dot(N, L);
+    float NdotL             = dot(N, L);
     vec3 diffuseRadiance    = albedo / PI * NdotL;
 
     // Apply shadow factor

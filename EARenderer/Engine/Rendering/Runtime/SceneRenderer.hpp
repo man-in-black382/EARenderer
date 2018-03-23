@@ -94,7 +94,7 @@ namespace EARenderer {
         void render();
 
         void renderSurfelsGBuffer();
-        void renderLurfelLuminances();
+        void renderSurfelLuminances();
     };
     
 }
