@@ -46,6 +46,7 @@ namespace EARenderer {
 
         static glm::vec2 wrapCoordinates(const glm::vec2& uv);
         static glm::vec3 wrapCoordinates(const glm::vec3& uvr);
+        static Size2D estimatedSize(size_t texelCount);
 
         const Size2D& size() const;
         uint16_t mipMapsCount() const;

@@ -61,7 +61,7 @@ namespace EARenderer {
 
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_S, wrap);
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_T, wrap);
-//        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
+        glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
     }
 
 #pragma mark - Static
@@ -86,6 +86,11 @@ namespace EARenderer {
         rFract += 1;
 
         return { uFract - (long)uFract, vFract - (long)vFract, rFract - (long)rFract };
+    }
+
+    Size2D GLTexture::estimatedSize(size_t texelCount) {
+        size_t dimensionLength = std::ceil(std::sqrt((float)texelCount));
+        return Size2D(dimensionLength);
     }
     
 #pragma mark - Getters

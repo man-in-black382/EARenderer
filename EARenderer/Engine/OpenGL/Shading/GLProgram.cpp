@@ -146,9 +146,15 @@ namespace EARenderer {
     
     void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture) {
         GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
+
+        if (!sampler.isSampler()) {
+            throw std::runtime_error(string_format("Uniform %s is not a sampler", sampler.name().c_str()));
+        }
+
         if (!isModifyingUniforms) {
             throw std::logic_error("You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         }
+        
         glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
     }

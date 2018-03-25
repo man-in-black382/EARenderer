@@ -10,9 +10,13 @@
 
 #import "ResourcePool.hpp"
 #import "Scene.hpp"
+#import "FrameMeter.hpp"
 
 @protocol DemoSceneComposing <NSObject>
 
 - (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene;
+
+- (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
+                frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics;
 
 @end

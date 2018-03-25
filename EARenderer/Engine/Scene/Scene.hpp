@@ -39,8 +39,9 @@ namespace EARenderer {
     private:
         size_t mOctreeDepth = 5;
 
-        PackedLookupTable<DirectionalLight> mDirectionalLights;
+        DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;
+
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
 
@@ -66,8 +67,9 @@ namespace EARenderer {
     public:
         Scene();
         
-        PackedLookupTable<DirectionalLight>& directionalLights();
+        DirectionalLight& directionalLight();
         PackedLookupTable<PointLight>& pointLights();
+
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
 

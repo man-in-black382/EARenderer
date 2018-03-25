@@ -20,7 +20,7 @@ namespace EARenderer {
     
     Scene::Scene()
     :
-    mDirectionalLights(10),
+    mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
     mPointLights(10),
     mMeshInstances(1000),
     mLightProbes(10000)
@@ -28,8 +28,8 @@ namespace EARenderer {
     
 #pragma mark - Getters
     
-    PackedLookupTable<DirectionalLight>& Scene::directionalLights() {
-        return mDirectionalLights;
+    DirectionalLight& Scene::directionalLight() {
+        return mDirectionalLight;
     }
     
     PackedLookupTable<PointLight>& Scene::pointLights() {

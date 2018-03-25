@@ -328,6 +328,11 @@ namespace EARenderer {
                     mScene->surfels().push_back(nextSurfel);
                     idsToDelete.push_back(*it);
                     cluster.surfelCount++;
+
+                    // Limit the amount of surfels int cluster
+                    if (cluster.surfelCount == mMaximumSurfelClusterSize) {
+                        continue;
+                    }
                 }
             }
 

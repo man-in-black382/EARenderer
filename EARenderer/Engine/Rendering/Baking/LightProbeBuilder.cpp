@@ -26,8 +26,7 @@ namespace EARenderer {
 #pragma mark - Private
     
     void LightProbeBuilder::captureEnvironmentForProbe(Scene *scene, const LightProbe& probe) {
-        ID directionalLightID = *(scene->directionalLights().begin());
-        DirectionalLight& directionalLight = scene->directionalLights()[directionalLightID];
+        DirectionalLight& directionalLight = scene->directionalLight();
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         

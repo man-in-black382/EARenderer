@@ -32,6 +32,8 @@
 #import "Measurement.hpp"
 #import "LightProbeBuilder.hpp"
 
+#import "Choreograph.h"
+
 static float const FrequentEventsThrottleCooldownMS = 100;
 
 @interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
@@ -92,15 +94,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     camera->lookAt(glm::vec3(-1, -1, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
-    
-    auto HDRColor = EARenderer::Color(10.0, 10.0, 10.0);
-    EARenderer::DirectionalLight directionalLight(HDRColor, glm::vec3(0.0, -1.0, -0.1));
-    EARenderer::PointLight pointLight(glm::vec3(5, 5, -5), HDRColor);
-    
     self.scene->setCamera(camera);
-    self.scene->directionalLights().insert(directionalLight);
-    self.scene->pointLights().insert(pointLight);
-    
+
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
@@ -138,6 +133,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
+    self.sceneRenderer->renderSurfelClusterLuminances();
     self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();
@@ -145,7 +141,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
-    self.fpsView.frameCharacteristics = self.frameMeter->tick();
+    auto frameCharacteristics = self.frameMeter->tick();
+    self.fpsView.frameCharacteristics = frameCharacteristics;
+
+    [self.demoScene updateAnimatedObjectsInScene:self.scene frameCharacteristics:frameCharacteristics];
 }
 
 #pragma mark - MeshListTabViewItemDelegate

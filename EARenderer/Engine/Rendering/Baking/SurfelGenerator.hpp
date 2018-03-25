@@ -58,6 +58,7 @@ namespace EARenderer {
 #pragma mark - Member variables
         
         float mMinimumSurfelDistance = 0.1;
+        size_t mMaximumSurfelClusterSize = 256;
         
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;

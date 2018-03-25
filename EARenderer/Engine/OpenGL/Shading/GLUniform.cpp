@@ -62,7 +62,8 @@ namespace EARenderer {
     
     bool GLUniform::isSampler() const {
         return
-           mType == GL_SAMPLER_2D
+           mType == GL_SAMPLER_1D
+        || mType == GL_SAMPLER_2D
         || mType == GL_SAMPLER_3D
         || mType == GL_SAMPLER_CUBE
         || mType == GL_SAMPLER_1D_SHADOW
@@ -76,7 +77,27 @@ namespace EARenderer {
         || mType == GL_SAMPLER_CUBE_SHADOW
         || mType == GL_SAMPLER_BUFFER
         || mType == GL_SAMPLER_2D_RECT
-        || mType == GL_SAMPLER_2D_RECT_SHADOW;
+        || mType == GL_SAMPLER_2D_RECT_SHADOW
+        || mType == GL_INT_SAMPLER_1D
+        || mType == GL_INT_SAMPLER_2D
+        || mType == GL_INT_SAMPLER_3D
+        || mType == GL_INT_SAMPLER_CUBE
+        || mType == GL_INT_SAMPLER_1D_ARRAY
+        || mType == GL_INT_SAMPLER_2D_ARRAY
+        || mType == GL_INT_SAMPLER_2D_MULTISAMPLE
+        || mType == GL_INT_SAMPLER_2D_MULTISAMPLE_ARRAY
+        || mType == GL_INT_SAMPLER_BUFFER
+        || mType == GL_INT_SAMPLER_2D_RECT
+        || mType == GL_UNSIGNED_INT_SAMPLER_1D
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D
+        || mType == GL_UNSIGNED_INT_SAMPLER_3D
+        || mType == GL_UNSIGNED_INT_SAMPLER_CUBE
+        || mType == GL_UNSIGNED_INT_SAMPLER_1D_ARRAY
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D_ARRAY
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY
+        || mType == GL_UNSIGNED_INT_SAMPLER_BUFFER
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D_RECT;
     }
     
 }

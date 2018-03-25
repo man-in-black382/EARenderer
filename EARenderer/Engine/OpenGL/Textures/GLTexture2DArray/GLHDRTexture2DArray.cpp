@@ -19,18 +19,18 @@ namespace EARenderer {
     }
 
     GLHDRTexture2DArray::GLHDRTexture2DArray(std::vector<std::vector<glm::vec3>> data) {
-        float powerOf2 = 0.0;
+        Size2D estimation;
         std::vector<void *> pixelData;
 
         for (auto& layerData : data) {
-            powerOf2 = std::max(std::log2f(layerData.size()), powerOf2);
+            Size2D size = estimatedSize(layerData.size());
+            if (size.width > estimation.width && size.height > estimation.height) {
+                estimation = size;
+            }
             pixelData.push_back(layerData.data());
         }
 
-        powerOf2 = std::ceil(powerOf2);
-        size_t dimensionLength = std::sqrt(std::pow(2, powerOf2));
-
-        initialize(Size2D(dimensionLength, dimensionLength), Filter::None, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
+        initialize(estimation, Filter::None, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
     }
 
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14105" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14105"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
         <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
         <capability name="system font weights other than Regular or Bold" minToolsVersion="7.0"/>
@@ -1622,6 +1622,9 @@
                                     <outlet property="meshTab" destination="Q6w-3f-6br" id="RYN-zC-3SB"/>
                                 </connections>
                             </tabView>
+                            <openGLView misplaced="YES" depthSize="24bit" antiAliasingType="multisample" rendererType="accelerated" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
+                                <rect key="frame" x="0.0" y="0.0" width="841" height="474"/>
+                            </openGLView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="dAA-ol-bed" userLabel="FPS View" customClass="FPSView">
                                 <rect key="frame" x="2" y="414" width="150" height="60"/>
                                 <subviews>
@@ -1657,9 +1660,6 @@
                                     <outlet property="timeTextField" destination="c69-ME-75j" id="eEF-yr-XRI"/>
                                 </connections>
                             </customView>
-                            <openGLView misplaced="YES" depthSize="24bit" antiAliasingType="multisample" rendererType="accelerated" samplingRate="8" useAuxiliaryDepthBufferStencil="NO" allowOffline="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mBd-pU-WrJ" customClass="SceneGLView">
-                                <rect key="frame" x="0.0" y="0.0" width="841" height="474"/>
-                            </openGLView>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="XJn-Te-qHz" secondAttribute="bottom" id="1Xk-XL-454"/>

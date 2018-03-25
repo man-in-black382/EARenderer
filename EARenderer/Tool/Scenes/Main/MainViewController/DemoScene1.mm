@@ -14,6 +14,16 @@
 #import "Measurement.hpp"
 
 #import <string>
+#import <memory>
+
+#import "Choreograph.h"
+
+@interface DemoScene1 ()
+
+@property (assign, nonatomic) choreograph::Timeline *animationTimeline;
+@property (assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
+
+@end
 
 @implementation DemoScene1
 
@@ -165,6 +175,8 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
+    scene->directionalLight().setColor(EARenderer::Color(15.0, 15.0, 15.0));
+
     scene->calculateBoundingBox();
 
     glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
@@ -174,6 +186,15 @@
     EARenderer::Measurement::executionTime("Embree BVH generation took", [&]() {
         scene->buildStaticGeometryRaytracer();
     });
+
+    [self setupAnimations];
+}
+
+- (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
+                frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics
+{
+    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 }
 
 #pragma mark - Helpers
@@ -182,6 +203,21 @@
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:resource ofType:nil];
     return std::string(path.UTF8String);
+}
+
+- (void)setupAnimations
+{
+    self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
+    self.animationTimeline = new choreograph::Timeline();
+
+    glm::vec3 start(0.5, -1.0, 0.5);
+    glm::vec3 end(-0.5, -1.0, -0.5);
+
+    choreograph::PhraseRef<glm::vec3> startToEnd = choreograph::makeRamp(start, end, 20.0);
+    self.animationTimeline->apply(self.sunDirectionOutput, startToEnd).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
 }
 
 #pragma mark - Other materials

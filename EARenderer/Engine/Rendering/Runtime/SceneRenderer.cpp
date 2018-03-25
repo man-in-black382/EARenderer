@@ -22,17 +22,26 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
+
+    // Shadow maps
     mShadowMaps(Size2D(1024), mNumberOfCascades),
     mShadowCubeMap(Size2D(1024)),
     mDepthFramebuffer(Size2D(1024)),
+
+    // Image based lighting (IBL)
     mEnvironmentMapCube(Size2D(512)),
     mDiffuseIrradianceMap(Size2D(32)),
     mSpecularIrradianceMap(Size2D(512)),
     mBRDFIntegrationMap(Size2D(512)),
     mIBLFramebuffer(Size2D(512)),
+
+    // Surfels and surfel clusters
     mSurfelsGBuffer(surfelsGBufferData()),
+    mSurfelClustersGBuffer(surfelClustersGBufferData()),
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
-    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size())
+    mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
+    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
+    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer.size())
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -42,11 +51,11 @@ namespace EARenderer {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
-        
+
         mSpecularIrradianceMap.generateMipmaps();
 
-        mSurfelsLuminanceFramebuffer.bind();
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
+        mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
         
 //        convertEquirectangularMapToCubemap();
 //        buildDiffuseIrradianceMap();
@@ -131,8 +140,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
-        ID directionalLightID = *(mScene->directionalLights().begin());
-        DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
+        DirectionalLight& directionalLight = mScene->directionalLight();
 
         mSurfelLightingShader.bind();
         mSurfelsLuminanceFramebuffer.bind();
@@ -142,6 +150,20 @@ namespace EARenderer {
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+        });
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+    }
+
+    void SceneRenderer::averageSurfelClusterLuminances() {
+        mSurfelClusterAveragingShader.bind();
+        mSurfelClustersLuminanceFramebuffer.bind();
+        mSurfelClustersLuminanceFramebuffer.viewport().apply();
+
+        mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
+            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(mSurfelClustersGBuffer);
+            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -233,16 +255,37 @@ namespace EARenderer {
         return bufferData;
     }
 
+    std::vector<uint8_t> SceneRenderer::surfelClustersGBufferData() const {
+        std::vector<uint8_t> data;
+
+        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
+        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
+        // Surfel generator cannot generate more than 256 surfels per cluster by design
+        // so 1 byte per surfel count will be enough
+        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
+        for (auto& cluster : mScene->surfelClusters()) {
+            uint8_t b = cluster.surfelOffset & 0xFF;
+            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
+            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
+            uint8_t a = cluster.surfelCount;
+            data.push_back(r);
+            data.push_back(g);
+            data.push_back(b);
+            data.push_back(a);
+        }
+        return data;
+    }
+
 #pragma mark - Public access point
     
     void SceneRenderer::render() {
-        ID directionalLightID = *(mScene->directionalLights().begin());
-        DirectionalLight& directionalLight = mScene->directionalLights()[directionalLightID];
+        DirectionalLight& directionalLight = mScene->directionalLight();
 //        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
         FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
         
         renderShadowMapsForDirectionalLights(cascades);
         relightSurfels(cascades);
+        averageSurfelClusterLuminances();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
@@ -329,6 +372,27 @@ namespace EARenderer {
 
         mFSQuadShader.ensureSamplerValidity([this]() {
             mFSQuadShader.setTexture(mSurfelsLuminanceMap);
+        });
+
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glEnable(GL_DEPTH_TEST);
+    }
+
+    void SceneRenderer::renderSurfelClusterLuminances() {
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+        }
+
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        Rect2D viewportRect({ 400, 0 }, { 400, 400 });
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mSurfelClustersLuminanceMap);
         });
 
         glDrawArrays(GL_TRIANGLES, 0, 4);

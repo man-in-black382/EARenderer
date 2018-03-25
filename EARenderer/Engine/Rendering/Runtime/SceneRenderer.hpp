@@ -28,6 +28,7 @@
 #include "GLSLRadianceConvolution.hpp"
 #include "GLSLBRDFIntegration.hpp"
 #include "GLSLSurfelLighting.hpp"
+#include "GLSLSurfelClusterAveraging.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -55,6 +56,7 @@ namespace EARenderer {
         GLSLRadianceConvolution mRadianceConvolutionShader;
         GLSLBRDFIntegration mBRDFIntegrationShader;
         GLSLSurfelLighting mSurfelLightingShader;
+        GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
@@ -63,8 +65,11 @@ namespace EARenderer {
         GLFramebuffer mIBLFramebuffer;
 
         GLHDRTexture2DArray mSurfelsGBuffer;
+        GLLDRTexture2D mSurfelClustersGBuffer;
         GLHDRTexture2D mSurfelsLuminanceMap;
+        GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
+        GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
@@ -77,6 +82,7 @@ namespace EARenderer {
         
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void relightSurfels(const FrustumCascades& cascades);
+        void averageSurfelClusterLuminances();
         void renderSkybox();
         
         void convertEquirectangularMapToCubemap();
@@ -85,6 +91,7 @@ namespace EARenderer {
         void buildBRDFIntegrationMap();
 
         std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
+        std::vector<uint8_t> surfelClustersGBufferData() const;
                 
     public:
         SceneRenderer(Scene* scene);
@@ -95,6 +102,7 @@ namespace EARenderer {
 
         void renderSurfelsGBuffer();
         void renderSurfelLuminances();
+        void renderSurfelClusterLuminances();
     };
     
 }

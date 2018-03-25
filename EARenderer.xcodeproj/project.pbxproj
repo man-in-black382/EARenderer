@@ -26,6 +26,11 @@
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE1C97252064574B006A4A73 /* libembree3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C97242064574B006A4A73 /* libembree3.3.dylib */; };
+		CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */; };
+		CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */; };
+		CE1C97582067B09E006A4A73 /* Cue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C974D2067B09E006A4A73 /* Cue.cpp */; };
+		CE1C97592067B09E006A4A73 /* Timeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C974F2067B09E006A4A73 /* Timeline.cpp */; };
+		CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C97502067B09E006A4A73 /* TimelineItem.cpp */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
 		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
 		CE2221FD1FC0B263009B6804 /* LightProbeBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FB1FC0B263009B6804 /* LightProbeBuilder.cpp */; };
@@ -313,6 +318,32 @@
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		CE1C97242064574B006A4A73 /* libembree3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.dylib; sourceTree = "<group>"; };
+		CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelClusterAveraging.frag; sourceTree = "<group>"; };
+		CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelClusterAveraging.cpp; sourceTree = "<group>"; };
+		CE1C9729206665B1006A4A73 /* GLSLSurfelClusterAveraging.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelClusterAveraging.hpp; sourceTree = "<group>"; };
+		CE1C973F2067B09E006A4A73 /* CinderSpecialization.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CinderSpecialization.hpp; sourceTree = "<group>"; };
+		CE1C97402067B09E006A4A73 /* Easing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Easing.h; sourceTree = "<group>"; };
+		CE1C97412067B09E006A4A73 /* Choreograph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Choreograph.h; sourceTree = "<group>"; };
+		CE1C97422067B09E006A4A73 /* TimeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeType.h; sourceTree = "<group>"; };
+		CE1C97432067B09E006A4A73 /* Cue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cue.h; sourceTree = "<group>"; };
+		CE1C97442067B09E006A4A73 /* Sequence.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Sequence.hpp; sourceTree = "<group>"; };
+		CE1C97462067B09E006A4A73 /* Sugar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Sugar.hpp; sourceTree = "<group>"; };
+		CE1C97472067B09E006A4A73 /* Hold.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Hold.hpp; sourceTree = "<group>"; };
+		CE1C97482067B09E006A4A73 /* Ramp.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Ramp.hpp; sourceTree = "<group>"; };
+		CE1C97492067B09E006A4A73 /* Combine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Combine.hpp; sourceTree = "<group>"; };
+		CE1C974A2067B09E006A4A73 /* Retime.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Retime.hpp; sourceTree = "<group>"; };
+		CE1C974B2067B09E006A4A73 /* Procedural.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Procedural.hpp; sourceTree = "<group>"; };
+		CE1C974C2067B09E006A4A73 /* Phrase.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Phrase.hpp; sourceTree = "<group>"; };
+		CE1C974D2067B09E006A4A73 /* Cue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cue.cpp; sourceTree = "<group>"; };
+		CE1C974E2067B09E006A4A73 /* TimelineItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineItem.h; sourceTree = "<group>"; };
+		CE1C974F2067B09E006A4A73 /* Timeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timeline.cpp; sourceTree = "<group>"; };
+		CE1C97502067B09E006A4A73 /* TimelineItem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimelineItem.cpp; sourceTree = "<group>"; };
+		CE1C97522067B09E006A4A73 /* VectorManipulation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = VectorManipulation.hpp; sourceTree = "<group>"; };
+		CE1C97532067B09E006A4A73 /* MakeUnique.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MakeUnique.hpp; sourceTree = "<group>"; };
+		CE1C97542067B09E006A4A73 /* TimelineOptions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TimelineOptions.hpp; sourceTree = "<group>"; };
+		CE1C97552067B09E006A4A73 /* Output.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Output.hpp; sourceTree = "<group>"; };
+		CE1C97562067B09E006A4A73 /* Motion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Motion.hpp; sourceTree = "<group>"; };
+		CE1C97572067B09E006A4A73 /* Timeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timeline.h; sourceTree = "<group>"; };
 		CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapFace.hpp; sourceTree = "<group>"; };
 		CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapSampler.hpp; sourceTree = "<group>"; };
 		CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapSampler.cpp; sourceTree = "<group>"; };
@@ -1063,6 +1094,68 @@
 			path = Runtime;
 			sourceTree = "<group>";
 		};
+		CE1C972B2067AA88006A4A73 /* embree */ = {
+			isa = PBXGroup;
+			children = (
+				CE1C97242064574B006A4A73 /* libembree3.3.dylib */,
+			);
+			path = embree;
+			sourceTree = "<group>";
+		};
+		CE1C973D2067B09E006A4A73 /* choreograph */ = {
+			isa = PBXGroup;
+			children = (
+				CE1C973E2067B09E006A4A73 /* specialization */,
+				CE1C97402067B09E006A4A73 /* Easing.h */,
+				CE1C97412067B09E006A4A73 /* Choreograph.h */,
+				CE1C97422067B09E006A4A73 /* TimeType.h */,
+				CE1C97432067B09E006A4A73 /* Cue.h */,
+				CE1C97442067B09E006A4A73 /* Sequence.hpp */,
+				CE1C97452067B09E006A4A73 /* phrase */,
+				CE1C974C2067B09E006A4A73 /* Phrase.hpp */,
+				CE1C974D2067B09E006A4A73 /* Cue.cpp */,
+				CE1C974E2067B09E006A4A73 /* TimelineItem.h */,
+				CE1C974F2067B09E006A4A73 /* Timeline.cpp */,
+				CE1C97502067B09E006A4A73 /* TimelineItem.cpp */,
+				CE1C97512067B09E006A4A73 /* detail */,
+				CE1C97542067B09E006A4A73 /* TimelineOptions.hpp */,
+				CE1C97552067B09E006A4A73 /* Output.hpp */,
+				CE1C97562067B09E006A4A73 /* Motion.hpp */,
+				CE1C97572067B09E006A4A73 /* Timeline.h */,
+			);
+			path = choreograph;
+			sourceTree = "<group>";
+		};
+		CE1C973E2067B09E006A4A73 /* specialization */ = {
+			isa = PBXGroup;
+			children = (
+				CE1C973F2067B09E006A4A73 /* CinderSpecialization.hpp */,
+			);
+			path = specialization;
+			sourceTree = "<group>";
+		};
+		CE1C97452067B09E006A4A73 /* phrase */ = {
+			isa = PBXGroup;
+			children = (
+				CE1C97462067B09E006A4A73 /* Sugar.hpp */,
+				CE1C97472067B09E006A4A73 /* Hold.hpp */,
+				CE1C97482067B09E006A4A73 /* Ramp.hpp */,
+				CE1C97492067B09E006A4A73 /* Combine.hpp */,
+				CE1C974A2067B09E006A4A73 /* Retime.hpp */,
+				CE1C974B2067B09E006A4A73 /* Procedural.hpp */,
+			);
+			path = phrase;
+			sourceTree = "<group>";
+		};
+		CE1C97512067B09E006A4A73 /* detail */ = {
+			isa = PBXGroup;
+			children = (
+				CE1C97522067B09E006A4A73 /* VectorManipulation.hpp */,
+				CE1C97532067B09E006A4A73 /* MakeUnique.hpp */,
+			);
+			path = detail;
+			sourceTree = "<group>";
+		};
 		CE3791741FA366640049BD1B /* Patchy Cement */ = {
 			isa = PBXGroup;
 			children = (
@@ -1598,7 +1691,8 @@
 		CE70F8991F8F8EBD00AD9027 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
-				CE1C97242064574B006A4A73 /* libembree3.3.dylib */,
+				CE1C973D2067B09E006A4A73 /* choreograph */,
+				CE1C972B2067AA88006A4A73 /* embree */,
 				CE70F89A1F8F8EBD00AD9027 /* stb */,
 				CE70F89C1F8F8EBD00AD9027 /* obj_loader */,
 				CE70F8A21F8F8EBD00AD9027 /* glm */,
@@ -2113,6 +2207,9 @@
 				CEF4DBF12062D43400A68C09 /* GLSLSurfelLighting.cpp */,
 				CEF4DBF22062D43400A68C09 /* GLSLSurfelLighting.hpp */,
 				CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */,
+				CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */,
+				CE1C9729206665B1006A4A73 /* GLSLSurfelClusterAveraging.hpp */,
+				CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -2415,6 +2512,7 @@
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
+				CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */,
 				CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */,
 				CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */,
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
@@ -2584,6 +2682,7 @@
 				CE70FA8D1F8F912300AD9027 /* SceneEditorTabView.mm in Sources */,
 				CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */,
 				CE70FA4A1F8F8EF600AD9027 /* GLUniform.cpp in Sources */,
+				CE1C97592067B09E006A4A73 /* Timeline.cpp in Sources */,
 				CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */,
 				CE70FA951F8F913100AD9027 /* OutlineView.m in Sources */,
 				CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */,
@@ -2617,6 +2716,7 @@
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
 				CE70FA4D1F8F8EF600AD9027 /* GLSLOmnidirectionalDepth.cpp in Sources */,
 				CE70FA3D1F8F8EF600AD9027 /* GLHDRTexture2D.cpp in Sources */,
+				CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */,
 				CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */,
 				CE70FA231F8F8EF600AD9027 /* Vertex1P1N1UV.cpp in Sources */,
 				CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */,
@@ -2630,6 +2730,7 @@
 				CE70FA8E1F8F912300AD9027 /* FPSView.mm in Sources */,
 				CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */,
 				CE70FA9A1F8F913100AD9027 /* AppDelegate.m in Sources */,
+				CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */,
 				CE891BC7205EB48500D2B09D /* GLLDRTexture2DSampler.cpp in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
@@ -2640,6 +2741,7 @@
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
 				CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */,
 				CE2221FD1FC0B263009B6804 /* LightProbeBuilder.cpp in Sources */,
+				CE1C97582067B09E006A4A73 /* Cue.cpp in Sources */,
 				CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */,
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,
 				CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */,
