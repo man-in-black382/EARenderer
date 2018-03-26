@@ -10,6 +10,7 @@
 #define Renderer_hpp
 
 #include <unordered_set>
+#include <array>
 
 #include "Scene.hpp"
 #include "GLFramebuffer.hpp"
@@ -37,6 +38,8 @@
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
+#include "GLHDRTexture3D.hpp"
+#include "GLBufferTexture.hpp"
 
 namespace EARenderer {
     
@@ -71,6 +74,11 @@ namespace EARenderer {
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
+        GLFloat3BufferTexture<SphericalHarmonics> mClusterProjectionsSHBufferTexture;
+        GLUIntegerBufferTexture<uint32_t> mClusterIndicesBufferTexture;
+
+        std::array<GLHDRTexture3D, 7> mGridProbesSphericalHarmonicMaps;
+
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
@@ -79,7 +87,12 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 //        //
-        
+
+        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
+        std::vector<uint8_t> surfelClustersGBufferData() const;
+        std::vector<SphericalHarmonics> surfelProjectionsSH() const;
+        std::vector<uint32_t> surfelClusterIndices() const;
+
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void relightSurfels(const FrustumCascades& cascades);
         void averageSurfelClusterLuminances();
@@ -90,11 +103,8 @@ namespace EARenderer {
         void buildSpecularIrradianceMap();
         void buildBRDFIntegrationMap();
 
-        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
-        std::vector<uint8_t> surfelClustersGBufferData() const;
-                
     public:
-        SceneRenderer(Scene* scene);
+        SceneRenderer(Scene* scene, size_t diffuseLightProbesGridResolution);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

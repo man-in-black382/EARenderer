@@ -44,10 +44,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
 
 // C++ raw pointers
+@property (assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::Scene *scene;
 @property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
-@property (assign, nonatomic) EARenderer::DefaultRenderComponentsProviding *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
 @property (assign, nonatomic) EARenderer::Cameraman *cameraman;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
@@ -75,10 +75,29 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.openGLView.delegate = self;    
 }
 
+- (void)dealloc
+{
+    delete self.scene;
+    delete self.sceneRenderer;
+    delete self.axesRenderer;
+    delete self.defaultRenderComponentsProvider;
+    delete self.sceneInteractor;
+    delete self.cameraman;
+    delete self.frameMeter;
+    delete self.frequentEventsThrottle;
+    delete self.surfelRenderer;
+    delete self.surfelGenerator;
+    delete self.lightProbeBuilder;
+    delete self.triangleRenderer;
+    delete self.boxRenderer;
+}
+
 #pragma mark - SceneGLViewDelegate
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
+    const uint8 kLightProbesGridResolution = 6;
+
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
     EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
@@ -106,13 +125,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
 
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), 6);
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), kLightProbesGridResolution);
     self.lightProbeBuilder->buildAndPlaceProbesForDynamicGeometry(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
 
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, kLightProbesGridResolution + 1);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
@@ -127,14 +146,18 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
 
     [self subscribeForEvents];
+
+    // Clean up 
+    delete self.surfelGenerator;
+    delete self.lightProbeBuilder;
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
-    self.sceneRenderer->renderSurfelClusterLuminances();
-    self.sceneRenderer->renderSurfelLuminances();
+//    self.sceneRenderer->renderSurfelClusterLuminances();
+//    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);

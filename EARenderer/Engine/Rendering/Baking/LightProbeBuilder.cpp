@@ -145,9 +145,9 @@ namespace EARenderer {
 
         printf("Building grid probes...\n");
         Measurement::executionTime("Grid probes placement took", [&]() {
-            for (float x = bb.min.x; x < bb.max.x; x += step.x) {
-                for (float y = bb.min.y; y < bb.max.y; y += step.y) {
-                    for (float z = bb.min.z; z < bb.max.z; z += step.z) {
+            for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
+                for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
+                    for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
 
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(scene, probe);

@@ -19,7 +19,7 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene)
+    SceneRenderer::SceneRenderer(Scene* scene, size_t diffuseLightProbesGridResolution)
     :
     mScene(scene),
 
@@ -41,7 +41,18 @@ namespace EARenderer {
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
     mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
-    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer.size())
+    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer.size()),
+
+    // Diffuse light probes
+    mGridProbesSphericalHarmonicMaps {
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
+        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution)
+    }
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -51,6 +62,9 @@ namespace EARenderer {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
+
+        mClusterProjectionsSHBufferTexture.buffer().initialize(surfelProjectionsSH());
+        mClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
 
         mSpecularIrradianceMap.generateMipmaps();
 
@@ -101,7 +115,63 @@ namespace EARenderer {
         meshID = closestMeshID;
         return closestMeshID != IDNotFound;
     }
-    
+
+#pragma mark - Data preparation
+
+    std::vector<std::vector<glm::vec3>> SceneRenderer::surfelsGBufferData() const {
+        std::vector<std::vector<glm::vec3>> bufferData;
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+
+        for (auto& surfel : mScene->surfels()) {
+            bufferData[0].emplace_back(surfel.position);
+            bufferData[1].emplace_back(surfel.normal);
+            bufferData[2].emplace_back(surfel.albedo);
+            bufferData[3].emplace_back(surfel.uv.x, surfel.uv.y, 0.0);
+        }
+
+        return bufferData;
+    }
+
+    std::vector<uint8_t> SceneRenderer::surfelClustersGBufferData() const {
+        std::vector<uint8_t> data;
+
+        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
+        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
+        // Surfel generator cannot generate more than 256 surfels per cluster by design
+        // so 1 byte per surfel count will be enough
+        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
+        for (auto& cluster : mScene->surfelClusters()) {
+            uint8_t b = cluster.surfelOffset & 0xFF;
+            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
+            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
+            uint8_t a = cluster.surfelCount;
+            data.push_back(r);
+            data.push_back(g);
+            data.push_back(b);
+            data.push_back(a);
+        }
+        return data;
+    }
+
+    std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
+        std::vector<SphericalHarmonics> shs;
+        for (auto& projection : mScene->surfelClusterProjections()) {
+            shs.push_back(projection.sphericalHarmonics);
+        }
+        return shs;
+    }
+
+    std::vector<uint32_t> SceneRenderer::surfelClusterIndices() const {
+        std::vector<uint32_t> indices;
+        for (auto& projection : mScene->surfelClusterProjections()) {
+            indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
+        }
+        return indices;
+    }
+
 #pragma mark - Rendering
     
     void SceneRenderer::renderSkybox() {
@@ -236,44 +306,6 @@ namespace EARenderer {
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
-    }
-
-    std::vector<std::vector<glm::vec3>> SceneRenderer::surfelsGBufferData() const {
-        std::vector<std::vector<glm::vec3>> bufferData;
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-
-        for (auto& surfel : mScene->surfels()) {
-            bufferData[0].emplace_back(surfel.position);
-            bufferData[1].emplace_back(surfel.normal);
-            bufferData[2].emplace_back(surfel.albedo);
-            bufferData[3].emplace_back(surfel.uv.x, surfel.uv.y, 0.0);
-        }
-
-        return bufferData;
-    }
-
-    std::vector<uint8_t> SceneRenderer::surfelClustersGBufferData() const {
-        std::vector<uint8_t> data;
-
-        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
-        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
-        // Surfel generator cannot generate more than 256 surfels per cluster by design
-        // so 1 byte per surfel count will be enough
-        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
-        for (auto& cluster : mScene->surfelClusters()) {
-            uint8_t b = cluster.surfelOffset & 0xFF;
-            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
-            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
-            uint8_t a = cluster.surfelCount;
-            data.push_back(r);
-            data.push_back(g);
-            data.push_back(b);
-            data.push_back(a);
-        }
-        return data;
     }
 
 #pragma mark - Public access point
