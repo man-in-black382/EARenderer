@@ -103,14 +103,68 @@ namespace EARenderer {
     
 #pragma mark - Public
     
-    void GLFramebuffer::attachTexture(const GLTexture2D& texture, uint16_t mipLevel) { attachTextureToColorAttachment0(texture, mipLevel); }
-    void GLFramebuffer::attachTexture(const GLTextureCubemap& texture, uint16_t mipLevel) { attachTextureToColorAttachment0(texture, mipLevel); }
-    void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture, uint16_t mipLevel) { attachTextureToColorAttachment0(texture, mipLevel); }
-    void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture, uint16_t mipLevel) { attachTextureToColorAttachment0(texture, mipLevel); }
-    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) { attachTextureToDepthAttachment(texture, mipLevel); }
-    void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel) { attachTextureToDepthAttachment(texture, mipLevel); }
-    void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures, uint16_t layer, uint16_t mipLevel) { attachTextureToColorAttachment0(textures, mipLevel, layer); }
-    void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures, uint16_t layer, uint16_t mipLevel) { attachTextureToDepthAttachment(textures, mipLevel, layer); }
+    void GLFramebuffer::attachTexture(const GLTexture2D& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTexture(const GLTextureCubemap& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToDepthAttachment(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToDepthAttachment(texture, mipLevel);
+    }
+
+    void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures,
+                                           uint16_t layer,
+                                           ColorAttachment colorAttachment,
+                                           uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(textures, mipLevel, layer);
+    }
+
+    void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures,
+                                           uint16_t layer,
+                                           uint16_t mipLevel)
+    {
+        attachTextureToDepthAttachment(textures, mipLevel, layer);
+    }
+
+    void GLFramebuffer::attachTextureLayer(const GLHDRTexture3D& texture,
+                                           uint16_t layer,
+                                           ColorAttachment colorAttachment,
+                                           uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment0(texture, mipLevel, layer);
+    }
     
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
         renderbuffer.bind();

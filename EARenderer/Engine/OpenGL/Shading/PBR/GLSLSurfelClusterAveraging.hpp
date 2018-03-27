@@ -20,7 +20,7 @@ namespace EARenderer {
         GLSLSurfelClusterAveraging();
 
         void setSurfelClustersGBuffer(const GLLDRTexture2D& gBuffer);
-        void setSurfelsLuminaceMap(const GLHDRTexture2D& gBuffer);
+        void setSurfelsLuminaceMap(const GLHDRTexture2D& map);
     };
 
 }

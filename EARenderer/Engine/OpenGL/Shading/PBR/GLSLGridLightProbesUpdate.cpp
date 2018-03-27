@@ -14,9 +14,29 @@ namespace EARenderer {
 
     GLSLGridLightProbesUpdate::GLSLGridLightProbesUpdate()
     :
-    GLProgram("FullScreenQuad.vert", "SurfelClusterAveraging.frag", "")
-    {
+    GLProgram("GridLightProbesUpdate.vert", "GridLightProbesUpdate.frag", "GridLightProbesUpdate.geom")
+    { }
 
+#pragma mark - Setters
+
+    void GLSLGridLightProbesUpdate::setProbesPerGridDimensionCount(size_t count) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesPerGridDimensionCount")>).location(), (GLint)count);
+    }
+
+    void GLSLGridLightProbesUpdate::setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap) {
+        setUniformTexture(uint32_constant<ctcrc32("uSurfelClustersLuminanceMap")>, luminanceMap);
+    }
+
+    void GLSLGridLightProbesUpdate::setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH) {
+        setUniformTexture(uint32_constant<ctcrc32("uProjectionClusterSphericalHarmonics")>, SH);
+    }
+
+    void GLSLGridLightProbesUpdate::setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices) {
+        setUniformTexture(uint32_constant<ctcrc32("uProjectionClusterIndices")>, indices);
+    }
+
+    void GLSLGridLightProbesUpdate::setProbeProjectionsMetadata(const GLUIntegerBufferTexture<glm::uvec2>& metadata) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbeProjectionsMetadata")>, metadata);
     }
 
 }

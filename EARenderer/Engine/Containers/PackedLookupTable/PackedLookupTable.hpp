@@ -53,7 +53,7 @@ namespace EARenderer {
         // The allocation ID of each object in the object array (1-1 mapping)
         ID* mObjectIDs = nullptr;
         
-        // FIFO queue to allocate objects with least ID reuse possible
+        // FIFO queue to allocate objects
         Allocation* mAllocations = nullptr;
         
         // Last possible free allocation slot

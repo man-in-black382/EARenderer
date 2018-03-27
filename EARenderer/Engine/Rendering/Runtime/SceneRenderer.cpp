@@ -19,7 +19,7 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene, size_t diffuseLightProbesGridResolution)
+    SceneRenderer::SceneRenderer(Scene* scene, size_t gridLightProbesCountPerDimension)
     :
     mScene(scene),
 
@@ -45,13 +45,13 @@ namespace EARenderer {
 
     // Diffuse light probes
     mGridProbesSphericalHarmonicMaps {
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution),
-        GLHDRTexture3D(Size2D(diffuseLightProbesGridResolution), diffuseLightProbesGridResolution)
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
+        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension)
     }
     {
         glEnable(GL_CULL_FACE);
@@ -63,20 +63,21 @@ namespace EARenderer {
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
 
-        mClusterProjectionsSHBufferTexture.buffer().initialize(surfelProjectionsSH());
-        mClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
+        mProjectionClusterSHsBufferTexture.buffer().initialize(surfelProjectionsSH());
+        mProjectionClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
+        mDiffuseProbeClusterProjectionsBufferTexture.buffer().initialize(probeProjectionsMetadata());
 
         mSpecularIrradianceMap.generateMipmaps();
 
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
-        
+
+//        mIBLFramebuffer.attachColorTextures({ mSurfelsLuminanceMap, mSurfelClustersLuminanceMap });
+
 //        convertEquirectangularMapToCubemap();
 //        buildDiffuseIrradianceMap();
 //        buildSpecularIrradianceMap();
 //        buildBRDFIntegrationMap();
-        
-//        mLightProbeBuilder.buildAndPlaceProbesInScene(scene);
     }
     
 #pragma mark - Setters
@@ -170,6 +171,14 @@ namespace EARenderer {
             indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
         }
         return indices;
+    }
+
+    std::vector<glm::uvec2> SceneRenderer::probeProjectionsMetadata() const {
+        std::vector<glm::uvec2> metadata;
+        for (auto& probe : mScene->diffuseLightProbes()) {
+            metadata.push_back({ probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount});
+        }
+        return metadata;
     }
 
 #pragma mark - Rendering

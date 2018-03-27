@@ -12,6 +12,8 @@
 #include <unordered_set>
 #include <array>
 
+#include <glm/vec2.hpp>
+
 #include "Scene.hpp"
 #include "GLFramebuffer.hpp"
 #include "DefaultRenderComponentsProviding.hpp"
@@ -30,6 +32,7 @@
 #include "GLSLBRDFIntegration.hpp"
 #include "GLSLSurfelLighting.hpp"
 #include "GLSLSurfelClusterAveraging.hpp"
+#include "GLSLGridLightProbesUpdate.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -60,6 +63,7 @@ namespace EARenderer {
         GLSLBRDFIntegration mBRDFIntegrationShader;
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
+        GLSLGridLightProbesUpdate mGridProbesUpdateShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
@@ -74,8 +78,9 @@ namespace EARenderer {
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
-        GLFloat3BufferTexture<SphericalHarmonics> mClusterProjectionsSHBufferTexture;
-        GLUIntegerBufferTexture<uint32_t> mClusterIndicesBufferTexture;
+        GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
+        GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
+        GLUIntegerBufferTexture<glm::uvec2> mDiffuseProbeClusterProjectionsBufferTexture;
 
         std::array<GLHDRTexture3D, 7> mGridProbesSphericalHarmonicMaps;
 
@@ -92,6 +97,7 @@ namespace EARenderer {
         std::vector<uint8_t> surfelClustersGBufferData() const;
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
         std::vector<uint32_t> surfelClusterIndices() const;
+        std::vector<glm::uvec2> probeProjectionsMetadata() const;
 
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void relightSurfels(const FrustumCascades& cascades);
@@ -104,7 +110,7 @@ namespace EARenderer {
         void buildBRDFIntegrationMap();
 
     public:
-        SceneRenderer(Scene* scene, size_t diffuseLightProbesGridResolution);
+        SceneRenderer(Scene* scene, size_t gridLightProbesCountPerDimension);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

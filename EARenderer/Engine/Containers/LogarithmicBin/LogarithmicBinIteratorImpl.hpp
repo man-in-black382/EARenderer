@@ -88,7 +88,7 @@ namespace EARenderer {
     template <typename T>
     bool
     LogarithmicBin<T>::Iterator::operator!=(const Iterator& other) const {
-        // Don't touch vector's itereator if we're at the end of unordered_map
+        // Don't touch vector's iterator if we're at the end of unordered_map
         if (mBinsIterator == mBinsEndIterator) {
             return mBinsIterator != other.mBinsIterator;
         } else {

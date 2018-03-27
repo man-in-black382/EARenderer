@@ -23,8 +23,8 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelClustersGBuffer")>, gBuffer);
     }
 
-    void GLSLSurfelClusterAveraging::setSurfelsLuminaceMap(const GLHDRTexture2D& gBuffer) {
-        setUniformTexture(uint32_constant<ctcrc32("uSurfelsLuminanceMap")>, gBuffer);
+    void GLSLSurfelClusterAveraging::setSurfelsLuminaceMap(const GLHDRTexture2D& map) {
+        setUniformTexture(uint32_constant<ctcrc32("uSurfelsLuminanceMap")>, map);
     }
 
 }
