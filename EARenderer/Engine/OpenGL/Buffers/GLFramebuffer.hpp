@@ -90,11 +90,6 @@ namespace EARenderer {
                                 ColorAttachment colorAttachment = ColorAttachment::Attachment0,
                                 uint16_t mipLevel = 0);
 
-        void attachTextureLayer(const GLTexture2DArray& textures,
-                                uint16_t layer,
-                                ColorAttachment colorAttachment = ColorAttachment::Attachment0,
-                                uint16_t mipLevel = 0);
-
         void attachTextureLayer(const GLHDRTexture3D& texture,
                                 uint16_t layer,
                                 ColorAttachment colorAttachment = ColorAttachment::Attachment0,

@@ -299,7 +299,7 @@ namespace EARenderer {
             float roughness = (float)mipLevel / (float)(mNumberOfIrradianceMips - 1);
             mRadianceConvolutionShader.setRoughness(roughness);
             
-            mIBLFramebuffer.attachTexture(mSpecularIrradianceMap, mipLevel);
+            mIBLFramebuffer.attachTexture(mSpecularIrradianceMap, GLFramebuffer::ColorAttachment::Attachment0, mipLevel);
             
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glDrawArrays(GL_TRIANGLES, 0, 4);
