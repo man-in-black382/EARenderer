@@ -50,6 +50,7 @@ namespace EARenderer {
     private:
         uint8_t mNumberOfCascades = 1;
         uint8_t mNumberOfIrradianceMips = 5;
+        size_t mGridProbesCountPerDimension = 0;
         
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
@@ -81,8 +82,8 @@ namespace EARenderer {
         GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
         GLUIntegerBufferTexture<glm::uvec2> mDiffuseProbeClusterProjectionsBufferTexture;
-
         std::array<GLHDRTexture3D, 7> mGridProbesSphericalHarmonicMaps;
+        GLFramebuffer mGridProbesFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
@@ -93,6 +94,11 @@ namespace EARenderer {
         GLSLGenericGeometry mGenericShader;
 //        //
 
+        void setupGLState();
+        void setupTextures();
+        void setupFramebuffers();
+        void setupShaders();
+
         std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
         std::vector<uint8_t> surfelClustersGBufferData() const;
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
@@ -102,6 +108,7 @@ namespace EARenderer {
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void relightSurfels(const FrustumCascades& cascades);
         void averageSurfelClusterLuminances();
+        void updateGridProbes();
         void renderSkybox();
         
         void convertEquirectangularMapToCubemap();

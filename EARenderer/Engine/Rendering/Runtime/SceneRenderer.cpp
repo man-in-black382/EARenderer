@@ -22,6 +22,7 @@ namespace EARenderer {
     SceneRenderer::SceneRenderer(Scene* scene, size_t gridLightProbesCountPerDimension)
     :
     mScene(scene),
+    mGridProbesCountPerDimension(gridLightProbesCountPerDimension),
 
     // Shadow maps
     mShadowMaps(Size2D(1024), mNumberOfCascades),
@@ -52,25 +53,13 @@ namespace EARenderer {
         GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
         GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
         GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension)
-    }
+    },
+    mGridProbesFramebuffer(Size2D(gridLightProbesCountPerDimension))
     {
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glClearColor(0.0, 0.0, 0.0, 1.0);
-        glClearDepth(1.0);
-        glDepthFunc(GL_LEQUAL);
-
-        mProjectionClusterSHsBufferTexture.buffer().initialize(surfelProjectionsSH());
-        mProjectionClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
-        mDiffuseProbeClusterProjectionsBufferTexture.buffer().initialize(probeProjectionsMetadata());
-
-        mSpecularIrradianceMap.generateMipmaps();
-
-        mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
-        mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
+        setupGLState();
+        setupTextures();
+        setupFramebuffers();
+        setupShaders();
 
 //        mIBLFramebuffer.attachColorTextures({ mSurfelsLuminanceMap, mSurfelClustersLuminanceMap });
 
@@ -115,6 +104,52 @@ namespace EARenderer {
         
         meshID = closestMeshID;
         return closestMeshID != IDNotFound;
+    }
+
+
+#pragma mark - Initial setup
+
+    void SceneRenderer::setupGLState() {
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClearDepth(1.0);
+        glDepthFunc(GL_LEQUAL);
+    }
+
+    void SceneRenderer::setupTextures() {
+        mProjectionClusterSHsBufferTexture.buffer().initialize(surfelProjectionsSH());
+        mProjectionClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
+        mDiffuseProbeClusterProjectionsBufferTexture.buffer().initialize(probeProjectionsMetadata());
+
+        mSpecularIrradianceMap.generateMipmaps();
+    }
+
+    void SceneRenderer::setupFramebuffers() {
+        mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
+        mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
+
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[0]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[1]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[2]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[3]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6]);
+    }
+
+    void SceneRenderer::setupShaders() {
+        mGridProbesUpdateShader.bind();
+        mGridProbesUpdateShader.ensureSamplerValidity([&] {
+            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
+            mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
+            mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
+            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
+            mGridProbesUpdateShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+        });
     }
 
 #pragma mark - Data preparation
@@ -182,74 +217,7 @@ namespace EARenderer {
     }
 
 #pragma mark - Rendering
-    
-    void SceneRenderer::renderSkybox() {
-        mSkyboxShader.bind();
-        mSkyboxShader.ensureSamplerValidity([this]() {
-            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
-            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
-        });
-        mScene->skybox()->draw();
-    }
-    
-    void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
-        // Fill shadow map
-        mDirectionalDepthShader.bind();
-        mDepthFramebuffer.bind();
-        mDepthFramebuffer.viewport().apply();
-
-        for (uint8_t cascade = 0; cascade < cascades.amount; cascade++) {
-            mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
-            glClear(GL_DEPTH_BUFFER_BIT);
-
-            for (ID meshInstanceID : mScene->meshInstances()) {
-                auto& instance = mScene->meshInstances()[meshInstanceID];
-                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-                
-                mDirectionalDepthShader.setModelMatrix(instance.transformation().modelMatrix());
-                mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
-                
-                for (ID subMeshID : subMeshes) {
-                    auto& subMesh = subMeshes[subMeshID];
-                    subMesh.draw();
-                }
-            }
-        }
-    }
-
-    void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
-        DirectionalLight& directionalLight = mScene->directionalLight();
-
-        mSurfelLightingShader.bind();
-        mSurfelsLuminanceFramebuffer.bind();
-        mSurfelsLuminanceFramebuffer.viewport().apply();
-
-        mSurfelLightingShader.setLight(directionalLight);
-        mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
-            mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
-        });
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 4);
-    }
-
-    void SceneRenderer::averageSurfelClusterLuminances() {
-        mSurfelClusterAveragingShader.bind();
-        mSurfelClustersLuminanceFramebuffer.bind();
-        mSurfelClustersLuminanceFramebuffer.viewport().apply();
-
-        mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
-            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(mSurfelClustersGBuffer);
-            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
-        });
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 4);
-    }
-    
-#pragma mark Cook-Torrance
+#pragma mark - Baking
     
     void SceneRenderer::convertEquirectangularMapToCubemap() {
         mIBLFramebuffer.bind();
@@ -317,7 +285,84 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
 
-#pragma mark - Public access point
+#pragma mark - Runtime
+
+    void SceneRenderer::renderSkybox() {
+        mSkyboxShader.bind();
+        mSkyboxShader.ensureSamplerValidity([this]() {
+            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+        });
+        mScene->skybox()->draw();
+    }
+
+    void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
+        // Fill shadow map
+        mDirectionalDepthShader.bind();
+        mDepthFramebuffer.bind();
+        mDepthFramebuffer.viewport().apply();
+
+        for (uint8_t cascade = 0; cascade < cascades.amount; cascade++) {
+            mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            for (ID meshInstanceID : mScene->meshInstances()) {
+                auto& instance = mScene->meshInstances()[meshInstanceID];
+                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+                mDirectionalDepthShader.setModelMatrix(instance.transformation().modelMatrix());
+                mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
+
+                for (ID subMeshID : subMeshes) {
+                    auto& subMesh = subMeshes[subMeshID];
+                    subMesh.draw();
+                }
+            }
+        }
+    }
+
+    void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
+        DirectionalLight& directionalLight = mScene->directionalLight();
+
+        mSurfelLightingShader.bind();
+        mSurfelsLuminanceFramebuffer.bind();
+        mSurfelsLuminanceFramebuffer.viewport().apply();
+
+        mSurfelLightingShader.setLight(directionalLight);
+        mSurfelLightingShader.ensureSamplerValidity([&]() {
+            mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+        });
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+    }
+
+    void SceneRenderer::averageSurfelClusterLuminances() {
+        mSurfelClusterAveragingShader.bind();
+        mSurfelClustersLuminanceFramebuffer.bind();
+        mSurfelClustersLuminanceFramebuffer.viewport().apply();
+
+        mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
+            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(mSurfelClustersGBuffer);
+            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
+        });
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+    }
+
+    void SceneRenderer::updateGridProbes() {
+        mGridProbesUpdateShader.bind();
+        mGridProbesFramebuffer.bind();
+        mGridProbesFramebuffer.viewport().apply();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
+    }
+
+#pragma mark - Public interface
     
     void SceneRenderer::render() {
         DirectionalLight& directionalLight = mScene->directionalLight();
@@ -327,6 +372,7 @@ namespace EARenderer {
         renderShadowMapsForDirectionalLights(cascades);
         relightSurfels(cascades);
         averageSurfelClusterLuminances();
+        updateGridProbes();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
@@ -341,6 +387,8 @@ namespace EARenderer {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
+            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
         

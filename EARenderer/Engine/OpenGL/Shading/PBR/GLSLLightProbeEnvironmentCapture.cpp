@@ -16,7 +16,7 @@ namespace EARenderer {
     :
     EARenderer::GLProgram("LightProbeEnvironmentCapture.vert", "CookTorrance.frag", "LightProbeEnvironmentCapture.geom")
     {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
+//        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
     }
     
 #pragma mark - Setters

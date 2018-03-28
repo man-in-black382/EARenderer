@@ -34,6 +34,14 @@
 namespace EARenderer {
     
     class GLFramebuffer: public GLNamedObject, public GLBindable {
+    public:
+        enum class ColorAttachment {
+            Attachment0, Attachment1, Attachment2, Attachment3,
+            Attachment4, Attachment5, Attachment6, Attachment7,
+            Attachment8, Attachment9, Attachment10, Attachment11,
+            Attachment12, Attachment13, Attachment14, Attachment15
+        };
+
     private:
         Size2D mSize;
         GLViewport mViewport;
@@ -43,12 +51,10 @@ namespace EARenderer {
 
         void obtainHardwareLimits();
         void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
-        void attachTextureToColorAttachment0(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
+        void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
+        GLenum glColorAttachment(ColorAttachment attachment) const;
         
     public:
-        enum class ColorAttachment { Attachment0, Attachment1, Attachment2, Attachment3,
-            Attachment4, Attachment5, Attachment6, Attachment7 };
-
         GLFramebuffer(const Size2D& size);
         GLFramebuffer(GLFramebuffer&& that) = default;
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
@@ -81,16 +87,15 @@ namespace EARenderer {
                            ColorAttachment colorAttachment = ColorAttachment::Attachment0,
                            uint16_t mipLevel = 0);
 
+        void attachTexture(const GLHDRTexture3D& texture,
+                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           uint16_t mipLevel = 0);
+
         void attachTextureLayer(const GLDepthTexture2DArray& textures,
                                 uint16_t layer,
                                 uint16_t mipLevel = 0);
 
         void attachTextureLayer(const GLTexture2DArray& textures,
-                                uint16_t layer,
-                                ColorAttachment colorAttachment = ColorAttachment::Attachment0,
-                                uint16_t mipLevel = 0);
-
-        void attachTextureLayer(const GLHDRTexture3D& texture,
                                 uint16_t layer,
                                 ColorAttachment colorAttachment = ColorAttachment::Attachment0,
                                 uint16_t mipLevel = 0);

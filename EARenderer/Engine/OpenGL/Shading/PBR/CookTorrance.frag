@@ -68,6 +68,7 @@ struct SH {
 };
 
 uniform vec3 uCameraPosition;
+uniform vec3 uWorldBoudningBoxDimensions;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -83,7 +84,16 @@ uniform int uNumberOfCascades;
 
 // Shperical harmonics
 
-uniform samplerBuffer uSphericalHarmonicsBuffer;
+//uniform samplerBuffer uSphericalHarmonicsBuffer;
+
+uniform sampler3D uGridSHMap0;
+uniform sampler3D uGridSHMap1;
+uniform sampler3D uGridSHMap2;
+uniform sampler3D uGridSHMap3;
+uniform sampler3D uGridSHMap4;
+uniform sampler3D uGridSHMap5;
+uniform sampler3D uGridSHMap6;
+
 uniform bool uShouldEvaluateSphericalHarmonics;
 
 // IBL
@@ -100,22 +110,72 @@ uniform int uSpecularIrradianceMapLOD;
 // Unpacks spherical harmonics coefficients
 // from the corresponding sample buffer
 //
-SH UnpackSH(int index) {
+//SH UnpackSH(int index) {
+//    SH sh;
+//
+//    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
+//    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
+//    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
+//    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
+//    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
+//    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
+//    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
+//    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
+//    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
+//
+//    return sh;
+//
+////    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
+//}
+
+SH UnpackSH() {
     SH sh;
 
-    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
-    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
-    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
-    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
-    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
-    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
-    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
-    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
-    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
+    // Get 3D texture space coordinates
+    vec3 shMapCoords = vWorldPosition / uWorldBoudningBoxDimensions;
+    // Transformation to [0,1] range
+    shMapCoords = shMapCoords * 0.5 + 0.5;
+
+    vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
+    vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
+    vec4 shMap2Data = texture(uGridSHMap2, shMapCoords);
+    vec4 shMap3Data = texture(uGridSHMap3, shMapCoords);
+    vec4 shMap4Data = texture(uGridSHMap4, shMapCoords);
+    vec4 shMap5Data = texture(uGridSHMap5, shMapCoords);
+    vec4 shMap6Data = texture(uGridSHMap6, shMapCoords);
+
+//    sh.L00  = vec3(shMap0Data.rgb);
+//    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+//    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
+//    sh.L1_1 = vec3(shMap2Data.gba);
+//    sh.L21  = vec3(shMap3Data.rgb);
+//    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
+//    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
+//    sh.L20  = vec3(shMap5Data.gba);
+//    sh.L22  = vec3(shMap6Data.rgb);
+
+    // Grace Cathedral test coefficients
+//    sh.L00  = vec3(0.79, 0.44, 0.54);
+//    sh.L11  = vec3(-0.29, -0.6, 0.01);
+//    sh.L10  = vec3(-0.34, -0.18, -0.27);
+//    sh.L1_1 = vec3(0.39, 0.35, 0.60);
+//    sh.L21  = vec3(0.56, 0.21, 0.14);
+//    sh.L2_1 = vec3(-0.26, -0.22, -0.47);
+//    sh.L2_2 = vec3(-0.11, -0.05, -0.12);
+//    sh.L20  = vec3(-0.16, -0.09, -0.15);
+//    sh.L22  = vec3(0.21, -0.05, -0.30);
+
+    sh.L00  = vec3(1.0);
+    sh.L11  = vec3(1.0);
+    sh.L10  = vec3(1.0);
+    sh.L1_1 = vec3(1.0);
+    sh.L21  = vec3(1.0);
+    sh.L2_1 = vec3(1.0);
+    sh.L2_2 = vec3(1.0);
+    sh.L20  = vec3(1.0);
+    sh.L22  = vec3(1.0);
 
     return sh;
-
-//    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
 }
 
 float SHRadiance(SH sh, vec3 direction, int component) {
@@ -130,7 +190,7 @@ float SHRadiance(SH sh, vec3 direction, int component) {
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = UnpackSH(0);
+    SH sh = UnpackSH();
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
@@ -212,7 +272,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
     
     vec3 diffuse    = Kd * albedo / PI * NdotL;
-//    diffuse         += uShouldEvaluateSphericalHarmonics ? Kd * EvaluateSphericalHarmonics(N) : vec3(0.0);
+//    diffuse         += Kd * EvaluateSphericalHarmonics(N);
     specular        *= NdotL;
 
     return (diffuse + specular) * radiance;
@@ -363,9 +423,9 @@ void main() {
     // in both the geometry and normal distribution function.
     float roughness2        = roughness * roughness;
     
-    float metallic          = FetchMetallicMap();
+    float metallic          = 0.0;// FetchMetallicMap();
     float ao                = FetchAOMap();
-    vec3 albedo             = FetchAlbedoMap();
+    vec3 albedo             = vec3(1.0);//FetchAlbedoMap();
     vec3 N                  = FetchNormalMap();
     vec3 V                  = normalize(uCameraPosition - vWorldPosition);
     vec3 L                  = vec3(0.0);
@@ -393,8 +453,8 @@ void main() {
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 correctColor       = uShouldEvaluateSphericalHarmonics ? ReinhardToneMapAndGammaCorrect(specularAndDiffuse) : specularAndDiffuse;
+    vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(specularAndDiffuse), 1.0);
+    oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
 //    oFragColor = vec4(GammaCorrect(albedo), 1.0);
 }

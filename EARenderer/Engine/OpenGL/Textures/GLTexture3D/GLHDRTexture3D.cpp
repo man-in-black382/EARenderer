@@ -13,7 +13,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLHDRTexture3D::GLHDRTexture3D(const Size2D& size, size_t depth) {
-        initialize(size, depth, Filter::Bilinear, WrapMode::ClampToEdge, GL_RGB32F);
+        initialize(size, depth, Filter::Bilinear, WrapMode::ClampToEdge, GL_RGBA32F);
     }
 
 }

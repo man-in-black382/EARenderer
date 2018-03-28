@@ -14,7 +14,13 @@ const float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
 
 // Output
 
-out vec4 oFragColor;
+layout(location = 0) out vec4 oFragData0;
+layout(location = 1) out vec4 oFragData1;
+layout(location = 2) out vec4 oFragData2;
+layout(location = 3) out vec4 oFragData3;
+layout(location = 4) out vec4 oFragData4;
+layout(location = 5) out vec4 oFragData5;
+layout(location = 6) out vec4 oFragData6;
 
 // Input
 
@@ -89,19 +95,19 @@ SH MultiplySHByColor(SH sh, vec3 color) {
 SH AddTwoSH(SH first, SH second) {
     SH result;
 
-    result.L00  = first.L00 + second.L00;
+    result.L00  = first.L00  + second.L00;
 
     result.L1_1 = first.L1_1 + second.L1_1;
-    result.L10  = first.L10 + second.L10;
-    result.L11  = first.L11 + second.L11;
+    result.L10  = first.L10  + second.L10;
+    result.L11  = first.L11  + second.L11;
 
     result.L2_2 = first.L2_2 + second.L2_2;
     result.L2_1 = first.L2_1 + second.L2_1;
-    result.L21  = first.L21 + second.L21;
+    result.L21  = first.L21  + second.L21;
 
-    result.L20  = first.L20 + second.L20;
+    result.L20  = first.L20  + second.L20;
 
-    result.L22  = first.L22 + second.L22;
+    result.L22  = first.L22  + second.L22;
 
     return result;
 }
@@ -110,7 +116,7 @@ SH AddTwoSH(SH first, SH second) {
 // Unpacks spherical harmonics coefficients
 // from the corresponding sample buffer
 //
-SH UnpackSH(uint surfelClusterIndex) {
+SH UnpackSH(int surfelClusterIndex) {
     SH sh;
 
     sh.L00  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 0).rgb);
@@ -123,6 +129,16 @@ SH UnpackSH(uint surfelClusterIndex) {
     sh.L20  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 7).rgb);
     sh.L22  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 8).rgb);
 
+//    sh.L00  = vec3(1.0, 0.2, 0.4);
+//    sh.L11  = vec3(1.0, 0.2, 0.4);
+//    sh.L10  = vec3(1.0, 0.2, 0.4);
+//    sh.L1_1 = vec3(1.0, 0.2, 0.4);
+//    sh.L21  = vec3(1.0, 0.2, 0.4);
+//    sh.L2_1 = vec3(1.0, 0.2, 0.4);
+//    sh.L2_2 = vec3(1.0, 0.2, 0.4);
+//    sh.L20  = vec3(1.0, 0.2, 0.4);
+//    sh.L22  = vec3(1.0, 0.2, 0.4);
+
     return sh;
 }
 
@@ -130,13 +146,24 @@ SH UnpackSH(uint surfelClusterIndex) {
 // since minimum of 7 4-component textures are required
 // to store 3rd order spherical harmonics for 3 color channels
 void PackSHToRenderTargets(SH sh) {
-    gl_FragData[0] = vec4(sh.L00.rgb, sh.L11.r);
-    gl_FragData[1] = vec4(sh.L11.gb, sh.L10.rg);
-    gl_FragData[2] = vec4(sh.L10.b, sh.L1_1.rgb);
-    gl_FragData[3] = vec4(sh.L21.rgb, sh.L2_1.r);
-    gl_FragData[4] = vec4(sh.L2_1.gb, sh.L2_2.rg);
-    gl_FragData[5] = vec4(sh.L2_2.b, sh.L20.rgb);
-    gl_FragData[6] = vec4(sh.L22.rgb, 0.0);
+    // Grace Cathedral test coefficients
+    sh.L00  = vec3(0.79, 0.44, 0.54);
+    sh.L11  = vec3(-0.29, -0.6, 0.01);
+    sh.L10  = vec3(-0.34, -0.18, -0.27);
+    sh.L1_1 = vec3(0.39, 0.35, 0.60);
+    sh.L21  = vec3(0.56, 0.21, 0.14);
+    sh.L2_1 = vec3(-0.26, -0.22, -0.47);
+    sh.L2_2 = vec3(-0.11, -0.05, -0.12);
+    sh.L20  = vec3(-0.16, -0.09, -0.15);
+    sh.L22  = vec3(0.21, -0.05, -0.30);
+
+    oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
+    oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
+    oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
+    oFragData3 = vec4(sh.L21.rgb, sh.L2_1.r);
+    oFragData4 = vec4(sh.L2_1.gb, sh.L2_2.rg);
+    oFragData5 = vec4(sh.L2_2.b, sh.L20.rgb);
+    oFragData6 = vec4(sh.L22.rgb, 0.0);
 }
 
 // Schematically, the update of a single light probe on the GPU works like this:
@@ -149,14 +176,14 @@ void PackSHToRenderTargets(SH sh) {
 // – Add the product of the SH and the luminance to the result SHs.
 //
 void main() {
-    uvec3 unnormalizedTexCoords = uvec3(uProbesPerGridDimensionCount * vTexCoords.x,
+    ivec3 unnormalizedTexCoords = ivec3(uProbesPerGridDimensionCount * vTexCoords.x,
                                         uProbesPerGridDimensionCount * vTexCoords.y,
                                         uProbesPerGridDimensionCount * vTexCoords.z);
 
-    uint size = uProbesPerGridDimensionCount;
-    uint metadataIndex = size * size * unnormalizedTexCoords.z +
-                         size * unnormalizedTexCoords.y +
-                         unnormalizedTexCoords.x;
+    int size = uProbesPerGridDimensionCount;
+    int metadataIndex = size * size * unnormalizedTexCoords.z +
+                        size * unnormalizedTexCoords.y +
+                        unnormalizedTexCoords.x;
 
     metadataIndex *= 2; // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
 
@@ -170,14 +197,14 @@ void main() {
     SH resultingSH = ZeroSH();
 
     for (uint i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupSize; ++i) {
-        uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, i).r;
+        uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, int(i)).r;
 
         vec2 luminanceUV = vec2(float(surfelClusterIndex % luminanceMapWidth) / luminanceMapWidth,
                                 float(surfelClusterIndex / luminanceMapWidth) / luminanceMapHeight);
 
-        vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, uv).rgb;
+        vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
 
-        SH surfelClusterPrecomputedSH = UnpackSH(surfelClusterIndex);
+        SH surfelClusterPrecomputedSH = UnpackSH(int(surfelClusterIndex));
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
 

@@ -18,7 +18,7 @@ namespace EARenderer {
     :
     GLProgram("CookTorrance.vert", "CookTorrance.frag", "")
     {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
+//        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
     }
     
 #pragma mark - Setters
@@ -78,8 +78,23 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
     }
     
-    void GLSLCookTorrance::setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture) {
-        setUniformTexture(uint32_constant<ctcrc32("uSphericalHarmonicsBuffer")>, SHTexture);
+//    void GLSLCookTorrance::setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture) {
+//        setUniformTexture(uint32_constant<ctcrc32("uSphericalHarmonicsBuffer")>, SHTexture);
+//    }
+
+    void GLSLCookTorrance::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
+    }
+
+    void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
+        glm::vec3 dimensions = box.max - box.min;
+        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxDimensions")>).location(), 1, glm::value_ptr(dimensions));
     }
     
 }

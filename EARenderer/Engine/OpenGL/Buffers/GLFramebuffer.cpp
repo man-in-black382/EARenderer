@@ -76,19 +76,49 @@ namespace EARenderer {
         glReadBuffer(GL_NONE);
     }
     
-    void GLFramebuffer::attachTextureToColorAttachment0(const GLTexture& texture, uint16_t mipLevel, int16_t layer) {
+    void GLFramebuffer::attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel, int16_t layer) {
         bind();
         texture.bind();
-        
+
+        GLenum attachment = glColorAttachment(colorAttachment);
+
         if (layer == -1) {
-            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), mipLevel);
+            glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture.name(), mipLevel);
         } else {
-            glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, texture.name(), mipLevel, layer);
+            glFramebufferTextureLayer(GL_FRAMEBUFFER, attachment, texture.name(), mipLevel, layer);
         }
-        
-        mDrawBuffers.insert(GL_COLOR_ATTACHMENT0);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+
+        mDrawBuffers.insert(attachment);
+
+        std::array<GLenum, 16> drawBuffers;
+        size_t i = 0;
+        for (GLenum drawBuffer : mDrawBuffers) {
+            drawBuffers[i] = drawBuffer;
+        }
+
+        glDrawBuffers((GLsizei)mDrawBuffers.size(), drawBuffers.data());
         glReadBuffer(GL_NONE);
+    }
+
+    GLenum GLFramebuffer::glColorAttachment(ColorAttachment attachment) const {
+        switch (attachment) {
+            case ColorAttachment::Attachment0: return GL_COLOR_ATTACHMENT0;
+            case ColorAttachment::Attachment1: return GL_COLOR_ATTACHMENT1;
+            case ColorAttachment::Attachment2: return GL_COLOR_ATTACHMENT2;
+            case ColorAttachment::Attachment3: return GL_COLOR_ATTACHMENT3;
+            case ColorAttachment::Attachment4: return GL_COLOR_ATTACHMENT4;
+            case ColorAttachment::Attachment5: return GL_COLOR_ATTACHMENT5;
+            case ColorAttachment::Attachment6: return GL_COLOR_ATTACHMENT6;
+            case ColorAttachment::Attachment7: return GL_COLOR_ATTACHMENT7;
+            case ColorAttachment::Attachment8: return GL_COLOR_ATTACHMENT8;
+            case ColorAttachment::Attachment9: return GL_COLOR_ATTACHMENT9;
+            case ColorAttachment::Attachment10: return GL_COLOR_ATTACHMENT10;
+            case ColorAttachment::Attachment11: return GL_COLOR_ATTACHMENT11;
+            case ColorAttachment::Attachment12: return GL_COLOR_ATTACHMENT12;
+            case ColorAttachment::Attachment13: return GL_COLOR_ATTACHMENT13;
+            case ColorAttachment::Attachment14: return GL_COLOR_ATTACHMENT14;
+            case ColorAttachment::Attachment15: return GL_COLOR_ATTACHMENT15;
+        }
     }
     
     void GLFramebuffer::detachAllAttachments() {
@@ -107,28 +137,28 @@ namespace EARenderer {
                                       ColorAttachment colorAttachment,
                                       uint16_t mipLevel)
     {
-        attachTextureToColorAttachment0(texture, mipLevel);
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
     void GLFramebuffer::attachTexture(const GLTextureCubemap& texture,
                                       ColorAttachment colorAttachment,
                                       uint16_t mipLevel)
     {
-        attachTextureToColorAttachment0(texture, mipLevel);
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
     void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture,
                                       ColorAttachment colorAttachment,
                                       uint16_t mipLevel)
     {
-        attachTextureToColorAttachment0(texture, mipLevel);
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
     void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture,
                                       ColorAttachment colorAttachment,
                                       uint16_t mipLevel)
     {
-        attachTextureToColorAttachment0(texture, mipLevel);
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
     void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture,
@@ -143,12 +173,19 @@ namespace EARenderer {
         attachTextureToDepthAttachment(texture, mipLevel);
     }
 
+    void GLFramebuffer::attachTexture(const GLHDRTexture3D& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+    }
+
     void GLFramebuffer::attachTextureLayer(const GLTexture2DArray& textures,
                                            uint16_t layer,
                                            ColorAttachment colorAttachment,
                                            uint16_t mipLevel)
     {
-        attachTextureToColorAttachment0(textures, mipLevel, layer);
+        attachTextureToColorAttachment(textures, colorAttachment, mipLevel, layer);
     }
 
     void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures,
@@ -156,14 +193,6 @@ namespace EARenderer {
                                            uint16_t mipLevel)
     {
         attachTextureToDepthAttachment(textures, mipLevel, layer);
-    }
-
-    void GLFramebuffer::attachTextureLayer(const GLHDRTexture3D& texture,
-                                           uint16_t layer,
-                                           ColorAttachment colorAttachment,
-                                           uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment0(texture, mipLevel, layer);
     }
     
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {

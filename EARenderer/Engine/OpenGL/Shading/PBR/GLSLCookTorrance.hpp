@@ -16,14 +16,18 @@
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
+#include "GLHDRTexture3D.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
 #include "FrustumCascades.hpp"
 #include "LightProbe.hpp"
+#include "AxisAlignedBox3D.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+
+#include <array>
 
 namespace EARenderer {
     
@@ -45,7 +49,10 @@ namespace EARenderer {
                             int8_t specularIrradianceMapMaxLOD);
         
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
-        void setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture);
+//        void setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture);
+        void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
+
+        void setWorldBoundingBox(const AxisAlignedBox3D& box);
     };
     
 }
