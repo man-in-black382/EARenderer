@@ -411,6 +411,21 @@ namespace EARenderer {
         }
 
         renderSkybox();
+
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect({ 400, 0 }, { 400, 400 });
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mGridProbesSphericalHarmonicMaps[0], 0.0);
+        });
+
+        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {

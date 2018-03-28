@@ -134,7 +134,7 @@ SH UnpackSH() {
     // Get 3D texture space coordinates
     vec3 shMapCoords = vWorldPosition / uWorldBoudningBoxDimensions;
     // Transformation to [0,1] range
-    shMapCoords = shMapCoords * 0.5 + 0.5;
+    shMapCoords = vec3(0.0);// shMapCoords * 0.5 + 0.5;
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
@@ -144,36 +144,26 @@ SH UnpackSH() {
     vec4 shMap5Data = texture(uGridSHMap5, shMapCoords);
     vec4 shMap6Data = texture(uGridSHMap6, shMapCoords);
 
-//    sh.L00  = vec3(shMap0Data.rgb);
-//    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
-//    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
-//    sh.L1_1 = vec3(shMap2Data.gba);
-//    sh.L21  = vec3(shMap3Data.rgb);
-//    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
-//    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
-//    sh.L20  = vec3(shMap5Data.gba);
-//    sh.L22  = vec3(shMap6Data.rgb);
+    sh.L00  = vec3(shMap0Data.rgb);
+    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
+    sh.L1_1 = vec3(shMap2Data.gba);
+    sh.L21  = vec3(shMap3Data.rgb);
+    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
+    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
+    sh.L20  = vec3(shMap5Data.gba);
+    sh.L22  = vec3(shMap6Data.rgb);
 
-    // Grace Cathedral test coefficients
-//    sh.L00  = vec3(0.79, 0.44, 0.54);
-//    sh.L11  = vec3(-0.29, -0.6, 0.01);
-//    sh.L10  = vec3(-0.34, -0.18, -0.27);
-//    sh.L1_1 = vec3(0.39, 0.35, 0.60);
-//    sh.L21  = vec3(0.56, 0.21, 0.14);
-//    sh.L2_1 = vec3(-0.26, -0.22, -0.47);
-//    sh.L2_2 = vec3(-0.11, -0.05, -0.12);
-//    sh.L20  = vec3(-0.16, -0.09, -0.15);
-//    sh.L22  = vec3(0.21, -0.05, -0.30);
-
-    sh.L00  = vec3(1.0);
-    sh.L11  = vec3(1.0);
-    sh.L10  = vec3(1.0);
-    sh.L1_1 = vec3(1.0);
-    sh.L21  = vec3(1.0);
-    sh.L2_1 = vec3(1.0);
-    sh.L2_2 = vec3(1.0);
-    sh.L20  = vec3(1.0);
-    sh.L22  = vec3(1.0);
+//    // White and green
+//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+//    sh.L10  = vec3(0.0);
+//    sh.L1_1 = vec3(0.0);
+//    sh.L21  = vec3(0.0);
+//    sh.L2_1 = vec3(0.0);
+//    sh.L2_2 = vec3(0.0);
+//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
 
     return sh;
 }
@@ -456,5 +446,5 @@ void main() {
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
-//    oFragColor = vec4(GammaCorrect(albedo), 1.0);
+    oFragColor = vec4(GammaCorrect(correctColor), 1.0);
 }

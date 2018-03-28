@@ -14,6 +14,7 @@
 #include "GLHDRTexture2D.hpp"
 #include "GLDepthTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
+#include "GLTexture3D.hpp"
 #include "GLDepthTexture2DArray.hpp"
 
 namespace EARenderer {
@@ -26,6 +27,7 @@ namespace EARenderer {
         
         void setTexture(const GLTexture2D& texture);
         void setTexture(const GLTexture2DArray& texture, uint8_t index);
+        void setTexture(const GLTexture3D& texture, float depth);
         void setApplyToneMapping(bool toneMap);
     };
     

@@ -24,7 +24,12 @@ namespace EARenderer {
     mPointLights(10),
     mMeshInstances(1000),
     mLightProbes(10000)
-    { }
+    {
+        SphericalHarmonics sh;
+        sh.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0), 2 * M_PI);
+        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 2 * M_PI);
+        printf("");
+    }
     
 #pragma mark - Getters
     
