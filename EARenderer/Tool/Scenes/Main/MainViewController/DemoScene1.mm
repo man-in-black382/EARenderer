@@ -22,6 +22,7 @@
 
 @property (assign, nonatomic) choreograph::Timeline *animationTimeline;
 @property (assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
+@property (assign, nonatomic) choreograph::Output<glm::vec3> *objectPositionOutput;
 
 @end
 
@@ -195,6 +196,11 @@
 {
     self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
     scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+
+    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
+    auto transformation = sphereInstance.transformation();
+    transformation.translation = self.objectPositionOutput->value();
+    sphereInstance.setTransformation(transformation);
 }
 
 #pragma mark - Helpers
@@ -208,6 +214,7 @@
 - (void)setupAnimations
 {
     self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
+    self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
     glm::vec3 start(0.5, -1.0, 0.5);
@@ -215,6 +222,11 @@
 
     choreograph::PhraseRef<glm::vec3> startToEnd = choreograph::makeRamp(start, end, 20.0);
     self.animationTimeline->apply(self.sunDirectionOutput, startToEnd).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
+    self.animationTimeline->apply(self.objectPositionOutput, startToEnd).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });

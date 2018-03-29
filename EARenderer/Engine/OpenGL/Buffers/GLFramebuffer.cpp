@@ -91,10 +91,14 @@ namespace EARenderer {
         mDrawBuffers.insert(attachment);
 
         std::array<GLenum, 16> drawBuffers;
+
         size_t i = 0;
         for (GLenum drawBuffer : mDrawBuffers) {
             drawBuffers[i] = drawBuffer;
+            i++;
         }
+
+        std::sort(drawBuffers.begin(), drawBuffers.begin() + i);
 
         glDrawBuffers((GLsizei)mDrawBuffers.size(), drawBuffers.data());
         glReadBuffer(GL_NONE);

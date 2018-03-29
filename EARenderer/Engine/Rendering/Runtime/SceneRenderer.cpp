@@ -132,13 +132,15 @@ namespace EARenderer {
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[0]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[1]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[2]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[3]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5]);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6]);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
+        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
+
+        printf("Complete: %d\n", mGridProbesFramebuffer.isComplete());
     }
 
     void SceneRenderer::setupShaders() {
@@ -195,6 +197,7 @@ namespace EARenderer {
     std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
         std::vector<SphericalHarmonics> shs;
         for (auto& projection : mScene->surfelClusterProjections()) {
+//            projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0, 0.0, 0.0), Color(1.0, 0.0, 0.0));
             shs.push_back(projection.sphericalHarmonics);
         }
         return shs;
@@ -354,12 +357,16 @@ namespace EARenderer {
     }
 
     void SceneRenderer::updateGridProbes() {
+        glDisable(GL_BLEND);
+
         mGridProbesUpdateShader.bind();
         mGridProbesFramebuffer.bind();
         mGridProbesFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
+
+        glEnable(GL_BLEND);
     }
 
 #pragma mark - Public interface
@@ -412,20 +419,20 @@ namespace EARenderer {
 
         renderSkybox();
 
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(false);
-
-        Rect2D viewportRect({ 400, 0 }, { 400, 400 });
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(mGridProbesSphericalHarmonicMaps[0], 0.0);
-        });
-
-        glDrawArrays(GL_TRIANGLES, 0, 4);
-        glEnable(GL_DEPTH_TEST);
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//
+//        Rect2D viewportRect({ 0, 0 }, { 400, 400 });
+//        GLViewport(viewportRect).apply();
+//
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(mGridProbesSphericalHarmonicMaps[0], 0.0);
+//        });
+//
+//        glDrawArrays(GL_TRIANGLES, 0, 4);
+//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {

@@ -16,7 +16,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
     
     SphericalHarmonics::SphericalHarmonics(const glm::vec3& direction, const Color& color) {
-        contribute(direction, color, 1.0f);
+        contribute(direction, color, 4.0 * M_PI);
     }
     
 #pragma mark - Getters
