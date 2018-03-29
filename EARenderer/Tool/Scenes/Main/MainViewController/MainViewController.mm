@@ -156,7 +156,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
-//    self.sceneRenderer->renderSurfelClusterLuminances();
+    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();

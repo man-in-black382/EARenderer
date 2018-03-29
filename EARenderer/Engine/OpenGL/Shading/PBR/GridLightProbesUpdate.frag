@@ -75,19 +75,19 @@ SH ZeroSH() {
 SH MultiplySHByColor(SH sh, vec3 color) {
     SH result;
 
-    result.L00  = color * Y00;
+    result.L00  = color * sh.L00;
 
-    result.L1_1 = color * Y1_1;
-    result.L10  = color * Y10;
-    result.L11  = color * Y11;
+    result.L1_1 = color * sh.L1_1;
+    result.L10  = color * sh.L10;
+    result.L11  = color * sh.L11;
 
-    result.L2_2 = color * Y2_2;
-    result.L2_1 = color * Y2_1;
-    result.L21  = color * Y21;
+    result.L2_2 = color * sh.L2_2;
+    result.L2_1 = color * sh.L2_1;
+    result.L21  = color * sh.L21;
 
-    result.L20  = color * Y20;
+    result.L20  = color * sh.L20;
 
-    result.L22  = color * Y22;
+    result.L22  = color * sh.L22;
 
     return result;
 }
@@ -203,12 +203,14 @@ void main() {
                                 float(surfelClusterIndex / luminanceMapWidth) / luminanceMapHeight);
 
         vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
+        surfelClusterLuminance = vec3(1.0);
 
         SH surfelClusterPrecomputedSH = UnpackSH(int(surfelClusterIndex));
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
 
-        resultingSH = surfelClusterPrecomputedSH;//AddTwoSH(resultingSH, luminanceSH);
+        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+//        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
     }
 
     PackSHToRenderTargets(resultingSH);

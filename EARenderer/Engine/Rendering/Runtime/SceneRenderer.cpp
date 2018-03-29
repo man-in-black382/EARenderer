@@ -422,7 +422,7 @@ namespace EARenderer {
 //        glDisable(GL_DEPTH_TEST);
 //
 //        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
+//        mFSQuadShader.setApplyToneMapping(true);
 //
 //        Rect2D viewportRect({ 0, 0 }, { 400, 400 });
 //        GLViewport(viewportRect).apply();

@@ -67,7 +67,7 @@ namespace EARenderer {
             visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 1.0 : 0.0;
         }
 
-        return distanceTerm * visibilityTerm * visibilityTest;
+        return distanceTerm;// * visibilityTerm * visibilityTest;
     }
 
     SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
@@ -83,7 +83,7 @@ namespace EARenderer {
             }
         }
 
-        projection.sphericalHarmonics.normalize();
+//        projection.sphericalHarmonics.normalize();
 
         return projection;
     }
@@ -148,15 +148,17 @@ namespace EARenderer {
             for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
                 for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
                     for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
-
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);
-
                     }
                 }
             }
         });
+
+//        DiffuseLightProbe probe(scene->lightBakingVolume().center());
+//        projectSurfelClustersOnProbe(scene, probe);
+//        scene->diffuseLightProbes().push_back(probe);
     }
     
 }

@@ -28,6 +28,7 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uTextureArray")>, texture);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uIndex")>).location(), index);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_TRUE);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSample3DTexture")>).location(), GL_FALSE);
     }
 
     void GLSLFullScreenQuad::setTexture(const GLTexture3D& texture, float depth) {

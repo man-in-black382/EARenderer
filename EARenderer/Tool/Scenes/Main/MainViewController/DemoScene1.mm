@@ -217,16 +217,22 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 start(0.5, -1.0, 0.5);
-    glm::vec3 end(-0.5, -1.0, -0.5);
+    glm::vec3 lightStart(0.5, -1.0, 0.5);
+    glm::vec3 lightEnd(-0.5, -1.0, -0.5);
 
-    choreograph::PhraseRef<glm::vec3> startToEnd = choreograph::makeRamp(start, end, 20.0);
-    self.animationTimeline->apply(self.sunDirectionOutput, startToEnd).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 20.0);
+
+    self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
 
-    self.animationTimeline->apply(self.objectPositionOutput, startToEnd).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
+    glm::vec3 objectStart(0.5, -0.5, 0.5);
+    glm::vec3 objectEnd(-0.5, -1.0, -0.5);
+
+    choreograph::PhraseRef<glm::vec3> objectPhrase = choreograph::makeRamp(objectStart, objectEnd, 20.0);
+
+    self.animationTimeline->apply(self.objectPositionOutput, objectPhrase).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
