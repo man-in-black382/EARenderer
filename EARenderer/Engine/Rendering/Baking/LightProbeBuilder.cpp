@@ -67,7 +67,7 @@ namespace EARenderer {
             visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 1.0 : 0.0;
         }
 
-        return distanceTerm;// * visibilityTerm * visibilityTest;
+        return distanceTerm * visibilityTerm * visibilityTest;
     }
 
     SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
@@ -83,7 +83,7 @@ namespace EARenderer {
             }
         }
 
-//        projection.sphericalHarmonics.normalize();
+        projection.sphericalHarmonics.normalize();
 
         return projection;
     }
@@ -143,22 +143,71 @@ namespace EARenderer {
         AxisAlignedBox3D bb = scene->lightBakingVolume();
         glm::vec3 step = (bb.max - bb.min) / (float)mSpaceDivisionResolution;
 
+        size_t i = 0;
+
         printf("Building grid probes...\n");
         Measurement::executionTime("Grid probes placement took", [&]() {
             for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
                 for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
                     for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
                         DiffuseLightProbe probe({ x, y, z });
-                        projectSurfelClustersOnProbe(scene, probe);
+//                        projectSurfelClustersOnProbe(scene, probe);
+
+                        probe.surfelClusterProjectionGroupCount = 1;
+                        probe.surfelClusterProjectionGroupOffset = i;
+
+                        SurfelClusterProjection projection;
+
+                        switch (i) {
+                            case 0:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(1.0, 0.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 1:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(1.0, 0.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 2:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(1.0, 0.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 3:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(1.0, 0.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 4:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(0.0, 1.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 5:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(0.0, 1.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 6:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(0.0, 1.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+
+                            case 7:
+                                projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0), Color(0.0, 1.0, 0.0));
+                                scene->surfelClusterProjections().push_back(projection);
+                                break;
+                        }
+
                         scene->diffuseLightProbes().push_back(probe);
+//
+                        i++;
                     }
                 }
             }
+            printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
         });
-
-//        DiffuseLightProbe probe(scene->lightBakingVolume().center());
-//        projectSurfelClustersOnProbe(scene, probe);
-//        scene->diffuseLightProbes().push_back(probe);
     }
     
 }

@@ -35,7 +35,7 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uProjectionClusterIndices")>, indices);
     }
 
-    void GLSLGridLightProbesUpdate::setProbeProjectionsMetadata(const GLUIntegerBufferTexture<glm::uvec2>& metadata) {
+    void GLSLGridLightProbesUpdate::setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata) {
         setUniformTexture(uint32_constant<ctcrc32("uProbeProjectionsMetadata")>, metadata);
     }
 

@@ -139,8 +139,6 @@ namespace EARenderer {
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
-
-        printf("Complete: %d\n", mGridProbesFramebuffer.isComplete());
     }
 
     void SceneRenderer::setupShaders() {
@@ -197,9 +195,21 @@ namespace EARenderer {
     std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
         std::vector<SphericalHarmonics> shs;
         for (auto& projection : mScene->surfelClusterProjections()) {
-//            projection.sphericalHarmonics = SphericalHarmonics(glm::vec3(1.0, 0.0, 0.0), Color(1.0, 0.0, 0.0));
             shs.push_back(projection.sphericalHarmonics);
         }
+//        SphericalHarmonics redSH(glm::vec3(1.0, 0.0, 0.0), Color(1.0, 0.0, 0.0));
+//        SphericalHarmonics blueSH(glm::vec3(1.0, 0.0, 0.0), Color(0.0, 0.0, 1.0));
+//
+//        shs.push_back(redSH);
+//        shs.push_back(redSH);
+//        shs.push_back(redSH);
+//        shs.push_back(redSH);
+//
+//        shs.push_back(blueSH);
+//        shs.push_back(blueSH);
+//        shs.push_back(blueSH);
+//        shs.push_back(blueSH);
+
         return shs;
     }
 
@@ -211,10 +221,11 @@ namespace EARenderer {
         return indices;
     }
 
-    std::vector<glm::uvec2> SceneRenderer::probeProjectionsMetadata() const {
-        std::vector<glm::uvec2> metadata;
+    std::vector<uint32_t> SceneRenderer::probeProjectionsMetadata() const {
+        std::vector<uint32_t> metadata;
         for (auto& probe : mScene->diffuseLightProbes()) {
-            metadata.push_back({ probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount});
+            metadata.push_back(probe.surfelClusterProjectionGroupOffset);
+            metadata.push_back(probe.surfelClusterProjectionGroupCount);
         }
         return metadata;
     }
@@ -362,6 +373,7 @@ namespace EARenderer {
         mGridProbesUpdateShader.bind();
         mGridProbesFramebuffer.bind();
         mGridProbesFramebuffer.viewport().apply();
+//        GLViewport(Size2D(mGridProbesCountPerDimension)).apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);

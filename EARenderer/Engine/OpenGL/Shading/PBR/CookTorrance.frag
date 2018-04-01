@@ -134,7 +134,7 @@ SH UnpackSH() {
     // Get 3D texture space coordinates
     vec3 shMapCoords = vWorldPosition / uWorldBoudningBoxDimensions;
     // Transformation to [0,1] range
-    shMapCoords = shMapCoords * 0.5 + 0.5;
+    shMapCoords = vec3(0.5);//shMapCoords * 0.5 + 0.5;
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
@@ -446,4 +446,5 @@ void main() {
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
+//    oFragColor = vec4(correctColor, 1.0);
 }

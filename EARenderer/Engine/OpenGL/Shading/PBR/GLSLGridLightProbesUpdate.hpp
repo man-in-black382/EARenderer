@@ -24,7 +24,7 @@ namespace EARenderer {
         void setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap);
         void setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH);
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
-        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<glm::uvec2>& metadata);
+        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);
     };
 
 }

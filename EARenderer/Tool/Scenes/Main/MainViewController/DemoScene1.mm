@@ -227,10 +227,10 @@
         m.resetTime();
     });
 
-    glm::vec3 objectStart(0.5, -0.5, 0.5);
-    glm::vec3 objectEnd(-0.5, -1.0, -0.5);
+    glm::vec3 objectStart(1.5, -0.5, 0.0);
+    glm::vec3 objectEnd(-1.5, -1.5, 0.0);
 
-    choreograph::PhraseRef<glm::vec3> objectPhrase = choreograph::makeRamp(objectStart, objectEnd, 20.0);
+    choreograph::PhraseRef<glm::vec3> objectPhrase = choreograph::makeRamp(objectStart, objectEnd, 5.0);
 
     self.animationTimeline->apply(self.objectPositionOutput, objectPhrase).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);

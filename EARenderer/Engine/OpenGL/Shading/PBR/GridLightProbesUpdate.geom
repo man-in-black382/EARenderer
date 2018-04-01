@@ -21,13 +21,12 @@ in InterfaceBlock {
 out vec3 vTexCoords;
 
 void main() {
-        for (int i = 0; i < gl_in.length(); i++) {
-            // Cubemap face
-            gl_Layer = gs_in[i].instanceID;
-            gl_Position = gl_in[i].gl_Position;
-            vTexCoords = vec3(gs_in[i].texCoords, float(gl_Layer) / float(uProbesPerGridDimensionCount));
-            EmitVertex();
-        }
-        EndPrimitive();
+    for (int i = 0; i < gl_in.length(); i++) {
+        gl_Layer = gs_in[i].instanceID;
+        gl_Position = gl_in[i].gl_Position;
+        vTexCoords = vec3(gs_in[i].texCoords, float(gl_Layer) / float(uProbesPerGridDimensionCount - 1));
+        EmitVertex();
+    }
+    EndPrimitive();
 }
 

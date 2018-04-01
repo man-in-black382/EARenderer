@@ -21,7 +21,7 @@ namespace EARenderer {
     public:
         GLTextureBuffer(GLenum internalFormat)
         :
-        GLBuffer<DataType>(GL_TEXTURE_BUFFER, GL_DYNAMIC_DRAW),
+        GLBuffer<DataType>(GL_TEXTURE_BUFFER, GL_STATIC_DRAW),
         mInternalFormat(internalFormat)
         { }
         

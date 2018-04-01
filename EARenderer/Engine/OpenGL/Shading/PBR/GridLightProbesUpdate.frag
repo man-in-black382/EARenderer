@@ -119,6 +119,8 @@ SH AddTwoSH(SH first, SH second) {
 SH UnpackSH(int surfelClusterIndex) {
     SH sh;
 
+    surfelClusterIndex *= 9;
+
     sh.L00  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 0).rgb);
     sh.L11  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 1).rgb);
     sh.L10  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 2).rgb);
@@ -129,15 +131,15 @@ SH UnpackSH(int surfelClusterIndex) {
     sh.L20  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 7).rgb);
     sh.L22  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 8).rgb);
 
-//        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//        sh.L10  = vec3(0.0);
-//        sh.L1_1 = vec3(0.0);
-//        sh.L21  = vec3(0.0);
-//        sh.L2_1 = vec3(0.0);
-//        sh.L2_2 = vec3(0.0);
-//        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+//    sh.L10  = vec3(0.0);
+//    sh.L1_1 = vec3(0.0);
+//    sh.L21  = vec3(0.0);
+//    sh.L2_1 = vec3(0.0);
+//    sh.L2_2 = vec3(0.0);
+//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
 
     return sh;
 }
@@ -176,11 +178,8 @@ void PackSHToRenderTargets(SH sh) {
 // – Add the product of the SH and the luminance to the result SHs.
 //
 void main() {
-    ivec3 unnormalizedTexCoords = ivec3(uProbesPerGridDimensionCount * vTexCoords.x,
-                                        uProbesPerGridDimensionCount * vTexCoords.y,
-                                        uProbesPerGridDimensionCount * vTexCoords.z);
-
     int size = uProbesPerGridDimensionCount;
+    ivec3 unnormalizedTexCoords = ivec3(float(size - 1) * vTexCoords);
     int metadataIndex = size * size * unnormalizedTexCoords.z +
                         size * unnormalizedTexCoords.y +
                         unnormalizedTexCoords.x;
@@ -208,8 +207,10 @@ void main() {
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
 
-        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+        AddTwoSH(resultingSH, luminanceSH);
     }
+
+    resultingSH = UnpackSH(int(projectionGroupOffset));
 
     PackSHToRenderTargets(resultingSH);
 }

@@ -96,7 +96,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
-    const uint8 kLightProbesGridResolution = 6;
+    const uint8 kLightProbesGridResolution = 1;
 
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
@@ -156,7 +156,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
     self.sceneRenderer->render();
-    self.sceneRenderer->renderSurfelClusterLuminances();
+//    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();

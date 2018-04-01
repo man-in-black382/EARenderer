@@ -81,7 +81,7 @@ namespace EARenderer {
 
         GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
-        GLUIntegerBufferTexture<glm::uvec2> mDiffuseProbeClusterProjectionsBufferTexture;
+        GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
         std::array<GLHDRTexture3D, 7> mGridProbesSphericalHarmonicMaps;
         GLFramebuffer mGridProbesFramebuffer;
 
@@ -103,7 +103,7 @@ namespace EARenderer {
         std::vector<uint8_t> surfelClustersGBufferData() const;
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
         std::vector<uint32_t> surfelClusterIndices() const;
-        std::vector<glm::uvec2> probeProjectionsMetadata() const;
+        std::vector<uint32_t> probeProjectionsMetadata() const;
 
         void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
         void relightSurfels(const FrustumCascades& cascades);
