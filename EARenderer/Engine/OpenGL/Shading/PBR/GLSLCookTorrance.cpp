@@ -9,6 +9,7 @@
 #include "GLSLCookTorrance.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
     
@@ -93,8 +94,12 @@ namespace EARenderer {
     }
 
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
-        glm::vec3 dimensions = box.max - box.min;
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxDimensions")>).location(), 1, glm::value_ptr(dimensions));
+        glm::mat4 translation = glm::translate(-box.min);
+        glm::vec3 bbAxisLengths = box.max - box.min;
+        glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
+        glm::mat4 result = scale * translation;
+
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(result));
     }
     
 }

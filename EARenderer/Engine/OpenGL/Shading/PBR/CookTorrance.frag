@@ -68,7 +68,7 @@ struct SH {
 };
 
 uniform vec3 uCameraPosition;
-uniform vec3 uWorldBoudningBoxDimensions;
+uniform mat4 uWorldBoudningBoxTransform;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -105,36 +105,11 @@ uniform int uSpecularIrradianceMapLOD;
 ////////////////////////////////////////////////////////////
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
-
-//
-// Unpacks spherical harmonics coefficients
-// from the corresponding sample buffer
-//
-//SH UnpackSH(int index) {
-//    SH sh;
-//
-//    sh.L00 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 0).rgb);
-//    sh.L11 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 1).rgb);
-//    sh.L10 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 2).rgb);
-//    sh.L1_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 3).rgb);
-//    sh.L21 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 4).rgb);
-//    sh.L2_1 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 5).rgb);
-//    sh.L2_2 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 6).rgb);
-//    sh.L20 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 7).rgb);
-//    sh.L22 = vec3(texelFetch(uSphericalHarmonicsBuffer, index + 8).rgb);
-//
-//    return sh;
-//
-////    return SH(vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0), vec3(1.0));
-//}
-
 SH UnpackSH() {
     SH sh;
 
     // Get 3D texture space coordinates
-    vec3 shMapCoords = vWorldPosition / uWorldBoudningBoxDimensions;
-    // Transformation to [0,1] range
-    shMapCoords = vec3(0.5);//shMapCoords * 0.5 + 0.5;
+    vec3 shMapCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
@@ -445,6 +420,6 @@ void main() {
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-    oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
+    oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(N)), 1.0);
 //    oFragColor = vec4(correctColor, 1.0);
 }
