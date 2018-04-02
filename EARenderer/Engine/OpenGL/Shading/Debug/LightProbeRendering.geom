@@ -16,15 +16,16 @@ uniform float uRadius;
 
 // Outputs
 
-out vec4 vCurrentPosition;
+out vec3 vCurrentPosition;
 out vec3 vTexCoords;
+out mat3 vNormalMatrix;
 
 // Functions
 
 // Rotation matrix used to orient disk to the viewer
 mat4 RotationMatrix(vec3 probePosition) {
     vec3 worldUp = vec3(0.0, 1.0, 0.0);
-    vec3 zAxis = -normalize(uCameraPosition - probePosition);
+    vec3 zAxis = normalize(probePosition - uCameraPosition);
 
     if (abs(zAxis.x) < 0.000001 && abs(zAxis.z) < 0.000001) {
         worldUp = vec3(0.0, 0.0, 1.0);
@@ -36,7 +37,19 @@ mat4 RotationMatrix(vec3 probePosition) {
     return mat4(vec4(xAxis, 0.0),
                 vec4(yAxis, 0.0),
                 vec4(zAxis, 0.0),
-                vec4(0.0, 0.0, 0.0, 1.0));
+                vec4(vec3(0.0), 1.0));
+}
+
+void EmitBillboardVertex(vec2 xy, mat4 rotationMatrix, vec3 texCoords) {
+    vec4 vertex = vec4(xy, 0.0, 0.0);
+    vTexCoords = texCoords;
+    vNormalMatrix = mat3(rotationMatrix);
+    vCurrentPosition = vertex.xyz;
+    vertex = rotationMatrix * vertex;
+    vertex = vertex + gl_in[0].gl_Position;
+    vertex = uCameraSpaceMat * vertex;
+    gl_Position = vertex;
+    EmitVertex();
 }
 
 void main() {
@@ -44,41 +57,10 @@ void main() {
     vec3 texCoords = (uWorldBoudningBoxTransform * probePosition).xyz;
     mat4 rotationMatrix = RotationMatrix(probePosition.xyz);
 
-    vec4 a = vec4(-uRadius, -uRadius, 0.0, 0.0);
-    vTexCoords = texCoords;
-    vCurrentPosition = a;
-    a = rotationMatrix * a;
-    a = a + probePosition;
-    a = uCameraSpaceMat * a;
-    gl_Position = a;
-    EmitVertex();
-
-    vec4 b = vec4(-uRadius, uRadius, 0.0, 0.0);
-    vTexCoords = texCoords;
-    vCurrentPosition = b;
-    b = rotationMatrix * b;
-    b = b + probePosition;
-    b = uCameraSpaceMat * b;
-    gl_Position = b;
-    EmitVertex();
-
-    vec4 c = vec4(uRadius, -uRadius, 0.0, 0.0);
-    vTexCoords = texCoords;
-    vCurrentPosition = c;
-    c = rotationMatrix * c;
-    c = c + probePosition;
-    c = uCameraSpaceMat * c;
-    gl_Position = c;
-    EmitVertex();
-
-    vec4 d = vec4(uRadius, uRadius, 0.0, 0.0);
-    vTexCoords = texCoords;
-    vCurrentPosition = d;
-    d = rotationMatrix * d;
-    d = d + probePosition;
-    d = uCameraSpaceMat * d;
-    gl_Position = d;
-    EmitVertex();
+    EmitBillboardVertex(vec2(-uRadius, -uRadius), rotationMatrix, texCoords);
+    EmitBillboardVertex(vec2(-uRadius, uRadius), rotationMatrix, texCoords);
+    EmitBillboardVertex(vec2(uRadius, -uRadius), rotationMatrix, texCoords);
+    EmitBillboardVertex(vec2(uRadius, uRadius), rotationMatrix, texCoords);
 
     EndPrimitive();
 }

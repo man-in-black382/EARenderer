@@ -198,8 +198,8 @@ void main() {
     for (uint i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupSize; ++i) {
         uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, int(i)).r;
 
-        vec2 luminanceUV = vec2(float(surfelClusterIndex % luminanceMapWidth) / luminanceMapWidth,
-                                float(surfelClusterIndex / luminanceMapWidth) / luminanceMapHeight);
+        vec2 luminanceUV = vec2(float(surfelClusterIndex % luminanceMapWidth) / float(luminanceMapWidth),
+                                float(surfelClusterIndex / luminanceMapWidth) / float(luminanceMapHeight));
 
         vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
 
@@ -207,8 +207,7 @@ void main() {
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
 
-//        AddTwoSH(resultingSH, luminanceSH);
-        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
+        resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
     PackSHToRenderTargets(resultingSH);

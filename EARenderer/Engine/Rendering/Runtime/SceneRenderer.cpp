@@ -14,6 +14,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
     
@@ -157,6 +158,16 @@ namespace EARenderer {
 
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
+            glm::mat4 translation = glm::translate(-mScene->lightBakingVolume().min);
+            glm::vec3 bbAxisLengths = mScene->lightBakingVolume().max - mScene->lightBakingVolume().min;
+            glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
+            glm::mat4 result = scale * translation;
+
+            for (auto& probe : mScene->diffuseLightProbes()) {
+                glm::vec3 pos = result * glm::vec4(probe.position, 1.0);
+                printf("Norm pos: %f %f %f \n", pos.x, pos.y, pos.z);
+            }
+
             mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });
@@ -207,19 +218,6 @@ namespace EARenderer {
         for (auto& projection : mScene->surfelClusterProjections()) {
             shs.push_back(projection.sphericalHarmonics);
         }
-//        SphericalHarmonics redSH(glm::vec3(1.0, 0.0, 0.0), Color(1.0, 0.0, 0.0));
-//        SphericalHarmonics blueSH(glm::vec3(1.0, 0.0, 0.0), Color(0.0, 0.0, 1.0));
-//
-//        shs.push_back(redSH);
-//        shs.push_back(redSH);
-//        shs.push_back(redSH);
-//        shs.push_back(redSH);
-//
-//        shs.push_back(blueSH);
-//        shs.push_back(blueSH);
-//        shs.push_back(blueSH);
-//        shs.push_back(blueSH);
-
         return shs;
     }
 
@@ -234,8 +232,8 @@ namespace EARenderer {
     std::vector<uint32_t> SceneRenderer::probeProjectionsMetadata() const {
         std::vector<uint32_t> metadata;
         for (auto& probe : mScene->diffuseLightProbes()) {
-            metadata.push_back(probe.surfelClusterProjectionGroupOffset);
-            metadata.push_back(probe.surfelClusterProjectionGroupCount);
+            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
+            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
         }
         return metadata;
     }

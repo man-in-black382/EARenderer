@@ -55,11 +55,11 @@ namespace EARenderer {
 
     float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint) {
         glm::vec3 Wps = surfel.position - standpoint;
-        float area2 = surfel.area * surfel.area;
         float distance2 = glm::length2(Wps);
+        Wps = glm::normalize(Wps);
 
-        float distanceTerm = std::min(area2 / distance2, 1.f);
-        float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
+        float distanceTerm = std::min(surfel.area / distance2, 1.f);
+        float visibilityTerm = std::max(-glm::dot(surfel.normal, Wps), 0.f);
         float visibilityTest = 0.0;
 
         // Save ray casts if surfel's facing away from the standpoint
@@ -67,7 +67,7 @@ namespace EARenderer {
             visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 0.0 : 1.0;
         }
 
-        return distanceTerm * visibilityTerm * visibilityTest;
+        return distanceTerm * visibilityTerm;// * visibilityTest;
     }
 
     SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
@@ -79,7 +79,9 @@ namespace EARenderer {
             float solidAngle = surfelSolidAngle(scene, surfel, standpoint);
 
             if (solidAngle > 0.0) {
-                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo, solidAngle);
+                projection.sphericalHarmonics.contribute(Wps_norm,
+                                                         surfel.albedo,
+                                                         solidAngle);
             }
         }
 

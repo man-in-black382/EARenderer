@@ -11,9 +11,9 @@ const float kC5 = 0.247708;
 
 // Input
 
-in vec4 vCurrentPosition;
+in vec3 vCurrentPosition;
 in vec3 vTexCoords;
-in vec3 vNormal;
+in mat3 vNormalMatrix;
 
 // Output
 
@@ -89,20 +89,29 @@ vec3 EvaluateSphericalHarmonics(vec3 direction) {
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
-// https://stackoverflow.com/a/10506172/4308277
+vec3 ReinhardToneMap(vec3 color) {
+    return color / (color + vec3(1.0));
+}
 
+// Drawing a sphere using billboard
 void main() {
-    // Draw a sphere
-    // Don't forget to exclude W component from length calculation
-    float distanceFromCenter = length(vCurrentPosition.xy);
+    vec2 normPosition = vCurrentPosition.xy / uRadius;
+    float normDistanceFromCenter = length(normPosition);
 
-    if (distanceFromCenter > uRadius) {
+    if (normDistanceFromCenter > 1.0) {
         discard;
     }
 
-    float normalizedDepth = sqrt(1.0 - distanceFromCenter * distanceFromCenter);
-    // Calculate the lighting normal for the sphere
-    vec3 normal = normalize(vec3(vCurrentPosition.xy, normalizedDepth));
+    // Knowing that our billboard represents a sphere we can reconstruct the z coordinate
+    // Also negate Z because the equation gives positive values for Z pointing "from the screen to the viewer"
+    // which is the opposite of the positive Z direction in the NDC space
+    float z = -sqrt(1.0 - normDistanceFromCenter * normDistanceFromCenter);
 
-    oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
+    // Calculate the normal for the sphere
+    vec3 normal = normalize(vec3(normPosition, z));
+
+    // Rotate
+    normal = vNormalMatrix * normal;
+
+    oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(normal)), 1.0);
 }
