@@ -56,6 +56,10 @@ namespace EARenderer {
     },
     mGridProbesFramebuffer(Size2D(gridLightProbesCountPerDimension))
     {
+        mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+        });
+        
         setupGLState();
         setupTextures();
         setupFramebuffers();
@@ -149,6 +153,12 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
             mGridProbesUpdateShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+        });
+
+        mDiffuseProbeRenderingShader.bind();
+        mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
+            mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });
     }
 
@@ -373,7 +383,6 @@ namespace EARenderer {
         mGridProbesUpdateShader.bind();
         mGridProbesFramebuffer.bind();
         mGridProbesFramebuffer.viewport().apply();
-//        GLViewport(Size2D(mGridProbesCountPerDimension)).apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
@@ -430,21 +439,6 @@ namespace EARenderer {
         }
 
         renderSkybox();
-
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(true);
-//
-//        Rect2D viewportRect({ 0, 0 }, { 400, 400 });
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mGridProbesSphericalHarmonicMaps[0], 0.0);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLES, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
@@ -520,6 +514,15 @@ namespace EARenderer {
 
         glDrawArrays(GL_TRIANGLES, 0, 4);
         glEnable(GL_DEPTH_TEST);
+    }
+
+    void SceneRenderer::renderDiffuseProbes(float radius) {
+        mDiffuseProbesVAO.bind();
+        mDiffuseProbeRenderingShader.bind();
+        mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
+        mDiffuseProbeRenderingShader.setSphereRadius(radius);
+
+        glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());
     }
 
 }

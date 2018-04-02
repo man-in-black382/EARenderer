@@ -64,7 +64,7 @@ namespace EARenderer {
 
         // Save ray casts if surfel's facing away from the standpoint
         if (visibilityTerm > 0.0) {
-            visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 1.0 : 0.0;
+            visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 0.0 : 1.0;
         }
 
         return distanceTerm * visibilityTerm * visibilityTest;

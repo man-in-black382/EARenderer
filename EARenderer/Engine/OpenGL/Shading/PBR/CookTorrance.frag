@@ -84,8 +84,6 @@ uniform int uNumberOfCascades;
 
 // Shperical harmonics
 
-//uniform samplerBuffer uSphericalHarmonicsBuffer;
-
 uniform sampler3D uGridSHMap0;
 uniform sampler3D uGridSHMap1;
 uniform sampler3D uGridSHMap2;
@@ -388,9 +386,9 @@ void main() {
     // in both the geometry and normal distribution function.
     float roughness2        = roughness * roughness;
     
-    float metallic          = 0.0;// FetchMetallicMap();
+    float metallic          = FetchMetallicMap();
     float ao                = FetchAOMap();
-    vec3 albedo             = vec3(1.0);//FetchAlbedoMap();
+    vec3 albedo             = FetchAlbedoMap();
     vec3 N                  = FetchNormalMap();
     vec3 V                  = normalize(uCameraPosition - vWorldPosition);
     vec3 L                  = vec3(0.0);
@@ -414,12 +412,12 @@ void main() {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
     
     // Apply shadow factor
-    specularAndDiffuse *= 1.0 - shadow;
+//    specularAndDiffuse *= 1.0 - shadow;
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(N)), 1.0);
-//    oFragColor = vec4(correctColor, 1.0);
+    oFragColor = vec4(correctColor, 1.0);
 }

@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */; };
 		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
+		AC3C9EB420720F2300F35EB3 /* LightProbeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EB320720F2300F35EB3 /* LightProbeRendering.vert */; };
+		AC3C9EB720720F5C00F35EB3 /* GLSLLightProbeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3C9EB520720F5C00F35EB3 /* GLSLLightProbeRendering.cpp */; };
+		AC3C9EB92072111500F35EB3 /* LightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EB82072111500F35EB3 /* LightProbeRendering.frag */; };
+		AC3C9EBE207219FF00F35EB3 /* LightProbeRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EBD207219FF00F35EB3 /* LightProbeRendering.geom */; };
 		AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC62416B205657AD009B36DF /* SurfelCluster.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
@@ -293,6 +297,11 @@
 		AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelClusterProjection.hpp; sourceTree = "<group>"; };
 		AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbe.cpp; sourceTree = "<group>"; };
 		AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbe.hpp; sourceTree = "<group>"; };
+		AC3C9EB320720F2300F35EB3 /* LightProbeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = LightProbeRendering.vert; path = EARenderer/Engine/OpenGL/Shading/Debug/LightProbeRendering.vert; sourceTree = SOURCE_ROOT; };
+		AC3C9EB520720F5C00F35EB3 /* GLSLLightProbeRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeRendering.cpp; sourceTree = "<group>"; };
+		AC3C9EB620720F5C00F35EB3 /* GLSLLightProbeRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeRendering.hpp; sourceTree = "<group>"; };
+		AC3C9EB82072111500F35EB3 /* LightProbeRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeRendering.frag; sourceTree = "<group>"; };
+		AC3C9EBD207219FF00F35EB3 /* LightProbeRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeRendering.geom; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
@@ -2210,6 +2219,11 @@
 				CEFB7A292051ADBA00364550 /* CubeEdgesRendering.geom */,
 				CE82DAED20511A4C00329E2E /* GLSLCubeRendering.cpp */,
 				CE82DAEE20511A4C00329E2E /* GLSLCubeRendering.hpp */,
+				AC3C9EB320720F2300F35EB3 /* LightProbeRendering.vert */,
+				AC3C9EBD207219FF00F35EB3 /* LightProbeRendering.geom */,
+				AC3C9EB82072111500F35EB3 /* LightProbeRendering.frag */,
+				AC3C9EB520720F5C00F35EB3 /* GLSLLightProbeRendering.cpp */,
+				AC3C9EB620720F5C00F35EB3 /* GLSLLightProbeRendering.hpp */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2540,6 +2554,7 @@
 				CE70FA5D1F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.vert in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
+				AC3C9EBE207219FF00F35EB3 /* LightProbeRendering.geom in Resources */,
 				CE70FA5E1F8F8F7400AD9027 /* DirectionalBlinnPhong.vert in Resources */,
 				CE4DE2211FA60CFE0067729A /* Sponza_Column_b_roughness.tga in Resources */,
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
@@ -2553,6 +2568,7 @@
 				CE37917B1FA366820049BD1B /* patchy_cement1_Ambient_Occlusion.png in Resources */,
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
 				CE70FA601F8F8F7400AD9027 /* DirectionalDepth.frag in Resources */,
+				AC3C9EB420720F2300F35EB3 /* LightProbeRendering.vert in Resources */,
 				CE4DE23A1FA60CFF0067729A /* Sponza_FlagPole_normal.tga in Resources */,
 				CE4DE2141FA60CFE0067729A /* Sponza_Arch_normal.tga in Resources */,
 				CE70FA611F8F8F7400AD9027 /* DirectionalBlinnPhong.frag in Resources */,
@@ -2625,6 +2641,7 @@
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
 				CE4DE2081FA60CFE0067729A /* ChainTexture_Albedo.tga in Resources */,
+				AC3C9EB92072111500F35EB3 /* LightProbeRendering.frag in Resources */,
 				CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */,
 				CE4DE2391FA60CFF0067729A /* Sponza_FlagPole_diffuse.tga in Resources */,
 				CE4DE24C1FA60CFF0067729A /* VasePlant_diffuse.tga in Resources */,
@@ -2692,6 +2709,7 @@
 				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
 				CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */,
 				ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */,
+				AC3C9EB720720F5C00F35EB3 /* GLSLLightProbeRendering.cpp in Sources */,
 				CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
