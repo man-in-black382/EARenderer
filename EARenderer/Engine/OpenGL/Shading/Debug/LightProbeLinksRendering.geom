@@ -3,7 +3,7 @@
 // Layout
 
 layout (points) in;
-layout (line_strip, max_vertices = 2) out;
+layout (line_strip, max_vertices = 512) out;
 
 // Uniforms
 
@@ -40,5 +40,4 @@ void main() {
         vec3 surfelClusterCenter = texelFetch(uClusterCenters, int(surfelClusterIndex)).xyz;
         EmitLine(worldPosition, vec4(surfelClusterCenter, 1.0));
     }
-
 }

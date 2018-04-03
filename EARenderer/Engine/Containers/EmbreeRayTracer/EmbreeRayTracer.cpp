@@ -21,30 +21,30 @@ namespace EARenderer {
     {
         RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-        glm::vec3 *vertexBuffer = (glm::vec3 *)rtcSetNewGeometryBuffer(geometry,
+        glm::vec4 *vertexBuffer = (glm::vec4 *)rtcSetNewGeometryBuffer(geometry,
                                                                        RTC_BUFFER_TYPE_VERTEX,
                                                                        0,
                                                                        RTC_FORMAT_FLOAT3,
-                                                                       sizeof(glm::vec3),
+                                                                       sizeof(glm::vec4),
                                                                        triangles.size() * 3);
 
-        uint32_t* indexBuffer = (uint32_t *)rtcSetNewGeometryBuffer(geometry,
+        glm::uvec3* indexBuffer = (glm::uvec3 *)rtcSetNewGeometryBuffer(geometry,
                                                                     RTC_BUFFER_TYPE_INDEX,
                                                                     0,
                                                                     RTC_FORMAT_UINT3,
-                                                                    sizeof(uint32_t) * 3,
+                                                                    sizeof(glm::uvec3),
                                                                     triangles.size());
 
         if (vertexBuffer && indexBuffer) {
-            for (size_t i = 0; i < triangles.size(); ++i) {
-                uint32_t index = (uint32_t)i * 3;
-                vertexBuffer[index] = triangles[i].p1;
-                vertexBuffer[index + 1] = triangles[i].p2;
-                vertexBuffer[index + 2] = triangles[i].p3;
+            for (uint32_t i = 0; i < triangles.size(); ++i) {
+                uint32_t index = i * 3;
+                vertexBuffer[index] = glm::vec4(triangles[i].p1, 1.0);
+                vertexBuffer[index + 1] = glm::vec4(triangles[i].p2, 1.0);
+                vertexBuffer[index + 2] = glm::vec4(triangles[i].p3, 1.0);
 
-                indexBuffer[index] = index;
-                indexBuffer[index + 1] = index + 1;
-                indexBuffer[index + 2] = index + 2;
+                indexBuffer[i].x = index;
+                indexBuffer[i].y = index + 1;
+                indexBuffer[i].z = index + 2;
             }
         }
 
@@ -97,7 +97,7 @@ namespace EARenderer {
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
 
-        glm::vec3 direction = p1 - p0;
+        glm::vec3 direction = (p1 - p0);
         float distance = glm::length(direction);
 
         RTCRay ray;
@@ -107,7 +107,7 @@ namespace EARenderer {
         ray.dir_x = direction.x;
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
-        ray.tnear = 0.f;
+        ray.tnear = 0.0f;
         ray.tfar = distance;
         ray.flags = 0;
         ray.mask = -1;

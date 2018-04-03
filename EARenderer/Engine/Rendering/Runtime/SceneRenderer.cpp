@@ -537,6 +537,8 @@ namespace EARenderer {
         mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
 
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
+
+        printf("Probe %ld has %zu projections\n", probeIndex, mScene->diffuseLightProbes()[probeIndex].surfelClusterProjectionGroupCount);
     }
 
 }

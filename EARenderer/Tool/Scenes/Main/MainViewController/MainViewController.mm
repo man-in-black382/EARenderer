@@ -96,7 +96,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
-    const uint8 kLightProbesGridResolution = 8;
+    const uint8 kLightProbesGridResolution = 4;
 
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
