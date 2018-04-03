@@ -37,12 +37,7 @@ namespace EARenderer {
     }
 
     void GLSLLightProbeRendering::setWorldBoundingBox(const AxisAlignedBox3D& box) {
-        glm::mat4 translation = glm::translate(-box.min);
-        glm::vec3 bbAxisLengths = box.max - box.min;
-        glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
-        glm::mat4 result = scale * translation;
-
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(result));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
     void GLSLLightProbeRendering::setSphereRadius(float radius) {

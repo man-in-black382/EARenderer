@@ -304,7 +304,9 @@ namespace EARenderer {
 
             // Push random surfel to a cluster
             ID firstSurfelID = *mSurfelFlatStorage.begin();
-            mScene->surfels().push_back(mSurfelFlatStorage[firstSurfelID]);
+            Surfel& firstSurfel = mSurfelFlatStorage[firstSurfelID];
+            mScene->surfels().push_back(firstSurfel);
+            cluster.center = firstSurfel.position;
             mSurfelFlatStorage.erase(firstSurfelID);
 
             // Iterate over all left surfels

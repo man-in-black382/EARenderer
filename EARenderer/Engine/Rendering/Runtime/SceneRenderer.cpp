@@ -129,6 +129,7 @@ namespace EARenderer {
         mProjectionClusterSHsBufferTexture.buffer().initialize(surfelProjectionsSH());
         mProjectionClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
         mDiffuseProbeClusterProjectionsBufferTexture.buffer().initialize(probeProjectionsMetadata());
+        mSurfelClusterCentersBufferTexture.buffer().initialize(surfelClusterCenters());
 
         mSpecularIrradianceMap.generateMipmaps();
     }
@@ -158,18 +159,17 @@ namespace EARenderer {
 
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
-            glm::mat4 translation = glm::translate(-mScene->lightBakingVolume().min);
-            glm::vec3 bbAxisLengths = mScene->lightBakingVolume().max - mScene->lightBakingVolume().min;
-            glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
-            glm::mat4 result = scale * translation;
-
-            for (auto& probe : mScene->diffuseLightProbes()) {
-                glm::vec3 pos = result * glm::vec4(probe.position, 1.0);
-                printf("Norm pos: %f %f %f \n", pos.x, pos.y, pos.z);
-            }
-
             mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
+        });
+
+        mLightProbeLinksRenderingShader.bind();
+        mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
+            mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
+            mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
+            mLightProbeLinksRenderingShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+            mLightProbeLinksRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+            mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
         });
     }
 
@@ -211,6 +211,14 @@ namespace EARenderer {
             data.push_back(a);
         }
         return data;
+    }
+
+    std::vector<glm::vec3> SceneRenderer::surfelClusterCenters() const {
+        std::vector<glm::vec3> centers;
+        for (auto& cluster : mScene->surfelClusters()) {
+            centers.push_back(cluster.center);
+        }
+        return centers;
     }
 
     std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
@@ -521,6 +529,14 @@ namespace EARenderer {
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
 
         glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());
+    }
+
+    void SceneRenderer::renderLinksForDiffuseProbe(size_t probeIndex) {
+        mDiffuseProbesVAO.bind();
+        mLightProbeLinksRenderingShader.bind();
+        mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
+
+        glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
     }
 
 }

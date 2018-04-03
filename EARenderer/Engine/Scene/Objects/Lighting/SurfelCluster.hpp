@@ -10,12 +10,14 @@
 #define SurfelCluster_hpp
 
 #include <stdlib.h>
+#include <glm/vec3.hpp>
 
 namespace EARenderer {
 
     struct SurfelCluster {
         size_t surfelOffset = 0;
         size_t surfelCount = 0;
+        glm::vec3 center;
 
         SurfelCluster(size_t offset, size_t count);
     };

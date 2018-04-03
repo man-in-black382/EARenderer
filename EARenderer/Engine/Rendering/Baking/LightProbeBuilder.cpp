@@ -59,12 +59,12 @@ namespace EARenderer {
         Wps = glm::normalize(Wps);
 
         float distanceTerm = std::min(surfel.area / distance2, 1.f);
-        float visibilityTerm = std::max(-glm::dot(surfel.normal, Wps), 0.f);
+        float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
         float visibilityTest = 0.0;
 
         // Save ray casts if surfel's facing away from the standpoint
         if (visibilityTerm > 0.0) {
-            visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 0.0 : 1.0;
+//            visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 0.0 : 1.0;
         }
 
         return distanceTerm * visibilityTerm;// * visibilityTest;
@@ -80,12 +80,13 @@ namespace EARenderer {
 
             if (solidAngle > 0.0) {
                 projection.sphericalHarmonics.contribute(Wps_norm,
+//                                                         glm::vec3(1.0, 0.0, 0.0),
                                                          surfel.albedo,
                                                          solidAngle);
             }
         }
 
-//        projection.sphericalHarmonics.normalize();
+        projection.sphericalHarmonics.normalize();
 
         return projection;
     }
@@ -104,6 +105,9 @@ namespace EARenderer {
                 probe.surfelClusterProjectionGroupCount++;
             }
         }
+
+//        printf("Projected clusters on probe at %f %f %f\n", probe.position.x, probe.position.y, probe.position.z);
+//        printf("Clusters offset: %zu | count: %zu \n\n", probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount);
     }
 
 #pragma mark - Public interface

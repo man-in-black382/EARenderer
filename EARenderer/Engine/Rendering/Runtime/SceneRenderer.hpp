@@ -34,6 +34,7 @@
 #include "GLSLSurfelClusterAveraging.hpp"
 #include "GLSLGridLightProbesUpdate.hpp"
 #include "GLSLLightProbeRendering.hpp"
+#include "GLSLLightProbeLinksRendering.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -67,6 +68,7 @@ namespace EARenderer {
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
+        GLSLLightProbeLinksRendering mLightProbeLinksRenderingShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
@@ -81,6 +83,7 @@ namespace EARenderer {
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
+        GLFloat3BufferTexture<glm::vec3> mSurfelClusterCentersBufferTexture;
         GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
@@ -102,6 +105,7 @@ namespace EARenderer {
 
         std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
         std::vector<uint8_t> surfelClustersGBufferData() const;
+        std::vector<glm::vec3> surfelClusterCenters() const;
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
         std::vector<uint32_t> surfelClusterIndices() const;
         std::vector<uint32_t> probeProjectionsMetadata() const;
@@ -128,6 +132,7 @@ namespace EARenderer {
         void renderSurfelLuminances();
         void renderSurfelClusterLuminances();
         void renderDiffuseProbes(float radius);
+        void renderLinksForDiffuseProbe(size_t probeIndex);
     };
     
 }

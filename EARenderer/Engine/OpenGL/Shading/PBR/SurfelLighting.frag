@@ -187,9 +187,9 @@ void main() {
 
     oFragColor = vec4(diffuseRadiance, 1.0);
 
-    if (vTexCoords.y > 0.5) {
-        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
-    } else {
-        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    }
+//    if (vTexCoords.y > 0.5) {
+//        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+//    } else {
+//        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+//    }
 }

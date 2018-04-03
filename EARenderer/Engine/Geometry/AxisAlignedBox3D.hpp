@@ -40,6 +40,7 @@ namespace EARenderer {
          @return orthographic projection matrix
          */
         glm::mat4 asFrustum() const;
+        glm::mat4 localSpaceMatrix() const;
         std::array<glm::vec4, 8> cornerPoints() const;
         float smallestDimensionLength() const;
         float largestDimensionLength() const;

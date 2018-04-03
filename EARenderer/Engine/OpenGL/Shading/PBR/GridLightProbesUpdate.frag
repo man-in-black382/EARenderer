@@ -203,11 +203,12 @@ void main() {
 
         vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
 
-        SH surfelClusterPrecomputedSH = UnpackSH(int(surfelClusterIndex));
+        SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
-        SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
-
-        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+//        SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
+//
+//        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
     }
 
     PackSHToRenderTargets(resultingSH);

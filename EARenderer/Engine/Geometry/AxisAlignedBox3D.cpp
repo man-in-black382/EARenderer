@@ -12,6 +12,7 @@
 #include <glm/detail/func_geometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec4.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
     
@@ -56,6 +57,13 @@ namespace EARenderer {
     glm::mat4 AxisAlignedBox3D::asFrustum() const {
         // Z component shenanigans due to NDC and world handedness inconsistency
         return glm::ortho(min.x, max.x, min.y, max.y, -max.z, -min.z);
+    }
+
+    glm::mat4 AxisAlignedBox3D::localSpaceMatrix() const {
+        glm::mat4 translation = glm::translate(-min);
+        glm::vec3 bbAxisLengths = max - min;
+        glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
+        return scale * translation;
     }
     
     std::array<glm::vec4, 8> AxisAlignedBox3D::cornerPoints() const {

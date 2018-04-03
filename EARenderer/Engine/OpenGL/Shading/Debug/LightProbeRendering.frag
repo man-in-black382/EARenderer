@@ -104,7 +104,7 @@ void main() {
 
     // Knowing that our billboard represents a sphere we can reconstruct the z coordinate
     // Also negate Z because the equation gives positive values for Z pointing "from the screen to the viewer"
-    // which is the opposite of the positive Z direction in the NDC space
+    // which is the opposite of the positive Z direction in NDC space
     float z = -sqrt(1.0 - normDistanceFromCenter * normDistanceFromCenter);
 
     // Calculate the normal for the sphere
@@ -113,5 +113,5 @@ void main() {
     // Rotate
     normal = vNormalMatrix * normal;
 
-    oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(normal)), 1.0);
+    oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
 }
