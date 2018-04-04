@@ -110,7 +110,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 50.f);
     camera->moveTo(glm::vec3(0, 1, 0));
-    camera->lookAt(glm::vec3(-1, -1, 0));
+    camera->lookAt(glm::vec3(-1, -0.5, 0));
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     self.scene->setCamera(camera);
@@ -123,14 +123,12 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.demoScene = demoScene1;
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.surfelGenerator->generateStaticGeometrySurfels();
-
     self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), kLightProbesGridResolution);
+    self.surfelGenerator->generateStaticGeometrySurfels();
     self.lightProbeBuilder->buildAndPlaceProbesForDynamicGeometry(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, kLightProbesGridResolution + 1);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
@@ -146,23 +144,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
 
     [self subscribeForEvents];
-
-    // Clean up 
-    delete self.surfelGenerator;
-    delete self.lightProbeBuilder;
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
     self.cameraman->updateCamera();
-    self.sceneRenderer->render();
+    self.sceneRenderer->renderMeshes();
     self.sceneRenderer->renderDiffuseProbes(0.1);
-    self.sceneRenderer->renderLinksForDiffuseProbe(self.scene->diffuseLightProbes().size() / 2);
+//    self.sceneRenderer->renderLinksForDiffuseProbe(self.scene->diffuseLightProbes().size() / 2);
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.axesRenderer->render();
-//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 

@@ -98,7 +98,6 @@ namespace EARenderer {
         rtcInitIntersectContext(&context);
 
         glm::vec3 direction = (p1 - p0);
-        float distance = glm::length(direction);
 
         RTCRay ray;
         ray.org_x = p0.x;
@@ -108,7 +107,7 @@ namespace EARenderer {
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
         ray.tnear = 0.0f;
-        ray.tfar = distance;
+        ray.tfar = 1.0f;
         ray.flags = 0;
         ray.mask = -1;
 

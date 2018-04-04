@@ -126,7 +126,7 @@ namespace EARenderer {
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-        void render();
+        void renderMeshes();
 
         void renderSurfelsGBuffer();
         void renderSurfelLuminances();

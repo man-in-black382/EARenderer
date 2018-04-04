@@ -384,7 +384,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::updateGridProbes() {
-        glDisable(GL_BLEND);
+//        glDisable(GL_BLEND);
 
         mGridProbesUpdateShader.bind();
         mGridProbesFramebuffer.bind();
@@ -393,14 +393,13 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
 
-        glEnable(GL_BLEND);
+//        glEnable(GL_BLEND);
     }
 
 #pragma mark - Public interface
     
-    void SceneRenderer::render() {
+    void SceneRenderer::renderMeshes() {
         DirectionalLight& directionalLight = mScene->directionalLight();
-//        FrustumCascades cascades = directionalLight.cascadesForCamera(*mScene->camera(), mNumberOfCascades);
         FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
         
         renderShadowMapsForDirectionalLights(cascades);
@@ -416,7 +415,6 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
-//        mCookTorranceShader.setSphericalHarmonicsBufferTexture(mScene->sphericalHarmonicsBufferTexture());
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
