@@ -105,9 +105,6 @@ namespace EARenderer {
                 probe.surfelClusterProjectionGroupCount++;
             }
         }
-
-//        printf("Projected clusters on probe at %f %f %f\n", probe.position.x, probe.position.y, probe.position.z);
-//        printf("Clusters offset: %zu | count: %zu \n\n", probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount);
     }
 
 #pragma mark - Public interface
@@ -147,13 +144,15 @@ namespace EARenderer {
 
     void LightProbeBuilder::buildAndPlaceProbesForDynamicGeometry(Scene *scene) {
         AxisAlignedBox3D bb = scene->lightBakingVolume();
-        glm::vec3 step = (bb.max - bb.min) / (float)mSpaceDivisionResolution;
+        glm::vec3 step = (bb.max - bb.min) / (float)(mSpaceDivisionResolution - 1);
+
+        printf("BB min %f %f %f \n", bb.max.x, bb.max.y, bb.max.z);
 
         printf("Building grid probes...\n");
         Measurement::executionTime("Grid probes placement took", [&]() {
-             for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
+             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);

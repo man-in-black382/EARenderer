@@ -64,7 +64,6 @@ namespace EARenderer {
         setupGLState();
         setupTextures();
         setupFramebuffers();
-        setupShaders();
 
 //        mIBLFramebuffer.attachColorTextures({ mSurfelsLuminanceMap, mSurfelClustersLuminanceMap });
 
@@ -145,32 +144,6 @@ namespace EARenderer {
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
         mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
-    }
-
-    void SceneRenderer::setupShaders() {
-        mGridProbesUpdateShader.bind();
-        mGridProbesUpdateShader.ensureSamplerValidity([&] {
-            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
-            mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
-            mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
-            mGridProbesUpdateShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
-        });
-
-        mDiffuseProbeRenderingShader.bind();
-        mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
-            mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
-        });
-
-        mLightProbeLinksRenderingShader.bind();
-        mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
-            mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
-            mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mLightProbeLinksRenderingShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
-            mLightProbeLinksRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-            mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
-        });
     }
 
 #pragma mark - Data preparation
@@ -355,10 +328,10 @@ namespace EARenderer {
     void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
         DirectionalLight& directionalLight = mScene->directionalLight();
 
-        mSurfelLightingShader.bind();
         mSurfelsLuminanceFramebuffer.bind();
         mSurfelsLuminanceFramebuffer.viewport().apply();
 
+        mSurfelLightingShader.bind();
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
@@ -384,16 +357,26 @@ namespace EARenderer {
     }
 
     void SceneRenderer::updateGridProbes() {
-//        glDisable(GL_BLEND);
+        // Disable blending because this is spherical harmonics, not colors!
+        // Nothing to blend here
+        glDisable(GL_BLEND);
 
         mGridProbesUpdateShader.bind();
+        mGridProbesUpdateShader.ensureSamplerValidity([&] {
+            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
+            mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
+            mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
+            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
+            mGridProbesUpdateShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+        });
+
         mGridProbesFramebuffer.bind();
         mGridProbesFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
 
-//        glEnable(GL_BLEND);
+        glEnable(GL_BLEND);
     }
 
 #pragma mark - Public interface
@@ -525,6 +508,10 @@ namespace EARenderer {
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
+        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
+            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
+        });
 
         glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());
     }
@@ -533,6 +520,13 @@ namespace EARenderer {
         mDiffuseProbesVAO.bind();
         mLightProbeLinksRenderingShader.bind();
         mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
+        mLightProbeLinksRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
+            mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
+            mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
+            mLightProbeLinksRenderingShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+            mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
+        });
 
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
 

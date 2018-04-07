@@ -32,7 +32,7 @@ namespace EARenderer {
 
         SurfelRenderer(Scene* scene, ResourcePool* resourcePool);
         
-        void render(Mode renderingMode, float surfelRadius);
+        void render(Mode renderingMode, float surfelRadius, size_t probeIndex = -1);
     };
     
 }

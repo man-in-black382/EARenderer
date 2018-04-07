@@ -92,7 +92,7 @@ namespace EARenderer {
     void GLProgram::obtainUniforms() {
         GLint count = 0;
         glGetProgramiv(mName, GL_ACTIVE_UNIFORMS, &count);
-        
+
         GLuint textureUnit = 0;
         for (GLuint index = 0; index < count; index++) {
             std::vector<GLchar> uniformNameChars(128);
@@ -110,6 +110,7 @@ namespace EARenderer {
                 }
                 glUniform1i(uniform.location(), textureUnit);
                 uniform.setTextureUnit(textureUnit);
+
                 textureUnit++;
             }
             
@@ -154,7 +155,7 @@ namespace EARenderer {
         if (!isModifyingUniforms) {
             throw std::logic_error("You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
         }
-        
+
         glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
         texture.bind();
     }

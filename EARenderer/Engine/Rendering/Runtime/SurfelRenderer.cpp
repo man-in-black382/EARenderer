@@ -45,7 +45,7 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    void SurfelRenderer::render(Mode renderingMode, float surfelRadius) {
+    void SurfelRenderer::render(Mode renderingMode, float surfelRadius, size_t probeIndex) {
         mSurfelRenderingShader.bind();
 
         switch (renderingMode) {
@@ -57,10 +57,23 @@ namespace EARenderer {
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
         mSurfelRenderingShader.setSurfelRadius(surfelRadius);
 
-        for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
-            mSurfelClusterVAOs[i].bind();
-            mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
-            glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfelClusters()[i].surfelCount));
+        if (probeIndex != -1) {
+            DiffuseLightProbe& probe = mScene->diffuseLightProbes()[probeIndex];
+            size_t projectionGroupCount = probe.surfelClusterProjectionGroupCount;
+            size_t projectionGroupOffset = probe.surfelClusterProjectionGroupOffset;
+
+            for (size_t i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupCount; i++) {
+                SurfelClusterProjection& projection = mScene->surfelClusterProjections()[i];
+                mSurfelClusterVAOs[projection.surfelClusterIndex].bind();
+                mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[projection.surfelClusterIndex]);
+                glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfelClusters()[projection.surfelClusterIndex].surfelCount));
+            }
+        } else {
+            for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
+                mSurfelClusterVAOs[i].bind();
+                mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
+                glDrawArrays(GL_POINTS, 0, static_cast<GLint>(mScene->surfelClusters()[i].surfelCount));
+            }
         }
     }
     

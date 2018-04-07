@@ -107,7 +107,7 @@ namespace EARenderer {
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
         ray.tnear = 0.0f;
-        ray.tfar = 1.0f;
+        ray.tfar = 0.99f;
         ray.flags = 0;
         ray.mask = -1;
 

@@ -125,8 +125,4 @@ void main() {
     normal = vNormalMatrix * normal;
 
     oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
-//
-//
-    vec4 shMap2Data = texture(uGridSHMap3, vec3(0.0));
-    oFragColor = shMap2Data;
 }

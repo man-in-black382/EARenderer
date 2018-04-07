@@ -180,16 +180,10 @@ void main() {
     }
 
     float NdotL             = dot(N, L);
-    vec3 diffuseRadiance    = albedo / PI * NdotL;
+    vec3 diffuseRadiance    = radiance * albedo / PI * NdotL;
 
     // Apply shadow factor
 //    diffuseRadiance *= 1.0 - shadow;
 
     oFragColor = vec4(diffuseRadiance, 1.0);
-
-    if (vTexCoords.y > 0.5) {
-        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
-    } else {
-        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    }
 }

@@ -2233,9 +2233,9 @@
 				AC3C9EB82072111500F35EB3 /* LightProbeRendering.frag */,
 				AC3C9EB520720F5C00F35EB3 /* GLSLLightProbeRendering.cpp */,
 				AC3C9EB620720F5C00F35EB3 /* GLSLLightProbeRendering.hpp */,
-				AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */,
-				AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */,
 				AC59F2902073C6B400698E55 /* LightProbeLinksRendering.vert */,
+				AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */,
+				AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */,
 				AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */,
 				AC59F28C207373C100698E55 /* GLSLLightProbeLinksRendering.hpp */,
 			);

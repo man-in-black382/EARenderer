@@ -101,7 +101,6 @@ namespace EARenderer {
         void setupGLState();
         void setupTextures();
         void setupFramebuffers();
-        void setupShaders();
 
         std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
         std::vector<uint8_t> surfelClustersGBufferData() const;
