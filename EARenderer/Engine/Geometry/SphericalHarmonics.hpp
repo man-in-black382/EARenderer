@@ -32,7 +32,8 @@ namespace EARenderer {
         static constexpr float Y20 = 0.31539156525252000603f; // 1/4 * sqrt(5/pi)
         static constexpr float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
         
-    private:
+//    private:
+    public:
         glm::vec3 mL00 = glm::zero<glm::vec3>();
         glm::vec3 mL11 = glm::zero<glm::vec3>();
         glm::vec3 mL10 = glm::zero<glm::vec3>();

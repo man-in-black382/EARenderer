@@ -79,10 +79,7 @@ namespace EARenderer {
             float solidAngle = surfelSolidAngle(scene, surfel, standpoint);
 
             if (solidAngle > 0.0) {
-                projection.sphericalHarmonics.contribute(Wps_norm,
-//                                                         glm::vec3(1.0, 0.0, 0.0),
-                                                         surfel.albedo,
-                                                         solidAngle);
+                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo, solidAngle);
             }
         }
 
@@ -105,6 +102,9 @@ namespace EARenderer {
                 probe.surfelClusterProjectionGroupCount++;
             }
         }
+
+//        printf("Projected clusters on probe at %f %f %f\n", probe.position.x, probe.position.y, probe.position.z);
+//        printf("Clusters offset: %zu | count: %zu \n\n", probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount);
     }
 
 #pragma mark - Public interface
@@ -146,21 +146,106 @@ namespace EARenderer {
         AxisAlignedBox3D bb = scene->lightBakingVolume();
         glm::vec3 step = (bb.max - bb.min) / (float)(mSpaceDivisionResolution - 1);
 
-        printf("BB min %f %f %f \n", bb.max.x, bb.max.y, bb.max.z);
+//        printf("Building grid probes...\n");
+//        Measurement::executionTime("Grid probes placement took", [&]() {
+//             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+//                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+//                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
+//                        DiffuseLightProbe probe({ x, y, z });
+//                        projectSurfelClustersOnProbe(scene, probe);
+//                        scene->diffuseLightProbes().push_back(probe);
+//                    }
+//                }
+//            }
+//            printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
+//        });
 
-        printf("Building grid probes...\n");
-        Measurement::executionTime("Grid probes placement took", [&]() {
-             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
-                        DiffuseLightProbe probe({ x, y, z });
-                        projectSurfelClustersOnProbe(scene, probe);
-                        scene->diffuseLightProbes().push_back(probe);
-                    }
-                }
-            }
-            printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
-        });
+        SphericalHarmonics greenWhiteSH;
+        greenWhiteSH.mL00  = glm::vec3(1.77245402, 3.54490805, 1.77245402);
+        greenWhiteSH.mL11  = glm::vec3(3.06998014, 0.0, 3.06998014);
+        greenWhiteSH.mL10  = glm::vec3(0.0);
+        greenWhiteSH.mL1_1 = glm::vec3(0.0);
+        greenWhiteSH.mL21  = glm::vec3(0.0);
+        greenWhiteSH.mL2_1 = glm::vec3(0.0);
+        greenWhiteSH.mL2_2 = glm::vec3(0.0);
+        greenWhiteSH.mL20  = glm::vec3(-1.9816637, -3.96332741, -1.9816637);
+        greenWhiteSH.mL22  = glm::vec3(3.43234229, 6.86468458, 3.43234229);
+
+        SphericalHarmonics redAndWhiteSH;
+        redAndWhiteSH.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 2.0 * M_PI);
+        redAndWhiteSH.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 2.0 * M_PI);
+
+        DiffuseLightProbe probe0(bb.center() - glm::vec3(0.5, 0.5, 0.5));
+        probe0.surfelClusterProjectionGroupOffset = 0;
+        probe0.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe0);
+        SurfelClusterProjection projection0;
+        projection0.surfelClusterIndex = 0;
+        projection0.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection0);
+
+        DiffuseLightProbe probe1(bb.center() - glm::vec3(0.5, 0.5, -0.5));
+        probe1.surfelClusterProjectionGroupOffset = 1;
+        probe1.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe1);
+        SurfelClusterProjection projection1;
+        projection1.surfelClusterIndex = 0;
+        projection1.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection1);
+
+        DiffuseLightProbe probe2(bb.center() - glm::vec3(-0.5, 0.5, 0.5));
+        probe2.surfelClusterProjectionGroupOffset = 2;
+        probe2.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe2);
+        SurfelClusterProjection projection2;
+        projection2.surfelClusterIndex = 0;
+        projection2.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection2);
+
+        DiffuseLightProbe probe3(bb.center() - glm::vec3(-0.5, 0.5, -0.5));
+        probe3.surfelClusterProjectionGroupOffset = 3;
+        probe3.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe3);
+        SurfelClusterProjection projection3;
+        projection3.surfelClusterIndex = 0;
+        projection3.sphericalHarmonics = redAndWhiteSH;
+        scene->surfelClusterProjections().push_back(projection3);
+
+        DiffuseLightProbe probe4(bb.center() - glm::vec3(0.5, -0.5, 0.5));
+        probe4.surfelClusterProjectionGroupOffset = 4;
+        probe4.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe4);
+        SurfelClusterProjection projection4;
+        projection4.surfelClusterIndex = 0;
+        projection4.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection4);
+
+        DiffuseLightProbe probe5(bb.center() - glm::vec3(0.5, -0.5, -0.5));
+        probe5.surfelClusterProjectionGroupOffset = 5;
+        probe5.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe5);
+        SurfelClusterProjection projection5;
+        projection5.surfelClusterIndex = 0;
+        projection5.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection5);
+
+        DiffuseLightProbe probe6(bb.center() - glm::vec3(-0.5, -0.5, 0.5));
+        probe6.surfelClusterProjectionGroupOffset = 6;
+        probe6.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe6);
+        SurfelClusterProjection projection6;
+        projection6.surfelClusterIndex = 0;
+        projection6.sphericalHarmonics = greenWhiteSH;
+        scene->surfelClusterProjections().push_back(projection6);
+
+        DiffuseLightProbe probe7(bb.center() - glm::vec3(-0.5, -0.5, -0.5));
+        probe7.surfelClusterProjectionGroupOffset = 7;
+        probe7.surfelClusterProjectionGroupCount = 1;
+        scene->diffuseLightProbes().push_back(probe7);
+        SurfelClusterProjection projection7;
+        projection7.surfelClusterIndex = 0;
+        projection7.sphericalHarmonics = redAndWhiteSH;
+        scene->surfelClusterProjections().push_back(projection7);
     }
     
 }

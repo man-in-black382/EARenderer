@@ -33,6 +33,8 @@ namespace EARenderer {
     
     class GLSLCookTorrance: public GLProgram {
     public:
+        enum class GeometryType { Static, Dynamic };
+
         using GLProgram::GLProgram;
         
         GLSLCookTorrance();
@@ -51,6 +53,7 @@ namespace EARenderer {
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
+        void setGeometryType(GeometryType type);
     };
     
 }

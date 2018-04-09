@@ -44,7 +44,7 @@ namespace EARenderer {
         GLTexture& operator=(GLTexture&& rhs) = default;
         ~GLTexture() override = 0;
 
-        static glm::vec2 wrapCoordinates(const glm::vec2& uv);
+        static glm::vec2 WrapCoordinates(const glm::vec2& uv);
         static glm::vec3 wrapCoordinates(const glm::vec3& uvr);
         static Size2D estimatedSize(size_t texelCount);
 

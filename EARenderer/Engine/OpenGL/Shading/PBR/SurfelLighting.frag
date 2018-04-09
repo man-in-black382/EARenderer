@@ -183,7 +183,7 @@ void main() {
     vec3 diffuseRadiance    = radiance * albedo / PI * NdotL;
 
     // Apply shadow factor
-//    diffuseRadiance *= 1.0 - shadow;
+    diffuseRadiance *= 1.0 - shadow;
 
     oFragColor = vec4(diffuseRadiance, 1.0);
 }

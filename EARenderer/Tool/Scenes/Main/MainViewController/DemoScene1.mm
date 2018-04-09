@@ -197,10 +197,10 @@
     self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
     scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 
-    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
-    auto transformation = sphereInstance.transformation();
-    transformation.translation = self.objectPositionOutput->value();
-    sphereInstance.setTransformation(transformation);
+//    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
+//    auto transformation = sphereInstance.transformation();
+//    transformation.translation = self.objectPositionOutput->value();
+//    sphereInstance.setTransformation(transformation);
 }
 
 #pragma mark - Helpers
@@ -227,15 +227,15 @@
         m.resetTime();
     });
 
-    glm::vec3 objectStart(1.5, -0.5, 0.0);
-    glm::vec3 objectEnd(-1.5, -1.5, 0.0);
-
-    choreograph::PhraseRef<glm::vec3> objectPhrase = choreograph::makeRamp(objectStart, objectEnd, 5.0);
-
-    self.animationTimeline->apply(self.objectPositionOutput, objectPhrase).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
-        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
-        m.resetTime();
-    });
+//    glm::vec3 objectStart(-1.5, -1.5, 1.0);
+//    glm::vec3 objectEnd(-1.5, -1.5, -1.0);
+//
+//    choreograph::PhraseRef<glm::vec3> objectPhrase = choreograph::makeRamp(objectStart, objectEnd, 20.0);
+//
+//    self.animationTimeline->apply(self.objectPositionOutput, objectPhrase).finishFn( [&m = *self.objectPositionOutput->inputPtr()] {
+//        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+//        m.resetTime();
+//    });
 }
 
 #pragma mark - Other materials

@@ -64,7 +64,7 @@ namespace EARenderer {
         setupGLState();
         setupTextures();
         setupFramebuffers();
-
+        
 //        mIBLFramebuffer.attachColorTextures({ mSurfelsLuminanceMap, mSurfelClustersLuminanceMap });
 
 //        convertEquirectangularMapToCubemap();
@@ -88,7 +88,7 @@ namespace EARenderer {
         for (ID id : mScene->meshInstances()) {
             MeshInstance& meshInstance = mScene->meshInstances()[id];
             glm::mat4 modelMatrix = meshInstance.transformation().modelMatrix();
-            Ray3D meshLocalSpaceRay = ray.transformedBy(glm::inverse(modelMatrix));
+            Ray3D meshLocalSpaceRay = ray;//.transformedBy(glm::inverse(modelMatrix)); // Had to comment the transformation and I don't remember why :(
             
             float distance = 0;
             if (Collision::RayAABB(meshLocalSpaceRay, meshInstance.boundingBox(), distance)) {
@@ -109,7 +109,6 @@ namespace EARenderer {
         meshID = closestMeshID;
         return closestMeshID != IDNotFound;
     }
-
 
 #pragma mark - Initial setup
 
@@ -339,7 +338,7 @@ namespace EARenderer {
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
     void SceneRenderer::averageSurfelClusterLuminances() {
@@ -353,7 +352,7 @@ namespace EARenderer {
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
     void SceneRenderer::updateGridProbes() {
@@ -374,7 +373,7 @@ namespace EARenderer {
         mGridProbesFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 4, (GLsizei)mGridProbesCountPerDimension);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mGridProbesCountPerDimension);
 
         glEnable(GL_BLEND);
     }
@@ -406,9 +405,31 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
-        
-        for (ID meshInstanceID : mScene->meshInstances()) {
-            auto& instance = mScene->meshInstances()[meshInstanceID];
+
+        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Static);
+
+        for (ID staticMeshInstanceID : mScene->staticMeshInstanceIDs()) {
+            auto& instance = mScene->meshInstances()[staticMeshInstanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
+
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+
+                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
+                    mCookTorranceShader.setMaterial(material);
+                });
+
+                subMesh.draw();
+            }
+        }
+
+        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Dynamic);
+
+        for (ID dynamicMeshInstanceID : mScene->dynamicMeshInstanceIDs()) {
+            auto& instance = mScene->meshInstances()[dynamicMeshInstanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
             mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
@@ -448,7 +469,7 @@ namespace EARenderer {
                 mFSQuadShader.setTexture(mSurfelsGBuffer, i);
             });
 
-            glDrawArrays(GL_TRIANGLES, 0, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
             if ((viewportRect.origin.x + 400) > defaultViewportWidth) {
                 viewportRect.origin.x = 0.0;
@@ -478,7 +499,7 @@ namespace EARenderer {
             mFSQuadShader.setTexture(mSurfelsLuminanceMap);
         });
 
-        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glEnable(GL_DEPTH_TEST);
     }
 
@@ -499,16 +520,20 @@ namespace EARenderer {
             mFSQuadShader.setTexture(mSurfelClustersLuminanceMap);
         });
 
-        glDrawArrays(GL_TRIANGLES, 0, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderDiffuseProbes(float radius) {
+        glm::vec3 min = mScene->lightBakingVolume().center() - glm::vec3(0.5);
+        glm::vec3 max = mScene->lightBakingVolume().center() + glm::vec3(0.5);;
+
         mDiffuseProbesVAO.bind();
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
-        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+//        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mDiffuseProbeRenderingShader.setWorldBoundingBox(AxisAlignedBox3D(min, max));
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });

@@ -50,7 +50,7 @@ struct SH {
 SH UnpackSH() {
     SH sh;
 
-    vec3 shMapCoords = vTexCoords;
+    vec3 shMapCoords = vec3(vTexCoords.x, vTexCoords.y, vTexCoords.z);
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);

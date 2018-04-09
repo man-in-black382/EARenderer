@@ -78,10 +78,6 @@ namespace EARenderer {
         
         setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
     }
-    
-//    void GLSLCookTorrance::setSphericalHarmonicsBufferTexture(const GLFloat3BufferTexture<SphericalHarmonics>& SHTexture) {
-//        setUniformTexture(uint32_constant<ctcrc32("uSphericalHarmonicsBuffer")>, SHTexture);
-//    }
 
     void GLSLCookTorrance::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
@@ -94,12 +90,16 @@ namespace EARenderer {
     }
 
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
-        glm::mat4 translation = glm::translate(-box.min);
-        glm::vec3 bbAxisLengths = box.max - box.min;
-        glm::mat4 scale = glm::scale(1.f / bbAxisLengths);
-        glm::mat4 result = scale * translation;
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
+    }
 
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(result));
+    void GLSLCookTorrance::setGeometryType(GeometryType type) {
+        int8_t t = 0;
+        switch (type) {
+            case GeometryType::Static: t = 0; break;
+            case GeometryType::Dynamic: t = 1; break;
+        }
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uGeometryType")>).location(), t);
     }
     
 }

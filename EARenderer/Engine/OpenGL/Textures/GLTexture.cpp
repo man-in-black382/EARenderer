@@ -66,7 +66,7 @@ namespace EARenderer {
 
 #pragma mark - Static
 
-    glm::vec2 GLTexture::wrapCoordinates(const glm::vec2& uv) {
+    glm::vec2 GLTexture::WrapCoordinates(const glm::vec2& uv) {
         float uFract = uv.x - (long)uv.x;
         float vFract = uv.y - (long)uv.y;
 

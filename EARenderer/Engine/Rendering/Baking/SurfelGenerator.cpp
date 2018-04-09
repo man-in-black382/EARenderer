@@ -207,9 +207,16 @@ namespace EARenderer {
         p1p2 * surfelCandidate.barycentricCoordinate.x +
         p1p3 * surfelCandidate.barycentricCoordinate.y;
 
-        uv = GLTexture::wrapCoordinates(uv);
+        uv = GLTexture::WrapCoordinates(uv);
 
         Color albedo = albedoMapSampler.sample(uv);
+
+        if (surfelCandidate.position.x > 0.0) {
+            albedo = Color(0.0, 1.0, 0.0);
+        } else {
+            albedo = Color(1.0, 1.0, 1.0);
+        }
+
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);

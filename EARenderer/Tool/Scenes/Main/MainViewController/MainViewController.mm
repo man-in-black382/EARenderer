@@ -96,7 +96,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
-    const uint8 kLightProbesGridResolution = 9;
+    const uint8 kLightProbesGridResolution = 2;
 
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
@@ -151,12 +151,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.cameraman->updateCamera();
     self.sceneRenderer->renderMeshes();
     self.sceneRenderer->renderDiffuseProbes(0.1);
-    self.sceneRenderer->renderLinksForDiffuseProbe(100);
-//    self.sceneRenderer->renderSurfelLuminances();
-//    self.sceneRenderer->renderSurfelClusterLuminances();
+//    self.sceneRenderer->renderLinksForDiffuseProbe(0);
+    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+    self.sceneRenderer->renderSurfelLuminances();
+    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
-//    self.axesRenderer->render();
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0, 100);
+    self.axesRenderer->render();
+
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 

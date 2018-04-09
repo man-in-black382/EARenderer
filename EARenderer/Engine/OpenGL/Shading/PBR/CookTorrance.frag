@@ -9,6 +9,9 @@ const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
+const int kGeometryTypeStatic   = 0;
+const int kGeometryTypeDynamic  = 1;
+
 // Spherical harmonics
 const float kC1 = 0.429043;
 const float kC2 = 0.511664;
@@ -76,6 +79,7 @@ uniform Spotlight uSpotlight;
 uniform Material uMaterial;
 
 uniform int uLightType;
+uniform int uGeometryType;
 
 // Shadow mapping
 uniform sampler2DArray uShadowMapArray;
@@ -418,6 +422,9 @@ void main() {
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-    oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(N)), 1.0);
-    oFragColor = vec4(correctColor, 1.0);
+    if (uGeometryType == kGeometryTypeStatic) {
+        oFragColor = vec4(correctColor, 1.0);
+    } else if (uGeometryType == kGeometryTypeDynamic) {
+        oFragColor = vec4(EvaluateSphericalHarmonics(N) * 5.0, 1.0);
+    }
 }

@@ -148,24 +148,28 @@ SH UnpackSH(int surfelClusterIndex) {
 // since minimum of 7 4-component textures are required
 // to store 3rd order spherical harmonics for 3 color channels
 void PackSHToRenderTargets(SH sh) {
-    // White and green
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
-
-//    oFragData0 = vec4(1.0, 0.0, 0.0, 1.0);
-//    oFragData1 = vec4(0.0, 1.0, 0.0, 1.0);
-//    oFragData2 = vec4(0.0, 0.0, 1.0, 1.0);
-//    oFragData3 = vec4(1.0, 1.0, 0.0, 1.0);
-//    oFragData4 = vec4(1.0, 0.0, 1.0, 1.0);
-//    oFragData5 = vec4(0.0, 1.0, 1.0, 1.0);
-//    oFragData6 = vec4(1.0, 1.0, 1.0, 1.0);
+//    if (vTexCoords.x > 0.5) {
+        // White and green
+//        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+//        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+//        sh.L10  = vec3(0.0);
+//        sh.L1_1 = vec3(0.0);
+//        sh.L21  = vec3(0.0);
+//        sh.L2_1 = vec3(0.0);
+//        sh.L2_2 = vec3(0.0);
+//        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+//        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+//    } else {
+//        sh.L00  = vec3(0.0);
+//        sh.L11  = vec3(0.0);
+//        sh.L10  = vec3(0.0);
+//        sh.L1_1 = vec3(0.0);
+//        sh.L21  = vec3(0.0);
+//        sh.L2_1 = vec3(0.0);
+//        sh.L2_2 = vec3(0.0);
+//        sh.L20  = vec3(0.0);
+//        sh.L22  = vec3(0.0);
+//    }
 
     oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
     oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
@@ -192,6 +196,12 @@ void main() {
                         size * unnormalizedTexCoords.y +
                         unnormalizedTexCoords.x;
 
+    if (vTexCoords.x >= 0.75) {
+        metadataIndex = 7;
+    } else {
+        metadataIndex = 0;
+    }
+
     metadataIndex *= 2; // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
 
     uint projectionGroupOffset = texelFetch(uProbeProjectionsMetadata, metadataIndex).r;
@@ -213,10 +223,11 @@ void main() {
 
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
+        surfelClusterLuminance = vec3(1.0);
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
-//
-//        resultingSH = AddTwoSH(resultingSH, luminanceSH);
-        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
+
+        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+//        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
     }
 
     PackSHToRenderTargets(resultingSH);
