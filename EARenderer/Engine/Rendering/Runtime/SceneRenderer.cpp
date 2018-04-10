@@ -366,7 +366,7 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
-            mGridProbesUpdateShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+            mGridProbesUpdateShader.setProbesGridResolution(mGridProbesCountPerDimension);
         });
 
         mGridProbesFramebuffer.bind();
@@ -447,6 +447,10 @@ namespace EARenderer {
         }
 
         renderSkybox();
+
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+        }
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
@@ -525,15 +529,15 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderDiffuseProbes(float radius) {
-        glm::vec3 min = mScene->lightBakingVolume().center() - glm::vec3(0.5);
-        glm::vec3 max = mScene->lightBakingVolume().center() + glm::vec3(0.5);;
+//        glm::vec3 min = mScene->lightBakingVolume().center() - glm::vec3(0.5);
+//        glm::vec3 max = mScene->lightBakingVolume().center() + glm::vec3(0.5);;
 
         mDiffuseProbesVAO.bind();
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
-//        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-        mDiffuseProbeRenderingShader.setWorldBoundingBox(AxisAlignedBox3D(min, max));
+        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+//        mDiffuseProbeRenderingShader.setWorldBoundingBox(AxisAlignedBox3D(min, max));
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });

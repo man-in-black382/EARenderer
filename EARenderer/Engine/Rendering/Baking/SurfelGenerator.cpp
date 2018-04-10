@@ -211,11 +211,11 @@ namespace EARenderer {
 
         Color albedo = albedoMapSampler.sample(uv);
 
-        if (surfelCandidate.position.x > 0.0) {
-            albedo = Color(0.0, 1.0, 0.0);
-        } else {
-            albedo = Color(1.0, 1.0, 1.0);
-        }
+//        if (surfelCandidate.position.x > 0.0) {
+//            albedo = Color(0.0, 1.0, 0.0);
+//        } else {
+//            albedo = Color(1.0, 1.0, 1.0);
+//        }
 
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         

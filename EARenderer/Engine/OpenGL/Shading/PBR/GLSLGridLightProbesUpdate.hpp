@@ -20,7 +20,7 @@ namespace EARenderer {
     public:
         GLSLGridLightProbesUpdate();
 
-        void setProbesPerGridDimensionCount(size_t count);
+        void setProbesGridResolution(size_t resolution);
         void setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap);
         void setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH);
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);

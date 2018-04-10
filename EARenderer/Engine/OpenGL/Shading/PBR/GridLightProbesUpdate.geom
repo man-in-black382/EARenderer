@@ -5,10 +5,6 @@
 layout (triangles) in;
 layout (triangle_strip, max_vertices = 3) out;
 
-// Uniforms
-
-uniform int uProbesPerGridDimensionCount;
-
 // Input
 
 in InterfaceBlock {
@@ -18,13 +14,15 @@ in InterfaceBlock {
 
 // Output
 
-out vec3 vTexCoords;
+out vec2 vTexCoords;
+out float vLayer;
 
 void main() {
     for (int i = 0; i < gl_in.length(); i++) {
         gl_Layer = gs_in[i].instanceID;
         gl_Position = gl_in[i].gl_Position;
-        vTexCoords = vec3(gs_in[i].texCoords, float(gl_Layer) / float(uProbesPerGridDimensionCount - 1));
+        vTexCoords = gs_in[i].texCoords;
+        vLayer = float(gl_Layer);
         EmitVertex();
     }
     EndPrimitive();

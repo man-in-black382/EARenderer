@@ -18,8 +18,8 @@ const vec2 kVertices[4] = vec2[]
  );
 
 void main() {
-    gl_Position = vec4(kVertices[gl_VertexID], 0.0, 1.0);
-    vs_out.texCoords = gl_Position.xy / 2.0 + 0.5;
+    gl_Position = vec4(kVertices[gl_VertexID], 1.0, 1.0);
+    vs_out.texCoords.xy = gl_Position.xy / 2.0 + 0.5;
     vs_out.instanceID = gl_InstanceID;
 }
 
