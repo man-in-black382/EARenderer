@@ -22,6 +22,7 @@ out vec4 oFragColor;
 // Uniforms
 
 uniform float uRadius;
+uniform int uProbesGridResolution;
 
 uniform sampler3D uGridSHMap0;
 uniform sampler3D uGridSHMap1;
@@ -47,10 +48,18 @@ struct SH {
 
 // Functions
 
+// Shrink tex coords by the size of 1 texel, which will result in a (0; 0; 0)
+// coordinate to become (0.5; 0.5; 0.5) coordinate (in texel space)
+vec3 AlignWithTexelCenters(vec3 texCoords) {
+    float halfTexel = 1.0 / float(uProbesGridResolution) / 2.0;
+    float reductionFactor = float(uProbesGridResolution - 1) / float(uProbesGridResolution);
+    return texCoords * reductionFactor + halfTexel;
+}
+
 SH UnpackSH() {
     SH sh;
 
-    vec3 shMapCoords = vec3(vTexCoords.x, vTexCoords.y, vTexCoords.z);
+    vec3 shMapCoords = AlignWithTexelCenters(vTexCoords);
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);

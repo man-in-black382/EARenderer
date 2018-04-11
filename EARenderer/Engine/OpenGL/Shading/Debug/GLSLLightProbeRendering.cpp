@@ -40,6 +40,10 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
+    void GLSLLightProbeRendering::setProbesGridResolution(size_t resolution) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), (GLint)resolution);
+    }
+
     void GLSLLightProbeRendering::setSphereRadius(float radius) {
         glUniform1f(uniformByNameCRC32(ctcrc32("uRadius")).location(), radius);
     }

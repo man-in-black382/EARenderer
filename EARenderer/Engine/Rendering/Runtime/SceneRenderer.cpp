@@ -403,6 +403,7 @@ namespace EARenderer {
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
+            mCookTorranceShader.setProbesGridResolution(mGridProbesCountPerDimension);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
@@ -529,15 +530,12 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderDiffuseProbes(float radius) {
-//        glm::vec3 min = mScene->lightBakingVolume().center() - glm::vec3(0.5);
-//        glm::vec3 max = mScene->lightBakingVolume().center() + glm::vec3(0.5);;
-
         mDiffuseProbesVAO.bind();
         mDiffuseProbeRenderingShader.bind();
         mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
         mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-//        mDiffuseProbeRenderingShader.setWorldBoundingBox(AxisAlignedBox3D(min, max));
+        mDiffuseProbeRenderingShader.setProbesGridResolution(mGridProbesCountPerDimension);
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });

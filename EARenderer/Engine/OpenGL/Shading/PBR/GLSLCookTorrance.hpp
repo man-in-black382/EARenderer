@@ -54,6 +54,7 @@ namespace EARenderer {
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setGeometryType(GeometryType type);
+        void setProbesGridResolution(size_t resolution);
     };
     
 }

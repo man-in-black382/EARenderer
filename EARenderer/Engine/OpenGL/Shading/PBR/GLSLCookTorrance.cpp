@@ -101,5 +101,9 @@ namespace EARenderer {
         }
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uGeometryType")>).location(), t);
     }
+
+    void GLSLCookTorrance::setProbesGridResolution(size_t resolution) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), (GLint)resolution);
+    }
     
 }

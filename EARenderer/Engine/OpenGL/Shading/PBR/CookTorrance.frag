@@ -72,6 +72,7 @@ struct SH {
 
 uniform vec3 uCameraPosition;
 uniform mat4 uWorldBoudningBoxTransform;
+uniform int uProbesGridResolution;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -104,6 +105,16 @@ uniform samplerCube uSpecularIrradianceMap;
 uniform samplerCube uDiffuseIrradianceMap;
 uniform int uSpecularIrradianceMapLOD;
 
+// Functions
+
+// Shrink tex coords by the size of 1 texel, which will result in a (0; 0; 0)
+// coordinate to become (0.5; 0.5; 0.5) coordinate (in texel space)
+vec3 AlignWithTexelCenters(vec3 texCoords) {
+    float halfTexel = 1.0 / float(uProbesGridResolution) / 2.0;
+    float reductionFactor = float(uProbesGridResolution - 1) / float(uProbesGridResolution);
+    return texCoords * reductionFactor + halfTexel;
+}
+
 ////////////////////////////////////////////////////////////
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
@@ -111,7 +122,8 @@ SH UnpackSH() {
     SH sh;
 
     // Get 3D texture space coordinates
-    vec3 shMapCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+    vec3 shMapCoords = AlignWithTexelCenters(texCoords);
 
     vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
     vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
