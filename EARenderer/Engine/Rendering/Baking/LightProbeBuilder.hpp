@@ -38,8 +38,9 @@ namespace EARenderer {
         
         LightProbeBuilder(const Size2D& probeCaptureResolution);
         
-        void buildAndPlaceProbesInScene(Scene* scene);
+        void buildAndPlaceProbesInScene(Scene *scene);
         void buildDynamicGeometryProbes(Scene *scene);
+        void buildStaticGeometryProbes(Scene *scene);
     };
     
 }

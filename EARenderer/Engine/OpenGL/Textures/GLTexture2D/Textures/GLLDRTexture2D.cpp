@@ -43,7 +43,7 @@ namespace EARenderer {
     }
 
     GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint8_t> bytes) {
-        Size2D size = estimatedSize(bytes.size() / 4);
+        Size2D size = EstimatedSize(bytes.size() / 4);
         initialize(size, Filter::None, WrapMode::ClampToEdge, GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, bytes.data());
     }
 

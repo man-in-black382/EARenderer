@@ -23,7 +23,7 @@ namespace EARenderer {
         std::vector<void *> pixelData;
 
         for (auto& layerData : data) {
-            Size2D size = estimatedSize(layerData.size());
+            Size2D size = EstimatedSize(layerData.size());
             if (size.width > estimation.width && size.height > estimation.height) {
                 estimation = size;
             }

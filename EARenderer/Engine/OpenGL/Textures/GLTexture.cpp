@@ -76,7 +76,7 @@ namespace EARenderer {
         return { uFract - (long)uFract, vFract - (long)vFract };
     }
 
-    glm::vec3 GLTexture::wrapCoordinates(const glm::vec3& uvr) {
+    glm::vec3 GLTexture::WrapCoordinates(const glm::vec3& uvr) {
         float uFract = uvr.x - (long)uvr.x;
         float vFract = uvr.y - (long)uvr.y;
         float rFract = uvr.z - (long)uvr.z;
@@ -88,9 +88,26 @@ namespace EARenderer {
         return { uFract - (long)uFract, vFract - (long)vFract, rFract - (long)rFract };
     }
 
-    Size2D GLTexture::estimatedSize(size_t texelCount) {
+    Size2D GLTexture::EstimatedSize(size_t texelCount) {
         size_t dimensionLength = std::ceil(std::sqrt((float)texelCount));
         return Size2D(dimensionLength);
+    }
+
+    glm::vec2 GLTexture::UVMap(const glm::vec3& vertex, const glm::vec3& normal) {
+        glm::vec2 uv;
+
+        if (fabs(normal.x) > fabs(normal.y) && fabs(normal.x) > fabs(normal.z)) {
+            uv.x = vertex.y;
+            uv.y = vertex.z;
+        } else if (fabs(normal.y) > fabs(normal.x) && fabs(normal.y) > fabs(normal.z)) {
+            uv.x = vertex.x;
+            uv.y = vertex.z;
+        } else {
+            uv.x = vertex.x;
+            uv.y = vertex.y;
+        }
+
+        return uv;
     }
     
 #pragma mark - Getters

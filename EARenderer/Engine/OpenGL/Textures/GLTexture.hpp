@@ -45,8 +45,9 @@ namespace EARenderer {
         ~GLTexture() override = 0;
 
         static glm::vec2 WrapCoordinates(const glm::vec2& uv);
-        static glm::vec3 wrapCoordinates(const glm::vec3& uvr);
-        static Size2D estimatedSize(size_t texelCount);
+        static glm::vec3 WrapCoordinates(const glm::vec3& uvr);
+        static Size2D EstimatedSize(size_t texelCount);
+        static glm::vec2 UVMap(const glm::vec3& vertex, const glm::vec3& normal);
 
         const Size2D& size() const;
         uint16_t mipMapsCount() const;

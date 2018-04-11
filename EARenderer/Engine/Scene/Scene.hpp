@@ -38,7 +38,7 @@ namespace EARenderer {
     class Scene {
     private:
         size_t mOctreeDepth = 5;
-        float mGridProbesDistance = 1.0;
+        float mGridProbesDistance = 0.75;
 
         DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;

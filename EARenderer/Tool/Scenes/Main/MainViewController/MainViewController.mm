@@ -124,6 +124,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelGenerator->generateStaticGeometrySurfels();
 
     self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
+    self.lightProbeBuilder->buildStaticGeometryProbes(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
@@ -150,9 +151,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneRenderer->renderMeshes();
     self.sceneRenderer->renderDiffuseProbes(0.1);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(0);
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();
-//    self.sceneRenderer->renderSurfelClusterLuminances();
+    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 

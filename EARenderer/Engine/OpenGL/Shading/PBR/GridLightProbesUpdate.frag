@@ -204,11 +204,9 @@ void main() {
 
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
-        surfelClusterLuminance = vec3(1.0);
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);
 
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
-//        resultingSH = AddTwoSH(resultingSH, surfelClusterPrecomputedSH);
     }
 
     PackSHToRenderTargets(resultingSH);

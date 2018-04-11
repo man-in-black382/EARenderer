@@ -103,9 +103,6 @@ namespace EARenderer {
                 probe.surfelClusterProjectionGroupCount++;
             }
         }
-
-//        printf("Projected clusters on probe at %f %f %f\n", probe.position.x, probe.position.y, probe.position.z);
-//        printf("Clusters offset: %zu | count: %zu \n\n", probe.surfelClusterProjectionGroupOffset, probe.surfelClusterProjectionGroupCount);
     }
 
 #pragma mark - Public interface
@@ -163,6 +160,44 @@ namespace EARenderer {
                 }
             }
             printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
+        });
+    }
+
+    void LightProbeBuilder::buildStaticGeometryProbes(Scene *scene) {
+        glm::mat4 lightBakingVolumeLocalSpace = scene->lightBakingVolume().localSpaceMatrix();
+
+        printf("Building lightmapped probes...\n");
+        Measurement::executionTime("Lightmapped probes placement took", [&]() {
+
+            std::vector<Triangle3D> triangles;
+
+            for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
+                auto& meshInstance = scene->meshInstances()[meshInstanceID];
+                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+
+                auto modelMatrix = meshInstance.modelMatrix();
+
+                for (ID subMeshID : mesh.subMeshes()) {
+                    auto& subMesh = mesh.subMeshes()[subMeshID];
+
+                    for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
+                        glm::vec3 p0 = lightBakingVolumeLocalSpace * modelMatrix * subMesh.vertices()[i].position;
+                        glm::vec2 uv0 = GLTexture::UVMap(p0, subMesh.vertices()[i].normal);
+
+                        glm::vec3 p1 = lightBakingVolumeLocalSpace * modelMatrix * subMesh.vertices()[i + 1].position;
+                        glm::vec2 uv1 = GLTexture::UVMap(p1, subMesh.vertices()[i + 1].normal);
+
+                        glm::vec3 p2 = lightBakingVolumeLocalSpace * modelMatrix * subMesh.vertices()[i + 2].position;
+                        glm::vec2 uv2 = GLTexture::UVMap(p2, subMesh.vertices()[i + 2].normal);
+
+                        glm::vec2 minUV = glm::min(glm::min(uv0, uv1), uv2);
+                        glm::vec2 maxUV = glm::max(glm::max(uv0, uv1), uv2);
+
+                        printf("Min uv: %f %f | Max uv: %f %f \n", minUV.s, minUV.t, maxUV.s, maxUV.t);
+                    }
+                }
+            }
+
         });
     }
     
