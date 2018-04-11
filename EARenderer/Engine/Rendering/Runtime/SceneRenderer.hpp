@@ -52,7 +52,7 @@ namespace EARenderer {
     private:
         uint8_t mNumberOfCascades = 1;
         uint8_t mNumberOfIrradianceMips = 5;
-        size_t mGridProbesCountPerDimension = 0;
+        glm::ivec3 mProbeGridResolution;
         
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
@@ -121,7 +121,7 @@ namespace EARenderer {
         void buildBRDFIntegrationMap();
 
     public:
-        SceneRenderer(Scene* scene, size_t gridLightProbesCountPerDimension);
+        SceneRenderer(Scene* scene);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

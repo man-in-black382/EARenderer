@@ -16,6 +16,8 @@
 #include "GLDepthRenderbuffer.hpp"
 #include "GLSLLightProbeEnvironmentCapture.hpp"
 
+#include <glm/vec3.hpp>
+
 namespace EARenderer {
     
     class LightProbeBuilder {
@@ -34,10 +36,10 @@ namespace EARenderer {
     public:
         GLHDRTextureCubemap mEnvironmentMap;
         
-        LightProbeBuilder(const Size2D& probeCaptureResolution, uint32_t spaceDivisionResolution);
+        LightProbeBuilder(const Size2D& probeCaptureResolution);
         
         void buildAndPlaceProbesInScene(Scene* scene);
-        void buildAndPlaceProbesForDynamicGeometry(Scene *scene);
+        void buildDynamicGeometryProbes(Scene *scene);
     };
     
 }

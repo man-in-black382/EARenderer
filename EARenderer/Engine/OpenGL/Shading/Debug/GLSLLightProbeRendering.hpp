@@ -22,7 +22,7 @@ namespace EARenderer {
         void setCamera(const Camera& camera);
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProbesGridResolution(size_t resolution);
+        void setProbesGridResolution(const glm::ivec3& resolution);
         void setSphereRadius(float radius);
     };
 

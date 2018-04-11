@@ -96,8 +96,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
-    const uint8 kLightProbesGridResolution = 7;
-
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
     
     EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
@@ -105,9 +103,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.scene = new EARenderer::Scene();
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
-    
-    // Temporary
-    
+
     EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 50.f);
     camera->moveTo(glm::vec3(0, 1, 0));
     camera->lookAt(glm::vec3(-1, -0.5, 0));
@@ -123,13 +119,15 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.demoScene = demoScene1;
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256), kLightProbesGridResolution);
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256));
+
     self.surfelGenerator->generateStaticGeometrySurfels();
-    self.lightProbeBuilder->buildAndPlaceProbesForDynamicGeometry(self.scene);
+
+    self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, kLightProbesGridResolution);
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),

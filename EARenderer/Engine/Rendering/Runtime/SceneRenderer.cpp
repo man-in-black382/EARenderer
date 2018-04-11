@@ -20,10 +20,10 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene, size_t gridLightProbesCountPerDimension)
+    SceneRenderer::SceneRenderer(Scene* scene)
     :
     mScene(scene),
-    mGridProbesCountPerDimension(gridLightProbesCountPerDimension),
+    mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
     mShadowMaps(Size2D(1024), mNumberOfCascades),
@@ -47,15 +47,15 @@ namespace EARenderer {
 
     // Diffuse light probes
     mGridProbesSphericalHarmonicMaps {
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension),
-        GLHDRTexture3D(Size2D(gridLightProbesCountPerDimension), gridLightProbesCountPerDimension)
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
-    mGridProbesFramebuffer(Size2D(gridLightProbesCountPerDimension))
+    mGridProbesFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
     {
         mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
@@ -366,14 +366,14 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
-            mGridProbesUpdateShader.setProbesGridResolution(mGridProbesCountPerDimension);
+            mGridProbesUpdateShader.setProbesGridResolution(mProbeGridResolution);
         });
 
         mGridProbesFramebuffer.bind();
         mGridProbesFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mGridProbesCountPerDimension);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
 
         glEnable(GL_BLEND);
     }
@@ -403,7 +403,7 @@ namespace EARenderer {
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
-            mCookTorranceShader.setProbesGridResolution(mGridProbesCountPerDimension);
+            mCookTorranceShader.setProbesGridResolution(mProbeGridResolution);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
@@ -535,7 +535,7 @@ namespace EARenderer {
         mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
         mDiffuseProbeRenderingShader.setSphereRadius(radius);
         mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-        mDiffuseProbeRenderingShader.setProbesGridResolution(mGridProbesCountPerDimension);
+        mDiffuseProbeRenderingShader.setProbesGridResolution(mProbeGridResolution);
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
             mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
         });
@@ -551,13 +551,11 @@ namespace EARenderer {
         mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
             mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mLightProbeLinksRenderingShader.setProbesPerGridDimensionCount(mGridProbesCountPerDimension);
+            mLightProbeLinksRenderingShader.setProbesGridResolution(mProbeGridResolution);
             mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
         });
 
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
-
-        printf("Probe %ld has %zu projections\n", probeIndex, mScene->diffuseLightProbes()[probeIndex].surfelClusterProjectionGroupCount);
     }
 
 }

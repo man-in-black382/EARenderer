@@ -38,6 +38,7 @@ namespace EARenderer {
     class Scene {
     private:
         size_t mOctreeDepth = 5;
+        float mGridProbesDistance = 1.0;
 
         DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;
@@ -91,6 +92,8 @@ namespace EARenderer {
         void calculateBoundingBox();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
+        
+        glm::ivec3 preferredProbeGridResolution() const;
 
         const AxisAlignedBox3D& boundingBox() const;
 

@@ -19,8 +19,8 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void GLSLGridLightProbesUpdate::setProbesGridResolution(size_t resolution) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), (GLint)resolution);
+    void GLSLGridLightProbesUpdate::setProbesGridResolution(const glm::ivec3& resolution) {
+        glUniform3iv(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), 1, glm::value_ptr(resolution));
     }
 
     void GLSLGridLightProbesUpdate::setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap) {

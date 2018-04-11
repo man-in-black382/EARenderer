@@ -29,7 +29,7 @@ in float vLayer;
 
 // Uniforms
 
-uniform int uProbesGridResolution;
+uniform ivec3 uProbesGridResolution;
 
 uniform samplerBuffer uProjectionClusterSphericalHarmonics;
 uniform usamplerBuffer uProjectionClusterIndices;
@@ -162,14 +162,14 @@ void PackSHToRenderTargets(SH sh) {
 int FlattenTexCoords() {
     // Texture coordinate interpolation gives us values at texel centers, not edges
     // and so we're accounting for that by adding half a texel size to x and y
-    float halfTexel = 1.0 / float(uProbesGridResolution) / 2.0;
-    float resolution = float(uProbesGridResolution - 1);
-    float x = (vTexCoords.x + halfTexel) * resolution;
-    float y = (vTexCoords.y + halfTexel) * resolution;
+    vec3 halfTexel = 1.0 / vec3(uProbesGridResolution) / 2.0;
+    vec3 resolution = vec3(uProbesGridResolution - 1);
+    float x = (vTexCoords.x + halfTexel.x) * resolution.x;
+    float y = (vTexCoords.y + halfTexel.y) * resolution.y;
     // vLayer is not normalized, therefore we're using it as-is
     float z = vLayer;
 
-    int index = uProbesGridResolution * uProbesGridResolution * int(z) + uProbesGridResolution * int(y) + int(x);
+    int index = uProbesGridResolution.y * uProbesGridResolution.x * int(z) + uProbesGridResolution.x * int(y) + int(x);
     return index;
 }
 

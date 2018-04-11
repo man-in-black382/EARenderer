@@ -185,6 +185,11 @@ namespace EARenderer {
 
         mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
     }
+
+    glm::ivec3 Scene::preferredProbeGridResolution() const {
+        glm::vec3 bbLengths = mLightBakingVolume.max - mLightBakingVolume.min;
+        return bbLengths / mGridProbesDistance;
+    }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
         mStaticMeshInstanceIDs.push_back(meshInstanceID);
