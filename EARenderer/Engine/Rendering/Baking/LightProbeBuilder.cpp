@@ -163,6 +163,14 @@ namespace EARenderer {
             }
             printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
         });
+
+        for (size_t i = 0; i < scene->surfels().size(); i++) {
+            if (i < scene->surfels().size() / 2) {
+                scene->surfels()[i].albedo = glm::vec3(1.0, 0.0, 0.0);
+            } else {
+                scene->surfels()[i].albedo = glm::vec3(0.0, 0.0, 1.0);
+            }
+        }
     }
 
     void LightProbeBuilder::buildStaticGeometryProbes(Scene *scene) {
@@ -271,19 +279,19 @@ namespace EARenderer {
                 }
             }
 
-            printf("UV mapping... \n");
-
-            std::size_t count = 0;
-
-            std::vector<std::uint16_t> remap(indices.size()); // allocate buffer for each vertex index
-            std::vector<float> uvs(indices.size() * 2); // allocate buffer for each output uv
-            std::vector<std::uint16_t> outIndices(indices.size()); // allocate buffer for each output uv
-
-            ray::uvmapper::lightmappack((float *)vertices.data(), indices.data(), indices.size(),
-                                        lightMapResolution.width, lightMapResolution.height, 0,
-                                        remap.data(), uvs.data(), outIndices.data(), count);
-
-            printf("");
+//            printf("UV mapping... \n");
+//
+//            std::size_t count = 0;
+//
+//            std::vector<std::uint16_t> remap(indices.size()); // allocate buffer for each vertex index
+//            std::vector<float> uvs(indices.size() * 2); // allocate buffer for each output uv
+//            std::vector<std::uint16_t> outIndices(indices.size()); // allocate buffer for each output uv
+//
+//            ray::uvmapper::lightmappack((float *)vertices.data(), indices.data(), indices.size(),
+//                                        lightMapResolution.width, lightMapResolution.height, 0,
+//                                        remap.data(), uvs.data(), outIndices.data(), count);
+//
+//            printf("");
         });
     }
     

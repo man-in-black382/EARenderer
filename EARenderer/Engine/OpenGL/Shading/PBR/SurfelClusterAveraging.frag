@@ -44,6 +44,7 @@ void main() {
     for (uint i = surfelOffset; i < surfelOffset + surfelCount; ++i) {
         vec2 uv = vec2(float(i % luminanceMapWidth) / luminanceMapWidth,
                        float(i / luminanceMapWidth) / luminanceMapHeight);
+
         averagedClusterLuminance += texture(uSurfelsLuminanceMap, uv).rgb;
     }
 
