@@ -325,6 +325,7 @@
 		AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelGenerator.hpp; sourceTree = "<group>"; };
 		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
 		AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LowDiscrepancySequence.hpp; sourceTree = "<group>"; };
+		AC9FCF6C207F6CE500B5462D /* trianglepacker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = trianglepacker.hpp; sourceTree = "<group>"; };
 		ACB0AA4C1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture2DSampler.cpp; sourceTree = "<group>"; };
 		ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DSampler.hpp; sourceTree = "<group>"; };
 		ACC539262068EAC400B150B5 /* GLTexture3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture3D.cpp; sourceTree = "<group>"; };
@@ -1052,6 +1053,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		AC9FCF6B207F6CE500B5462D /* trianglepacker */ = {
+			isa = PBXGroup;
+			children = (
+				AC9FCF6C207F6CE500B5462D /* trianglepacker.hpp */,
+			);
+			path = trianglepacker;
+			sourceTree = "<group>";
+		};
 		ACB0AA431FF4EC3500CD6A11 /* GLTexture2D */ = {
 			isa = PBXGroup;
 			children = (
@@ -1739,6 +1748,7 @@
 				CE1C972B2067AA88006A4A73 /* embree */,
 				CE70F89A1F8F8EBD00AD9027 /* stb */,
 				CE70F89C1F8F8EBD00AD9027 /* obj_loader */,
+				AC9FCF6B207F6CE500B5462D /* trianglepacker */,
 				CE70F8A21F8F8EBD00AD9027 /* glm */,
 			);
 			path = ThirdParty;

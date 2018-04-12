@@ -21,6 +21,7 @@ namespace EARenderer {
         GLLDRTexture2D(const Size2D& size, Filter filter = Filter::Trilinear);
         GLLDRTexture2D(const std::string& imagePath);
         GLLDRTexture2D(const std::vector<uint8_t> bytes);
+        GLLDRTexture2D(const std::vector<uint32_t> integers);
         ~GLLDRTexture2D() = default;
 
         GLLDRTexture2DSampler sampleTexels(int32_t mipLevel = 0) const;

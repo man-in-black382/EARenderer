@@ -12,6 +12,7 @@
 #include "Interval.hpp"
 #include "AxisAlignedBox3D.hpp"
 #include "Ray3D.hpp"
+#include "Triangle2D.hpp"
 #include "Triangle3D.hpp"
 #include "Sphere.hpp"
 #include "Plane.hpp"

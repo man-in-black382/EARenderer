@@ -190,6 +190,10 @@ namespace EARenderer {
         glm::vec3 bbLengths = mLightBakingVolume.max - mLightBakingVolume.min;
         return bbLengths / mGridProbesDistance;
     }
+
+    Size2D Scene::preferredProbeLightmapResolution() const {
+        return mProbesLightmapResolution;
+    }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
         mStaticMeshInstanceIDs.push_back(meshInstanceID);

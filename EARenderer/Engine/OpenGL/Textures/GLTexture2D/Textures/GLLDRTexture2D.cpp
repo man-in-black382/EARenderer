@@ -47,6 +47,11 @@ namespace EARenderer {
         initialize(size, Filter::None, WrapMode::ClampToEdge, GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, bytes.data());
     }
 
+    GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint32_t> integers) {
+        Size2D size = EstimatedSize(integers.size());
+        initialize(size, Filter::None, WrapMode::ClampToEdge, GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT, integers.data());
+    }
+
 #pragma mark - Sampling
 
     GLLDRTexture2DSampler GLLDRTexture2D::sampleTexels(int32_t mipLevel) const {

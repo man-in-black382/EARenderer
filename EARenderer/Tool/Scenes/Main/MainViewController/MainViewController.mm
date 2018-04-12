@@ -123,7 +123,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.surfelGenerator->generateStaticGeometrySurfels();
 
-    self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
+//    self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
     self.lightProbeBuilder->buildStaticGeometryProbes(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
