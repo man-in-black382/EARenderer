@@ -1,17 +1,5 @@
 #version 400 core
 
-// Constants
-
-const float Y00 = 0.28209479177387814347f; // 1 / (2*sqrt(pi))
-const float Y11 = 0.48860251190291992159f; // sqrt(3 /(4pi))
-const float Y10 = Y11;
-const float Y1_1 = Y11;
-const float Y21 = 1.09254843059207907054f; // 1 / (2*sqrt(pi))
-const float Y2_1 = Y21;
-const float Y2_2 = Y21;
-const float Y20 = 0.31539156525252000603f; // 1/4 * sqrt(5/pi)
-const float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
-
 // Output
 
 layout(location = 0) out vec4 oFragData0;
@@ -131,16 +119,6 @@ SH UnpackSH(int surfelClusterIndex) {
     sh.L2_2 = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 6).rgb);
     sh.L20  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 7).rgb);
     sh.L22  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 8).rgb);
-
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
 
     return sh;
 }

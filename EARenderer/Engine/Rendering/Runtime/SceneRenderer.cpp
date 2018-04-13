@@ -497,7 +497,7 @@ namespace EARenderer {
         mFSQuadShader.bind();
         mFSQuadShader.setApplyToneMapping(true);
 
-        Rect2D viewportRect(Size2D(400, 400));
+        Rect2D viewportRect(Size2D(100, 100));
         GLViewport(viewportRect).apply();
 
         mFSQuadShader.ensureSamplerValidity([this]() {
@@ -518,7 +518,7 @@ namespace EARenderer {
         mFSQuadShader.bind();
         mFSQuadShader.setApplyToneMapping(true);
 
-        Rect2D viewportRect({ 400, 0 }, { 400, 400 });
+        Rect2D viewportRect({ 100, 0 }, { 100, 100 });
         GLViewport(viewportRect).apply();
 
         mFSQuadShader.ensureSamplerValidity([this]() {

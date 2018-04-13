@@ -51,10 +51,4 @@ void main() {
     averagedClusterLuminance /= surfelCount;
 
     oFragColor = vec4(averagedClusterLuminance, 1.0);
-//
-//    if (vTexCoords.x < 0.2 && vTexCoords.y < 0.2) {
-//        oFragColor = vec4(vec3(5.0), 1.0);
-//    } else {
-//        oFragColor = vec4(vec3(0.0), 1.0);
-//    }
 }

@@ -152,8 +152,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneRenderer->renderDiffuseProbes(0.1);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(0);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
-    self.sceneRenderer->renderSurfelLuminances();
-    self.sceneRenderer->renderSurfelClusterLuminances();
+//    self.sceneRenderer->renderSurfelLuminances();
+//    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 

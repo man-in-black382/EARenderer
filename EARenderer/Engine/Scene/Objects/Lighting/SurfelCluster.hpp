@@ -19,6 +19,7 @@ namespace EARenderer {
         size_t surfelCount = 0;
         glm::vec3 center;
 
+        SurfelCluster() = default;
         SurfelCluster(size_t offset, size_t count);
     };
 

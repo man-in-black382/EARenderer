@@ -163,14 +163,6 @@ namespace EARenderer {
             }
             printf("Built %lu probes | %lu projections \n", scene->diffuseLightProbes().size(), scene->surfelClusterProjections().size());
         });
-
-        for (size_t i = 0; i < scene->surfels().size(); i++) {
-            if (i < scene->surfels().size() / 2) {
-                scene->surfels()[i].albedo = glm::vec3(1.0, 0.0, 0.0);
-            } else {
-                scene->surfels()[i].albedo = glm::vec3(0.0, 0.0, 1.0);
-            }
-        }
     }
 
     void LightProbeBuilder::buildStaticGeometryProbes(Scene *scene) {
