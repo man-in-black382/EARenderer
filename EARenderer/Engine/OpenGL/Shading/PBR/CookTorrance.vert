@@ -7,9 +7,10 @@ const int kMaxCascades = 4;
 
 layout (location = 0) in vec4 iPosition;
 layout (location = 1) in vec3 iTexCoords;
-layout (location = 2) in vec3 iNormal;
-layout (location = 3) in vec3 iTangent;
-layout (location = 4) in vec3 iBitangent;
+layout (location = 2) in vec2 iLightmapCoords;
+layout (location = 3) in vec3 iNormal;
+layout (location = 4) in vec3 iTangent;
+layout (location = 5) in vec3 iBitangent;
 
 // Uniforms
 

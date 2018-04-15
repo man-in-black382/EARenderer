@@ -9,6 +9,8 @@
 #ifndef WavefrontMeshLoader_hpp
 #define WavefrontMeshLoader_hpp
 
+#include "MeshLoader.hpp"
+
 #include <string>
 #include <vector>
 #include <array>
@@ -23,7 +25,7 @@
 
 namespace EARenderer {
     
-    class WavefrontMeshLoader {
+    class WavefrontMeshLoader: public MeshLoader {
     private:
         /// Objects of such type contain averaged normal for a vertex and indices of vertices
         /// in current submesh which are sharing this normal
@@ -55,7 +57,7 @@ namespace EARenderer {
         
     public:
         WavefrontMeshLoader(const std::string& meshPath);
-        void load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D &boundingBox);
+        void load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D &boundingBox) override;
     };
     
 }

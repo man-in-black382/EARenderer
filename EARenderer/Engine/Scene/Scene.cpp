@@ -89,10 +89,6 @@ namespace EARenderer {
         return mLightBakingVolume;
     }
     
-    GLFloat3BufferTexture<SphericalHarmonics>& Scene::sphericalHarmonicsBufferTexture() {
-        return mSphericalHarmonicsBufferTexture;
-    }
-    
     const std::list<ID>& Scene::staticMeshInstanceIDs() const {
         return mStaticMeshInstanceIDs;
     }

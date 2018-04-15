@@ -13,14 +13,14 @@ namespace EARenderer {
     SubMesh::SubMesh()
     :
     mBoundingBox(AxisAlignedBox3D::maximumReversed()),
-    mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>())
+    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
     { }
     
-    SubMesh::SubMesh(const std::vector<Vertex1P1N1UV1T1BT>& vertices)
+    SubMesh::SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices)
     :
     mVertices(vertices),
     mBoundingBox(AxisAlignedBox3D::maximumReversed()),
-    mVAO(GLVertexArray<Vertex1P1N1UV1T1BT>())
+    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
     {
         finalizeVertexBuffer();
     }
@@ -35,7 +35,7 @@ namespace EARenderer {
         return mMaterialName;
     }
     
-    const std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() const {
+    const std::vector<Vertex1P1N2UV1T1BT>& SubMesh::vertices() const {
         return mVertices;
     }
     
@@ -43,15 +43,15 @@ namespace EARenderer {
         return mBoundingBox;
     }
     
-    const GLVertexArray<Vertex1P1N1UV1T1BT>& SubMesh::VAO() const {
+    const GLVertexArray<Vertex1P1N2UV1T1BT>& SubMesh::VAO() const {
         return mVAO;
     }
 
-    std::vector<Vertex1P1N1UV1T1BT>& SubMesh::vertices() {
+    std::vector<Vertex1P1N2UV1T1BT>& SubMesh::vertices() {
         return mVertices;
     }
 
-    GLVertexArray<Vertex1P1N1UV1T1BT>& SubMesh::VAO() {
+    GLVertexArray<Vertex1P1N2UV1T1BT>& SubMesh::VAO() {
         return mVAO;
     }
     
@@ -68,7 +68,7 @@ namespace EARenderer {
     
 #pragma mark - Other methods
     
-    void SubMesh::addVertex(const Vertex1P1N1UV1T1BT& vertex) {
+    void SubMesh::addVertex(const Vertex1P1N2UV1T1BT& vertex) {
         mBoundingBox.min = glm::min(glm::vec3(vertex.position), mBoundingBox.min);
         mBoundingBox.max = glm::max(glm::vec3(vertex.position), mBoundingBox.max);
         mVertices.push_back(vertex);
@@ -78,6 +78,7 @@ namespace EARenderer {
         mVAO.initialize(mVertices, {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec4), glm::vec4::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())

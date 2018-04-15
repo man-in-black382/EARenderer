@@ -117,9 +117,10 @@ namespace EARenderer {
             bool isTexCoordPresent = indices[i].texcoord_index != 0;
             bool isNormalPresent = indices[i].normal_index != 0;
 
-            lastSubMesh.addVertex(Vertex1P1N1UV1T1BT(mVertices[fixedVIdx],
-                                                            isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec3(),
-                                                            isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
+            lastSubMesh.addVertex(Vertex1P1N2UV1T1BT(mVertices[fixedVIdx],
+                                                     isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec3(),
+                                                     glm::vec2(0.0),
+                                                     isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
             
             shouldCalculateNormal = !isNormalPresent;
             shouldBuildTangent = isTexCoordPresent;

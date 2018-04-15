@@ -33,11 +33,12 @@
     // Meshes
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
-    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
+    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_with_2nd_uv" ofType:@"fbx"];
+//    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
-    
-    EARenderer::ID sphereMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(spherePath.UTF8String)));
+
     EARenderer::ID sponzaMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
+    EARenderer::ID sphereMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(spherePath.UTF8String)));
     EARenderer::ID planeMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(planePath.UTF8String)));
 
     // Materials

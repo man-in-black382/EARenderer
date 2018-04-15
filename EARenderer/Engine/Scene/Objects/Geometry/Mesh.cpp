@@ -7,7 +7,7 @@
 //
 
 #include "Mesh.hpp"
-#include "WavefrontMeshLoader.hpp"
+#include "MeshLoader.hpp"
 
 namespace EARenderer {
     
@@ -17,12 +17,16 @@ namespace EARenderer {
     :
     mSubMeshes(1000)
     {
-        WavefrontMeshLoader loader(filePath);
+        auto meshLoader = MeshLoader::Create(filePath);
         std::vector<SubMesh> subMeshes;
         
-        loader.load(subMeshes, mName, mBoundingBox);
+        meshLoader->load(subMeshes, mName, mBoundingBox);
         for (auto& subMesh : subMeshes) {
             mSubMeshes.emplace(std::move(subMesh));
+            printf("%s \n", subMesh.name().c_str());
+            if (subMesh.name() == "sponza_00") {
+                printf("");
+            }
         }
         
         float scaleDown = mBoundingBox.diagonal() * 1.44;

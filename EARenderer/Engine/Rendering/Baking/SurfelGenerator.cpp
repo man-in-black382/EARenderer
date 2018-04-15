@@ -211,12 +211,6 @@ namespace EARenderer {
 
         Color albedo = albedoMapSampler.sample(uv);
 
-//        if (surfelCandidate.position.x > 0.0) {
-//            albedo = Color(0.0, 1.0, 0.0);
-//        } else {
-//            albedo = Color(1.0, 1.0, 1.0);
-//        }
-
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);
@@ -383,28 +377,6 @@ namespace EARenderer {
             formClusters();
         });
         printf("Generated %lu clusters\n\n", mScene->surfelClusters().size());
-
-//        std::array<glm::vec3, 10> colors {
-//            glm::vec3(1.0, 0.0, 0.0),
-//            glm::vec3(0.0, 1.0, 0.0),
-//            glm::vec3(0.0, 0.0, 1.0),
-//            glm::vec3(1.0, 1.0, 0.0),
-//            glm::vec3(1.0, 0.0, 1.0),
-//            glm::vec3(0.0, 1.0, 1.0),
-//            glm::vec3(1.0, 1.0, 1.0),
-//            glm::vec3(1.0, 0.6, 0.2),
-//            glm::vec3(0.2, 0.6, 0.0),
-//            glm::vec3(0.4, 0.4, 0.3),
-//        };
-//
-//        for (size_t i = 0; i < 10; i++) {
-//            for (size_t j = 0; j < 100; j++) {
-//                Surfel s(glm::vec3(0.0), glm::vec3(1.0, 0.0, 0.0), colors[i], glm::vec2(0.0), 1.0);
-//                mScene->surfels().push_back(s);
-//            }
-//            SurfelCluster c(i * 100, 100);
-//            mScene->surfelClusters().push_back(c);
-//        }
     }
     
 }

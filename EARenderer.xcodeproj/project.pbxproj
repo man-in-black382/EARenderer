@@ -137,6 +137,9 @@
 		CE4DE24F1FA60CFF0067729A /* VaseRound_diffuse.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774E61FA5D73200F5699C /* VaseRound_diffuse.tga */; };
 		CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774D61FA5D72F00F5699C /* VaseRound_normal.tga */; };
 		CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */; };
+		CE4E19C720834E4600AF181A /* sponza_with_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */; };
+		CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */; };
+		CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19CB20837DB700AF181A /* MeshLoader.cpp */; };
 		CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED052012759C00A03146 /* Triangle2D.cpp */; };
 		CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED08201275B900A03146 /* Triangle3D.cpp */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
@@ -157,10 +160,10 @@
 		CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */; };
 		CE70FA1E1F8F8EF600AD9027 /* Ray3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */; };
 		CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */; };
-		CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8661F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.cpp */; };
+		CE70FA201F8F8EF600AD9027 /* Vertex1P1N2UV1T1BT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8661F8F8EBD00AD9027 /* Vertex1P1N2UV1T1BT.cpp */; };
 		CE70FA211F8F8EF600AD9027 /* Vertex1P3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8671F8F8EBD00AD9027 /* Vertex1P3.cpp */; };
 		CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8691F8F8EBD00AD9027 /* Vertex1P4.cpp */; };
-		CE70FA231F8F8EF600AD9027 /* Vertex1P1N1UV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N1UV.cpp */; };
+		CE70FA231F8F8EF600AD9027 /* Vertex1P1N2UV.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N2UV.cpp */; };
 		CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */; };
 		CE70FA251F8F8EF600AD9027 /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8711F8F8EBD00AD9027 /* Size2D.cpp */; };
 		CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8761F8F8EBD00AD9027 /* Scene.cpp */; };
@@ -233,7 +236,6 @@
 		CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8201F8F8EBD00AD9027 /* suzanne.obj */; };
 		CE70FA791F8F8F7400AD9027 /* torus.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8211F8F8EBD00AD9027 /* torus.obj */; };
 		CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8221F8F8EBD00AD9027 /* plane.obj */; };
-		CE70FA7B1F8F8F7400AD9027 /* _engine_resource_sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */; };
 		CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7E41F8F8EBD00AD9027 /* SceneObjectMarker.mm */; };
 		CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7F21F8F8EBD00AD9027 /* MainViewController.mm */; };
 		CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7F91F8F8EBD00AD9027 /* DefaultRenderComponentsProvider.mm */; };
@@ -629,6 +631,11 @@
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
 		CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexAttribute.cpp; sourceTree = "<group>"; };
+		CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_with_2nd_uv.fbx; sourceTree = "<group>"; };
+		CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutodeskMeshLoader.cpp; sourceTree = "<group>"; };
+		CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutodeskMeshLoader.hpp; sourceTree = "<group>"; };
+		CE4E19CB20837DB700AF181A /* MeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLoader.cpp; sourceTree = "<group>"; };
+		CE4E19CC20837DB700AF181A /* MeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshLoader.hpp; sourceTree = "<group>"; };
 		CE53ED052012759C00A03146 /* Triangle2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle2D.cpp; sourceTree = "<group>"; };
 		CE53ED062012759C00A03146 /* Triangle2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle2D.hpp; sourceTree = "<group>"; };
 		CE53ED08201275B900A03146 /* Triangle3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle3D.cpp; sourceTree = "<group>"; };
@@ -683,7 +690,6 @@
 		CE70F8201F8F8EBD00AD9027 /* suzanne.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = suzanne.obj; sourceTree = "<group>"; };
 		CE70F8211F8F8EBD00AD9027 /* torus.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = torus.obj; sourceTree = "<group>"; };
 		CE70F8221F8F8EBD00AD9027 /* plane.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plane.obj; sourceTree = "<group>"; };
-		CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = _engine_resource_sphere.obj; sourceTree = "<group>"; };
 		CE70F8251F8F8EBD00AD9027 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE70F8341F8F8EBD00AD9027 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CE70F8351F8F8EBD00AD9027 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -723,14 +729,14 @@
 		CE70F8621F8F8EBD00AD9027 /* Rect2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Rect2D.cpp; sourceTree = "<group>"; };
 		CE70F8631F8F8EBD00AD9027 /* Ray3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ray3D.cpp; sourceTree = "<group>"; };
 		CE70F8641F8F8EBD00AD9027 /* AxisAlignedBox3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxisAlignedBox3D.cpp; sourceTree = "<group>"; };
-		CE70F8661F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N1UV1T1BT.cpp; sourceTree = "<group>"; };
+		CE70F8661F8F8EBD00AD9027 /* Vertex1P1N2UV1T1BT.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N2UV1T1BT.cpp; sourceTree = "<group>"; };
 		CE70F8671F8F8EBD00AD9027 /* Vertex1P3.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P3.cpp; sourceTree = "<group>"; };
-		CE70F8681F8F8EBD00AD9027 /* Vertex1P1N1UV.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N1UV.hpp; sourceTree = "<group>"; };
+		CE70F8681F8F8EBD00AD9027 /* Vertex1P1N2UV.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N2UV.hpp; sourceTree = "<group>"; };
 		CE70F8691F8F8EBD00AD9027 /* Vertex1P4.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P4.cpp; sourceTree = "<group>"; };
-		CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N1UV.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N1UV.cpp; sourceTree = "<group>"; };
+		CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N2UV.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Vertex1P1N2UV.cpp; sourceTree = "<group>"; };
 		CE70F86B1F8F8EBD00AD9027 /* Vertex1P3.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P3.hpp; sourceTree = "<group>"; };
 		CE70F86C1F8F8EBD00AD9027 /* Vertex1P4.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P4.hpp; sourceTree = "<group>"; };
-		CE70F86D1F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N1UV1T1BT.hpp; sourceTree = "<group>"; };
+		CE70F86D1F8F8EBD00AD9027 /* Vertex1P1N2UV1T1BT.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vertex1P1N2UV1T1BT.hpp; sourceTree = "<group>"; };
 		CE70F86E1F8F8EBD00AD9027 /* Parallelogram3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Parallelogram3D.hpp; sourceTree = "<group>"; };
 		CE70F86F1F8F8EBD00AD9027 /* Size2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Size2D.hpp; sourceTree = "<group>"; };
 		CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Parallelogram3D.cpp; sourceTree = "<group>"; };
@@ -1634,14 +1640,6 @@
 			path = constraint;
 			sourceTree = "<group>";
 		};
-		AC8F7DFA203AF63F004CD033 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F8231F8F8EBD00AD9027 /* _engine_resource_sphere.obj */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
 		AC9FCF6B207F6CE500B5462D /* trianglepacker */ = {
 			isa = PBXGroup;
 			children = (
@@ -2056,6 +2054,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */,
 				CEC7B03E1FA635780097CFDE /* sponza.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8211F8F8EBD00AD9027 /* torus.obj */,
@@ -2105,7 +2104,6 @@
 		CE70F83E1F8F8EBD00AD9027 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				AC8F7DFA203AF63F004CD033 /* Resources */,
 				CE70F83F1F8F8EBD00AD9027 /* Input */,
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
 				CE70F8491F8F8EBD00AD9027 /* Utils */,
@@ -2223,10 +2221,10 @@
 		CE70F8651F8F8EBD00AD9027 /* Vertices */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N1UV.cpp */,
-				CE70F8681F8F8EBD00AD9027 /* Vertex1P1N1UV.hpp */,
-				CE70F8661F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.cpp */,
-				CE70F86D1F8F8EBD00AD9027 /* Vertex1P1N1UV1T1BT.hpp */,
+				CE70F86A1F8F8EBD00AD9027 /* Vertex1P1N2UV.cpp */,
+				CE70F8681F8F8EBD00AD9027 /* Vertex1P1N2UV.hpp */,
+				CE70F8661F8F8EBD00AD9027 /* Vertex1P1N2UV1T1BT.cpp */,
+				CE70F86D1F8F8EBD00AD9027 /* Vertex1P1N2UV1T1BT.hpp */,
 				CE70F8671F8F8EBD00AD9027 /* Vertex1P3.cpp */,
 				CE70F86B1F8F8EBD00AD9027 /* Vertex1P3.hpp */,
 				CE70F8691F8F8EBD00AD9027 /* Vertex1P4.cpp */,
@@ -2670,10 +2668,14 @@
 		CE70F9AF1F8F8EBD00AD9027 /* Resource Management */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */,
-				CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */,
 				CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */,
 				CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */,
+				CE4E19CB20837DB700AF181A /* MeshLoader.cpp */,
+				CE4E19CC20837DB700AF181A /* MeshLoader.hpp */,
+				CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */,
+				CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */,
+				CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */,
+				CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */,
 			);
 			path = "Resource Management";
 			sourceTree = "<group>";
@@ -3211,6 +3213,7 @@
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE70FA671F8F8F7400AD9027 /* GenericGeometry.frag in Resources */,
 				CE4DE2181FA60CFE0067729A /* Sponza_Bricks_a_Roughness.tga in Resources */,
+				CE4E19C720834E4600AF181A /* sponza_with_2nd_uv.fbx in Resources */,
 				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
@@ -3283,7 +3286,6 @@
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
-				CE70FA7B1F8F8F7400AD9027 /* _engine_resource_sphere.obj in Resources */,
 				AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */,
 				CE4DE24A1FA60CFF0067729A /* VaseHanging_normal.tga in Resources */,
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
@@ -3351,6 +3353,7 @@
 				CE70FA531F8F8EF600AD9027 /* GLNamedObject.cpp in Sources */,
 				CE70FA8D1F8F912300AD9027 /* SceneEditorTabView.mm in Sources */,
 				CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */,
+				CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */,
 				CE70FA4A1F8F8EF600AD9027 /* GLUniform.cpp in Sources */,
 				CE1C97592067B09E006A4A73 /* Timeline.cpp in Sources */,
 				CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */,
@@ -3365,6 +3368,7 @@
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
 				CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */,
+				CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */,
 				CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */,
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				ACC5392B2068ED5300B150B5 /* GLHDRTexture3D.cpp in Sources */,
@@ -3390,7 +3394,7 @@
 				CE70FA3D1F8F8EF600AD9027 /* GLHDRTexture2D.cpp in Sources */,
 				CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */,
 				CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */,
-				CE70FA231F8F8EF600AD9027 /* Vertex1P1N1UV.cpp in Sources */,
+				CE70FA231F8F8EF600AD9027 /* Vertex1P1N2UV.cpp in Sources */,
 				ACC539282068EAC400B150B5 /* GLTexture3D.cpp in Sources */,
 				CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */,
 				CE70FA921F8F912300AD9027 /* LightListTabViewItem.mm in Sources */,
@@ -3425,7 +3429,7 @@
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
 				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
-				CE70FA201F8F8EF600AD9027 /* Vertex1P1N1UV1T1BT.cpp in Sources */,
+				CE70FA201F8F8EF600AD9027 /* Vertex1P1N2UV1T1BT.cpp in Sources */,
 				CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */,
 				CE70FA911F8F912300AD9027 /* MeshListTabViewItem.mm in Sources */,
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,

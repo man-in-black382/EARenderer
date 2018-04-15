@@ -28,6 +28,7 @@ namespace EARenderer {
         
         Mesh& mesh = ResourcePool::shared().meshes[mMeshID];
         mTransformation = mesh.baseTransform();
+        mModelMatrix = mTransformation.modelMatrix();
     }
     
 #pragma mark - Getters

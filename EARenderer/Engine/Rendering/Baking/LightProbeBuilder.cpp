@@ -128,18 +128,6 @@ namespace EARenderer {
 //                }
 //            }
 //        }
-
-        // DEBUG
-        
-        LightProbe probe(glm::vec3(-1.922861, -1.135728, 0.476772), 100);
-        captureEnvironmentForProbe(scene, probe);
-        probe.updateSHCoefficients(mEnvironmentMap);
-        scene->lightProbes().emplace(probe);
-
-        scene->sphericalHarmonicsBufferTexture().buffer().initialize(nullptr, 1);
-        scene->sphericalHarmonicsBufferTexture().buffer().write([&probe](auto writer) {
-            writer.writeAt(0, probe.sphericalHarmonics());
-        });
     }
 
     void LightProbeBuilder::buildDynamicGeometryProbes(Scene *scene) {

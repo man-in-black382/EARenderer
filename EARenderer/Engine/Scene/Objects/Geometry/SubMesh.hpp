@@ -9,7 +9,7 @@
 #ifndef SubMesh_hpp
 #define SubMesh_hpp
 
-#include "Vertex1P1N1UV1T1BT.hpp"
+#include "Vertex1P1N2UV1T1BT.hpp"
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArray.hpp"
@@ -25,26 +25,26 @@ namespace EARenderer {
     private:
         std::string mName;
         std::string mMaterialName;
-        std::vector<Vertex1P1N1UV1T1BT> mVertices;
+        std::vector<Vertex1P1N2UV1T1BT> mVertices;
         AxisAlignedBox3D mBoundingBox;
-        GLVertexArray<Vertex1P1N1UV1T1BT> mVAO;
+        GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
         
     public:
         SubMesh();
-        SubMesh(const std::vector<Vertex1P1N1UV1T1BT>& vertices);
+        SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices);
         
         const std::string& name() const;
         const std::string& materialName() const;
-        const std::vector<Vertex1P1N1UV1T1BT>& vertices() const;
+        const std::vector<Vertex1P1N2UV1T1BT>& vertices() const;
         const AxisAlignedBox3D& boundingBox() const;
-        const GLVertexArray<Vertex1P1N1UV1T1BT>& VAO() const;
+        const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
 
-        std::vector<Vertex1P1N1UV1T1BT>& vertices();
-        GLVertexArray<Vertex1P1N1UV1T1BT>& VAO();
+        std::vector<Vertex1P1N2UV1T1BT>& vertices();
+        GLVertexArray<Vertex1P1N2UV1T1BT>& VAO();
         
         void setName(const std::string& name);
         void setMaterialName(const std::string& name);
-        void addVertex(const Vertex1P1N1UV1T1BT& vertex);
+        void addVertex(const Vertex1P1N2UV1T1BT& vertex);
         void finalizeVertexBuffer();
         
         void draw() const override;

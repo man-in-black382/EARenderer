@@ -55,8 +55,6 @@ namespace EARenderer {
         std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
         std::shared_ptr<EmbreeRayTracer> mRaytracer;
 
-        GLFloat3BufferTexture<SphericalHarmonics> mSphericalHarmonicsBufferTexture;
-        
         std::list<ID> mStaticMeshInstanceIDs;
         std::list<ID> mDynamicMeshInstanceIDs;
         
@@ -83,8 +81,6 @@ namespace EARenderer {
         std::shared_ptr<SparseOctree<MeshTriangleRef>> octree();
         std::shared_ptr<EmbreeRayTracer> rayTracer();
         
-        GLFloat3BufferTexture<SphericalHarmonics>& sphericalHarmonicsBufferTexture();
-
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;
         
