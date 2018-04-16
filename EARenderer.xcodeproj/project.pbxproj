@@ -138,7 +138,6 @@
 		CE4DE24F1FA60CFF0067729A /* VaseRound_diffuse.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774E61FA5D73200F5699C /* VaseRound_diffuse.tga */; };
 		CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774D61FA5D72F00F5699C /* VaseRound_normal.tga */; };
 		CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */; };
-		CE4E19C720834E4600AF181A /* sponza_with_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */; };
 		CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */; };
 		CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19CB20837DB700AF181A /* MeshLoader.cpp */; };
 		CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED052012759C00A03146 /* Triangle2D.cpp */; };
@@ -235,7 +234,6 @@
 		CE70FA751F8F8F7400AD9027 /* rustediron2_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81B1F8F8EBD00AD9027 /* rustediron2_basecolor.png */; };
 		CE70FA761F8F8F7400AD9027 /* rustediron2_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81C1F8F8EBD00AD9027 /* rustediron2_metallic.png */; };
 		CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8201F8F8EBD00AD9027 /* suzanne.obj */; };
-		CE70FA791F8F8F7400AD9027 /* torus.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8211F8F8EBD00AD9027 /* torus.obj */; };
 		CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8221F8F8EBD00AD9027 /* plane.obj */; };
 		CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7E41F8F8EBD00AD9027 /* SceneObjectMarker.mm */; };
 		CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE70F7F21F8F8EBD00AD9027 /* MainViewController.mm */; };
@@ -284,7 +282,6 @@
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
-		CEC7B03F1FA635800097CFDE /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B03E1FA635780097CFDE /* sponza.obj */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CECD853D2041FE1C00966766 /* debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853C2041FE1B00966766 /* debug.png */; };
 		CECD853F2041FF9800966766 /* debug2.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853E2041FF9800966766 /* debug2.png */; };
@@ -633,7 +630,6 @@
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
 		CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexAttribute.cpp; sourceTree = "<group>"; };
-		CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_with_2nd_uv.fbx; sourceTree = "<group>"; };
 		CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutodeskMeshLoader.cpp; sourceTree = "<group>"; };
 		CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutodeskMeshLoader.hpp; sourceTree = "<group>"; };
 		CE4E19CB20837DB700AF181A /* MeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLoader.cpp; sourceTree = "<group>"; };
@@ -690,7 +686,6 @@
 		CE70F81C1F8F8EBD00AD9027 /* rustediron2_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rustediron2_metallic.png; sourceTree = "<group>"; };
 		CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE70F8201F8F8EBD00AD9027 /* suzanne.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = suzanne.obj; sourceTree = "<group>"; };
-		CE70F8211F8F8EBD00AD9027 /* torus.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = torus.obj; sourceTree = "<group>"; };
 		CE70F8221F8F8EBD00AD9027 /* plane.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = plane.obj; sourceTree = "<group>"; };
 		CE70F8251F8F8EBD00AD9027 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CE70F8341F8F8EBD00AD9027 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -1253,7 +1248,6 @@
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
-		CEC7B03E1FA635780097CFDE /* sponza.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CECD853C2041FE1B00966766 /* debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug.png; sourceTree = "<group>"; };
 		CECD853E2041FF9800966766 /* debug2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug2.png; sourceTree = "<group>"; };
@@ -2057,10 +2051,7 @@
 			isa = PBXGroup;
 			children = (
 				CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */,
-				CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */,
-				CEC7B03E1FA635780097CFDE /* sponza.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
-				CE70F8211F8F8EBD00AD9027 /* torus.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
 				AC8F7DFB203AF676004CD033 /* sphere.obj */,
 			);
@@ -3162,7 +3153,6 @@
 				CE4DE2291FA60CFF0067729A /* Sponza_Curtain_metallic.tga in Resources */,
 				CE70FA5A1F8F8F7400AD9027 /* FullScreenQuad.frag in Resources */,
 				CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */,
-				CEC7B03F1FA635800097CFDE /* sponza.obj in Resources */,
 				CE4DE2361FA60CFF0067729A /* Sponza_Fabric_Red_diffuse.tga in Resources */,
 				CE4DE22F1FA60CFF0067729A /* Sponza_Details_normal.tga in Resources */,
 				CE70FA5B1F8F8F7400AD9027 /* DirectionalDepth.vert in Resources */,
@@ -3216,7 +3206,6 @@
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE70FA671F8F8F7400AD9027 /* GenericGeometry.frag in Resources */,
 				CE4DE2181FA60CFE0067729A /* Sponza_Bricks_a_Roughness.tga in Resources */,
-				CE4E19C720834E4600AF181A /* sponza_with_2nd_uv.fbx in Resources */,
 				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
@@ -3270,7 +3259,6 @@
 				CE4DE24C1FA60CFF0067729A /* VasePlant_diffuse.tga in Resources */,
 				CE37917E1FA366820049BD1B /* patchy_cement1_Normal.png in Resources */,
 				CE4DE2111FA60CFE0067729A /* Lion_Roughness.tga in Resources */,
-				CE70FA791F8F8F7400AD9027 /* torus.obj in Resources */,
 				CE4DE23F1FA60CFF0067729A /* Sponza_Roof_diffuse.tga in Resources */,
 				CE4DE20B1FA60CFE0067729A /* ChainTexture_Roughness.tga in Resources */,
 				CE4DE21F1FA60CFE0067729A /* Sponza_Column_b_diffuse.tga in Resources */,

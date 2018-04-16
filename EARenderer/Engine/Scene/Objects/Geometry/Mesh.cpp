@@ -23,10 +23,6 @@ namespace EARenderer {
         meshLoader->load(subMeshes, mName, mBoundingBox);
         for (auto& subMesh : subMeshes) {
             mSubMeshes.emplace(std::move(subMesh));
-            printf("%s \n", subMesh.name().c_str());
-            if (subMesh.name() == "sponza_00") {
-                printf("");
-            }
         }
         
         float scaleDown = mBoundingBox.diagonal() * 1.44;

@@ -110,24 +110,24 @@ namespace EARenderer {
 #pragma mark - Public interface
     
     void LightProbeBuilder::buildAndPlaceProbesInScene(Scene* scene) {
-//        mFramebuffer.bind();
-//        mFramebuffer.attachTexture(mEnvironmentMap);
-//        mFramebuffer.attachTexture(mDepthCubemap);
-//        mFramebuffer.viewport().apply();
-//
-//        AxisAlignedBox3D bb = scene->boundingBox();
-//        glm::vec3 step { bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z };
-//        step /= mSpaceDivisionResolution;
-//
-//        for (int32_t x = bb.min.x; x < bb.max.x; x += step.x) {
-//            for (int32_t y = bb.min.y; y < bb.max.y; y += step.y) {
-//                for (int32_t z = bb.min.z; z < bb.max.z; z += step.z) {
-//                    const auto& probe = LightProbe({ x, y, z });
-//                    captureEnvironmentForProbe(scene, probe);
-//                    scene->lightProbes().emplace(probe);
-//                }
-//            }
-//        }
+        //        mFramebuffer.bind();
+        //        mFramebuffer.attachTexture(mEnvironmentMap);
+        //        mFramebuffer.attachTexture(mDepthCubemap);
+        //        mFramebuffer.viewport().apply();
+        //
+        //        AxisAlignedBox3D bb = scene->boundingBox();
+        //        glm::vec3 step { bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z };
+        //        step /= mSpaceDivisionResolution;
+        //
+        //        for (int32_t x = bb.min.x; x < bb.max.x; x += step.x) {
+        //            for (int32_t y = bb.min.y; y < bb.max.y; y += step.y) {
+        //                for (int32_t z = bb.min.z; z < bb.max.z; z += step.z) {
+        //                    const auto& probe = LightProbe({ x, y, z });
+        //                    captureEnvironmentForProbe(scene, probe);
+        //                    scene->lightProbes().emplace(probe);
+        //                }
+        //            }
+        //        }
     }
 
     void LightProbeBuilder::buildDynamicGeometryProbes(Scene *scene) {
@@ -140,7 +140,7 @@ namespace EARenderer {
 
         printf("Building grid probes...\n");
         Measurement::executionTime("Grid probes placement took", [&]() {
-             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
                 for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
                     for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
                         DiffuseLightProbe probe({ x, y, z });
@@ -170,6 +170,8 @@ namespace EARenderer {
 
             uint16_t index = 0;
 
+            float area = 0;
+
             printf("Collecting triangles... \n");
 
             for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
@@ -181,97 +183,69 @@ namespace EARenderer {
                 for (ID subMeshID : mesh.subMeshes()) {
                     auto& subMesh = mesh.subMeshes()[subMeshID];
 
+                    area = 0;
+
                     for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
                         Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
                                             modelMatrix * subMesh.vertices()[i + 1].position,
                                             modelMatrix * subMesh.vertices()[i + 2].position);
 
-                        if (Collision::TriangleAABB(triangle, scene->lightBakingVolume())) {
-                            vertices.emplace_back(triangle.p1);
-                            indices.push_back(index);
-                            index++;
-
-                            vertices.emplace_back(triangle.p2);
-                            indices.push_back(index);
-                            index++;
-
-                            vertices.emplace_back(triangle.p3);
-                            indices.push_back(index);
-                            index++;
+                        if (!Collision::TriangleAABB(triangle, scene->lightBakingVolume())) {
+                            continue;
                         }
-                    }
 
-//
-//
-//
-//
-//                        glm::vec3 p0Norm = lightBakingVolumeLocalSpace * glm::vec4(p0, 1.0);
-//                        glm::vec2 uv0 = GLTexture::UVMap(p0Norm, subMesh.vertices()[i].normal);
-//                        glm::ivec2 uv0i = uv0 * glmResolution;
-//
-//
-//                        glm::vec3 p1Norm = lightBakingVolumeLocalSpace * glm::vec4(p1, 1.0);
-//                        glm::vec2 uv1 = GLTexture::UVMap(p1Norm, subMesh.vertices()[i + 1].normal);
-//                        glm::ivec2 uv1i = uv1 * glmResolution;
-//
-//
-//                        glm::vec3 p2Norm = lightBakingVolumeLocalSpace * glm::vec4(p2, 1.0);
-//                        glm::vec2 uv2 = GLTexture::UVMap(p2Norm, subMesh.vertices()[i + 2].normal);
-//                        glm::ivec2 uv2i = uv2 * glmResolution;
-//
-//                        glm::vec2 minUV = glm::min(glm::min(uv0, uv1), uv2);
-//                        glm::vec2 maxUV = glm::max(glm::max(uv0, uv1), uv2);
-//
-//                        glm::vec2 deltaUV = maxUV - minUV;
-//
-//
-//                        glm::ivec2 iMinUV = minUV * glmResolution;
-//                        glm::ivec2 iMaxUV = maxUV * glmResolution;
-//
-//                        iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(glmResolution));
-//                        iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(glmResolution));
-//
-//                        for (size_t v = iMinUV.y; v < iMaxUV.y; v++) {
-//                            for (size_t u = iMinUV.x; u < iMaxUV.x; u++) {
-//                                size_t flatIndex = u + v * lightMapResolution.width;
-//
-//                                if (probeIndices[flatIndex] == kInvalidIndex) {
-//                                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
-//                                    glm::vec3 barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
-//                                    bool pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
-//
+                        glm::vec2 uv0 = subMesh.vertices()[i].lightmapCoords;
+                        glm::ivec2 uv0i = uv0 * glmResolution;
+
+
+
+                        glm::vec2 uv1 = subMesh.vertices()[i + 1].lightmapCoords;
+                        glm::ivec2 uv1i = uv1 * glmResolution;
+
+                        glm::vec2 uv2 = subMesh.vertices()[i + 2].lightmapCoords;
+                        glm::ivec2 uv2i = uv2 * glmResolution;
+
+                        glm::vec2 minUV = glm::min(glm::min(uv0, uv1), uv2);
+                        glm::vec2 maxUV = glm::max(glm::max(uv0, uv1), uv2);
+
+                        glm::vec2 deltaUV = maxUV - minUV;
+                        area += deltaUV.x * deltaUV.y;
+//                        printf("Area: %f% \n", area * 100);
+
+                        glm::ivec2 iMinUV = minUV * glmResolution;
+                        glm::ivec2 iMaxUV = maxUV * glmResolution;
+
+                        iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(glmResolution));
+                        iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(glmResolution));
+
+                        for (size_t v = iMinUV.y; v < iMaxUV.y; v++) {
+                            for (size_t u = iMinUV.x; u < iMaxUV.x; u++) {
+                                size_t flatIndex = u + v * lightMapResolution.width;
+
+                                if (probeIndices[flatIndex] == kInvalidIndex) {
+                                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
+                                    glm::vec3 barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
+                                    bool pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
+
 //                                    if (pointInside) {
-//                                        probeIndices[flatIndex] = 0;
-//                                        glm::vec3 probePosition = p0 * barycentric.x + p1 * barycentric.y + p2 * barycentric.z;
-//                                        printf("Inserting probe at %f %f %f \n", probePosition.x, probePosition.y, probePosition.z);
-//
-//                                        DiffuseLightProbe probe(probePosition);
-//                                        scene->diffuseLightProbes().push_back(probe);
-//                                    }
-//                                }
-//                            }
-//                        }
+                                        probeIndices[flatIndex] = 0;
+                                        glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
+                                        printf("Inserting probe at %f %f %f \n", probePosition.x, probePosition.y, probePosition.z);
 
+                                        DiffuseLightProbe probe(probePosition);
+                                        scene->diffuseLightProbes().push_back(probe);
+//                                    /}
+                                }
+                            }
+                        }
 
-//                    }
+                    }
 
 
                 }
             }
 
-//            printf("UV mapping... \n");
-//
-//            std::size_t count = 0;
-//
-//            std::vector<std::uint16_t> remap(indices.size()); // allocate buffer for each vertex index
-//            std::vector<float> uvs(indices.size() * 2); // allocate buffer for each output uv
-//            std::vector<std::uint16_t> outIndices(indices.size()); // allocate buffer for each output uv
-//
-//            ray::uvmapper::lightmappack((float *)vertices.data(), indices.data(), indices.size(),
-//                                        lightMapResolution.width, lightMapResolution.height, 0,
-//                                        remap.data(), uvs.data(), outIndices.data(), count);
-//
-//            printf("");
+            printf("");
         });
     }
     
