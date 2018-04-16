@@ -26,9 +26,7 @@ namespace EARenderer {
         glm::vec3 bitangent;
         
         using Vertex1P1N2UV::Vertex1P1N2UV;
-
-        Vertex1P1N2UV1T1BT() = default;
-
+        
         Vertex1P1N2UV1T1BT(const glm::vec4& position,
                            const glm::vec3& texcoords,
                            const glm::vec2& lightmapCoords,

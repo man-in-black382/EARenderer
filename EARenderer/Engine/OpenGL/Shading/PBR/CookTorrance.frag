@@ -439,6 +439,4 @@ void main() {
     } else if (uGeometryType == kGeometryTypeDynamic) {
         oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
     }
-
-    oFragColor = vec4(0.2, 0.7, 0.6, 1.0);
 }

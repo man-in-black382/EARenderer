@@ -27,8 +27,6 @@ namespace EARenderer {
         glm::vec2 lightmapCoords;
         glm::vec3 normal;
 
-        Vertex1P1N2UV() = default;
-
         Vertex1P1N2UV(const glm::vec4& position,
                       const glm::vec3& texCoords,
                       const glm::vec2& lightmapCoords,

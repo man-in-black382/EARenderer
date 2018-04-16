@@ -87,8 +87,6 @@ namespace EARenderer {
         SubMesh& subMesh = mSubMeshes->emplace_back();
         subMesh.setName(mesh->GetName());
 
-        printf("Name: %s \n", mesh->GetName());
-
         size_t polygonCount = mesh->GetPolygonCount();
         FbxVector4* controlPoints = mesh->GetControlPoints();
 
@@ -102,14 +100,14 @@ namespace EARenderer {
             for (size_t j = 0; j < lPolygonSize; j++) {
                 size_t controlPointIndex = mesh->GetPolygonVertex(i, j);
                 FbxVector4 position = controlPoints[controlPointIndex];
-                glm::vec4 glmPosition(position[0], position[1], position[2], position[3]);
+                glm::vec4 glmPosition(position[0], position[1], position[2], 1.0);
 
                 subMesh.addVertex(Vertex1P1N2UV1T1BT(glmPosition));
 
                 extractNormal(mesh, vertexId);
                 extractUVs(mesh, i, j);
-                extractTangent(mesh);
-                extractBinormal(mesh);
+                extractTangent(mesh, vertexId);
+                extractBinormal(mesh, vertexId);
 
                 vertexId++;
             } // for polygonSize
@@ -214,58 +212,68 @@ namespace EARenderer {
         mSubMeshes->back().vertices().back().normal = glm::vec3(normal[0], normal[1], normal[2]);
     }
 
-    void AutodeskMeshLoader::extractTangent(FbxMesh* mesh) {
-//        for( l = 0; l < mesh->GetElementTangentCount(); ++l)
-//        {
-//            FbxGeometryElementTangent* leTangent = mesh->GetElementTangent( l);
-//            FBXSDK_sprintf(header, 100, "            Tangent: ");
-//
-//            if(leTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-//            {
-//                switch (leTangent->GetReferenceMode())
-//                {
-//                    case FbxGeometryElement::eDirect:
-//                        Display3DVector(header, leTangent->GetDirectArray().GetAt(vertexId));
-//                        break;
-//                    case FbxGeometryElement::eIndexToDirect:
-//                    {
-//                        int id = leTangent->GetIndexArray().GetAt(vertexId);
-//                        Display3DVector(header, leTangent->GetDirectArray().GetAt(id));
-//                    }
-//                        break;
-//                    default:
-//                        break; // other reference modes not shown here!
-//                }
-//            }
-//
-//        }
+    void AutodeskMeshLoader::extractTangent(FbxMesh* mesh, size_t vertexId) {
+        if (mesh->GetElementTangentCount() == 0) {
+            return;
+        }
+
+        FbxGeometryElementTangent* leTangent = mesh->GetElementTangent(0);
+
+        FbxVector4 tangent;
+
+        if(leTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+
+            switch (leTangent->GetReferenceMode()) {
+
+                case FbxGeometryElement::eDirect: {
+                    tangent = leTangent->GetDirectArray().GetAt(vertexId);
+                    break;
+                }
+
+                case FbxGeometryElement::eIndexToDirect: {
+                    int id = leTangent->GetIndexArray().GetAt(vertexId);
+                    tangent = leTangent->GetDirectArray().GetAt(id);
+                    break;
+                }
+
+                default:
+                    break; // other reference modes not shown here!
+            }
+        }
+
+        mSubMeshes->back().vertices().back().tangent = glm::vec3(tangent[0], tangent[1], tangent[2]);
     }
 
-    void AutodeskMeshLoader::extractBinormal(FbxMesh* mesh) {
-        //                for( l = 0; l < mesh->GetElementBinormalCount(); ++l)
-        //                {
-        //
-        //                    FbxGeometryElementBinormal* leBinormal = mesh->GetElementBinormal( l);
-        //
-        //                    FBXSDK_sprintf(header, 100, "            Binormal: ");
-        //                    if(leBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex)
-        //                    {
-        //                        switch (leBinormal->GetReferenceMode())
-        //                        {
-        //                            case FbxGeometryElement::eDirect:
-        //                                Display3DVector(header, leBinormal->GetDirectArray().GetAt(vertexId));
-        //                                break;
-        //                            case FbxGeometryElement::eIndexToDirect:
-        //                            {
-        //                                int id = leBinormal->GetIndexArray().GetAt(vertexId);
-        //                                Display3DVector(header, leBinormal->GetDirectArray().GetAt(id));
-        //                            }
-        //                                break;
-        //                            default:
-        //                                break; // other reference modes not shown here!
-        //                        }
-        //                    }
-        //                }
+    void AutodeskMeshLoader::extractBinormal(FbxMesh* mesh, size_t vertexId) {
+        if (mesh->GetElementBinormalCount() == 0) {
+            return;
+        }
+
+        FbxGeometryElementBinormal* leBinormal = mesh->GetElementBinormal(0);
+
+        FbxVector4 binormal;
+
+        if(leBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+
+            switch (leBinormal->GetReferenceMode()) {
+
+                case FbxGeometryElement::eDirect: {
+                    binormal = leBinormal->GetDirectArray().GetAt(vertexId);
+                    break;
+                }
+
+                case FbxGeometryElement::eIndexToDirect: {
+                    int id = leBinormal->GetIndexArray().GetAt(vertexId);
+                    binormal = leBinormal->GetDirectArray().GetAt(id);
+                    break;
+                }
+
+                default:
+                    break; // other reference modes not shown here!
+            }
+        }
+
+        mSubMeshes->back().vertices().back().bitangent = glm::vec3(binormal[0], binormal[1], binormal[2]);
     }
 
     void AutodeskMeshLoader::extractMaterials(FbxMesh* mesh) {

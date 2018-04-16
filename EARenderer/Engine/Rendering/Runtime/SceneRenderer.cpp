@@ -448,10 +448,6 @@ namespace EARenderer {
         }
 
         renderSkybox();
-
-        if (mDefaultRenderComponentsProvider) {
-            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-        }
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {

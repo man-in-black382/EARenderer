@@ -30,8 +30,8 @@ namespace EARenderer {
         void parseMesh(FbxMesh* mesh);
         void extractUVs(FbxMesh* mesh, size_t polygonIndex, size_t polygonVertexIndex);
         void extractNormal(FbxMesh* mesh, size_t vertexId);
-        void extractTangent(FbxMesh* mesh);
-        void extractBinormal(FbxMesh* mesh);
+        void extractTangent(FbxMesh* mesh, size_t vertexId);
+        void extractBinormal(FbxMesh* mesh, size_t vertexId);
         void extractMaterials(FbxMesh* mesh);
 
     public:

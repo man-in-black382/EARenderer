@@ -39,6 +39,7 @@
 		ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
+		CE08F27C2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */; };
 		CE1C97252064574B006A4A73 /* libembree3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C97242064574B006A4A73 /* libembree3.3.dylib */; };
 		CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */; };
 		CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */; };
@@ -583,6 +584,7 @@
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
+		CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_with_2nd_uv_t.fbx; sourceTree = "<group>"; };
 		CE1C97242064574B006A4A73 /* libembree3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.dylib; sourceTree = "<group>"; };
 		CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelClusterAveraging.frag; sourceTree = "<group>"; };
 		CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelClusterAveraging.cpp; sourceTree = "<group>"; };
@@ -2054,6 +2056,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */,
 				CE4E19C620834E4600AF181A /* sponza_with_2nd_uv.fbx */,
 				CEC7B03E1FA635780097CFDE /* sponza.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
@@ -3226,6 +3229,7 @@
 				CE4DE2421FA60CFF0067729A /* Sponza_Thorn_diffuse.tga in Resources */,
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
 				CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */,
+				CE08F27C2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx in Resources */,
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,
