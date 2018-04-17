@@ -56,30 +56,40 @@ namespace EARenderer {
         }
     }
 
-    float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint) {
-        glm::vec3 Wps = surfel.position - standpoint;
+    float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const DiffuseLightProbe& probe) {
+        glm::vec3 Wps = surfel.position - probe.position;
         float distance2 = glm::length2(Wps);
         Wps = glm::normalize(Wps);
 
         float distanceTerm = std::min(surfel.area / distance2, 1.f);
+
         float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
+
+        // Used to indicate whether surfel is located in the positive hemisphere of static geometry probe
+        // to reduce ray casts. For full-sphere (dynamic geometry) grid probes it is always true.
+        bool isInSameHemisphere = true;
+
+        if (probe.normal.x != 0.0 || probe.normal.y != 0.0 || probe.normal.z != 0.0) {
+            isInSameHemisphere = glm::dot(Wps, probe.normal) > 0.0;
+        }
+
         float visibilityTest = 0.0;
 
         // Save ray casts if surfel's facing away from the standpoint
-        if (visibilityTerm > 0.0) {
-            visibilityTest = scene->rayTracer()->lineSegmentOccluded(standpoint, surfel.position) ? 0.0 : 1.0;
+        if (visibilityTerm > 0.0 && isInSameHemisphere) {
+            visibilityTest = scene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position) ? 0.0 : 1.0;
         }
 
         return distanceTerm * visibilityTerm * visibilityTest;
     }
 
-    SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint) {
+    SurfelClusterProjection LightProbeBuilder::projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const DiffuseLightProbe& probe) {
         SurfelClusterProjection projection;
 
         for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
             Surfel& surfel = scene->surfels()[i];
-            glm::vec3 Wps_norm = glm::normalize(surfel.position - standpoint);
-            float solidAngle = surfelSolidAngle(scene, surfel, standpoint);
+            glm::vec3 Wps_norm = glm::normalize(surfel.position - probe.position);
+            float solidAngle = surfelSolidAngle(scene, surfel, probe);
 
             if (solidAngle > 0.0) {
                 projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo, solidAngle);
@@ -96,7 +106,7 @@ namespace EARenderer {
 
         for (size_t i = 0; i < scene->surfelClusters().size(); i++) {
             SurfelCluster &cluster = scene->surfelClusters()[i];
-            SurfelClusterProjection projection = projectSurfelCluster(scene, cluster, probe.position);
+            SurfelClusterProjection projection = projectSurfelCluster(scene, cluster, probe);
 
             // Only accept projections with non-zero SH
             if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
@@ -154,8 +164,14 @@ namespace EARenderer {
                         glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
                         glm::vec3 probeNormal = vertex0.normal * barycentric.x + vertex1.normal * barycentric.y + vertex2.normal * barycentric.z;
 
+//                        printf("Normal 1: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+//                        printf("Normal 2: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+//                        printf("Normal 3: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+//                        printf("Interp: %f %f %f \n\n", probeNormal.x, probeNormal.y, probeNormal.z);
+
                         DiffuseLightProbe probe(probePosition);
                         probe.normal = glm::normalize(probeNormal);
+                        projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);
                     }
                 }
@@ -222,8 +238,7 @@ namespace EARenderer {
         printf("Building lightmapped probes...\n");
 
         Measurement::executionTime("Lightmapped probes placement took", [&]() {
-
-            printf("Collecting triangles... \n");
+            size_t probeOffset = scene->diffuseLightProbes().size();
 
             for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
                 auto& meshInstance = scene->meshInstances()[meshInstanceID];
@@ -243,6 +258,8 @@ namespace EARenderer {
                     }
                 }
             }
+
+            printf("Built %ld static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
         });
     }
     
