@@ -107,6 +107,63 @@ namespace EARenderer {
         }
     }
 
+    void LightProbeBuilder::generateProbesForStaticVertices(Scene *scene,
+                                                            const glm::vec2& lightmapResolution,
+                                                            const glm::mat4& modelMatrix,
+                                                            const Vertex1P1N2UV1T1BT& vertex0,
+                                                            const Vertex1P1N2UV1T1BT& vertex1,
+                                                            const Vertex1P1N2UV1T1BT& vertex2)
+    {
+        // All texel centers must be found on the geometry to be placed in 3D.
+        // Therefore, we iterate over all light-mapped triangles in the scene once and locate the texel centers.
+        // For a triangle, the bounding rectangle is determined in texture space,
+        // and each of the texels is tested if it is within the triangle.
+        // If so, the position of the cache is computed by the texel’s position within the triangle.
+        // Texels in empty areas of the light map are not filled by this process.
+
+        Triangle3D triangle(modelMatrix * vertex0.position, modelMatrix * vertex1.position, modelMatrix * vertex2.position);
+
+        if (!Collision::TriangleAABB(triangle, scene->lightBakingVolume())) {
+            return;
+        }
+
+        glm::ivec2 uv0i = vertex0.lightmapCoords * lightmapResolution;
+        glm::ivec2 uv1i = vertex1.lightmapCoords * lightmapResolution;
+        glm::ivec2 uv2i = vertex2.lightmapCoords * lightmapResolution;
+
+        glm::vec2 minUV = glm::min(glm::min(vertex0.lightmapCoords, vertex1.lightmapCoords), vertex2.lightmapCoords);
+        glm::vec2 maxUV = glm::max(glm::max(vertex0.lightmapCoords, vertex1.lightmapCoords), vertex2.lightmapCoords);
+
+        glm::ivec2 iMinUV = minUV * lightmapResolution;
+        glm::ivec2 iMaxUV = maxUV * lightmapResolution;
+
+        iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
+        iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
+
+        for (size_t v = iMinUV.y; v < iMaxUV.y; v++) {
+            for (size_t u = iMinUV.x; u < iMaxUV.x; u++) {
+                size_t flatIndex = u + v * lightmapResolution.x;
+
+                if (scene->diffuseProbeLightmapIndices()[flatIndex] == -1) {
+                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
+                    glm::vec3 barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
+                    bool pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
+
+                    if (pointInside) {
+                        scene->diffuseProbeLightmapIndices()[flatIndex] = 0;
+                        glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
+                        glm::vec3 probeNormal = vertex0.normal * barycentric.x + vertex1.normal * barycentric.y + vertex2.normal * barycentric.z;
+
+                        DiffuseLightProbe probe(probePosition);
+                        probe.normal = glm::normalize(probeNormal);
+                        scene->diffuseLightProbes().push_back(probe);
+                    }
+                }
+            }
+        }
+    }
+
+
 #pragma mark - Public interface
     
     void LightProbeBuilder::buildAndPlaceProbesInScene(Scene* scene) {
@@ -154,23 +211,17 @@ namespace EARenderer {
     }
 
     void LightProbeBuilder::buildStaticGeometryProbes(Scene *scene) {
-        glm::mat4 lightBakingVolumeLocalSpace = scene->lightBakingVolume().localSpaceMatrix();
         Size2D lightMapResolution = scene->preferredProbeLightmapResolution();
         glm::vec2 glmResolution = glm::vec2(lightMapResolution.width, lightMapResolution.height);
 
-        const uint32_t kInvalidIndex = -1;
-        std::vector<uint32_t> probeIndices;
+        const int32_t kInvalidIndex = -1;
+        std::vector<int32_t> probeIndices;
         probeIndices.assign(lightMapResolution.width * lightMapResolution.height, kInvalidIndex);
+        scene->setDiffuseProbeLightmapIndices(probeIndices);
 
         printf("Building lightmapped probes...\n");
+
         Measurement::executionTime("Lightmapped probes placement took", [&]() {
-
-            std::vector<glm::vec3> vertices;
-            std::vector<uint16_t> indices;
-
-            uint16_t index = 0;
-
-            float area = 0;
 
             printf("Collecting triangles... \n");
 
@@ -183,69 +234,15 @@ namespace EARenderer {
                 for (ID subMeshID : mesh.subMeshes()) {
                     auto& subMesh = mesh.subMeshes()[subMeshID];
 
-                    area = 0;
-
                     for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
-                        Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
-                                            modelMatrix * subMesh.vertices()[i + 1].position,
-                                            modelMatrix * subMesh.vertices()[i + 2].position);
+                        auto& v0 = subMesh.vertices()[i];
+                        auto& v1 = subMesh.vertices()[i + 1];
+                        auto& v2 = subMesh.vertices()[i + 2];
 
-                        if (!Collision::TriangleAABB(triangle, scene->lightBakingVolume())) {
-                            continue;
-                        }
-
-                        glm::vec2 uv0 = subMesh.vertices()[i].lightmapCoords;
-                        glm::ivec2 uv0i = uv0 * glmResolution;
-
-
-
-                        glm::vec2 uv1 = subMesh.vertices()[i + 1].lightmapCoords;
-                        glm::ivec2 uv1i = uv1 * glmResolution;
-
-                        glm::vec2 uv2 = subMesh.vertices()[i + 2].lightmapCoords;
-                        glm::ivec2 uv2i = uv2 * glmResolution;
-
-                        glm::vec2 minUV = glm::min(glm::min(uv0, uv1), uv2);
-                        glm::vec2 maxUV = glm::max(glm::max(uv0, uv1), uv2);
-
-                        glm::vec2 deltaUV = maxUV - minUV;
-                        area += deltaUV.x * deltaUV.y;
-//                        printf("Area: %f% \n", area * 100);
-
-                        glm::ivec2 iMinUV = minUV * glmResolution;
-                        glm::ivec2 iMaxUV = maxUV * glmResolution;
-
-                        iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(glmResolution));
-                        iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(glmResolution));
-
-                        for (size_t v = iMinUV.y; v < iMaxUV.y; v++) {
-                            for (size_t u = iMinUV.x; u < iMaxUV.x; u++) {
-                                size_t flatIndex = u + v * lightMapResolution.width;
-
-                                if (probeIndices[flatIndex] == kInvalidIndex) {
-                                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
-                                    glm::vec3 barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
-                                    bool pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
-
-//                                    if (pointInside) {
-                                        probeIndices[flatIndex] = 0;
-                                        glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
-                                        printf("Inserting probe at %f %f %f \n", probePosition.x, probePosition.y, probePosition.z);
-
-                                        DiffuseLightProbe probe(probePosition);
-                                        scene->diffuseLightProbes().push_back(probe);
-//                                    /}
-                                }
-                            }
-                        }
-
+                        generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
                     }
-
-
                 }
             }
-
-            printf("");
         });
     }
     

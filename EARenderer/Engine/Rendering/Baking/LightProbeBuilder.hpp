@@ -15,8 +15,11 @@
 #include "GLBufferTexture.hpp"
 #include "GLDepthRenderbuffer.hpp"
 #include "GLSLLightProbeEnvironmentCapture.hpp"
+#include "Vertex1P1N2UV1T1BT.hpp"
 
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace EARenderer {
     
@@ -29,9 +32,19 @@ namespace EARenderer {
         uint32_t mSpaceDivisionResolution;
         
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
+
         float surfelSolidAngle(Scene *scene, const Surfel& surfel, const glm::vec3& standpoint);
+
         SurfelClusterProjection projectSurfelCluster(Scene *scene, const SurfelCluster& cluster, const glm::vec3& standpoint);
+
         void projectSurfelClustersOnProbe(Scene* scene, DiffuseLightProbe& probe);
+
+        void generateProbesForStaticVertices(Scene *scene,
+                                             const glm::vec2& lightmapResolution,
+                                             const glm::mat4& modelMatrix,
+                                             const Vertex1P1N2UV1T1BT& vertex0,
+                                             const Vertex1P1N2UV1T1BT& vertex1,
+                                             const Vertex1P1N2UV1T1BT& vertex2);
         
     public:
         GLHDRTextureCubemap mEnvironmentMap;

@@ -28,7 +28,7 @@ namespace EARenderer {
         FbxScene* importScene();
         void processChildNode(FbxNode* node);
         void parseMesh(FbxMesh* mesh);
-        void extractUVs(FbxMesh* mesh, size_t polygonIndex, size_t polygonVertexIndex);
+        void extractUVs(FbxMesh* mesh, size_t vertexId);
         void extractNormal(FbxMesh* mesh, size_t vertexId);
         void extractTangent(FbxMesh* mesh, size_t vertexId);
         void extractBinormal(FbxMesh* mesh, size_t vertexId);

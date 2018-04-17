@@ -96,6 +96,10 @@ namespace EARenderer {
     const std::list<ID>& Scene::dynamicMeshInstanceIDs() const {
         return mDynamicMeshInstanceIDs;
     }
+
+    std::vector<int32_t>& Scene::diffuseProbeLightmapIndices() {
+        return mDiffuseProbeLightmapIndices;
+    }
     
 #pragma mark - Setters
     
@@ -109,6 +113,10 @@ namespace EARenderer {
 
     void Scene::setLightBakingVolume(const AxisAlignedBox3D& volume) {
         mLightBakingVolume = volume;
+    }
+
+    void Scene::setDiffuseProbeLightmapIndices(const std::vector<int32_t>& indices) {
+        mDiffuseProbeLightmapIndices = indices;
     }
     
 #pragma mark -

@@ -26,7 +26,6 @@ namespace EARenderer {
         mManager->Destroy();
     }
 
-
 #pragma mark - Loading
 
 #pragma mark - Private
@@ -105,7 +104,7 @@ namespace EARenderer {
                 subMesh.addVertex(Vertex1P1N2UV1T1BT(glmPosition));
 
                 extractNormal(mesh, vertexId);
-                extractUVs(mesh, i, j);
+                extractUVs(mesh, vertexId);
                 extractTangent(mesh, vertexId);
                 extractBinormal(mesh, vertexId);
 
@@ -119,59 +118,20 @@ namespace EARenderer {
         subMesh.finalizeVertexBuffer();
     }
 
-    void AutodeskMeshLoader::extractUVs(FbxMesh* mesh, size_t polygonIndex, size_t polygonVertexIndex) {
+    void AutodeskMeshLoader::extractUVs(FbxMesh* mesh, size_t vertexId) {
         FbxVector2 uv;
 
-        int controlPointIndex = mesh->GetPolygonVertex(polygonIndex, polygonVertexIndex);
+        for (size_t i = 0; i < mesh->GetElementUVCount(); ++i) {
 
-        for (size_t i = 0; i < mesh->GetElementUVCount(); ++i)
-        {
             const FbxGeometryElementUV* leUV = mesh->GetElementUV(i);
+            const bool lUseIndex = leUV->GetReferenceMode() != FbxGeometryElement::eDirect;
 
             switch (leUV->GetMappingMode()) {
-
-                case FbxGeometryElement::eByControlPoint: {
-
-                    switch (leUV->GetReferenceMode()) {
-                        case FbxGeometryElement::eDirect: {
-                            uv = leUV->GetDirectArray().GetAt(controlPointIndex);
-                            break;
-                        }
-
-                        case FbxGeometryElement::eIndexToDirect: {
-                            int id = leUV->GetIndexArray().GetAt(controlPointIndex);
-                            uv = leUV->GetDirectArray().GetAt(id);
-                            break;
-                        }
-
-                        default:
-                            break; // other reference modes not shown here!
-                    }
-                }
-
-
                 case FbxGeometryElement::eByPolygonVertex: {
-
-                    int textureUVIndex = mesh->GetTextureUVIndex(polygonIndex, polygonVertexIndex);
-
-                    switch (leUV->GetReferenceMode()) {
-
-                        case FbxGeometryElement::eDirect:
-                        case FbxGeometryElement::eIndexToDirect: {
-                            uv = leUV->GetDirectArray().GetAt(textureUVIndex);
-                            break;
-                        }
-
-                        default:
-                            break; // other reference modes not shown here!
-                    }
+                    int lUVIndex = lUseIndex ? leUV->GetIndexArray().GetAt(vertexId) : vertexId;
+                    uv = leUV->GetDirectArray().GetAt(lUVIndex);
                     break;
                 }
-
-                case FbxGeometryElement::eByPolygon: // doesn't make much sense for UVs
-                case FbxGeometryElement::eAllSame:   // doesn't make much sense for UVs
-                case FbxGeometryElement::eNone:      // doesn't make much sense for UVs
-                    break;
 
                 default:
                     break;
