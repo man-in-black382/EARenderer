@@ -17,6 +17,7 @@ uniform mat4 uViewProjectionMatrices[6];
 
 in InterfaceBlock {
     vec3 vTexCoords;
+    vec2 vLightmapCoords;
     mat3 vTBN;
     vec4 vPosInLightSpace[kMaxCascades];
 } gs_in[];
@@ -25,6 +26,7 @@ in InterfaceBlock {
 
 out vec3 vWorldPosition;
 out vec3 vTexCoords;
+out vec2 vLightmapCoords;
 out mat3 vTBN;
 out vec4 vPosInLightSpace[kMaxCascades];
 out vec4 vPosInCameraSpace;
@@ -41,6 +43,7 @@ void main() {
             vPosInLightSpace = gs_in[i].vPosInLightSpace;
             vTBN = gs_in[i].vTBN;
             vTexCoords = gs_in[i].vTexCoords;
+            vLightmapCoords = gs_in[i].vLightmapCoords;
             
             EmitVertex();
         }

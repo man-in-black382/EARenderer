@@ -33,6 +33,7 @@
 #include "GLSLSurfelLighting.hpp"
 #include "GLSLSurfelClusterAveraging.hpp"
 #include "GLSLGridLightProbesUpdate.hpp"
+#include "GLSLLightmapLightProbesUpdate.hpp"
 #include "GLSLLightProbeRendering.hpp"
 #include "GLSLLightProbeLinksRendering.hpp"
 
@@ -68,6 +69,8 @@ namespace EARenderer {
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
+        GLSLLightmapLightProbesUpdate mLightmapProbesUpdateShader;
+
         GLSLLightProbeLinksRendering mLightProbeLinksRenderingShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
@@ -78,6 +81,7 @@ namespace EARenderer {
 
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLLDRTexture2D mSurfelClustersGBuffer;
+        GLLDRTexture2D mLightmapProbeIndicesMap;
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
@@ -87,8 +91,10 @@ namespace EARenderer {
         GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
-        std::array<GLHDRTexture3D, 7> mGridProbesSphericalHarmonicMaps;
-        GLFramebuffer mGridProbesFramebuffer;
+        std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
+        GLHDRTexture2DArray mLightmapProbesSHMaps;
+        GLFramebuffer mGridProbesSHFramebuffer;
+        GLFramebuffer mLightmapProbesSHFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
@@ -113,6 +119,7 @@ namespace EARenderer {
         void relightSurfels(const FrustumCascades& cascades);
         void averageSurfelClusterLuminances();
         void updateGridProbes();
+        void updateLightmapProbes();
         void renderSkybox();
         
         void convertEquirectangularMapToCubemap();

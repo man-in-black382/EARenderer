@@ -15,7 +15,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLHDRTexture2DArray::GLHDRTexture2DArray(const Size2D& size, GLsizei layers) {
-        initialize(size, layers, Filter::Bilinear, WrapMode::Repeat, GL_RGB32F);
+        initialize(size, layers, Filter::Bilinear, WrapMode::Repeat, GL_RGBA32F);
     }
 
     GLHDRTexture2DArray::GLHDRTexture2DArray(std::vector<std::vector<glm::vec3>> data) {

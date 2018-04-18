@@ -35,6 +35,9 @@
 		ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = ACCCC1E0203C802500905557 /* SurfelRendering.geom */; };
 		ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = ACCCC1E2203C859400905557 /* SurfelRendering.frag */; };
 		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
+		ACE9F61D20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACE9F61C20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp */; };
+		ACE9F62120873BF3005ACC47 /* LightmapLightProbesUpdate.frag in Resources */ = {isa = PBXBuildFile; fileRef = ACE9F61E20873BF2005ACC47 /* LightmapLightProbesUpdate.frag */; };
+		ACE9F62320873BF3005ACC47 /* LightmapLightProbesUpdate.vert in Resources */ = {isa = PBXBuildFile; fileRef = ACE9F62020873BF3005ACC47 /* LightmapLightProbesUpdate.vert */; };
 		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
 		ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
@@ -573,6 +576,10 @@
 		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		ACE0274020454DAA004A9A13 /* SparseOctree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctree.hpp; sourceTree = "<group>"; };
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
+		ACE9F61B20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightmapLightProbesUpdate.hpp; sourceTree = "<group>"; };
+		ACE9F61C20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightmapLightProbesUpdate.cpp; sourceTree = "<group>"; };
+		ACE9F61E20873BF2005ACC47 /* LightmapLightProbesUpdate.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbesUpdate.frag; sourceTree = "<group>"; };
+		ACE9F62020873BF3005ACC47 /* LightmapLightProbesUpdate.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbesUpdate.vert; sourceTree = "<group>"; };
 		ACF8B7792012462200BCA351 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
 		ACF8B77A2012462200BCA351 /* Sphere.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Sphere.hpp; sourceTree = "<group>"; };
 		ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLPipelineState.cpp; sourceTree = "<group>"; };
@@ -2866,6 +2873,10 @@
 				CE1C975B206A396A006A4A73 /* GridLightProbesUpdate.vert */,
 				ACC539312068F80100B150B5 /* GridLightProbesUpdate.geom */,
 				ACC5392C2068F65600B150B5 /* GridLightProbesUpdate.frag */,
+				ACE9F61C20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp */,
+				ACE9F61B20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.hpp */,
+				ACE9F62020873BF3005ACC47 /* LightmapLightProbesUpdate.vert */,
+				ACE9F61E20873BF2005ACC47 /* LightmapLightProbesUpdate.frag */,
 			);
 			path = PBR;
 			sourceTree = "<group>";
@@ -3180,6 +3191,7 @@
 				CE70FA601F8F8F7400AD9027 /* DirectionalDepth.frag in Resources */,
 				AC3C9EB420720F2300F35EB3 /* LightProbeRendering.vert in Resources */,
 				CE4DE23A1FA60CFF0067729A /* Sponza_FlagPole_normal.tga in Resources */,
+				ACE9F62120873BF3005ACC47 /* LightmapLightProbesUpdate.frag in Resources */,
 				CE4DE2141FA60CFE0067729A /* Sponza_Arch_normal.tga in Resources */,
 				CE70FA611F8F8F7400AD9027 /* DirectionalBlinnPhong.frag in Resources */,
 				CE4DE20F1FA60CFE0067729A /* Lion_Albedo.tga in Resources */,
@@ -3283,6 +3295,7 @@
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
 				CE4DE2161FA60CFE0067729A /* Sponza_Bricks_a_Albedo.tga in Resources */,
 				CE4DE2261FA60CFF0067729A /* Sponza_Curtain_Blue_normal.tga in Resources */,
+				ACE9F62320873BF3005ACC47 /* LightmapLightProbesUpdate.vert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3416,6 +3429,7 @@
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,
 				CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */,
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
+				ACE9F61D20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp in Sources */,
 				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,

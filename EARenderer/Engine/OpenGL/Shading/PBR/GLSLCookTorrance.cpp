@@ -89,6 +89,10 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
     }
 
+    void GLSLCookTorrance::setLightmapProbesSHTextures(const GLHDRTexture2DArray& textures) {
+        setUniformTexture(uint32_constant<ctcrc32("uLightmapSHMaps")>, textures);
+    }
+
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }

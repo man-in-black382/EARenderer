@@ -364,7 +364,7 @@ namespace EARenderer {
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
         printf("Generating surfels...\n");
-        EARenderer::Measurement::executionTime("Surfel generation took", [&]() {
+        EARenderer::Measurement::ExecutionTime("Surfel generation took", [&]() {
             for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
                 auto& meshInstance = mScene->meshInstances()[meshInstanceID];
                 generateSurflesOnMeshInstance(meshInstance);
@@ -373,7 +373,7 @@ namespace EARenderer {
         printf("Generated %lu surfels\n\n", mSurfelSpatialHash.size());
 
         printf("Generating surfel clusters...\n");
-        EARenderer::Measurement::executionTime("Surfel clustering took", [&]() {
+        EARenderer::Measurement::ExecutionTime("Surfel clustering took", [&]() {
             formClusters();
         });
         printf("Generated %lu clusters\n\n", mScene->surfelClusters().size());

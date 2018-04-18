@@ -26,6 +26,7 @@ out vec4 oFragColor;
 // Input
 
 in vec3 vTexCoords;
+in vec2 vLightmapCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
 in vec4 vPosInLightSpace[kMaxCascades];
@@ -97,6 +98,8 @@ uniform sampler3D uGridSHMap4;
 uniform sampler3D uGridSHMap5;
 uniform sampler3D uGridSHMap6;
 
+uniform sampler2DArray uLightmapSHMaps;
+
 uniform bool uShouldEvaluateSphericalHarmonics;
 
 // IBL
@@ -118,7 +121,7 @@ vec3 AlignWithTexelCenters(vec3 texCoords) {
 ////////////////////////////////////////////////////////////
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
-SH UnpackSH() {
+SH UnpackGridSH() {
     SH sh;
 
     // Get 3D texture space coordinates
@@ -157,6 +160,30 @@ SH UnpackSH() {
     return sh;
 }
 
+SH UnpackLightmapSH() {
+    SH sh;
+
+    vec4 shMap0Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 0));
+    vec4 shMap1Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 1));
+    vec4 shMap2Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 2));
+    vec4 shMap3Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 3));
+    vec4 shMap4Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 4));
+    vec4 shMap5Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 5));
+    vec4 shMap6Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 6));
+
+    sh.L00  = vec3(shMap0Data.rgb);
+    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
+    sh.L1_1 = vec3(shMap2Data.gba);
+    sh.L21  = vec3(shMap3Data.rgb);
+    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
+    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
+    sh.L20  = vec3(shMap5Data.gba);
+    sh.L22  = vec3(shMap6Data.rgb);
+
+    return sh;
+}
+
 float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
 
@@ -168,8 +195,13 @@ float SHRadiance(SH sh, vec3 direction, int component) {
             2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
-vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = UnpackSH();
+vec3 EvaluateGridSphericalHarmonics(vec3 direction) {
+    SH sh = UnpackGridSH();
+    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+}
+
+vec3 EvaluateLightmapSphericalHarmonics(vec3 direction) {
+    SH sh = UnpackLightmapSH();
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
@@ -435,8 +467,10 @@ void main() {
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     if (uGeometryType == kGeometryTypeStatic) {
-        oFragColor = vec4(correctColor, 1.0);
+        oFragColor = vec4(EvaluateLightmapSphericalHarmonics(N), 1.0);
     } else if (uGeometryType == kGeometryTypeDynamic) {
-        oFragColor = vec4(EvaluateSphericalHarmonics(N), 1.0);
+        oFragColor = vec4(EvaluateGridSphericalHarmonics(N), 1.0);
     }
+
+//    oFragColor = vec4(correctColor, 1.0);
 }

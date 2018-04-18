@@ -212,7 +212,7 @@ namespace EARenderer {
         step.z /= resolution.z - 1;
 
         printf("Building grid probes...\n");
-        Measurement::executionTime("Grid probes placement took", [&]() {
+        Measurement::ExecutionTime("Grid probes placement took", [&]() {
             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
                 for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
                     for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
@@ -231,13 +231,13 @@ namespace EARenderer {
         glm::vec2 glmResolution = glm::vec2(lightMapResolution.width, lightMapResolution.height);
 
         const int32_t kInvalidIndex = -1;
-        std::vector<int32_t> probeIndices;
+        std::vector<uint32_t> probeIndices;
         probeIndices.assign(lightMapResolution.width * lightMapResolution.height, kInvalidIndex);
         scene->setDiffuseProbeLightmapIndices(probeIndices);
 
-        printf("Building lightmapped probes...\n");
+        printf("\nBuilding lightmapped probes...\n");
 
-        Measurement::executionTime("Lightmapped probes placement took", [&]() {
+        Measurement::ExecutionTime("Lightmapped probes placement took", [&]() {
             size_t probeOffset = scene->diffuseLightProbes().size();
 
             for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {

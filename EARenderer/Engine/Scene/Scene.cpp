@@ -97,10 +97,10 @@ namespace EARenderer {
         return mDynamicMeshInstanceIDs;
     }
 
-    std::vector<int32_t>& Scene::diffuseProbeLightmapIndices() {
+    std::vector<uint32_t>& Scene::diffuseProbeLightmapIndices() {
         return mDiffuseProbeLightmapIndices;
     }
-    
+
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -115,7 +115,7 @@ namespace EARenderer {
         mLightBakingVolume = volume;
     }
 
-    void Scene::setDiffuseProbeLightmapIndices(const std::vector<int32_t>& indices) {
+    void Scene::setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices) {
         mDiffuseProbeLightmapIndices = indices;
     }
     

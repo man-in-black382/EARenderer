@@ -20,7 +20,7 @@ namespace EARenderer {
     public:
         using Work = std::function<void()>;
         
-        static uint64_t executionTime(const std::string& printPrefix, const Work& work) {
+        static uint64_t ExecutionTime(const std::string& printPrefix, const Work& work) {
             auto t1 = std::chrono::high_resolution_clock::now();
             work();
             auto t2 = std::chrono::high_resolution_clock::now();

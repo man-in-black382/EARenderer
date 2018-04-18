@@ -26,6 +26,7 @@ uniform int uNumberOfCascades;
 // Output
 
 out vec3 vTexCoords;
+out vec2 vLightmapCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInLightSpace[kMaxCascades];
@@ -55,6 +56,7 @@ void main() {
     vec4 worldPosition = uModelMat * iPosition;
     
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
+    vLightmapCoords = iLightmapCoords;
     vWorldPosition = worldPosition.xyz;
     vTBN = orthogonalTBN();
     

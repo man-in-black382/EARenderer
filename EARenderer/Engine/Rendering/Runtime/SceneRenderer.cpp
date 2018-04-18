@@ -40,13 +40,14 @@ namespace EARenderer {
     // Surfels and surfel clusters
     mSurfelsGBuffer(surfelsGBufferData()),
     mSurfelClustersGBuffer(surfelClustersGBufferData()),
+    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
     mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
     mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer.size()),
 
     // Diffuse light probes
-    mGridProbesSphericalHarmonicMaps {
+    mGridProbesSHMaps {
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
@@ -55,7 +56,9 @@ namespace EARenderer {
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
-    mGridProbesFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
+    mLightmapProbesSHMaps(scene->preferredProbeLightmapResolution(), 7),
+    mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
+    mLightmapProbesSHFramebuffer(mLightmapProbesSHMaps.size())
     {
         mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
@@ -136,13 +139,21 @@ namespace EARenderer {
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
-        mGridProbesFramebuffer.attachTexture(mGridProbesSphericalHarmonicMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
+
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 0, GLFramebuffer::ColorAttachment::Attachment0);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 1, GLFramebuffer::ColorAttachment::Attachment1);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 2, GLFramebuffer::ColorAttachment::Attachment2);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 3, GLFramebuffer::ColorAttachment::Attachment3);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 4, GLFramebuffer::ColorAttachment::Attachment4);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 5, GLFramebuffer::ColorAttachment::Attachment5);
+        mLightmapProbesSHFramebuffer.attachTextureLayer(mLightmapProbesSHMaps, 6, GLFramebuffer::ColorAttachment::Attachment6);
     }
 
 #pragma mark - Data preparation
@@ -369,11 +380,34 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProbesGridResolution(mProbeGridResolution);
         });
 
-        mGridProbesFramebuffer.bind();
-        mGridProbesFramebuffer.viewport().apply();
+        mGridProbesSHFramebuffer.bind();
+        mGridProbesSHFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
+
+        glEnable(GL_BLEND);
+    }
+
+    void SceneRenderer::updateLightmapProbes() {
+        // Disable blending because this is spherical harmonics, not colors!
+        // Nothing to blend here
+        glDisable(GL_BLEND);
+
+        mLightmapProbesUpdateShader.bind();
+        mLightmapProbesUpdateShader.ensureSamplerValidity([&] {
+            mLightmapProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
+            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
+            mLightmapProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
+            mLightmapProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
+            mLightmapProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
+        });
+
+        mLightmapProbesSHFramebuffer.bind();
+        mLightmapProbesSHFramebuffer.viewport().apply();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         glEnable(GL_BLEND);
     }
@@ -388,6 +422,7 @@ namespace EARenderer {
         relightSurfels(cascades);
         averageSurfelClusterLuminances();
         updateGridProbes();
+        updateLightmapProbes();
         
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
@@ -402,7 +437,8 @@ namespace EARenderer {
             mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
-            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
+            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
+            mCookTorranceShader.setLightmapProbesSHTextures(mLightmapProbesSHMaps);
             mCookTorranceShader.setProbesGridResolution(mProbeGridResolution);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
@@ -533,7 +569,7 @@ namespace EARenderer {
         mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
         mDiffuseProbeRenderingShader.setProbesGridResolution(mProbeGridResolution);
         mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
-            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSphericalHarmonicMaps);
+            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
         glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());

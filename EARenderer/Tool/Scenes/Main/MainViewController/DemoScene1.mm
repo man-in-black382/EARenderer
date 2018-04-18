@@ -185,7 +185,7 @@
     scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");
-    EARenderer::Measurement::executionTime("Embree BVH generation took", [&]() {
+    EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
         scene->buildStaticGeometryRaytracer();
     });
 

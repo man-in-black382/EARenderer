@@ -7,9 +7,10 @@ const int kMaxCascades = 4;
 
 layout (location = 0) in vec4 iPosition;
 layout (location = 1) in vec3 iTexCoords;
-layout (location = 2) in vec3 iNormal;
-layout (location = 3) in vec3 iTangent;
-layout (location = 4) in vec3 iBitangent;
+layout (location = 2) in vec2 iLightmapCoords;
+layout (location = 3) in vec3 iNormal;
+layout (location = 4) in vec3 iTangent;
+layout (location = 5) in vec3 iBitangent;
 
 // Uniforms
 
@@ -24,6 +25,7 @@ uniform int uNumberOfCascades;
 
 out InterfaceBlock {
     vec3 vTexCoords;
+    vec2 vLightmapCoords;
     mat3 vTBN;
     vec4 vPosInLightSpace[kMaxCascades];
 } vs_out;
@@ -44,6 +46,7 @@ void main() {
     vec4 worldPosition = uModelMat * iPosition;
     
     vs_out.vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
+    vs_out.vLightmapCoords = iLightmapCoords;
     vs_out.vTBN = orthogonalTBN();
     
     for (int i = 0; i < uNumberOfCascades; ++i) {

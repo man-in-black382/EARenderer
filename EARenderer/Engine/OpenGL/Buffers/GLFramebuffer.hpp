@@ -20,7 +20,7 @@
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
-#include "GLTexture2DArray.hpp"
+#include "GLHDRTexture2DArray.hpp"
 #include "GLDepthRenderbuffer.hpp"
 #include "GLHDRTexture3D.hpp"
 
@@ -95,7 +95,7 @@ namespace EARenderer {
                                 uint16_t layer,
                                 uint16_t mipLevel = 0);
 
-        void attachTextureLayer(const GLTexture2DArray& textures,
+        void attachTextureLayer(const GLHDRTexture2DArray& textures,
                                 uint16_t layer,
                                 ColorAttachment colorAttachment = ColorAttachment::Attachment0,
                                 uint16_t mipLevel = 0);

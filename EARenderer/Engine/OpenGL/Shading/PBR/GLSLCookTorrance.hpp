@@ -15,7 +15,7 @@
 #include "GLTexture2D.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
-#include "GLTexture2DArray.hpp"
+#include "GLHDRTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
@@ -52,6 +52,7 @@ namespace EARenderer {
         
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
+        void setLightmapProbesSHTextures(const GLHDRTexture2DArray& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setGeometryType(GeometryType type);
         void setProbesGridResolution(const glm::ivec3& resolution);

@@ -51,7 +51,7 @@ namespace EARenderer {
         std::vector<SurfelCluster> mSurfelClusters;
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
         std::vector<DiffuseLightProbe> mDiffuseLightProbes;
-        std::vector<int32_t> mDiffuseProbeLightmapIndices;
+        std::vector<uint32_t> mDiffuseProbeLightmapIndices;
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
         std::shared_ptr<EmbreeRayTracer> mRaytracer;
@@ -99,8 +99,8 @@ namespace EARenderer {
         void setLightBakingVolume(const AxisAlignedBox3D& volume);
         const AxisAlignedBox3D& lightBakingVolume() const;
 
-        std::vector<int32_t>& diffuseProbeLightmapIndices();
-        void setDiffuseProbeLightmapIndices(const std::vector<int32_t>& indices);
+        std::vector<uint32_t>& diffuseProbeLightmapIndices();
+        void setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices);
         
         void setCamera(Camera* camera);
         Camera* camera() const;
