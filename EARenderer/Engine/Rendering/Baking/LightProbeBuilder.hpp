@@ -25,6 +25,8 @@ namespace EARenderer {
     
     class LightProbeBuilder {
     private:
+        static constexpr uint32_t InvalidProbeIndex = -1;
+
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLDepthTextureCubemap mDepthCubemap;
@@ -45,6 +47,8 @@ namespace EARenderer {
                                              const Vertex1P1N2UV1T1BT& vertex0,
                                              const Vertex1P1N2UV1T1BT& vertex1,
                                              const Vertex1P1N2UV1T1BT& vertex2);
+
+        void fillProbeIndexHoles(Scene *scene);
         
     public:
         GLHDRTextureCubemap mEnvironmentMap;

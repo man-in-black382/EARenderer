@@ -218,7 +218,7 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(0.5, -1.0, 0.25);
+    glm::vec3 lightStart(0.5, -1.0, -0.25);
     glm::vec3 lightEnd(0.5, -1.0, -0.25);
 
     choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 30.0);
