@@ -61,7 +61,9 @@ namespace EARenderer {
     mLightmapProbesSHFramebuffer(mLightmapProbesSHMaps.size())
     {
         mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec2::length())
         });
         
         setupGLState();
@@ -169,7 +171,7 @@ namespace EARenderer {
             bufferData[0].emplace_back(surfel.position);
             bufferData[1].emplace_back(surfel.normal);
             bufferData[2].emplace_back(surfel.albedo);
-            bufferData[3].emplace_back(surfel.uv.x, surfel.uv.y, 0.0);
+            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
         }
 
         return bufferData;
@@ -576,15 +578,27 @@ namespace EARenderer {
         glEnable(GL_DEPTH_TEST);
     }
 
-    void SceneRenderer::renderDiffuseProbes(float radius) {
+    void SceneRenderer::renderDiffuseGridProbes(float radius) {
         mDiffuseProbesVAO.bind();
-        mDiffuseProbeRenderingShader.bind();
-        mDiffuseProbeRenderingShader.setCamera(*mScene->camera());
-        mDiffuseProbeRenderingShader.setSphereRadius(radius);
-        mDiffuseProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-        mDiffuseProbeRenderingShader.setProbesGridResolution(mProbeGridResolution);
-        mDiffuseProbeRenderingShader.ensureSamplerValidity([&] {
-            mDiffuseProbeRenderingShader.setGridProbesSHTextures(mGridProbesSHMaps);
+        mGridProbeRenderingShader.bind();
+        mGridProbeRenderingShader.setCamera(*mScene->camera());
+        mGridProbeRenderingShader.setSphereRadius(radius);
+        mGridProbeRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mGridProbeRenderingShader.setProbesGridResolution(mProbeGridResolution);
+        mGridProbeRenderingShader.ensureSamplerValidity([&] {
+            mGridProbeRenderingShader.setGridProbesSHTextures(mGridProbesSHMaps);
+        });
+
+        glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());
+    }
+
+    void SceneRenderer::renderDiffuseLightmapProbes(float radius) {
+        mDiffuseProbesVAO.bind();
+        mLightmapProbeRenderingShader.bind();
+        mLightmapProbeRenderingShader.setCamera(*mScene->camera());
+        mLightmapProbeRenderingShader.setSphereRadius(radius);
+        mLightmapProbeRenderingShader.ensureSamplerValidity([&] {
+            mLightmapProbeRenderingShader.setLightmapProbesSHTextures(mLightmapProbesSHMaps);
         });
 
         glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());

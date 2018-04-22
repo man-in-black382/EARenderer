@@ -6,7 +6,7 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "GLSLLightProbeRendering.hpp"
+#include "GLSLGridLightProbeRendering.hpp"
 
 #include <glm/gtx/transform.hpp>
 
@@ -14,19 +14,19 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLSLLightProbeRendering::GLSLLightProbeRendering()
+    GLSLGridLightProbeRendering::GLSLGridLightProbeRendering()
     :
-    GLProgram("LightProbeRendering.vert", "LightProbeRendering.frag", "LightProbeRendering.geom")
+    GLProgram("GridLightProbeRendering.vert", "GridLightProbeRendering.frag", "GridLightProbeRendering.geom")
     { }
 
 #pragma mark - Setters
 
-    void GLSLLightProbeRendering::setCamera(const Camera& camera) {
+    void GLSLGridLightProbeRendering::setCamera(const Camera& camera) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
     }
 
-    void GLSLLightProbeRendering::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
+    void GLSLGridLightProbeRendering::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
@@ -36,15 +36,15 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
     }
 
-    void GLSLLightProbeRendering::setWorldBoundingBox(const AxisAlignedBox3D& box) {
+    void GLSLGridLightProbeRendering::setWorldBoundingBox(const AxisAlignedBox3D& box) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
-    void GLSLLightProbeRendering::setProbesGridResolution(const glm::ivec3& resolution) {
+    void GLSLGridLightProbeRendering::setProbesGridResolution(const glm::ivec3& resolution) {
         glUniform3iv(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), 1, glm::value_ptr(resolution));
     }
 
-    void GLSLLightProbeRendering::setSphereRadius(float radius) {
+    void GLSLGridLightProbeRendering::setSphereRadius(float radius) {
         glUniform1f(uniformByNameCRC32(ctcrc32("uRadius")).location(), radius);
     }
 

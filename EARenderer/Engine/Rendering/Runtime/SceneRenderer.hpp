@@ -34,7 +34,8 @@
 #include "GLSLSurfelClusterAveraging.hpp"
 #include "GLSLGridLightProbesUpdate.hpp"
 #include "GLSLLightmapLightProbesUpdate.hpp"
-#include "GLSLLightProbeRendering.hpp"
+#include "GLSLGridLightProbeRendering.hpp"
+#include "GLSLLightmapLightProbeRendering.hpp"
 #include "GLSLLightProbeLinksRendering.hpp"
 
 #include "GLDepthTexture2D.hpp"
@@ -100,7 +101,8 @@ namespace EARenderer {
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
 
-        GLSLLightProbeRendering mDiffuseProbeRenderingShader;
+        GLSLGridLightProbeRendering mGridProbeRenderingShader;
+        GLSLLightmapLightProbeRendering mLightmapProbeRenderingShader;
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
@@ -137,7 +139,8 @@ namespace EARenderer {
         void renderSurfelsGBuffer();
         void renderSurfelLuminances();
         void renderSurfelClusterLuminances();
-        void renderDiffuseProbes(float radius);
+        void renderDiffuseGridProbes(float radius);
+        void renderDiffuseLightmapProbes(float radius);
         void renderLinksForDiffuseProbe(size_t probeIndex);
     };
     

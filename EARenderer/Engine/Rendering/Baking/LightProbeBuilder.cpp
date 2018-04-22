@@ -96,6 +96,11 @@ namespace EARenderer {
             }
         }
 
+//        SphericalHarmonics sh;
+//        sh.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 2.0 * M_PI);
+//        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 2.0 * M_PI);
+//        projection.sphericalHarmonics = sh;
+
         projection.sphericalHarmonics.normalize();
 
         return projection;
@@ -150,12 +155,16 @@ namespace EARenderer {
         iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
         iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
 
-        for (size_t v = iMinUV.y; v <= iMaxUV.y; v++) {
-            for (size_t u = iMinUV.x; u <= iMaxUV.x; u++) {
-                size_t flatIndex = u + v * lightmapResolution.x;
+        glm::vec2 step = 1.0f / lightmapResolution / 2.0f;
+
+        for (float v = minUV.y; v <= maxUV.y; v += step.y) {
+            for (float u = minUV.x; u <= maxUV.x; u += step.x) {
+                size_t flatIndex = u * lightmapResolution.x + v * lightmapResolution.x * lightmapResolution.y;
 
                 if (scene->diffuseProbeLightmapIndices()[flatIndex] == -1) {
-                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
+                    Triangle3D UVs(glm::vec3(vertex0.lightmapCoords, 0.0),
+                                   glm::vec3(vertex1.lightmapCoords, 0.0),
+                                   glm::vec3(vertex2.lightmapCoords, 0.0));
 
                     bool pointInside = true;
                     glm::vec3 barycentric(1.0 / 3.0);
@@ -166,19 +175,17 @@ namespace EARenderer {
                     if (UVs.area() > 0) {
                         barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
                         pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
+
+//                        printf("Area: %1.20f | Barycentric: %f %f %f \n", UVs.area(), barycentric.x, barycentric.y, barycentric.z);
                     }
 
                     if (pointInside) {
                         glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
                         glm::vec3 probeNormal = vertex0.normal * barycentric.x + vertex1.normal * barycentric.y + vertex2.normal * barycentric.z;
 
-//                        printf("Normal 1: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
-//                        printf("Normal 2: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
-//                        printf("Normal 3: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
-//                        printf("Interp: %f %f %f \n\n", probeNormal.x, probeNormal.y, probeNormal.z);
-
                         DiffuseLightProbe probe(probePosition);
                         probe.normal = glm::normalize(probeNormal);
+                        probe.lightmapUV = { u, v };
                         projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);
                         scene->diffuseProbeLightmapIndices()[flatIndex] = (uint32_t)scene->diffuseLightProbes().size() - 1;
@@ -186,6 +193,43 @@ namespace EARenderer {
                 }
             }
         }
+
+//        for (size_t v = iMinUV.y; v <= iMaxUV.y; v++) {
+//            for (size_t u = iMinUV.x; u <= iMaxUV.x; u++) {
+//                size_t flatIndex = u + v * lightmapResolution.x;
+//
+//                if (scene->diffuseProbeLightmapIndices()[flatIndex] == -1) {
+//                    Triangle3D UVs(glm::vec3(uv0i, 0.0), glm::vec3(uv1i, 0.0), glm::vec3(uv2i, 0.0));
+//
+//                    bool pointInside = true;
+//                    glm::vec3 barycentric(1.0 / 3.0);
+//
+//                    // There will be a lot of cases where triangle will be mapped to a single lightmap texel
+//                    // which means we'll attempt to calculate barycentric coords in a degenerate triangle
+//                    //
+//                    if (UVs.area() > 0) {
+//                        barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
+//                        pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
+//                    }
+//
+//                    if (pointInside) {
+//                        glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
+//                        glm::vec3 probeNormal = vertex0.normal * barycentric.x + vertex1.normal * barycentric.y + vertex2.normal * barycentric.z;
+//
+////                        printf("Normal 1: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+////                        printf("Normal 2: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+////                        printf("Normal 3: %f %f %f \n", vertex0.normal.x, vertex0.normal.y, vertex0.normal.z);
+////                        printf("Interp: %f %f %f \n\n", probeNormal.x, probeNormal.y, probeNormal.z);
+//
+//                        DiffuseLightProbe probe(probePosition);
+//                        probe.normal = glm::normalize(probeNormal);
+//                        projectSurfelClustersOnProbe(scene, probe);
+//                        scene->diffuseLightProbes().push_back(probe);
+//                        scene->diffuseProbeLightmapIndices()[flatIndex] = (uint32_t)scene->diffuseLightProbes().size() - 1;
+//                    }
+//                }
+//            }
+//        }
     }
 
     void LightProbeBuilder::fillProbeIndexHoles(Scene *scene) {

@@ -18,11 +18,11 @@ namespace EARenderer {
         glm::vec3 position;
         glm::vec3 normal;
         glm::vec3 albedo;
-        glm::vec2 uv;
+        glm::vec2 lightmapUV;
         float area;
         
-        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& albedo, const glm::vec2& uv, float area);
-        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& uv);
+        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& albedo, const glm::vec2& lightmapUV, float area);
+        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& lightmapUV);
     };
     
 }

@@ -134,6 +134,4 @@ void main() {
     normal = vNormalMatrix * normal;
 
     oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
-
-    oFragColor = vec4(0.3, 0.4, 0.6, 1.0);
 }

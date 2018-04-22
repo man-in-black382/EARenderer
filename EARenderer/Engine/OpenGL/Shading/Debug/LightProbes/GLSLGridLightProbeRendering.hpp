@@ -15,9 +15,9 @@
 
 namespace EARenderer {
 
-    class GLSLLightProbeRendering: public GLProgram {
+    class GLSLGridLightProbeRendering: public GLProgram {
     public:
-        GLSLLightProbeRendering();
+        GLSLGridLightProbeRendering();
 
         void setCamera(const Camera& camera);
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
