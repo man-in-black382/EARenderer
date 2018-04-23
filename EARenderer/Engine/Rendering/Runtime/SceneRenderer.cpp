@@ -396,17 +396,17 @@ namespace EARenderer {
         // Nothing to blend here
         glDisable(GL_BLEND);
 
+        mLightmapProbesSHFramebuffer.bind();
+        mLightmapProbesSHFramebuffer.viewport().apply();
+
         mLightmapProbesUpdateShader.bind();
         mLightmapProbesUpdateShader.ensureSamplerValidity([&] {
-            mLightmapProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
             mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
+            mLightmapProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
             mLightmapProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mLightmapProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
             mLightmapProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
         });
-
-        mLightmapProbesSHFramebuffer.bind();
-        mLightmapProbesSHFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -487,20 +487,20 @@ namespace EARenderer {
 
         renderSkybox();
 
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(Size2D(128));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect(Size2D(128));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mLightmapProbesSHMaps, 1);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {

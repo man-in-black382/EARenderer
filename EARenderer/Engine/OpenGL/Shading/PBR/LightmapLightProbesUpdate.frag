@@ -125,24 +125,27 @@ SH UnpackSH(int surfelClusterIndex) {
 // since minimum of 7 4-component layers are required
 // to store 3rd order spherical harmonics for 3 color channels
 void PackSHToRenderTargets(SH sh) {
-    //    // White and green
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+    // White and green
+    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+    sh.L10  = vec3(0.0);
+    sh.L1_1 = vec3(0.0);
+    sh.L21  = vec3(0.0);
+    sh.L2_1 = vec3(0.0);
+    sh.L2_2 = vec3(0.0);
+    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
 
-    oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
-    oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
-    oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
-    oFragData3 = vec4(sh.L21.rgb, sh.L2_1.r);
-    oFragData4 = vec4(sh.L2_1.gb, sh.L2_2.rg);
-    oFragData5 = vec4(sh.L2_2.b, sh.L20.rgb);
-    oFragData6 = vec4(sh.L22.rgb, 0.0);
+//    oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
+//    oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
+//    oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
+//    oFragData3 = vec4(sh.L21.rgb, sh.L2_1.r);
+//    oFragData4 = vec4(sh.L2_1.gb, sh.L2_2.rg);
+//    oFragData5 = vec4(sh.L2_2.b, sh.L20.rgb);
+//    oFragData6 = vec4(sh.L22.rgb, 0.0);
+
+    oFragData0 = vec4(0.1, 0.1, 1.0, 1.0);
+    oFragData1 = vec4(0.1, 1.0, 0.1, 1.0);
 }
 
 // Schematically, the update of a single light probe on the GPU works like this:
@@ -158,6 +161,10 @@ void main() {
     // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
     int metadataIndex = int(texture(uLightmapProbeIndicesMap, vTexCoords)) * 2;
 
+    // DEBUG /////
+    metadataIndex = 0;
+    //////////////
+
     uint projectionGroupOffset = texelFetch(uProbeProjectionsMetadata, metadataIndex).r;
     uint projectionGroupSize = texelFetch(uProbeProjectionsMetadata, metadataIndex + 1).r;
 
@@ -166,6 +173,11 @@ void main() {
     int luminanceMapHeight = luminanceMapSize.y;
 
     SH resultingSH = ZeroSH();
+
+    // DEBUG ////////
+    projectionGroupOffset = 0;
+    projectionGroupSize = 2;
+    ////////////////
 
     for (uint i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupSize; ++i) {
         uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, int(i)).r;

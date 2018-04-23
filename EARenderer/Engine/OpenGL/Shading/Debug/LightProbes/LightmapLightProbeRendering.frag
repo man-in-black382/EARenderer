@@ -44,13 +44,15 @@ struct SH {
 SH UnpackSH() {
     SH sh;
 
-    vec4 shMap0Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 0));
-    vec4 shMap1Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 1));
-    vec4 shMap2Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 2));
-    vec4 shMap3Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 3));
-    vec4 shMap4Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 4));
-    vec4 shMap5Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 5));
-    vec4 shMap6Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 6));
+    vec2 lightmapCoords = vec2(1.0);
+
+    vec4 shMap0Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 0));
+    vec4 shMap1Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 1));
+    vec4 shMap2Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 2));
+    vec4 shMap3Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 3));
+    vec4 shMap4Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 4));
+    vec4 shMap5Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 5));
+    vec4 shMap6Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 6));
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
@@ -62,16 +64,16 @@ SH UnpackSH() {
     sh.L20  = vec3(shMap5Data.gba);
     sh.L22  = vec3(shMap6Data.rgb);
 
-    //    // White and green
-    //    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-    //    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-    //    sh.L10  = vec3(0.0);
-    //    sh.L1_1 = vec3(0.0);
-    //    sh.L21  = vec3(0.0);
-    //    sh.L2_1 = vec3(0.0);
-    //    sh.L2_2 = vec3(0.0);
-    //    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-    //    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+    // White and green
+//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+//    sh.L10  = vec3(0.0);
+//    sh.L1_1 = vec3(0.0);
+//    sh.L21  = vec3(0.0);
+//    sh.L2_1 = vec3(0.0);
+//    sh.L2_2 = vec3(0.0);
+//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
 
     return sh;
 }
@@ -116,5 +118,7 @@ void main() {
     // Rotate
     normal = vNormalMatrix * normal;
 
-    oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
+    oFragColor = vec4(EvaluateSphericalHarmonics(normal) * 4.0, 1.0);
+
+    oFragColor = texture(uLightmapSHMaps, vec3(vec2(1.0), 0));
 }
