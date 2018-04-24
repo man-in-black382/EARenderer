@@ -231,7 +231,8 @@ namespace EARenderer {
         auto& indices = scene->diffuseProbeLightmapIndices();
         for (size_t i = 0; i < indices.size(); ++i) {
             if (indices[i] == InvalidProbeIndex) {
-                indices[i] = 0;
+//                indices[i] = 0;
+                indices[i] = scene->diffuseLightProbes().size() - 1;
             }
         }
     }
@@ -313,6 +314,13 @@ namespace EARenderer {
                     }
                 }
             }
+
+            DiffuseLightProbe blankProbe;
+            SurfelClusterProjection blankProjection;
+            scene->surfelClusterProjections().push_back(blankProjection);
+            blankProbe.surfelClusterProjectionGroupCount = 1;
+            blankProbe.surfelClusterProjectionGroupOffset = scene->surfelClusterProjections().size() - 1;
+            scene->diffuseLightProbes().push_back(blankProbe);
 
             fillProbeIndexHoles(scene);
 
