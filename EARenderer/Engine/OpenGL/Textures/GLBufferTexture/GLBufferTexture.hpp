@@ -38,6 +38,10 @@ namespace EARenderer {
         GLTextureBuffer<BufferDataType>& buffer() {
             return mBuffer;
         }
+
+        const GLTextureBuffer<BufferDataType>& buffer() const {
+            return mBuffer;
+        }
     };
         
     template <typename BufferDataType>

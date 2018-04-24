@@ -445,62 +445,21 @@ namespace EARenderer {
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
-        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Static);
 
-        for (ID staticMeshInstanceID : mScene->staticMeshInstanceIDs()) {
-            auto& instance = mScene->meshInstances()[staticMeshInstanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-
-            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
-
-            for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
-                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
-
-                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
-                    mCookTorranceShader.setMaterial(material);
-                });
-
-                subMesh.draw();
-            }
-        }
-
-        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Dynamic);
-
-        for (ID dynamicMeshInstanceID : mScene->dynamicMeshInstanceIDs()) {
-            auto& instance = mScene->meshInstances()[dynamicMeshInstanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-
-            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
-
-            for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
-                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
-
-                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
-                    mCookTorranceShader.setMaterial(material);
-                });
-
-                subMesh.draw();
-            }
-        }
-
-        renderSkybox();
-
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(false);
-
-        Rect2D viewportRect(Size2D(128));
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(mLightmapProbesSHMaps, 1);
-        });
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glEnable(GL_DEPTH_TEST);
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//
+//        Rect2D viewportRect(Size2D(128));
+//        GLViewport(viewportRect).apply();
+//
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(mLightmapProbesSHMaps, 1);
+//        });
+//
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {

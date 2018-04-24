@@ -96,11 +96,6 @@ namespace EARenderer {
             }
         }
 
-        SphericalHarmonics sh;
-//        sh.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 0.0 * M_PI);
-//        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), 0.0 * M_PI);
-        projection.sphericalHarmonics = sh;
-
         projection.sphericalHarmonics.normalize();
 
         return projection;

@@ -10,9 +10,7 @@
 #include "FileManager.hpp"
 #include "StringUtils.hpp"
 
-#include <vector>
 #include <sstream>
-#include <stdexcept>
 
 #include <glm/gtc/type_ptr.hpp>
 

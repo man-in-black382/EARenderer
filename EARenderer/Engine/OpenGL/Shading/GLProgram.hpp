@@ -15,6 +15,7 @@
 #include <vector>
 #include <array>
 #include <type_traits>
+#include <stdexcept>
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -67,6 +68,10 @@ namespace EARenderer {
         
         template <typename BufferDataType>
         void setUniformTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
+            if (bufferTexture.buffer().size() == 0) {
+                throw std::runtime_error("Passing empty texture buffer to a uniform is not allowed");
+            }
+
             GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
             glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
             bufferTexture.bind();
