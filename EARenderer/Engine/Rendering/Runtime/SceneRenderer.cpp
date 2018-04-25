@@ -302,23 +302,13 @@ namespace EARenderer {
 
 #pragma mark - Runtime
 
-    void SceneRenderer::renderSkybox() {
-        mSkyboxShader.bind();
-        mSkyboxShader.ensureSamplerValidity([this]() {
-            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
-            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
-        });
-        mScene->skybox()->draw();
-    }
-
-    void SceneRenderer::renderShadowMapsForDirectionalLights(const FrustumCascades& cascades) {
+    void SceneRenderer::renderShadowMapsForDirectionalLights() {
         // Fill shadow map
         mDirectionalDepthShader.bind();
         mDepthFramebuffer.bind();
         mDepthFramebuffer.viewport().apply();
 
-        for (uint8_t cascade = 0; cascade < cascades.amount; cascade++) {
+        for (uint8_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
             mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
             glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -327,7 +317,7 @@ namespace EARenderer {
                 auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
                 mDirectionalDepthShader.setModelMatrix(instance.transformation().modelMatrix());
-                mDirectionalDepthShader.setViewProjectionMatrix(cascades.lightViewProjections[cascade]);
+                mDirectionalDepthShader.setViewProjectionMatrix(mShadowCascades.lightViewProjections[cascade]);
 
                 for (ID subMeshID : subMeshes) {
                     auto& subMesh = subMeshes[subMeshID];
@@ -337,7 +327,7 @@ namespace EARenderer {
         }
     }
 
-    void SceneRenderer::relightSurfels(const FrustumCascades& cascades) {
+    void SceneRenderer::relightSurfels() {
         DirectionalLight& directionalLight = mScene->directionalLight();
 
         mSurfelsLuminanceFramebuffer.bind();
@@ -346,7 +336,7 @@ namespace EARenderer {
         mSurfelLightingShader.bind();
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
         });
 
@@ -415,17 +405,21 @@ namespace EARenderer {
     }
 
 #pragma mark - Public interface
-    
-    void SceneRenderer::renderMeshes() {
+
+    void SceneRenderer::prepareFrame() {
         DirectionalLight& directionalLight = mScene->directionalLight();
-        FrustumCascades cascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
-        
-        renderShadowMapsForDirectionalLights(cascades);
-        relightSurfels(cascades);
+        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
+
+        renderShadowMapsForDirectionalLights();
+        relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
         updateLightmapProbes();
-        
+    }
+
+    void SceneRenderer::renderMeshes() {
+        DirectionalLight& directionalLight = mScene->directionalLight();
+
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
@@ -437,7 +431,7 @@ namespace EARenderer {
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
-            mCookTorranceShader.setShadowMapsUniforms(cascades, mShadowMaps);
+            mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mCookTorranceShader.setLightmapProbesSHTextures(mLightmapProbesSHMaps);
@@ -445,7 +439,46 @@ namespace EARenderer {
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
-
+//        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Static);
+//
+//        for (ID staticMeshInstanceID : mScene->staticMeshInstanceIDs()) {
+//            auto& instance = mScene->meshInstances()[staticMeshInstanceID];
+//            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+//
+//            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
+//
+//            for (ID subMeshID : subMeshes) {
+//                auto& subMesh = subMeshes[subMeshID];
+//                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+//
+//                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
+//                    mCookTorranceShader.setMaterial(material);
+//                });
+//
+//                subMesh.draw();
+//            }
+//        }
+//
+//        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Dynamic);
+//
+//        for (ID dynamicMeshInstanceID : mScene->dynamicMeshInstanceIDs()) {
+//            auto& instance = mScene->meshInstances()[dynamicMeshInstanceID];
+//            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+//
+//            mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
+//
+//            for (ID subMeshID : subMeshes) {
+//                auto& subMesh = subMeshes[subMeshID];
+//                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+//
+//                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
+//                    mCookTorranceShader.setMaterial(material);
+//                });
+//
+//                subMesh.draw();
+//            }
+//        }
+//
 //        glDisable(GL_DEPTH_TEST);
 //
 //        mFSQuadShader.bind();
@@ -455,11 +488,21 @@ namespace EARenderer {
 //        GLViewport(viewportRect).apply();
 //
 //        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mLightmapProbesSHMaps, 1);
+//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
 //        });
 //
 //        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 //        glEnable(GL_DEPTH_TEST);
+    }
+
+    void SceneRenderer::renderSkybox() {
+        mSkyboxShader.bind();
+        mSkyboxShader.ensureSamplerValidity([this]() {
+            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+        });
+        mScene->skybox()->draw();
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
