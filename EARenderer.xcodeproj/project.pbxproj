@@ -550,6 +550,8 @@
 		AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.frag; sourceTree = "<group>"; };
 		AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.geom; sourceTree = "<group>"; };
 		AC59F2902073C6B400698E55 /* LightProbeLinksRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.vert; sourceTree = "<group>"; };
+		AC5BD7BA2091B400006E8A3C /* ThreadPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ThreadPool.hpp; sourceTree = "<group>"; };
+		AC5BD7BD2091B42C006E8A3C /* ThreadSafeQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ThreadSafeQueue.hpp; sourceTree = "<group>"; };
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
@@ -1652,6 +1654,15 @@
 			path = constraint;
 			sourceTree = "<group>";
 		};
+		AC5BD7B82091B3EE006E8A3C /* Threading */ = {
+			isa = PBXGroup;
+			children = (
+				AC5BD7BA2091B400006E8A3C /* ThreadPool.hpp */,
+				AC5BD7BD2091B42C006E8A3C /* ThreadSafeQueue.hpp */,
+			);
+			path = Threading;
+			sourceTree = "<group>";
+		};
 		AC9FCF6B207F6CE500B5462D /* trianglepacker */ = {
 			isa = PBXGroup;
 			children = (
@@ -2114,14 +2125,12 @@
 		CE70F83E1F8F8EBD00AD9027 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F83F1F8F8EBD00AD9027 /* Input */,
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
-				CE70F8491F8F8EBD00AD9027 /* Utils */,
+				AC5BD7B82091B3EE006E8A3C /* Threading */,
 				CE70F8521F8F8EBD00AD9027 /* Rendering */,
 				CE70F85F1F8F8EBD00AD9027 /* Containers */,
 				CE70F8611F8F8EBD00AD9027 /* Geometry */,
 				CE70F8751F8F8EBD00AD9027 /* Scene */,
-				CE70F8971F8F8EBD00AD9027 /* EventSystem */,
 				CE70F8991F8F8EBD00AD9027 /* ThirdParty */,
 				CE70F9AF1F8F8EBD00AD9027 /* Resource Management */,
 				CE70F9B41F8F8EBD00AD9027 /* OpenGL */,
@@ -2129,18 +2138,12 @@
 			path = Engine;
 			sourceTree = "<group>";
 		};
-		CE70F83F1F8F8EBD00AD9027 /* Input */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F8401F8F8EBD00AD9027 /* Input.cpp */,
-				CE70F8411F8F8EBD00AD9027 /* Input.hpp */,
-			);
-			path = Input;
-			sourceTree = "<group>";
-		};
 		CE70F8421F8F8EBD00AD9027 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				CE70F8981F8F8EBD00AD9027 /* Event.inl */,
+				CE70F8401F8F8EBD00AD9027 /* Input.cpp */,
+				CE70F8411F8F8EBD00AD9027 /* Input.hpp */,
 				CE70F8481F8F8EBD00AD9027 /* BitwiseEnum.hpp */,
 				CE70F8441F8F8EBD00AD9027 /* Color.cpp */,
 				CE70F8461F8F8EBD00AD9027 /* Color.hpp */,
@@ -2154,13 +2157,6 @@
 				CE5C5E242000CA04004D2B4E /* Measurement.cpp */,
 				CE5C5E252000CA04004D2B4E /* Measurement.hpp */,
 				AC40402E2004B25E00715B1A /* TupleHash.hpp */,
-			);
-			path = Foundation;
-			sourceTree = "<group>";
-		};
-		CE70F8491F8F8EBD00AD9027 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
 				CE70F84B1F8F8EBD00AD9027 /* FileManager.cpp */,
 				CE70F84E1F8F8EBD00AD9027 /* FileManager.hpp */,
 				CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */,
@@ -2171,7 +2167,7 @@
 				CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */,
 				AC0636D42015E0560065DEB7 /* StringUtils.hpp */,
 			);
-			path = Utils;
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 		CE70F8521F8F8EBD00AD9027 /* Rendering */ = {
@@ -2328,14 +2324,6 @@
 				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
 			);
 			path = Geometry;
-			sourceTree = "<group>";
-		};
-		CE70F8971F8F8EBD00AD9027 /* EventSystem */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F8981F8F8EBD00AD9027 /* Event.inl */,
-			);
-			path = EventSystem;
 			sourceTree = "<group>";
 		};
 		CE70F8991F8F8EBD00AD9027 /* ThirdParty */ = {
