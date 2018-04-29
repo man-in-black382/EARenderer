@@ -119,4 +119,6 @@ void main() {
     normal = vNormalMatrix * normal;
 
     oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
+
+//    oFragColor = vec4(vLightmapCoords, 0.0, 1.0);
 }

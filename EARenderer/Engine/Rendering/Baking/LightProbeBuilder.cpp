@@ -228,12 +228,45 @@ namespace EARenderer {
     }
 
     void LightProbeBuilder::fillProbeIndexHoles(Scene *scene) {
-        auto& indices = scene->diffuseProbeLightmapIndices();
-        for (size_t i = 0; i < indices.size(); ++i) {
-            if (indices[i] == InvalidProbeIndex) {
-//                indices[i] = 0;
-                indices[i] = scene->diffuseLightProbes().size() - 1;
+        auto& probeIndices = scene->diffuseProbeLightmapIndices();
+        Size2D resolution = scene->preferredProbeLightmapResolution();
+        std::unordered_set<uint32_t> texelsToProcess;
+
+        for (int32_t i = 0; i < probeIndices.size(); i++) {
+            if (probeIndices[i] != InvalidProbeIndex) {
+                texelsToProcess.insert(i);
             }
+        }
+
+        auto fillNeighbour = [&](int32_t u, int32_t v, int32_t currentIndex) {
+            if (u < 0 || v < 0) return;
+            if (u >= resolution.width || v >= resolution.height) return;
+
+            int32_t neighbourIndex = u + v * resolution.width;
+
+            if (probeIndices[neighbourIndex] == InvalidProbeIndex) {
+                probeIndices[neighbourIndex] = probeIndices[currentIndex];
+            }
+        };
+
+        // Horizontal + vertical dillation
+        for (int32_t index : texelsToProcess) {
+            glm::ivec2 index2D(index % (int32_t)resolution.width, index / resolution.width);
+
+            fillNeighbour(index2D.x + 1, index2D.y, index);
+            fillNeighbour(index2D.x - 1, index2D.y, index);
+            fillNeighbour(index2D.x, index2D.y + 1, index);
+            fillNeighbour(index2D.x, index2D.y - 1, index);
+        }
+
+        // Diagonal dillation
+        for (int32_t index : texelsToProcess) {
+            glm::ivec2 index2D(index % (int32_t)resolution.width, index / resolution.width);
+
+            fillNeighbour(index2D.x + 1, index2D.y + 1, index);
+            fillNeighbour(index2D.x - 1, index2D.y + 1, index);
+            fillNeighbour(index2D.x + 1, index2D.y - 1, index);
+            fillNeighbour(index2D.x - 1, index2D.y - 1, index);
         }
     }
 
@@ -314,13 +347,6 @@ namespace EARenderer {
                     }
                 }
             }
-
-            DiffuseLightProbe blankProbe;
-            SurfelClusterProjection blankProjection;
-            scene->surfelClusterProjections().push_back(blankProjection);
-            blankProbe.surfelClusterProjectionGroupCount = 1;
-            blankProbe.surfelClusterProjectionGroupOffset = scene->surfelClusterProjections().size() - 1;
-            scene->diffuseLightProbes().push_back(blankProbe);
 
             fillProbeIndexHoles(scene);
 

@@ -59,6 +59,7 @@ namespace EARenderer {
         Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
+        FrustumCascades mShadowCascades;
     
         GLSLDirectionalDepth mDirectionalDepthShader;
         GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
@@ -117,12 +118,11 @@ namespace EARenderer {
         std::vector<uint32_t> surfelClusterIndices() const;
         std::vector<uint32_t> probeProjectionsMetadata() const;
 
-        void renderShadowMapsForDirectionalLights(const FrustumCascades& cascades);
-        void relightSurfels(const FrustumCascades& cascades);
+        void renderShadowMapsForDirectionalLights();
+        void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
         void updateLightmapProbes();
-        void renderSkybox();
         
         void convertEquirectangularMapToCubemap();
         void buildDiffuseIrradianceMap();
@@ -134,8 +134,11 @@ namespace EARenderer {
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-        void renderMeshes();
 
+        void prepareFrame();
+
+        void renderMeshes();
+        void renderSkybox();
         void renderSurfelsGBuffer();
         void renderSurfelLuminances();
         void renderSurfelClusterLuminances();

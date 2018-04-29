@@ -148,6 +148,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view
 {
     self.cameraman->updateCamera();
+
+    self.sceneRenderer->prepareFrame();
+
     self.sceneRenderer->renderMeshes();
 //    self.sceneRenderer->renderDiffuseGridProbes(0.1);
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.1);

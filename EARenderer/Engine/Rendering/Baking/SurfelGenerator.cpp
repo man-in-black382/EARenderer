@@ -12,7 +12,7 @@
 #include "Measurement.hpp"
 #include "Sphere.hpp"
 #include "Collision.hpp"
-
+#include "ThreadPool.hpp"
 #include "SparseOctree.hpp"
 
 #include <random>
