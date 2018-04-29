@@ -42,7 +42,6 @@
 		ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
-		CE08F27C2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */; };
 		CE1C97252064574B006A4A73 /* libembree3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C97242064574B006A4A73 /* libembree3.3.dylib */; };
 		CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */; };
 		CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */; };
@@ -287,6 +286,7 @@
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
+		CEAB2A932095E37C0075399C /* sponza_with_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CEAB2A922095E37C0075399C /* sponza_with_2nd_uv.fbx */; };
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
@@ -592,7 +592,6 @@
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
-		CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_with_2nd_uv_t.fbx; sourceTree = "<group>"; };
 		CE1C97242064574B006A4A73 /* libembree3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.dylib; sourceTree = "<group>"; };
 		CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelClusterAveraging.frag; sourceTree = "<group>"; };
 		CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelClusterAveraging.cpp; sourceTree = "<group>"; };
@@ -1260,6 +1259,7 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
+		CEAB2A922095E37C0075399C /* sponza_with_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_with_2nd_uv.fbx; sourceTree = "<group>"; };
 		CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
@@ -2066,7 +2066,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CE08F27B2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx */,
+				CEAB2A922095E37C0075399C /* sponza_with_2nd_uv.fbx */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
 				AC8F7DFB203AF676004CD033 /* sphere.obj */,
@@ -3222,6 +3222,7 @@
 				CE70FA621F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.frag in Resources */,
 				CE4DE20A1FA60CFE0067729A /* ChainTexture_Normal.tga in Resources */,
 				CE4DE2281FA60CFF0067729A /* Sponza_Curtain_Green_normal.tga in Resources */,
+				CEAB2A932095E37C0075399C /* sponza_with_2nd_uv.fbx in Resources */,
 				CE4DE22C1FA60CFF0067729A /* Sponza_Curtain_roughness.tga in Resources */,
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
@@ -3254,7 +3255,6 @@
 				CE4DE2421FA60CFF0067729A /* Sponza_Thorn_diffuse.tga in Resources */,
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
 				CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */,
-				CE08F27C2084B28D00EC0899 /* sponza_with_2nd_uv_t.fbx in Resources */,
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,

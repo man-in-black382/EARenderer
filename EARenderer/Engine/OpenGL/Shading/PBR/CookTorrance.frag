@@ -460,15 +460,17 @@ void main() {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
     
     // Apply shadow factor
-    specularAndDiffuse *= 1.0 - shadow;
+//    specularAndDiffuse *= 1.0 - shadow;
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     if (uGeometryType == kGeometryTypeStatic) {
-        oFragColor = vec4(EvaluateLightmapSphericalHarmonics(N) * 3.0, 1.0);
+        oFragColor = vec4(EvaluateLightmapSphericalHarmonics(N), 1.0);
     } else if (uGeometryType == kGeometryTypeDynamic) {
         oFragColor = vec4(EvaluateGridSphericalHarmonics(N), 1.0);
     }
+
+    oFragColor = vec4(correctColor, 1.0);
 }
