@@ -83,7 +83,7 @@ namespace EARenderer {
 
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLLDRTexture2D mSurfelClustersGBuffer;
-        GLLDRTexture2D mLightmapProbeIndicesMap;
+//        GLLDRTexture2D mLightmapProbeIndicesMap;
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;

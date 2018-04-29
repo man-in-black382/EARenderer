@@ -40,7 +40,7 @@ namespace EARenderer {
     // Surfels and surfel clusters
     mSurfelsGBuffer(surfelsGBufferData()),
     mSurfelClustersGBuffer(surfelClustersGBufferData()),
-    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
+//    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
     mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
@@ -391,7 +391,7 @@ namespace EARenderer {
 
         mLightmapProbesUpdateShader.bind();
         mLightmapProbesUpdateShader.ensureSamplerValidity([&] {
-            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
+//            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
             mLightmapProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
             mLightmapProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mLightmapProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
@@ -414,7 +414,7 @@ namespace EARenderer {
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
-        updateLightmapProbes();
+//        updateLightmapProbes();
     }
 
     void SceneRenderer::renderMeshes() {
