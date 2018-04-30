@@ -10,7 +10,6 @@
 #define Box_hpp
 
 #include "Transformation.hpp"
-#include "Triangle3D.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -18,15 +17,17 @@
 #include <array>
 
 namespace EARenderer {
-    
+
+    struct Triangle3D;
+
     struct AxisAlignedBox3D {
         glm::vec3 min = glm::zero<glm::vec3>();
         glm::vec3 max = glm::zero<glm::vec3>();
         
-        static const AxisAlignedBox3D& zero();
-        static const AxisAlignedBox3D& unit();
+        static const AxisAlignedBox3D& Zero();
+        static const AxisAlignedBox3D& Unit();
         static const AxisAlignedBox3D& NDC();
-        static const AxisAlignedBox3D& maximumReversed();
+        static const AxisAlignedBox3D& MaximumReversed();
         
         AxisAlignedBox3D()= default;
         AxisAlignedBox3D(const glm::vec3& min, const glm::vec3& max);

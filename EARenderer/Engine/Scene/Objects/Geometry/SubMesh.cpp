@@ -7,19 +7,22 @@
 //
 
 #include "SubMesh.hpp"
+#include "Triangle3D.hpp"
 
 namespace EARenderer {
 
     SubMesh::SubMesh()
     :
-    mBoundingBox(AxisAlignedBox3D::maximumReversed()),
+    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
+    mArea(0.0),
     mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
     { }
     
     SubMesh::SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices)
     :
     mVertices(vertices),
-    mBoundingBox(AxisAlignedBox3D::maximumReversed()),
+    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
+    mArea(0.0),
     mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
     {
         finalizeVertexBuffer();
@@ -54,6 +57,10 @@ namespace EARenderer {
     GLVertexArray<Vertex1P1N2UV1T1BT>& SubMesh::VAO() {
         return mVAO;
     }
+
+    float SubMesh::surfaceArea() const {
+        return mArea;
+    }
     
 #pragma mark - Setters
     
@@ -72,6 +79,16 @@ namespace EARenderer {
         mBoundingBox.min = glm::min(glm::vec3(vertex.position), mBoundingBox.min);
         mBoundingBox.max = glm::max(glm::vec3(vertex.position), mBoundingBox.max);
         mVertices.push_back(vertex);
+
+        if ((mVertices.size() % 3) == 0) {
+            size_t count = mVertices.size();
+            auto& v0 = mVertices[count - 3];
+            auto& v1 = mVertices[count - 2];
+            auto& v2 = mVertices[count - 1];
+
+            Triangle3D triangle(v0.position, v1.position, v2.position);
+            mArea += triangle.area();
+        }
     }
     
     void SubMesh::finalizeVertexBuffer() {

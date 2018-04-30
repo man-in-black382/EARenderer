@@ -7,6 +7,7 @@
 //
 
 #include "Triangle3D.hpp"
+#include "AxisAlignedBox3D.hpp"
 
 #include <glm/detail/func_geometric.hpp>
 
@@ -18,6 +19,16 @@ namespace EARenderer {
 
     glm::vec3 Triangle3D::normal() const {
         return glm::normalize(glm::cross(c - a, b - a));
+    }
+
+    AxisAlignedBox3D Triangle3D::boundingBox() const {
+        glm::vec3 min = glm::min(p1, p2);
+        min = glm::min(min, p3);
+
+        glm::vec3 max = glm::max(p1, p2);
+        max = glm::max(min, p3);
+
+        return { min, max };
     }
     
     std::array<Triangle3D, 4> Triangle3D::split() const {

@@ -101,6 +101,10 @@ namespace EARenderer {
         return mDiffuseProbeLightmapIndices;
     }
 
+    float Scene::staticGeometryArea() const {
+        return mStaticGeometryArea;
+    }
+
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -121,11 +125,19 @@ namespace EARenderer {
     
 #pragma mark -
     
-    void Scene::calculateBoundingBox() {
-        mBoundingBox = AxisAlignedBox3D::maximumReversed();
+    void Scene::calculateGeometricProperties() {
+        mBoundingBox = AxisAlignedBox3D::MaximumReversed();
+        mStaticGeometryArea = 0.0;
         
-        for (ID meshInstanceID : mMeshInstances) {
+        for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto& instance = mMeshInstances[meshInstanceID];
+            auto& mesh = ResourcePool::shared().meshes[instance.meshID()];
+
+            for (ID subMeshID : mesh.subMeshes()) {
+                auto& subMesh = mesh.subMeshes()[subMeshID];
+                mStaticGeometryArea += subMesh.surfaceArea();
+            }
+
             auto boundingBox = instance.boundingBox();
             mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
             mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);

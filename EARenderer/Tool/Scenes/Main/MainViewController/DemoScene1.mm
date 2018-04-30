@@ -179,9 +179,9 @@
 
     scene->directionalLight().setColor(EARenderer::Color(15.0, 15.0, 15.0));
 
-    scene->calculateBoundingBox();
+    scene->calculateGeometricProperties();
 
-    glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
+    glm::mat4 bbScale = glm::scale(glm::vec3(0.99, 0.99, 0.99));
     scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");

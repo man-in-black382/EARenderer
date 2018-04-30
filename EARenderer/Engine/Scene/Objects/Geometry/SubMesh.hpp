@@ -27,6 +27,7 @@ namespace EARenderer {
         std::string mMaterialName;
         std::vector<Vertex1P1N2UV1T1BT> mVertices;
         AxisAlignedBox3D mBoundingBox;
+        float mArea;
         GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
         
     public:
@@ -38,6 +39,7 @@ namespace EARenderer {
         const std::vector<Vertex1P1N2UV1T1BT>& vertices() const;
         const AxisAlignedBox3D& boundingBox() const;
         const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
+        float surfaceArea() const;
 
         std::vector<Vertex1P1N2UV1T1BT>& vertices();
         GLVertexArray<Vertex1P1N2UV1T1BT>& VAO();

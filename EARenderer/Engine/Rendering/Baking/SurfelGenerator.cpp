@@ -43,7 +43,7 @@ namespace EARenderer {
     mDistribution(0.0f, 1.0f),
     mResourcePool(resourcePool),
     mScene(scene),
-    mSurfelSpatialHash(AxisAlignedBox3D::zero(), 1),
+    mSurfelSpatialHash(AxisAlignedBox3D::Zero(), 1),
     mSurfelFlatStorage(10000)
     { }
     

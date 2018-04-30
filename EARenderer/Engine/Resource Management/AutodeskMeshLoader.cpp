@@ -237,6 +237,10 @@ namespace EARenderer {
     }
 
     void AutodeskMeshLoader::extractMaterials(FbxMesh* mesh) {
+        if (mesh->GetElementMaterialCount() == 0) {
+            return;
+        }
+
         FbxLayerElementMaterial *leMaterial = mesh->GetElementMaterial();
         FbxSurfaceMaterial* lMaterial = mesh->GetNode()->GetMaterial(leMaterial->GetIndexArray().GetAt(0));
         mSubMeshes->back().setMaterialName(lMaterial->GetName());
@@ -253,7 +257,7 @@ namespace EARenderer {
 
         mSubMeshes = &subMeshes;
         mBoundingBox = &boundingBox;
-        *mBoundingBox = AxisAlignedBox3D::maximumReversed();
+        *mBoundingBox = AxisAlignedBox3D::MaximumReversed();
 
         if(!rootNode) {
             return;

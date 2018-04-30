@@ -7,6 +7,7 @@
 //
 
 #include "Triangle2D.hpp"
+#include "AxisAlignedBox3D.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/detail/func_geometric.hpp>
@@ -32,6 +33,16 @@ namespace EARenderer {
             Triangle2D(halfBC, c, halfAC),
             Triangle2D(halfAB, halfAC, halfBC)
         };
+    }
+
+    AxisAlignedBox3D Triangle2D::boundingBox() const {
+        glm::vec2 min = glm::min(p1, p2);
+        min = glm::min(min, p3);
+
+        glm::vec2 max = glm::max(p1, p2);
+        max = glm::max(min, p3);
+
+        return { glm::vec3(min, 0.0), glm::vec3(max, 0.0) };
     }
     
 }

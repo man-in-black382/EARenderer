@@ -6,6 +6,7 @@
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
+#include "Triangle3D.hpp"
 #include "AxisAlignedBox3D.hpp"
 
 #include <limits>
@@ -18,12 +19,12 @@ namespace EARenderer {
     
 #pragma mark - Static
     
-    const AxisAlignedBox3D& AxisAlignedBox3D::zero() {
+    const AxisAlignedBox3D& AxisAlignedBox3D::Zero() {
         static AxisAlignedBox3D b;
         return b;
     }
     
-    const AxisAlignedBox3D& AxisAlignedBox3D::unit() {
+    const AxisAlignedBox3D& AxisAlignedBox3D::Unit() {
         static AxisAlignedBox3D b(glm::vec3(0.0), glm::vec3(1.0));
         return b;
     }
@@ -33,7 +34,7 @@ namespace EARenderer {
         return b;
     }
     
-    const AxisAlignedBox3D& AxisAlignedBox3D::maximumReversed() {
+    const AxisAlignedBox3D& AxisAlignedBox3D::MaximumReversed() {
         auto min = glm::vec3(std::numeric_limits<float>::max());
         auto max = glm::vec3(std::numeric_limits<float>::lowest());
         static AxisAlignedBox3D b(min, max);

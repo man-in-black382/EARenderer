@@ -460,7 +460,7 @@ void main() {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
     
     // Apply shadow factor
-//    specularAndDiffuse *= 1.0 - shadow;
+    specularAndDiffuse *= 1.0 - shadow;
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;

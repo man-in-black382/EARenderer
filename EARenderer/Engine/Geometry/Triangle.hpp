@@ -9,11 +9,15 @@
 #ifndef Triangle_hpp
 #define Triangle_hpp
 
+#include "AxisAlignedBox3D.hpp"
+
 #include <glm/vec3.hpp>
 #include <array>
 
 namespace EARenderer {
-    
+
+    struct AxisAlignedBox3D;
+
     template <typename Point>
     struct Triangle {
         union {
@@ -37,6 +41,7 @@ namespace EARenderer {
         Triangle(const Point& p1, const Point& p2, const Point& p3) : a(p1), b(p2), c(p3) { }
         
         virtual float area() const = 0;
+        virtual AxisAlignedBox3D boundingBox() const = 0;
     };
     
 }

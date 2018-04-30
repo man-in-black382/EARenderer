@@ -37,9 +37,13 @@ namespace EARenderer {
     
     class Scene {
     private:
+
+#pragma mark - Member variables
+
         size_t mOctreeDepth = 5;
         float mGridProbesDistance = 0.75;
         Size2D mProbesLightmapResolution = Size2D(128);
+        float mStaticGeometryArea = 0.0;
 
         DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;
@@ -66,11 +70,15 @@ namespace EARenderer {
         AxisAlignedBox3D mLightBakingVolume;
         
     public:
+
+#pragma mark - Lifecycle
+
         Scene();
-        
+
+#pragma mark - Getters
+
         DirectionalLight& directionalLight();
         PackedLookupTable<PointLight>& pointLights();
-
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
 
@@ -78,35 +86,39 @@ namespace EARenderer {
         std::vector<SurfelCluster>& surfelClusters();
         std::vector<SurfelClusterProjection>& surfelClusterProjections();
         std::vector<DiffuseLightProbe>& diffuseLightProbes();
+        std::vector<uint32_t>& diffuseProbeLightmapIndices();
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> octree();
         std::shared_ptr<EmbreeRayTracer> rayTracer();
         
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;
-        
-        void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
-        void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);
-        void calculateBoundingBox();
-        void buildStaticGeometryOctree();
-        void buildStaticGeometryRaytracer();
-        
+
         glm::ivec3 preferredProbeGridResolution() const;
         Size2D preferredProbeLightmapResolution() const;
 
         const AxisAlignedBox3D& boundingBox() const;
+        const AxisAlignedBox3D& lightBakingVolume() const;
+        float staticGeometryArea() const;
+
+        Camera* camera() const;
+        Skybox* skybox() const;
+
+#pragma mark - Setters
 
         void setLightBakingVolume(const AxisAlignedBox3D& volume);
-        const AxisAlignedBox3D& lightBakingVolume() const;
-
-        std::vector<uint32_t>& diffuseProbeLightmapIndices();
         void setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices);
-        
         void setCamera(Camera* camera);
-        Camera* camera() const;
-        
         void setSkybox(Skybox* skybox);
-        Skybox* skybox() const;
+
+        void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
+        void addMeshInstanceWithIDAsDynamic(ID meshInstanceID);
+
+#pragma mark -
+
+        void calculateGeometricProperties();
+        void buildStaticGeometryOctree();
+        void buildStaticGeometryRaytracer();
     };
     
 }

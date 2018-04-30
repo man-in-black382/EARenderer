@@ -19,6 +19,7 @@ namespace EARenderer {
         using Triangle<glm::vec2>::Triangle;
         
         float area() const override;
+        AxisAlignedBox3D boundingBox() const override;
         std::array<Triangle2D, 4> split() const;
     };
     
