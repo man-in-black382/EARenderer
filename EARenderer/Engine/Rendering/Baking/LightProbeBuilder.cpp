@@ -170,13 +170,13 @@ namespace EARenderer {
                     if (UVs.area() > 0) {
                         barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
                         pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
-
-//                        printf("Area: %1.20f | Barycentric: %f %f %f \n", UVs.area(), barycentric.x, barycentric.y, barycentric.z);
                     }
 
                     if (pointInside) {
                         glm::vec3 probePosition = triangle.p1 * barycentric.x + triangle.p2 * barycentric.y + triangle.p3 * barycentric.z;
                         glm::vec3 probeNormal = vertex0.normal * barycentric.x + vertex1.normal * barycentric.y + vertex2.normal * barycentric.z;
+
+//                        printf("Probe position: %f %f %f \n", probePosition.x, probePosition.y, probePosition.z);
 
                         DiffuseLightProbe probe(probePosition);
                         probe.normal = glm::normalize(probeNormal);

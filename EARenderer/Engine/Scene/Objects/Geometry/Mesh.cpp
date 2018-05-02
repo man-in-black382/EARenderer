@@ -15,7 +15,7 @@ namespace EARenderer {
     
     Mesh::Mesh(const std::string& filePath)
     :
-    mSubMeshes(1000)
+    mSubMeshes(500)
     {
         auto meshLoader = MeshLoader::Create(filePath);
         std::vector<SubMesh> subMeshes;

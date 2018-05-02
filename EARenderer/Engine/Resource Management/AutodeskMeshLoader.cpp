@@ -101,6 +101,8 @@ namespace EARenderer {
                 FbxVector4 position = controlPoints[controlPointIndex];
                 glm::vec4 glmPosition(position[0], position[1], position[2], 1.0);
 
+//                printf("Position: %f %f %f \n", glmPosition.x, glmPosition.y, glmPosition.z);
+
                 subMesh.addVertex(Vertex1P1N2UV1T1BT(glmPosition));
 
                 extractNormal(mesh, vertexId);

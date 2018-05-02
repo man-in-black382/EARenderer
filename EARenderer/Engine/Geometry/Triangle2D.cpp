@@ -35,14 +35,16 @@ namespace EARenderer {
         };
     }
 
-    AxisAlignedBox3D Triangle2D::boundingBox() const {
+    Rect2D Triangle2D::boundingRect() const {
         glm::vec2 min = glm::min(p1, p2);
         min = glm::min(min, p3);
 
         glm::vec2 max = glm::max(p1, p2);
         max = glm::max(min, p3);
 
-        return { glm::vec3(min, 0.0), glm::vec3(max, 0.0) };
+        glm::vec2 delta = max - min;
+
+        return { min, { delta.x, delta.y } };
     }
     
 }

@@ -10,6 +10,7 @@
 #define Triangle2D_hpp
 
 #include "Triangle.hpp"
+#include "Rect2D.hpp"
 
 #include <glm/vec2.hpp>
 
@@ -19,7 +20,7 @@ namespace EARenderer {
         using Triangle<glm::vec2>::Triangle;
         
         float area() const override;
-        AxisAlignedBox3D boundingBox() const override;
+        Rect2D boundingRect() const;
         std::array<Triangle2D, 4> split() const;
     };
     

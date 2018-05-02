@@ -83,7 +83,7 @@ namespace EARenderer {
 
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLLDRTexture2D mSurfelClustersGBuffer;
-//        GLLDRTexture2D mLightmapProbeIndicesMap;
+        GLLDRTexture2D mLightmapProbeIndicesMap;
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
@@ -117,6 +117,8 @@ namespace EARenderer {
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
         std::vector<uint32_t> surfelClusterIndices() const;
         std::vector<uint32_t> probeProjectionsMetadata() const;
+
+        void bindDefaultFramebuffer();
 
         void renderShadowMapsForDirectionalLights();
         void relightSurfels();

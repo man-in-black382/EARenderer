@@ -61,7 +61,7 @@ namespace EARenderer {
         uint16_t cy = cell.decodeY();
         uint16_t cz = cell.decodeZ();
 
-        size_t neighbourIndex = 0;
+        int32_t neighbourIndex = -1;
 
         for (int8_t x = -1; x <= 1; ++x) {
             for (int8_t y = -1; y <= 1; ++y) {
@@ -84,7 +84,7 @@ namespace EARenderer {
             }
         }
 
-        if (neighbourIndex < neighbours.max_size() - 1) {
+        if (neighbourIndex < (int32_t)neighbours.max_size() - 1) {
             neighbours[neighbourIndex + 1] = Cell::InvalidCell();
         }
 

@@ -146,6 +146,8 @@
 		CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED08201275B900A03146 /* Triangle3D.cpp */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
+		CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5683E32099AC5F00C827F5 /* DemoScene2.mm */; };
+		CE5683E82099CAE700C827F5 /* Cornell.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE5683E72099CAE600C827F5 /* Cornell.fbx */; };
 		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
 		CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
@@ -260,6 +262,9 @@
 		CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8241F8F8EBD00AD9027 /* Main.storyboard */; };
 		CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE70F81E1F8F8EBD00AD9027 /* Assets.xcassets */; };
 		CE73110C2096E04E002A8DE7 /* LightmapPacker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE73110A2096E04E002A8DE7 /* LightmapPacker.cpp */; };
+		CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE73110F2098C8E2002A8DE7 /* MaxRectsBinPack.cpp */; };
+		CE7311132098C8E2002A8DE7 /* GuillotineBinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */; };
+		CE7311162098C920002A8DE7 /* Rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311152098C920002A8DE7 /* Rect.cpp */; };
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CE7B4683208C77C2003DBDD1 /* LightmapLightProbeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */; };
 		CE7B4684208C77C2003DBDD1 /* LightmapLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */; };
@@ -654,6 +659,9 @@
 		CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		CE54EC411F939B5D00C9EDE3 /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
 		CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
+		CE5683E22099AC5E00C827F5 /* DemoScene2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoScene2.h; sourceTree = "<group>"; };
+		CE5683E32099AC5F00C827F5 /* DemoScene2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene2.mm; sourceTree = "<group>"; };
+		CE5683E72099CAE600C827F5 /* Cornell.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = Cornell.fbx; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
 		CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTexture2DArray.cpp; sourceTree = "<group>"; };
@@ -1130,6 +1138,12 @@
 		CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
 		CE73110A2096E04E002A8DE7 /* LightmapPacker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightmapPacker.cpp; sourceTree = "<group>"; };
 		CE73110B2096E04E002A8DE7 /* LightmapPacker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightmapPacker.hpp; sourceTree = "<group>"; };
+		CE73110E2098C8E2002A8DE7 /* GuillotineBinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GuillotineBinPack.h; sourceTree = "<group>"; };
+		CE73110F2098C8E2002A8DE7 /* MaxRectsBinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MaxRectsBinPack.cpp; sourceTree = "<group>"; };
+		CE7311102098C8E2002A8DE7 /* MaxRectsBinPack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaxRectsBinPack.h; sourceTree = "<group>"; };
+		CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuillotineBinPack.cpp; sourceTree = "<group>"; };
+		CE7311142098C920002A8DE7 /* Rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rect.h; sourceTree = "<group>"; };
+		CE7311152098C920002A8DE7 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rect.cpp; sourceTree = "<group>"; };
 		CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
 		CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
 		CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.vert; sourceTree = "<group>"; };
@@ -1978,6 +1992,8 @@
 				CE82A9F21FA2218A00F980A2 /* DemoSceneComposing.h */,
 				CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */,
 				CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */,
+				CE5683E22099AC5E00C827F5 /* DemoScene2.h */,
+				CE5683E32099AC5F00C827F5 /* DemoScene2.mm */,
 			);
 			path = MainViewController;
 			sourceTree = "<group>";
@@ -2082,6 +2098,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE5683E72099CAE600C827F5 /* Cornell.fbx */,
 				CEAB2A94209636350075399C /* sponza_v2.fbx */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
@@ -2187,6 +2204,7 @@
 		CE70F85F1F8F8EBD00AD9027 /* Containers */ = {
 			isa = PBXGroup;
 			children = (
+				CE73110D2098C8E2002A8DE7 /* BinPack */,
 				CE891BB8205D1E8B00D2B09D /* EmbreeRayTracer */,
 				CE895F97204C19B600E63140 /* SpatialHash */,
 				CE895F91204C0CEE00E63140 /* PackedLookupTable */,
@@ -2874,6 +2892,19 @@
 			path = PBR;
 			sourceTree = "<group>";
 		};
+		CE73110D2098C8E2002A8DE7 /* BinPack */ = {
+			isa = PBXGroup;
+			children = (
+				CE73110F2098C8E2002A8DE7 /* MaxRectsBinPack.cpp */,
+				CE7311102098C8E2002A8DE7 /* MaxRectsBinPack.h */,
+				CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */,
+				CE73110E2098C8E2002A8DE7 /* GuillotineBinPack.h */,
+				CE7311152098C920002A8DE7 /* Rect.cpp */,
+				CE7311142098C920002A8DE7 /* Rect.h */,
+			);
+			path = BinPack;
+			sourceTree = "<group>";
+		};
 		CE7B467D208C76B7003DBDD1 /* LightProbes */ = {
 			isa = PBXGroup;
 			children = (
@@ -3239,6 +3270,7 @@
 				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
+				CE5683E82099CAE700C827F5 /* Cornell.fbx in Resources */,
 				CE70FA681F8F8F7400AD9027 /* CookTorrance.frag in Resources */,
 				CE70FA691F8F8F7400AD9027 /* CookTorrance.vert in Resources */,
 				CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */,
@@ -3395,6 +3427,7 @@
 				CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */,
 				CE70FA8A1F8F912300AD9027 /* MainViewController.mm in Sources */,
 				ACC5392B2068ED5300B150B5 /* GLHDRTexture3D.cpp in Sources */,
+				CE7311132098C8E2002A8DE7 /* GuillotineBinPack.cpp in Sources */,
 				ACC539302068F6FE00B150B5 /* GLSLGridLightProbesUpdate.cpp in Sources */,
 				CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */,
 				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
@@ -3433,6 +3466,7 @@
 				CE70FA9A1F8F913100AD9027 /* AppDelegate.m in Sources */,
 				AC59F28D207373C100698E55 /* GLSLLightProbeLinksRendering.cpp in Sources */,
 				CE73110C2096E04E002A8DE7 /* LightmapPacker.cpp in Sources */,
+				CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */,
 				CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */,
 				CE891BC7205EB48500D2B09D /* GLLDRTexture2DSampler.cpp in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
@@ -3450,7 +3484,9 @@
 				CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */,
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
 				ACE9F61D20873BD5005ACC47 /* GLSLLightmapLightProbesUpdate.cpp in Sources */,
+				CE7311162098C920002A8DE7 /* Rect.cpp in Sources */,
 				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
+				CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,

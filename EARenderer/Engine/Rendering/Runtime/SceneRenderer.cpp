@@ -40,7 +40,7 @@ namespace EARenderer {
     // Surfels and surfel clusters
     mSurfelsGBuffer(surfelsGBufferData()),
     mSurfelClustersGBuffer(surfelClustersGBufferData()),
-//    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
+    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
     mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
@@ -302,6 +302,13 @@ namespace EARenderer {
 
 #pragma mark - Runtime
 
+    void SceneRenderer::bindDefaultFramebuffer() {
+        if (mDefaultRenderComponentsProvider) {
+            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
+            mDefaultRenderComponentsProvider->defaultViewport().apply();
+        }
+    }
+
     void SceneRenderer::renderShadowMapsForDirectionalLights() {
         // Fill shadow map
         mDirectionalDepthShader.bind();
@@ -391,7 +398,7 @@ namespace EARenderer {
 
         mLightmapProbesUpdateShader.bind();
         mLightmapProbesUpdateShader.ensureSamplerValidity([&] {
-//            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
+            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mLightmapProbeIndicesMap);
             mLightmapProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
             mLightmapProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mLightmapProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
@@ -414,16 +421,13 @@ namespace EARenderer {
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
-//        updateLightmapProbes();
+        updateLightmapProbes();
     }
 
     void SceneRenderer::renderMeshes() {
         DirectionalLight& directionalLight = mScene->directionalLight();
 
-        if (mDefaultRenderComponentsProvider) {
-            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-            mDefaultRenderComponentsProvider->defaultViewport().apply();
-        }
+        bindDefaultFramebuffer();
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -481,23 +485,24 @@ namespace EARenderer {
 
         renderSkybox();
 
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(Size2D(128));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect(Size2D(128));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {
+        bindDefaultFramebuffer();
         mSkyboxShader.bind();
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
@@ -508,10 +513,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderSurfelsGBuffer() {
-        if (mDefaultRenderComponentsProvider) {
-            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-        }
-        
+        bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
@@ -541,10 +543,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderSurfelLuminances() {
-        if (mDefaultRenderComponentsProvider) {
-            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-        }
-
+        bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
@@ -562,10 +561,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderSurfelClusterLuminances() {
-        if (mDefaultRenderComponentsProvider) {
-            mDefaultRenderComponentsProvider->bindSystemFramebuffer();
-        }
-
+        bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
@@ -583,6 +579,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderDiffuseGridProbes(float radius) {
+        bindDefaultFramebuffer();
         mDiffuseProbesVAO.bind();
         mGridProbeRenderingShader.bind();
         mGridProbeRenderingShader.setCamera(*mScene->camera());
@@ -597,6 +594,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderDiffuseLightmapProbes(float radius) {
+        bindDefaultFramebuffer();
         mDiffuseProbesVAO.bind();
         mLightmapProbeRenderingShader.bind();
         mLightmapProbeRenderingShader.setCamera(*mScene->camera());
@@ -609,6 +607,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderLinksForDiffuseProbe(size_t probeIndex) {
+        bindDefaultFramebuffer();
         mDiffuseProbesVAO.bind();
         mLightProbeLinksRenderingShader.bind();
         mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
