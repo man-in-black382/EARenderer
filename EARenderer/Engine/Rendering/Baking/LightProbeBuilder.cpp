@@ -15,46 +15,8 @@
 #include <stdexcept>
 
 namespace EARenderer {
-    
-#pragma mark - Lifecycle
-    
-    LightProbeBuilder::LightProbeBuilder(const Size2D& probeCaptureResolution)
-    :
-    mEnvironmentMap(probeCaptureResolution),
-    mFramebuffer(probeCaptureResolution),
-    mDepthRenderbuffer(probeCaptureResolution),
-    mDepthCubemap(probeCaptureResolution)
-    { }
-    
+
 #pragma mark - Private
-    
-    void LightProbeBuilder::captureEnvironmentForProbe(Scene *scene, const LightProbe& probe) {
-        DirectionalLight& directionalLight = scene->directionalLight();
-        
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        mEnvironmentCaptureShader.bind();
-        mEnvironmentCaptureShader.setLightProbe(probe);
-        mEnvironmentCaptureShader.setLight(directionalLight);
-        
-        for (ID staticInstanceID : scene->staticMeshInstanceIDs()) {
-            auto& instance = scene->meshInstances()[staticInstanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-            
-            mEnvironmentCaptureShader.setModelMatrix(instance.transformation().modelMatrix());
-            
-            for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
-                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
-                
-                mEnvironmentCaptureShader.ensureSamplerValidity([this, &material]() {
-                    mEnvironmentCaptureShader.setMaterial(material);
-                });
-                
-                subMesh.draw();
-            }
-        }
-    }
 
     float LightProbeBuilder::surfelSolidAngle(Scene *scene, const Surfel& surfel, const DiffuseLightProbe& probe) {
         glm::vec3 Wps = surfel.position - probe.position;
@@ -150,13 +112,15 @@ namespace EARenderer {
         iMinUV = glm::clamp(iMinUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
         iMaxUV = glm::clamp(iMaxUV, glm::ivec2(0), glm::ivec2(lightmapResolution));
 
-        glm::vec2 step = 1.0f / lightmapResolution / 2.0f;
+        glm::vec2 step = 1.0f / lightmapResolution;
 
         for (float v = minUV.y; v <= maxUV.y; v += step.y) {
             for (float u = minUV.x; u <= maxUV.x; u += step.x) {
-                size_t flatIndex = u * lightmapResolution.x + v * lightmapResolution.x * lightmapResolution.y;
+                size_t indexX = u * (lightmapResolution.x - 1);
+                size_t indexY = v * (lightmapResolution.y - 1);
+                size_t flatIndex = indexY * lightmapResolution.x + indexX;
 
-                if (scene->diffuseProbeLightmapIndices()[flatIndex] == -1) {
+                if (scene->diffuseProbeLightmapIndices()[flatIndex] == InvalidProbeIndex) {
                     Triangle3D UVs(glm::vec3(vertex0.lightmapCoords, 0.0),
                                    glm::vec3(vertex1.lightmapCoords, 0.0),
                                    glm::vec3(vertex2.lightmapCoords, 0.0));
@@ -271,27 +235,6 @@ namespace EARenderer {
     }
 
 #pragma mark - Public interface
-    
-    void LightProbeBuilder::buildAndPlaceProbesInScene(Scene* scene) {
-        //        mFramebuffer.bind();
-        //        mFramebuffer.attachTexture(mEnvironmentMap);
-        //        mFramebuffer.attachTexture(mDepthCubemap);
-        //        mFramebuffer.viewport().apply();
-        //
-        //        AxisAlignedBox3D bb = scene->boundingBox();
-        //        glm::vec3 step { bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z };
-        //        step /= mSpaceDivisionResolution;
-        //
-        //        for (int32_t x = bb.min.x; x < bb.max.x; x += step.x) {
-        //            for (int32_t y = bb.min.y; y < bb.max.y; y += step.y) {
-        //                for (int32_t z = bb.min.z; z < bb.max.z; z += step.z) {
-        //                    const auto& probe = LightProbe({ x, y, z });
-        //                    captureEnvironmentForProbe(scene, probe);
-        //                    scene->lightProbes().emplace(probe);
-        //                }
-        //            }
-        //        }
-    }
 
     void LightProbeBuilder::buildDynamicGeometryProbes(Scene *scene) {
         AxisAlignedBox3D bb = scene->lightBakingVolume();

@@ -122,12 +122,12 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.demoScene = demoScene;
     
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder(EARenderer::Size2D(256));
+    self.lightProbeBuilder = new EARenderer::LightProbeBuilder();
 
     self.surfelGenerator->generateStaticGeometrySurfels();
 
     EARenderer::LightmapPacker lightmapPacker;
-    lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
+    auto debugUVBoxes = lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
 
 //    self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
     self.lightProbeBuilder->buildStaticGeometryProbes(self.scene);
@@ -146,7 +146,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() });
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(),  /*self.scene->lightBakingVolume()*/debugUVBoxes );
 
     [self subscribeForEvents];
 }
@@ -159,7 +159,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.sceneRenderer->renderMeshes();
 //    self.sceneRenderer->renderDiffuseGridProbes(0.1);
-//    self.sceneRenderer->renderDiffuseLightmapProbes(0.1);
+    self.sceneRenderer->renderDiffuseLightmapProbes(0.02);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(0);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();
@@ -167,7 +167,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 //    self.triangleRenderer->render();
-//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;

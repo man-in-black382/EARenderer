@@ -472,5 +472,7 @@ void main() {
         oFragColor = vec4(EvaluateGridSphericalHarmonics(N), 1.0);
     }
 
+    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(oFragColor.rgb), 1.0);
+
     oFragColor = vec4(correctColor, 1.0);
 }

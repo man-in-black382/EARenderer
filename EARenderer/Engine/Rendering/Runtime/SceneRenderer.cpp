@@ -422,14 +422,15 @@ namespace EARenderer {
         averageSurfelClusterLuminances();
         updateGridProbes();
         updateLightmapProbes();
+
+        bindDefaultFramebuffer();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void SceneRenderer::renderMeshes() {
         DirectionalLight& directionalLight = mScene->directionalLight();
 
         bindDefaultFramebuffer();
-        
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
         mCookTorranceShader.ensureSamplerValidity([&]() {
@@ -499,6 +500,8 @@ namespace EARenderer {
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glEnable(GL_DEPTH_TEST);
+
+        bindDefaultFramebuffer();
     }
 
     void SceneRenderer::renderSkybox() {

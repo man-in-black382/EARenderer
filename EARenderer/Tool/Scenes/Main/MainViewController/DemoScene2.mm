@@ -27,14 +27,14 @@
 - (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene
 {
     // Meshes
-    NSString *cornellBoxPath = [[NSBundle mainBundle] pathForResource:@"Cornell" ofType:@"fbx"];
+    NSString *cornellBoxPath = [[NSBundle mainBundle] pathForResource:@"cornell_box_lux" ofType:@"obj"];
 
     EARenderer::ID cornellBoxMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(cornellBoxPath.UTF8String)));
 
     // Materials
     
     EARenderer::ID redMaterialID = [self load_FabricC_MaterialToPool:resourcePool];
-    EARenderer::ID greenMaterialID = [self load_FabricA_MaterialToPool:resourcePool];
+    EARenderer::ID greenMaterialID = [self load_FabricE_MaterialToPool:resourcePool];
     EARenderer::ID grayMaterialID = [self loadPatchyCementMaterialToPool:resourcePool];
 
     // Instances
@@ -50,13 +50,13 @@
         
         printf("Material %s\n", subMesh.materialName().c_str());
         
-//        if (subMesh.materialName() == "cbox_red") {
-//            cornellBoxInstance.setMaterialIDForSubMeshID(redMaterialID, subMeshID);
-//        } else if (subMesh.materialName() == "cbox_green") {
-//            cornellBoxInstance.setMaterialIDForSubMeshID(greenMaterialID, subMeshID);
-//        } else {
+        if (subMesh.materialName() == "Material_#74") {
+            cornellBoxInstance.setMaterialIDForSubMeshID(redMaterialID, subMeshID);
+        } else if (subMesh.materialName() == "Material_#73") {
+            cornellBoxInstance.setMaterialIDForSubMeshID(greenMaterialID, subMeshID);
+        } else {
             cornellBoxInstance.setMaterialIDForSubMeshID(grayMaterialID, subMeshID);
-//        }
+        }
     }
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(cornellBoxInstance));

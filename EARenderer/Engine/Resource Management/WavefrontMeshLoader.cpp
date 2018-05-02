@@ -119,7 +119,7 @@ namespace EARenderer {
 
             lastSubMesh.addVertex(Vertex1P1N2UV1T1BT(mVertices[fixedVIdx],
                                                      isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec3(),
-                                                     glm::vec2(0.0),
+                                                     isTexCoordPresent ? mTexCoords[fixedTIdx] : glm::vec2(),
                                                      isNormalPresent ? mNormals[fixedNIdx] : glm::vec3()));
             
             shouldCalculateNormal = !isNormalPresent;

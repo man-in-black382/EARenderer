@@ -12,11 +12,11 @@
 
 namespace EARenderer {
 
-    void LightmapPacker::remapSubMesh(SubMesh& subMesh, const rbp::Rect& rect, const glm::vec2& gap) const {
+    std::vector<AxisAlignedBox3D> LightmapPacker::remapStaticGeometryToSingleLightmap(Scene *scene) const {
 
-    }
-
-    void LightmapPacker::remapStaticGeometryToSingleLightmap(Scene *scene) const {
+        // DEBUG
+        std::vector<AxisAlignedBox3D> debugBoxes;
+        //
 
         std::vector<float> uvRectSizes;
 
@@ -25,8 +25,9 @@ namespace EARenderer {
 
         glm::vec2 onePixelGap = twoPixelGap / 2.0f;
 
-        int32_t exp = std::numeric_limits<int32_t>::max() * 0.99;
-        rbp::MaxRectsBinPack binPack(exp * 1.01, exp * 1.01);
+        size_t binSize = std::numeric_limits<int32_t>::max();
+        int32_t initialScaleDown = binSize * 0.90;
+        rbp::MaxRectsBinPack binPack(binSize, binSize);
 
         for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
             auto& meshInstance = scene->meshInstances()[meshInstanceID];
@@ -41,13 +42,13 @@ namespace EARenderer {
 
 //                uvRectSizes.push_back(squareSide);
 
-                int32_t size = squareSide * exp;
+                int32_t size = squareSide * initialScaleDown;
                 rbp::Rect uvRect = binPack.Insert(size, size, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic::RectBestAreaFit);
 
-                float normX = (float)uvRect.x / exp;
-                float normY = (float)uvRect.y / exp;
-                float normWidth = (float)uvRect.width / exp;
-                float normHeight = (float)uvRect.height / exp;
+                float normX = (float)uvRect.x / binSize;
+                float normY = (float)uvRect.y / binSize;
+                float normWidth = (float)uvRect.width / binSize;
+                float normHeight = (float)uvRect.height / binSize;
 
                 glm::vec2 scaleDown((normWidth - twoPixelGap.x) / normWidth,
                                     (normWidth - twoPixelGap.y) / normHeight);
@@ -55,18 +56,25 @@ namespace EARenderer {
                 if (scaleDown.x > 0.0 && scaleDown.y > 0.0) {
                     normWidth *= scaleDown.x;
                     normHeight *= scaleDown.y;
+
+                    for (auto& vertex : subMesh.vertices()) {
+                        printf("Lightmap coords before: %f %f \n", vertex.lightmapCoords.x, vertex.lightmapCoords.y);
+                        vertex.lightmapCoords *= glm::vec2(normWidth, normHeight);
+                        vertex.lightmapCoords += glm::vec2(normX + onePixelGap.x, normY + onePixelGap.y);
+                        printf("Lightmap coords after: %f %f \n", vertex.lightmapCoords.x, vertex.lightmapCoords.y);
+                    }
+
+                    subMesh.finalizeVertexBuffer();
                 }
 
-                for (auto& vertex : subMesh.vertices()) {
-                    printf("Lightmap coords before: %f %f \n", vertex.lightmapCoords.x, vertex.lightmapCoords.y);
-                    vertex.lightmapCoords *= glm::vec2(normWidth, normHeight);
-                    vertex.lightmapCoords += glm::vec2(normX + onePixelGap.x, normY + onePixelGap.y);
-                    printf("Lightmap coords after: %f %f \n", vertex.lightmapCoords.x, vertex.lightmapCoords.y);
-                }
-
-                subMesh.finalizeVertexBuffer();
+                // DEBUG
+                glm::vec3 min(normX, normY, 0.0);
+                glm::vec3 max(normX + normWidth, normY + normHeight, 0.1);
+                debugBoxes.emplace_back(min, max);
             }
         }
+
+        return debugBoxes;
 
 //        std::sort(uvRectSizes.begin(), uvRectSizes.end(), [](const auto& lhs, const auto& rhs) { return lhs > rhs; });
 

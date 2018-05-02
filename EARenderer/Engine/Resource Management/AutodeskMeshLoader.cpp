@@ -88,6 +88,7 @@ namespace EARenderer {
 
         size_t polygonCount = mesh->GetPolygonCount();
         FbxVector4* controlPoints = mesh->GetControlPoints();
+        size_t controlPointsCount = mesh->GetControlPointsCount();
 
         extractMaterials(mesh);
 

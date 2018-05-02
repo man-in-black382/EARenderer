@@ -26,12 +26,6 @@ namespace EARenderer {
     class LightProbeBuilder {
     private:
         static constexpr uint32_t InvalidProbeIndex = -1;
-
-        GLFramebuffer mFramebuffer;
-        GLDepthRenderbuffer mDepthRenderbuffer;
-        GLDepthTextureCubemap mDepthCubemap;
-        GLSLLightProbeEnvironmentCapture mEnvironmentCaptureShader;
-        uint32_t mSpaceDivisionResolution;
         
         void captureEnvironmentForProbe(Scene *scene, const LightProbe& probe);
 
@@ -50,12 +44,7 @@ namespace EARenderer {
 
         void fillProbeIndexHoles(Scene *scene);
         
-    public:
-        GLHDRTextureCubemap mEnvironmentMap;
-        
-        LightProbeBuilder(const Size2D& probeCaptureResolution);
-        
-        void buildAndPlaceProbesInScene(Scene *scene);
+    public:                
         void buildDynamicGeometryProbes(Scene *scene);
         void buildStaticGeometryProbes(Scene *scene);
     };
