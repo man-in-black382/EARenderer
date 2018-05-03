@@ -19,7 +19,6 @@
 #include "DefaultRenderComponentsProviding.hpp"
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
-#include "LightProbeBuilder.hpp"
 
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"

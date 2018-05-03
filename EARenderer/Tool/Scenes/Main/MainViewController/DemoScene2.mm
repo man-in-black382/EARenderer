@@ -9,7 +9,6 @@
 #import "DemoScene2.h"
 
 #import "MeshInstance.hpp"
-#import "LightProbeBuilder.hpp"
 #import "SurfelGenerator.hpp"
 #import "Measurement.hpp"
 

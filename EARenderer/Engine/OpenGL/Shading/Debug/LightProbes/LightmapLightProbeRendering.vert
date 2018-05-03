@@ -9,6 +9,7 @@ layout (location = 2) in vec2 iLightmapCoords;
 // Output
 
 out InterfaceBlock {
+    vec3 normal;
     vec2 lightmapCoords;
 } vs_out;
 
@@ -16,5 +17,6 @@ out InterfaceBlock {
 
 void main() {
     vs_out.lightmapCoords = iLightmapCoords;
+    vs_out.normal = iNormal;
     gl_Position = vec4(iPosition, 1.0);
 }

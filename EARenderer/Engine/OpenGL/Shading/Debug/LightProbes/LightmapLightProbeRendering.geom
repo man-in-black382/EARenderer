@@ -8,6 +8,7 @@ layout (triangle_strip, max_vertices = 4) out;
 // Input
 
 in InterfaceBlock {
+    vec3 normal;
     vec2 lightmapCoords;
 } gs_in[];
 
@@ -45,12 +46,25 @@ mat4 RotationMatrix(vec3 probePosition) {
 
 void EmitBillboardVertex(vec2 xy, mat4 rotationMatrix) {
     vec4 vertex = vec4(xy, 0.0, 0.0);
+
+    // Pass raw billboard data to fragment shader
     vLightmapCoords = gs_in[0].lightmapCoords;
     vNormalMatrix = mat3(rotationMatrix);
     vCurrentPosition = vertex.xyz;
+
+    // Rotate to viewer
     vertex = rotationMatrix * vertex;
+
+    // Translate to probe's position
     vertex = vertex + gl_in[0].gl_Position;
+
+    // Move billboard out of geometry to maintain an immersion of a solid sphere
+    vec3 displacement = gs_in[0].normal * vec3(uRadius);
+    vertex = vertex + vec4(displacement, 0.0);
+
+    // Standard camera transformation
     vertex = uCameraSpaceMat * vertex;
+
     gl_Position = vertex;
     EmitVertex();
 }

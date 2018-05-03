@@ -202,6 +202,11 @@ namespace EARenderer {
         mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
     }
 
+    void Scene::destroyAuxiliaryData() {
+        mRaytracer = nullptr;
+        mOctree = nullptr;
+    }
+
     glm::ivec3 Scene::preferredProbeGridResolution() const {
         glm::vec3 bbLengths = mLightBakingVolume.max - mLightBakingVolume.min;
         return bbLengths / mGridProbesDistance;

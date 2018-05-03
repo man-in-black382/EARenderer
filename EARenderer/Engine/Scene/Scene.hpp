@@ -42,7 +42,7 @@ namespace EARenderer {
 
         size_t mOctreeDepth = 5;
         float mGridProbesDistance = 0.75;
-        Size2D mProbesLightmapResolution = Size2D(45);
+        Size2D mProbesLightmapResolution = Size2D(32);
         float mStaticGeometryArea = 0.0;
 
         DirectionalLight mDirectionalLight;
@@ -119,6 +119,11 @@ namespace EARenderer {
         void calculateGeometricProperties();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
+
+        /**
+         Destroy helper objects that take up a lot of memory, but can be recreated at any time (ray tracers, etc.)
+         */
+        void destroyAuxiliaryData();
     };
     
 }

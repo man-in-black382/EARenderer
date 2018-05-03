@@ -14,13 +14,12 @@
 
 #include <glm/vec2.hpp>
 
-// DEBUG
-#include <vector>
-#include <AxisAlignedBox3D.hpp>
-
 namespace EARenderer {
 
     class LightmapPacker {
+    private:
+        using SubMeshRectSizePair = std::pair<SubMesh *, int32_t>;
+        
     public:
         /**
          Remaps lightmap coords of each static mesh in a way that'll make all coords
@@ -28,7 +27,7 @@ namespace EARenderer {
 
          @param scene Scene object providing static meshes
          */
-        std::vector<AxisAlignedBox3D> remapStaticGeometryToSingleLightmap(Scene *scene) const;
+        void remapStaticGeometryToSingleLightmap(Scene *scene) const;
     };
 
 }

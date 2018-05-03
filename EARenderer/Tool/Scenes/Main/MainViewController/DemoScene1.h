@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 #import "DemoSceneComposing.h"
-#import "LightProbeBuilder.hpp"
 
 #import <glm/vec3.hpp>
 

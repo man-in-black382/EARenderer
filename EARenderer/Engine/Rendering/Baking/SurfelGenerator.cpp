@@ -110,7 +110,7 @@ namespace EARenderer {
             
             float area = triangle.area();
             
-            // There is very likely to be degenerate triangles which we don't want
+            // There are very likely to be degenerate triangles which we don't want
             if (area <= 1e-06) {
                 continue;
             }

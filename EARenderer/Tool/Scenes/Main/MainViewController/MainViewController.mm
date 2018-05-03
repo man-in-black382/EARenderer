@@ -32,7 +32,8 @@
 #import "TriangleRenderer.hpp"
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
-#import "LightProbeBuilder.hpp"
+#import "GridDiffuseLightProbeGenerator.hpp"
+#import "LightmapDiffuseLightProbeGenerator.hpp"
 #import "LightmapPacker.hpp"
 
 #import "Choreograph.h"
@@ -56,8 +57,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
-@property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
-@property (assign, nonatomic) EARenderer::LightProbeBuilder *lightProbeBuilder;
 @property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
 @property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
 
@@ -89,8 +88,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     delete self.frameMeter;
     delete self.frequentEventsThrottle;
     delete self.surfelRenderer;
-    delete self.surfelGenerator;
-    delete self.lightProbeBuilder;
     delete self.triangleRenderer;
     delete self.boxRenderer;
 }
@@ -120,17 +117,18 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
-    
-    self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.lightProbeBuilder = new EARenderer::LightProbeBuilder();
-
-    self.surfelGenerator->generateStaticGeometrySurfels();
 
     EARenderer::LightmapPacker lightmapPacker;
-    auto debugUVBoxes = lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
+    lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
 
-//    self.lightProbeBuilder->buildDynamicGeometryProbes(self.scene);
-    self.lightProbeBuilder->buildStaticGeometryProbes(self.scene);
+    EARenderer::SurfelGenerator surfelGenerator(resourcePool, self.scene);
+    surfelGenerator.generateStaticGeometrySurfels();
+
+//    EARenderer::GridDiffusawweLightProbeGenerator gridProbeGenerator;
+//    gridProbeGenerator.generateProbes(self.scene);
+
+    EARenderer::LightmapDiffuseLightProbeGenerator lightmapProbeGenerator;
+    lightmapProbeGenerator.generateProbes(self.scene);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
@@ -146,7 +144,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(),  /*self.scene->lightBakingVolume()*/debugUVBoxes );
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() } );
+
+    self.scene->destroyAuxiliaryData();
 
     [self subscribeForEvents];
 }
@@ -167,7 +167,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 //    self.triangleRenderer->render();
-    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;
