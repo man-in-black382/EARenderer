@@ -252,7 +252,7 @@ namespace EARenderer {
                     mSurfelFlatStorage.insert(surfel);
                 }
 
-                // In any case, the algorithm then checks to see if triangle is completely covered by any surfel from the surfel set
+                // In any case, the algorithm then checks to see whether triangle is completely covered by any surfel from the surfel set
                 auto& surfelPositionTriangle = surfelCandidate.logarithmicBinIterator->positions;
                 float triangleArea = surfelPositionTriangle.area();
                 float subTriangleArea = triangleArea / 4.0f;
