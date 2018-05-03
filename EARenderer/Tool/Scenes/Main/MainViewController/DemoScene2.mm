@@ -34,7 +34,7 @@
     
     EARenderer::ID redMaterialID = [self load_FabricC_MaterialToPool:resourcePool];
     EARenderer::ID greenMaterialID = [self load_FabricE_MaterialToPool:resourcePool];
-    EARenderer::ID grayMaterialID = [self loadPatchyCementMaterialToPool:resourcePool];
+    EARenderer::ID grayMaterialID = [self loadLimestoneRockMaterialToPool:resourcePool];
 
     // Instances
     
@@ -59,8 +59,8 @@
     }
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(cornellBoxInstance));
-    scene->directionalLight().setColor(EARenderer::Color(15.0, 15.0, 15.0));
-    scene->directionalLight().setDirection(glm::vec3(-1, -1, -1));
+    scene->directionalLight().setColor(EARenderer::Color(10.0, 10.0, 10.0));
+    scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
@@ -112,14 +112,14 @@
     });
 }
 
-- (EARenderer::ID)loadPatchyCementMaterialToPool:(EARenderer::ResourcePool *)pool
+- (EARenderer::ID)loadLimestoneRockMaterialToPool:(EARenderer::ResourcePool *)pool
 {
     return pool->materials.insert({
-        [self pathForResource:@"patchy_cement1_Base_Color.png"],
-        [self pathForResource:@"patchy_cement1_Normal.png"],
-        [self pathForResource:@"patchy_cement1_Roughness.png"],
-        [self pathForResource:@"patchy_cement1_Ambient_Occlusion.png"],
-        [self pathForResource:@"patchy_cement1_Metallic.png"]
+        [self pathForResource:@"limestone-rock-albedo.png"],
+        [self pathForResource:@"limestone-rock-normal.png"],
+        [self pathForResource:@"limestone-rock-roughness.png"],
+        [self pathForResource:@"limestone-rock-ao.png"],
+        [self pathForResource:@"limestone-rock-metalness.png"]
     });
 }
 

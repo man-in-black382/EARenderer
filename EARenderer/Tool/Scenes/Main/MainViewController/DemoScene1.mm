@@ -43,7 +43,6 @@
     // Materials
     
     EARenderer::ID ironMaterialID = [self loadIronMaterialToPool:resourcePool];
-    EARenderer::ID patchyCementMaterialID = [self loadPatchyCementMaterialToPool:resourcePool];
     EARenderer::ID scuffedTitaniumMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
     
     // Sponza materials
@@ -58,7 +57,7 @@
     EARenderer::ID columnA_MaterialID = [self load_ColumnA_MaterialToPool:resourcePool];
     EARenderer::ID columnB_MaterialID = [self load_ColumnB_MaterialToPool:resourcePool];
     EARenderer::ID columnC_MaterialID = [self load_ColumnC_MaterialToPool:resourcePool];
-    EARenderer::ID floor_MaterialID = [self load_Floor_MaterialToPool:resourcePool];
+    EARenderer::ID floor_MaterialID = [self loadLimestoneRockMaterialToPool:resourcePool];
     EARenderer::ID details_MaterialID = [self load_Details_MaterialToPool:resourcePool];
     EARenderer::ID flagpole_MaterialID = [self load_FlagPole_MaterialToPool:resourcePool];
     EARenderer::ID fabricA_MaterialID = [self load_FabricA_MaterialToPool:resourcePool];
@@ -145,22 +144,11 @@
     EARenderer::MeshInstance ironSphereInstance(sphereMeshID);
     ironSphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
     
-    EARenderer::MeshInstance patchyCementSphereInstance(sphereMeshID);
-    patchyCementSphereInstance.setMaterialIDForAllSubmeshes(patchyCementMaterialID);
-    EARenderer::Transformation t = patchyCementSphereInstance.transformation();
-    t.translation.x = 0.5;
-    patchyCementSphereInstance.setTransformation(t);
-    
     EARenderer::MeshInstance scuffedTitaniumSphereInstance(sphereMeshID);
     scuffedTitaniumSphereInstance.setMaterialIDForAllSubmeshes(scuffedTitaniumMaterialID);
-    t = scuffedTitaniumSphereInstance.transformation();
+    EARenderer::Transformation t = scuffedTitaniumSphereInstance.transformation();
     t.translation.x = -0.5;
     scuffedTitaniumSphereInstance.setTransformation(t);
-    
-    EARenderer::MeshInstance planeInstance(planeMeshID);
-    planeInstance.setMaterialIDForAllSubmeshes(patchyCementMaterialID);
-    t.translation.y = 0.5;
-    planeInstance.setTransformation(t);
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
 //    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
@@ -240,6 +228,17 @@
 
 #pragma mark - Other materials
 
+- (EARenderer::ID)loadLimestoneRockMaterialToPool:(EARenderer::ResourcePool *)pool
+{
+    return pool->materials.insert({
+        [self pathForResource:@"limestone-rock-albedo.png"],
+        [self pathForResource:@"limestone-rock-normal.png"],
+        [self pathForResource:@"limestone-rock-roughness.png"],
+        [self pathForResource:@"limestone-rock-ao.png"],
+        [self pathForResource:@"limestone-rock-metalness.png"]
+    });
+}
+
 - (EARenderer::ID)loadIronMaterialToPool:(EARenderer::ResourcePool *)pool
 {
     NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
@@ -288,17 +287,6 @@
         std::string(metallicMapPath.UTF8String),
         std::string(roughnessMapPath.UTF8String),
         std::string(blankImagePath.UTF8String)
-    });
-}
-
-- (EARenderer::ID)loadPatchyCementMaterialToPool:(EARenderer::ResourcePool *)pool
-{
-    return pool->materials.insert({
-        [self pathForResource:@"patchy_cement1_Base_Color.png"],
-        [self pathForResource:@"patchy_cement1_Normal.png"],
-        [self pathForResource:@"patchy_cement1_Roughness.png"],
-        [self pathForResource:@"patchy_cement1_Ambient_Occlusion.png"],
-        [self pathForResource:@"patchy_cement1_Metallic.png"]
     });
 }
 

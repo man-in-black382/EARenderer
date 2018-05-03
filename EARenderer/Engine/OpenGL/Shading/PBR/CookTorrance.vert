@@ -66,5 +66,4 @@ void main() {
     
     vPosInCameraSpace = uCameraSpaceMat * worldPosition;
     gl_Position = vPosInCameraSpace;
-    
 }

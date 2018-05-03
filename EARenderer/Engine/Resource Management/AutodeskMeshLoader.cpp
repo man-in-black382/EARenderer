@@ -141,8 +141,14 @@ namespace EARenderer {
             }
 
             switch (i) {
-                case 0: mSubMeshes->back().vertices().back().textureCoords = glm::vec3(uv[0], uv[1], 0.0); break;
-                case 1: mSubMeshes->back().vertices().back().lightmapCoords = glm::vec2(uv[0], uv[1]); break;
+                case 0:
+                    mSubMeshes->back().vertices().back().textureCoords = glm::vec3(uv[0], uv[1], 0.0);
+                    // Fill lightmap coords with texture coords in case second UV channel is not provided
+                    mSubMeshes->back().vertices().back().lightmapCoords = glm::vec2(uv[0], uv[1]);
+                    break;
+                case 1:
+                    mSubMeshes->back().vertices().back().lightmapCoords = glm::vec2(uv[0], uv[1]);
+                    break;
                 default: return;
             }
         }

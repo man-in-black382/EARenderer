@@ -41,8 +41,18 @@ namespace EARenderer {
 
         glm::vec2 step = 1.0f / lightmapResolution;
 
-        for (float v = minUV.y; v <= maxUV.y; v += step.y) {
-            for (float u = minUV.x; u <= maxUV.x; u += step.x) {
+        float minUVXAligned = floor(minUV.x * lightmapResolution.x) / lightmapResolution.x - step.x / 2.0;
+        float minUVYAligned = floor(minUV.y * lightmapResolution.y) / lightmapResolution.y - step.y / 2.0;
+
+        float maxUVXAligned = ceil(maxUV.x * lightmapResolution.x) / lightmapResolution.x + step.x / 2.0;
+        float maxUVYAligned = ceil(maxUV.y * lightmapResolution.y) / lightmapResolution.y + step.y / 2.0;
+
+//        for (float v = step.y / 2.0; v <= 1.0; v += step.y) {
+//            for (float u = step.x / 2.0; u <= 1.0; u += step.x) {
+        for (float v = minUVYAligned; v <= maxUVYAligned; v += step.y) {
+            for (float u = minUVXAligned; u <= maxUVXAligned; u += step.x) {
+//        for (float v = minUV.y; v <= maxUV.y; v += step.y) {
+//            for (float u = minUV.x; u <= maxUV.x; u += step.x) {
                 size_t indexX = u * (lightmapResolution.x);
                 size_t indexY = v * (lightmapResolution.y);
                 size_t flatIndex = indexY * lightmapResolution.x + indexX;

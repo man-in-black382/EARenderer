@@ -265,7 +265,7 @@ float GeometrySmith(float NdotL, float NdotV, float roughness) {
     return ggx1 * ggx2;
 }
 
-vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, vec3 radiance) {
+vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, vec3 radiance, vec3 indirectRadiance, float shadow) {
     float NdotL     = max(dot(N, L), 0.0);
     float NdotV     = max(dot(N, V), 0.0);
     
@@ -281,12 +281,17 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
     
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
-    
-    vec3 diffuse    = Kd * albedo / PI * NdotL;
-//    diffuse         += Kd * EvaluateSphericalHarmonics(N);
-    specular        *= NdotL;
 
-    return (diffuse + specular) * radiance;
+    // Radiance of analytical light with shadow applied and Normal to Light vector angle accounted
+    vec3 shadowedLambertianDirectRadiance = radiance * (1.0 - shadow) * NdotL;
+
+    // Lambertian diffuse component with indirect light applied
+    vec3 diffuse    = Kd * (albedo / PI) * (shadowedLambertianDirectRadiance + indirectRadiance);
+
+    // Specular component is not affected by indirect light (probably will by a reflection probe later)
+    specular        *= shadowedLambertianDirectRadiance;
+
+    return diffuse + specular;
 }
 
 vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
@@ -456,22 +461,22 @@ void main() {
     } else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
     }
-    
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance);
-    
-    // Apply shadow factor
-    specularAndDiffuse *= 1.0 - shadow;
+
+    vec3 indirectRadiance = vec3(0.0);
+
+    if (uGeometryType == kGeometryTypeStatic) {
+        indirectRadiance = EvaluateLightmapSphericalHarmonics(N);
+    } else if (uGeometryType == kGeometryTypeDynamic) {
+        indirectRadiance = EvaluateGridSphericalHarmonics(N);
+    }
+
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, indirectRadiance, shadow);
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-    if (uGeometryType == kGeometryTypeStatic) {
-        oFragColor = vec4(EvaluateLightmapSphericalHarmonics(N), 1.0);
-    } else if (uGeometryType == kGeometryTypeDynamic) {
-        oFragColor = vec4(EvaluateGridSphericalHarmonics(N), 1.0);
-    }
+    oFragColor = vec4(correctColor, 1.0);
 
-//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(oFragColor.rgb), 1.0);
-//    oFragColor = vec4(correctColor, 1.0);
+//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 }
