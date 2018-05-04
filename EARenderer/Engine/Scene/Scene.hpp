@@ -36,6 +36,9 @@
 namespace EARenderer {
     
     class Scene {
+    public:
+        using SubMeshInstancePair = std::pair<SubMesh *, ID>;
+
     private:
 
 #pragma mark - Member variables
@@ -50,6 +53,8 @@ namespace EARenderer {
 
         PackedLookupTable<MeshInstance> mMeshInstances;
         PackedLookupTable<LightProbe> mLightProbes;
+
+        std::vector<SubMeshInstancePair> mSortedStaticSubMeshes;
 
         std::vector<Surfel> mSurfels;
         std::vector<SurfelCluster> mSurfelClusters;
@@ -81,6 +86,13 @@ namespace EARenderer {
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
+
+        /**
+         All scene's sub meshes sorted by descending triangle area values
+
+         @return sorted vector of pointers to sub meshes
+         */
+        const std::vector<SubMeshInstancePair>& sortedStaticSubMeshes();
 
         std::vector<Surfel>& surfels();
         std::vector<SurfelCluster>& surfelClusters();
@@ -119,6 +131,7 @@ namespace EARenderer {
         void calculateGeometricProperties();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
+        void sortStaticSubMeshes();
 
         /**
          Destroy helper objects that take up a lot of memory, but can be recreated at any time (ray tracers, etc.)

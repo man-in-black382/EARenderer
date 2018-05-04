@@ -114,9 +114,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
+
+    self.scene->sortStaticSubMeshes();
 
     EARenderer::LightmapPacker lightmapPacker;
     lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
@@ -159,7 +161,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.sceneRenderer->renderMeshes();
 //    self.sceneRenderer->renderDiffuseGridProbes(0.1);
-//    self.sceneRenderer->renderDiffuseLightmapProbes(0.02);
+    self.sceneRenderer->renderDiffuseLightmapProbes(0.1);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(0);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();

@@ -282,14 +282,14 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
 
-    // Radiance of analytical light with shadow applied and Normal to Light vector angle accounted
-    vec3 shadowedLambertianDirectRadiance = radiance * (1.0 - shadow) * NdotL;
+    // Radiance of analytical light with shadow applied and Normal to Light vectors angle accounted
+    vec3 shadowedDirectRadiance = radiance * (1.0 - shadow) * NdotL;
 
     // Lambertian diffuse component with indirect light applied
-    vec3 diffuse    = Kd * (albedo / PI) * (shadowedLambertianDirectRadiance + indirectRadiance);
+    vec3 diffuse    = Kd * (albedo / PI) * (shadowedDirectRadiance + indirectRadiance);
 
     // Specular component is not affected by indirect light (probably will by a reflection probe later)
-    specular        *= shadowedLambertianDirectRadiance;
+    specular        *= shadowedDirectRadiance;
 
     return diffuse + specular;
 }

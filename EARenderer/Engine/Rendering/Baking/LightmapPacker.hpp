@@ -17,9 +17,6 @@
 namespace EARenderer {
 
     class LightmapPacker {
-    private:
-        using SubMeshRectSizePair = std::pair<SubMesh *, int32_t>;
-        
     public:
         /**
          Remaps lightmap coords of each static mesh in a way that'll make all coords

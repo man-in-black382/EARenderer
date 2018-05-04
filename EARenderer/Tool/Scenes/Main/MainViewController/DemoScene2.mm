@@ -19,6 +19,9 @@
 
 @interface DemoScene2 ()
 
+@property (assign, nonatomic) choreograph::Timeline *animationTimeline;
+@property (assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
+
 @end
 
 @implementation DemoScene2
@@ -34,7 +37,7 @@
     
     EARenderer::ID redMaterialID = [self load_FabricC_MaterialToPool:resourcePool];
     EARenderer::ID greenMaterialID = [self load_FabricE_MaterialToPool:resourcePool];
-    EARenderer::ID grayMaterialID = [self loadLimestoneRockMaterialToPool:resourcePool];
+    EARenderer::ID grayMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
 
     // Instances
     
@@ -71,18 +74,15 @@
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
         scene->buildStaticGeometryRaytracer();
     });
+
+    [self setupAnimations];
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics
 {
-//    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
-//    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
-
-//    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
-//    auto transformation = sphereInstance.transformation();
-//    transformation.translation = self.objectPositionOutput->value();
-//    sphereInstance.setTransformation(transformation);
+    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 }
 
 #pragma mark - Helpers
@@ -91,6 +91,22 @@
 {
     NSString *path = [[NSBundle mainBundle] pathForResource:resource ofType:nil];
     return std::string(path.UTF8String);
+}
+
+- (void)setupAnimations
+{
+    self.animationTimeline = new choreograph::Timeline();
+    self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
+
+    glm::vec3 lightStart(-1.0, -0.5, -0.25);
+    glm::vec3 lightEnd(1.0, -0.5, -0.25);
+
+    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 5.0);
+
+    self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
 }
 
 #pragma mark - Materials
@@ -117,9 +133,9 @@
     return pool->materials.insert({
         [self pathForResource:@"limestone-rock-albedo.png"],
         [self pathForResource:@"limestone-rock-normal.png"],
+        [self pathForResource:@"limestone-rock-metalness.png"],
         [self pathForResource:@"limestone-rock-roughness.png"],
-        [self pathForResource:@"limestone-rock-ao.png"],
-        [self pathForResource:@"limestone-rock-metalness.png"]
+        [self pathForResource:@"limestone-rock-ao.png"]
     });
 }
 

@@ -175,10 +175,6 @@ void main() {
 
         vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
 
-        // DEBUG
-        surfelClusterLuminance = vec3(5.0);
-        //
-
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, surfelClusterLuminance);

@@ -105,6 +105,13 @@ namespace EARenderer {
         return mStaticGeometryArea;
     }
 
+    const std::vector<Scene::SubMeshInstancePair>& Scene::sortedStaticSubMeshes() {
+        if (mSortedStaticSubMeshes.empty()) {
+            sortStaticSubMeshes();
+        }
+        return mSortedStaticSubMeshes;
+    }
+
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -200,6 +207,23 @@ namespace EARenderer {
         }
 
         mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
+    }
+
+    void Scene::sortStaticSubMeshes() {
+        mSortedStaticSubMeshes.clear();
+
+        for (ID meshInstanceID : mStaticMeshInstanceIDs) {
+            auto& meshInstance = mMeshInstances[meshInstanceID];
+            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            for (ID subMeshID : mesh.subMeshes()) {
+                auto& subMesh = mesh.subMeshes()[subMeshID];
+                mSortedStaticSubMeshes.push_back(std::make_pair(&subMesh, meshInstanceID));
+            }
+        }
+
+        std::sort(mSortedStaticSubMeshes.begin(), mSortedStaticSubMeshes.end(), [](const auto& lhs, const auto& rhs) {
+            return lhs.first->surfaceArea() > rhs.first->surfaceArea();
+        });
     }
 
     void Scene::destroyAuxiliaryData() {

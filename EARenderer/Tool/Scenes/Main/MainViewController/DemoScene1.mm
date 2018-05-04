@@ -46,7 +46,9 @@
     EARenderer::ID scuffedTitaniumMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
     
     // Sponza materials
-    
+
+    printf("Loading materials...\n");
+
     EARenderer::ID leaf_MaterialID = [self load_Leaf_MaterialToPool:resourcePool];
     EARenderer::ID vaseRound_MaterialID = [self load_VaseRound_MaterialToPool:resourcePool];
     EARenderer::ID _57_MaterialID = [self load_Material57_ToPool:resourcePool];
@@ -71,6 +73,8 @@
     EARenderer::ID vase_MaterialID = [self load_Vase_MaterialToPool:resourcePool];
     EARenderer::ID _25_MaterialID = [self load_Material25_ToPool:resourcePool];
     EARenderer::ID roof_MaterialID = [self load_Roof_MaterialToPool:resourcePool];
+
+    printf("Materials loaded\n\n");
     
     // Instances
     
@@ -84,8 +88,8 @@
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto& subMesh = sponzaMesh.subMeshes()[subMeshID];
         
-        printf("Material %s\n", subMesh.materialName().c_str());
-        
+//        printf("Material %s\n", subMesh.materialName().c_str());
+
         if (subMesh.materialName() == "leaf") {
             sponzaInstance.setMaterialIDForSubMeshID(leaf_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "vase_round") {
@@ -168,8 +172,8 @@
 
     scene->calculateGeometricProperties();
 
-    glm::mat4 bbScale = glm::scale(glm::vec3(0.99, 0.99, 0.99));
-    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
+//    glm::mat4 bbScale = glm::scale(glm::vec3(0.99, 0.99, 0.99));
+//    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
@@ -182,8 +186,8 @@
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics
 {
-    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
-    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+//    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+//    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 
 //    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
 //    auto transformation = sphereInstance.transformation();

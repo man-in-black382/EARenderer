@@ -145,22 +145,19 @@ namespace EARenderer {
         Measurement::ExecutionTime("Lightmapped probes placement took", [&]() {
             size_t probeOffset = scene->diffuseLightProbes().size();
 
-            for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
-                auto& meshInstance = scene->meshInstances()[meshInstanceID];
-                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            for (auto& subMeshInstanceIDPair : scene->sortedStaticSubMeshes()) {
+                SubMesh *subMesh = subMeshInstanceIDPair.first;
+                ID instanceID = subMeshInstanceIDPair.second;
 
+                auto& meshInstance = scene->meshInstances()[instanceID];
                 auto modelMatrix = meshInstance.modelMatrix();
 
-                for (ID subMeshID : mesh.subMeshes()) {
-                    auto& subMesh = mesh.subMeshes()[subMeshID];
+                for (size_t i = 0; i < subMesh->vertices().size(); i += 3) {
+                    auto& v0 = subMesh->vertices()[i];
+                    auto& v1 = subMesh->vertices()[i + 1];
+                    auto& v2 = subMesh->vertices()[i + 2];
 
-                    for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
-                        auto& v0 = subMesh.vertices()[i];
-                        auto& v1 = subMesh.vertices()[i + 1];
-                        auto& v2 = subMesh.vertices()[i + 2];
-
-                        generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
-                    }
+                    generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
                 }
             }
 
