@@ -144,6 +144,7 @@
 		CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */; };
 		CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */; };
 		CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19CB20837DB700AF181A /* MeshLoader.cpp */; };
+		CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */; };
 		CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED052012759C00A03146 /* Triangle2D.cpp */; };
 		CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED08201275B900A03146 /* Triangle3D.cpp */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
@@ -294,7 +295,6 @@
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
-		CEAB2A95209636360075399C /* sponza_v2.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CEAB2A94209636350075399C /* sponza_v2.fbx */; };
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
@@ -657,6 +657,7 @@
 		CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutodeskMeshLoader.hpp; sourceTree = "<group>"; };
 		CE4E19CB20837DB700AF181A /* MeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLoader.cpp; sourceTree = "<group>"; };
 		CE4E19CC20837DB700AF181A /* MeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshLoader.hpp; sourceTree = "<group>"; };
+		CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_2nd_uv.fbx; sourceTree = "<group>"; };
 		CE53ED052012759C00A03146 /* Triangle2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle2D.cpp; sourceTree = "<group>"; };
 		CE53ED062012759C00A03146 /* Triangle2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle2D.hpp; sourceTree = "<group>"; };
 		CE53ED08201275B900A03146 /* Triangle3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle3D.cpp; sourceTree = "<group>"; };
@@ -1283,7 +1284,6 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
-		CEAB2A94209636350075399C /* sponza_v2.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_v2.fbx; sourceTree = "<group>"; };
 		CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
@@ -2099,8 +2099,8 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */,
 				CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */,
-				CEAB2A94209636350075399C /* sponza_v2.fbx */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
 				AC8F7DFB203AF676004CD033 /* sphere.obj */,
@@ -3228,7 +3228,6 @@
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
-				CEAB2A95209636360075399C /* sponza_v2.fbx in Resources */,
 				CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */,
 				CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */,
 				CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */,
@@ -3250,6 +3249,7 @@
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
 				ACC539322068F80100B150B5 /* GridLightProbesUpdate.geom in Resources */,
+				CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */,
 				CE4DE21E1FA60CFE0067729A /* Sponza_Column_a_roughness.tga in Resources */,
 				ACC5392D2068F65700B150B5 /* GridLightProbesUpdate.frag in Resources */,
 				CE4DE2451FA60CFF0067729A /* sponzaPBR.mtl in Resources */,

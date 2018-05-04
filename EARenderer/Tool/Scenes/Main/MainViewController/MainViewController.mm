@@ -169,7 +169,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 //    self.triangleRenderer->render();
-//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;

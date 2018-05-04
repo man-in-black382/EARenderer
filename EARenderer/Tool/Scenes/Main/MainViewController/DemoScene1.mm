@@ -32,7 +32,7 @@
     // Meshes
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
-    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_v2" ofType:@"fbx"];
+    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_2nd_uv" ofType:@"fbx"];
 //    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
 
@@ -172,8 +172,8 @@
 
     scene->calculateGeometricProperties();
 
-//    glm::mat4 bbScale = glm::scale(glm::vec3(0.99, 0.99, 0.99));
-//    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
+    glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
+    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
@@ -186,8 +186,8 @@
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics
 {
-//    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
-//    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 
 //    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
 //    auto transformation = sphereInstance.transformation();
@@ -209,10 +209,10 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(0.5, -1.0, -0.25);
+    glm::vec3 lightStart(-0.5, -1.0, -0.25);
     glm::vec3 lightEnd(0.5, -1.0, -0.25);
 
-    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 30.0);
+    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);
 
     self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
