@@ -59,7 +59,7 @@
     EARenderer::ID columnA_MaterialID = [self load_ColumnA_MaterialToPool:resourcePool];
     EARenderer::ID columnB_MaterialID = [self load_ColumnB_MaterialToPool:resourcePool];
     EARenderer::ID columnC_MaterialID = [self load_ColumnC_MaterialToPool:resourcePool];
-    EARenderer::ID floor_MaterialID = [self loadLimestoneRockMaterialToPool:resourcePool];
+    EARenderer::ID floor_MaterialID = [self load_Floor_MaterialToPool:resourcePool];
     EARenderer::ID details_MaterialID = [self load_Details_MaterialToPool:resourcePool];
     EARenderer::ID flagpole_MaterialID = [self load_FlagPole_MaterialToPool:resourcePool];
     EARenderer::ID fabricA_MaterialID = [self load_FabricA_MaterialToPool:resourcePool];
@@ -231,17 +231,6 @@
 }
 
 #pragma mark - Other materials
-
-- (EARenderer::ID)loadLimestoneRockMaterialToPool:(EARenderer::ResourcePool *)pool
-{
-    return pool->materials.insert({
-        [self pathForResource:@"limestone-rock-albedo.png"],
-        [self pathForResource:@"limestone-rock-normal.png"],
-        [self pathForResource:@"limestone-rock-roughness.png"],
-        [self pathForResource:@"limestone-rock-ao.png"],
-        [self pathForResource:@"limestone-rock-metalness.png"]
-    });
-}
 
 - (EARenderer::ID)loadIronMaterialToPool:(EARenderer::ResourcePool *)pool
 {

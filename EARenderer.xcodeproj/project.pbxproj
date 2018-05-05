@@ -59,11 +59,6 @@
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
 		CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */; };
-		CE44592D209B9A27009F4FCE /* limestone-rock-roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE445928209B9A25009F4FCE /* limestone-rock-roughness.png */; };
-		CE44592E209B9A27009F4FCE /* limestone-rock-ao.png in Resources */ = {isa = PBXBuildFile; fileRef = CE445929209B9A25009F4FCE /* limestone-rock-ao.png */; };
-		CE44592F209B9A27009F4FCE /* limestone-rock-albedo.png in Resources */ = {isa = PBXBuildFile; fileRef = CE44592A209B9A26009F4FCE /* limestone-rock-albedo.png */; };
-		CE445930209B9A27009F4FCE /* limestone-rock-metalness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE44592B209B9A26009F4FCE /* limestone-rock-metalness.png */; };
-		CE445931209B9A27009F4FCE /* limestone-rock-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE44592C209B9A27009F4FCE /* limestone-rock-normal.png */; };
 		CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */; };
 		CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775011FA5D73700F5699C /* Background_Albedo.tga */; };
 		CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775091FA5D73800F5699C /* Background_Normal.tga */; };
@@ -145,6 +140,15 @@
 		CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */; };
 		CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19CB20837DB700AF181A /* MeshLoader.cpp */; };
 		CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */; };
+		CE53ADD6209E191700749A96 /* cornell_box_covered.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD5209E191600749A96 /* cornell_box_covered.obj */; };
+		CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD9209E2BC100749A96 /* fabric02_col.jpg */; };
+		CE53ADDE209E2BC300749A96 /* fabric02_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADDA209E2BC100749A96 /* fabric02_disp.jpg */; };
+		CE53ADDF209E2BC300749A96 /* fabric02_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADDB209E2BC200749A96 /* fabric02_nrm.jpg */; };
+		CE53ADE0209E2BC300749A96 /* fabric02_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADDC209E2BC300749A96 /* fabric02_rgh.jpg */; };
+		CE53ADE5209E2BD600749A96 /* Fabric03_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE1209E2BD100749A96 /* Fabric03_disp.jpg */; };
+		CE53ADE6209E2BD600749A96 /* Fabric03_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE2209E2BD200749A96 /* Fabric03_rgh.jpg */; };
+		CE53ADE7209E2BD600749A96 /* Fabric03_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE3209E2BD400749A96 /* Fabric03_nrm.jpg */; };
+		CE53ADE8209E2BD600749A96 /* Fabric03_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE4209E2BD600749A96 /* Fabric03_col.jpg */; };
 		CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED052012759C00A03146 /* Triangle2D.cpp */; };
 		CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED08201275B900A03146 /* Triangle3D.cpp */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
@@ -298,8 +302,6 @@
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
-		CECD853D2041FE1C00966766 /* debug.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853C2041FE1B00966766 /* debug.png */; };
-		CECD853F2041FF9800966766 /* debug2.png in Resources */ = {isa = PBXBuildFile; fileRef = CECD853E2041FF9800966766 /* debug2.png */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
 		CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */; };
@@ -646,11 +648,6 @@
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
-		CE445928209B9A25009F4FCE /* limestone-rock-roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "limestone-rock-roughness.png"; sourceTree = "<group>"; };
-		CE445929209B9A25009F4FCE /* limestone-rock-ao.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "limestone-rock-ao.png"; sourceTree = "<group>"; };
-		CE44592A209B9A26009F4FCE /* limestone-rock-albedo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "limestone-rock-albedo.png"; sourceTree = "<group>"; };
-		CE44592B209B9A26009F4FCE /* limestone-rock-metalness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "limestone-rock-metalness.png"; sourceTree = "<group>"; };
-		CE44592C209B9A27009F4FCE /* limestone-rock-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "limestone-rock-normal.png"; sourceTree = "<group>"; };
 		CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexAttribute.cpp; sourceTree = "<group>"; };
 		CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutodeskMeshLoader.cpp; sourceTree = "<group>"; };
@@ -658,6 +655,15 @@
 		CE4E19CB20837DB700AF181A /* MeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLoader.cpp; sourceTree = "<group>"; };
 		CE4E19CC20837DB700AF181A /* MeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshLoader.hpp; sourceTree = "<group>"; };
 		CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_2nd_uv.fbx; sourceTree = "<group>"; };
+		CE53ADD5209E191600749A96 /* cornell_box_covered.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_covered.obj; sourceTree = "<group>"; };
+		CE53ADD9209E2BC100749A96 /* fabric02_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_col.jpg; sourceTree = "<group>"; };
+		CE53ADDA209E2BC100749A96 /* fabric02_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_disp.jpg; sourceTree = "<group>"; };
+		CE53ADDB209E2BC200749A96 /* fabric02_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_nrm.jpg; sourceTree = "<group>"; };
+		CE53ADDC209E2BC300749A96 /* fabric02_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_rgh.jpg; sourceTree = "<group>"; };
+		CE53ADE1209E2BD100749A96 /* Fabric03_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_disp.jpg; sourceTree = "<group>"; };
+		CE53ADE2209E2BD200749A96 /* Fabric03_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_rgh.jpg; sourceTree = "<group>"; };
+		CE53ADE3209E2BD400749A96 /* Fabric03_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_nrm.jpg; sourceTree = "<group>"; };
+		CE53ADE4209E2BD600749A96 /* Fabric03_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_col.jpg; sourceTree = "<group>"; };
 		CE53ED052012759C00A03146 /* Triangle2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle2D.cpp; sourceTree = "<group>"; };
 		CE53ED062012759C00A03146 /* Triangle2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle2D.hpp; sourceTree = "<group>"; };
 		CE53ED08201275B900A03146 /* Triangle3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle3D.cpp; sourceTree = "<group>"; };
@@ -1289,8 +1295,6 @@
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
-		CECD853C2041FE1B00966766 /* debug.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug.png; sourceTree = "<group>"; };
-		CECD853E2041FF9800966766 /* debug2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = debug2.png; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
@@ -1850,16 +1854,26 @@
 			path = "Scuffed Titanium";
 			sourceTree = "<group>";
 		};
-		CE445927209B9A11009F4FCE /* Limestone Rock */ = {
+		CE53ADD7209E2BA100749A96 /* BlueFabric */ = {
 			isa = PBXGroup;
 			children = (
-				CE44592A209B9A26009F4FCE /* limestone-rock-albedo.png */,
-				CE445929209B9A25009F4FCE /* limestone-rock-ao.png */,
-				CE44592B209B9A26009F4FCE /* limestone-rock-metalness.png */,
-				CE44592C209B9A27009F4FCE /* limestone-rock-normal.png */,
-				CE445928209B9A25009F4FCE /* limestone-rock-roughness.png */,
+				CE53ADE4209E2BD600749A96 /* Fabric03_col.jpg */,
+				CE53ADE1209E2BD100749A96 /* Fabric03_disp.jpg */,
+				CE53ADE3209E2BD400749A96 /* Fabric03_nrm.jpg */,
+				CE53ADE2209E2BD200749A96 /* Fabric03_rgh.jpg */,
 			);
-			path = "Limestone Rock";
+			path = BlueFabric;
+			sourceTree = "<group>";
+		};
+		CE53ADD8209E2BA800749A96 /* RedFabric */ = {
+			isa = PBXGroup;
+			children = (
+				CE53ADD9209E2BC100749A96 /* fabric02_col.jpg */,
+				CE53ADDA209E2BC100749A96 /* fabric02_disp.jpg */,
+				CE53ADDB209E2BC200749A96 /* fabric02_nrm.jpg */,
+				CE53ADDC209E2BC300749A96 /* fabric02_rgh.jpg */,
+			);
+			path = RedFabric;
 			sourceTree = "<group>";
 		};
 		CE70F7BC1F8F8E5A00AD9027 = {
@@ -2072,9 +2086,8 @@
 		CE70F80E1F8F8EBD00AD9027 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				CE445927209B9A11009F4FCE /* Limestone Rock */,
-				CECD853E2041FF9800966766 /* debug2.png */,
-				CECD853C2041FE1B00966766 /* debug.png */,
+				CE53ADD8209E2BA800749A96 /* RedFabric */,
+				CE53ADD7209E2BA100749A96 /* BlueFabric */,
 				CE9774C31FA5D71A00F5699C /* Sponza PRB Texture Set */,
 				CE3791751FA366730049BD1B /* Scuffed Titanium */,
 				CE81CB151FA24ED000535020 /* blank_black.png */,
@@ -2099,6 +2112,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE53ADD5209E191600749A96 /* cornell_box_covered.obj */,
 				CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */,
 				CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
@@ -3193,12 +3207,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE44592D209B9A27009F4FCE /* limestone-rock-roughness.png in Resources */,
 				CE4DE2431FA60CFF0067729A /* Sponza_Thorn_normal.tga in Resources */,
 				CE70FA551F8F8F7400AD9027 /* RadianceConvolution.frag in Resources */,
 				AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */,
 				CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */,
 				CE7B4685208C77C2003DBDD1 /* LightmapLightProbeRendering.geom in Resources */,
+				CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */,
 				CE70FA561F8F8F7400AD9027 /* CubemapRendering.vert in Resources */,
 				CE70FA571F8F8F7400AD9027 /* EquirectangularMapConversion.frag in Resources */,
 				CE4DE2251FA60CFF0067729A /* Sponza_Curtain_Blue_diffuse.tga in Resources */,
@@ -3226,11 +3240,14 @@
 				CE70FA5E1F8F8F7400AD9027 /* DirectionalBlinnPhong.vert in Resources */,
 				CE4DE2211FA60CFE0067729A /* Sponza_Column_b_roughness.tga in Resources */,
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
+				CE53ADE5209E2BD600749A96 /* Fabric03_disp.jpg in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
 				CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */,
 				CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */,
 				CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */,
+				CE53ADE8209E2BD600749A96 /* Fabric03_col.jpg in Resources */,
+				CE53ADE6209E2BD600749A96 /* Fabric03_rgh.jpg in Resources */,
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
 				CE4DE2191FA60CFE0067729A /* Sponza_Ceiling_diffuse.tga in Resources */,
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
@@ -3246,35 +3263,36 @@
 				CE4DE20A1FA60CFE0067729A /* ChainTexture_Normal.tga in Resources */,
 				CE4DE2281FA60CFF0067729A /* Sponza_Curtain_Green_normal.tga in Resources */,
 				CE4DE22C1FA60CFF0067729A /* Sponza_Curtain_roughness.tga in Resources */,
+				CE53ADE7209E2BD600749A96 /* Fabric03_nrm.jpg in Resources */,
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
 				ACC539322068F80100B150B5 /* GridLightProbesUpdate.geom in Resources */,
 				CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */,
 				CE4DE21E1FA60CFE0067729A /* Sponza_Column_a_roughness.tga in Resources */,
 				ACC5392D2068F65700B150B5 /* GridLightProbesUpdate.frag in Resources */,
+				CE53ADDE209E2BC300749A96 /* fabric02_disp.jpg in Resources */,
 				CE4DE2451FA60CFF0067729A /* sponzaPBR.mtl in Resources */,
-				CE445930209B9A27009F4FCE /* limestone-rock-metalness.png in Resources */,
 				CE4DE24B1FA60CFF0067729A /* VaseHanging_roughness.tga in Resources */,
 				CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */,
 				CE70FA641F8F8F7400AD9027 /* Skybox.frag in Resources */,
 				CE4DE2221FA60CFE0067729A /* Sponza_Column_c_diffuse.tga in Resources */,
-				CECD853D2041FE1C00966766 /* debug.png in Resources */,
 				CE4DE2311FA60CFF0067729A /* Sponza_Fabric_Blue_diffuse.tga in Resources */,
 				CE70FA651F8F8F7400AD9027 /* Skybox.vert in Resources */,
 				CE7B4684208C77C2003DBDD1 /* LightmapLightProbeRendering.frag in Resources */,
 				CE4DE2401FA60CFF0067729A /* Sponza_Roof_normal.tga in Resources */,
-				CECD853F2041FF9800966766 /* debug2.png in Resources */,
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE70FA671F8F8F7400AD9027 /* GenericGeometry.frag in Resources */,
 				CE4DE2181FA60CFE0067729A /* Sponza_Bricks_a_Roughness.tga in Resources */,
 				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
+				CE53ADE0209E2BC300749A96 /* fabric02_rgh.jpg in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
 				CE70FA681F8F8F7400AD9027 /* CookTorrance.frag in Resources */,
 				CE70FA691F8F8F7400AD9027 /* CookTorrance.vert in Resources */,
 				CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */,
 				CE70FA6E1F8F8F7400AD9027 /* blank_white.jpg in Resources */,
 				CE4DE2231FA60CFF0067729A /* Sponza_Column_c_normal.tga in Resources */,
+				CE53ADD6209E191700749A96 /* cornell_box_covered.obj in Resources */,
 				CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */,
 				CE4DE2421FA60CFF0067729A /* Sponza_Thorn_diffuse.tga in Resources */,
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
@@ -3285,8 +3303,6 @@
 				CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */,
 				CE4DE2301FA60CFF0067729A /* Sponza_Details_roughness.tga in Resources */,
 				CE4DE2101FA60CFE0067729A /* Lion_Normal.tga in Resources */,
-				CE44592F209B9A27009F4FCE /* limestone-rock-albedo.png in Resources */,
-				CE44592E209B9A27009F4FCE /* limestone-rock-ao.png in Resources */,
 				CE70FA731F8F8F7400AD9027 /* rustediron2_roughness.png in Resources */,
 				CE4DE23D1FA60CFF0067729A /* Sponza_Floor_normal.tga in Resources */,
 				CE4DE24F1FA60CFF0067729A /* VaseRound_diffuse.tga in Resources */,
@@ -3315,7 +3331,6 @@
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
 				CE4DE2081FA60CFE0067729A /* ChainTexture_Albedo.tga in Resources */,
-				CE445931209B9A27009F4FCE /* limestone-rock-normal.png in Resources */,
 				AC3C9EB92072111500F35EB3 /* GridLightProbeRendering.frag in Resources */,
 				CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */,
 				CE4DE2391FA60CFF0067729A /* Sponza_FlagPole_diffuse.tga in Resources */,
@@ -3337,6 +3352,7 @@
 				CE4DE2171FA60CFE0067729A /* Sponza_Bricks_a_Normal.tga in Resources */,
 				CE4DE23B1FA60CFF0067729A /* Sponza_FlagPole_roughness.tga in Resources */,
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
+				CE53ADDF209E2BC300749A96 /* fabric02_nrm.jpg in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
 				AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */,

@@ -406,7 +406,7 @@ vec3 LinearFromSRGB(vec3 sRGB) {
 }
 
 vec3 FetchAlbedoMap() {
-//    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 7).rgb);
+//    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 6).rgb);
     return LinearFromSRGB(texture(uMaterial.albedoMap, vTexCoords.st).rgb);
 }
 

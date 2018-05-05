@@ -147,7 +147,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(),  /*self.scene->lightBakingVolume()*/debugUVBoxes );
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() } );
 
     self.scene->destroyAuxiliaryData();
 
@@ -164,9 +164,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderDiffuseGridProbes(0.01);
     self.sceneRenderer->renderDiffuseLightmapProbes(0.01);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(1600);
-//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Clusters, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
-    self.sceneRenderer->renderSurfelLuminances();
-    self.sceneRenderer->renderSurfelClusterLuminances();
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+//    self.sceneRenderer->renderSurfelLuminances();
+//    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 //    self.triangleRenderer->render();

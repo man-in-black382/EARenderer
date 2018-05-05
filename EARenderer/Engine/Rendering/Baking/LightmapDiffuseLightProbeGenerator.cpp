@@ -47,8 +47,8 @@ namespace EARenderer {
         float maxUVXAligned = ceil(maxUV.x * lightmapResolution.x) / lightmapResolution.x + step.x / 2.0;
         float maxUVYAligned = ceil(maxUV.y * lightmapResolution.y) / lightmapResolution.y + step.y / 2.0;
 
-        for (float v = step.y; v < 1.0; v += step.y) {
-            for (float u = step.x; u < 1.0; u += step.x) {
+        for (float v = step.y / 2.0; v < 1.0; v += step.y) {
+            for (float u = step.x / 2.0; u < 1.0; u += step.x) {
 //        for (float v = minUVYAligned; v <= maxUVYAligned; v += step.y) {
 //            for (float u = minUVXAligned; u <= maxUVXAligned; u += step.x) {
 //        for (float v = minUV.y; v <= maxUV.y; v += step.y) {
@@ -86,13 +86,11 @@ namespace EARenderer {
                         vertex1.normal * barycentric.y +
                         vertex2.normal * barycentric.z;
 
-                        glm::vec2 probeUV = vertex0.lightmapCoords * barycentric.x +
-                        vertex1.lightmapCoords * barycentric.y +
-                        vertex2.lightmapCoords * barycentric.z;
-
                         DiffuseLightProbe probe(probePosition);
                         probe.normal = glm::normalize(probeNormal);
-                        probe.lightmapUV = { u + step.x / 2.0, v + step.y / 2.0 };
+//                        probe.lightmapUV = { u + step.x / 2.0, v + step.y / 2.0 };
+                        probe.lightmapUV = { u - step.x / 2.0, v - step.y / 2.0 };
+//                        probe.lightmapUV = { u, v };
                         projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);
                         scene->diffuseProbeLightmapIndices()[flatIndex] = (uint32_t)scene->diffuseLightProbes().size() - 1;
@@ -164,6 +162,11 @@ namespace EARenderer {
 
                 auto& meshInstance = scene->meshInstances()[instanceID];
                 auto modelMatrix = meshInstance.modelMatrix();
+                auto boundingBox = subMesh->boundingBox().transformedBy(modelMatrix);
+
+                if (!scene->lightBakingVolume().contains(boundingBox)) {
+                    continue;
+                }
 
                 for (size_t i = 0; i < subMesh->vertices().size(); i += 3) {
                     auto& v0 = subMesh->vertices()[i];
