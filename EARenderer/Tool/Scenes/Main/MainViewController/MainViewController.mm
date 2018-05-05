@@ -147,7 +147,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(),  /*self.scene->lightBakingVolume()*/debugUVBoxes );
+//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(),  /*self.scene->lightBakingVolume()*/debugUVBoxes );
 
     self.scene->destroyAuxiliaryData();
 
