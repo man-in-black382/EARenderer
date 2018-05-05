@@ -37,7 +37,7 @@
     
     EARenderer::ID redMaterialID = [self load_FabricC_MaterialToPool:resourcePool];
     EARenderer::ID greenMaterialID = [self load_FabricE_MaterialToPool:resourcePool];
-    EARenderer::ID grayMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
+    EARenderer::ID grayMaterialID = [self loadLimestoneRockMaterialToPool:resourcePool];
 
     // Instances
     

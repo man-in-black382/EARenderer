@@ -104,6 +104,10 @@ namespace EARenderer {
         return contains(triangle.a) && contains(triangle.b) && contains(triangle.c);
     }
 
+    bool AxisAlignedBox3D::contains(const AxisAlignedBox3D& box) const {
+        return contains(box.min) && contains(box.max);
+    }
+
     std::array<AxisAlignedBox3D, 8> AxisAlignedBox3D::octet() const {
         glm::vec3 c = center();
         return {

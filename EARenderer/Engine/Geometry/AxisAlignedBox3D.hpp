@@ -48,6 +48,7 @@ namespace EARenderer {
         glm::vec3 center() const;
         bool contains(const glm::vec3& point) const;
         bool contains(const Triangle3D& triangle) const;
+        bool contains(const AxisAlignedBox3D& box) const;
 
         /**
          Splits into 8 sub-boxes of equal size

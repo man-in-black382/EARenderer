@@ -484,20 +484,20 @@ namespace EARenderer {
             }
         }
 
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(Size2D(128));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect(Size2D(128));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {
@@ -614,7 +614,6 @@ namespace EARenderer {
         mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
             mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
             mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mLightProbeLinksRenderingShader.setProbesGridResolution(mProbeGridResolution);
             mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
         });
 

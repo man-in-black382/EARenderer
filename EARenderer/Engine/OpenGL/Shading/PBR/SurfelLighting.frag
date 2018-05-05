@@ -179,13 +179,14 @@ void main() {
         // Nothing to do here... yet
     }
 
-    float NdotL = dot(N, L);
+    float NdotL = max(dot(N, L), 0.0);
 
     // Surfel's color (albedo) is not needed here because it's already incoded
     // in the precomputed spherical harmonics.
     // Same goes for the division by Pi, which usually takes place
     // in Lambert's diffuse component calculation - normalization has already been done
     // in the spherical harmonics precomputation step.
+
     vec3 diffuseRadiance = radiance * NdotL;
 
     // Apply shadow factor

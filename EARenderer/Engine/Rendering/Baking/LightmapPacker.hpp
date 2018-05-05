@@ -11,6 +11,7 @@
 
 #include "Scene.hpp"
 #include "MaxRectsBinPack.h"
+#include "AxisAlignedBox3D.hpp"
 
 #include <glm/vec2.hpp>
 
@@ -24,7 +25,7 @@ namespace EARenderer {
 
          @param scene Scene object providing static meshes
          */
-        void remapStaticGeometryToSingleLightmap(Scene *scene) const;
+        std::vector<AxisAlignedBox3D> remapStaticGeometryToSingleLightmap(Scene *scene) const;
     };
 
 }

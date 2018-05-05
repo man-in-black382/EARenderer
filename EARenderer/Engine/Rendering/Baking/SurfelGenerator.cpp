@@ -121,7 +121,7 @@ namespace EARenderer {
                                normalMatrix * glm::vec4(vertex2.normal, 0.0));
 
             // Texture coordinates as is
-            Triangle2D UVs(vertex0.lightmapCoords, vertex1.lightmapCoords, vertex2.lightmapCoords);
+            Triangle2D UVs(vertex0.textureCoords, vertex1.textureCoords, vertex2.textureCoords);
 
             transformedTriangleProperties.emplace_back(TransformedTriangleData(triangle, normals, UVs));
             

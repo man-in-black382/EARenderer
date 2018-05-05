@@ -23,7 +23,6 @@ namespace EARenderer {
 
         void setCamera(const Camera& camera);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProbesGridResolution(const glm::ivec3& resolution);
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
         void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);
         void setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3>& centers);

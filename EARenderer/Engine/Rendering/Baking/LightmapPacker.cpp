@@ -12,7 +12,12 @@
 
 namespace EARenderer {
 
-    void LightmapPacker::remapStaticGeometryToSingleLightmap(Scene *scene) const {
+    std::vector<AxisAlignedBox3D> LightmapPacker::remapStaticGeometryToSingleLightmap(Scene *scene) const {
+
+        // DEBUG
+        std::vector<AxisAlignedBox3D> debugBoxes;
+        //
+
         glm::vec2 twoPixelGap((1.0f / scene->preferredProbeLightmapResolution().width) * 2.0,
                               (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
 
@@ -22,11 +27,27 @@ namespace EARenderer {
         int32_t initialScale = binSize * 0.90;
         rbp::MaxRectsBinPack binPack(binSize, binSize);
 
+        float relevantArea = 0.0;
+
+        std::vector<Scene::SubMeshInstancePair> relevantSubMeshInstancePairs;
+
         for (auto& subMeshInstanceIDPair : scene->sortedStaticSubMeshes()) {
+            SubMesh *subMesh = subMeshInstanceIDPair.first;
+            MeshInstance& instance = scene->meshInstances()[subMeshInstanceIDPair.second];
+            AxisAlignedBox3D boundingBox = subMesh->boundingBox().transformedBy(instance.modelMatrix());
+
+            // Skip sub meshes that lie outside of light baking volume
+            if (scene->lightBakingVolume().contains(boundingBox)) {
+                relevantArea += subMesh->surfaceArea();
+                relevantSubMeshInstancePairs.push_back(subMeshInstanceIDPair);
+            }
+        }
+
+        for (auto& subMeshInstanceIDPair : relevantSubMeshInstancePairs) {
 
             SubMesh *subMesh = subMeshInstanceIDPair.first;
 
-            float normalizedArea = subMesh->surfaceArea() / scene->staticGeometryArea();
+            float normalizedArea = subMesh->surfaceArea() / relevantArea;
             float squareSide = sqrt(normalizedArea);
 
             int32_t size = squareSide * initialScale;
@@ -54,7 +75,16 @@ namespace EARenderer {
             }
 
             subMesh->finalizeVertexBuffer();
+
+            // DEBUG
+            glm::vec3 min(normX, normY, 0.0);
+            glm::vec3 max(normX + normWidth, normY + normHeight, 0.01);
+            debugBoxes.emplace_back(min * 10.0f, max * 10.0f);
         }
+
+        debugBoxes.emplace_back(glm::vec3(0.0, 0.0, -0.1), glm::vec3(10.0, 10.0, 0.1));
+
+        return debugBoxes;
     }
 
 }

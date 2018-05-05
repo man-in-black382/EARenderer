@@ -44,9 +44,10 @@ namespace EARenderer {
 #pragma mark - Member variables
 
         size_t mOctreeDepth = 5;
-        float mGridProbesDistance = 0.75;
-        Size2D mProbesLightmapResolution = Size2D(128);
+        float mGridProbesDistance = 0.15;
+        Size2D mProbesLightmapResolution = Size2D(64);
         float mStaticGeometryArea = 0.0;
+        float mMinimumSurfelDistance = 0.1;
 
         DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;
