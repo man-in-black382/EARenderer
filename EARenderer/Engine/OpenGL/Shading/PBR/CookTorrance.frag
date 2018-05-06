@@ -478,5 +478,5 @@ void main() {
 
     oFragColor = vec4(correctColor, 1.0);
 
-//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 }

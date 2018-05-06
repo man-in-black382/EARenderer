@@ -128,7 +128,7 @@ namespace EARenderer {
     
     void GLTexture::generateMipmaps() {
         bind();
-//        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glGenerateMipmap(mBindingPoint);
         mMipMapsCount = floor(std::log2(std::max(mSize.width, mSize.height)));
 

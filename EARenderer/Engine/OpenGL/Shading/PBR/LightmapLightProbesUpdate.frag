@@ -182,5 +182,17 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
+    if (metadataIndex < 0 || metadataIndex > 100000) {
+        resultingSH.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+        resultingSH.L11  = vec3(3.06998014, 0.0, 3.06998014);
+        resultingSH.L10  = vec3(0.0);
+        resultingSH.L1_1 = vec3(0.0);
+        resultingSH.L21  = vec3(0.0);
+        resultingSH.L2_1 = vec3(0.0);
+        resultingSH.L2_2 = vec3(0.0);
+        resultingSH.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+        resultingSH.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+    }
+
     PackSHToRenderTargets(resultingSH);
 }

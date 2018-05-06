@@ -59,15 +59,21 @@ namespace EARenderer {
             float normWidth = (float)uvRect.width / binSize;
             float normHeight = (float)uvRect.height / binSize;
 
-            glm::vec2 scaleDown((normWidth - twoPixelGap.x) / normWidth,
-                                (normHeight - twoPixelGap.y) / normHeight);
+//            glm::vec2 scaleDown((normWidth - twoPixelGap.x) / normWidth,
+//                                (normHeight - twoPixelGap.y) / normHeight);
 
-            if (scaleDown.x > 0.0 && scaleDown.y > 0.0) {
-                normWidth *= scaleDown.x;
-                normHeight *= scaleDown.y;
-                normX += onePixelGap.x;
-                normY += onePixelGap.y;
-            }
+//            glm::vec2 scaleDown((1.0 - twoPixelGap.x),
+//                                (1.0 - twoPixelGap.y));
+//
+//            scaleDown = glm::max(scaleDown, glm::zero<glm::vec2>());
+
+            normWidth = std::max(normWidth - twoPixelGap.x, 0.0f);
+            normHeight = std::max(normHeight - twoPixelGap.y, 0.0f);
+
+//            normWidth *= scaleDown.x;
+//            normHeight *= scaleDown.y;
+//            normX += onePixelGap.x;
+//            normY += onePixelGap.y;
 
             for (auto& vertex : subMesh->vertices()) {
                 vertex.lightmapCoords *= glm::vec2(normWidth, normHeight);
@@ -83,6 +89,9 @@ namespace EARenderer {
         }
 
         debugBoxes.emplace_back(glm::vec3(0.0, 0.0, -0.1), glm::vec3(10.0, 10.0, 0.1));
+
+        float w = 1.0 / scene->preferredProbeLightmapResolution().width;
+        debugBoxes.emplace_back(glm::vec3(0.0, 0.0, 0.2), glm::vec3(w * 10.0, 10.0, 0.3));
 
         return debugBoxes;
     }
