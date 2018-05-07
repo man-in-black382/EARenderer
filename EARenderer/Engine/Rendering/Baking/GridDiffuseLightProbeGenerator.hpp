@@ -15,7 +15,9 @@ namespace EARenderer {
 
     class GridDiffuseLightProbeGenerator: public DiffuseLightProbeGenerator {
     public:
-        void generateProbes(Scene *scene) override;
+        ~GridDiffuseLightProbeGenerator() = default;
+
+        void generateProbes(Scene *scene);
     };
 
 }

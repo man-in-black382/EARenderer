@@ -25,11 +25,16 @@ namespace EARenderer {
             friend LightmapPacker;
 
             std::vector<Scene::SubMeshInstancePair> mDedicatedProbeCandidates;
+            std::vector<Scene::SubMeshInstancePair> mLightmappingSubjects;
             std::vector<AxisAlignedBox3D> mUVIslandsVisualizationData;
 
         public:
             const std::vector<Scene::SubMeshInstancePair>& dedicatedProbeCandidates() const {
                 return mDedicatedProbeCandidates;
+            }
+
+            const std::vector<Scene::SubMeshInstancePair>& lightmappingSubjects() const {
+                return mLightmappingSubjects;
             }
 
             const std::vector<AxisAlignedBox3D>& UVIslandsVisualizationData() const {

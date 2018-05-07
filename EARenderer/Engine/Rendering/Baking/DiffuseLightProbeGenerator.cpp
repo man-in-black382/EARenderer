@@ -10,6 +10,12 @@
 
 namespace EARenderer {
 
+#pragma mark - Lifecycle
+
+    DiffuseLightProbeGenerator::~DiffuseLightProbeGenerator() { }
+
+#pragma mark - Protected
+
     float DiffuseLightProbeGenerator::surfelSolidAngle(Scene *scene, const Surfel& surfel, const DiffuseLightProbe& probe) {
         glm::vec3 Wps = surfel.position - probe.position;
         float distance2 = glm::length2(Wps);

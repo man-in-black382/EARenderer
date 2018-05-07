@@ -134,11 +134,18 @@ namespace EARenderer {
             fillNeighbour(index2D.x + 1, index2D.y - 1, index);
             fillNeighbour(index2D.x - 1, index2D.y - 1, index);
         }
+
+        // Fill the rest of the holes with 0 indices to prevent cache misses in the shaders
+        for (int32_t i = 0; i < probeIndices.size(); i++) {
+            if (probeIndices[i] == InvalidProbeIndex) {
+                probeIndices[i] = 0;
+            }
+        }
     }
 
 #pragma mark - Public interface
 
-    void LightmapDiffuseLightProbeGenerator::generateProbes(Scene *scene) {
+    void LightmapDiffuseLightProbeGenerator::generateProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult) {
         Size2D lightMapResolution = scene->preferredProbeLightmapResolution();
         glm::vec2 glmResolution = glm::vec2(lightMapResolution.width, lightMapResolution.height);
 
@@ -151,22 +158,24 @@ namespace EARenderer {
         Measurement::ExecutionTime("Lightmapped probes placement took", [&]() {
             size_t probeOffset = scene->diffuseLightProbes().size();
 
-            for (auto& subMeshInstanceIDPair : scene->sortedStaticSubMeshes()) {
-                SubMesh *subMesh = subMeshInstanceIDPair.first;
+            for (auto& subMeshInstanceIDPair : lightmapPackingResult.lightmappingSubjects()) {
                 ID instanceID = subMeshInstanceIDPair.second;
 
                 auto& meshInstance = scene->meshInstances()[instanceID];
+                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+                auto& subMesh = mesh.subMeshes()[subMeshInstanceIDPair.first];
+
                 auto modelMatrix = meshInstance.modelMatrix();
-                auto boundingBox = subMesh->boundingBox().transformedBy(modelMatrix);
+                auto boundingBox = subMesh.boundingBox().transformedBy(modelMatrix);
 
                 if (!scene->lightBakingVolume().contains(boundingBox)) {
                     continue;
                 }
 
-                for (size_t i = 0; i < subMesh->vertices().size(); i += 3) {
-                    auto& v0 = subMesh->vertices()[i];
-                    auto& v1 = subMesh->vertices()[i + 1];
-                    auto& v2 = subMesh->vertices()[i + 2];
+                for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
+                    auto& v0 = subMesh.vertices()[i];
+                    auto& v1 = subMesh.vertices()[i + 1];
+                    auto& v2 = subMesh.vertices()[i + 2];
 
                     generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
                 }

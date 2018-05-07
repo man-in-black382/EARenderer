@@ -10,6 +10,7 @@
 #define LightmapDiffuseLightProbeGenerator_hpp
 
 #include "DiffuseLightProbeGenerator.hpp"
+#include "LightmapPacker.hpp"
 
 namespace EARenderer {
 
@@ -27,7 +28,9 @@ namespace EARenderer {
         void fillProbeIndexHoles(Scene *scene);
 
     public:
-        void generateProbes(Scene *scene) override;
+        ~LightmapDiffuseLightProbeGenerator() = default;
+        
+        void generateProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult);
     };
 
 }

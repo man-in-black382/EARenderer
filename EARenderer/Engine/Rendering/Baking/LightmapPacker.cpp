@@ -17,13 +17,15 @@ namespace EARenderer {
     void LightmapPacker::obtainRelevantSubMeshes(Scene *scene) {
         // Find sub meshes that lie inside light baking volume
         for (auto& subMeshInstanceIDPair : scene->sortedStaticSubMeshes()) {
-            SubMesh *subMesh = subMeshInstanceIDPair.first;
             MeshInstance& instance = scene->meshInstances()[subMeshInstanceIDPair.second];
-            AxisAlignedBox3D boundingBox = subMesh->boundingBox().transformedBy(instance.modelMatrix());
+            Mesh& mesh = ResourcePool::shared().meshes[instance.meshID()];
+            SubMesh& subMesh = mesh.subMeshes()[subMeshInstanceIDPair.first];
+
+            AxisAlignedBox3D boundingBox = subMesh.boundingBox().transformedBy(instance.modelMatrix());
 
             // Skip sub meshes that lie outside of light baking volume
             if (scene->lightBakingVolume().contains(boundingBox)) {
-                mRelevantSubMeshesArea += subMesh->surfaceArea();
+                mRelevantSubMeshesArea += subMesh.surfaceArea();
                 mRelevantSubMeshInstancePairs.push_back(subMeshInstanceIDPair);
             }
         }
@@ -42,9 +44,13 @@ namespace EARenderer {
 
         // Filter out very small sub meshes that deserve a dedicated light probe and not needed in a lightmap
         for (size_t i = 0; i < mRelevantSubMeshInstancePairs.size(); i++) {
-            SubMesh *subMesh = mRelevantSubMeshInstancePairs[i].first;
+            ID instanceID = mRelevantSubMeshInstancePairs[i].second;
 
-            float normalizedArea = subMesh->surfaceArea() / mRelevantSubMeshesArea;
+            auto& meshInstance = scene->meshInstances()[instanceID];
+            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            auto& subMesh = mesh.subMeshes()[mRelevantSubMeshInstancePairs[i].first];
+
+            float normalizedArea = subMesh.surfaceArea() / mRelevantSubMeshesArea;
             float squareSide = sqrt(normalizedArea);
 
             int32_t size = squareSide * initialScale;
@@ -75,15 +81,19 @@ namespace EARenderer {
                               (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
 
         int32_t binSize = std::numeric_limits<int32_t>::max();
-        int32_t initialScale = binSize * 0.90;
+        int32_t initialScale = binSize * 0.98;
         rbp::MaxRectsBinPack binPack(binSize, binSize);
 
         binPack.Init(binSize, binSize);
 
         for (auto& subMeshInstancePair : mRelevantSubMeshInstancePairs) {
-            SubMesh *subMesh = subMeshInstancePair.first;
+            ID instanceID = subMeshInstancePair.second;
 
-            float normalizedArea = subMesh->surfaceArea() / mRelevantSubMeshesArea;
+            auto& meshInstance = scene->meshInstances()[instanceID];
+            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            auto& subMesh = mesh.subMeshes()[subMeshInstancePair.first];
+
+            float normalizedArea = subMesh.surfaceArea() / mRelevantSubMeshesArea;
             float squareSide = sqrt(normalizedArea);
 
             int32_t size = squareSide * initialScale;
@@ -98,12 +108,12 @@ namespace EARenderer {
             normWidth -= twoPixelGap.x;
             normHeight -= twoPixelGap.y;
 
-            for (auto& vertex : subMesh->vertices()) {
+            for (auto& vertex : subMesh.vertices()) {
                 vertex.lightmapCoords *= glm::vec2(normWidth, normHeight);
                 vertex.lightmapCoords += glm::vec2(normX, normY);
             }
 
-            subMesh->finalizeVertexBuffer();
+            subMesh.finalizeVertexBuffer();
 
             // Emplace UV island
             glm::vec3 min(normX, normY, 0.0);
@@ -113,6 +123,9 @@ namespace EARenderer {
 
         // Emplace whole lightmap containing all UV islands
         mPackingResult.mUVIslandsVisualizationData.emplace_back(glm::vec3(0.0, 0.0, -0.1), glm::vec3(1.0, 1.0, 0.1));
+
+        // Also provide submesh - instances that need to be lightmapped
+        mPackingResult.mLightmappingSubjects = mRelevantSubMeshInstancePairs;
     }
 
 #pragma mark - Public interface

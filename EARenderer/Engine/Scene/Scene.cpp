@@ -216,13 +216,20 @@ namespace EARenderer {
             auto& meshInstance = mMeshInstances[meshInstanceID];
             auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
             for (ID subMeshID : mesh.subMeshes()) {
-                auto& subMesh = mesh.subMeshes()[subMeshID];
-                mSortedStaticSubMeshes.push_back(std::make_pair(&subMesh, meshInstanceID));
+                mSortedStaticSubMeshes.push_back(std::make_pair(subMeshID, meshInstanceID));
             }
         }
 
-        std::sort(mSortedStaticSubMeshes.begin(), mSortedStaticSubMeshes.end(), [](const auto& lhs, const auto& rhs) {
-            return lhs.first->surfaceArea() > rhs.first->surfaceArea();
+        std::sort(mSortedStaticSubMeshes.begin(), mSortedStaticSubMeshes.end(), [&](const auto& lhs, const auto& rhs) {
+            auto& meshInstance1 = mMeshInstances[lhs.second];
+            auto& mesh1 = ResourcePool::shared().meshes[meshInstance1.meshID()];
+            auto& subMesh1 = mesh1.subMeshes()[lhs.first];
+
+            auto& meshInstance2 = mMeshInstances[rhs.second];
+            auto& mesh2 = ResourcePool::shared().meshes[meshInstance2.meshID()];
+            auto& subMesh2 = mesh2.subMeshes()[rhs.first];
+
+            return subMesh1.surfaceArea() > subMesh2.surfaceArea();
         });
     }
 

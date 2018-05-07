@@ -24,7 +24,7 @@ namespace EARenderer {
         void projectSurfelClustersOnProbe(Scene* scene, DiffuseLightProbe& probe);
 
     public:
-        virtual void generateProbes(Scene *scene) = 0;
+        virtual ~DiffuseLightProbeGenerator() = 0;
     };
 
 }

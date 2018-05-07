@@ -37,7 +37,7 @@ namespace EARenderer {
     
     class Scene {
     public:
-        using SubMeshInstancePair = std::pair<SubMesh *, ID>;
+        using SubMeshInstancePair = std::pair<ID, ID>;
 
     private:
 
