@@ -81,7 +81,7 @@ namespace EARenderer {
                               (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
 
         int32_t binSize = std::numeric_limits<int32_t>::max();
-        int32_t initialScale = binSize * 0.98;
+        int32_t initialScale = binSize * 0.90;
         rbp::MaxRectsBinPack binPack(binSize, binSize);
 
         binPack.Init(binSize, binSize);

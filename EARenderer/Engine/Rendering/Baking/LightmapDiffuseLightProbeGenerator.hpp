@@ -27,6 +27,10 @@ namespace EARenderer {
 
         void fillProbeIndexHoles(Scene *scene);
 
+        void generateLightmappedProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult);
+
+        void generateDedicatedProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult);
+
     public:
         ~LightmapDiffuseLightProbeGenerator() = default;
         

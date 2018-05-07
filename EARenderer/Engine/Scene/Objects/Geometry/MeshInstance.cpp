@@ -24,6 +24,7 @@ namespace EARenderer {
         auto& subMeshes = ResourcePool::shared().meshes[meshID].subMeshes();
         for (ID subMeshID : subMeshes) {
             mSubMeshMaterialMap[subMeshID] = IDNotFound;
+            mSubMeshDiffuseLightProbeMap[subMeshID] = AbsentProbeIndex;
         }
         
         Mesh& mesh = ResourcePool::shared().meshes[mMeshID];
@@ -65,6 +66,13 @@ namespace EARenderer {
         return mSubMeshMaterialMap.at(subMeshID);
     }
 
+    MeshInstance::DiffuseLightProbeIndex MeshInstance::diffuseLightProbeIndexForSubMeshID(ID subMeshID) const {
+        if (mSubMeshDiffuseLightProbeMap.find(subMeshID) == mSubMeshDiffuseLightProbeMap.end()) {
+            return AbsentProbeIndex;
+        }
+        return mSubMeshDiffuseLightProbeMap.at(subMeshID);
+    }
+
 #pragma mark - Setters
     
     void MeshInstance::setIsSelected(bool selected) {
@@ -90,6 +98,11 @@ namespace EARenderer {
             ID subMeshID = keyValuePair.first;
             mSubMeshMaterialMap[subMeshID] = materialID;
         }
+    }
+
+    void MeshInstance::setDiffuseLightProbeIndexForSubMeshID(DiffuseLightProbeIndex probeIndex, ID subMeshID) {
+        ASSERT(mSubMeshDiffuseLightProbeMap.find(subMeshID) != mSubMeshDiffuseLightProbeMap.end(), "Mesh (ID :" << mMeshID << ") doesn't contain submesh with ID " << subMeshID << " . Therefore cannot set light probe index for it.");
+        mSubMeshDiffuseLightProbeMap[subMeshID] = probeIndex;
     }
     
 }

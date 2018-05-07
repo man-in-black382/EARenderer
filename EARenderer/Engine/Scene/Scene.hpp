@@ -45,7 +45,7 @@ namespace EARenderer {
 
         size_t mOctreeDepth = 5;
         float mGridProbesDistance = 0.15;
-        Size2D mProbesLightmapResolution = Size2D(64);
+        Size2D mProbesLightmapResolution = Size2D(128);
         float mStaticGeometryArea = 0.0;
 
         DirectionalLight mDirectionalLight;

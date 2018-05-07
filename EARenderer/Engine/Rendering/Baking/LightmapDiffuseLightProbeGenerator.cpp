@@ -48,18 +48,22 @@ namespace EARenderer {
         float maxUVXAligned = ceil(maxUV.x * (lightmapResolution.x)) / (lightmapResolution.x) + step.x / 2.0;
         float maxUVYAligned = ceil(maxUV.y * (lightmapResolution.y)) / (lightmapResolution.y) + step.y / 2.0;
 
+        bool found = false;
+
         for (float v = minUVYAligned; v < maxUVYAligned; v += step.y) {
             for (float u = minUVXAligned; u < maxUVXAligned; u += step.x) {
                 size_t indexX = u * (lightmapResolution.x);
                 size_t indexY = v * (lightmapResolution.y);
                 size_t flatIndex = indexY * lightmapResolution.x + indexX;
 
+//                printf("Flat index: %zu \n", flatIndex);
+
                 if (scene->diffuseProbeLightmapIndices()[flatIndex] == InvalidProbeIndex) {
                     Triangle3D UVs(glm::vec3(vertex0.lightmapCoords, 0.0),
                                    glm::vec3(vertex1.lightmapCoords, 0.0),
                                    glm::vec3(vertex2.lightmapCoords, 0.0));
 
-                    bool pointInside = true;
+                    bool pointInside = false;
                     glm::vec3 barycentric(1.0 / 3.0);
 
                     // There will be a lot of cases where triangle will be mapped to a single lightmap texel
@@ -73,6 +77,8 @@ namespace EARenderer {
                     }
 
                     if (pointInside) {
+                        found = true;
+
                         glm::vec3 probePosition = triangle.p1 * barycentric.x +
                         triangle.p2 * barycentric.y +
                         triangle.p3 * barycentric.z;
@@ -90,6 +96,10 @@ namespace EARenderer {
                     }
                 }
             }
+        }
+
+        if (!found) {
+//            printf("Texel center not found in triangle UVs \n");
         }
     }
 
@@ -135,17 +145,15 @@ namespace EARenderer {
             fillNeighbour(index2D.x - 1, index2D.y - 1, index);
         }
 
-        // Fill the rest of the holes with 0 indices to prevent cache misses in the shaders
-        for (int32_t i = 0; i < probeIndices.size(); i++) {
-            if (probeIndices[i] == InvalidProbeIndex) {
-                probeIndices[i] = 0;
-            }
-        }
+//        // Fill the rest of the holes with 0 indices to prevent cache misses in the shaders
+//        for (int32_t i = 0; i < probeIndices.size(); i++) {
+//            if (probeIndices[i] == InvalidProbeIndex) {
+//                probeIndices[i] = 0;
+//            }
+//        }
     }
 
-#pragma mark - Public interface
-
-    void LightmapDiffuseLightProbeGenerator::generateProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult) {
+    void LightmapDiffuseLightProbeGenerator::generateLightmappedProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult) {
         Size2D lightMapResolution = scene->preferredProbeLightmapResolution();
         glm::vec2 glmResolution = glm::vec2(lightMapResolution.width, lightMapResolution.height);
 
@@ -180,11 +188,48 @@ namespace EARenderer {
                     generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
                 }
             }
-            
+
             fillProbeIndexHoles(scene);
 
             printf("Built %ld static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
         });
+    }
+
+    void LightmapDiffuseLightProbeGenerator::generateDedicatedProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult) {
+
+        printf("\nBuilding small mesh dedicated probes...\n");
+
+        Measurement::ExecutionTime("Small mesh dedicated probes placement took", [&]() {
+            size_t probeOffset = scene->diffuseLightProbes().size();
+
+            for (auto& subMeshInstanceIDPair : lightmapPackingResult.dedicatedProbeCandidates()) {
+                ID instanceID = subMeshInstanceIDPair.second;
+                ID subMeshID = subMeshInstanceIDPair.first;
+
+                auto& meshInstance = scene->meshInstances()[instanceID];
+                auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+                auto& subMesh = mesh.subMeshes()[subMeshID];
+
+                auto probePosition = subMesh.boundingBox().transformedBy(meshInstance.modelMatrix()).center();
+
+                DiffuseLightProbe probe;
+                probe.position = probePosition;
+
+                projectSurfelClustersOnProbe(scene, probe);
+
+                scene->diffuseLightProbes().push_back(probe);
+                meshInstance.setDiffuseLightProbeIndexForSubMeshID(scene->diffuseLightProbes().size() - 1, subMeshID);
+            }
+
+            printf("Built %ld dedicated static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
+        });
+    }
+
+#pragma mark - Public interface
+
+    void LightmapDiffuseLightProbeGenerator::generateProbes(Scene *scene, const LightmapPacker::PackingResult& lightmapPackingResult) {
+        generateLightmappedProbes(scene, lightmapPackingResult);
+        generateDedicatedProbes(scene, lightmapPackingResult);
     }
 
 }
