@@ -11,6 +11,7 @@
 #include "Collision.hpp"
 
 #include <unordered_set>
+#include <stdexcept>
 
 namespace EARenderer {
 
@@ -47,21 +48,11 @@ namespace EARenderer {
         float maxUVXAligned = ceil(maxUV.x * (lightmapResolution.x)) / (lightmapResolution.x) + step.x / 2.0;
         float maxUVYAligned = ceil(maxUV.y * (lightmapResolution.y)) / (lightmapResolution.y) + step.y / 2.0;
 
-//        for (float v = 0.0; v <= 1.0; v += step.y) {
-//            for (float u = 0.0; u <= 1.0; u += step.x) {
-        for (float v = step.y / 2.0; v <= 1.0; v += step.y) {
-            for (float u = step.x / 2.0; u <= 1.0; u += step.x) {
-//        for (float v = minUVYAligned; v <= maxUVYAligned; v += step.y) {
-//            for (float u = minUVXAligned; u <= maxUVXAligned; u += step.x) {
-//        for (float v = minUV.y; v <= maxUV.y; v += step.y) {
-//            for (float u = minUV.x; u <= maxUV.x; u += step.x) {
-//                u = 1.0;
-//                v = 1.0;
+        for (float v = minUVYAligned; v < maxUVYAligned; v += step.y) {
+            for (float u = minUVXAligned; u < maxUVXAligned; u += step.x) {
                 size_t indexX = u * (lightmapResolution.x);
                 size_t indexY = v * (lightmapResolution.y);
                 size_t flatIndex = indexY * lightmapResolution.x + indexX;
-
-//                printf("Flat index: %ld \n", flatIndex);
 
                 if (scene->diffuseProbeLightmapIndices()[flatIndex] == InvalidProbeIndex) {
                     Triangle3D UVs(glm::vec3(vertex0.lightmapCoords, 0.0),
@@ -76,9 +67,9 @@ namespace EARenderer {
                     //
                     if (UVs.area() > 0) {
                         barycentric = Collision::Barycentric(glm::vec3(u, v, 0.0), UVs);
-                        pointInside = barycentric.x > 0.0 && barycentric.y > 0.0 && barycentric.z > 0.0;
+                        pointInside = barycentric.x >= 0.0 && barycentric.y >= 0.0 && barycentric.z >= 0.0;
                     } else {
-                        return;
+                        throw std::logic_error("A triangle with degenerate lightmap UVs detected while generating light probes for static geometry");
                     }
 
                     if (pointInside) {
@@ -92,9 +83,7 @@ namespace EARenderer {
 
                         DiffuseLightProbe probe(probePosition);
                         probe.normal = glm::normalize(probeNormal);
-//                        probe.lightmapUV = { u + step.x / 2.0, v + step.y / 2.0 };
-                        probe.lightmapUV = { u - step.x / 2.0, v - step.y / 2.0 };
-//                        probe.lightmapUV = { u, v };
+                        probe.lightmapUV = { u, v };
                         projectSurfelClustersOnProbe(scene, probe);
                         scene->diffuseLightProbes().push_back(probe);
                         scene->diffuseProbeLightmapIndices()[flatIndex] = (uint32_t)scene->diffuseLightProbes().size() - 1;
@@ -147,6 +136,8 @@ namespace EARenderer {
         }
     }
 
+#pragma mark - Public interface
+
     void LightmapDiffuseLightProbeGenerator::generateProbes(Scene *scene) {
         Size2D lightMapResolution = scene->preferredProbeLightmapResolution();
         glm::vec2 glmResolution = glm::vec2(lightMapResolution.width, lightMapResolution.height);
@@ -180,8 +171,8 @@ namespace EARenderer {
                     generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
                 }
             }
-
-//            fillProbeIndexHoles(scene);
+            
+            fillProbeIndexHoles(scene);
 
             printf("Built %ld static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
         });

@@ -115,14 +115,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
     self.scene->sortStaticSubMeshes();
 
     EARenderer::LightmapPacker lightmapPacker;
-    auto debugUVBoxes = lightmapPacker.remapStaticGeometryToSingleLightmap(self.scene);
+    auto packingResult = lightmapPacker.packStaticGeometryToSingleLightmap(self.scene);
 
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
@@ -147,7 +147,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), /*{ self.scene->lightBakingVolume() }*/debugUVBoxes );
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), /*{ self.scene->lightBakingVolume() }*/packingResult.UVIslandsVisualizationData() );
 
     self.scene->destroyAuxiliaryData();
 
@@ -160,9 +160,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.sceneRenderer->prepareFrame();
 
-    self.sceneRenderer->renderMeshes();
+//    self.sceneRenderer->renderMeshes();
 //    self.sceneRenderer->renderDiffuseGridProbes(0.01);
-//    self.sceneRenderer->renderDiffuseLightmapProbes(0.1);
+//    self.sceneRenderer->renderDiffuseLightmapProbes(0.01);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(1600);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();

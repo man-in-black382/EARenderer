@@ -40,7 +40,6 @@ namespace EARenderer {
     // Surfels and surfel clusters
     mSurfelsGBuffer(surfelsGBufferData()),
     mSurfelClustersGBuffer(surfelClustersGBufferData()),
-    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
     mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
     mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
@@ -56,6 +55,8 @@ namespace EARenderer {
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
+
+    mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
     mLightmapProbesSHMaps(scene->preferredProbeLightmapResolution(), 7),
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
     mLightmapProbesSHFramebuffer(mLightmapProbesSHMaps.size())
@@ -63,7 +64,7 @@ namespace EARenderer {
         mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec2::length())
+            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length())
         });
         
         setupGLState();
@@ -420,8 +421,8 @@ namespace EARenderer {
         renderShadowMapsForDirectionalLights();
         relightSurfels();
         averageSurfelClusterLuminances();
-        updateGridProbes();
-        updateLightmapProbes();
+//        updateGridProbes();
+//        updateLightmapProbes();
 
         bindDefaultFramebuffer();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -484,20 +485,20 @@ namespace EARenderer {
             }
         }
 
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(false);
-
-        Rect2D viewportRect(Size2D(128));
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
-        });
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glEnable(GL_DEPTH_TEST);
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//
+//        Rect2D viewportRect(Size2D(128));
+//        GLViewport(viewportRect).apply();
+//
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
+//        });
+//
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

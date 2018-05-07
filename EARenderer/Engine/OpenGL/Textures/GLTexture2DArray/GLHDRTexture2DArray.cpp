@@ -30,7 +30,7 @@ namespace EARenderer {
             pixelData.push_back(layerData.data());
         }
 
-        initialize(estimation, Filter::Trilinear, WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
+        initialize(estimation, Filter::None, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
     }
 
 }

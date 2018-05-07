@@ -12,25 +12,10 @@
 
 namespace EARenderer {
 
-    std::vector<AxisAlignedBox3D> LightmapPacker::remapStaticGeometryToSingleLightmap(Scene *scene) const {
+#pragma mark - Private heplers
 
-        // DEBUG
-        std::vector<AxisAlignedBox3D> debugBoxes;
-        //
-
-        glm::vec2 twoPixelGap((1.0f / scene->preferredProbeLightmapResolution().width) * 2.0,
-                              (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
-
-        glm::vec2 onePixelGap = twoPixelGap / 2.0f;
-
-        int32_t binSize = std::numeric_limits<int32_t>::max();
-        int32_t initialScale = binSize * 0.90;
-        rbp::MaxRectsBinPack binPack(binSize, binSize);
-
-        float relevantArea = 0.0;
-
-        std::vector<Scene::SubMeshInstancePair> relevantSubMeshInstancePairs;
-
+    void LightmapPacker::obtainRelevantSubMeshes(Scene *scene) {
+        // Find sub meshes that lie inside light baking volume
         for (auto& subMeshInstanceIDPair : scene->sortedStaticSubMeshes()) {
             SubMesh *subMesh = subMeshInstanceIDPair.first;
             MeshInstance& instance = scene->meshInstances()[subMeshInstanceIDPair.second];
@@ -38,16 +23,67 @@ namespace EARenderer {
 
             // Skip sub meshes that lie outside of light baking volume
             if (scene->lightBakingVolume().contains(boundingBox)) {
-                relevantArea += subMesh->surfaceArea();
-                relevantSubMeshInstancePairs.push_back(subMeshInstanceIDPair);
+                mRelevantSubMeshesArea += subMesh->surfaceArea();
+                mRelevantSubMeshInstancePairs.push_back(subMeshInstanceIDPair);
+            }
+        }
+    }
+
+    void LightmapPacker::filterSmallSubMeshesOut(Scene *scene) {
+
+        glm::vec2 twoPixelGap((1.0f / scene->preferredProbeLightmapResolution().width) * 2.0,
+                              (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
+
+        int32_t binSize = std::numeric_limits<int32_t>::max();
+        int32_t initialScale = binSize * 0.90;
+        rbp::MaxRectsBinPack binPack(binSize, binSize);
+
+        std::vector<size_t> indicesToDelete;
+
+        // Filter out very small sub meshes that deserve a dedicated light probe and not needed in a lightmap
+        for (size_t i = 0; i < mRelevantSubMeshInstancePairs.size(); i++) {
+            SubMesh *subMesh = mRelevantSubMeshInstancePairs[i].first;
+
+            float normalizedArea = subMesh->surfaceArea() / mRelevantSubMeshesArea;
+            float squareSide = sqrt(normalizedArea);
+
+            int32_t size = squareSide * initialScale;
+
+            rbp::Rect uvRect = binPack.Insert(size, size, rbp::MaxRectsBinPack::FreeRectChoiceHeuristic::RectBestAreaFit);
+
+            float normWidth = (float)uvRect.width / binSize;
+            float normHeight = (float)uvRect.height / binSize;
+
+            normWidth -= twoPixelGap.x;
+            normHeight -= twoPixelGap.y;
+
+            if (normHeight <= 0.0 && normWidth <= 0.0) {
+                indicesToDelete.push_back(i);
+                mPackingResult.mDedicatedProbeCandidates.push_back(mRelevantSubMeshInstancePairs[i]);
             }
         }
 
-        for (auto& subMeshInstanceIDPair : relevantSubMeshInstancePairs) {
+        for (auto it = indicesToDelete.rbegin(); it != indicesToDelete.rend(); ++it) {
+            size_t indexToDelete = *it;
+            mRelevantSubMeshInstancePairs.erase(mRelevantSubMeshInstancePairs.begin() + indexToDelete);
+        }
+    }
 
-            SubMesh *subMesh = subMeshInstanceIDPair.first;
+    void LightmapPacker::packLargeSubMeshes(Scene *scene) {
+        
+        glm::vec2 twoPixelGap((1.0f / scene->preferredProbeLightmapResolution().width) * 2.0,
+                              (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
 
-            float normalizedArea = subMesh->surfaceArea() / relevantArea;
+        int32_t binSize = std::numeric_limits<int32_t>::max();
+        int32_t initialScale = binSize * 0.90;
+        rbp::MaxRectsBinPack binPack(binSize, binSize);
+
+        binPack.Init(binSize, binSize);
+
+        for (auto& subMeshInstancePair : mRelevantSubMeshInstancePairs) {
+            SubMesh *subMesh = subMeshInstancePair.first;
+
+            float normalizedArea = subMesh->surfaceArea() / mRelevantSubMeshesArea;
             float squareSide = sqrt(normalizedArea);
 
             int32_t size = squareSide * initialScale;
@@ -59,21 +95,8 @@ namespace EARenderer {
             float normWidth = (float)uvRect.width / binSize;
             float normHeight = (float)uvRect.height / binSize;
 
-//            glm::vec2 scaleDown((normWidth - twoPixelGap.x) / normWidth,
-//                                (normHeight - twoPixelGap.y) / normHeight);
-
-//            glm::vec2 scaleDown((1.0 - twoPixelGap.x),
-//                                (1.0 - twoPixelGap.y));
-//
-//            scaleDown = glm::max(scaleDown, glm::zero<glm::vec2>());
-
-            normWidth = std::max(normWidth - twoPixelGap.x, 0.0f);
-            normHeight = std::max(normHeight - twoPixelGap.y, 0.0f);
-
-//            normWidth *= scaleDown.x;
-//            normHeight *= scaleDown.y;
-//            normX += onePixelGap.x;
-//            normY += onePixelGap.y;
+            normWidth -= twoPixelGap.x;
+            normHeight -= twoPixelGap.y;
 
             for (auto& vertex : subMesh->vertices()) {
                 vertex.lightmapCoords *= glm::vec2(normWidth, normHeight);
@@ -82,18 +105,29 @@ namespace EARenderer {
 
             subMesh->finalizeVertexBuffer();
 
-            // DEBUG
+            // Emplace UV island
             glm::vec3 min(normX, normY, 0.0);
-            glm::vec3 max(normX + normWidth, normY + normHeight, 0.01);
-            debugBoxes.emplace_back(min * 10.0f, max * 10.0f);
+            glm::vec3 max(normX + normWidth, normY + normHeight, 0.0);
+            mPackingResult.mUVIslandsVisualizationData.emplace_back(min, max);
         }
 
-        debugBoxes.emplace_back(glm::vec3(0.0, 0.0, -0.1), glm::vec3(10.0, 10.0, 0.1));
-
-        float w = 1.0 / scene->preferredProbeLightmapResolution().width;
-        debugBoxes.emplace_back(glm::vec3(0.0, 0.0, 0.2), glm::vec3(w * 10.0, 10.0, 0.3));
-
-        return debugBoxes;
+        // Emplace whole lightmap containing all UV islands
+        mPackingResult.mUVIslandsVisualizationData.emplace_back(glm::vec3(0.0, 0.0, -0.1), glm::vec3(1.0, 1.0, 0.1));
     }
 
+#pragma mark - Public interface
+
+    LightmapPacker::PackingResult LightmapPacker::packStaticGeometryToSingleLightmap(Scene *scene) {
+        mRelevantSubMeshInstancePairs.clear();
+        mRelevantSubMeshesArea = 0.0;
+        mPackingResult.mDedicatedProbeCandidates.clear();
+        mPackingResult.mUVIslandsVisualizationData.clear();
+
+        obtainRelevantSubMeshes(scene);
+        filterSmallSubMeshesOut(scene);
+        packLargeSubMeshes(scene);
+
+        return mPackingResult;
+    }
+    
 }

@@ -163,13 +163,17 @@ SH UnpackGridSH() {
 SH UnpackLightmapSH() {
     SH sh;
 
-    vec4 shMap0Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 0));
-    vec4 shMap1Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 1));
-    vec4 shMap2Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 2));
-    vec4 shMap3Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 3));
-    vec4 shMap4Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 4));
-    vec4 shMap5Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 5));
-    vec4 shMap6Data = texture(uLightmapSHMaps, vec3(vLightmapCoords, 6));
+    vec3 lightmapSize = textureSize(uLightmapSHMaps, 0);
+    vec2 halfTexel = 1.0 / lightmapSize.xy / 2.0;
+    vec2 lightmapCoords = vLightmapCoords;// - halfTexel;
+
+    vec4 shMap0Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 0));
+    vec4 shMap1Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 1));
+    vec4 shMap2Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 2));
+    vec4 shMap3Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 3));
+    vec4 shMap4Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 4));
+    vec4 shMap5Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 5));
+    vec4 shMap6Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 6));
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
