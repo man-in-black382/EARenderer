@@ -45,7 +45,7 @@ namespace EARenderer {
 
         size_t mOctreeDepth = 5;
         float mGridProbesDistance = 0.15;
-        Size2D mProbesLightmapResolution = Size2D(128);
+        Size2D mProbesLightmapResolution = Size2D(64);
         float mStaticGeometryArea = 0.0;
 
         DirectionalLight mDirectionalLight;
@@ -61,6 +61,7 @@ namespace EARenderer {
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
         std::vector<DiffuseLightProbe> mDiffuseLightProbes;
         std::vector<uint32_t> mDiffuseProbeLightmapIndices;
+        std::vector<uint32_t> mDedicatedDiffuseProbeIndices;
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
         std::shared_ptr<EmbreeRayTracer> mRaytracer;
@@ -90,7 +91,7 @@ namespace EARenderer {
         /**
          All scene's sub meshes sorted by descending triangle area values
 
-         @return sorted vector of pointers to sub meshes
+         @return sorted vector of submesh - instance id pairs
          */
         const std::vector<SubMeshInstancePair>& sortedStaticSubMeshes();
 
@@ -99,6 +100,7 @@ namespace EARenderer {
         std::vector<SurfelClusterProjection>& surfelClusterProjections();
         std::vector<DiffuseLightProbe>& diffuseLightProbes();
         std::vector<uint32_t>& diffuseProbeLightmapIndices();
+        std::vector<uint32_t>& dedicatedDiffuseProbeIndices();
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> octree();
         std::shared_ptr<EmbreeRayTracer> rayTracer();
@@ -120,6 +122,7 @@ namespace EARenderer {
 
         void setLightBakingVolume(const AxisAlignedBox3D& volume);
         void setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices);
+        void setDedicatedDiffuseProbeIndices(const std::vector<uint32_t>& indices);
         void setCamera(Camera* camera);
         void setSkybox(Skybox* skybox);
 

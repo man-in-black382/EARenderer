@@ -57,9 +57,12 @@ namespace EARenderer {
     },
 
     mLightmapProbeIndicesMap(scene->diffuseProbeLightmapIndices()),
+    mDedicatedProbeIndicesMap(scene->dedicatedDiffuseProbeIndices()),
     mLightmapProbesSHMaps(scene->preferredProbeLightmapResolution(), 7),
+    mDedicatedProbesSHMaps(mLightmapProbeIndicesMap.size(), 7),
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
-    mLightmapProbesSHFramebuffer(mLightmapProbesSHMaps.size())
+    mLightmapProbesSHFramebuffer(mLightmapProbesSHMaps.size()),
+    mDedicatedProbesSHFramebuffer(mDedicatedProbesSHMaps.size())
     {
         mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -409,6 +412,16 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+        mDedicatedProbesSHFramebuffer.bind();
+        mDedicatedProbesSHFramebuffer.viewport().apply();
+
+        mLightmapProbesUpdateShader.ensureSamplerValidity([&] {
+            mLightmapProbesUpdateShader.setLightmapProbeIndicesMap(mDedicatedProbeIndicesMap);
+        });
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
         glEnable(GL_BLEND);
     }
 
@@ -441,11 +454,10 @@ namespace EARenderer {
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mCookTorranceShader.setLightmapProbesSHTextures(mLightmapProbesSHMaps);
+            mCookTorranceShader.setDedicatedProbesSHTextures(mDedicatedProbesSHMaps);
             mCookTorranceShader.setProbesGridResolution(mProbeGridResolution);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
-
-        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::Static);
 
         for (ID staticMeshInstanceID : mScene->staticMeshInstanceIDs()) {
             auto& instance = mScene->meshInstances()[staticMeshInstanceID];
@@ -457,8 +469,17 @@ namespace EARenderer {
                 auto& subMesh = subMeshes[subMeshID];
                 auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
 
-                mCookTorranceShader.ensureSamplerValidity([this, &material]() {
+                mCookTorranceShader.ensureSamplerValidity([&]() {
                     mCookTorranceShader.setMaterial(material);
+
+                    auto index = instance.SHTextureIndexForSubMesh(subMeshID);
+                    if (index == MeshInstance::InvalidIndex) {
+                        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::StaticDedicated);
+                        mCookTorranceShader.setDedicatedProbesSHMapIndex(index);
+                    } else {
+                        mCookTorranceShader.setGeometryType(GLSLCookTorrance::GeometryType::StaticLightmapped);
+                    }
+
                 });
 
                 subMesh.draw();

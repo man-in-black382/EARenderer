@@ -93,6 +93,10 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uLightmapSHMaps")>, textures);
     }
 
+    void GLSLCookTorrance::setDedicatedProbesSHTextures(const GLHDRTexture2DArray& textures) {
+        setUniformTexture(uint32_constant<ctcrc32("uDedicatedSHMaps")>, textures);
+    }
+
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
@@ -100,8 +104,9 @@ namespace EARenderer {
     void GLSLCookTorrance::setGeometryType(GeometryType type) {
         int8_t t = 0;
         switch (type) {
-            case GeometryType::Static: t = 0; break;
-            case GeometryType::Dynamic: t = 1; break;
+            case GeometryType::StaticLightmapped: t = 0; break;
+            case GeometryType::StaticDedicated: t = 1; break;
+            case GeometryType::Dynamic: t = 2; break;
         }
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uGeometryType")>).location(), t);
     }
@@ -109,5 +114,9 @@ namespace EARenderer {
     void GLSLCookTorrance::setProbesGridResolution(const glm::ivec3& resolution) {
         glUniform3iv(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), 1, glm::value_ptr(resolution));
     }
-    
+
+    void GLSLCookTorrance::setDedicatedProbesSHMapIndex(uint32_t index) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uDedicatedSHMapIndex")>).location(), index);
+    }
+
 }

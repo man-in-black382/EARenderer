@@ -9,8 +9,9 @@ const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
-const int kGeometryTypeStatic   = 0;
-const int kGeometryTypeDynamic  = 1;
+const int kGeometryTypeStaticLightmapped = 0;
+const int kGeometryTypeStaticDedicated   = 1;
+const int kGeometryTypeDynamic           = 2;
 
 // Spherical harmonics
 const float kC1 = 0.429043;
@@ -99,14 +100,15 @@ uniform sampler3D uGridSHMap5;
 uniform sampler3D uGridSHMap6;
 
 uniform sampler2DArray uLightmapSHMaps;
+uniform sampler2DArray uDedicatedSHMaps;
 
-uniform bool uShouldEvaluateSphericalHarmonics;
+uniform uint uDedicatedSHMapIndex;
 
 // IBL
-uniform sampler2D uBRDFIntegrationMap;
-uniform samplerCube uSpecularIrradianceMap;
-uniform samplerCube uDiffuseIrradianceMap;
-uniform int uSpecularIrradianceMapLOD;
+//uniform sampler2D uBRDFIntegrationMap;
+//uniform samplerCube uSpecularIrradianceMap;
+//uniform samplerCube uDiffuseIrradianceMap;
+//uniform int uSpecularIrradianceMapLOD;
 
 // Functions
 
@@ -146,26 +148,13 @@ SH UnpackGridSH() {
     sh.L20  = vec3(shMap5Data.gba);
     sh.L22  = vec3(shMap6Data.rgb);
 
-//    // White and green
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
-
     return sh;
 }
 
 SH UnpackLightmapSH() {
     SH sh;
 
-    vec3 lightmapSize = textureSize(uLightmapSHMaps, 0);
-    vec2 halfTexel = 1.0 / lightmapSize.xy / 2.0;
-    vec2 lightmapCoords = vLightmapCoords;// - halfTexel;
+    vec2 lightmapCoords = vLightmapCoords;
 
     vec4 shMap0Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 0));
     vec4 shMap1Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 1));
@@ -174,6 +163,38 @@ SH UnpackLightmapSH() {
     vec4 shMap4Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 4));
     vec4 shMap5Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 5));
     vec4 shMap6Data = texture(uLightmapSHMaps, vec3(lightmapCoords, 6));
+
+    sh.L00  = vec3(shMap0Data.rgb);
+    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
+    sh.L1_1 = vec3(shMap2Data.gba);
+    sh.L21  = vec3(shMap3Data.rgb);
+    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
+    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
+    sh.L20  = vec3(shMap5Data.gba);
+    sh.L22  = vec3(shMap6Data.rgb);
+
+    return sh;
+}
+
+SH UnpackDedicatedSH() {
+    SH sh;
+
+    ivec3 size = textureSize(uDedicatedSHMaps, 0);
+    vec2 halfTexel = 1.0 / size.xy / 2.0;
+
+    vec2 coords = vec2(float(uDedicatedSHMapIndex % size.x) / float(size.x),
+                       float(uDedicatedSHMapIndex / size.x) / float(size.y));
+
+    coords += halfTexel;
+
+    vec4 shMap0Data = texture(uDedicatedSHMaps, vec3(coords, 0));
+    vec4 shMap1Data = texture(uDedicatedSHMaps, vec3(coords, 1));
+    vec4 shMap2Data = texture(uDedicatedSHMaps, vec3(coords, 2));
+    vec4 shMap3Data = texture(uDedicatedSHMaps, vec3(coords, 3));
+    vec4 shMap4Data = texture(uDedicatedSHMaps, vec3(coords, 4));
+    vec4 shMap5Data = texture(uDedicatedSHMaps, vec3(coords, 5));
+    vec4 shMap6Data = texture(uDedicatedSHMaps, vec3(coords, 6));
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
@@ -206,6 +227,11 @@ vec3 EvaluateGridSphericalHarmonics(vec3 direction) {
 
 vec3 EvaluateLightmapSphericalHarmonics(vec3 direction) {
     SH sh = UnpackLightmapSH();
+    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+}
+
+vec3 EvaluateDedicatedSphericalHarmonics(vec3 direction) {
+    SH sh = UnpackDedicatedSH();
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
@@ -298,22 +324,22 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     return diffuse + specular;
 }
 
-vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
-    vec3 R = reflect(-V, N);
-    vec3 diffuseIrradiance  = texture(uDiffuseIrradianceMap, R).rgb;
-    vec3 specularIrradiance = textureLod(uSpecularIrradianceMap, R, roughness * (uSpecularIrradianceMapLOD - 1)).rgb;
-    vec3 F                  = FresnelSchlick(V, H, albedo, metallic);
-    vec2 envBRDF            = texture(uBRDFIntegrationMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
-    
-    vec3 Ks         = F;                // Specular (reflected) portion
-    vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
-    Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
-    
-    vec3 diffuse    = diffuseIrradiance * albedo;
-    vec3 specular   = (F * envBRDF.x + envBRDF.y) * specularIrradiance;
-
-    return diffuse + specular;
-}
+//vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
+//    vec3 R = reflect(-V, N);
+//    vec3 diffuseIrradiance  = texture(uDiffuseIrradianceMap, R).rgb;
+//    vec3 specularIrradiance = textureLod(uSpecularIrradianceMap, R, roughness * (uSpecularIrradianceMapLOD - 1)).rgb;
+//    vec3 F                  = FresnelSchlick(V, H, albedo, metallic);
+//    vec2 envBRDF            = texture(uBRDFIntegrationMap, vec2(max(dot(N, V), 0.0), roughness)).rg;
+//    
+//    vec3 Ks         = F;                // Specular (reflected) portion
+//    vec3 Kd         = vec3(1.0) - Ks;   // Diffuse (refracted) portion
+//    Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
+//    
+//    vec3 diffuse    = diffuseIrradiance * albedo;
+//    vec3 specular   = (F * envBRDF.x + envBRDF.y) * specularIrradiance;
+//
+//    return diffuse + specular;
+//}
 
 ////////////////////////////////////////////////////////////
 //////////// Radiance of different light types /////////////
@@ -459,18 +485,24 @@ void main() {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
         shadow      = Shadow(N, L);
-    } else if (uLightType == kLightTypePoint) {
+    }
+    else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N);
         L           = normalize(uPointLight.position - vWorldPosition);
-    } else if (uLightType == kLightTypeSpot) {
+    }
+    else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
     }
 
     vec3 indirectRadiance = vec3(0.0);
 
-    if (uGeometryType == kGeometryTypeStatic) {
+    if (uGeometryType == kGeometryTypeStaticLightmapped) {
         indirectRadiance = EvaluateLightmapSphericalHarmonics(N);
-    } else if (uGeometryType == kGeometryTypeDynamic) {
+    }
+    else if (uGeometryType == kGeometryTypeStaticDedicated) {
+        indirectRadiance = EvaluateGridSphericalHarmonics(N);
+    }
+    else if (uGeometryType == kGeometryTypeDynamic) {
         indirectRadiance = EvaluateGridSphericalHarmonics(N);
     }
 

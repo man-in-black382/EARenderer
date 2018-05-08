@@ -42,8 +42,8 @@ namespace EARenderer {
 
         glm::vec2 step = 1.0f / lightmapResolution;
 
-        float minUVXAligned = floor(minUV.x * (lightmapResolution.x)) / (lightmapResolution.x) + step.x / 2.0;
-        float minUVYAligned = floor(minUV.y * (lightmapResolution.y)) / (lightmapResolution.y) + step.y / 2.0;
+        float minUVXAligned = floor(minUV.x * (lightmapResolution.x)) / (lightmapResolution.x) - step.x / 2.0;
+        float minUVYAligned = floor(minUV.y * (lightmapResolution.y)) / (lightmapResolution.y) - step.y / 2.0;
 
         float maxUVXAligned = ceil(maxUV.x * (lightmapResolution.x)) / (lightmapResolution.x) + step.x / 2.0;
         float maxUVYAligned = ceil(maxUV.y * (lightmapResolution.y)) / (lightmapResolution.y) + step.y / 2.0;
@@ -77,8 +77,6 @@ namespace EARenderer {
                     }
 
                     if (pointInside) {
-                        found = true;
-
                         glm::vec3 probePosition = triangle.p1 * barycentric.x +
                         triangle.p2 * barycentric.y +
                         triangle.p3 * barycentric.z;
@@ -96,10 +94,6 @@ namespace EARenderer {
                     }
                 }
             }
-        }
-
-        if (!found) {
-//            printf("Texel center not found in triangle UVs \n");
         }
     }
 
@@ -180,13 +174,56 @@ namespace EARenderer {
                     continue;
                 }
 
+
+//
+//                if (subMesh.name() == "sponza_116") {
+//                    printf("");
+//                }
+//
+//                Triangle3D t(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(1.0, 1.0, 0.0));
+//                auto bc = Collision::Barycentric(glm::vec3(0.3, 0.5, 0.0), t);
+//
+//                glm::vec2 min(1.0);
+//                glm::vec2 max(0.0);
+//
+//                float a = 0.0;
+
+                bool anyNumberOfProbesGenerated = false;
+
                 for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
                     auto& v0 = subMesh.vertices()[i];
                     auto& v1 = subMesh.vertices()[i + 1];
                     auto& v2 = subMesh.vertices()[i + 2];
 
+//                    Triangle2D lt(v0.lightmapCoords, v1.lightmapCoords, v2.lightmapCoords);
+//                    a += lt.area();
+//
+//                    glm::vec2 minUV = glm::min(glm::min(v0.lightmapCoords, v1.lightmapCoords), v2.lightmapCoords);
+//                    glm::vec2 maxUV = glm::max(glm::max(v0.lightmapCoords, v1.lightmapCoords), v2.lightmapCoords);
+//
+//                    min = glm::min(min, minUV);
+//                    max = glm::max(max, maxUV);
+
+                    size_t probesCount = scene->diffuseLightProbes().size();
+
                     generateProbesForStaticVertices(scene, glmResolution, modelMatrix, v0, v1, v2);
+
+                    if (scene->diffuseLightProbes().size() > probesCount) {
+                        anyNumberOfProbesGenerated = true;
+                    }
                 }
+
+                if (!anyNumberOfProbesGenerated) {
+//                    throw std::logic_error("Zero diffuse probes generated for sub mesh. Examine your lightmap coordinates.");
+                }
+
+//                glm::vec2 length = max - min;
+//                float b = length.x * length.y;
+//                float r = a / b;
+//
+//                if (!found) {
+//                    printf("Failed to locate texel center on sub mesh \n");
+//                }
             }
 
             fillProbeIndexHoles(scene);
@@ -200,7 +237,11 @@ namespace EARenderer {
         printf("\nBuilding small mesh dedicated probes...\n");
 
         Measurement::ExecutionTime("Small mesh dedicated probes placement took", [&]() {
+
+            std::vector<uint32_t> probeIndices;
             size_t probeOffset = scene->diffuseLightProbes().size();
+
+            MeshInstance::Index shTextureIndex = 0;
 
             for (auto& subMeshInstanceIDPair : lightmapPackingResult.dedicatedProbeCandidates()) {
                 ID instanceID = subMeshInstanceIDPair.second;
@@ -216,10 +257,17 @@ namespace EARenderer {
                 probe.position = probePosition;
 
                 projectSurfelClustersOnProbe(scene, probe);
-
                 scene->diffuseLightProbes().push_back(probe);
-                meshInstance.setDiffuseLightProbeIndexForSubMeshID(scene->diffuseLightProbes().size() - 1, subMeshID);
+
+                uint32_t lightProbeIndex = (uint32_t)scene->diffuseLightProbes().size() - 1;
+
+                probeIndices.push_back(lightProbeIndex);
+                meshInstance.setDedicatedSHTextureIndexForSubMeshID(shTextureIndex, subMeshID);
+
+                shTextureIndex++;
             }
+
+            scene->setDedicatedDiffuseProbeIndices(probeIndices);
 
             printf("Built %ld dedicated static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
         });

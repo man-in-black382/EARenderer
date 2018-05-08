@@ -36,6 +36,8 @@ namespace EARenderer {
         glm::vec2 twoPixelGap((1.0f / scene->preferredProbeLightmapResolution().width) * 2.0,
                               (1.0f / scene->preferredProbeLightmapResolution().height) * 2.0);
 
+        glm::vec2 onePixelGap = twoPixelGap / 2.0f;
+
         int32_t binSize = std::numeric_limits<int32_t>::max();
         int32_t initialScale = binSize * 0.90;
         rbp::MaxRectsBinPack binPack(binSize, binSize);
@@ -63,7 +65,7 @@ namespace EARenderer {
             normWidth -= twoPixelGap.x;
             normHeight -= twoPixelGap.y;
 
-            if (normHeight <= 0.0 && normWidth <= 0.0) {
+            if (normHeight < onePixelGap.x && normWidth < onePixelGap.y) {
                 indicesToDelete.push_back(i);
                 mPackingResult.mDedicatedProbeCandidates.push_back(mRelevantSubMeshInstancePairs[i]);
             }

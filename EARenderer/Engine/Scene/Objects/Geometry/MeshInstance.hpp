@@ -21,7 +21,9 @@ namespace EARenderer {
     
     class MeshInstance {
     public:
-        using DiffuseLightProbeIndex = size_t;
+        using Index = uint32_t;
+
+        static constexpr Index InvalidIndex = -1;
 
     private:
         ID mMeshID;
@@ -30,10 +32,9 @@ namespace EARenderer {
         Transformation mTransformation;
         glm::mat4 mModelMatrix;
         std::unordered_map<ID, ID> mSubMeshMaterialMap;
-        std::unordered_map<ID, DiffuseLightProbeIndex> mSubMeshDiffuseLightProbeMap;
+        std::unordered_map<ID, Index> mSubMeshSHTextureIndexMap;
         
     public:
-        static constexpr size_t AbsentProbeIndex = -1;
 
         MeshInstance(ID meshID);
         
@@ -44,14 +45,14 @@ namespace EARenderer {
         Transformation transformation() const;
         AxisAlignedBox3D boundingBox() const;
         ID materialIDForSubMeshID(ID subMeshID) const;
-        DiffuseLightProbeIndex diffuseLightProbeIndexForSubMeshID(ID subMeshID) const;
+        Index SHTextureIndexForSubMesh(ID subMeshID) const;
         
         void setIsSelected(bool selected);
         void setIsHighlighted(bool highlighted);
         void setTransformation(const Transformation& transform);
         void setMaterialIDForSubMeshID(ID materialID, ID subMeshID);
         void setMaterialIDForAllSubmeshes(ID materialID);
-        void setDiffuseLightProbeIndexForSubMeshID(DiffuseLightProbeIndex probeIndex, ID subMeshID);
+        void setDedicatedSHTextureIndexForSubMeshID(Index textureIndex, ID subMeshID);
     };
     
 }

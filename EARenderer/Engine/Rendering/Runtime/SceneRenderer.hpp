@@ -83,6 +83,7 @@ namespace EARenderer {
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLLDRTexture2D mSurfelClustersGBuffer;
         GLLDRTexture2D mLightmapProbeIndicesMap;
+        GLLDRTexture2D mDedicatedProbeIndicesMap;
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
@@ -94,8 +95,10 @@ namespace EARenderer {
         GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
         std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
         GLHDRTexture2DArray mLightmapProbesSHMaps;
+        GLHDRTexture2DArray mDedicatedProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
         GLFramebuffer mLightmapProbesSHFramebuffer;
+        GLFramebuffer mDedicatedProbesSHFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;

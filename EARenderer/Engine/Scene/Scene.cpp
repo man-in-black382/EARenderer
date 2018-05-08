@@ -101,6 +101,10 @@ namespace EARenderer {
         return mDiffuseProbeLightmapIndices;
     }
 
+    std::vector<uint32_t>& Scene::dedicatedDiffuseProbeIndices() {
+        return mDedicatedDiffuseProbeIndices;
+    }
+
     float Scene::staticGeometryArea() const {
         return mStaticGeometryArea;
     }
@@ -128,6 +132,10 @@ namespace EARenderer {
 
     void Scene::setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices) {
         mDiffuseProbeLightmapIndices = indices;
+    }
+
+    void Scene::setDedicatedDiffuseProbeIndices(const std::vector<uint32_t>& indices) {
+        mDedicatedDiffuseProbeIndices = indices;
     }
     
 #pragma mark -
