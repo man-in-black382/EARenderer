@@ -226,7 +226,9 @@ namespace EARenderer {
 //                }
             }
 
-            fillProbeIndexHoles(scene);
+            for (size_t i = 0; i < 50; i++) {
+                fillProbeIndexHoles(scene);
+            }
 
             printf("Built %ld static geometry probes \n", scene->diffuseLightProbes().size() - probeOffset);
         });

@@ -121,17 +121,17 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.scene->sortStaticSubMeshes();
 
-    EARenderer::LightmapPacker lightmapPacker;
-    auto packingResult = lightmapPacker.packStaticGeometryToSingleLightmap(self.scene);
+//    EARenderer::LightmapPacker lightmapPacker;
+//    auto packingResult = lightmapPacker.packStaticGeometryToSingleLightmap(self.scene);
 
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     self.surfelGenerator->generateStaticGeometrySurfels();
 
-//    EARenderer::GridDiffuseLightProbeGenerator gridProbeGenerator;
-//    gridProbeGenerator.generateProbes(self.scene);
+    EARenderer::GridDiffuseLightProbeGenerator gridProbeGenerator;
+    gridProbeGenerator.generateProbes(self.scene);
 
-    EARenderer::LightmapDiffuseLightProbeGenerator lightmapProbeGenerator;
-    lightmapProbeGenerator.generateProbes(self.scene, packingResult);
+//    EARenderer::LightmapDiffuseLightProbeGenerator lightmapProbeGenerator;
+//    lightmapProbeGenerator.generateProbes(self.scene, packingResult);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
@@ -147,7 +147,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), /*{ self.scene->lightBakingVolume() }*/packingResult.UVIslandsVisualizationData() );
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() } );
 
     self.scene->destroyAuxiliaryData();
 
@@ -161,8 +161,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneRenderer->prepareFrame();
 
     self.sceneRenderer->renderMeshes();
-//    self.sceneRenderer->renderDiffuseGridProbes(0.01);
-//    self.sceneRenderer->renderDiffuseLightmapProbes(0.1);
+    self.sceneRenderer->renderDiffuseGridProbes(0.01);
+//    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(1600);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();
@@ -170,7 +170,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelsGBuffer();
     self.axesRenderer->render();
 //    self.triangleRenderer->render();
-    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;

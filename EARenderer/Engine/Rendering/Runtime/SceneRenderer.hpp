@@ -32,9 +32,7 @@
 #include "GLSLSurfelLighting.hpp"
 #include "GLSLSurfelClusterAveraging.hpp"
 #include "GLSLGridLightProbesUpdate.hpp"
-#include "GLSLLightmapLightProbesUpdate.hpp"
 #include "GLSLGridLightProbeRendering.hpp"
-#include "GLSLLightmapLightProbeRendering.hpp"
 #include "GLSLLightProbeLinksRendering.hpp"
 
 #include "GLDepthTexture2D.hpp"
@@ -70,7 +68,6 @@ namespace EARenderer {
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
-        GLSLLightmapLightProbesUpdate mLightmapProbesUpdateShader;
 
         GLSLLightProbeLinksRendering mLightProbeLinksRenderingShader;
         
@@ -82,8 +79,6 @@ namespace EARenderer {
 
         GLHDRTexture2DArray mSurfelsGBuffer;
         GLLDRTexture2D mSurfelClustersGBuffer;
-        GLLDRTexture2D mLightmapProbeIndicesMap;
-        GLLDRTexture2D mDedicatedProbeIndicesMap;
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
@@ -94,18 +89,13 @@ namespace EARenderer {
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
         std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
-        GLHDRTexture2DArray mLightmapProbesSHMaps;
-        GLHDRTexture2DArray mDedicatedProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
-        GLFramebuffer mLightmapProbesSHFramebuffer;
-        GLFramebuffer mDedicatedProbesSHFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDepthFramebuffer;
 
         GLSLGridLightProbeRendering mGridProbeRenderingShader;
-        GLSLLightmapLightProbeRendering mLightmapProbeRenderingShader;
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
@@ -126,8 +116,7 @@ namespace EARenderer {
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
-        void updateLightmapProbes();
-        
+
         void convertEquirectangularMapToCubemap();
         void buildDiffuseIrradianceMap();
         void buildSpecularIrradianceMap();
@@ -147,7 +136,6 @@ namespace EARenderer {
         void renderSurfelLuminances();
         void renderSurfelClusterLuminances();
         void renderDiffuseGridProbes(float radius);
-        void renderDiffuseLightmapProbes(float radius);
         void renderLinksForDiffuseProbe(size_t probeIndex);
     };
     
