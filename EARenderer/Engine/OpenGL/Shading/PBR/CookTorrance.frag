@@ -362,7 +362,7 @@ vec3 LinearFromSRGB(vec3 sRGB) {
 }
 
 vec3 FetchAlbedoMap() {
-//    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 6).rgb);
+//    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 10).rgb);
     return LinearFromSRGB(texture(uMaterial.albedoMap, vTexCoords.st).rgb);
 }
 
@@ -430,5 +430,5 @@ void main() {
 
     oFragColor = vec4(correctColor, 1.0);
 
-    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 }

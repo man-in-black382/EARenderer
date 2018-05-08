@@ -14,10 +14,16 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLTextureSampler::GLTextureSampler(const Size2D textureSize, int32_t mipLevel)
-    :
-    mMipSize(textureSize.transformedBy(glm::vec2(std::pow(0.5, mipLevel))))
-    { }
+    GLTextureSampler::GLTextureSampler(const GLTexture& texture, int32_t mipLevel) {
+        texture.bind();
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        GLint w = 0;
+        GLint h = 0;
+        glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_WIDTH, &w);
+        glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_HEIGHT, &h);
+        mMipSize.width = w;
+        mMipSize.height = h;
+    }
 
     GLTextureSampler::~GLTextureSampler() { }
     

@@ -9,7 +9,7 @@
 #ifndef GLTextureSampler_hpp
 #define GLTextureSampler_hpp
 
-#include "Size2D.hpp"
+#include "GLTexture.hpp"
 
 #include <stdlib.h>
 
@@ -19,7 +19,7 @@ namespace EARenderer {
     protected:
         Size2D mMipSize;
 
-        GLTextureSampler(const Size2D textureSize, int32_t mipLevel);
+        GLTextureSampler(const GLTexture& texture, int32_t mipLevel);
 
     public:
         virtual ~GLTextureSampler() = 0;

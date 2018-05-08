@@ -15,10 +15,9 @@ namespace EARenderer {
 
     GLLDRTexture2DSampler::GLLDRTexture2DSampler(const GLLDRTexture2D& texture, uint8_t mipLevel)
     :
-    GLTexture2DSampler(texture.size(), mipLevel),
+    GLTexture2DSampler(texture, mipLevel),
     mPixelBuffer(new GLubyte[mMipSize.width * mMipSize.height * 4])
     {
-        texture.bind();
         glGetTexImage(GL_TEXTURE_2D, mipLevel, GL_RGBA, GL_UNSIGNED_BYTE, mPixelBuffer.get());
     }
 

@@ -17,7 +17,7 @@ namespace EARenderer {
     
     GLHDRCubemapSampler::GLHDRCubemapSampler(const GLHDRTextureCubemap& texture, uint8_t mipLevel)
     :
-    GLCubemapSampler(texture.size(), mipLevel),
+    GLCubemapSampler(texture, mipLevel),
     mPositiveXPixelBuffer(new GLhalf[mMipSize.width * mMipSize.height * 4]),
     mNegativeXPixelBuffer(new GLhalf[mMipSize.width * mMipSize.height * 4]),
     mPositiveYPixelBuffer(new GLhalf[mMipSize.width * mMipSize.height * 4]),
