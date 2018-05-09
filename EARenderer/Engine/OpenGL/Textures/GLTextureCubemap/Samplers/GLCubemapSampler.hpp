@@ -23,8 +23,8 @@ namespace EARenderer {
         using GLTextureSampler::GLTextureSampler;
 
     public:
-        void computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const;
-        void computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) const;
+        static void ComputeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords);
+        static void ComputeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector);
         
         virtual Color sample(const glm::vec3& direction) const = 0;
         virtual Color sample(GLCubemapFace face, int32_t x, int32_t y) const = 0;

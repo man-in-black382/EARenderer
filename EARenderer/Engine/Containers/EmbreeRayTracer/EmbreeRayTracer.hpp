@@ -35,6 +35,7 @@ namespace EARenderer {
         void swap(EmbreeRayTracer& that);
 
         bool lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1);
+        bool rayHit(const Ray3D& ray, float& distance);
     };
 
     void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs);

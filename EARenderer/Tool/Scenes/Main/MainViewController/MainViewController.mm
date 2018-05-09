@@ -35,6 +35,7 @@
 #import "GridDiffuseLightProbeGenerator.hpp"
 #import "LightmapDiffuseLightProbeGenerator.hpp"
 #import "LightmapPacker.hpp"
+#import "OcclusionMapBuilder.hpp"
 
 #import "Choreograph.h"
 
@@ -129,6 +130,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     EARenderer::GridDiffuseLightProbeGenerator gridProbeGenerator;
     gridProbeGenerator.generateProbes(self.scene);
+
+    EARenderer::OcclusionMapBuilder probeOcclusionMapBuilder(EARenderer::Size2D(10));
+    probeOcclusionMapBuilder.buildLightProbeOcclusionMaps(self.scene);
 
 //    EARenderer::LightmapDiffuseLightProbeGenerator lightmapProbeGenerator;
 //    lightmapProbeGenerator.generateProbes(self.scene, packingResult);

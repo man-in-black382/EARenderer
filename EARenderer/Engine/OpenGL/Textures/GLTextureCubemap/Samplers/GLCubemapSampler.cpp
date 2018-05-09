@@ -13,9 +13,9 @@
 
 namespace EARenderer {
 
-#pragma mark - Private heplers
+#pragma mark - Conversions
     
-    void GLCubemapSampler::computeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) const {
+    void GLCubemapSampler::ComputeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords) {
         int majorAxis = 0;
         glm::vec3 a = glm::abs(sampleVector);
         
@@ -46,7 +46,7 @@ namespace EARenderer {
         texCoords = { 0.5f * (tmpS / m + 1.0f), 0.5f * (tmpT / m + 1.0f) };
     }
     
-    void GLCubemapSampler::computeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) const {
+    void GLCubemapSampler::ComputeSampleVector(GLCubemapFace face, int32_t x, int32_t y, const Size2D& faceSize, glm::vec3& sampleVector) {
         float s = ((float)x + 0.5f) / faceSize.width * 2.0f - 1.0f;
         float t = ((float)y + 0.5f) / faceSize.height * 2.0f - 1.0f;
         

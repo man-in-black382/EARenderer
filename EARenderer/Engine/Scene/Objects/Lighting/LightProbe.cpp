@@ -85,7 +85,7 @@ namespace EARenderer {
                     Color texel = sampler.sample(CubemapFaceFromIndex(face), x, y);
                     float sAngle = solidAngle(x, y, cubemap.size());
                     glm::vec3 direction;
-                    sampler.computeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
+                    GLCubemapSampler::ComputeSampleVector(CubemapFaceFromIndex(face), x, y, cubemap.size(), direction);
                     direction = glm::normalize(direction);
                     mSphericalHarmonics.contribute(direction, texel, sAngle);
                 }

@@ -119,4 +119,34 @@ namespace EARenderer {
         return ray.tfar < 0.0;
     }
 
+    bool EmbreeRayTracer::rayHit(const Ray3D& ray, float& distance) {
+        RTCIntersectContext context;
+        rtcInitIntersectContext(&context);
+
+        RTCRayHit rayHit;
+
+        rayHit.ray.org_x = ray.origin.x;
+        rayHit.ray.org_y = ray.origin.y;
+        rayHit.ray.org_z = ray.origin.z;
+        rayHit.ray.dir_x = ray.direction.x;
+        rayHit.ray.dir_y = ray.direction.y;
+        rayHit.ray.dir_z = ray.direction.z;
+        rayHit.ray.tnear = 0.01f;
+        rayHit.ray.tfar = std::numeric_limits<float>::infinity();
+        rayHit.ray.flags = 0;
+        rayHit.ray.mask = -1;
+
+        rayHit.hit.instID[0] = RTC_INVALID_GEOMETRY_ID;
+        rayHit.hit.geomID = RTC_INVALID_GEOMETRY_ID;
+
+        rtcIntersect1(mScene, &context, &rayHit);
+
+        distance = rayHit.ray.tfar;
+
+        // When no intersection is found, the ray data is not updated.
+        // In case a hit was found, the tfar component of the ray is set to -inf.
+        //
+        return rayHit.hit.geomID != RTC_INVALID_GEOMETRY_ID;
+    }
+
 }

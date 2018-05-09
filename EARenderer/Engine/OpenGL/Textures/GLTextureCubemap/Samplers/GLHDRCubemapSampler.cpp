@@ -45,7 +45,7 @@ namespace EARenderer {
     Color GLHDRCubemapSampler::sample(const glm::vec3& direction) const {
         GLCubemapFace face;
         glm::vec2 texCoords;
-        computeTexCoords(direction, face, texCoords);
+        ComputeTexCoords(direction, face, texCoords);
         return sample(face, texCoords.x * mMipSize.width, texCoords.y * mMipSize.height);
     }
     

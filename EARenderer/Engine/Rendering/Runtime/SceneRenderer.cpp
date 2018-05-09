@@ -62,7 +62,7 @@ namespace EARenderer {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length())
         });
-        
+
         setupGLState();
         setupTextures();
         setupFramebuffers();
