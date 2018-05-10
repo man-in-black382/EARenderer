@@ -13,13 +13,15 @@
 #include "DiffuseLightProbeData.hpp"
 #include "SurfelData.hpp"
 
+#include <memory>
+
 namespace EARenderer {
 
     class DiffuseLightProbeGenerator {
     protected:
-        DiffuseLightProbeData mProbeData;
+        std::shared_ptr<DiffuseLightProbeData> mProbeData;
 
-        const SurfelData *mSurfelData = nullptr;
+        std::shared_ptr<const SurfelData> mSurfelData;
         const Scene *mScene = nullptr;
 
         void captureEnvironmentForProbe(const LightProbe& probe);
@@ -37,7 +39,7 @@ namespace EARenderer {
         std::vector<uint32_t> probeProjectionsMetadata() const;
 
     public:
-        DiffuseLightProbeData generateProbes(const Scene *scene, const SurfelData& surfelData);
+        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData);
     };
 
 }

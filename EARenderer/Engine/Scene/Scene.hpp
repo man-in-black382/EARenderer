@@ -89,12 +89,12 @@ namespace EARenderer {
         DirectionalLight& directionalLight();
         PackedLookupTable<PointLight>& pointLights();
         PackedLookupTable<MeshInstance>& meshInstances();
-        PackedLookupTable<LightProbe>& lightProbes();
+//        PackedLookupTable<LightProbe>& lightProbes();
 
         const DirectionalLight& directionalLight() const;
         const PackedLookupTable<PointLight>& pointLights() const;
         const PackedLookupTable<MeshInstance>& meshInstances() const;
-        const PackedLookupTable<LightProbe>& lightProbes() const;
+//        const PackedLookupTable<LightProbe>& lightProbes() const;
 
         /**
          All scene's sub meshes sorted by descending triangle area values
@@ -105,10 +105,10 @@ namespace EARenderer {
 
 //        std::vector<Surfel>& surfels();
 //        std::vector<SurfelCluster>& surfelClusters();
-        std::vector<SurfelClusterProjection>& surfelClusterProjections();
-        std::vector<DiffuseLightProbe>& diffuseLightProbes();
-        std::vector<uint32_t>& diffuseProbeLightmapIndices();
-        std::vector<uint32_t>& dedicatedDiffuseProbeIndices();
+//        std::vector<SurfelClusterProjection>& surfelClusterProjections();
+//        std::vector<DiffuseLightProbe>& diffuseLightProbes();
+//        std::vector<uint32_t>& diffuseProbeLightmapIndices();
+//        std::vector<uint32_t>& dedicatedDiffuseProbeIndices();
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> octree() const;
         std::shared_ptr<EmbreeRayTracer> rayTracer() const;
@@ -117,7 +117,7 @@ namespace EARenderer {
         const std::list<ID>& dynamicMeshInstanceIDs() const;
 
         glm::ivec3 preferredProbeGridResolution() const;
-        Size2D preferredProbeLightmapResolution() const;
+//        Size2D preferredProbeLightmapResolution() const;
 
         const AxisAlignedBox3D& boundingBox() const;
         const AxisAlignedBox3D& lightBakingVolume() const;

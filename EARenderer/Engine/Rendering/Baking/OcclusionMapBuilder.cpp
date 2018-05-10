@@ -23,8 +23,8 @@ namespace EARenderer {
 #pragma mark - Occlusion maps generation
 #pragma mark - Private helpers
 
-    void OcclusionMapBuilder::calculateTextureResolution(Scene *scene) {
-        size_t probeCount = scene->diffuseLightProbes().size();
+    void OcclusionMapBuilder::calculateTextureResolution() {
+        size_t probeCount = mProbeData->probes().size();
         size_t occlusionMapFaceCount = 6;
 
         size_t texelCount = mOcclusionMapFaceResolution.width * mOcclusionMapFaceResolution.height * probeCount * occlusionMapFaceCount;
@@ -38,11 +38,11 @@ namespace EARenderer {
         mTextureResolution = Size2D(alignedWidth, alignedHeight);
     }
 
-    void OcclusionMapBuilder::findOcclusionsDistancesForProbe(int32_t probeIndex, Scene *scene) {
+    void OcclusionMapBuilder::findOcclusionsDistancesForProbe(int32_t probeIndex) {
 
         const int32_t kFaceCount = 6;
 
-        auto& probe = scene->diffuseLightProbes()[probeIndex];
+        auto& probe = mProbeData->probes()[probeIndex];
         int32_t probeShadowMapsPerRow = mTextureResolution.width / mOcclusionMapFaceResolution.width / 6;
         int32_t yOffset = probeIndex / probeShadowMapsPerRow;
         int32_t xOffset = probeIndex % probeShadowMapsPerRow;
@@ -68,7 +68,7 @@ namespace EARenderer {
                     float hitDistance = std::numeric_limits<float>::max();
                     Ray3D ray(probe.position, direction);
 
-                    if (scene->rayTracer()->rayHit(ray, hitDistance)) {
+                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
                         printf("Texture coords: %d %d \n", globalX, globalY);
 
                         int32_t flatIndex = globalY * mTextureResolution.width + globalX;
@@ -82,12 +82,15 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    std::shared_ptr<GLHDRTexture2D> OcclusionMapBuilder::buildLightProbeOcclusionMaps(Scene *scene) {
-        calculateTextureResolution(scene);
+    std::shared_ptr<GLHDRTexture2D> OcclusionMapBuilder::buildLightProbeOcclusionMaps(const Scene *scene, std::shared_ptr<const DiffuseLightProbeData> probeData) {
+        mScene = scene;
+        mProbeData = probeData;
+
+        calculateTextureResolution();
         mOcclusionDistances.assign(mTextureResolution.width * mTextureResolution.height, 0);
 
-        for (int32_t i = 0; i < scene->diffuseLightProbes().size(); i++) {
-            findOcclusionsDistancesForProbe(i, scene);
+        for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
+            findOcclusionsDistancesForProbe(i);
         }
 
         return std::shared_ptr<GLHDRTexture2D>(new GLHDRTexture2D(mOcclusionDistances, mTextureResolution));

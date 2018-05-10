@@ -59,7 +59,7 @@ namespace EARenderer {
     }
 
     void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe& probe) {
-        probe.surfelClusterProjectionGroupOffset = mProbeData.mSurfelClusterProjections.size();
+        probe.surfelClusterProjectionGroupOffset = mProbeData->mSurfelClusterProjections.size();
 
         for (size_t i = 0; i < mSurfelData->surfelClusters().size(); i++) {
             const SurfelCluster &cluster = mSurfelData->surfelClusters()[i];
@@ -68,7 +68,7 @@ namespace EARenderer {
             // Only accept projections with non-zero SH
             if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
                 projection.surfelClusterIndex = i;
-                mProbeData.mSurfelClusterProjections.push_back(projection);
+                mProbeData->mSurfelClusterProjections.push_back(projection);
                 probe.surfelClusterProjectionGroupCount++;
             }
         }
@@ -76,7 +76,7 @@ namespace EARenderer {
 
     std::vector<SphericalHarmonics> DiffuseLightProbeGenerator::surfelProjectionsSH() const {
         std::vector<SphericalHarmonics> shs;
-        for (auto& projection : mProbeData.mSurfelClusterProjections) {
+        for (auto& projection : mProbeData->mSurfelClusterProjections) {
             shs.push_back(projection.sphericalHarmonics);
         }
         return shs;
@@ -84,7 +84,7 @@ namespace EARenderer {
 
     std::vector<uint32_t> DiffuseLightProbeGenerator::surfelClusterIndices() const {
         std::vector<uint32_t> indices;
-        for (auto& projection : mProbeData.mSurfelClusterProjections) {
+        for (auto& projection : mProbeData->mSurfelClusterProjections) {
             indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
         }
         return indices;
@@ -92,7 +92,7 @@ namespace EARenderer {
 
     std::vector<uint32_t> DiffuseLightProbeGenerator::probeProjectionsMetadata() const {
         std::vector<uint32_t> metadata;
-        for (auto& probe : mProbeData.mProbes) {
+        for (auto& probe : mProbeData->mProbes) {
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
         }
@@ -101,9 +101,9 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    DiffuseLightProbeData DiffuseLightProbeGenerator::generateProbes(const Scene *scene, const SurfelData& surfelData) {
-        mProbeData = DiffuseLightProbeData();
-        mSurfelData = &surfelData;
+    std::shared_ptr<DiffuseLightProbeData> DiffuseLightProbeGenerator::generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData) {
+        mProbeData = std::make_shared<DiffuseLightProbeData>();
+        mSurfelData = surfelData;
         mScene = scene;
 
         AxisAlignedBox3D bb = scene->lightBakingVolume();
@@ -120,21 +120,21 @@ namespace EARenderer {
                     for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(probe);
-                        mProbeData.mProbes.push_back(probe);
+                        mProbeData->mProbes.push_back(probe);
                     }
                 }
             }
-            printf("Built %lu probes | %lu projections \n", mProbeData.mProbes.size(), mProbeData.mSurfelClusterProjections.size());
+            printf("Built %lu probes | %lu projections \n", mProbeData->mProbes.size(), mProbeData->mSurfelClusterProjections.size());
         });
 
-        mProbeData.mProjectionClusterSHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
-        mProbeData.mProjectionClusterSHsBufferTexture->buffer().initialize(surfelProjectionsSH());
+        mProbeData->mProjectionClusterSHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
+        mProbeData->mProjectionClusterSHsBufferTexture->buffer().initialize(surfelProjectionsSH());
         
-        mProbeData.mProjectionClusterIndicesBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
-        mProbeData.mProjectionClusterIndicesBufferTexture->buffer().initialize(surfelClusterIndices());
+        mProbeData->mProjectionClusterIndicesBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
+        mProbeData->mProjectionClusterIndicesBufferTexture->buffer().initialize(surfelClusterIndices());
 
-        mProbeData.mProbeClusterProjectionsMetadataBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
-        mProbeData.mProbeClusterProjectionsMetadataBufferTexture->buffer().initialize(probeProjectionsMetadata());
+        mProbeData->mProbeClusterProjectionsMetadataBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
+        mProbeData->mProbeClusterProjectionsMetadataBufferTexture->buffer().initialize(probeProjectionsMetadata());
 
         return mProbeData;
     }

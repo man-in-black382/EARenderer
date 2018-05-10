@@ -65,7 +65,7 @@ namespace EARenderer {
         std::uniform_real_distribution<float> mDistribution;
         PackedLookupTable<Surfel> mSurfelFlatStorage;
         SpatialHash<Surfel> mSurfelSpatialHash;
-        SurfelData mSurfelDataContainer;
+        std::shared_ptr<SurfelData> mSurfelDataContainer;
         const ResourcePool *mResourcePool = nullptr;
         const Scene *mScene = nullptr;
         
@@ -78,6 +78,13 @@ namespace EARenderer {
          */
         float optimalMinimumSubdivisionArea() const;
 
+        /**
+         Calculates an optimal space division resolution to be used in a spatial hash data structure
+
+         @param surfelCountPerCellDimension desired surfel density per one cell of the spatial hash
+         @param workingVolume extents of a spatial hash structure
+         @return space division resolution to passed to the spatial hash
+         */
         uint32_t spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D& workingVolume) const;
 
         /**
@@ -138,14 +145,40 @@ namespace EARenderer {
          */
         void generateSurflesOnMeshInstance(const MeshInstance& instance);
 
+        /**
+         Determines resemblance of two surfels to decide whether thay belong to the same cluster
+
+         @param first surfel one
+         @param second surfel two
+         @param workingVolumeMaximumExtent2 squared largest length of scene's light baking volume
+         @return returns a true if surfels are alike and belong to the same surfel cluster
+         */
         bool surfelsAlike(const Surfel& first, const Surfel& second, float workingVolumeMaximumExtent2);
 
+        /**
+         Gathers similar surfels into clusters
+         */
         void formClusters();
 
+        /**
+         Data to be fetched to a surfel G buffer texture
+
+         @return nested array of surfel attributes (positions, normals, albedo and uv)
+         */
         std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
 
+        /**
+         Data to be fetched to a surfel clusters G buffer texture
+
+         @return array of surfel offset - count pairs
+         */
         std::vector<uint8_t> surfelClustersGBufferData() const;
 
+        /**
+         Returns an array of surfel cluster centers
+
+         @return array of surfel cluster centers
+         */
         std::vector<glm::vec3> surfelClusterCenters() const;
         
     public:
@@ -153,7 +186,7 @@ namespace EARenderer {
 
         float minimumDistanceBetweenSurfels() const;
 
-        SurfelData generateStaticGeometrySurfels();
+        std::shared_ptr<SurfelData> generateStaticGeometrySurfels();
     };
     
 }

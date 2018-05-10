@@ -20,9 +20,11 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(const Scene* scene, const SurfelData& surfelData)
+    SceneRenderer::SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData)
     :
     mScene(scene),
+    mSurfelData(surfelData),
+    mDiffuseProbeData(diffuseProbeData),
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
@@ -38,12 +40,10 @@ namespace EARenderer {
     mIBLFramebuffer(Size2D(512)),
 
     // Surfels and surfel clusters
-    mSurfelsGBuffer(surfelData.surfelsGBuffer()),
-    mSurfelClustersGBuffer(surfelData.surfelClustersGBuffer()),
-    mSurfelsLuminanceMap(mSurfelsGBuffer->size(), GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(mSurfelClustersGBuffer->size(), GLTexture::Filter::None),
-    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer->size()),
-    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer->size()),
+    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
+    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), GLTexture::Filter::None),
+    mSurfelsLuminanceFramebuffer(mSurfelsLuminanceMap.size()),
+    mSurfelClustersLuminanceFramebuffer(mSurfelClustersLuminanceMap.size()),
 
     // Diffuse light probes
     mGridProbesSHMaps {
@@ -57,7 +57,7 @@ namespace EARenderer {
     },
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
     {
-        mDiffuseProbesVAO.initialize(scene->diffuseLightProbes(), {
+        mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length())
@@ -88,7 +88,7 @@ namespace EARenderer {
         ID closestMeshID = IDNotFound;
         
         for (ID id : mScene->meshInstances()) {
-            MeshInstance& meshInstance = mScene->meshInstances()[id];
+            const MeshInstance& meshInstance = mScene->meshInstances()[id];
             glm::mat4 modelMatrix = meshInstance.transformation().modelMatrix();
             Ray3D meshLocalSpaceRay = ray;//.transformedBy(glm::inverse(modelMatrix)); // Had to comment the transformation and I don't remember why :(
             
@@ -126,11 +126,6 @@ namespace EARenderer {
     }
 
     void SceneRenderer::setupTextures() {
-        mProjectionClusterSHsBufferTexture.buffer().initialize(surfelProjectionsSH());
-        mProjectionClusterIndicesBufferTexture.buffer().initialize(surfelClusterIndices());
-        mDiffuseProbeClusterProjectionsBufferTexture.buffer().initialize(probeProjectionsMetadata());
-        mSurfelClusterCentersBufferTexture.buffer().initialize(surfelClusterCenters());
-
         mSpecularIrradianceMap.generateMipmaps();
     }
 
@@ -145,79 +140,6 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
-    }
-
-#pragma mark - Data preparation
-
-    std::vector<std::vector<glm::vec3>> SceneRenderer::surfelsGBufferData() const {
-        std::vector<std::vector<glm::vec3>> bufferData;
-//        bufferData.emplace_back();
-//        bufferData.emplace_back();
-//        bufferData.emplace_back();
-//        bufferData.emplace_back();
-//
-//        for (auto& surfel : mScene->surfels()) {
-//            bufferData[0].emplace_back(surfel.position);
-//            bufferData[1].emplace_back(surfel.normal);
-//            bufferData[2].emplace_back(surfel.albedo);
-//            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
-//        }
-
-        return bufferData;
-    }
-
-    std::vector<uint8_t> SceneRenderer::surfelClustersGBufferData() const {
-        std::vector<uint8_t> data;
-
-//        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
-//        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
-//        // Surfel generator cannot generate more than 256 surfels per cluster by design
-//        // so 1 byte per surfel count will be enough
-//        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
-//        for (auto& cluster : mScene->surfelClusters()) {
-//            uint8_t b = cluster.surfelOffset & 0xFF;
-//            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
-//            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
-//            uint8_t a = cluster.surfelCount;
-//            data.push_back(r);
-//            data.push_back(g);
-//            data.push_back(b);
-//            data.push_back(a);
-//        }
-        return data;
-    }
-
-    std::vector<glm::vec3> SceneRenderer::surfelClusterCenters() const {
-        std::vector<glm::vec3> centers;
-//        for (auto& cluster : mScene->surfelClusters()) {
-//            centers.push_back(cluster.center);
-//        }
-        return centers;
-    }
-
-    std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
-        std::vector<SphericalHarmonics> shs;
-//        for (auto& projection : mScene->surfelClusterProjections()) {
-//            shs.push_back(projection.sphericalHarmonics);
-//        }
-        return shs;
-    }
-
-    std::vector<uint32_t> SceneRenderer::surfelClusterIndices() const {
-        std::vector<uint32_t> indices;
-//        for (auto& projection : mScene->surfelClusterProjections()) {
-//            indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
-//        }
-        return indices;
-    }
-
-    std::vector<uint32_t> SceneRenderer::probeProjectionsMetadata() const {
-        std::vector<uint32_t> metadata;
-//        for (auto& probe : mScene->diffuseLightProbes()) {
-//            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
-//            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
-//        }
-        return metadata;
     }
 
 #pragma mark - Rendering
@@ -324,7 +246,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::relightSurfels() {
-        DirectionalLight& directionalLight = mScene->directionalLight();
+        const DirectionalLight& directionalLight = mScene->directionalLight();
 
         mSurfelsLuminanceFramebuffer.bind();
         mSurfelsLuminanceFramebuffer.viewport().apply();
@@ -333,7 +255,7 @@ namespace EARenderer {
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
-            mSurfelLightingShader.setSurfelsGBuffer(mSurfelsGBuffer);
+            mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -346,7 +268,7 @@ namespace EARenderer {
         mSurfelClustersLuminanceFramebuffer.viewport().apply();
 
         mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
-            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(mSurfelClustersGBuffer);
+            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(*mSurfelData->surfelClustersGBuffer());
             mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
         });
 
@@ -362,9 +284,9 @@ namespace EARenderer {
         mGridProbesUpdateShader.bind();
         mGridProbesUpdateShader.ensureSamplerValidity([&] {
             mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
-            mGridProbesUpdateShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
-            mGridProbesUpdateShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(mProjectionClusterSHsBufferTexture);
+            mGridProbesUpdateShader.setProbeProjectionsMetadata(*mDiffuseProbeData->probeClusterProjectionsMetadataBufferTexture());
+            mGridProbesUpdateShader.setProjectionClusterIndices(*mDiffuseProbeData->projectionClusterIndicesBufferTexture());
+            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(*mDiffuseProbeData->projectionClusterSHsBufferTexture());
             mGridProbesUpdateShader.setProbesGridResolution(mProbeGridResolution);
         });
 
@@ -380,21 +302,20 @@ namespace EARenderer {
 #pragma mark - Public interface
 
     void SceneRenderer::prepareFrame() {
-        DirectionalLight& directionalLight = mScene->directionalLight();
+        const DirectionalLight& directionalLight = mScene->directionalLight();
         mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
 
         renderShadowMapsForDirectionalLights();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
-//        updateLightmapProbes();
 
         bindDefaultFramebuffer();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void SceneRenderer::renderMeshes() {
-        DirectionalLight& directionalLight = mScene->directionalLight();
+        const DirectionalLight& directionalLight = mScene->directionalLight();
 
         bindDefaultFramebuffer();
         
@@ -464,11 +385,11 @@ namespace EARenderer {
         float defaultViewportWidth = mDefaultRenderComponentsProvider->defaultViewport().frame().size.width;
         Rect2D viewportRect(Size2D(400, 400));
 
-        for (size_t i = 0; i < mSurfelsGBuffer.layers(); i++) {
+        for (size_t i = 0; i < mSurfelData->surfelsGBuffer()->layers(); i++) {
             GLViewport(viewportRect).apply();
 
             mFSQuadShader.ensureSamplerValidity([this, i]() {
-                mFSQuadShader.setTexture(mSurfelsGBuffer, i);
+                mFSQuadShader.setTexture(*mSurfelData->surfelsGBuffer(), i);
             });
 
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -532,7 +453,7 @@ namespace EARenderer {
             mGridProbeRenderingShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        glDrawArrays(GL_POINTS, 0, (GLsizei)mScene->diffuseLightProbes().size());
+        glDrawArrays(GL_POINTS, 0, (GLsizei)mDiffuseProbeData->probes().size());
     }
 
     void SceneRenderer::renderLinksForDiffuseProbe(size_t probeIndex) {
@@ -542,9 +463,9 @@ namespace EARenderer {
         mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
         mLightProbeLinksRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
         mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
-            mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(mDiffuseProbeClusterProjectionsBufferTexture);
-            mLightProbeLinksRenderingShader.setProjectionClusterIndices(mProjectionClusterIndicesBufferTexture);
-            mLightProbeLinksRenderingShader.setSurfelClusterCenters(mSurfelClusterCentersBufferTexture);
+            mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(*mDiffuseProbeData->probeClusterProjectionsMetadataBufferTexture());
+            mLightProbeLinksRenderingShader.setProjectionClusterIndices(*mDiffuseProbeData->projectionClusterIndicesBufferTexture());
+            mLightProbeLinksRenderingShader.setSurfelClusterCenters(*mSurfelData->surfelClusterCentersBufferTexture());
         });
 
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);

@@ -12,6 +12,7 @@
 #include "Scene.hpp"
 #include "Size2D.hpp"
 #include "GLHDRTexture2D.hpp"
+#include "DiffuseLightProbeData.hpp"
 
 #include <memory>
 
@@ -23,13 +24,16 @@ namespace EARenderer {
         Size2D mOcclusionMapFaceResolution;
         std::vector<float> mOcclusionDistances;
 
-        void calculateTextureResolution(Scene *scene);
-        void findOcclusionsDistancesForProbe(int32_t probeIndex, Scene *scene);
+        const Scene *mScene = nullptr;
+        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
+
+        void calculateTextureResolution();
+        void findOcclusionsDistancesForProbe(int32_t probeIndex);
 
     public:
         OcclusionMapBuilder(const Size2D& mapResolution);
 
-        std::shared_ptr<GLHDRTexture2D> buildLightProbeOcclusionMaps(Scene *scene);
+        std::shared_ptr<GLHDRTexture2D> buildLightProbeOcclusionMaps(const Scene *scene, std::shared_ptr<const DiffuseLightProbeData> probeData);
     };
 
 }

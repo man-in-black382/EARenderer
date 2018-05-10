@@ -45,10 +45,10 @@ namespace EARenderer {
         return mMeshInstances;
     }
     
-    PackedLookupTable<LightProbe>& Scene::lightProbes() {
-        return mLightProbes;
-    }
-
+//    PackedLookupTable<LightProbe>& Scene::lightProbes() {
+//        return mLightProbes;
+//    }
+//
     const DirectionalLight& Scene::directionalLight() const {
         return mDirectionalLight;
     }
@@ -61,9 +61,9 @@ namespace EARenderer {
         return mMeshInstances;
     }
 
-    const PackedLookupTable<LightProbe>& Scene::lightProbes() const {
-        return mLightProbes;
-    }
+//    const PackedLookupTable<LightProbe>& Scene::lightProbes() const {
+//        return mLightProbes;
+//    }
 
 //    std::vector<Surfel>& Scene::surfels() {
 //        return mSurfels;
@@ -73,13 +73,13 @@ namespace EARenderer {
 //        return mSurfelClusters;
 //    }
 
-    std::vector<SurfelClusterProjection>& Scene::surfelClusterProjections() {
-        return mSurfelClusterProjections;
-    }
-
-    std::vector<DiffuseLightProbe>& Scene::diffuseLightProbes() {
-        return mDiffuseLightProbes;
-    }
+//    std::vector<SurfelClusterProjection>& Scene::surfelClusterProjections() {
+//        return mSurfelClusterProjections;
+//    }
+//
+//    std::vector<DiffuseLightProbe>& Scene::diffuseLightProbes() {
+//        return mDiffuseLightProbes;
+//    }
 
     std::shared_ptr<SparseOctree<MeshTriangleRef>> Scene::octree() const {
         return mOctree;
@@ -113,13 +113,13 @@ namespace EARenderer {
         return mDynamicMeshInstanceIDs;
     }
 
-    std::vector<uint32_t>& Scene::diffuseProbeLightmapIndices() {
-        return mDiffuseProbeLightmapIndices;
-    }
-
-    std::vector<uint32_t>& Scene::dedicatedDiffuseProbeIndices() {
-        return mDedicatedDiffuseProbeIndices;
-    }
+//    std::vector<uint32_t>& Scene::diffuseProbeLightmapIndices() {
+//        return mDiffuseProbeLightmapIndices;
+//    }
+//
+//    std::vector<uint32_t>& Scene::dedicatedDiffuseProbeIndices() {
+//        return mDedicatedDiffuseProbeIndices;
+//    }
 
     float Scene::staticGeometryArea() const {
         return mStaticGeometryArea;
@@ -267,9 +267,9 @@ namespace EARenderer {
         return bbLengths / mGridProbesDistance;
     }
 
-    Size2D Scene::preferredProbeLightmapResolution() const {
-        return mProbesLightmapResolution;
-    }
+//    Size2D Scene::preferredProbeLightmapResolution() const {
+//        return mProbesLightmapResolution;
+//    }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
         mStaticMeshInstanceIDs.push_back(meshInstanceID);

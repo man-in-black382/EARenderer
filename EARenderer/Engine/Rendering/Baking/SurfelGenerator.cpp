@@ -301,12 +301,12 @@ namespace EARenderer {
 
         while (mSurfelFlatStorage.size()) {
             // Allocate cluster with count of 1 since we're immediately inserting 1 surfel
-            SurfelCluster cluster(mSurfelDataContainer.mSurfels.size(), 1);
+            SurfelCluster cluster(mSurfelDataContainer->mSurfels.size(), 1);
 
             // Push random surfel to a cluster
             ID firstSurfelID = *mSurfelFlatStorage.begin();
             Surfel& firstSurfel = mSurfelFlatStorage[firstSurfelID];
-            mSurfelDataContainer.mSurfels.push_back(firstSurfel);
+            mSurfelDataContainer->mSurfels.push_back(firstSurfel);
             cluster.center = firstSurfel.position;
             mSurfelFlatStorage.erase(firstSurfelID);
 
@@ -318,7 +318,7 @@ namespace EARenderer {
 
                 // Determine if the surfel is similar to all the surfels in the current cluster
                 for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-                    auto& surfel = mSurfelDataContainer.mSurfels[i];
+                    auto& surfel = mSurfelDataContainer->mSurfels[i];
                     if (!surfelsAlike(surfel, nextSurfel, extent2)) {
                         alikeToAllSurfelsInCluster = false;
                         break;
@@ -328,7 +328,7 @@ namespace EARenderer {
                 // If surfel meets similarity criteria
                 // we push it to the cluster and remove from surfel list
                 if (alikeToAllSurfelsInCluster) {
-                    mSurfelDataContainer.mSurfels.push_back(nextSurfel);
+                    mSurfelDataContainer->mSurfels.push_back(nextSurfel);
                     idsToDelete.push_back(*it);
                     cluster.surfelCount++;
 
@@ -347,7 +347,7 @@ namespace EARenderer {
             idsToDelete.clear();
 
             // Push cluster to cluster list
-            mSurfelDataContainer.mSurfelClusters.push_back(cluster);
+            mSurfelDataContainer->mSurfelClusters.push_back(cluster);
 
             // Then repear until all surfels are asigned to clusters
         }
@@ -360,7 +360,7 @@ namespace EARenderer {
         bufferData.emplace_back();
         bufferData.emplace_back();
 
-        for (auto& surfel : mSurfelDataContainer.mSurfels) {
+        for (auto& surfel : mSurfelDataContainer->mSurfels) {
             bufferData[0].emplace_back(surfel.position);
             bufferData[1].emplace_back(surfel.normal);
             bufferData[2].emplace_back(surfel.albedo);
@@ -378,7 +378,7 @@ namespace EARenderer {
         // Surfel generator cannot generate more than 256 surfels per cluster by design
         // so 1 byte per surfel count will be enough
         // Fragment shader will then unpack these values from RGB and Alpha channels respectively
-        for (auto& cluster : mSurfelDataContainer.mSurfelClusters) {
+        for (auto& cluster : mSurfelDataContainer->mSurfelClusters) {
             uint8_t b = cluster.surfelOffset & 0xFF;
             uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
             uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
@@ -393,7 +393,7 @@ namespace EARenderer {
 
     std::vector<glm::vec3> SurfelGenerator::surfelClusterCenters() const {
         std::vector<glm::vec3> centers;
-        for (auto& cluster : mSurfelDataContainer.mSurfelClusters) {
+        for (auto& cluster : mSurfelDataContainer->mSurfelClusters) {
             centers.push_back(cluster.center);
         }
         return centers;
@@ -405,8 +405,8 @@ namespace EARenderer {
         return mMinimumSurfelDistance;
     }
 
-    SurfelData SurfelGenerator::generateStaticGeometrySurfels() {
-        mSurfelDataContainer = SurfelData();
+    std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
+        mSurfelDataContainer = std::make_shared<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
@@ -426,12 +426,13 @@ namespace EARenderer {
             formClusters();
         });
 
-        mSurfelDataContainer.mSurfelsGBuffer = std::shared_ptr<GLHDRTexture2DArray>(new GLHDRTexture2DArray(surfelsGBufferData()));
-        mSurfelDataContainer.mSurfelClustersGBuffer = std::shared_ptr<GLLDRTexture2D>(new GLLDRTexture2D(surfelClustersGBufferData()));
-        mSurfelDataContainer.mSurfelClusterCentersBufferTexture = std::shared_ptr<GLFloat3BufferTexture<glm::vec3>>(new GLFloat3BufferTexture<glm::vec3>());
-        mSurfelDataContainer.mSurfelClusterCentersBufferTexture->buffer().initialize(surfelClusterCenters());
+        mSurfelDataContainer->mSurfelsGBuffer = std::make_shared<GLHDRTexture2DArray>(surfelsGBufferData());
+        mSurfelDataContainer->mSurfelClustersGBuffer = std::make_shared<GLLDRTexture2D>(surfelClustersGBufferData());
 
-        printf("Generated %lu clusters\n\n", mSurfelDataContainer.mSurfelClusters.size());
+        mSurfelDataContainer->mSurfelClusterCentersBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
+        mSurfelDataContainer->mSurfelClusterCentersBufferTexture->buffer().initialize(surfelClusterCenters());
+
+        printf("Generated %lu clusters\n\n", mSurfelDataContainer->mSurfelClusters.size());
 
         return mSurfelDataContainer;
     }

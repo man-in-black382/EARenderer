@@ -11,6 +11,7 @@
 
 #include <unordered_set>
 #include <array>
+#include <memory>
 
 #include <glm/vec2.hpp>
 
@@ -20,6 +21,7 @@
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
 #include "SurfelData.hpp"
+#include "DiffuseLightProbeData.hpp"
 
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
@@ -55,6 +57,10 @@ namespace EARenderer {
         glm::ivec3 mProbeGridResolution;
         
         const Scene *mScene = nullptr;
+
+        std::shared_ptr<const SurfelData> mSurfelData;
+        std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
+
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
         FrustumCascades mShadowCascades;
@@ -78,19 +84,11 @@ namespace EARenderer {
         GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
 
-        std::shared_ptr<GLHDRTexture2DArray> mSurfelsGBuffer;
-        std::shared_ptr<GLLDRTexture2D> mSurfelClustersGBuffer;
-
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
-        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mSurfelClusterCentersBufferTexture;
-        
-        GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
-        GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
-        GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
         std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
@@ -106,13 +104,6 @@ namespace EARenderer {
         void setupTextures();
         void setupFramebuffers();
 
-        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
-        std::vector<uint8_t> surfelClustersGBufferData() const;
-        std::vector<glm::vec3> surfelClusterCenters() const;
-        std::vector<SphericalHarmonics> surfelProjectionsSH() const;
-        std::vector<uint32_t> surfelClusterIndices() const;
-        std::vector<uint32_t> probeProjectionsMetadata() const;
-
         void bindDefaultFramebuffer();
 
         void renderShadowMapsForDirectionalLights();
@@ -126,7 +117,7 @@ namespace EARenderer {
         void buildBRDFIntegrationMap();
 
     public:
-        SceneRenderer(const Scene* scene, const SurfelData& surfelData);
+        SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

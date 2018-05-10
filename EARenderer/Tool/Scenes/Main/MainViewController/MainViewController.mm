@@ -32,9 +32,7 @@
 #import "TriangleRenderer.hpp"
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
-#import "GridDiffuseLightProbeGenerator.hpp"
-#import "LightmapDiffuseLightProbeGenerator.hpp"
-#import "LightmapPacker.hpp"
+#import "DiffuseLightProbeGenerator.hpp"
 #import "OcclusionMapBuilder.hpp"
 
 #import "Choreograph.h"
@@ -122,24 +120,18 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.scene->sortStaticSubMeshes();
 
-//    EARenderer::LightmapPacker lightmapPacker;
-//    auto packingResult = lightmapPacker.packStaticGeometryToSingleLightmap(self.scene);
-
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    EARenderer::SurfelData surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
+    auto surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
 
-    EARenderer::GridDiffuseLightProbeGenerator gridProbeGenerator;
-    gridProbeGenerator.generateProbes(self.scene);
+    EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
+    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
 
     EARenderer::OcclusionMapBuilder probeOcclusionMapBuilder(EARenderer::Size2D(10));
-    probeOcclusionMapBuilder.buildLightProbeOcclusionMaps(self.scene);
-
-//    EARenderer::LightmapDiffuseLightProbeGenerator lightmapProbeGenerator;
-//    lightmapProbeGenerator.generateProbes(self.scene, packingResult);
+    probeOcclusionMapBuilder.buildLightProbeOcclusionMaps(self.scene, diffuseLightProbeData);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData);
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
@@ -172,7 +164,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
-    self.axesRenderer->render();
+//    self.axesRenderer->render();
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
