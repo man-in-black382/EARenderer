@@ -20,7 +20,7 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(Scene* scene)
+    SceneRenderer::SceneRenderer(const Scene* scene, const SurfelData& surfelData)
     :
     mScene(scene),
     mProbeGridResolution(scene->preferredProbeGridResolution()),
@@ -38,12 +38,12 @@ namespace EARenderer {
     mIBLFramebuffer(Size2D(512)),
 
     // Surfels and surfel clusters
-    mSurfelsGBuffer(surfelsGBufferData()),
-    mSurfelClustersGBuffer(surfelClustersGBufferData()),
-    mSurfelsLuminanceMap(mSurfelsGBuffer.size(), GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(mSurfelClustersGBuffer.size(), GLTexture::Filter::None),
-    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer.size()),
-    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer.size()),
+    mSurfelsGBuffer(surfelData.surfelsGBuffer()),
+    mSurfelClustersGBuffer(surfelData.surfelClustersGBuffer()),
+    mSurfelsLuminanceMap(mSurfelsGBuffer->size(), GLTexture::Filter::None),
+    mSurfelClustersLuminanceMap(mSurfelClustersGBuffer->size(), GLTexture::Filter::None),
+    mSurfelsLuminanceFramebuffer(mSurfelsGBuffer->size()),
+    mSurfelClustersLuminanceFramebuffer(mSurfelClustersGBuffer->size()),
 
     // Diffuse light probes
     mGridProbesSHMaps {
@@ -151,17 +151,17 @@ namespace EARenderer {
 
     std::vector<std::vector<glm::vec3>> SceneRenderer::surfelsGBufferData() const {
         std::vector<std::vector<glm::vec3>> bufferData;
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-
-        for (auto& surfel : mScene->surfels()) {
-            bufferData[0].emplace_back(surfel.position);
-            bufferData[1].emplace_back(surfel.normal);
-            bufferData[2].emplace_back(surfel.albedo);
-            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
-        }
+//        bufferData.emplace_back();
+//        bufferData.emplace_back();
+//        bufferData.emplace_back();
+//        bufferData.emplace_back();
+//
+//        for (auto& surfel : mScene->surfels()) {
+//            bufferData[0].emplace_back(surfel.position);
+//            bufferData[1].emplace_back(surfel.normal);
+//            bufferData[2].emplace_back(surfel.albedo);
+//            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
+//        }
 
         return bufferData;
     }
@@ -169,54 +169,54 @@ namespace EARenderer {
     std::vector<uint8_t> SceneRenderer::surfelClustersGBufferData() const {
         std::vector<uint8_t> data;
 
-        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
-        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
-        // Surfel generator cannot generate more than 256 surfels per cluster by design
-        // so 1 byte per surfel count will be enough
-        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
-        for (auto& cluster : mScene->surfelClusters()) {
-            uint8_t b = cluster.surfelOffset & 0xFF;
-            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
-            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
-            uint8_t a = cluster.surfelCount;
-            data.push_back(r);
-            data.push_back(g);
-            data.push_back(b);
-            data.push_back(a);
-        }
+//        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
+//        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
+//        // Surfel generator cannot generate more than 256 surfels per cluster by design
+//        // so 1 byte per surfel count will be enough
+//        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
+//        for (auto& cluster : mScene->surfelClusters()) {
+//            uint8_t b = cluster.surfelOffset & 0xFF;
+//            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
+//            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
+//            uint8_t a = cluster.surfelCount;
+//            data.push_back(r);
+//            data.push_back(g);
+//            data.push_back(b);
+//            data.push_back(a);
+//        }
         return data;
     }
 
     std::vector<glm::vec3> SceneRenderer::surfelClusterCenters() const {
         std::vector<glm::vec3> centers;
-        for (auto& cluster : mScene->surfelClusters()) {
-            centers.push_back(cluster.center);
-        }
+//        for (auto& cluster : mScene->surfelClusters()) {
+//            centers.push_back(cluster.center);
+//        }
         return centers;
     }
 
     std::vector<SphericalHarmonics> SceneRenderer::surfelProjectionsSH() const {
         std::vector<SphericalHarmonics> shs;
-        for (auto& projection : mScene->surfelClusterProjections()) {
-            shs.push_back(projection.sphericalHarmonics);
-        }
+//        for (auto& projection : mScene->surfelClusterProjections()) {
+//            shs.push_back(projection.sphericalHarmonics);
+//        }
         return shs;
     }
 
     std::vector<uint32_t> SceneRenderer::surfelClusterIndices() const {
         std::vector<uint32_t> indices;
-        for (auto& projection : mScene->surfelClusterProjections()) {
-            indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
-        }
+//        for (auto& projection : mScene->surfelClusterProjections()) {
+//            indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
+//        }
         return indices;
     }
 
     std::vector<uint32_t> SceneRenderer::probeProjectionsMetadata() const {
         std::vector<uint32_t> metadata;
-        for (auto& probe : mScene->diffuseLightProbes()) {
-            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
-            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
-        }
+//        for (auto& probe : mScene->diffuseLightProbes()) {
+//            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
+//            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
+//        }
         return metadata;
     }
 

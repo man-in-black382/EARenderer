@@ -11,20 +11,25 @@
 
 #include "Scene.hpp"
 #include "Size2D.hpp"
+#include "GLHDRTexture2D.hpp"
+
+#include <memory>
 
 namespace EARenderer {
 
     class OcclusionMapBuilder {
     private:
-        Size2D mMapsResolution;
+        Size2D mTextureResolution;
+        Size2D mOcclusionMapFaceResolution;
         std::vector<float> mOcclusionDistances;
 
-        void findOcclusionsDistancesForProbe(size_t probeIndex, Scene *scene);
+        void calculateTextureResolution(Scene *scene);
+        void findOcclusionsDistancesForProbe(int32_t probeIndex, Scene *scene);
 
     public:
         OcclusionMapBuilder(const Size2D& mapResolution);
 
-        void buildLightProbeOcclusionMaps(Scene *scene);
+        std::shared_ptr<GLHDRTexture2D> buildLightProbeOcclusionMaps(Scene *scene);
     };
 
 }

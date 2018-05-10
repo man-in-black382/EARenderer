@@ -19,6 +19,7 @@
 #include "DefaultRenderComponentsProviding.hpp"
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
+#include "SurfelData.hpp"
 
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
@@ -53,7 +54,7 @@ namespace EARenderer {
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
         
-        Scene *mScene = nullptr;
+        const Scene *mScene = nullptr;
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
         FrustumCascades mShadowCascades;
@@ -77,14 +78,16 @@ namespace EARenderer {
         GLHDRTexture2D mBRDFIntegrationMap;
         GLFramebuffer mIBLFramebuffer;
 
-        GLHDRTexture2DArray mSurfelsGBuffer;
-        GLLDRTexture2D mSurfelClustersGBuffer;
+        std::shared_ptr<GLHDRTexture2DArray> mSurfelsGBuffer;
+        std::shared_ptr<GLLDRTexture2D> mSurfelClustersGBuffer;
+
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
-        GLFloat3BufferTexture<glm::vec3> mSurfelClusterCentersBufferTexture;
+        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mSurfelClusterCentersBufferTexture;
+        
         GLFloat3BufferTexture<SphericalHarmonics> mProjectionClusterSHsBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mProjectionClusterIndicesBufferTexture;
         GLUIntegerBufferTexture<uint32_t> mDiffuseProbeClusterProjectionsBufferTexture;
@@ -123,7 +126,7 @@ namespace EARenderer {
         void buildBRDFIntegrationMap();
 
     public:
-        SceneRenderer(Scene* scene);
+        SceneRenderer(const Scene* scene, const SurfelData& surfelData);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

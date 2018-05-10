@@ -49,13 +49,29 @@ namespace EARenderer {
         return mLightProbes;
     }
 
-    std::vector<Surfel>& Scene::surfels() {
-        return mSurfels;
+    const DirectionalLight& Scene::directionalLight() const {
+        return mDirectionalLight;
     }
 
-    std::vector<SurfelCluster>& Scene::surfelClusters() {
-        return mSurfelClusters;
+    const PackedLookupTable<PointLight>& Scene::pointLights() const {
+        return mPointLights;
     }
+
+    const PackedLookupTable<MeshInstance>& Scene::meshInstances() const {
+        return mMeshInstances;
+    }
+
+    const PackedLookupTable<LightProbe>& Scene::lightProbes() const {
+        return mLightProbes;
+    }
+
+//    std::vector<Surfel>& Scene::surfels() {
+//        return mSurfels;
+//    }
+//
+//    std::vector<SurfelCluster>& Scene::surfelClusters() {
+//        return mSurfelClusters;
+//    }
 
     std::vector<SurfelClusterProjection>& Scene::surfelClusterProjections() {
         return mSurfelClusterProjections;
@@ -65,11 +81,11 @@ namespace EARenderer {
         return mDiffuseLightProbes;
     }
 
-    std::shared_ptr<SparseOctree<MeshTriangleRef>> Scene::octree() {
+    std::shared_ptr<SparseOctree<MeshTriangleRef>> Scene::octree() const {
         return mOctree;
     }
 
-    std::shared_ptr<EmbreeRayTracer> Scene::rayTracer() {
+    std::shared_ptr<EmbreeRayTracer> Scene::rayTracer() const {
         return mRaytracer;
     }
     

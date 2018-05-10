@@ -37,7 +37,7 @@ namespace EARenderer {
     logarithmicBinIterator(iterator)
     { }
     
-    SurfelGenerator::SurfelGenerator(ResourcePool *resourcePool, Scene *scene)
+    SurfelGenerator::SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene)
     :
     mEngine(std::random_device()()),
     mDistribution(0.0f, 1.0f),
@@ -87,7 +87,7 @@ namespace EARenderer {
         return std::max(spaceDivisionResolution, (uint32_t)1);
     }
     
-    LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(const SubMesh& subMesh, MeshInstance& containingInstance) {
+    LogarithmicBin<SurfelGenerator::TransformedTriangleData> SurfelGenerator::constructSubMeshVertexDataBin(const SubMesh& subMesh, const MeshInstance& containingInstance) {
         glm::mat4 modelMatrix = containingInstance.transformation().modelMatrix();
         glm::mat4 normalMatrix = containingInstance.transformation().normalMatrix();
         
@@ -216,7 +216,7 @@ namespace EARenderer {
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);
     }
     
-    void SurfelGenerator::generateSurflesOnMeshInstance(MeshInstance& instance) {
+    void SurfelGenerator::generateSurflesOnMeshInstance(const MeshInstance& instance) {
         auto& mesh = mResourcePool->meshes[instance.meshID()];
         
         for (ID subMeshID : mesh.subMeshes()) {
@@ -301,12 +301,12 @@ namespace EARenderer {
 
         while (mSurfelFlatStorage.size()) {
             // Allocate cluster with count of 1 since we're immediately inserting 1 surfel
-            SurfelCluster cluster(mScene->surfels().size(), 1);
+            SurfelCluster cluster(mSurfelDataContainer.mSurfels.size(), 1);
 
             // Push random surfel to a cluster
             ID firstSurfelID = *mSurfelFlatStorage.begin();
             Surfel& firstSurfel = mSurfelFlatStorage[firstSurfelID];
-            mScene->surfels().push_back(firstSurfel);
+            mSurfelDataContainer.mSurfels.push_back(firstSurfel);
             cluster.center = firstSurfel.position;
             mSurfelFlatStorage.erase(firstSurfelID);
 
@@ -318,7 +318,7 @@ namespace EARenderer {
 
                 // Determine if the surfel is similar to all the surfels in the current cluster
                 for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-                    auto& surfel = mScene->surfels()[i];
+                    auto& surfel = mSurfelDataContainer.mSurfels[i];
                     if (!surfelsAlike(surfel, nextSurfel, extent2)) {
                         alikeToAllSurfelsInCluster = false;
                         break;
@@ -328,7 +328,7 @@ namespace EARenderer {
                 // If surfel meets similarity criteria
                 // we push it to the cluster and remove from surfel list
                 if (alikeToAllSurfelsInCluster) {
-                    mScene->surfels().push_back(nextSurfel);
+                    mSurfelDataContainer.mSurfels.push_back(nextSurfel);
                     idsToDelete.push_back(*it);
                     cluster.surfelCount++;
 
@@ -347,10 +347,56 @@ namespace EARenderer {
             idsToDelete.clear();
 
             // Push cluster to cluster list
-            mScene->surfelClusters().push_back(cluster);
+            mSurfelDataContainer.mSurfelClusters.push_back(cluster);
 
             // Then repear until all surfels are asigned to clusters
         }
+    }
+
+    std::vector<std::vector<glm::vec3>> SurfelGenerator::surfelsGBufferData() const {
+        std::vector<std::vector<glm::vec3>> bufferData;
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+        bufferData.emplace_back();
+
+        for (auto& surfel : mSurfelDataContainer.mSurfels) {
+            bufferData[0].emplace_back(surfel.position);
+            bufferData[1].emplace_back(surfel.normal);
+            bufferData[2].emplace_back(surfel.albedo);
+            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
+        }
+
+        return bufferData;
+    }
+
+    std::vector<uint8_t> SurfelGenerator::surfelClustersGBufferData() const {
+        std::vector<uint8_t> data;
+
+        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
+        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
+        // Surfel generator cannot generate more than 256 surfels per cluster by design
+        // so 1 byte per surfel count will be enough
+        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
+        for (auto& cluster : mSurfelDataContainer.mSurfelClusters) {
+            uint8_t b = cluster.surfelOffset & 0xFF;
+            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
+            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
+            uint8_t a = cluster.surfelCount;
+            data.push_back(r);
+            data.push_back(g);
+            data.push_back(b);
+            data.push_back(a);
+        }
+        return data;
+    }
+
+    std::vector<glm::vec3> SurfelGenerator::surfelClusterCenters() const {
+        std::vector<glm::vec3> centers;
+        for (auto& cluster : mSurfelDataContainer.mSurfelClusters) {
+            centers.push_back(cluster.center);
+        }
+        return centers;
     }
     
 #pragma mark - Public interface
@@ -359,24 +405,35 @@ namespace EARenderer {
         return mMinimumSurfelDistance;
     }
 
-    void SurfelGenerator::generateStaticGeometrySurfels() {
+    SurfelData SurfelGenerator::generateStaticGeometrySurfels() {
+        mSurfelDataContainer = SurfelData();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
         printf("Generating surfels...\n");
+
         EARenderer::Measurement::ExecutionTime("Surfel generation took", [&]() {
             for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
-                auto& meshInstance = mScene->meshInstances()[meshInstanceID];
+                const auto& meshInstance = mScene->meshInstances()[meshInstanceID];
                 generateSurflesOnMeshInstance(meshInstance);
             }
         });
+
         printf("Generated %lu surfels\n\n", mSurfelSpatialHash.size());
 
         printf("Generating surfel clusters...\n");
         EARenderer::Measurement::ExecutionTime("Surfel clustering took", [&]() {
             formClusters();
         });
-        printf("Generated %lu clusters\n\n", mScene->surfelClusters().size());
+
+        mSurfelDataContainer.mSurfelsGBuffer = std::shared_ptr<GLHDRTexture2DArray>(new GLHDRTexture2DArray(surfelsGBufferData()));
+        mSurfelDataContainer.mSurfelClustersGBuffer = std::shared_ptr<GLLDRTexture2D>(new GLLDRTexture2D(surfelClustersGBufferData()));
+        mSurfelDataContainer.mSurfelClusterCentersBufferTexture = std::shared_ptr<GLFloat3BufferTexture<glm::vec3>>(new GLFloat3BufferTexture<glm::vec3>());
+        mSurfelDataContainer.mSurfelClusterCentersBufferTexture->buffer().initialize(surfelClusterCenters());
+
+        printf("Generated %lu clusters\n\n", mSurfelDataContainer.mSurfelClusters.size());
+
+        return mSurfelDataContainer;
     }
     
 }

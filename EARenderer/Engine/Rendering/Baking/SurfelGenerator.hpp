@@ -17,6 +17,7 @@
 #include "Triangle3D.hpp"
 #include "SpatialHash.hpp"
 #include "SparseOctree.hpp"
+#include "SurfelData.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -25,7 +26,7 @@
 
 namespace EARenderer {
     
-    // Based on papers
+    // Based on
     // http://www.cg.tuwien.ac.at/research/publications/2009/cline-09-poisson/cline-09-poisson-paper.pdf
     // http://davidkuri.de/downloads/SIC-GI.pdf
     
@@ -64,8 +65,9 @@ namespace EARenderer {
         std::uniform_real_distribution<float> mDistribution;
         PackedLookupTable<Surfel> mSurfelFlatStorage;
         SpatialHash<Surfel> mSurfelSpatialHash;
-        ResourcePool *mResourcePool = nullptr;
-        Scene *mScene = nullptr;
+        SurfelData mSurfelDataContainer;
+        const ResourcePool *mResourcePool = nullptr;
+        const Scene *mScene = nullptr;
         
 #pragma mark - Member functions
 
@@ -92,7 +94,7 @@ namespace EARenderer {
          @param containingInstance Mesh instance that applies transformation and materials to underlying sub mesh
          @return A logarithmic bin containing sub mesh's triangle data (positions, normals, albedo values and texture coordinates)
          */
-        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(const SubMesh& subMesh, MeshInstance& containingInstance);
+        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(const SubMesh& subMesh, const MeshInstance& containingInstance);
         
         /**
          Checks to see whether triangle is completely covered by any surfel from existing surfel set
@@ -134,18 +136,24 @@ namespace EARenderer {
 
          @param instance An instance on which surfels will be generated on
          */
-        void generateSurflesOnMeshInstance(MeshInstance& instance);
+        void generateSurflesOnMeshInstance(const MeshInstance& instance);
 
         bool surfelsAlike(const Surfel& first, const Surfel& second, float workingVolumeMaximumExtent2);
 
         void formClusters();
+
+        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
+
+        std::vector<uint8_t> surfelClustersGBufferData() const;
+
+        std::vector<glm::vec3> surfelClusterCenters() const;
         
     public:
-        SurfelGenerator(ResourcePool *resourcePool, Scene *scene);
+        SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene);
 
         float minimumDistanceBetweenSurfels() const;
 
-        void generateStaticGeometrySurfels();
+        SurfelData generateStaticGeometrySurfels();
     };
     
 }

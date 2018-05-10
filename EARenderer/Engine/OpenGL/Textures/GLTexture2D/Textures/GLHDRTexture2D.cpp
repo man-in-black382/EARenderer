@@ -32,5 +32,9 @@ namespace EARenderer {
         initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, GL_RGB16F, GL_RGB, GL_FLOAT, pixelData);
         stbi_image_free(pixelData);
     };
+
+    GLHDRTexture2D::GLHDRTexture2D(const std::vector<float>, const Size2D& size) {
+        
+    }
     
 }

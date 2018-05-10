@@ -60,8 +60,11 @@ namespace EARenderer {
         std::vector<SurfelCluster> mSurfelClusters;
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
         std::vector<DiffuseLightProbe> mDiffuseLightProbes;
+
+        // FIXME: Delete these 2 lines
         std::vector<uint32_t> mDiffuseProbeLightmapIndices;
         std::vector<uint32_t> mDedicatedDiffuseProbeIndices;
+        //
 
         std::shared_ptr<SparseOctree<MeshTriangleRef>> mOctree;
         std::shared_ptr<EmbreeRayTracer> mRaytracer;
@@ -88,6 +91,11 @@ namespace EARenderer {
         PackedLookupTable<MeshInstance>& meshInstances();
         PackedLookupTable<LightProbe>& lightProbes();
 
+        const DirectionalLight& directionalLight() const;
+        const PackedLookupTable<PointLight>& pointLights() const;
+        const PackedLookupTable<MeshInstance>& meshInstances() const;
+        const PackedLookupTable<LightProbe>& lightProbes() const;
+
         /**
          All scene's sub meshes sorted by descending triangle area values
 
@@ -95,15 +103,15 @@ namespace EARenderer {
          */
         const std::vector<SubMeshInstancePair>& sortedStaticSubMeshes();
 
-        std::vector<Surfel>& surfels();
-        std::vector<SurfelCluster>& surfelClusters();
+//        std::vector<Surfel>& surfels();
+//        std::vector<SurfelCluster>& surfelClusters();
         std::vector<SurfelClusterProjection>& surfelClusterProjections();
         std::vector<DiffuseLightProbe>& diffuseLightProbes();
         std::vector<uint32_t>& diffuseProbeLightmapIndices();
         std::vector<uint32_t>& dedicatedDiffuseProbeIndices();
 
-        std::shared_ptr<SparseOctree<MeshTriangleRef>> octree();
-        std::shared_ptr<EmbreeRayTracer> rayTracer();
+        std::shared_ptr<SparseOctree<MeshTriangleRef>> octree() const;
+        std::shared_ptr<EmbreeRayTracer> rayTracer() const;
         
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;

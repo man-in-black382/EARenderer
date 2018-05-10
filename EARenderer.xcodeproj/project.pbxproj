@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		AC0ADF1F2080B5F50026FD48 /* libfbxsdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC0ADF1E2080B5F50026FD48 /* libfbxsdk.a */; };
-		AC2E3839209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E3837209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.cpp */; };
-		AC2E383C209AFF9E002F754F /* GridDiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383A209AFF9E002F754F /* GridDiffuseLightProbeGenerator.cpp */; };
 		AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */; };
 		AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */; };
 		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
@@ -546,10 +544,6 @@
 		AC0AE0132080B6050026FD48 /* fbxsdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fbxsdk.h; sourceTree = "<group>"; };
 		AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferTexture.hpp; sourceTree = "<group>"; };
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
-		AC2E3837209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightmapDiffuseLightProbeGenerator.cpp; sourceTree = "<group>"; };
-		AC2E3838209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightmapDiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
-		AC2E383A209AFF9E002F754F /* GridDiffuseLightProbeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GridDiffuseLightProbeGenerator.cpp; sourceTree = "<group>"; };
-		AC2E383B209AFF9E002F754F /* GridDiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GridDiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
 		AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeGenerator.cpp; sourceTree = "<group>"; };
 		AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
 		AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelClusterProjection.cpp; sourceTree = "<group>"; };
@@ -578,6 +572,8 @@
 		AC859C2B1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.vert; sourceTree = "<group>"; };
 		AC859C2D1FD6BB4F00227038 /* GLCubemapFace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapFace.cpp; sourceTree = "<group>"; };
 		AC8F7DFB203AF676004CD033 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
+		AC92B97B20A4535700FEAB2E /* SurfelData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelData.hpp; sourceTree = "<group>"; };
+		AC92B97E20A4567C00FEAB2E /* DiffuseLightProbeData.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeData.hpp; sourceTree = "<group>"; };
 		AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelGenerator.cpp; sourceTree = "<group>"; };
 		AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelGenerator.hpp; sourceTree = "<group>"; };
 		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
@@ -1749,14 +1745,12 @@
 			children = (
 				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
 				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
+				AC92B97B20A4535700FEAB2E /* SurfelData.hpp */,
 				CE73110A2096E04E002A8DE7 /* LightmapPacker.cpp */,
 				CE73110B2096E04E002A8DE7 /* LightmapPacker.hpp */,
 				AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */,
 				AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */,
-				AC2E383A209AFF9E002F754F /* GridDiffuseLightProbeGenerator.cpp */,
-				AC2E383B209AFF9E002F754F /* GridDiffuseLightProbeGenerator.hpp */,
-				AC2E3837209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.cpp */,
-				AC2E3838209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.hpp */,
+				AC92B97E20A4567C00FEAB2E /* DiffuseLightProbeData.hpp */,
 				CE53ADE920A3511800749A96 /* OcclusionMapBuilder.cpp */,
 				CE53ADEA20A3511800749A96 /* OcclusionMapBuilder.hpp */,
 			);
@@ -3491,7 +3485,6 @@
 				CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */,
 				CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */,
 				CE891BC7205EB48500D2B09D /* GLLDRTexture2DSampler.cpp in Sources */,
-				AC2E3839209AFF76002F754F /* LightmapDiffuseLightProbeGenerator.cpp in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,
@@ -3510,7 +3503,6 @@
 				CE7311162098C920002A8DE7 /* Rect.cpp in Sources */,
 				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
 				CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */,
-				AC2E383C209AFF9E002F754F /* GridDiffuseLightProbeGenerator.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,

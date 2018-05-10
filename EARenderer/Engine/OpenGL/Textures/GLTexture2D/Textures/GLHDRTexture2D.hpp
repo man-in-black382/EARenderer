@@ -11,12 +11,15 @@
 
 #include "GLTexture2D.hpp"
 
+#include <vector>
+
 namespace EARenderer {
     
     class GLHDRTexture2D: public GLTexture2D {
     public:
         GLHDRTexture2D(const Size2D& size, Filter filter = Filter::Trilinear);
         GLHDRTexture2D(const std::string& imagePath);
+        GLHDRTexture2D(const std::vector<float>, const Size2D& size);
         ~GLHDRTexture2D() = default;
     };
     

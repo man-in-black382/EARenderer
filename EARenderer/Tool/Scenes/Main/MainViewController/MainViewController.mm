@@ -126,7 +126,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    auto packingResult = lightmapPacker.packStaticGeometryToSingleLightmap(self.scene);
 
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    self.surfelGenerator->generateStaticGeometrySurfels();
+    EARenderer::SurfelData surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
 
     EARenderer::GridDiffuseLightProbeGenerator gridProbeGenerator;
     gridProbeGenerator.generateProbes(self.scene);
@@ -139,7 +139,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene);
+    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
