@@ -11,8 +11,8 @@
 
 #include "Scene.hpp"
 #include "GLSLSurfelRendering.hpp"
-#include "Surfel.hpp"
-#include "SurfelCluster.hpp"
+#include "SurfelData.hpp"
+#include "DiffuseLightProbeData.hpp"
 
 #include <vector>
 
@@ -20,8 +20,9 @@ namespace EARenderer {
     
     class SurfelRenderer {
     private:
-        Scene *mScene;
-        ResourcePool *mResourcePool;
+        const Scene *mScene = nullptr;
+        std::shared_ptr<const SurfelData> mSurfelData;
+        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
         
         std::vector<GLVertexArray<Surfel>> mSurfelClusterVAOs;
         std::vector<Color> mSurfelClusterColors;
@@ -30,7 +31,7 @@ namespace EARenderer {
     public:
         enum class Mode { Default, Clusters };
 
-        SurfelRenderer(Scene* scene, ResourcePool* resourcePool);
+        SurfelRenderer(const Scene *scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> probeData);
         
         void render(Mode renderingMode, float surfelRadius, size_t probeIndex = -1);
     };

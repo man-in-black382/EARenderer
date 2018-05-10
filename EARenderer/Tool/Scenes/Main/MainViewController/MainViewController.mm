@@ -129,7 +129,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     EARenderer::OcclusionMapBuilder probeOcclusionMapBuilder(EARenderer::Size2D(10));
     probeOcclusionMapBuilder.buildLightProbeOcclusionMaps(self.scene, diffuseLightProbeData);
 
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, resourcePool);
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
