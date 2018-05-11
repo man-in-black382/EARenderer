@@ -31,6 +31,7 @@ namespace EARenderer {
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
+        std::shared_ptr<GLHDRTexture2D> mOcclusionMapAtlas;
 
     public:
         const auto& probes() const { return mProbes; }
@@ -42,6 +43,8 @@ namespace EARenderer {
         auto projectionClusterIndicesBufferTexture() const { return mProjectionClusterIndicesBufferTexture; };
 
         auto probeClusterProjectionsMetadataBufferTexture() const { return mProbeClusterProjectionsMetadataBufferTexture; }
+
+        auto occlusionMapAtlas() const { return mOcclusionMapAtlas; }
     };
 
 }

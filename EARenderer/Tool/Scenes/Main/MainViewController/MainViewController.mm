@@ -33,7 +33,6 @@
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
 #import "DiffuseLightProbeGenerator.hpp"
-#import "OcclusionMapBuilder.hpp"
 
 #import "Choreograph.h"
 
@@ -124,10 +123,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     auto surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
-    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
-
-    EARenderer::OcclusionMapBuilder probeOcclusionMapBuilder(EARenderer::Size2D(10));
-    probeOcclusionMapBuilder.buildLightProbeOcclusionMaps(self.scene, diffuseLightProbeData);
+    EARenderer::Size2D occlusionMapResolution(10);
+    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData, occlusionMapResolution);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);

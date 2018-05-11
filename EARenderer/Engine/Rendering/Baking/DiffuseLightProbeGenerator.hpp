@@ -18,19 +18,28 @@
 namespace EARenderer {
 
     class DiffuseLightProbeGenerator {
-    protected:
-        std::shared_ptr<DiffuseLightProbeData> mProbeData;
+    private:
 
+#pragma mark - Member variables
+
+        Size2D mOcclusionTextureResolution;
+        Size2D mOcclusionMapFaceResolution;
+        std::vector<float> mOcclusionDistances;
+        std::shared_ptr<DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const SurfelData> mSurfelData;
         const Scene *mScene = nullptr;
 
-        void captureEnvironmentForProbe(const LightProbe& probe);
+#pragma mark - Members functions
 
         float surfelSolidAngle(const Surfel& surfel, const DiffuseLightProbe& probe);
 
         SurfelClusterProjection projectSurfelCluster(const SurfelCluster& cluster, const DiffuseLightProbe& probe);
 
         void projectSurfelClustersOnProbe(DiffuseLightProbe& probe);
+
+        void calculateOcclusionTextureResolution();
+
+        void findOcclusionsDistancesForProbe(int32_t probeIndex);
 
         std::vector<SphericalHarmonics> surfelProjectionsSH() const;
 
@@ -39,7 +48,7 @@ namespace EARenderer {
         std::vector<uint32_t> probeProjectionsMetadata() const;
 
     public:
-        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData);
+        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData, const Size2D& occlusionMapResolution);
     };
 
 }

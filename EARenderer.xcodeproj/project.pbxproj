@@ -147,7 +147,6 @@
 		CE53ADE6209E2BD600749A96 /* Fabric03_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE2209E2BD200749A96 /* Fabric03_rgh.jpg */; };
 		CE53ADE7209E2BD600749A96 /* Fabric03_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE3209E2BD400749A96 /* Fabric03_nrm.jpg */; };
 		CE53ADE8209E2BD600749A96 /* Fabric03_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADE4209E2BD600749A96 /* Fabric03_col.jpg */; };
-		CE53ADEB20A3511800749A96 /* OcclusionMapBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ADE920A3511800749A96 /* OcclusionMapBuilder.cpp */; };
 		CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED052012759C00A03146 /* Triangle2D.cpp */; };
 		CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE53ED08201275B900A03146 /* Triangle3D.cpp */; };
 		CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE54EC401F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp */; };
@@ -660,8 +659,6 @@
 		CE53ADE2209E2BD200749A96 /* Fabric03_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_rgh.jpg; sourceTree = "<group>"; };
 		CE53ADE3209E2BD400749A96 /* Fabric03_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_nrm.jpg; sourceTree = "<group>"; };
 		CE53ADE4209E2BD600749A96 /* Fabric03_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric03_col.jpg; sourceTree = "<group>"; };
-		CE53ADE920A3511800749A96 /* OcclusionMapBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OcclusionMapBuilder.cpp; sourceTree = "<group>"; };
-		CE53ADEA20A3511800749A96 /* OcclusionMapBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = OcclusionMapBuilder.hpp; sourceTree = "<group>"; };
 		CE53ED052012759C00A03146 /* Triangle2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle2D.cpp; sourceTree = "<group>"; };
 		CE53ED062012759C00A03146 /* Triangle2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Triangle2D.hpp; sourceTree = "<group>"; };
 		CE53ED08201275B900A03146 /* Triangle3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Triangle3D.cpp; sourceTree = "<group>"; };
@@ -1746,8 +1743,6 @@
 				AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */,
 				AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */,
 				AC92B97E20A4567C00FEAB2E /* DiffuseLightProbeData.hpp */,
-				CE53ADE920A3511800749A96 /* OcclusionMapBuilder.cpp */,
-				CE53ADEA20A3511800749A96 /* OcclusionMapBuilder.hpp */,
 			);
 			path = Baking;
 			sourceTree = "<group>";
@@ -3484,7 +3479,6 @@
 				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,
 				CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */,
 				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
-				CE53ADEB20A3511800749A96 /* OcclusionMapBuilder.cpp in Sources */,
 				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
 				CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */,
