@@ -12,11 +12,17 @@
 #include "GLTextureCubemap.hpp"
 #include "GLHDRCubemapSampler.hpp"
 
+#include <array>
+#include <vector>
+#include <glm/vec3.hpp>
+
 namespace EARenderer {
     
     class GLHDRTextureCubemap: public GLTextureCubemap {
     public:
         GLHDRTextureCubemap(const Size2D& size, Filter filter = Filter::Trilinear);
+        GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Filter filter = Filter::Trilinear);
+
         ~GLHDRTextureCubemap() = default;
 
         GLHDRCubemapSampler sampleTexels(int32_t mipLevel = 0) const;

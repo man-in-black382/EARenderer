@@ -93,8 +93,14 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
-    void GLSLCookTorrance::setProbesGridResolution(const glm::ivec3& resolution) {
-        glUniform3iv(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), 1, glm::value_ptr(resolution));
+    void GLSLCookTorrance::setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapsAtlas")>, atlas);
     }
+
+    void GLSLCookTorrance::setCubemapTexCoordsMap(const GLLDRTextureCubemap& map) {
+        setUniformTexture(uint32_constant<ctcrc32("uCubemapTexCoordsMap")>, map);
+    }
+
+
 
 }

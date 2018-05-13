@@ -17,9 +17,24 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLLDRTextureCubemap::GLLDRTextureCubemap(const Size2D& size, Filter filter) {
-        std::array<void *, 6> nullptrs;
+        std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
         initialize(size, filter, WrapMode::ClampToEdge, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, nullptrs);
+    }
+
+    GLLDRTextureCubemap::GLLDRTextureCubemap(const std::array<std::vector<glm::uvec3>, 6>& pixels) {
+        Size2D estimation;
+        std::array<const void *, 6> pixelData;
+
+        for (size_t i = 0; i < 6; i++) {
+            Size2D size = EstimatedSize(pixels[i].size());
+            if (size.width > estimation.width && size.height > estimation.height) {
+                estimation = size;
+            }
+            pixelData[i] = pixels[i].data();
+        }
+
+        initialize(estimation, Filter::None, WrapMode::ClampToEdge, GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT, pixelData);
     }
     
     GLLDRTextureCubemap::GLLDRTextureCubemap(const std::string& rightImagePath,
@@ -39,6 +54,7 @@ namespace EARenderer {
         };
 
         std::array<void *, 6> pixelDataArray;
+        std::array<const void *, 6> constPixelDataArray;
 
         stbi_set_flip_vertically_on_load(true);
 
@@ -50,6 +66,7 @@ namespace EARenderer {
             }
 
             pixelDataArray[i] = pixelData;
+            constPixelDataArray[i] = pixelData;
         }
 
         GLint texComponents;
@@ -60,7 +77,7 @@ namespace EARenderer {
             default: texComponents = GL_RGBA; break;
         }
 
-        initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, texComponents, GL_RGBA, GL_UNSIGNED_BYTE, pixelDataArray);
+        initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, texComponents, GL_RGBA, GL_UNSIGNED_BYTE, constPixelDataArray);
 
         for (auto buffer : pixelDataArray) {
             stbi_image_free(buffer);

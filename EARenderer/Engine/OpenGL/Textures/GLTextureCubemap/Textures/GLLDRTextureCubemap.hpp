@@ -11,17 +11,23 @@
 
 #include "GLTextureCubemap.hpp"
 
+#include <glm/vec3.hpp>
+#include <vector>
+#include <array>
+
 namespace EARenderer {
 
     class GLLDRTextureCubemap: public GLTextureCubemap {
     public:
         GLLDRTextureCubemap(const Size2D& size, Filter filter = Filter::Trilinear);
+        GLLDRTextureCubemap(const std::array<std::vector<glm::uvec3>, 6>& pixels);
+        
         GLLDRTextureCubemap(const std::string& rightImagePath,
-                         const std::string& leftImagePath,
-                         const std::string& topImagePath,
-                         const std::string& bottomImagePath,
-                         const std::string& frontImagePath,
-                         const std::string& backImagePath);
+                            const std::string& leftImagePath,
+                            const std::string& topImagePath,
+                            const std::string& bottomImagePath,
+                            const std::string& frontImagePath,
+                            const std::string& backImagePath);
 
         ~GLLDRTextureCubemap() = default;
     };

@@ -20,7 +20,7 @@ namespace EARenderer {
     protected:
         void initialize(const Size2D& size, Filter filter, WrapMode wrapMode,
                         GLint internalFormat, GLenum format, GLenum type,
-                        const std::array<void *, 6>& pixelData);
+                        std::array<const void *, 6>& pixelData);
 
     public:
         GLTextureCubemap();

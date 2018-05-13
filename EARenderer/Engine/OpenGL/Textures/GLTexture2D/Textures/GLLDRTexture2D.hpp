@@ -13,6 +13,7 @@
 #include "GLLDRTexture2DSampler.hpp"
 
 #include <vector>
+#include <glm/vec3.hpp>
 
 namespace EARenderer {
 
@@ -20,8 +21,9 @@ namespace EARenderer {
     public:
         GLLDRTexture2D(const Size2D& size, Filter filter = Filter::Trilinear);
         GLLDRTexture2D(const std::string& imagePath);
-        GLLDRTexture2D(const std::vector<uint8_t> bytes);
-        GLLDRTexture2D(const std::vector<uint32_t> integers);
+        GLLDRTexture2D(const std::vector<uint8_t>& bytes);
+        GLLDRTexture2D(const std::vector<uint32_t>& integers);
+        GLLDRTexture2D(const std::vector<glm::uvec3>& uIntegerTriples);
         ~GLLDRTexture2D() = default;
 
         GLLDRTexture2DSampler sampleTexels(int32_t mipLevel = 0) const;

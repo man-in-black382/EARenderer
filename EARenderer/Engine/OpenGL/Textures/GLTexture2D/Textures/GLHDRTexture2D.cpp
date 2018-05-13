@@ -33,8 +33,8 @@ namespace EARenderer {
         stbi_image_free(pixelData);
     };
 
-    GLHDRTexture2D::GLHDRTexture2D(const std::vector<float>, const Size2D& size) {
-        
+    GLHDRTexture2D::GLHDRTexture2D(const std::vector<float>& floats, const Size2D& size) {
+        initialize(size, Filter::None, WrapMode::ClampToEdge, GL_R32F, GL_RED, GL_FLOAT, floats.data());
     }
     
 }

@@ -113,7 +113,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -151,10 +151,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
 
-    self.sceneRenderer->prepareFrame();
+    EARenderer::Measurement::ExecutionTime("Frame preparation took", [&]() {
+        self.sceneRenderer->prepareFrame();
+        glFinish();
+    });
 
-    self.sceneRenderer->renderMeshes();
+    EARenderer::Measurement::ExecutionTime("Mesh rendering took", [&]() {
+        self.sceneRenderer->renderMeshes();
+        glFinish();
+    });
+
     self.sceneRenderer->renderDiffuseGridProbes(0.01);
+
+    printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(1600);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
@@ -165,6 +174,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
+    glFinish();
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;
 

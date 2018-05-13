@@ -14,7 +14,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
     
     GLDepthTextureCubemap::GLDepthTextureCubemap(const Size2D& size) {
-        std::array<void *, 6> nullptrs;
+        std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
         initialize(size, Filter::Bilinear, WrapMode::ClampToBorder, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, nullptrs);
     }

@@ -15,9 +15,24 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLHDRTextureCubemap::GLHDRTextureCubemap(const Size2D& size, Filter filter) {
-        std::array<void *, 6> nullptrs;
+        std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
-        initialize(size, filter, WrapMode::ClampToEdge, GL_RGB16F, GL_RGB, GL_FLOAT, nullptrs);
+        initialize(size, filter, WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, nullptrs);
+    }
+
+    GLHDRTextureCubemap::GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Filter filter) {
+        Size2D estimation;
+        std::array<const void *, 6> pixelData;
+
+        for (size_t i = 0; i < 6; i++) {
+            Size2D size = EstimatedSize(pixels[i].size());
+            if (size.width > estimation.width && size.height > estimation.height) {
+                estimation = size;
+            }
+            pixelData[i] = pixels[i].data();
+        }
+
+        initialize(estimation, filter, WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
     }
     
 #pragma mark - Public interface

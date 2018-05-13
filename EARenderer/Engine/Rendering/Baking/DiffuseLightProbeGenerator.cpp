@@ -120,7 +120,7 @@ namespace EARenderer {
                     Ray3D ray(probe.position, direction);
 
                     if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
-                        printf("Texture coords: %d %d \n", globalX, globalY);
+//                        printf("Texture coords: %d %d \n", globalX, globalY);
 
                         int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
                         mOcclusionDistances[flatIndex] = hitDistance;
@@ -153,6 +153,22 @@ namespace EARenderer {
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
         }
         return metadata;
+    }
+
+    std::array<std::vector<glm::uvec3>, 6> DiffuseLightProbeGenerator::cubemapTextureCoordinates() const {
+        std::array<std::vector<glm::uvec3>, 6> coordinates;
+
+        for (size_t i = 0; i < 6; i++) {
+            coordinates[i].assign(mOcclusionMapFaceResolution.width * mOcclusionMapFaceResolution.height, glm::zero<glm::vec3>());
+            for (size_t y = 0; y < mOcclusionMapFaceResolution.height; y++) {
+                for (size_t x = 0; x < mOcclusionMapFaceResolution.width; x++) {
+                    size_t flatIndex = y * mOcclusionMapFaceResolution.width + x;
+                    coordinates[i][flatIndex] = glm::uvec3(i, x, y);
+                }
+            }
+        }
+
+        return coordinates;
     }
 
 #pragma mark - Public interface
@@ -196,11 +212,14 @@ namespace EARenderer {
         calculateOcclusionTextureResolution();
         mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, 0);
 
-        for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
-            findOcclusionsDistancesForProbe(i);
-        }
+        Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
+            for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
+                findOcclusionsDistancesForProbe(i);
+            }
+        });
 
         mProbeData->mOcclusionMapAtlas = std::make_shared<GLHDRTexture2D>(mOcclusionDistances, mOcclusionTextureResolution);
+        mProbeData->mCubeFaceTextureCoordsMap = std::make_shared<GLLDRTextureCubemap>(cubemapTextureCoordinates());
 
         return mProbeData;
     }

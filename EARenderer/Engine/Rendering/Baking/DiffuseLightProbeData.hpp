@@ -13,6 +13,7 @@
 #include "SurfelClusterProjection.hpp"
 #include "GLBufferTexture.hpp"
 #include "SphericalHarmonics.hpp"
+#include "GLLDRTextureCubemap.hpp"
 
 #include <vector>
 #include <memory>
@@ -32,6 +33,7 @@ namespace EARenderer {
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
         std::shared_ptr<GLHDRTexture2D> mOcclusionMapAtlas;
+        std::shared_ptr<GLLDRTextureCubemap> mCubeFaceTextureCoordsMap;
 
     public:
         const auto& probes() const { return mProbes; }
@@ -45,6 +47,8 @@ namespace EARenderer {
         auto probeClusterProjectionsMetadataBufferTexture() const { return mProbeClusterProjectionsMetadataBufferTexture; }
 
         auto occlusionMapAtlas() const { return mOcclusionMapAtlas; }
+
+        auto cubeFaceTextureCoordsMap() const { return mCubeFaceTextureCoordsMap; }
     };
 
 }

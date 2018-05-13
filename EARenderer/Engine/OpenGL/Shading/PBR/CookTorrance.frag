@@ -74,7 +74,7 @@ struct SH {
 
 uniform vec3 uCameraPosition;
 uniform mat4 uWorldBoudningBoxTransform;
-uniform ivec3 uProbesGridResolution;
+//uniform vec3 uWorldBoundingBoxExtents;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -98,6 +98,9 @@ uniform sampler3D uGridSHMap4;
 uniform sampler3D uGridSHMap5;
 uniform sampler3D uGridSHMap6;
 
+uniform sampler2D uProbeOcclusionMapsAtlas;
+uniform usamplerCube uCubemapTexCoordsMap;
+
 // IBL
 //uniform sampler2D uBRDFIntegrationMap;
 //uniform samplerCube uSpecularIrradianceMap;
@@ -109,28 +112,70 @@ uniform sampler3D uGridSHMap6;
 // Shrink tex coords by the size of 1 texel, which will result in a (0; 0; 0)
 // coordinate to become (0.5; 0.5; 0.5) coordinate (in texel space)
 vec3 AlignWithTexelCenters(vec3 texCoords) {
-    vec3 halfTexel = 1.0 / vec3(uProbesGridResolution) / 2.0;
-    vec3 reductionFactor = vec3(uProbesGridResolution - 1) / vec3(uProbesGridResolution);
+    ivec3 gridResolution = textureSize(uGridSHMap0, 0);
+    vec3 halfTexel = 1.0 / vec3(gridResolution) / 2.0;
+    vec3 reductionFactor = vec3(gridResolution - 1) / vec3(gridResolution);
     return texCoords * reductionFactor + halfTexel;
 }
 
 ////////////////////////////////////////////////////////////
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
-SH UnpackGridSH() {
+
+SH ScaleSH(SH sh, vec3 scale) {
+    SH result;
+
+    result.L00  = scale * sh.L00;
+
+    result.L1_1 = scale * sh.L1_1;
+    result.L10  = scale * sh.L10;
+    result.L11  = scale * sh.L11;
+
+    result.L2_2 = scale * sh.L2_2;
+    result.L2_1 = scale * sh.L2_1;
+    result.L21  = scale * sh.L21;
+
+    result.L20  = scale * sh.L20;
+
+    result.L22  = scale * sh.L22;
+
+    return result;
+}
+
+SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
+    SH result;
+
+    result.L00  = first.L00 + second.L00 + third.L00 + fourth.L00 + fifth.L00 + sixth.L00 + seventh.L00 + eighth.L00;
+
+    result.L1_1 = first.L1_1 + second.L1_1 + third.L1_1 + fourth.L1_1 + fifth.L1_1 + sixth.L1_1 + seventh.L1_1 + eighth.L1_1;
+
+    result.L10  = first.L10 + second.L10 + third.L10 + fourth.L10 + fifth.L10 + sixth.L10 + seventh.L10 + eighth.L10;
+
+    result.L11  = first.L11 + second.L11 + third.L11 + fourth.L11 + fifth.L11 + sixth.L11 + seventh.L11 + eighth.L11;
+
+    result.L2_2 = first.L2_2 + second.L2_2 + third.L2_2 + fourth.L2_2 + fifth.L2_2 + sixth.L2_2 + seventh.L2_2 + eighth.L2_2;
+
+    result.L2_1 = first.L2_1 + second.L2_1 + third.L2_1 + fourth.L2_1 + fifth.L2_1 + sixth.L2_1 + seventh.L2_1 + eighth.L2_1;
+
+    result.L21  = first.L21 + second.L21 + third.L21 + fourth.L21 + fifth.L21 + sixth.L21 + seventh.L21 + eighth.L21;
+
+    result.L20  = first.L20 + second.L20 + third.L20 + fourth.L20 + fifth.L20 + sixth.L20 + seventh.L20 + eighth.L20;
+
+    result.L22  = first.L22 + second.L22 + third.L22 + fourth.L22 + fifth.L22 + sixth.L22 + seventh.L22 + eighth.L22;
+
+    return result;
+}
+
+SH UnpackSH(ivec3 texCoords) {
     SH sh;
 
-    // Get 3D texture space coordinates
-    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
-    vec3 shMapCoords = AlignWithTexelCenters(texCoords);
-
-    vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
-    vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
-    vec4 shMap2Data = texture(uGridSHMap2, shMapCoords);
-    vec4 shMap3Data = texture(uGridSHMap3, shMapCoords);
-    vec4 shMap4Data = texture(uGridSHMap4, shMapCoords);
-    vec4 shMap5Data = texture(uGridSHMap5, shMapCoords);
-    vec4 shMap6Data = texture(uGridSHMap6, shMapCoords);
+    vec4 shMap0Data = texelFetch(uGridSHMap0, texCoords, 0);
+    vec4 shMap1Data = texelFetch(uGridSHMap1, texCoords, 0);
+    vec4 shMap2Data = texelFetch(uGridSHMap2, texCoords, 0);
+    vec4 shMap3Data = texelFetch(uGridSHMap3, texCoords, 0);
+    vec4 shMap4Data = texelFetch(uGridSHMap4, texCoords, 0);
+    vec4 shMap5Data = texelFetch(uGridSHMap5, texCoords, 0);
+    vec4 shMap6Data = texelFetch(uGridSHMap6, texCoords, 0);
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
@@ -145,6 +190,72 @@ SH UnpackGridSH() {
     return sh;
 }
 
+SH LerpSurroundingProbes() {
+
+    ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
+    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+
+//    vec3 shMapCoords = AlignWithTexelCenters(texCoords);
+
+    vec3 unnormCoords = texCoords * vec3(gridResolution);
+    vec3 minCoords = vec3(0.0, 0.0, 0.0);
+    vec3 maxCoords = vec3(1.0, 1.0, 1.0);
+
+//    vec3 minCoords = texCoords;
+//    vec3 maxCoords = texCoords;
+
+//       5-------6
+//      /|      /|
+//     / |     / |
+//    1--|----2  |
+//    |  4----|--7
+//    | /     | /
+//    0-------3
+
+
+//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
+//    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
+//    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
+//    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
+//    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
+//    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
+//    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
+//    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
+
+    ivec3 cp0 = ivec3(minCoords.x, minCoords.y, minCoords.z);
+    ivec3 cp1 = ivec3(minCoords.x, maxCoords.y, minCoords.z);
+    ivec3 cp2 = ivec3(maxCoords.x, maxCoords.y, minCoords.z);
+    ivec3 cp3 = ivec3(maxCoords.x, minCoords.y, minCoords.z);
+    ivec3 cp4 = ivec3(minCoords.x, minCoords.y, maxCoords.z);
+    ivec3 cp5 = ivec3(minCoords.x, maxCoords.y, maxCoords.z);
+    ivec3 cp6 = ivec3(maxCoords.x, maxCoords.y, maxCoords.z);
+    ivec3 cp7 = ivec3(maxCoords.x, minCoords.y, maxCoords.z);
+
+    SH sh0 = UnpackSH(cp0);
+    SH sh1 = UnpackSH(cp1);
+    SH sh2 = UnpackSH(cp2);
+    SH sh3 = UnpackSH(cp3);
+    SH sh4 = UnpackSH(cp4);
+    SH sh5 = UnpackSH(cp5);
+    SH sh6 = UnpackSH(cp6);
+    SH sh7 = UnpackSH(cp7);
+
+    vec3 scale = vec3(1.0 / 8.0);
+
+    sh0 = ScaleSH(sh0, scale);
+    sh1 = ScaleSH(sh1, scale);
+    sh2 = ScaleSH(sh2, scale);
+    sh3 = ScaleSH(sh3, scale);
+    sh4 = ScaleSH(sh4, scale);
+    sh5 = ScaleSH(sh5, scale);
+    sh6 = ScaleSH(sh6, scale);
+    sh7 = ScaleSH(sh7, scale);
+
+    SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
+
+    return result;
+}
+
 float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
 
@@ -156,8 +267,8 @@ float SHRadiance(SH sh, vec3 direction, int component) {
             2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
-vec3 EvaluateGridSphericalHarmonics(vec3 direction) {
-    SH sh = UnpackGridSH();
+vec3 EvaluateSphericalHarmonics(vec3 direction) {
+    SH sh = LerpSurroundingProbes();
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
@@ -293,6 +404,7 @@ int shadowCascadeIndex()
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
     
+
     float fragDepth = projCoords.z;
     
     for (int i = 0; i < uNumberOfCascades; ++i) {
@@ -420,13 +532,17 @@ void main() {
         // Nothing to do here... yet
     }
 
-    vec3 indirectRadiance = EvaluateGridSphericalHarmonics(N);
+    vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, indirectRadiance, shadow);
 
     // Image based lighting
     vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
+
+    // STUB
+    vec4 stub0 = texture(uProbeOcclusionMapsAtlas, vec2(0.0));
+    vec4 stub1 = texture(uCubemapTexCoordsMap, vec3(1.0));
 
     oFragColor = vec4(correctColor, 1.0);
 

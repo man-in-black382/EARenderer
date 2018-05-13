@@ -326,7 +326,8 @@ namespace EARenderer {
             mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
-            mCookTorranceShader.setProbesGridResolution(mProbeGridResolution);
+            mCookTorranceShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
+            mCookTorranceShader.setCubemapTexCoordsMap(*mDiffuseProbeData->cubeFaceTextureCoordsMap());
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
@@ -353,11 +354,11 @@ namespace EARenderer {
 //        mFSQuadShader.bind();
 //        mFSQuadShader.setApplyToneMapping(false);
 //
-//        Rect2D viewportRect(Size2D(128));
+//        Rect2D viewportRect(mDiffuseProbeData->occlusionMapAtlas()->size());
 //        GLViewport(viewportRect).apply();
 //
 //        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mLightmapProbeIndicesMap);
+//            mFSQuadShader.setTexture(*mDiffuseProbeData->occlusionMapAtlas());
 //        });
 //
 //        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

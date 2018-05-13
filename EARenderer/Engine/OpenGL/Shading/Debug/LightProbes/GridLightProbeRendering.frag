@@ -133,5 +133,5 @@ void main() {
     // Rotate
     normal = vNormalMatrix * normal;
 
-    oFragColor = vec4(EvaluateSphericalHarmonics(normal), 1.0);
+    oFragColor = vec4(ReinhardToneMap(EvaluateSphericalHarmonics(normal)), 1.0);
 }

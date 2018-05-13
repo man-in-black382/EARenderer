@@ -19,7 +19,7 @@ namespace EARenderer {
     public:
         GLHDRTexture2D(const Size2D& size, Filter filter = Filter::Trilinear);
         GLHDRTexture2D(const std::string& imagePath);
-        GLHDRTexture2D(const std::vector<float>, const Size2D& size);
+        GLHDRTexture2D(const std::vector<float>& floats, const Size2D& size);
         ~GLHDRTexture2D() = default;
     };
     

@@ -17,6 +17,7 @@
 #include "GLHDRTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
+#include "GLLDRTextureCubemap.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
@@ -56,8 +57,8 @@ namespace EARenderer {
         void setDedicatedProbesSHTextures(const GLHDRTexture2DArray& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setGeometryType(GeometryType type);
-        void setProbesGridResolution(const glm::ivec3& resolution);
-        void setDedicatedProbesSHMapIndex(uint32_t index);
+        void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
+        void setCubemapTexCoordsMap(const GLLDRTextureCubemap& map);
     };
     
 }

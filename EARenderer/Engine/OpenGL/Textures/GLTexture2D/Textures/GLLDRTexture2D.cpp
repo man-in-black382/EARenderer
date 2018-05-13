@@ -42,14 +42,19 @@ namespace EARenderer {
         stbi_image_free(pixelData);        
     }
 
-    GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint8_t> bytes) {
+    GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint8_t>& bytes) {
         Size2D size = EstimatedSize(bytes.size() / 4);
         initialize(size, Filter::None, WrapMode::ClampToEdge, GL_RGBA8UI, GL_RGBA_INTEGER, GL_UNSIGNED_BYTE, bytes.data());
     }
 
-    GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint32_t> integers) {
+    GLLDRTexture2D::GLLDRTexture2D(const std::vector<uint32_t>& integers) {
         Size2D size = EstimatedSize(integers.size());
         initialize(size, Filter::None, WrapMode::ClampToEdge, GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT, integers.data());
+    }
+
+    GLLDRTexture2D::GLLDRTexture2D(const std::vector<glm::uvec3>& uIntegerTriples) {
+        Size2D size = EstimatedSize(uIntegerTriples.size());
+        initialize(size, Filter::None, WrapMode::ClampToEdge, GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT, uIntegerTriples.data());
     }
 
 #pragma mark - Sampling
