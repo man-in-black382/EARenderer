@@ -161,7 +161,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         glFinish();
     });
 
-    self.sceneRenderer->renderDiffuseGridProbes(0.01);
+//    self.sceneRenderer->renderDiffuseGridProbes(0.01);
 
     printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);

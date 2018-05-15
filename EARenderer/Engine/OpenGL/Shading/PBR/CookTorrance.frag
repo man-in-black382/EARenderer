@@ -72,6 +72,11 @@ struct SH {
     vec3 L22;
 };
 
+struct vec8 {
+    float value0; float value1; float value2; float value3;
+    float value4; float value5; float value6; float value7;
+};
+
 uniform vec3 uCameraPosition;
 uniform mat4 uWorldBoudningBoxTransform;
 //uniform vec3 uWorldBoundingBoxExtents;
@@ -142,6 +147,54 @@ SH ScaleSH(SH sh, vec3 scale) {
     return result;
 }
 
+SH SumSH(SH first, SH second) {
+    SH result;
+
+    result.L00  = first.L00 + second.L00;
+
+    result.L1_1 = first.L1_1 + second.L1_1;
+
+    result.L10  = first.L10 + second.L10;
+
+    result.L11  = first.L11 + second.L11;
+
+    result.L2_2 = first.L2_2 + second.L2_2;
+
+    result.L2_1 = first.L2_1 + second.L2_1;
+
+    result.L21  = first.L21 + second.L21;
+
+    result.L20  = first.L20 + second.L20;
+
+    result.L22  = first.L22 + second.L22;
+
+    return result;
+}
+
+SH SumSH(SH first, SH second, SH third, SH fourth) {
+    SH result;
+
+    result.L00  = first.L00 + second.L00 + third.L00 + fourth.L00;
+
+    result.L1_1 = first.L1_1 + second.L1_1 + third.L1_1 + fourth.L1_1;
+
+    result.L10  = first.L10 + second.L10 + third.L10 + fourth.L10;
+
+    result.L11  = first.L11 + second.L11 + third.L11 + fourth.L11;
+
+    result.L2_2 = first.L2_2 + second.L2_2 + third.L2_2 + fourth.L2_2;
+
+    result.L2_1 = first.L2_1 + second.L2_1 + third.L2_1 + fourth.L2_1;
+
+    result.L21  = first.L21 + second.L21 + third.L21 + fourth.L21;
+
+    result.L20  = first.L20 + second.L20 + third.L20 + fourth.L20;
+
+    result.L22  = first.L22 + second.L22 + third.L22 + fourth.L22;
+
+    return result;
+}
+
 SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
     SH result;
 
@@ -166,16 +219,18 @@ SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH sevent
     return result;
 }
 
-SH UnpackSH(ivec3 texCoords) {
+SH UnpackSH(vec3 texCoords) {
     SH sh;
 
-    vec4 shMap0Data = texelFetch(uGridSHMap0, texCoords, 0);
-    vec4 shMap1Data = texelFetch(uGridSHMap1, texCoords, 0);
-    vec4 shMap2Data = texelFetch(uGridSHMap2, texCoords, 0);
-    vec4 shMap3Data = texelFetch(uGridSHMap3, texCoords, 0);
-    vec4 shMap4Data = texelFetch(uGridSHMap4, texCoords, 0);
-    vec4 shMap5Data = texelFetch(uGridSHMap5, texCoords, 0);
-    vec4 shMap6Data = texelFetch(uGridSHMap6, texCoords, 0);
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+    vec4 shMap5Data = texelFetch(uGridSHMap5, iTexCoords, 0);
+    vec4 shMap6Data = texelFetch(uGridSHMap6, iTexCoords, 0);
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
@@ -190,6 +245,42 @@ SH UnpackSH(ivec3 texCoords) {
     return sh;
 }
 
+vec8 Barycentric(vec3 p0, vec3 p1, vec3 p2, vec3 p3, vec3 p4, vec3 p5, vec3 p6, vec3 p7, vec3 subjectPoint) {
+
+    float distance0 = distance(p0, subjectPoint);
+    float distance1 = distance(p1, subjectPoint);
+    float distance2 = distance(p2, subjectPoint);
+    float distance3 = distance(p3, subjectPoint);
+    float distance4 = distance(p4, subjectPoint);
+    float distance5 = distance(p5, subjectPoint);
+    float distance6 = distance(p6, subjectPoint);
+    float distance7 = distance(p7, subjectPoint);
+
+    float divisorInv = 1.0 / (distance0 + distance1 + distance2 + distance3 + distance4 + distance5 + distance6 + distance7);
+
+    vec8 result;
+
+    result.value0 = 1.0 - distance0 * divisorInv;
+    result.value1 = 1.0 - distance1 * divisorInv;
+    result.value2 = 1.0 - distance2 * divisorInv;
+    result.value3 = 1.0 - distance3 * divisorInv;
+    result.value4 = 1.0 - distance4 * divisorInv;
+    result.value5 = 1.0 - distance5 * divisorInv;
+    result.value6 = 1.0 - distance6 * divisorInv;
+    result.value7 = 1.0 - distance7 * divisorInv;
+
+//    result.value0 = distance0 * divisorInv;
+//    result.value1 = distance1 * divisorInv;
+//    result.value2 = distance2 * divisorInv;
+//    result.value3 = distance3 * divisorInv;
+//    result.value4 = distance4 * divisorInv;
+//    result.value5 = distance5 * divisorInv;
+//    result.value6 = distance6 * divisorInv;
+//    result.value7 = distance7 * divisorInv;
+
+    return result;
+}
+
 SH LerpSurroundingProbes() {
 
     ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
@@ -198,11 +289,8 @@ SH LerpSurroundingProbes() {
 //    vec3 shMapCoords = AlignWithTexelCenters(texCoords);
 
     vec3 unnormCoords = texCoords * vec3(gridResolution);
-    vec3 minCoords = vec3(0.0, 0.0, 0.0);
-    vec3 maxCoords = vec3(1.0, 1.0, 1.0);
-
-//    vec3 minCoords = texCoords;
-//    vec3 maxCoords = texCoords;
+    vec3 minCoords = floor(unnormCoords);
+    vec3 maxCoords = floor(unnormCoords + 1.0);
 
 //       5-------6
 //      /|      /|
@@ -212,24 +300,14 @@ SH LerpSurroundingProbes() {
 //    | /     | /
 //    0-------3
 
-
-//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-//    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
-//    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
-//    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
-//    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
-//    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
-//    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
-//    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
-
-    ivec3 cp0 = ivec3(minCoords.x, minCoords.y, minCoords.z);
-    ivec3 cp1 = ivec3(minCoords.x, maxCoords.y, minCoords.z);
-    ivec3 cp2 = ivec3(maxCoords.x, maxCoords.y, minCoords.z);
-    ivec3 cp3 = ivec3(maxCoords.x, minCoords.y, minCoords.z);
-    ivec3 cp4 = ivec3(minCoords.x, minCoords.y, maxCoords.z);
-    ivec3 cp5 = ivec3(minCoords.x, maxCoords.y, maxCoords.z);
-    ivec3 cp6 = ivec3(maxCoords.x, maxCoords.y, maxCoords.z);
-    ivec3 cp7 = ivec3(maxCoords.x, minCoords.y, maxCoords.z);
+    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
+    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
+    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
+    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
+    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
+    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
+    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
+    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
     SH sh0 = UnpackSH(cp0);
     SH sh1 = UnpackSH(cp1);
@@ -242,14 +320,25 @@ SH LerpSurroundingProbes() {
 
     vec3 scale = vec3(1.0 / 8.0);
 
-    sh0 = ScaleSH(sh0, scale);
-    sh1 = ScaleSH(sh1, scale);
-    sh2 = ScaleSH(sh2, scale);
-    sh3 = ScaleSH(sh3, scale);
-    sh4 = ScaleSH(sh4, scale);
-    sh5 = ScaleSH(sh5, scale);
-    sh6 = ScaleSH(sh6, scale);
-    sh7 = ScaleSH(sh7, scale);
+    vec8 weights = Barycentric(cp0, cp1, cp2, cp3, cp4, cp5, cp6, cp7, unnormCoords);
+
+    sh0 = ScaleSH(sh0, vec3(weights.value0));
+    sh1 = ScaleSH(sh1, vec3(weights.value1));
+    sh2 = ScaleSH(sh2, vec3(weights.value2));
+    sh3 = ScaleSH(sh3, vec3(weights.value3));
+    sh4 = ScaleSH(sh4, vec3(weights.value4));
+    sh5 = ScaleSH(sh5, vec3(weights.value5));
+    sh6 = ScaleSH(sh6, vec3(weights.value6));
+    sh7 = ScaleSH(sh7, vec3(weights.value7));
+
+//    sh0 = ScaleSH(sh0, scale);
+//    sh1 = ScaleSH(sh1, scale);
+//    sh2 = ScaleSH(sh2, scale);
+//    sh3 = ScaleSH(sh3, scale);
+//    sh4 = ScaleSH(sh4, scale);
+//    sh5 = ScaleSH(sh5, scale);
+//    sh6 = ScaleSH(sh6, scale);
+//    sh7 = ScaleSH(sh7, scale);
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -547,4 +636,9 @@ void main() {
     oFragColor = vec4(correctColor, 1.0);
 
 //    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+
+//    ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
+//    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+//    vec3 unnormCoords = texCoords * vec3(gridResolution);
+//    oFragColor = vec4(texCoords, 1.0);
 }
