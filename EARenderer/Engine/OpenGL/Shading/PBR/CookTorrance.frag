@@ -245,40 +245,33 @@ SH UnpackSH(vec3 texCoords) {
     return sh;
 }
 
-vec8 Barycentric(vec3 p0, vec3 p1, vec3 p2, vec3 p3, vec3 p4, vec3 p5, vec3 p6, vec3 p7, vec3 subjectPoint) {
+vec8 TriLerp(vec3 pMin, vec3 pMax, vec3 p) {
+    //       5-------6
+    //      /|      /|
+    //     / |     / |
+    //    1--|----2  |
+    //    |  4----|--7
+    //    | /     | /
+    //    0-------3
 
-    float distance0 = distance(p0, subjectPoint);
-    float distance1 = distance(p1, subjectPoint);
-    float distance2 = distance(p2, subjectPoint);
-    float distance3 = distance(p3, subjectPoint);
-    float distance4 = distance(p4, subjectPoint);
-    float distance5 = distance(p5, subjectPoint);
-    float distance6 = distance(p6, subjectPoint);
-    float distance7 = distance(p7, subjectPoint);
+    // 0 - min
+    // 6 - max
+    // Interpolation weights are in order: 0, 1, 2, 3, 4, 5, 6, 7
 
-    float divisorInv = 1.0 / (distance0 + distance1 + distance2 + distance3 + distance4 + distance5 + distance6 + distance7);
+    vec3 extents = pMax - pMin;
+    float divisorInv = 1.0 / (extents.x * extents.y * extents.z);
 
-    vec8 result;
+    vec8 weights;
+    weights.value0 = (pMax.x - p.x) * (pMax.y - p.y) * (pMax.z - p.z) * divisorInv;
+    weights.value1 = (pMax.x - p.x) * (p.y - pMin.y) * (pMax.z - p.z) * divisorInv;
+    weights.value2 = (p.x - pMin.x) * (p.y - pMin.y) * (pMax.z - p.z) * divisorInv;
+    weights.value3 = (p.x - pMin.x) * (pMax.y - p.y) * (pMax.z - p.z) * divisorInv;
+    weights.value4 = (pMax.x - p.x) * (pMax.y - p.y) * (p.z - pMin.z) * divisorInv;
+    weights.value5 = (pMax.x - p.x) * (p.y - pMin.y) * (p.z - pMin.z) * divisorInv;
+    weights.value6 = (p.x - pMin.x) * (p.y - pMin.y) * (p.z - pMin.z) * divisorInv;
+    weights.value7 = (p.x - pMin.x) * (pMax.y - p.y) * (p.z - pMin.z) * divisorInv;
 
-    result.value0 = 1.0 - distance0 * divisorInv;
-    result.value1 = 1.0 - distance1 * divisorInv;
-    result.value2 = 1.0 - distance2 * divisorInv;
-    result.value3 = 1.0 - distance3 * divisorInv;
-    result.value4 = 1.0 - distance4 * divisorInv;
-    result.value5 = 1.0 - distance5 * divisorInv;
-    result.value6 = 1.0 - distance6 * divisorInv;
-    result.value7 = 1.0 - distance7 * divisorInv;
-
-//    result.value0 = distance0 * divisorInv;
-//    result.value1 = distance1 * divisorInv;
-//    result.value2 = distance2 * divisorInv;
-//    result.value3 = distance3 * divisorInv;
-//    result.value4 = distance4 * divisorInv;
-//    result.value5 = distance5 * divisorInv;
-//    result.value6 = distance6 * divisorInv;
-//    result.value7 = distance7 * divisorInv;
-
-    return result;
+    return weights;
 }
 
 SH LerpSurroundingProbes() {
@@ -286,19 +279,17 @@ SH LerpSurroundingProbes() {
     ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
     vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
 
-//    vec3 shMapCoords = AlignWithTexelCenters(texCoords);
-
     vec3 unnormCoords = texCoords * vec3(gridResolution);
     vec3 minCoords = floor(unnormCoords);
-    vec3 maxCoords = floor(unnormCoords + 1.0);
+    vec3 maxCoords = ceil(unnormCoords);
 
-//       5-------6
-//      /|      /|
-//     / |     / |
-//    1--|----2  |
-//    |  4----|--7
-//    | /     | /
-//    0-------3
+    //       5-------6
+    //      /|      /|
+    //     / |     / |
+    //    1--|----2  |
+    //    |  4----|--7
+    //    | /     | /
+    //    0-------3
 
     vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
     vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
@@ -318,9 +309,7 @@ SH LerpSurroundingProbes() {
     SH sh6 = UnpackSH(cp6);
     SH sh7 = UnpackSH(cp7);
 
-    vec3 scale = vec3(1.0 / 8.0);
-
-    vec8 weights = Barycentric(cp0, cp1, cp2, cp3, cp4, cp5, cp6, cp7, unnormCoords);
+    vec8 weights = TriLerp(minCoords, maxCoords, unnormCoords);
 
     sh0 = ScaleSH(sh0, vec3(weights.value0));
     sh1 = ScaleSH(sh1, vec3(weights.value1));
@@ -330,15 +319,6 @@ SH LerpSurroundingProbes() {
     sh5 = ScaleSH(sh5, vec3(weights.value5));
     sh6 = ScaleSH(sh6, vec3(weights.value6));
     sh7 = ScaleSH(sh7, vec3(weights.value7));
-
-//    sh0 = ScaleSH(sh0, scale);
-//    sh1 = ScaleSH(sh1, scale);
-//    sh2 = ScaleSH(sh2, scale);
-//    sh3 = ScaleSH(sh3, scale);
-//    sh4 = ScaleSH(sh4, scale);
-//    sh5 = ScaleSH(sh5, scale);
-//    sh6 = ScaleSH(sh6, scale);
-//    sh7 = ScaleSH(sh7, scale);
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -635,15 +615,4 @@ void main() {
     oFragColor = vec4(correctColor, 1.0);
 
     oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
-
-//    ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
-//    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
-//    vec3 unnormCoords = texCoords * vec3(gridResolution);
-//
-//    vec3 minCoords = floor(unnormCoords);
-//    vec3 maxCoords = floor(unnormCoords + 1.0);
-//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-//    float distance0 = distance(minCoords.xy, unnormCoords.xy);
-//
-//    oFragColor = vec4(distance0, 0.0, 0.0, 1.0);
 }
