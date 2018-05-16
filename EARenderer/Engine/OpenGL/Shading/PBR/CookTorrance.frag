@@ -492,7 +492,6 @@ int shadowCascadeIndex()
     vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
-    
 
     float fragDepth = projCoords.z;
     
@@ -635,10 +634,16 @@ void main() {
 
     oFragColor = vec4(correctColor, 1.0);
 
-//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 
 //    ivec3 gridResolution = textureSize(uGridSHMap0, 0) - 1;
 //    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
 //    vec3 unnormCoords = texCoords * vec3(gridResolution);
-//    oFragColor = vec4(texCoords, 1.0);
+//
+//    vec3 minCoords = floor(unnormCoords);
+//    vec3 maxCoords = floor(unnormCoords + 1.0);
+//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
+//    float distance0 = distance(minCoords.xy, unnormCoords.xy);
+//
+//    oFragColor = vec4(distance0, 0.0, 0.0, 1.0);
 }
