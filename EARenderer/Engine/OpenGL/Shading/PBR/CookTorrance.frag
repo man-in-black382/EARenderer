@@ -9,10 +9,6 @@ const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
-const int kGeometryTypeStaticLightmapped = 0;
-const int kGeometryTypeStaticDedicated   = 1;
-const int kGeometryTypeDynamic           = 2;
-
 // Spherical harmonics
 const float kC1 = 0.429043;
 const float kC2 = 0.511664;

@@ -24,12 +24,7 @@ namespace EARenderer {
     mPointLights(10),
     mMeshInstances(1000),
     mLightProbes(10000)
-    {
-        SphericalHarmonics sh;
-        sh.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0), 2 * M_PI);
-        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 2 * M_PI);
-        printf("");
-    }
+    { }
     
 #pragma mark - Getters
     
@@ -44,11 +39,7 @@ namespace EARenderer {
     PackedLookupTable<MeshInstance>& Scene::meshInstances() {
         return mMeshInstances;
     }
-    
-//    PackedLookupTable<LightProbe>& Scene::lightProbes() {
-//        return mLightProbes;
-//    }
-//
+
     const DirectionalLight& Scene::directionalLight() const {
         return mDirectionalLight;
     }
@@ -60,26 +51,6 @@ namespace EARenderer {
     const PackedLookupTable<MeshInstance>& Scene::meshInstances() const {
         return mMeshInstances;
     }
-
-//    const PackedLookupTable<LightProbe>& Scene::lightProbes() const {
-//        return mLightProbes;
-//    }
-
-//    std::vector<Surfel>& Scene::surfels() {
-//        return mSurfels;
-//    }
-//
-//    std::vector<SurfelCluster>& Scene::surfelClusters() {
-//        return mSurfelClusters;
-//    }
-
-//    std::vector<SurfelClusterProjection>& Scene::surfelClusterProjections() {
-//        return mSurfelClusterProjections;
-//    }
-//
-//    std::vector<DiffuseLightProbe>& Scene::diffuseLightProbes() {
-//        return mDiffuseLightProbes;
-//    }
 
     std::shared_ptr<SparseOctree<MeshTriangleRef>> Scene::octree() const {
         return mOctree;
@@ -113,14 +84,6 @@ namespace EARenderer {
         return mDynamicMeshInstanceIDs;
     }
 
-//    std::vector<uint32_t>& Scene::diffuseProbeLightmapIndices() {
-//        return mDiffuseProbeLightmapIndices;
-//    }
-//
-//    std::vector<uint32_t>& Scene::dedicatedDiffuseProbeIndices() {
-//        return mDedicatedDiffuseProbeIndices;
-//    }
-
     float Scene::staticGeometryArea() const {
         return mStaticGeometryArea;
     }
@@ -144,14 +107,6 @@ namespace EARenderer {
 
     void Scene::setLightBakingVolume(const AxisAlignedBox3D& volume) {
         mLightBakingVolume = volume;
-    }
-
-    void Scene::setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices) {
-        mDiffuseProbeLightmapIndices = indices;
-    }
-
-    void Scene::setDedicatedDiffuseProbeIndices(const std::vector<uint32_t>& indices) {
-        mDedicatedDiffuseProbeIndices = indices;
     }
     
 #pragma mark -
@@ -266,10 +221,6 @@ namespace EARenderer {
         glm::vec3 bbLengths = mLightBakingVolume.max - mLightBakingVolume.min;
         return bbLengths / mGridProbesDistance;
     }
-
-//    Size2D Scene::preferredProbeLightmapResolution() const {
-//        return mProbesLightmapResolution;
-//    }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
         mStaticMeshInstanceIDs.push_back(meshInstanceID);
