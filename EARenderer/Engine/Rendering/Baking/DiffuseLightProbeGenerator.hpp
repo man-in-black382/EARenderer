@@ -14,6 +14,7 @@
 #include "SurfelData.hpp"
 
 #include <memory>
+#include <glm/vec2.hpp>
 
 namespace EARenderer {
 
@@ -25,6 +26,8 @@ namespace EARenderer {
         Size2D mOcclusionTextureResolution;
         Size2D mOcclusionMapFaceResolution;
         std::vector<float> mOcclusionDistances;
+        std::vector<glm::uvec2> mProbeOcclusionMapAtlasOffsets;
+        std::vector<glm::vec3> mProbePositions;
         std::shared_ptr<DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const SurfelData> mSurfelData;
         const Scene *mScene = nullptr;

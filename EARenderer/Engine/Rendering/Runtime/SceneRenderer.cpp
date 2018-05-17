@@ -328,6 +328,8 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mCookTorranceShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
             mCookTorranceShader.setCubemapTexCoordsMap(*mDiffuseProbeData->cubeFaceTextureCoordsMap());
+            mCookTorranceShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
+            mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
@@ -371,7 +373,8 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+//            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+            mSkyboxShader.setCubemap(*mDiffuseProbeData->cubeFaceTextureCoordsMap());
         });
         mScene->skybox()->draw();
     }

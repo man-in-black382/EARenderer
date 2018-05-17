@@ -53,7 +53,7 @@ struct Material {
     sampler2D normalMap;
     sampler2D metallicMap;
     sampler2D roughnessMap;
-    sampler2D AOMap; // Ambient occlusion
+//    sampler2D AOMap; // Ambient occlusion
 };
 
 struct SH {
@@ -101,6 +101,8 @@ uniform sampler3D uGridSHMap6;
 
 uniform sampler2D uProbeOcclusionMapsAtlas;
 uniform usamplerCube uCubemapTexCoordsMap;
+uniform usamplerBuffer uProbeOcclusionMapAtlasOffsets;
+uniform samplerBuffer uProbePositions;
 
 // IBL
 //uniform sampler2D uBRDFIntegrationMap;
@@ -277,31 +279,44 @@ float ProbeOcclusion(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec2 occl
     ivec2 faceResolution = ivec2(10);
     //
 
-    vec3 probeToFragVector = normalize(fragPos - probeGridPos);
-    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
-
-    int face = int(cubeSampleCoords.z);
-
     // [x + WIDTH * (y + HEIGHT * z)]
     int gridWidth = gridSize.x;
     int gridHeight = gridSize.y;
     int probeCoord1D = int(probeGridPos.x) + gridWidth * (int(probeGridPos.y) + gridHeight * int(probeGridPos.z));
 
-    const int faceCount = 6;
+    vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
 
-    int shadowMapsPerRow = occlusionMapSize.x / faceResolution.x / faceCount;
-    int yOffset = probeCoord1D / shadowMapsPerRow;
-    int xOffset = probeCoord1D % shadowMapsPerRow;
+    vec3 probeToFragVector = vWorldPosition - probePosition;
+//    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
 
-    int xOffsetInPixels = xOffset * faceResolution.x * faceCount;
+//    int face = int(cubeSampleCoords.z);
 
-    int localX = int(cubeSampleCoords.x * float(faceResolution.x - 1));
-    int localY = int(cubeSampleCoords.y * float(faceResolution.y - 1));
+//    const int faceCount = 6;
+//
+//    int shadowMapsPerRow = occlusionMapSize.x / faceResolution.x / faceCount;
+//    int yOffset = probeCoord1D / shadowMapsPerRow;
+//    int xOffset = probeCoord1D % shadowMapsPerRow;
+//
+//    int xOffsetInPixels = xOffset * faceResolution.x * faceCount;
 
-    int globalX = localX + faceResolution.x * face + xOffsetInPixels;
-    int globalY = localY + faceResolution.y * yOffset;
+//    int localX = int(cubeSampleCoords.x * float(faceResolution.x));
+//    int localY = int(cubeSampleCoords.y * float(faceResolution.y));
 
-    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(globalX, globalY), 0).r;
+//    int globalX = localX + faceResolution.x * face + xOffsetInPixels;
+//    int globalY = localY + faceResolution.y * yOffset;
+
+    uvec3 cubeCoords = texture(uCubemapTexCoordsMap, probeToFragVector).xyz;
+    int face = int(cubeCoords.z);
+    int localX = int(cubeCoords.x);
+    int localY = int(cubeCoords.y);
+
+    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
+    
+    int offsetX = int(offset.x) + localX + face * faceResolution.x;
+    int offsetY = int(offset.y) + localY;
+
+    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
+
     float probeToFragDistance = length(probeToFragVector);
 
     return occlusionDistance < probeToFragDistance ? 0.0 : 1.0;
@@ -634,9 +649,9 @@ float FetchRoughnessMap() {
     return texture(uMaterial.roughnessMap, vTexCoords.st).r;
 }
 
-float FetchAOMap() {
-    return texture(uMaterial.AOMap, vTexCoords.st).r;
-}
+//float FetchAOMap() {
+//    return texture(uMaterial.AOMap, vTexCoords.st).r;
+//}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
@@ -651,7 +666,7 @@ void main() {
     float roughness2        = roughness * roughness;
     
     float metallic          = FetchMetallicMap();
-    float ao                = FetchAOMap();
+//    float ao                = FetchAOMap();
     vec3 albedo             = FetchAlbedoMap();
     vec3 N                  = FetchNormalMap();
     vec3 V                  = normalize(uCameraPosition - vWorldPosition);
@@ -680,7 +695,7 @@ void main() {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, indirectRadiance, shadow);
 
     // Image based lighting
-    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
+//    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
     // STUB
@@ -688,6 +703,12 @@ void main() {
     vec4 stub1 = texture(uCubemapTexCoordsMap, vec3(1.0));
 
     oFragColor = vec4(correctColor, 1.0);
+
+    /////////////////////
+
+    uvec3 cubeCoords = texture(uCubemapTexCoordsMap, vWorldPosition).xyz;
+//    oFragColor = vec4(normalize(vWorldPosition.xyz), 1.0);
+    oFragColor = vec4(float(cubeCoords.z) / 6.0, 0.0, 0.0, 1.0);
 
     oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 }

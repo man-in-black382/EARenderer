@@ -161,6 +161,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         glFinish();
     });
 
+
+    self.sceneRenderer->renderSkybox();
+
     self.sceneRenderer->renderDiffuseGridProbes(0.01);
 
     printf("\n");

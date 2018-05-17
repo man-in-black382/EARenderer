@@ -46,11 +46,18 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsHDR")).location(), GL_TRUE);
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_TRUE);
     }
+
+    void GLSLSkybox::setCubemap(const GLLDRTextureCubemap& cubemap) {
+        setUniformTexture(ctcrc32("uUICubeMapTexture"), cubemap);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uIsHDR")).location(), GL_FALSE);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_TRUE);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uIsIntegerCube")).location(), GL_TRUE);
+    }
     
     void GLSLSkybox::setEquirectangularMap(const GLHDRTexture2D& equireqMap) {
         setUniformTexture(ctcrc32("uEquirectangularMap"), equireqMap);
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsHDR")).location(), GL_TRUE);
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_FALSE);
     }
-    
+
 }

@@ -58,9 +58,32 @@ namespace EARenderer {
     };
 
     template <typename BufferDataType>
+    class GLInteger2BufferTexture: public GLBufferTexture<BufferDataType> {
+    public:
+        GLInteger2BufferTexture() : GLBufferTexture<BufferDataType>(GL_RG32I) { }
+    };
+
+    template <typename BufferDataType>
+    class GLInteger3BufferTexture: public GLBufferTexture<BufferDataType> {
+    public:
+        GLInteger3BufferTexture() : GLBufferTexture<BufferDataType>(GL_RGB32I) { }
+    };
+
+    template <typename BufferDataType>
     class GLUIntegerBufferTexture: public GLBufferTexture<BufferDataType> {
     public:
         GLUIntegerBufferTexture() : GLBufferTexture<BufferDataType>(GL_R32UI) { }
+    };
+
+    template <typename BufferDataType>
+    class GLUInteger2BufferTexture: public GLBufferTexture<BufferDataType> {
+    public:
+        GLUInteger2BufferTexture() : GLBufferTexture<BufferDataType>(GL_RG32UI) { }
+    };
+    template <typename BufferDataType>
+    class GLUInteger3BufferTexture: public GLBufferTexture<BufferDataType> {
+    public:
+        GLUInteger3BufferTexture() : GLBufferTexture<BufferDataType>(GL_RGB32UI) { }
     };
     
     template <typename BufferDataType>

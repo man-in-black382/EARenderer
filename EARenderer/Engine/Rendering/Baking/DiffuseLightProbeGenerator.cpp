@@ -101,6 +101,8 @@ namespace EARenderer {
         int32_t xOffsetInPixels = xOffset * mOcclusionMapFaceResolution.width * kFaceCount;
         int32_t yOffsetInPixels = yOffset * mOcclusionMapFaceResolution.height;
 
+        mProbeOcclusionMapAtlasOffsets.emplace_back(xOffsetInPixels, yOffsetInPixels);
+
         printf("Probe idx: %d | X offset: %d | Y offset: %d \n", probeIndex, xOffset, yOffset);
 
         for (int32_t cubeFaceIndex = 0; cubeFaceIndex < kFaceCount; cubeFaceIndex++) {
@@ -164,7 +166,7 @@ namespace EARenderer {
             for (size_t y = 0; y < mOcclusionMapFaceResolution.height; y++) {
                 for (size_t x = 0; x < mOcclusionMapFaceResolution.width; x++) {
                     size_t flatIndex = y * mOcclusionMapFaceResolution.width + x;
-                    coordinates[i][flatIndex] = glm::uvec3(i, x, y);
+                    coordinates[i][flatIndex] = glm::uvec3(x, y, i);
                 }
             }
         }
@@ -194,6 +196,7 @@ namespace EARenderer {
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(probe);
                         mProbeData->mProbes.push_back(probe);
+                        mProbePositions.emplace_back(x, y, z);
                     }
                 }
             }
@@ -221,6 +224,12 @@ namespace EARenderer {
 
         mProbeData->mOcclusionMapAtlas = std::make_shared<GLHDRTexture2D>(mOcclusionDistances, mOcclusionTextureResolution);
         mProbeData->mCubeFaceTextureCoordsMap = std::make_shared<GLLDRTextureCubemap>(cubemapTextureCoordinates());
+
+        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture = std::make_shared<GLUInteger2BufferTexture<glm::uvec2>>();
+        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture->buffer().initialize(mProbeOcclusionMapAtlasOffsets);
+
+        mProbeData->mProbePositionsBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
+        mProbeData->mProbePositionsBufferTexture->buffer().initialize(mProbePositions);
 
         return mProbeData;
     }

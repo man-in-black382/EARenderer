@@ -59,6 +59,8 @@ namespace EARenderer {
         void setGeometryType(GeometryType type);
         void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
         void setCubemapTexCoordsMap(const GLLDRTextureCubemap& map);
+        void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets);
+        void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
     };
     
 }

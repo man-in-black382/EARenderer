@@ -51,7 +51,7 @@ namespace EARenderer {
         if (material.normalMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.normalMap")>, *material.normalMap()); }
         if (material.metallicMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.metallicMap")>, *material.metallicMap()); }
         if (material.roughnessMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.roughnessMap")>, *material.roughnessMap()); }
-        if (material.ambientOcclusionMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.AOMap")>, *material.ambientOcclusionMap()); }
+//        if (material.ambientOcclusionMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.AOMap")>, *material.ambientOcclusionMap()); }
     }
     
     void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
@@ -101,6 +101,12 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uCubemapTexCoordsMap")>, map);
     }
 
+    void GLSLCookTorrance::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapAtlasOffsets")>, offsets);
+    }
 
+    void GLSLCookTorrance::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
+    }
 
 }
