@@ -99,6 +99,7 @@ namespace EARenderer {
         int32_t xOffset = probeIndex % probeShadowMapsPerRow;
 
         int32_t xOffsetInPixels = xOffset * mOcclusionMapFaceResolution.width * kFaceCount;
+        int32_t yOffsetInPixels = yOffset * mOcclusionMapFaceResolution.height;
 
         printf("Probe idx: %d | X offset: %d | Y offset: %d \n", probeIndex, xOffset, yOffset);
 
@@ -111,7 +112,7 @@ namespace EARenderer {
                 for (int32_t localX = 0; localX < mOcclusionMapFaceResolution.width; localX++) {
 
                     int32_t globalX = localX + mOcclusionMapFaceResolution.width * cubeFaceIndex + xOffsetInPixels;
-                    int32_t globalY = localY + mOcclusionMapFaceResolution.height * yOffset;
+                    int32_t globalY = localY + yOffsetInPixels;
 
                     glm::vec3 direction;
                     GLCubemapSampler::ComputeSampleVector(face, localX, localY, mOcclusionMapFaceResolution, direction);
