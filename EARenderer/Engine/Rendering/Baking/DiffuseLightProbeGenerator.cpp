@@ -84,7 +84,7 @@ namespace EARenderer {
 
         size_t tail = (size_t)estimatedSize.width % size_t(occlusionMapFaceCount * mOcclusionMapFaceResolution.width);
         size_t alignedWidth = estimatedSize.width - tail;
-        size_t alignedHeight = texelCount / alignedWidth;
+        size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
 
         mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
     }
@@ -102,8 +102,9 @@ namespace EARenderer {
         int32_t yOffsetInPixels = yOffset * mOcclusionMapFaceResolution.height;
 
         mProbeOcclusionMapAtlasOffsets.emplace_back(xOffsetInPixels, yOffsetInPixels);
+        printf("Added offset x: %d | y: %d \n", xOffsetInPixels, yOffsetInPixels);
 
-        printf("Probe idx: %d | X offset: %d | Y offset: %d \n", probeIndex, xOffset, yOffset);
+//        printf("Probe idx: %d | X offset: %d | Y offset: %d \n", probeIndex, xOffset, yOffset);
 
         for (int32_t cubeFaceIndex = 0; cubeFaceIndex < kFaceCount; cubeFaceIndex++) {
 
@@ -126,7 +127,7 @@ namespace EARenderer {
 //                        printf("Texture coords: %d %d \n", globalX, globalY);
 
                         int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
-                        mOcclusionDistances[flatIndex] = hitDistance;
+                        mOcclusionDistances[flatIndex] = 10000.0;//hitDistance;
                     }
                 }
             }
