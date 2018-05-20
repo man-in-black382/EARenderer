@@ -16,16 +16,16 @@ namespace EARenderer {
 
     EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D>& triangles)
     :
-    mDevice(rtcNewDevice(nullptr)),
+    mDevice(rtcNewDevice("verbose=3")),
     mScene(rtcNewScene(mDevice))
     {
         RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-        glm::vec4 *vertexBuffer = (glm::vec4 *)rtcSetNewGeometryBuffer(geometry,
+        glm::vec3 *vertexBuffer = (glm::vec3 *)rtcSetNewGeometryBuffer(geometry,
                                                                        RTC_BUFFER_TYPE_VERTEX,
                                                                        0,
                                                                        RTC_FORMAT_FLOAT3,
-                                                                       sizeof(glm::vec4),
+                                                                       sizeof(glm::vec3),
                                                                        triangles.size() * 3);
 
         glm::uvec3* indexBuffer = (glm::uvec3 *)rtcSetNewGeometryBuffer(geometry,
@@ -38,9 +38,9 @@ namespace EARenderer {
         if (vertexBuffer && indexBuffer) {
             for (uint32_t i = 0; i < triangles.size(); ++i) {
                 uint32_t index = i * 3;
-                vertexBuffer[index] = glm::vec4(triangles[i].p1, 1.0);
-                vertexBuffer[index + 1] = glm::vec4(triangles[i].p2, 1.0);
-                vertexBuffer[index + 2] = glm::vec4(triangles[i].p3, 1.0);
+                vertexBuffer[index] = glm::vec3(triangles[i].p1);
+                vertexBuffer[index + 1] = glm::vec3(triangles[i].p2);
+                vertexBuffer[index + 2] = glm::vec3(triangles[i].p3);
 
                 indexBuffer[i].x = index;
                 indexBuffer[i].y = index + 1;
@@ -107,15 +107,19 @@ namespace EARenderer {
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
         ray.tnear = 0.01f;
-        ray.tfar = 0.99f;
+        ray.tfar = std::numeric_limits<float>::max();
         ray.flags = 0;
-        ray.mask = -1;
 
         rtcOccluded1(mScene, &context, &ray);
 
         // When no intersection is found, the ray data is not updated.
         // In case a hit was found, the tfar component of the ray is set to -inf.
         //
+
+        if (ray.tfar < 0.0) {
+            printf("Occluded! %f %f %f\n", p1.x, p1.y, p1.z);
+        }
+
         return ray.tfar < 0.0;
     }
 
@@ -131,8 +135,8 @@ namespace EARenderer {
         rayHit.ray.dir_x = ray.direction.x;
         rayHit.ray.dir_y = ray.direction.y;
         rayHit.ray.dir_z = ray.direction.z;
-        rayHit.ray.tnear = 0.01f;
-        rayHit.ray.tfar = std::numeric_limits<float>::infinity();
+        rayHit.ray.tnear = 0.00f;
+        rayHit.ray.tfar = std::numeric_limits<float>::max();
         rayHit.ray.flags = 0;
         rayHit.ray.mask = -1;
 
@@ -143,9 +147,6 @@ namespace EARenderer {
 
         distance = rayHit.ray.tfar;
 
-        // When no intersection is found, the ray data is not updated.
-        // In case a hit was found, the tfar component of the ray is set to -inf.
-        //
         return rayHit.hit.geomID != RTC_INVALID_GEOMETRY_ID;
     }
 

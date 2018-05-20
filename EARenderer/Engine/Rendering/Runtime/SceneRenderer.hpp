@@ -37,6 +37,7 @@
 #include "GLSLGridLightProbesUpdate.hpp"
 #include "GLSLGridLightProbeRendering.hpp"
 #include "GLSLLightProbeLinksRendering.hpp"
+#include "GLSLProbeOcclusionRendering.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -77,6 +78,7 @@ namespace EARenderer {
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
 
         GLSLLightProbeLinksRendering mLightProbeLinksRenderingShader;
+        GLSLProbeOcclusionRendering mProbeOcclusionRenderingShader;
         
         GLHDRTextureCubemap mEnvironmentMapCube;
         GLHDRTextureCubemap mDiffuseIrradianceMap;
@@ -131,6 +133,7 @@ namespace EARenderer {
         void renderSurfelClusterLuminances();
         void renderDiffuseGridProbes(float radius);
         void renderLinksForDiffuseProbe(size_t probeIndex);
+        void renderProbeOcclusionMap();
     };
     
 }

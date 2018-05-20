@@ -84,9 +84,11 @@ namespace EARenderer {
 
         size_t tail = (size_t)estimatedSize.width % size_t(occlusionMapFaceCount * mOcclusionMapFaceResolution.width);
         size_t alignedWidth = estimatedSize.width - tail;
-        size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
+//        size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
+//
+//        mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
 
-        mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
+        mOcclusionTextureResolution = Size2D(60, 10);
     }
 
     void DiffuseLightProbeGenerator::findOcclusionsDistancesForProbe(int32_t probeIndex) {
@@ -120,15 +122,48 @@ namespace EARenderer {
                     glm::vec3 direction;
                     GLCubemapSampler::ComputeSampleVector(face, localX, localY, mOcclusionMapFaceResolution, direction);
 
+//                    printf("Direction for %d %d - %f %f %f \n", localX, localY, direction.x, direction.y, direction.z);
+
+                    glm::vec2 testCoords;
+                    GLCubemapFace testFace;
+                    GLHDRCubemapSampler::ComputeTexCoords(direction, testFace, testCoords);
+
+//                    printf("Coords for direction %f %f %f - %f %f \n\n", direction.x, direction.y, direction.z, testCoords.x, testCoords.y);
+
                     float hitDistance = std::numeric_limits<float>::max();
-                    Ray3D ray(probe.position, direction);
+//                    Ray3D ray(probe.position, direction);
 
-                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
-//                        printf("Texture coords: %d %d \n", globalX, globalY);
+//                    glm::vec3 right(0.1, 0.0, 0.0);
+//                    glm::vec3 left(-1.0, 0.0, 0.0);
+//                    glm::vec3 top(0.0, 1.0, 0.0);
+//                    glm::vec3 front(0.0, 0.0, 1.0);
+//
+//                    bool rocc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + right);
+//                    bool locc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + left);
+//                    bool tocc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + top);
+//                    bool focc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + front);
 
+
+                    if (mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + direction)) {
                         int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
-                        mOcclusionDistances[flatIndex] = 10000.0;//hitDistance;
+                        mOcclusionDistances[flatIndex] = 0.15;
+                    } else {
+                        int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
+                        mOcclusionDistances[flatIndex] = 2.0;
                     }
+
+//                    Ray3D ray(probe.position, glm::vec3(0.0, 1.0, 0.0));
+//
+//                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
+////                        printf("Texture coords: %d %d \n", globalX, globalY);
+//
+//                        int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
+//                        mOcclusionDistances[flatIndex] = hitDistance;
+////                        printf("Hit distance: %f \n", hitDistance);
+////                        mOcclusionDistances[flatIndex] = cubeFaceIndex / 5.0;
+//                    } else {
+//                        printf("No hits detected at %f %f %f \n", direction.x, direction.y, direction.z);
+//                    }
                 }
             }
         }
@@ -191,16 +226,22 @@ namespace EARenderer {
 
         printf("Building grid probes...\n");
         Measurement::ExecutionTime("Grid probes placement took", [&]() {
-            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
-                        DiffuseLightProbe probe({ x, y, z });
-                        projectSurfelClustersOnProbe(probe);
-                        mProbeData->mProbes.push_back(probe);
-                        mProbePositions.emplace_back(x, y, z);
-                    }
-                }
-            }
+//            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+//                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+//                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
+//                        DiffuseLightProbe probe({ x, y, z });
+//                        projectSurfelClustersOnProbe(probe);
+//                        mProbeData->mProbes.push_back(probe);
+//                        mProbePositions.emplace_back(x, y, z);
+//                    }
+//                }
+//            }
+
+            DiffuseLightProbe probe({ 0.5, 0.5, 0.5 });
+            projectSurfelClustersOnProbe(probe);
+            mProbeData->mProbes.push_back(probe);
+            mProbePositions.emplace_back(0.5, 0.5, 0.5);
+
             printf("Built %lu probes | %lu projections \n", mProbeData->mProbes.size(), mProbeData->mSurfelClusterProjections.size());
         });
 
@@ -215,7 +256,7 @@ namespace EARenderer {
 
         mOcclusionMapFaceResolution = occlusionMapResolution;
         calculateOcclusionTextureResolution();
-        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, 0);
+        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, std::numeric_limits<float>::max());
 
         Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
             for (int32_t i = 0; i < mProbeData->probes().size(); i++) {

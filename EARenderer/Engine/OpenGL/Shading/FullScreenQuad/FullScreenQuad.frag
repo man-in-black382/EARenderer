@@ -1,6 +1,6 @@
 #version 400 core
 
-uniform isampler2D uTexture;
+uniform sampler2D uTexture;
 uniform sampler2DArray uTextureArray;
 uniform sampler3D uTexture3D;
 uniform int uIndex;

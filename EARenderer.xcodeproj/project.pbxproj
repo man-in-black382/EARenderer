@@ -43,7 +43,6 @@
 		ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF0D8C20402260005A9700 /* GLPipelineState.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
-		CE1C97252064574B006A4A73 /* libembree3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C97242064574B006A4A73 /* libembree3.3.dylib */; };
 		CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */; };
 		CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */; };
 		CE1C97582067B09E006A4A73 /* Cue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C974D2067B09E006A4A73 /* Cue.cpp */; };
@@ -270,6 +269,12 @@
 		CE7311132098C8E2002A8DE7 /* GuillotineBinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */; };
 		CE7311162098C920002A8DE7 /* Rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311152098C920002A8DE7 /* Rect.cpp */; };
 		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
+		CE7A013620B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7A013420B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp */; };
+		CE7A013A20B165850002D422 /* ProbeOcclusionRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE7A013720B165850002D422 /* ProbeOcclusionRendering.frag */; };
+		CE7A013B20B165850002D422 /* ProbeOcclusionRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE7A013820B165850002D422 /* ProbeOcclusionRendering.geom */; };
+		CE7A013C20B165850002D422 /* ProbeOcclusionRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE7A013920B165850002D422 /* ProbeOcclusionRendering.vert */; };
+		CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */; };
+		CE7A018420B1CA610002D422 /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */; };
 		CE7B4683208C77C2003DBDD1 /* LightmapLightProbeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */; };
 		CE7B4684208C77C2003DBDD1 /* LightmapLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */; };
 		CE7B4685208C77C2003DBDD1 /* LightmapLightProbeRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE7B4681208C77C2003DBDD1 /* LightmapLightProbeRendering.geom */; };
@@ -282,7 +287,6 @@
 		CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */; };
 		CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE83F10A205EC0EA00274A3A /* GLLDRTextureCubemap.cpp */; };
 		CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE83F10D205EC84900274A3A /* GLTextureSampler.cpp */; };
-		CE891BBB205D1EA100D2B09D /* EmbreeRayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */; };
 		CE891BC4205E7FCD00D2B09D /* GLLDRTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BC2205E7FCD00D2B09D /* GLLDRTexture2D.cpp */; };
 		CE891BC7205EB48500D2B09D /* GLLDRTexture2DSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BC5205EB48500D2B09D /* GLLDRTexture2DSampler.cpp */; };
 		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
@@ -604,7 +608,6 @@
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
-		CE1C97242064574B006A4A73 /* libembree3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.dylib; sourceTree = "<group>"; };
 		CE1C9726206657CE006A4A73 /* SurfelClusterAveraging.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelClusterAveraging.frag; sourceTree = "<group>"; };
 		CE1C9728206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelClusterAveraging.cpp; sourceTree = "<group>"; };
 		CE1C9729206665B1006A4A73 /* GLSLSurfelClusterAveraging.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelClusterAveraging.hpp; sourceTree = "<group>"; };
@@ -1151,6 +1154,14 @@
 		CE7311152098C920002A8DE7 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rect.cpp; sourceTree = "<group>"; };
 		CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
 		CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
+		CE7A013420B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLProbeOcclusionRendering.cpp; sourceTree = "<group>"; };
+		CE7A013520B1654B0002D422 /* GLSLProbeOcclusionRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLProbeOcclusionRendering.hpp; sourceTree = "<group>"; };
+		CE7A013720B165850002D422 /* ProbeOcclusionRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.frag; sourceTree = "<group>"; };
+		CE7A013820B165850002D422 /* ProbeOcclusionRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.geom; sourceTree = "<group>"; };
+		CE7A013920B165850002D422 /* ProbeOcclusionRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.vert; sourceTree = "<group>"; };
+		CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libembree3.3.2.0.dylib; path = ../../../../opt/local/lib/libembree3.3.2.0.dylib; sourceTree = "<group>"; };
+		CE7A016A20B1BF1F0002D422 /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtbb.dylib; path = ../../../../opt/local/lib/libtbb.dylib; sourceTree = "<group>"; };
+		CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.0.0.dylib; sourceTree = "<group>"; };
 		CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.vert; sourceTree = "<group>"; };
 		CE7B467F208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightmapLightProbeRendering.hpp; sourceTree = "<group>"; };
 		CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.frag; sourceTree = "<group>"; };
@@ -1308,8 +1319,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE1C97252064574B006A4A73 /* libembree3.3.dylib in Frameworks */,
 				AC0ADF1F2080B5F50026FD48 /* libfbxsdk.a in Frameworks */,
+				CE7A018420B1CA610002D422 /* libembree3.3.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1773,7 +1784,7 @@
 		CE1C972B2067AA88006A4A73 /* embree */ = {
 			isa = PBXGroup;
 			children = (
-				CE1C97242064574B006A4A73 /* libembree3.3.dylib */,
+				CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */,
 			);
 			path = embree;
 			sourceTree = "<group>";
@@ -2911,6 +2922,11 @@
 		CE7B467D208C76B7003DBDD1 /* LightProbes */ = {
 			isa = PBXGroup;
 			children = (
+				CE7A013720B165850002D422 /* ProbeOcclusionRendering.frag */,
+				CE7A013820B165850002D422 /* ProbeOcclusionRendering.geom */,
+				CE7A013920B165850002D422 /* ProbeOcclusionRendering.vert */,
+				CE7A013420B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp */,
+				CE7A013520B1654B0002D422 /* GLSLProbeOcclusionRendering.hpp */,
 				AC3C9EB320720F2300F35EB3 /* GridLightProbeRendering.vert */,
 				AC3C9EBD207219FF00F35EB3 /* GridLightProbeRendering.geom */,
 				AC3C9EB82072111500F35EB3 /* GridLightProbeRendering.frag */,
@@ -2959,6 +2975,8 @@
 		CE891BB4205C54C800D2B09D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE7A016A20B1BF1F0002D422 /* libtbb.dylib */,
+				CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3238,6 +3256,7 @@
 				CE53ADE8209E2BD600749A96 /* Fabric03_col.jpg in Resources */,
 				CE53ADE6209E2BD600749A96 /* Fabric03_rgh.jpg in Resources */,
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
+				CE7A013B20B165850002D422 /* ProbeOcclusionRendering.geom in Resources */,
 				CE4DE2191FA60CFE0067729A /* Sponza_Ceiling_diffuse.tga in Resources */,
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
 				CE70FA601F8F8F7400AD9027 /* DirectionalDepth.frag in Resources */,
@@ -3315,6 +3334,7 @@
 				CE4DE21A1FA60CFE0067729A /* Sponza_Ceiling_normal.tga in Resources */,
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
+				CE7A013A20B165850002D422 /* ProbeOcclusionRendering.frag in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
 				CE4DE2381FA60CFF0067729A /* Sponza_Fabric_roughness.tga in Resources */,
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
@@ -3342,6 +3362,7 @@
 				CE4DE23B1FA60CFF0067729A /* Sponza_FlagPole_roughness.tga in Resources */,
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
 				CE53ADDF209E2BC300749A96 /* fabric02_nrm.jpg in Resources */,
+				CE7A013C20B165850002D422 /* ProbeOcclusionRendering.vert in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
 				AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */,
@@ -3362,7 +3383,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */,
-				CE891BBB205D1EA100D2B09D /* EmbreeRayTracer.cpp in Sources */,
 				CE54EC421F939B5D00C9EDE3 /* GLSLBRDFIntegration.cpp in Sources */,
 				CE70FA471F8F8EF600AD9027 /* GLSLRadianceConvolution.cpp in Sources */,
 				ACB0AA4E1FF4ED5B00CD6A11 /* GLTexture2DSampler.cpp in Sources */,
@@ -3396,6 +3416,7 @@
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
 				CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */,
+				CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */,
 				AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */,
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */,
@@ -3438,6 +3459,7 @@
 				AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */,
 				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
+				CE7A013620B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp in Sources */,
 				AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
@@ -3627,25 +3649,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				FRAMEWORK_SEARCH_PATHS = "/opt/local/lib/**";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
-					/opt/local/include,
+					/opt/local/include/embree3,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
 					/opt/local/lib,
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/autodesk",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/**",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
@@ -3658,25 +3680,25 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
+				FRAMEWORK_SEARCH_PATHS = "/opt/local/lib/**";
 				GCC_OPTIMIZATION_LEVEL = s;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/**",
-					/opt/local/include,
+					/opt/local/include/embree3,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
 					/opt/local/lib,
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/autodesk",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/**",
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;

@@ -351,20 +351,20 @@ namespace EARenderer {
             }
         }
 
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(mDiffuseProbeData->occlusionMapAtlas()->size());
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(*mDiffuseProbeData->occlusionMapAtlas());
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect(Size2D(600, 600));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(*mDiffuseProbeData->occlusionMapAtlas());
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {
@@ -473,6 +473,18 @@ namespace EARenderer {
         });
 
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
+    }
+
+    void SceneRenderer::renderProbeOcclusionMap() {
+        bindDefaultFramebuffer();
+        mDiffuseProbesVAO.bind();
+        mProbeOcclusionRenderingShader.bind();
+        mProbeOcclusionRenderingShader.setCamera(*mScene->camera());
+        mProbeOcclusionRenderingShader.ensureSamplerValidity([&]() {
+            mProbeOcclusionRenderingShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
+        });
+
+        glDrawArraysInstanced(GL_POINTS, (GLint)0, 1, 6);
     }
 
 }

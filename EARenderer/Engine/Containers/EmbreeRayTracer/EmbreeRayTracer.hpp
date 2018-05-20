@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <glm/vec3.hpp>
-#include <embree3/rtcore.h>
+#include <rtcore.h>
 
 namespace EARenderer {
 

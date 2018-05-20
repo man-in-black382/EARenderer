@@ -185,7 +185,7 @@ namespace EARenderer {
             }
         }
 
-        mRaytracer = std::shared_ptr<EmbreeRayTracer>(new EmbreeRayTracer(triangles));
+        mRaytracer = std::make_shared<EmbreeRayTracer>(triangles);
     }
 
     void Scene::sortStaticSubMeshes() {

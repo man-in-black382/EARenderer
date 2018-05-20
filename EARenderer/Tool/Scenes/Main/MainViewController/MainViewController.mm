@@ -161,14 +161,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         glFinish();
     });
 
+    self.sceneRenderer->renderDiffuseGridProbes(0.02);
+    self.sceneRenderer->renderProbeOcclusionMap();
 
-    self.sceneRenderer->renderSkybox();
-
-    self.sceneRenderer->renderDiffuseGridProbes(0.01);
+//    self.sceneRenderer->renderSkybox();
 
     printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
-//    self.sceneRenderer->renderLinksForDiffuseProbe(1600);
+//    self.sceneRenderer->renderLinksForDiffuseProbe(0);
 //    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
