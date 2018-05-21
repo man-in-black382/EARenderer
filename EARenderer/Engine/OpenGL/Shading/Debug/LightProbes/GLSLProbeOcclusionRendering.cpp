@@ -27,6 +27,14 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapsAtlas")>, atlas);
     }
 
+    void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapAtlasOffsets")>, offsets);
+    }
+
+    void GLSLProbeOcclusionRendering::setProbeIndex(size_t index) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbeIndex")>).location(), (GLint)index);
+    }
+
 }
 
 

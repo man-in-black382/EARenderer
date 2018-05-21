@@ -8,8 +8,10 @@ layout (line_strip, max_vertices = 512) out;
 // Uniforms
 
 uniform mat4 uCameraSpaceMat;
+uniform int uProbeIndex;
 
 uniform sampler2D uProbeOcclusionMapsAtlas;
+uniform usamplerBuffer uProbeOcclusionMapAtlasOffsets;
 
 // Input
 
@@ -56,10 +58,12 @@ vec3 SampleVector(int x, int y) {
 }
 
 float OcclusionDistance(int x, int y) {
+    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, uProbeIndex).xy;
+
     ivec2 faceSize = ivec2(10.0);
     int face = gs_in[0].instanceID;
-    int offsetX = x + face * faceSize.x;
-    int offsetY = y;
+    int offsetX = int(offset.x) + x + face * faceSize.x;
+    int offsetY = int(offset.y) + y;
 
     return texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
 }

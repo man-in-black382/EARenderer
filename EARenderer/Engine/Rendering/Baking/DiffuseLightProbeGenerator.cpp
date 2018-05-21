@@ -84,11 +84,11 @@ namespace EARenderer {
 
         size_t tail = (size_t)estimatedSize.width % size_t(occlusionMapFaceCount * mOcclusionMapFaceResolution.width);
         size_t alignedWidth = estimatedSize.width - tail;
-//        size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
-//
-//        mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
+        size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
 
-        mOcclusionTextureResolution = Size2D(60, 10);
+        mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
+
+//        mOcclusionTextureResolution = Size2D(60, 10);
     }
 
     void DiffuseLightProbeGenerator::findOcclusionsDistancesForProbe(int32_t probeIndex) {
@@ -199,21 +199,21 @@ namespace EARenderer {
 
         printf("Building grid probes...\n");
         Measurement::ExecutionTime("Grid probes placement took", [&]() {
-//            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
-//                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
-//                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
-//                        DiffuseLightProbe probe({ x, y, z });
-//                        projectSurfelClustersOnProbe(probe);
-//                        mProbeData->mProbes.push_back(probe);
-//                        mProbePositions.emplace_back(x, y, z);
-//                    }
-//                }
-//            }
+            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
+                        DiffuseLightProbe probe({ x, y, z });
+                        projectSurfelClustersOnProbe(probe);
+                        mProbeData->mProbes.push_back(probe);
+                        mProbePositions.emplace_back(x, y, z);
+                    }
+                }
+            }
 
-            DiffuseLightProbe probe({ 0.5, 0.5, 0.5 });
-            projectSurfelClustersOnProbe(probe);
-            mProbeData->mProbes.push_back(probe);
-            mProbePositions.emplace_back(0.5, 0.5, 0.5);
+//            DiffuseLightProbe probe({ 0.5, 0.5, 0.5 });
+//            projectSurfelClustersOnProbe(probe);
+//            mProbeData->mProbes.push_back(probe);
+//            mProbePositions.emplace_back(0.5, 0.5, 0.5);
 
             printf("Built %lu probes | %lu projections \n", mProbeData->mProbes.size(), mProbeData->mSurfelClusterProjections.size());
         });
@@ -229,7 +229,7 @@ namespace EARenderer {
 
         mOcclusionMapFaceResolution = occlusionMapResolution;
         calculateOcclusionTextureResolution();
-        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, std::numeric_limits<float>::max());
+        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, 10.0/*std::numeric_limits<float>::max()*/);
 
         Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
             for (int32_t i = 0; i < mProbeData->probes().size(); i++) {

@@ -162,7 +162,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     });
 
     self.sceneRenderer->renderDiffuseGridProbes(0.02);
-//    self.sceneRenderer->renderProbeOcclusionMap();
+    self.sceneRenderer->renderProbeOcclusionMap(155);
 
 //    self.sceneRenderer->renderSkybox();
 

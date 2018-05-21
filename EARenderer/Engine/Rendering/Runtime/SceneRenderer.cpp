@@ -475,16 +475,18 @@ namespace EARenderer {
         glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
     }
 
-    void SceneRenderer::renderProbeOcclusionMap() {
+    void SceneRenderer::renderProbeOcclusionMap(size_t probeIndex) {
         bindDefaultFramebuffer();
         mDiffuseProbesVAO.bind();
         mProbeOcclusionRenderingShader.bind();
         mProbeOcclusionRenderingShader.setCamera(*mScene->camera());
+        mProbeOcclusionRenderingShader.setProbeIndex(probeIndex);
         mProbeOcclusionRenderingShader.ensureSamplerValidity([&]() {
             mProbeOcclusionRenderingShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
+            mProbeOcclusionRenderingShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
         });
 
-        glDrawArraysInstanced(GL_POINTS, (GLint)0, 1, 6);
+        glDrawArraysInstanced(GL_POINTS, (GLint)probeIndex, 1, 6);
     }
 
 }

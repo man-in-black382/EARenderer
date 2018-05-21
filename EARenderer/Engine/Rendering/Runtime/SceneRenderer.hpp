@@ -133,7 +133,7 @@ namespace EARenderer {
         void renderSurfelClusterLuminances();
         void renderDiffuseGridProbes(float radius);
         void renderLinksForDiffuseProbe(size_t probeIndex);
-        void renderProbeOcclusionMap();
+        void renderProbeOcclusionMap(size_t probeIndex);
     };
     
 }
