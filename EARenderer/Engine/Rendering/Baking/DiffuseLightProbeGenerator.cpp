@@ -131,39 +131,12 @@ namespace EARenderer {
 //                    printf("Coords for direction %f %f %f - %f %f \n\n", direction.x, direction.y, direction.z, testCoords.x, testCoords.y);
 
                     float hitDistance = std::numeric_limits<float>::max();
-//                    Ray3D ray(probe.position, direction);
+                    Ray3D ray(probe.position, direction);
 
-//                    glm::vec3 right(0.1, 0.0, 0.0);
-//                    glm::vec3 left(-1.0, 0.0, 0.0);
-//                    glm::vec3 top(0.0, 1.0, 0.0);
-//                    glm::vec3 front(0.0, 0.0, 1.0);
-//
-//                    bool rocc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + right);
-//                    bool locc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + left);
-//                    bool tocc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + top);
-//                    bool focc = mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + front);
-
-
-                    if (mScene->rayTracer()->lineSegmentOccluded(probe.position, probe.position + direction)) {
+                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
                         int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
-                        mOcclusionDistances[flatIndex] = 0.15;
-                    } else {
-                        int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
-                        mOcclusionDistances[flatIndex] = 2.0;
+                        mOcclusionDistances[flatIndex] = hitDistance;
                     }
-
-//                    Ray3D ray(probe.position, glm::vec3(0.0, 1.0, 0.0));
-//
-//                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
-////                        printf("Texture coords: %d %d \n", globalX, globalY);
-//
-//                        int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
-//                        mOcclusionDistances[flatIndex] = hitDistance;
-////                        printf("Hit distance: %f \n", hitDistance);
-////                        mOcclusionDistances[flatIndex] = cubeFaceIndex / 5.0;
-//                    } else {
-//                        printf("No hits detected at %f %f %f \n", direction.x, direction.y, direction.z);
-//                    }
                 }
             }
         }

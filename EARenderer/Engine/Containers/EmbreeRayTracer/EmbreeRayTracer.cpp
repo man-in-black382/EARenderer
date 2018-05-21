@@ -16,7 +16,7 @@ namespace EARenderer {
 
     EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D>& triangles)
     :
-    mDevice(rtcNewDevice("verbose=3")),
+    mDevice(rtcNewDevice(nullptr)),
     mScene(rtcNewScene(mDevice))
     {
         RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
@@ -52,7 +52,7 @@ namespace EARenderer {
         rtcAttachGeometry(mScene, geometry);
         rtcCommitScene(mScene);
 
-        rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_ROBUST);
+//        rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_ROBUST);
         deviceErrorCallback(this, rtcGetDeviceError(mDevice), "");
         rtcSetDeviceErrorFunction(mDevice, deviceErrorCallback, this);
     }
@@ -107,7 +107,7 @@ namespace EARenderer {
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
         ray.tnear = 0.01f;
-        ray.tfar = std::numeric_limits<float>::max();
+        ray.tfar = 0.99;
         ray.flags = 0;
 
         rtcOccluded1(mScene, &context, &ray);
@@ -115,11 +115,6 @@ namespace EARenderer {
         // When no intersection is found, the ray data is not updated.
         // In case a hit was found, the tfar component of the ray is set to -inf.
         //
-
-        if (ray.tfar < 0.0) {
-            printf("Occluded! %f %f %f\n", p1.x, p1.y, p1.z);
-        }
-
         return ray.tfar < 0.0;
     }
 

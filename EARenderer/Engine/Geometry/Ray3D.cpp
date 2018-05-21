@@ -19,13 +19,11 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    Ray3D::Ray3D(const glm::vec3& origin, const glm::vec3& end)
+    Ray3D::Ray3D(const glm::vec3& origin, const glm::vec3& direction)
     :
     origin(origin),
-    direction(end - origin)
-    {
-        direction = glm::normalize(direction);
-    }
+    direction(glm::normalize(direction))
+    { }
     
 #pragma mark - Public
     
@@ -36,7 +34,7 @@ namespace EARenderer {
     Ray3D Ray3D::transformedBy(const glm::mat4& m) const {
         glm::vec3 newOrigin = m * glm::vec4(origin, 1.0);
         glm::vec3 newDirection = m * glm::vec4(direction, 0.0);
-        return Ray3D(newOrigin, newOrigin + newDirection);
+        return Ray3D(newOrigin, newDirection);
     }
     
 }

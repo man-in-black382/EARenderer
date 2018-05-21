@@ -469,21 +469,21 @@ SH TriLerpSurroundingProbes() {
 
 //    if ((weights.value0 + weights.value1 + weights.value2 + weights.value3 +
 //        weights.value4 + weights.value5 + weights.value6 + weights.value7) > 1.01)
-    if (probe4Occlusion == 0.0 && probe5Occlusion == 0.0 && probe6Occlusion == 0.0 && probe7Occlusion == 0.0)
-    {
-        SH sh;
-        //    // White and green
-        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-        sh.L10  = vec3(0.0);
-        sh.L1_1 = vec3(0.0);
-        sh.L21  = vec3(0.0);
-        sh.L2_1 = vec3(0.0);
-        sh.L2_2 = vec3(0.0);
-        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
-        return sh;
-    }
+//    if (probe4Occlusion == 0.0 && probe5Occlusion == 0.0 && probe6Occlusion == 0.0 && probe7Occlusion == 0.0)
+//    {
+//        SH sh;
+//        //    // White and green
+//        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+//        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+//        sh.L10  = vec3(0.0);
+//        sh.L1_1 = vec3(0.0);
+//        sh.L21  = vec3(0.0);
+//        sh.L2_1 = vec3(0.0);
+//        sh.L2_2 = vec3(0.0);
+//        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+//        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+//        return sh;
+//    }
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -776,9 +776,9 @@ void main() {
     vec4 stub0 = texture(uProbeOcclusionMapsAtlas, vec2(0.0));
     vec4 stub1 = texture(uCubemapTexCoordsMap, vec3(1.0));
 
-    oFragColor = vec4(correctColor, 1.0);
+//    oFragColor = vec4(correctColor, 1.0);
 
-//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 
     /////////////////////////////////////
 

@@ -251,7 +251,7 @@ namespace EARenderer {
 
             Node& node = mNodes[stackFrame.nodeIndex];
             for (T& object : node.mObjects) {
-                bool collisionDetected = mCollisionDetector(object, Ray3D(p0, p1));
+                bool collisionDetected = mCollisionDetector(object, Ray3D(p0, p1 - p0));
                 if (collisionDetected) {
                     mTraversalStack = std::stack<StackFrame>();
                     return true;

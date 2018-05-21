@@ -113,7 +113,7 @@ namespace EARenderer {
         glm::vec4 farUntransformed = inverseVP * farPlanePoint;
         farUntransformed /= farUntransformed.w;
         
-        return Ray3D(glm::vec3(nearUntransformed), glm::vec3(farUntransformed));
+        return Ray3D(glm::vec3(nearUntransformed), glm::vec3(farUntransformed) - glm::vec3(nearUntransformed));
     }
     
     glm::vec3 Camera::worldToNDC(const glm::vec3& v) const {
