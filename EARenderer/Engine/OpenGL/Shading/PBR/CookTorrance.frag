@@ -232,8 +232,16 @@ SH UnpackSH(vec3 texCoords) {
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+
     sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
     sh.L1_1 = vec3(shMap2Data.gba);
+
+//    sh.L21  = vec3(0.0);
+//    sh.L2_1 = vec3(0.0);
+//    sh.L2_2 = vec3(0.0);
+//    sh.L20  = vec3(0.0);
+//    sh.L22  = vec3(0.0);
+
     sh.L21  = vec3(shMap3Data.rgb);
     sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
     sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
@@ -273,7 +281,7 @@ vec3 CubeSampleCoords(vec3 sampleVector) {
     return vec3(0.5 * (tmpS / m + 1.0), 0.5 * (tmpT / m + 1.0), face);
 }
 
-float ProbeOcclusion(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec2 occlusionMapSize) {
+float ProbeOcclusionFactor(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec2 occlusionMapSize, vec3 fragNorm) {
 
     // TEMP
     ivec2 faceResolution = ivec2(10);
@@ -286,7 +294,7 @@ float ProbeOcclusion(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec2 occl
 
     vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
 
-    vec3 probeToFragVector = vWorldPosition - probePosition;
+    vec3 probeToFragVector = (vWorldPosition/* + fragNorm * 0.05*/) - probePosition;
     vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
 
     int face = int(cubeSampleCoords.z);
@@ -301,7 +309,7 @@ float ProbeOcclusion(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec2 occl
 
     float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
 
-    float probeToFragDistance = length(probeToFragVector);
+    float probeToFragDistance = length((vWorldPosition + fragNorm * 0.2) - probePosition);
 
     return occlusionDistance < probeToFragDistance ? 0.0 : 1.0;
 }
@@ -336,7 +344,7 @@ vec8 TriLerp(vec3 pMin, vec3 pMax, vec3 p) {
     return weights;
 }
 
-SH TriLerpSurroundingProbes() {
+SH TriLerpSurroundingProbes(vec3 fragNormal) {
 
     ivec3 gridSize = textureSize(uGridSHMap0, 0);
     ivec3 gridResolution = gridSize - 1;
@@ -374,89 +382,53 @@ SH TriLerpSurroundingProbes() {
 
     ivec2 occlusionMapSize = textureSize(uProbeOcclusionMapsAtlas, 0);
 
-    float stub = ProbeOcclusion(cp0, unnormCoords, gridSize, occlusionMapSize);
-
-//    float probe0Occlusion = 0.0;
-//    float probe1Occlusion = 0.0;
-//    float probe2Occlusion = 0.0;
-//    float probe3Occlusion = 0.0;
-//    float probe4Occlusion = 1.0;
-//    float probe5Occlusion = 1.0;
-//    float probe6Occlusion = 1.0;
-//    float probe7Occlusion = 1.0;
-
-//    float probe0Occlusion = 1.0;
-//    float probe1Occlusion = 1.0;
-//    float probe2Occlusion = 1.0;
-//    float probe3Occlusion = 1.0;
-//    float probe4Occlusion = 1.0;
-//    float probe5Occlusion = 1.0;
-//    float probe6Occlusion = 1.0;
-//    float probe7Occlusion = 1.0;
-
-    float probe0Occlusion = ProbeOcclusion(cp0, unnormCoords, gridSize, occlusionMapSize);
-    float probe1Occlusion = ProbeOcclusion(cp1, unnormCoords, gridSize, occlusionMapSize);
-    float probe2Occlusion = ProbeOcclusion(cp2, unnormCoords, gridSize, occlusionMapSize);
-    float probe3Occlusion = ProbeOcclusion(cp3, unnormCoords, gridSize, occlusionMapSize);
-    float probe4Occlusion = ProbeOcclusion(cp4, unnormCoords, gridSize, occlusionMapSize);
-    float probe5Occlusion = ProbeOcclusion(cp5, unnormCoords, gridSize, occlusionMapSize);
-    float probe6Occlusion = ProbeOcclusion(cp6, unnormCoords, gridSize, occlusionMapSize);
-    float probe7Occlusion = ProbeOcclusion(cp7, unnormCoords, gridSize, occlusionMapSize);
+    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe4OcclusionFactor = ProbeOcclusionFactor(cp4, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe5OcclusionFactor = ProbeOcclusionFactor(cp5, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, unnormCoords, gridSize, occlusionMapSize, fragNormal);
+    float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, unnormCoords, gridSize, occlusionMapSize, fragNormal);
 
     vec8 weights = TriLerp(minCoords, maxCoords, unnormCoords);
 
     float excludedWeight = 0.0;
 
-    if (probe0Occlusion == 0.0) {
-        excludedWeight += weights.value0;
-        weights.value0 = 0.0;
-    }
+    excludedWeight += weights.value0 * (1.0 - probe0OcclusionFactor);
+    weights.value0 *= probe0OcclusionFactor;
 
-    if (probe1Occlusion == 0.0) {
-        excludedWeight += weights.value1;
-        weights.value1 = 0.0;
-    }
+    excludedWeight += weights.value1 * (1.0 - probe1OcclusionFactor);
+    weights.value1 *= probe1OcclusionFactor;
 
-    if (probe2Occlusion == 0.0) {
-        excludedWeight += weights.value2;
-        weights.value2 = 0.0;
-    }
+    excludedWeight += weights.value2 * (1.0 - probe2OcclusionFactor);
+    weights.value2 *= probe2OcclusionFactor;
 
-    if (probe3Occlusion == 0.0) {
-        excludedWeight += weights.value3;
-        weights.value3 = 0.0;
-    }
+    excludedWeight += weights.value3 * (1.0 - probe3OcclusionFactor);
+    weights.value3 *= probe3OcclusionFactor;
 
-    if (probe4Occlusion == 0.0) {
-        excludedWeight += weights.value4;
-        weights.value4 = 0.0;
-    }
+    excludedWeight += weights.value4 * (1.0 - probe4OcclusionFactor);
+    weights.value4 *= probe4OcclusionFactor;
 
-    if (probe5Occlusion == 0.0) {
-        excludedWeight += weights.value5;
-        weights.value5 = 0.0;
-    }
+    excludedWeight += weights.value5 * (1.0 - probe5OcclusionFactor);
+    weights.value5 *= probe5OcclusionFactor;
 
-    if (probe6Occlusion == 0.0) {
-        excludedWeight += weights.value6;
-        weights.value6 = 0.0;
-    }
+    excludedWeight += weights.value6 * (1.0 - probe6OcclusionFactor);
+    weights.value6 *= probe6OcclusionFactor;
 
-    if (probe7Occlusion == 0.0) {
-        excludedWeight += weights.value7;
-        weights.value7 = 0.0;
-    }
+    excludedWeight += weights.value7 * (1.0 - probe7OcclusionFactor);
+    weights.value7 *= probe7OcclusionFactor;
 
     float weightScale = 1.0 / (1.0 - excludedWeight);
 
-    weights.value0 *= weightScale;
-    weights.value1 *= weightScale;
-    weights.value2 *= weightScale;
-    weights.value3 *= weightScale;
-    weights.value4 *= weightScale;
-    weights.value5 *= weightScale;
-    weights.value6 *= weightScale;
-    weights.value7 *= weightScale;
+//    weights.value0 *= weightScale;
+//    weights.value1 *= weightScale;
+//    weights.value2 *= weightScale;
+//    weights.value3 *= weightScale;
+//    weights.value4 *= weightScale;
+//    weights.value5 *= weightScale;
+//    weights.value6 *= weightScale;
+//    weights.value7 *= weightScale;
 
     sh0 = ScaleSH(sh0, vec3(weights.value0));
     sh1 = ScaleSH(sh1, vec3(weights.value1));
@@ -466,24 +438,6 @@ SH TriLerpSurroundingProbes() {
     sh5 = ScaleSH(sh5, vec3(weights.value5));
     sh6 = ScaleSH(sh6, vec3(weights.value6));
     sh7 = ScaleSH(sh7, vec3(weights.value7));
-
-//    if ((weights.value0 + weights.value1 + weights.value2 + weights.value3 +
-//        weights.value4 + weights.value5 + weights.value6 + weights.value7) > 1.01)
-//    if (probe4Occlusion == 0.0 && probe5Occlusion == 0.0 && probe6Occlusion == 0.0 && probe7Occlusion == 0.0)
-//    {
-//        SH sh;
-//        //    // White and green
-//        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//        sh.L10  = vec3(0.0);
-//        sh.L1_1 = vec3(0.0);
-//        sh.L21  = vec3(0.0);
-//        sh.L2_1 = vec3(0.0);
-//        sh.L2_2 = vec3(0.0);
-//        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
-//        return sh;
-//    }
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -501,7 +455,7 @@ float SHRadiance(SH sh, vec3 direction, int component) {
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = TriLerpSurroundingProbes();
+    SH sh = TriLerpSurroundingProbes(direction);
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
@@ -779,81 +733,4 @@ void main() {
 //    oFragColor = vec4(correctColor, 1.0);
 
     oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
-
-    /////////////////////////////////////
-
-//    ivec2 occlusionMapSize = textureSize(uProbeOcclusionMapsAtlas, 0);
-//    ivec3 gridSize = textureSize(uGridSHMap0, 0);
-//    ivec3 gridResolution = gridSize - 1;
-//    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
-//
-//    vec3 unnormCoords = texCoords * vec3(gridResolution);
-//    vec3 minCoords = floor(unnormCoords);
-//    vec3 maxCoords = ceil(unnormCoords);
-//
-//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-//    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
-//    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
-//    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
-//    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
-//    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
-//    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
-//    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
-//
-//    float probe0Occlusion = ProbeOcclusion(cp0, unnormCoords, gridSize, occlusionMapSize);
-//    float probe1Occlusion = ProbeOcclusion(cp1, unnormCoords, gridSize, occlusionMapSize);
-//    float probe2Occlusion = ProbeOcclusion(cp2, unnormCoords, gridSize, occlusionMapSize);
-//    float probe3Occlusion = ProbeOcclusion(cp3, unnormCoords, gridSize, occlusionMapSize);
-//    float probe4Occlusion = ProbeOcclusion(cp4, unnormCoords, gridSize, occlusionMapSize);
-//    float probe5Occlusion = ProbeOcclusion(cp5, unnormCoords, gridSize, occlusionMapSize);
-//    float probe6Occlusion = ProbeOcclusion(cp6, unnormCoords, gridSize, occlusionMapSize);
-//    float probe7Occlusion = ProbeOcclusion(cp7, unnormCoords, gridSize, occlusionMapSize);
-//
-////    if (probe0Occlusion > 0.0) {
-////        oFragColor = vec4(0.5, 0.2, 0.2, 1.0);
-////    } else {
-////        oFragColor = vec4(0.1, 0.1, 0.1, 1.0);
-////    }
-//
-//
-//    /////////////////
-//
-//    vec3 probeGridPos = cp0;
-//
-//    ivec2 faceResolution = ivec2(10);
-//    //
-//
-//    // [x + WIDTH * (y + HEIGHT * z)]
-////    int gridWidth = gridSize.x;
-////    int gridHeight = gridSize.y;
-//    int probeCoord1D = 0;//int(probeGridPos.x) + gridWidth * (int(probeGridPos.y) + gridHeight * int(probeGridPos.z));
-//
-//    vec3 probePosition = vec3(0.5);//texelFetch(uProbePositions, probeCoord1D).xyz;
-//
-//    vec3 probeToFragVector = vWorldPosition - probePosition;
-//
-//    vec3 cubeFloatCoords = CubeSampleCoords(probeToFragVector);
-//
-//    int face = int(cubeFloatCoords.z);
-//    int localX = int(cubeFloatCoords.x * (faceResolution.x));
-//    int localY = int(cubeFloatCoords.y * (faceResolution.y));
-//
-////    uvec3 cubeCoords = texture(uCubemapTexCoordsMap, probeToFragVector).xyz;
-////    int face = int(cubeCoords.z);
-////    int localX = int(cubeCoords.x);
-////    int localY = int(cubeCoords.y);
-//
-////    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
-////
-////    int offsetX = int(offset.x) + localX + face * faceResolution.x;
-////    int offsetY = int(offset.y) + localY;
-//
-//    int offsetX = localX + face * faceResolution.x;
-//    int offsetY = localY;
-//
-//    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
-//
-//    float probeToFragDistance = length(probeToFragVector);
-//
-//    oFragColor = vec4(occlusionDistance, 0.0, 0.0, 1.0);
 }

@@ -32,7 +32,7 @@
     // Meshes
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
-    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_2nd_uv" ofType:@"fbx"];
+    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
 //    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
 

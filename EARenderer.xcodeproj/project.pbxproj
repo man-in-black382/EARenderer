@@ -52,6 +52,7 @@
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
 		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
 		CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */; };
+		CE2C470920B49211004E5BE7 /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE2C470820B49211004E5BE7 /* sponza.obj */; };
 		CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */; };
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
@@ -642,6 +643,7 @@
 		CE2221F91FC0B06D009B6804 /* LightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbe.hpp; sourceTree = "<group>"; };
 		CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
 		CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRCubemapSampler.hpp; sourceTree = "<group>"; };
+		CE2C470820B49211004E5BE7 /* sponza.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_roughness.png"; sourceTree = "<group>"; };
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
@@ -2112,6 +2114,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CE2C470820B49211004E5BE7 /* sponza.obj */,
 				CE53ADD5209E191600749A96 /* cornell_box_covered.obj */,
 				CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */,
 				CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */,
@@ -3308,6 +3311,7 @@
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,
+				CE2C470920B49211004E5BE7 /* sponza.obj in Resources */,
 				CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */,
 				CE4DE2301FA60CFF0067729A /* Sponza_Details_roughness.tga in Resources */,
 				CE4DE2101FA60CFE0067729A /* Lion_Normal.tga in Resources */,
