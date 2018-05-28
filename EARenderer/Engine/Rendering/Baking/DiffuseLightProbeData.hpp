@@ -33,7 +33,6 @@ namespace EARenderer {
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
         std::shared_ptr<GLHDRTexture2D> mOcclusionMapAtlas;
-        std::shared_ptr<GLLDRTextureCubemap> mCubeFaceTextureCoordsMap;
         std::shared_ptr<GLUInteger2BufferTexture<glm::uvec2>> mOcclusionMapAtlasOffsetsBufferTexture;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mProbePositionsBufferTexture;
 
@@ -49,8 +48,6 @@ namespace EARenderer {
         auto probeClusterProjectionsMetadataBufferTexture() const { return mProbeClusterProjectionsMetadataBufferTexture; }
 
         auto occlusionMapAtlas() const { return mOcclusionMapAtlas; }
-
-        auto cubeFaceTextureCoordsMap() const { return mCubeFaceTextureCoordsMap; }
 
         auto occlusionMapAtlasOffsetsBufferTexture() const { return mOcclusionMapAtlasOffsetsBufferTexture; }
 

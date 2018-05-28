@@ -113,7 +113,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -161,8 +161,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         glFinish();
     });
 
-    self.sceneRenderer->renderDiffuseGridProbes(0.1);
-    self.sceneRenderer->renderProbeOcclusionMap(50);
+    self.sceneRenderer->renderDiffuseGridProbes(0.01);
+//    self.sceneRenderer->renderProbeOcclusionMap(22);
 
 //    self.sceneRenderer->renderSkybox();
 

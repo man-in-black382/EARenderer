@@ -19,11 +19,19 @@
 namespace EARenderer {
 
     class EmbreeRayTracer {
+    public:
+        enum class FaceFilter { None, CullFront, CullBack };
+
     private:
         RTCDevice mDevice = nullptr;
         RTCScene mScene = nullptr;
 
+        int mDebugCounter = 0;
+
+        FaceFilter mFaceFilter;
+
         static void deviceErrorCallback(void* userPtr, enum RTCError code, const char* str);
+        static void intersectionFilter(const struct RTCFilterFunctionNArguments* args);
 
     public:
         EmbreeRayTracer(const std::vector<Triangle3D>& triangles);
@@ -35,7 +43,7 @@ namespace EARenderer {
         void swap(EmbreeRayTracer& that);
 
         bool lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1);
-        bool rayHit(const Ray3D& ray, float& distance);
+        bool rayHit(const Ray3D& ray, float& distance, FaceFilter faceFilter = FaceFilter::None);
     };
 
     void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs);

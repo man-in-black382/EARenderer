@@ -87,8 +87,6 @@ namespace EARenderer {
         size_t alignedHeight = texelCount / alignedWidth + mOcclusionMapFaceResolution.height;
 
         mOcclusionTextureResolution = Size2D(alignedWidth, alignedHeight);
-
-//        mOcclusionTextureResolution = Size2D(60, 10);
     }
 
     void DiffuseLightProbeGenerator::findOcclusionsDistancesForProbe(int32_t probeIndex) {
@@ -133,7 +131,7 @@ namespace EARenderer {
                     float hitDistance = std::numeric_limits<float>::max();
                     Ray3D ray(probe.position, direction);
 
-                    if (mScene->rayTracer()->rayHit(ray, hitDistance)) {
+                    if (mScene->rayTracer()->rayHit(ray, hitDistance, EmbreeRayTracer::FaceFilter::CullFront)) {
                         int32_t flatIndex = globalY * mOcclusionTextureResolution.width + globalX;
                         mOcclusionDistances[flatIndex] = hitDistance;
                     }
@@ -165,22 +163,6 @@ namespace EARenderer {
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupCount);
         }
         return metadata;
-    }
-
-    std::array<std::vector<glm::uvec3>, 6> DiffuseLightProbeGenerator::cubemapTextureCoordinates() const {
-        std::array<std::vector<glm::uvec3>, 6> coordinates;
-
-        for (size_t i = 0; i < 6; i++) {
-            coordinates[i].assign(mOcclusionMapFaceResolution.width * mOcclusionMapFaceResolution.height, glm::zero<glm::vec3>());
-            for (size_t y = 0; y < mOcclusionMapFaceResolution.height; y++) {
-                for (size_t x = 0; x < mOcclusionMapFaceResolution.width; x++) {
-                    size_t flatIndex = y * mOcclusionMapFaceResolution.width + x;
-                    coordinates[i][flatIndex] = glm::uvec3(x, y, i);
-                }
-            }
-        }
-
-        return coordinates;
     }
 
 #pragma mark - Public interface
@@ -229,7 +211,7 @@ namespace EARenderer {
 
         mOcclusionMapFaceResolution = occlusionMapResolution;
         calculateOcclusionTextureResolution();
-        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, 10.0/*std::numeric_limits<float>::max()*/);
+        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, std::numeric_limits<float>::max());
 
         Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
             for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
@@ -238,7 +220,6 @@ namespace EARenderer {
         });
 
         mProbeData->mOcclusionMapAtlas = std::make_shared<GLHDRTexture2D>(mOcclusionDistances, mOcclusionTextureResolution);
-        mProbeData->mCubeFaceTextureCoordsMap = std::make_shared<GLLDRTextureCubemap>(cubemapTextureCoordinates());
 
         mProbeData->mOcclusionMapAtlasOffsetsBufferTexture = std::make_shared<GLUInteger2BufferTexture<glm::uvec2>>();
         mProbeData->mOcclusionMapAtlasOffsetsBufferTexture->buffer().initialize(mProbeOcclusionMapAtlasOffsets);

@@ -48,11 +48,15 @@ namespace EARenderer {
             }
         }
 
+        rtcSetGeometryUserData(geometry, this);
+        rtcSetGeometryIntersectFilterFunction(geometry, intersectionFilter);
+
         rtcCommitGeometry(geometry);
         rtcAttachGeometry(mScene, geometry);
         rtcCommitScene(mScene);
+        rtcReleaseGeometry(geometry);
 
-//        rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_ROBUST);
+        rtcSetSceneFlags(mScene, RTC_SCENE_FLAG_ROBUST);
         deviceErrorCallback(this, rtcGetDeviceError(mDevice), "");
         rtcSetDeviceErrorFunction(mDevice, deviceErrorCallback, this);
     }
@@ -91,6 +95,32 @@ namespace EARenderer {
         printf("Embree device error detected: \ncode: %d, message: %s \n", code, str);
     }
 
+    void EmbreeRayTracer::intersectionFilter(const struct RTCFilterFunctionNArguments* args) {
+        EmbreeRayTracer *thisPtr = reinterpret_cast<EmbreeRayTracer *>(args->geometryUserPtr);
+
+        if (thisPtr->mFaceFilter == FaceFilter::None) return;
+
+        glm::vec3 triangleNormal(RTCHitN_Ng_x(args->hit, args->N, 0),
+                                 RTCHitN_Ng_y(args->hit, args->N, 0),
+                                 RTCHitN_Ng_z(args->hit, args->N, 0));
+
+        glm::vec3 rayDirection(RTCRayN_dir_x(args->ray, args->N, 0),
+                               RTCRayN_dir_y(args->ray, args->N, 0),
+                               RTCRayN_dir_z(args->ray, args->N, 0));
+
+        thisPtr->mDebugCounter++;
+//        printf("Debug counter %d | distance %f | norm %f %f %f | N %d \n", thisPtr->mDebugCounter, RTCRayN_tfar(args->ray, 0, 0), triangleNormal.x, triangleNormal.y, triangleNormal.z, args->N);
+
+        float dot = glm::dot(triangleNormal, rayDirection);
+        bool vectorsPointingInSameHemisphere = dot > 0.0;
+
+        switch (thisPtr->mFaceFilter) {
+            case FaceFilter::CullFront: args->valid[0] = vectorsPointingInSameHemisphere ? -1 : 0; break;
+            case FaceFilter::CullBack: args->valid[0] = vectorsPointingInSameHemisphere ? 0 : -1; break;
+            default: break;
+        }
+    }
+
 #pragma mark - Occlusion
 
     bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1) {
@@ -118,11 +148,15 @@ namespace EARenderer {
         return ray.tfar < 0.0;
     }
 
-    bool EmbreeRayTracer::rayHit(const Ray3D& ray, float& distance) {
+    bool EmbreeRayTracer::rayHit(const Ray3D& ray, float& distance, FaceFilter faceFilter) {
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
 
+        mFaceFilter = faceFilter;
+
         RTCRayHit rayHit;
+
+        mDebugCounter = 0;
 
         rayHit.ray.org_x = ray.origin.x;
         rayHit.ray.org_y = ray.origin.y;
