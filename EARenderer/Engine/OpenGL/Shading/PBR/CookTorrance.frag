@@ -232,16 +232,8 @@ SH UnpackSH(vec3 texCoords) {
 
     sh.L00  = vec3(shMap0Data.rgb);
     sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
-
     sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
     sh.L1_1 = vec3(shMap2Data.gba);
-
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(0.0);
-//    sh.L22  = vec3(0.0);
-
     sh.L21  = vec3(shMap3Data.rgb);
     sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
     sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
@@ -294,27 +286,27 @@ float ProbeOcclusionFactor(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec
 
     vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
 
-    vec3 probeToFragVector = vWorldPosition - probePosition;
-    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
-
-    int face = int(cubeSampleCoords.z);
-
-    int localX = int(cubeSampleCoords.x * float(faceResolution.x));
-    int localY = int(cubeSampleCoords.y * float(faceResolution.y));
-
-    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
-
-    int offsetX = int(offset.x) + localX + face * faceResolution.x;
-    int offsetY = int(offset.y) + localY;
-
-    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
-
-    float probeToFragDistance = length((vWorldPosition) - probePosition);
+//    vec3 probeToFragVector = vWorldPosition - probePosition;
+//    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
+//
+//    int face = int(cubeSampleCoords.z);
+//
+//    int localX = int(cubeSampleCoords.x * float(faceResolution.x));
+//    int localY = int(cubeSampleCoords.y * float(faceResolution.y));
+//
+//    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
+//
+//    int offsetX = int(offset.x) + localX + face * faceResolution.x;
+//    int offsetY = int(offset.y) + localY;
+//
+//    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
+//
+//    float probeToFragDistance = length((vWorldPosition) - probePosition);
 
     //////
-    vec3 fragToProbeVector = -normalize(probeToFragVector);
-    float weight = min(max(0.0, dot(fragToProbeVector, fragNorm)), 1.0);
-    return 1.0 - weight;
+    vec3 fragToProbeVector = normalize(probePosition - vWorldPosition);
+    float weight = max(0.0, dot(fragToProbeVector, fragNorm));
+    return weight;
 
 //    float distanceDiff = abs(probeToFragDistance - occlusionDistance);
 
@@ -325,14 +317,15 @@ float ProbeOcclusionFactor(vec3 probeGridPos, vec3 fragPos, ivec3 gridSize, ivec
 
 vec8 TriLerp(vec3 pMin, vec3 pMax, vec3 p) {
     //
-    //       5-------6
-    //      /|      /|
-    //     / |     / |
-    //    1--|----2  |
-    //    |  4----|--7
-    //    | /     | /
-    //    0-------3
-    //
+    //        5-------6
+    //       /|      /|
+    // Y    / |     / |
+    // ^   1--|----2  |
+    // |   |  4----|--7
+    // |   | /     | /
+    // |   0-------3
+    // |
+    //  -----------> X
     // 0 - min
     // 6 - max
     // Interpolation weights are in order: 0, 1, 2, 3, 4, 5, 6, 7
@@ -400,15 +393,6 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, unnormCoords, gridSize, occlusionMapSize, fragNormal);
     float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, unnormCoords, gridSize, occlusionMapSize, fragNormal);
 
-//    probe0OcclusionFactor = 0.0;
-//    probe1OcclusionFactor = 0.0;
-//    probe2OcclusionFactor = 0.0;
-//    probe3OcclusionFactor = 0.0;
-//    probe4OcclusionFactor = 1.0;
-//    probe5OcclusionFactor = 1.0;
-//    probe6OcclusionFactor = 1.0;
-//    probe7OcclusionFactor = 1.0;
-
     vec8 weights = TriLerp(minCoords, maxCoords, unnormCoords);
 
     float excludedWeight = 0.0;
@@ -439,14 +423,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
 
     float weightScale = 1.0 / (1.0 - excludedWeight);
 
-//    weights.value0 *= weightScale;
-//    weights.value1 *= weightScale;
-//    weights.value2 *= weightScale;
-//    weights.value3 *= weightScale;
-//    weights.value4 *= weightScale;
-//    weights.value5 *= weightScale;
-//    weights.value6 *= weightScale;
-//    weights.value7 *= weightScale;
+    weights.value0 *= weightScale;
+    weights.value1 *= weightScale;
+    weights.value2 *= weightScale;
+    weights.value3 *= weightScale;
+    weights.value4 *= weightScale;
+    weights.value5 *= weightScale;
+    weights.value6 *= weightScale;
+    weights.value7 *= weightScale;
 
     sh0 = ScaleSH(sh0, vec3(weights.value0));
     sh1 = ScaleSH(sh1, vec3(weights.value1));
@@ -744,35 +728,31 @@ void main() {
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 correctColor       = ReinhardToneMapAndGammaCorrect(specularAndDiffuse);
 
-    // STUB
-    vec4 stub0 = texture(uProbeOcclusionMapsAtlas, vec2(0.0));
-    vec4 stub1 = texture(uCubemapTexCoordsMap, vec3(1.0));
+    oFragColor = vec4(correctColor, 1.0);
 
-//    oFragColor = vec4(correctColor, 1.0);
-
-    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
 
 /////////////////////////////////
 
-    ivec3 gridSize = textureSize(uGridSHMap0, 0);
-    ivec3 gridResolution = gridSize - 1;
-    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
-
-    vec3 unnormCoords = texCoords * vec3(gridResolution);
-    vec3 minCoords = floor(unnormCoords);
-    vec3 maxCoords = ceil(unnormCoords);
-
-    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
-    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
-    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
-
-    ivec2 occlusionMapSize = textureSize(uProbeOcclusionMapsAtlas, 0);
-    vec3 fragNormal = N;
+//    ivec3 gridSize = textureSize(uGridSHMap0, 0);
+//    ivec3 gridResolution = gridSize - 1;
+//    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+//
+//    vec3 unnormCoords = texCoords * vec3(gridResolution);
+//    vec3 minCoords = floor(unnormCoords);
+//    vec3 maxCoords = ceil(unnormCoords);
+//
+//    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
+//    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
+//    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
+//    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
+//    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
+//    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
+//    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
+//    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
+//
+//    ivec2 occlusionMapSize = textureSize(uProbeOcclusionMapsAtlas, 0);
+//    vec3 fragNormal = N;
 //
 //    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, unnormCoords, gridSize, occlusionMapSize, fragNormal);
 //    float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, unnormCoords, gridSize, occlusionMapSize, fragNormal);
@@ -814,39 +794,37 @@ void main() {
 
 //    oFragColor = vec4(vec3(probe7OcclusionFactor * 0.3, 0.0, 0.0), 1.0);
 
-//     TEMP
-    ivec2 faceResolution = ivec2(10);
-    //
-
-    // [x + WIDTH * (y + HEIGHT * z)]
-    int gridWidth = gridSize.x;
-    int gridHeight = gridSize.y;
-
-    vec3 probeGridPos = cp1;
-    int probeCoord1D = int(probeGridPos.x) + gridWidth * (int(probeGridPos.y) + gridHeight * int(probeGridPos.z));
-
-    vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
-
-    vec3 probeToFragVector = normalize(vWorldPosition - probePosition);
-    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
-
-    int face = int(cubeSampleCoords.z);
-
-    int localX = int(cubeSampleCoords.x * float(faceResolution.x));
-    int localY = int(cubeSampleCoords.y * float(faceResolution.y));
-
-    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
-
-    int offsetX = int(offset.x) + localX + face * faceResolution.x;
-    int offsetY = int(offset.y) + localY;
-
-    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
-
-    float probeToFragDistance = length((vWorldPosition) - probePosition);
-
-    vec3 fragToProbeVector = -normalize(probeToFragVector);
-    float weight = max(0.0, dot(fragToProbeVector, N));
-    oFragColor = vec4(vec3(weight), 1.0);
-
-//    return distanceDiff < (0.85 / 10.0) ? 0.0 : 1.0;
+////     TEMP
+//    ivec2 faceResolution = ivec2(10);
+//    //
+//
+//    // [x + WIDTH * (y + HEIGHT * z)]
+//    int gridWidth = gridSize.x;
+//    int gridHeight = gridSize.y;
+//
+//    vec3 probeGridPos = cp4;
+//    int probeCoord1D = int(probeGridPos.x) + gridWidth * (int(probeGridPos.y) + gridHeight * int(probeGridPos.z));
+//
+//    vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
+//
+//    vec3 probeToFragVector = normalize(vWorldPosition - probePosition);
+//    vec3 cubeSampleCoords = CubeSampleCoords(probeToFragVector);
+//
+//    int face = int(cubeSampleCoords.z);
+//
+//    int localX = int(cubeSampleCoords.x * float(faceResolution.x));
+//    int localY = int(cubeSampleCoords.y * float(faceResolution.y));
+//
+//    uvec2 offset = texelFetch(uProbeOcclusionMapAtlasOffsets, probeCoord1D).xy;
+//
+//    int offsetX = int(offset.x) + localX + face * faceResolution.x;
+//    int offsetY = int(offset.y) + localY;
+//
+//    float occlusionDistance = texelFetch(uProbeOcclusionMapsAtlas, ivec2(offsetX, offsetY), 0).r;
+//
+//    float probeToFragDistance = length((vWorldPosition) - probePosition);
+//
+//    vec3 fragToProbeVector = -normalize(probeToFragVector);
+//    float cosineClamped = max(0.0, dot(fragToProbeVector, N));
+//    oFragColor = vec4(vec3(cosineClamped), 1.0);
 }

@@ -108,9 +108,6 @@ namespace EARenderer {
                                RTCRayN_dir_y(args->ray, args->N, 0),
                                RTCRayN_dir_z(args->ray, args->N, 0));
 
-        thisPtr->mDebugCounter++;
-//        printf("Debug counter %d | distance %f | norm %f %f %f | N %d \n", thisPtr->mDebugCounter, RTCRayN_tfar(args->ray, 0, 0), triangleNormal.x, triangleNormal.y, triangleNormal.z, args->N);
-
         float dot = glm::dot(triangleNormal, rayDirection);
         bool vectorsPointingInSameHemisphere = dot > 0.0;
 
@@ -155,8 +152,6 @@ namespace EARenderer {
         mFaceFilter = faceFilter;
 
         RTCRayHit rayHit;
-
-        mDebugCounter = 0;
 
         rayHit.ray.org_x = ray.origin.x;
         rayHit.ray.org_y = ray.origin.y;

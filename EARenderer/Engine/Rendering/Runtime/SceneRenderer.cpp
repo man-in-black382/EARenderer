@@ -326,8 +326,8 @@ namespace EARenderer {
             mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
-            mCookTorranceShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
-            mCookTorranceShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
+//            mCookTorranceShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
+//            mCookTorranceShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
             mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });

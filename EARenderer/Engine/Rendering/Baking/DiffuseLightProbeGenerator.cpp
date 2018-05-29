@@ -192,10 +192,20 @@ namespace EARenderer {
                 }
             }
 
-//            DiffuseLightProbe probe({ 0.5, 0.5, 0.5 });
-//            projectSurfelClustersOnProbe(probe);
-//            mProbeData->mProbes.push_back(probe);
+//            DiffuseLightProbe probe0({ 0.1, 0.1, 0.1 });
+//            projectSurfelClustersOnProbe(probe0);
+//            mProbeData->mProbes.push_back(probe0);
+//            mProbePositions.emplace_back(0.1, 0.1, 0.1);
+//
+//            DiffuseLightProbe probe1({ 0.5, 0.5, 0.5 });
+//            projectSurfelClustersOnProbe(probe1);
+//            mProbeData->mProbes.push_back(probe1);
 //            mProbePositions.emplace_back(0.5, 0.5, 0.5);
+//
+//            DiffuseLightProbe probe2({ 0.8, 0.8, 0.8 });
+//            projectSurfelClustersOnProbe(probe2);
+//            mProbeData->mProbes.push_back(probe2);
+//            mProbePositions.emplace_back(0.8, 0.8, 0.8);
 
             printf("Built %lu probes | %lu projections \n", mProbeData->mProbes.size(), mProbeData->mSurfelClusterProjections.size());
         });
@@ -209,20 +219,20 @@ namespace EARenderer {
         mProbeData->mProbeClusterProjectionsMetadataBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
         mProbeData->mProbeClusterProjectionsMetadataBufferTexture->buffer().initialize(probeProjectionsMetadata());
 
-        mOcclusionMapFaceResolution = occlusionMapResolution;
-        calculateOcclusionTextureResolution();
-        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, std::numeric_limits<float>::max());
+//        mOcclusionMapFaceResolution = occlusionMapResolution;
+//        calculateOcclusionTextureResolution();
+//        mOcclusionDistances.assign(mOcclusionTextureResolution.width * mOcclusionTextureResolution.height, std::numeric_limits<float>::max());
 
-        Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
-            for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
-                findOcclusionsDistancesForProbe(i);
-            }
-        });
+//        Measurement::ExecutionTime("Occlusion maps generation took", [&]() {
+//            for (int32_t i = 0; i < mProbeData->probes().size(); i++) {
+//                findOcclusionsDistancesForProbe(i);
+//            }
+//        });
 
-        mProbeData->mOcclusionMapAtlas = std::make_shared<GLHDRTexture2D>(mOcclusionDistances, mOcclusionTextureResolution);
+//        mProbeData->mOcclusionMapAtlas = std::make_shared<GLHDRTexture2D>(mOcclusionDistances, mOcclusionTextureResolution);
 
-        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture = std::make_shared<GLUInteger2BufferTexture<glm::uvec2>>();
-        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture->buffer().initialize(mProbeOcclusionMapAtlasOffsets);
+//        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture = std::make_shared<GLUInteger2BufferTexture<glm::uvec2>>();
+//        mProbeData->mOcclusionMapAtlasOffsetsBufferTexture->buffer().initialize(mProbeOcclusionMapAtlasOffsets);
 
         mProbeData->mProbePositionsBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
         mProbeData->mProbePositionsBufferTexture->buffer().initialize(mProbePositions);

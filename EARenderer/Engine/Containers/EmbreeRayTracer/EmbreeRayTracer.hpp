@@ -26,8 +26,6 @@ namespace EARenderer {
         RTCDevice mDevice = nullptr;
         RTCScene mScene = nullptr;
 
-        int mDebugCounter = 0;
-
         FaceFilter mFaceFilter;
 
         static void deviceErrorCallback(void* userPtr, enum RTCError code, const char* str);
