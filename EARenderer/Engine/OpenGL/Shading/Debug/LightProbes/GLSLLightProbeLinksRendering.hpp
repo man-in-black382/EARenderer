@@ -26,6 +26,7 @@ namespace EARenderer {
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
         void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);
         void setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3>& centers);
+        void setProbesGridResolution(const glm::ivec3& resolution);
     };
 
 }

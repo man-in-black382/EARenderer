@@ -14,6 +14,8 @@
 #include "GLHDRTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
+#include "GLHDRTexture3D.hpp"
+#include "GLBufferTexture.hpp"
 
 namespace EARenderer {
 
@@ -25,6 +27,9 @@ namespace EARenderer {
         void setLight(const DirectionalLight& light);
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
         void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
+        void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
+        void setWorldBoundingBox(const AxisAlignedBox3D& box);
+        void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
     };
 
 }

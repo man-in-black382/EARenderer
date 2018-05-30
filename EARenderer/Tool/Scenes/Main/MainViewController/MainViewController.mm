@@ -151,25 +151,25 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
 
-    EARenderer::Measurement::ExecutionTime("Frame preparation took", [&]() {
+//    EARenderer::Measurement::ExecutionTime("Frame preparation took", [&]() {
         self.sceneRenderer->prepareFrame();
-        glFinish();
-    });
+//        glFinish();
+//    });
 
-    EARenderer::Measurement::ExecutionTime("Mesh rendering took", [&]() {
+//    EARenderer::Measurement::ExecutionTime("Mesh rendering took", [&]() {
         self.sceneRenderer->renderMeshes();
-        glFinish();
-    });
+//        glFinish();
+//    });
 
     self.sceneRenderer->renderDiffuseGridProbes(0.07);
-//    self.sceneRenderer->renderProbeOcclusionMap(22);
+//    self.sceneRenderer->renderProbeOcclusionMap(500);
 
 //    self.sceneRenderer->renderSkybox();
 
     printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
-//    self.sceneRenderer->renderLinksForDiffuseProbe(0);
-//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+    self.sceneRenderer->renderLinksForDiffuseProbe(300);
+    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0, 300);
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();

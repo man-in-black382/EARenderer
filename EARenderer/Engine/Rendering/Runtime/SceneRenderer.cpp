@@ -117,9 +117,9 @@ namespace EARenderer {
     void SceneRenderer::setupGLState() {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
+//        glEnable(GL_BLEND);
+//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
@@ -256,6 +256,9 @@ namespace EARenderer {
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
+            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
+            mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+            mSurfelLightingShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -464,6 +467,7 @@ namespace EARenderer {
         mLightProbeLinksRenderingShader.bind();
         mLightProbeLinksRenderingShader.setCamera(*mScene->camera());
         mLightProbeLinksRenderingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mLightProbeLinksRenderingShader.setProbesGridResolution(mScene->preferredProbeGridResolution());
         mLightProbeLinksRenderingShader.ensureSamplerValidity([&] {
             mLightProbeLinksRenderingShader.setProbeProjectionsMetadata(*mDiffuseProbeData->probeClusterProjectionsMetadataBufferTexture());
             mLightProbeLinksRenderingShader.setProjectionClusterIndices(*mDiffuseProbeData->projectionClusterIndicesBufferTexture());

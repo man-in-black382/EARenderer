@@ -136,7 +136,7 @@ namespace EARenderer {
 
     template <typename T>
     size_t SpatialHash<T>::size() const {
-        return mObjects.size();
+        return mSize;
     }
 
 #pragma mark Iteration

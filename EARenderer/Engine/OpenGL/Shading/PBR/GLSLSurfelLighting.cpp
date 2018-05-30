@@ -49,4 +49,21 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
     }
 
+    void GLSLSurfelLighting::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
+    }
+
+    void GLSLSurfelLighting::setWorldBoundingBox(const AxisAlignedBox3D& box) {
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
+    }
+    void GLSLSurfelLighting::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
+        setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
+    }
+
 }

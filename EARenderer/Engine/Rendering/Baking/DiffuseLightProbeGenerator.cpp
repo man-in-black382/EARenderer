@@ -22,18 +22,10 @@ namespace EARenderer {
 
         float visibilityTerm = std::max(glm::dot(-surfel.normal, Wps), 0.f);
 
-        // Used to indicate whether surfel is located in the positive hemisphere of static geometry probe
-        // to reduce ray casts. For full-sphere (dynamic geometry) grid probes it is always true.
-        bool isInSameHemisphere = true;
-
-        if (probe.normal.x != 0.0 || probe.normal.y != 0.0 || probe.normal.z != 0.0) {
-            isInSameHemisphere = glm::dot(Wps, probe.normal) > 0.0;
-        }
-
         float visibilityTest = 0.0;
 
         // Save ray casts if surfel's facing away from the standpoint
-        if (visibilityTerm > 0.0 && isInSameHemisphere) {
+        if (visibilityTerm > 0.0) {
             visibilityTest = mScene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position) ? 0.0 : 1.0;
         }
 
