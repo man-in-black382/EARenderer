@@ -10,6 +10,7 @@
 #import "SceneGLView.h"
 #import "SceneEditorTabView.h"
 #import "SceneObjectsTabView.h"
+#import "SettingsTabViewItem.h"
 #import "FPSView.h"
 
 #import "DemoSceneComposing.h"
@@ -38,7 +39,7 @@
 
 static float const FrequentEventsThrottleCooldownMS = 100;
 
-@interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate>
+@interface MainViewController () <SceneGLViewDelegate, MeshListTabViewItemDelegate, SettingsTabViewItemDelegate>
 
 @property (weak, nonatomic) IBOutlet SceneGLView *openGLView;
 @property (weak, nonatomic) IBOutlet FPSView *fpsView;
@@ -161,15 +162,15 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //        glFinish();
 //    });
 
-    self.sceneRenderer->renderDiffuseGridProbes(0.07);
+    self.sceneRenderer->renderDiffuseGridProbes(0.025);
 //    self.sceneRenderer->renderProbeOcclusionMap(500);
 
 //    self.sceneRenderer->renderSkybox();
 
-    printf("\n");
+//    printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
-    self.sceneRenderer->renderLinksForDiffuseProbe(300);
-    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0, 300);
+//    self.sceneRenderer->renderLinksForDiffuseProbe(320);
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0, 320);
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
@@ -213,6 +214,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
 //        mesh.setIsSelected(false);
 //    }
+}
+
+#pragma mark - SettingsTabViewItemDelegate
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings
+{
+    self.sceneRenderer->setRenderingSettings(settings);
 }
 
 #pragma mark - Helper methods

@@ -565,12 +565,6 @@ float Shadow(in vec3 N, in vec3 L)
 ///////////////////////// Helpers //////////////////////////
 ////////////////////////////////////////////////////////////
 
-vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
-    vec3 mappedColor = color / (color + vec3(1.0));
-    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.2));
-    return gammaCorrectedColor;
-}
-
 vec3 ReinhardToneMap(vec3 color) {
     return color / (color + vec3(1.0));
 }
@@ -643,16 +637,12 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-
-    //
-    indirectRadiance = vec3(0.0);
-    //
-
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, indirectRadiance, shadow);
 
     // Image based lighting
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 correctColor       = GammaCorrect(specularAndDiffuse);
+    vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
+    vec3 correctColor          = GammaCorrect(toneMappedColor);
 
     oFragColor = vec4(correctColor, 1.0);
 

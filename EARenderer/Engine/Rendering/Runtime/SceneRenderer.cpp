@@ -81,6 +81,10 @@ namespace EARenderer {
         mDefaultRenderComponentsProvider = provider;
     }
 
+    void SceneRenderer::setRenderingSettings(const RenderingSettings& settings) {
+        mSettings = settings;
+    }
+
 #pragma mark - Math
     
     bool SceneRenderer::raySelectsMesh(const Ray3D& ray, ID& meshID) {
@@ -253,6 +257,7 @@ namespace EARenderer {
 
         mSurfelLightingShader.bind();
         mSurfelLightingShader.setLight(directionalLight);
+        mSurfelLightingShader.setMultibounceEnabled(mSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());

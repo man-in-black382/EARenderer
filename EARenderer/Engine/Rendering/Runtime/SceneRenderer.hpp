@@ -22,6 +22,7 @@
 #include "Ray3D.hpp"
 #include "SurfelData.hpp"
 #include "DiffuseLightProbeData.hpp"
+#include "RenderingSettings.hpp"
 
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
@@ -58,6 +59,8 @@ namespace EARenderer {
         glm::ivec3 mProbeGridResolution;
         
         const Scene *mScene = nullptr;
+
+        RenderingSettings mSettings;
 
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
@@ -122,6 +125,7 @@ namespace EARenderer {
         SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData);
         
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
+        void setRenderingSettings(const RenderingSettings& settings);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);
 
         void prepareFrame();

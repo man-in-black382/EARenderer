@@ -30,6 +30,7 @@ namespace EARenderer {
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
+        void setMultibounceEnabled(bool multibounceEnabled);
     };
 
 }

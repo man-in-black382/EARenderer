@@ -54,6 +54,7 @@ uniform Spotlight uSpotlight;
 uniform sampler2DArray uSurfelsGBuffer;
 
 uniform int uLightType;
+uniform bool uEnableMultibounce;
 
 // Shadow mapping
 uniform sampler2DArray uShadowMapArray;
@@ -467,7 +468,9 @@ void main() {
     // Apply shadow factor
     diffuseRadiance *= 1.0 - shadow;
 
-    vec3 finalColor = diffuseRadiance;// + indirectRadiance;
+    vec3 finalColor = diffuseRadiance;
+
+    if (uEnableMultibounce) { finalColor += indirectRadiance; }
 
     oFragColor = vec4(finalColor, 1.0);
 }

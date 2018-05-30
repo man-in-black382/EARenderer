@@ -303,6 +303,7 @@
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
+		CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2192820BF249100767342 /* SettingsTabViewItem.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
@@ -1300,6 +1301,9 @@
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
+		CEC2192720BF249100767342 /* SettingsTabViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewItem.h; sourceTree = "<group>"; };
+		CEC2192820BF249100767342 /* SettingsTabViewItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsTabViewItem.mm; sourceTree = "<group>"; };
+		CEC2192B20BF26D800767342 /* RenderingSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RenderingSettings.hpp; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
@@ -1779,6 +1783,7 @@
 				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
 				CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */,
 				CE82DAF7205122FA00329E2E /* BoxRenderer.hpp */,
+				CEC2192B20BF26D800767342 /* RenderingSettings.hpp */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -2038,10 +2043,10 @@
 			isa = PBXGroup;
 			children = (
 				CE70F7FB1F8F8EBD00AD9027 /* FPSView.h */,
-				CE70F7FC1F8F8EBD00AD9027 /* SceneGLView.h */,
-				CE70F7FD1F8F8EBD00AD9027 /* Scene Editing */,
 				CE70F8021F8F8EBD00AD9027 /* FPSView.mm */,
+				CE70F7FD1F8F8EBD00AD9027 /* Scene Editing */,
 				CE70F8031F8F8EBD00AD9027 /* Scene Objects */,
+				CE70F7FC1F8F8EBD00AD9027 /* SceneGLView.h */,
 				CE70F80C1F8F8EBD00AD9027 /* SceneGLView.mm */,
 			);
 			path = Views;
@@ -2052,6 +2057,8 @@
 			children = (
 				CE70F7FE1F8F8EBD00AD9027 /* MeshEditingTabViewItem.h */,
 				CE70F7FF1F8F8EBD00AD9027 /* MeshEditingTabViewItem.mm */,
+				CEC2192720BF249100767342 /* SettingsTabViewItem.h */,
+				CEC2192820BF249100767342 /* SettingsTabViewItem.mm */,
 				CE70F8001F8F8EBD00AD9027 /* SceneEditorTabView.mm */,
 				CE70F8011F8F8EBD00AD9027 /* SceneEditorTabView.h */,
 			);
@@ -3450,6 +3457,7 @@
 				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
 				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
+				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
 				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
 				CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */,

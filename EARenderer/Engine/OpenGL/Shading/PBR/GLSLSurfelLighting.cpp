@@ -62,8 +62,13 @@ namespace EARenderer {
     void GLSLSurfelLighting::setWorldBoundingBox(const AxisAlignedBox3D& box) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
+
     void GLSLSurfelLighting::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
+    }
+
+    void GLSLSurfelLighting::setMultibounceEnabled(bool multibounceEnabled) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uEnableMultibounce")>).location(), multibounceEnabled);
     }
 
 }
