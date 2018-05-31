@@ -136,14 +136,14 @@ void PackSHToRenderTargets(SH sh) {
     oFragData6 = vec4(sh.L22.rgb, 0.0);
 }
 
-// Transform normalized texture corrdinates into a 3-dimensional integer index
+// Transform normalized texture corrdinates into a 1-dimensional integer index
 int FlattenTexCoords() {
     // Texture coordinate interpolation gives us values at texel centers, not edges
     // and so we're accounting for that by adding half a texel size to x and y
     vec3 halfTexel = 1.0 / vec3(uProbesGridResolution) / 2.0;
-    vec3 resolution = vec3(uProbesGridResolution - 1);
-    float x = (vTexCoords.x + halfTexel.x) * resolution.x;
-    float y = (vTexCoords.y + halfTexel.y) * resolution.y;
+    vec3 resolution = vec3(uProbesGridResolution);
+    float x = (vTexCoords.x - halfTexel.x) * resolution.x;
+    float y = (vTexCoords.y - halfTexel.y) * resolution.y;
     // vLayer is not normalized, therefore we're using it as-is
     float z = vLayer;
 

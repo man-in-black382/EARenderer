@@ -211,6 +211,14 @@ namespace EARenderer {
 
         Color albedo = albedoMapSampler.sample(uv);
 
+//        // FIXME: DEBUG
+//        if (surfelCandidate.position.z > 0.5) {
+//            albedo = Color(0.0, 1.0, 0.0, 1.0);
+//        } else {
+//            albedo = Color(1.0, 1.0, 1.0, 1.0);
+//        }
+//        //
+
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedo.rgb(), uv, singleSurfelArea);

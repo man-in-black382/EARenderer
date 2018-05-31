@@ -276,10 +276,6 @@
 		CE7A013C20B165850002D422 /* ProbeOcclusionRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE7A013920B165850002D422 /* ProbeOcclusionRendering.vert */; };
 		CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */; };
 		CE7A018420B1CA610002D422 /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */; };
-		CE7B4683208C77C2003DBDD1 /* LightmapLightProbeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */; };
-		CE7B4684208C77C2003DBDD1 /* LightmapLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */; };
-		CE7B4685208C77C2003DBDD1 /* LightmapLightProbeRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE7B4681208C77C2003DBDD1 /* LightmapLightProbeRendering.geom */; };
-		CE7B4686208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7B4682208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.cpp */; };
 		CE81CB161FA24F6200535020 /* blank_black.png in Resources */ = {isa = PBXBuildFile; fileRef = CE81CB151FA24ED000535020 /* blank_black.png */; };
 		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
 		CE82DAEF20511A4C00329E2E /* GLSLCubeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE82DAED20511A4C00329E2E /* GLSLCubeRendering.cpp */; };
@@ -1165,11 +1161,6 @@
 		CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libembree3.3.2.0.dylib; path = ../../../../opt/local/lib/libembree3.3.2.0.dylib; sourceTree = "<group>"; };
 		CE7A016A20B1BF1F0002D422 /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtbb.dylib; path = ../../../../opt/local/lib/libtbb.dylib; sourceTree = "<group>"; };
 		CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.0.0.dylib; sourceTree = "<group>"; };
-		CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.vert; sourceTree = "<group>"; };
-		CE7B467F208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightmapLightProbeRendering.hpp; sourceTree = "<group>"; };
-		CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.frag; sourceTree = "<group>"; };
-		CE7B4681208C77C2003DBDD1 /* LightmapLightProbeRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightmapLightProbeRendering.geom; sourceTree = "<group>"; };
-		CE7B4682208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightmapLightProbeRendering.cpp; sourceTree = "<group>"; };
 		CE81CB151FA24ED000535020 /* blank_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_black.png; sourceTree = "<group>"; };
 		CE82A9EF1FA2212F00F980A2 /* DemoScene1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemoScene1.h; sourceTree = "<group>"; };
 		CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene1.mm; sourceTree = "<group>"; };
@@ -2947,11 +2938,6 @@
 				AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */,
 				AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */,
 				AC59F28C207373C100698E55 /* GLSLLightProbeLinksRendering.hpp */,
-				CE7B467E208C77C1003DBDD1 /* LightmapLightProbeRendering.vert */,
-				CE7B4681208C77C2003DBDD1 /* LightmapLightProbeRendering.geom */,
-				CE7B4680208C77C2003DBDD1 /* LightmapLightProbeRendering.frag */,
-				CE7B4682208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.cpp */,
-				CE7B467F208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.hpp */,
 			);
 			path = LightProbes;
 			sourceTree = "<group>";
@@ -3228,7 +3214,6 @@
 				CE70FA551F8F8F7400AD9027 /* RadianceConvolution.frag in Resources */,
 				AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */,
 				CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */,
-				CE7B4685208C77C2003DBDD1 /* LightmapLightProbeRendering.geom in Resources */,
 				CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */,
 				CE70FA561F8F8F7400AD9027 /* CubemapRendering.vert in Resources */,
 				CE70FA571F8F8F7400AD9027 /* EquirectangularMapConversion.frag in Resources */,
@@ -3296,7 +3281,6 @@
 				CE4DE2221FA60CFE0067729A /* Sponza_Column_c_diffuse.tga in Resources */,
 				CE4DE2311FA60CFF0067729A /* Sponza_Fabric_Blue_diffuse.tga in Resources */,
 				CE70FA651F8F8F7400AD9027 /* Skybox.vert in Resources */,
-				CE7B4684208C77C2003DBDD1 /* LightmapLightProbeRendering.frag in Resources */,
 				CE4DE2401FA60CFF0067729A /* Sponza_Roof_normal.tga in Resources */,
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE70FA671F8F8F7400AD9027 /* GenericGeometry.frag in Resources */,
@@ -3377,7 +3361,6 @@
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
 				AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */,
-				CE7B4683208C77C2003DBDD1 /* LightmapLightProbeRendering.vert in Resources */,
 				CE4DE24A1FA60CFF0067729A /* VaseHanging_normal.tga in Resources */,
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
 				CE4DE2161FA60CFE0067729A /* Sponza_Bricks_a_Albedo.tga in Resources */,
@@ -3499,7 +3482,6 @@
 				CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */,
 				CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */,
 				CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */,
-				CE7B4686208C77C2003DBDD1 /* GLSLLightmapLightProbeRendering.cpp in Sources */,
 				CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */,
 				CE70FA8E1F8F912300AD9027 /* FPSView.mm in Sources */,
 				CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */,

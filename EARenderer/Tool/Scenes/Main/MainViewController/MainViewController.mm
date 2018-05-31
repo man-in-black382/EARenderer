@@ -162,7 +162,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //        glFinish();
 //    });
 
-    self.sceneRenderer->renderDiffuseGridProbes(0.025);
+    self.sceneRenderer->renderDiffuseGridProbes(0.05);
 //    self.sceneRenderer->renderProbeOcclusionMap(500);
 
 //    self.sceneRenderer->renderSkybox();
@@ -170,7 +170,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    printf("\n");
 //    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
 //    self.sceneRenderer->renderLinksForDiffuseProbe(320);
-//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0, 320);
+//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
