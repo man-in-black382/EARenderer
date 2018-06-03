@@ -3,11 +3,9 @@
 // Uniforms
 
 uniform samplerCube uCubeMapTexture;
-uniform usamplerCube uUICubeMapTexture;
 uniform sampler2D uEquirectangularMap;
 uniform bool uIsHDR;
 uniform bool uIsCube;
-uniform bool uIsIntegerCube;
 
 // Input
 
@@ -66,13 +64,7 @@ vec3 SampleSphericalMap(vec3 v) {
 
 void main() {
     if (uIsCube) {
-        if (uIsIntegerCube) {
-            ivec2 cubeSize = textureSize(uUICubeMapTexture, 0);
-            uvec4 values = texture(uUICubeMapTexture, oEyeDirection);
-            oFragmentColor = vec4(vec2(values.xy) / vec2(cubeSize.xy), 0.0, 1.0);
-        } else {
-            oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 0);
-        }
+        oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 0);
     } else {
         oFragmentColor = vec4(SampleSphericalMap(normalize(oEyeDirection.xyz)), 1.0); // Don't forget to normalize!
     }
@@ -80,22 +72,4 @@ void main() {
     if (uIsHDR) {
         oFragmentColor = vec4(ReinhardToneMapAndGammaCorrect(oFragmentColor.rgb), 1.0);
     }
-
-//    vec3 cubeFloatCoords = CubeSampleCoords(oEyeDirection);
-//
-//    float face = cubeFloatCoords.z;
-//
-//    if (face >= 5.0) {
-//        oFragmentColor = vec4(1.0, 0.0, 0.0, 1.0);
-//    } else if (face >= 4.0) {
-//        oFragmentColor = vec4(0.0, 1.0, 0.0, 1.0);
-//    } else if (face >= 3.0) {
-//        oFragmentColor = vec4(0.0, 0.0, 1.0, 1.0);
-//    } else if (face >= 2.0) {
-//        oFragmentColor = vec4(0.0, 0.0, 1.0, 1.0);
-//    } else if (face >= 1.0) {
-//        oFragmentColor = vec4(0.0, 1.0, 1.0, 1.0);
-//    } else if (face >= 0.0) {
-//        oFragmentColor = vec4(1.0, 1.0, 1.0, 1.0);
-//    }
 }

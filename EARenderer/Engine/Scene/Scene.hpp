@@ -44,7 +44,7 @@ namespace EARenderer {
 #pragma mark - Member variables
 
         size_t mOctreeDepth = 5;
-        float mGridProbesDistance = 0.7;
+        float mGridProbesDistance = 1.5;
         float mStaticGeometryArea = 0.0;
 
         DirectionalLight mDirectionalLight;

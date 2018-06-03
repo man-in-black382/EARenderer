@@ -16,6 +16,11 @@ namespace EARenderer {
         static Size2D zero = { 0, 0 };
         return zero;
     }
+
+    const Size2D& Size2D::unit() {
+        static Size2D unit = { 1, 1 };
+        return unit;
+    }
     
     Size2D::Size2D(float w, float h)
     :

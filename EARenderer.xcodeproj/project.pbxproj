@@ -58,6 +58,9 @@
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
 		CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */; };
 		CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */; };
+		CE4BF64C20C28DA8001B0458 /* bricks2_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4BF64920C28DA7001B0458 /* bricks2_disp.jpg */; };
+		CE4BF64D20C28DA8001B0458 /* bricks2_normal.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4BF64A20C28DA7001B0458 /* bricks2_normal.jpg */; };
+		CE4BF64E20C28DA8001B0458 /* bricks2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE4BF64B20C28DA7001B0458 /* bricks2.jpg */; };
 		CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775011FA5D73700F5699C /* Background_Albedo.tga */; };
 		CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775091FA5D73800F5699C /* Background_Normal.tga */; };
 		CE4DE2071FA60CFE0067729A /* Background_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9774CC1FA5D72E00F5699C /* Background_roughness.tga */; };
@@ -137,7 +140,6 @@
 		CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */ = {isa = PBXBuildFile; fileRef = CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */; };
 		CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */; };
 		CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE4E19CB20837DB700AF181A /* MeshLoader.cpp */; };
-		CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */; };
 		CE53ADD6209E191700749A96 /* cornell_box_covered.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD5209E191600749A96 /* cornell_box_covered.obj */; };
 		CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADD9209E2BC100749A96 /* fabric02_col.jpg */; };
 		CE53ADDE209E2BC300749A96 /* fabric02_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE53ADDA209E2BC100749A96 /* fabric02_disp.jpg */; };
@@ -300,6 +302,37 @@
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2192820BF249100767342 /* SettingsTabViewItem.mm */; };
+		CEC2195120C0744E00767342 /* Bricks08_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2192E20C0744C00767342 /* Bricks08_col.jpg */; };
+		CEC2195220C0744E00767342 /* Bricks08_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2192F20C0744C00767342 /* Bricks08_nrm.jpg */; };
+		CEC2195320C0744E00767342 /* Bricks08_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193020C0744C00767342 /* Bricks08_disp.jpg */; };
+		CEC2195420C0744E00767342 /* Bricks08_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193120C0744C00767342 /* Bricks08_rgh.jpg */; };
+		CEC2195520C0744E00767342 /* Bricks08_AO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193220C0744C00767342 /* Bricks08_AO.jpg */; };
+		CEC2195620C0744E00767342 /* PavingStones10_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193420C0744C00767342 /* PavingStones10_rgh.jpg */; };
+		CEC2195720C0744E00767342 /* PavingStones10_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193520C0744C00767342 /* PavingStones10_disp.jpg */; };
+		CEC2195820C0744E00767342 /* PavingStones10_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193620C0744C00767342 /* PavingStones10_col.jpg */; };
+		CEC2195920C0744E00767342 /* PavingStones10_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193720C0744C00767342 /* PavingStones10_nrm.jpg */; };
+		CEC2195A20C0744E00767342 /* PavingStones10_AO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193820C0744C00767342 /* PavingStones10_AO.jpg */; };
+		CEC2195B20C0744E00767342 /* PavingStones09_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193A20C0744D00767342 /* PavingStones09_rgh.jpg */; };
+		CEC2195C20C0744E00767342 /* PavingStones09_AO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193B20C0744D00767342 /* PavingStones09_AO.jpg */; };
+		CEC2195D20C0744E00767342 /* PavingStones09_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193C20C0744D00767342 /* PavingStones09_col.jpg */; };
+		CEC2195E20C0744E00767342 /* PavingStones09_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193D20C0744D00767342 /* PavingStones09_nrm.jpg */; };
+		CEC2195F20C0744E00767342 /* PavingStones09_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2193E20C0744D00767342 /* PavingStones09_disp.jpg */; };
+		CEC2196020C0744E00767342 /* Fabric06_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194020C0744D00767342 /* Fabric06_col.jpg */; };
+		CEC2196120C0744E00767342 /* Fabric06_mask.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194120C0744D00767342 /* Fabric06_mask.jpg */; };
+		CEC2196220C0744E00767342 /* Fabric06_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194220C0744D00767342 /* Fabric06_nrm.jpg */; };
+		CEC2196320C0744E00767342 /* Fabric06_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194320C0744D00767342 /* Fabric06_rgh.jpg */; };
+		CEC2196420C0744E00767342 /* Fabric06_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194420C0744D00767342 /* Fabric06_disp.jpg */; };
+		CEC2196520C0744E00767342 /* Rocks01_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194620C0744E00767342 /* Rocks01_col.jpg */; };
+		CEC2196620C0744E00767342 /* Rocks01_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194720C0744E00767342 /* Rocks01_nrm.jpg */; };
+		CEC2196720C0744E00767342 /* Rocks01_AO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194820C0744E00767342 /* Rocks01_AO.jpg */; };
+		CEC2196820C0744E00767342 /* Rocks01_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194920C0744E00767342 /* Rocks01_rgh.jpg */; };
+		CEC2196920C0744E00767342 /* Rocks01_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194A20C0744E00767342 /* Rocks01_disp.jpg */; };
+		CEC2196A20C0744E00767342 /* Fabric05_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194C20C0744E00767342 /* Fabric05_rgh.jpg */; };
+		CEC2196B20C0744E00767342 /* Fabric05_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194D20C0744E00767342 /* Fabric05_col.jpg */; };
+		CEC2196C20C0744E00767342 /* Fabric05_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194E20C0744E00767342 /* Fabric05_disp.jpg */; };
+		CEC2196D20C0744E00767342 /* Fabric05_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2194F20C0744E00767342 /* Fabric05_nrm.jpg */; };
+		CEC2196E20C0744E00767342 /* Fabric05_mask.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2195020C0744E00767342 /* Fabric05_mask.jpg */; };
+		CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2197020C076B000767342 /* MaterialLoader.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
@@ -647,11 +680,13 @@
 		CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_basecolor.png"; sourceTree = "<group>"; };
 		CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLVertexAttribute.cpp; sourceTree = "<group>"; };
+		CE4BF64920C28DA7001B0458 /* bricks2_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bricks2_disp.jpg; sourceTree = "<group>"; };
+		CE4BF64A20C28DA7001B0458 /* bricks2_normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bricks2_normal.jpg; sourceTree = "<group>"; };
+		CE4BF64B20C28DA7001B0458 /* bricks2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bricks2.jpg; sourceTree = "<group>"; };
 		CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AutodeskMeshLoader.cpp; sourceTree = "<group>"; };
 		CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AutodeskMeshLoader.hpp; sourceTree = "<group>"; };
 		CE4E19CB20837DB700AF181A /* MeshLoader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLoader.cpp; sourceTree = "<group>"; };
 		CE4E19CC20837DB700AF181A /* MeshLoader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshLoader.hpp; sourceTree = "<group>"; };
-		CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */ = {isa = PBXFileReference; lastKnownFileType = file; path = sponza_2nd_uv.fbx; sourceTree = "<group>"; };
 		CE53ADD5209E191600749A96 /* cornell_box_covered.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_covered.obj; sourceTree = "<group>"; };
 		CE53ADD9209E2BC100749A96 /* fabric02_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_col.jpg; sourceTree = "<group>"; };
 		CE53ADDA209E2BC100749A96 /* fabric02_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fabric02_disp.jpg; sourceTree = "<group>"; };
@@ -1295,6 +1330,38 @@
 		CEC2192720BF249100767342 /* SettingsTabViewItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsTabViewItem.h; sourceTree = "<group>"; };
 		CEC2192820BF249100767342 /* SettingsTabViewItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SettingsTabViewItem.mm; sourceTree = "<group>"; };
 		CEC2192B20BF26D800767342 /* RenderingSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RenderingSettings.hpp; sourceTree = "<group>"; };
+		CEC2192E20C0744C00767342 /* Bricks08_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bricks08_col.jpg; sourceTree = "<group>"; };
+		CEC2192F20C0744C00767342 /* Bricks08_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bricks08_nrm.jpg; sourceTree = "<group>"; };
+		CEC2193020C0744C00767342 /* Bricks08_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bricks08_disp.jpg; sourceTree = "<group>"; };
+		CEC2193120C0744C00767342 /* Bricks08_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bricks08_rgh.jpg; sourceTree = "<group>"; };
+		CEC2193220C0744C00767342 /* Bricks08_AO.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Bricks08_AO.jpg; sourceTree = "<group>"; };
+		CEC2193420C0744C00767342 /* PavingStones10_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones10_rgh.jpg; sourceTree = "<group>"; };
+		CEC2193520C0744C00767342 /* PavingStones10_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones10_disp.jpg; sourceTree = "<group>"; };
+		CEC2193620C0744C00767342 /* PavingStones10_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones10_col.jpg; sourceTree = "<group>"; };
+		CEC2193720C0744C00767342 /* PavingStones10_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones10_nrm.jpg; sourceTree = "<group>"; };
+		CEC2193820C0744C00767342 /* PavingStones10_AO.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones10_AO.jpg; sourceTree = "<group>"; };
+		CEC2193A20C0744D00767342 /* PavingStones09_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones09_rgh.jpg; sourceTree = "<group>"; };
+		CEC2193B20C0744D00767342 /* PavingStones09_AO.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones09_AO.jpg; sourceTree = "<group>"; };
+		CEC2193C20C0744D00767342 /* PavingStones09_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones09_col.jpg; sourceTree = "<group>"; };
+		CEC2193D20C0744D00767342 /* PavingStones09_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones09_nrm.jpg; sourceTree = "<group>"; };
+		CEC2193E20C0744D00767342 /* PavingStones09_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = PavingStones09_disp.jpg; sourceTree = "<group>"; };
+		CEC2194020C0744D00767342 /* Fabric06_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric06_col.jpg; sourceTree = "<group>"; };
+		CEC2194120C0744D00767342 /* Fabric06_mask.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric06_mask.jpg; sourceTree = "<group>"; };
+		CEC2194220C0744D00767342 /* Fabric06_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric06_nrm.jpg; sourceTree = "<group>"; };
+		CEC2194320C0744D00767342 /* Fabric06_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric06_rgh.jpg; sourceTree = "<group>"; };
+		CEC2194420C0744D00767342 /* Fabric06_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric06_disp.jpg; sourceTree = "<group>"; };
+		CEC2194620C0744E00767342 /* Rocks01_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Rocks01_col.jpg; sourceTree = "<group>"; };
+		CEC2194720C0744E00767342 /* Rocks01_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Rocks01_nrm.jpg; sourceTree = "<group>"; };
+		CEC2194820C0744E00767342 /* Rocks01_AO.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Rocks01_AO.jpg; sourceTree = "<group>"; };
+		CEC2194920C0744E00767342 /* Rocks01_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Rocks01_rgh.jpg; sourceTree = "<group>"; };
+		CEC2194A20C0744E00767342 /* Rocks01_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Rocks01_disp.jpg; sourceTree = "<group>"; };
+		CEC2194C20C0744E00767342 /* Fabric05_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric05_rgh.jpg; sourceTree = "<group>"; };
+		CEC2194D20C0744E00767342 /* Fabric05_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric05_col.jpg; sourceTree = "<group>"; };
+		CEC2194E20C0744E00767342 /* Fabric05_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric05_disp.jpg; sourceTree = "<group>"; };
+		CEC2194F20C0744E00767342 /* Fabric05_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric05_nrm.jpg; sourceTree = "<group>"; };
+		CEC2195020C0744E00767342 /* Fabric05_mask.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Fabric05_mask.jpg; sourceTree = "<group>"; };
+		CEC2196F20C076B000767342 /* MaterialLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialLoader.h; sourceTree = "<group>"; };
+		CEC2197020C076B000767342 /* MaterialLoader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MaterialLoader.mm; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
@@ -1852,6 +1919,16 @@
 			path = "Scuffed Titanium";
 			sourceTree = "<group>";
 		};
+		CE4BF64820C28DA7001B0458 /* test_bricks */ = {
+			isa = PBXGroup;
+			children = (
+				CE4BF64920C28DA7001B0458 /* bricks2_disp.jpg */,
+				CE4BF64A20C28DA7001B0458 /* bricks2_normal.jpg */,
+				CE4BF64B20C28DA7001B0458 /* bricks2.jpg */,
+			);
+			path = test_bricks;
+			sourceTree = "<group>";
+		};
 		CE53ADD7209E2BA100749A96 /* BlueFabric */ = {
 			isa = PBXGroup;
 			children = (
@@ -2007,6 +2084,8 @@
 				CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */,
 				CE5683E22099AC5E00C827F5 /* DemoScene2.h */,
 				CE5683E32099AC5F00C827F5 /* DemoScene2.mm */,
+				CEC2196F20C076B000767342 /* MaterialLoader.h */,
+				CEC2197020C076B000767342 /* MaterialLoader.mm */,
 			);
 			path = MainViewController;
 			sourceTree = "<group>";
@@ -2086,6 +2165,13 @@
 		CE70F80E1F8F8EBD00AD9027 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CE4BF64820C28DA7001B0458 /* test_bricks */,
+				CEC2192D20C0744C00767342 /* [4K]Bricks08 */,
+				CEC2194B20C0744E00767342 /* [4K]Fabric05 */,
+				CEC2193F20C0744D00767342 /* [4K]Fabric06 */,
+				CEC2193920C0744D00767342 /* [4K]PavingStones09 */,
+				CEC2193320C0744C00767342 /* [4K]PavingStones10 */,
+				CEC2194520C0744E00767342 /* [4K]Rocks01 */,
 				CE53ADD8209E2BA800749A96 /* RedFabric */,
 				CE53ADD7209E2BA100749A96 /* BlueFabric */,
 				CE9774C31FA5D71A00F5699C /* Sponza PRB Texture Set */,
@@ -2114,7 +2200,6 @@
 			children = (
 				CE2C470820B49211004E5BE7 /* sponza.obj */,
 				CE53ADD5209E191600749A96 /* cornell_box_covered.obj */,
-				CE53ADD3209CDDF300749A96 /* sponza_2nd_uv.fbx */,
 				CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
 				CE70F8221F8F8EBD00AD9027 /* plane.obj */,
@@ -2152,10 +2237,10 @@
 		CE70F8391F8F8EBD00AD9027 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				CE70F83D1F8F8EBD00AD9027 /* NSColor+ApplicationColors.h */,
 				CE70F83A1F8F8EBD00AD9027 /* NSColor+ApplicationColors.m */,
 				CE70F83B1F8F8EBD00AD9027 /* NSNumberFormatter+CustomFormatters.h */,
 				CE70F83C1F8F8EBD00AD9027 /* NSNumberFormatter+CustomFormatters.m */,
-				CE70F83D1F8F8EBD00AD9027 /* NSColor+ApplicationColors.h */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2725,7 +2810,6 @@
 				CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */,
 				CE70F9D51F8F8EBD00AD9027 /* GLNamedObject.hpp */,
 				CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */,
-				CE70F9B51F8F8EBD00AD9027 /* GLViewport.hpp */,
 				CE70F9CB1F8F8EBD00AD9027 /* Buffers */,
 				CE70F9D61F8F8EBD00AD9027 /* Shading */,
 				CE70F9B61F8F8EBD00AD9027 /* Textures */,
@@ -2778,6 +2862,7 @@
 				CE70F9FD1F8F8EBD00AD9027 /* GLProgram.hpp */,
 				CE70F9E71F8F8EBD00AD9027 /* GLShader.cpp */,
 				CE70FA081F8F8EBD00AD9027 /* GLShader.hpp */,
+				CE70F9B51F8F8EBD00AD9027 /* GLViewport.hpp */,
 				CE70F9E81F8F8EBD00AD9027 /* GLUniform.cpp */,
 				CE70F9EA1F8F8EBD00AD9027 /* GLUniform.hpp */,
 				CE70F9EB1F8F8EBD00AD9027 /* BlinnPhong */,
@@ -3152,6 +3237,78 @@
 			path = Floor;
 			sourceTree = "<group>";
 		};
+		CEC2192D20C0744C00767342 /* [4K]Bricks08 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2192E20C0744C00767342 /* Bricks08_col.jpg */,
+				CEC2192F20C0744C00767342 /* Bricks08_nrm.jpg */,
+				CEC2193020C0744C00767342 /* Bricks08_disp.jpg */,
+				CEC2193120C0744C00767342 /* Bricks08_rgh.jpg */,
+				CEC2193220C0744C00767342 /* Bricks08_AO.jpg */,
+			);
+			path = "[4K]Bricks08";
+			sourceTree = "<group>";
+		};
+		CEC2193320C0744C00767342 /* [4K]PavingStones10 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2193420C0744C00767342 /* PavingStones10_rgh.jpg */,
+				CEC2193520C0744C00767342 /* PavingStones10_disp.jpg */,
+				CEC2193620C0744C00767342 /* PavingStones10_col.jpg */,
+				CEC2193720C0744C00767342 /* PavingStones10_nrm.jpg */,
+				CEC2193820C0744C00767342 /* PavingStones10_AO.jpg */,
+			);
+			path = "[4K]PavingStones10";
+			sourceTree = "<group>";
+		};
+		CEC2193920C0744D00767342 /* [4K]PavingStones09 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2193A20C0744D00767342 /* PavingStones09_rgh.jpg */,
+				CEC2193B20C0744D00767342 /* PavingStones09_AO.jpg */,
+				CEC2193C20C0744D00767342 /* PavingStones09_col.jpg */,
+				CEC2193D20C0744D00767342 /* PavingStones09_nrm.jpg */,
+				CEC2193E20C0744D00767342 /* PavingStones09_disp.jpg */,
+			);
+			path = "[4K]PavingStones09";
+			sourceTree = "<group>";
+		};
+		CEC2193F20C0744D00767342 /* [4K]Fabric06 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2194020C0744D00767342 /* Fabric06_col.jpg */,
+				CEC2194120C0744D00767342 /* Fabric06_mask.jpg */,
+				CEC2194220C0744D00767342 /* Fabric06_nrm.jpg */,
+				CEC2194320C0744D00767342 /* Fabric06_rgh.jpg */,
+				CEC2194420C0744D00767342 /* Fabric06_disp.jpg */,
+			);
+			path = "[4K]Fabric06";
+			sourceTree = "<group>";
+		};
+		CEC2194520C0744E00767342 /* [4K]Rocks01 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2194620C0744E00767342 /* Rocks01_col.jpg */,
+				CEC2194720C0744E00767342 /* Rocks01_nrm.jpg */,
+				CEC2194820C0744E00767342 /* Rocks01_AO.jpg */,
+				CEC2194920C0744E00767342 /* Rocks01_rgh.jpg */,
+				CEC2194A20C0744E00767342 /* Rocks01_disp.jpg */,
+			);
+			path = "[4K]Rocks01";
+			sourceTree = "<group>";
+		};
+		CEC2194B20C0744E00767342 /* [4K]Fabric05 */ = {
+			isa = PBXGroup;
+			children = (
+				CEC2194C20C0744E00767342 /* Fabric05_rgh.jpg */,
+				CEC2194D20C0744E00767342 /* Fabric05_col.jpg */,
+				CEC2194E20C0744E00767342 /* Fabric05_disp.jpg */,
+				CEC2194F20C0744E00767342 /* Fabric05_nrm.jpg */,
+				CEC2195020C0744E00767342 /* Fabric05_mask.jpg */,
+			);
+			path = "[4K]Fabric05";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3214,35 +3371,44 @@
 				CE70FA551F8F8F7400AD9027 /* RadianceConvolution.frag in Resources */,
 				AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */,
 				CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */,
+				CEC2196B20C0744E00767342 /* Fabric05_col.jpg in Resources */,
 				CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */,
+				CEC2195220C0744E00767342 /* Bricks08_nrm.jpg in Resources */,
 				CE70FA561F8F8F7400AD9027 /* CubemapRendering.vert in Resources */,
 				CE70FA571F8F8F7400AD9027 /* EquirectangularMapConversion.frag in Resources */,
 				CE4DE2251FA60CFF0067729A /* Sponza_Curtain_Blue_diffuse.tga in Resources */,
+				CEC2196820C0744E00767342 /* Rocks01_rgh.jpg in Resources */,
 				CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */,
+				CEC2196A20C0744E00767342 /* Fabric05_rgh.jpg in Resources */,
 				CE70FA581F8F8F7400AD9027 /* CubemapRendering.geom in Resources */,
 				CE70FA591F8F8F7400AD9027 /* FullScreenQuad.vert in Resources */,
 				CE4DE24E1FA60CFF0067729A /* VasePlant_roughness.tga in Resources */,
 				CE81CB161FA24F6200535020 /* blank_black.png in Resources */,
+				CEC2195120C0744E00767342 /* Bricks08_col.jpg in Resources */,
 				CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */,
 				CE4DE2291FA60CFF0067729A /* Sponza_Curtain_metallic.tga in Resources */,
 				CE70FA5A1F8F8F7400AD9027 /* FullScreenQuad.frag in Resources */,
 				CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */,
 				CE4DE2361FA60CFF0067729A /* Sponza_Fabric_Red_diffuse.tga in Resources */,
 				CE4DE22F1FA60CFF0067729A /* Sponza_Details_normal.tga in Resources */,
+				CEC2196020C0744E00767342 /* Fabric06_col.jpg in Resources */,
 				CE70FA5B1F8F8F7400AD9027 /* DirectionalDepth.vert in Resources */,
 				CE4DE2271FA60CFF0067729A /* Sponza_Curtain_Green_diffuse.tga in Resources */,
 				CE96177A1FF83E5200A5E9FC /* SurfelRendering.vert in Resources */,
 				CE70FA9D1F8F919F00AD9027 /* Main.storyboard in Resources */,
+				CEC2196220C0744E00767342 /* Fabric06_nrm.jpg in Resources */,
 				CE70FA5C1F8F8F7400AD9027 /* OmnidirectionalDepth.frag in Resources */,
 				CE4DE20C1FA60CFE0067729A /* copyright.txt in Resources */,
 				CE70FA5D1F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.vert in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
 				AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */,
+				CEC2195E20C0744E00767342 /* PavingStones09_nrm.jpg in Resources */,
 				CE70FA5E1F8F8F7400AD9027 /* DirectionalBlinnPhong.vert in Resources */,
 				CE4DE2211FA60CFE0067729A /* Sponza_Column_b_roughness.tga in Resources */,
 				CE4DE2441FA60CFF0067729A /* Sponza_Thorn_roughness.tga in Resources */,
 				CE53ADE5209E2BD600749A96 /* Fabric03_disp.jpg in Resources */,
+				CEC2196120C0744E00767342 /* Fabric06_mask.jpg in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
 				CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */,
@@ -3270,13 +3436,14 @@
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
 				ACC539322068F80100B150B5 /* GridLightProbesUpdate.geom in Resources */,
-				CE53ADD4209CDDF300749A96 /* sponza_2nd_uv.fbx in Resources */,
 				CE4DE21E1FA60CFE0067729A /* Sponza_Column_a_roughness.tga in Resources */,
 				ACC5392D2068F65700B150B5 /* GridLightProbesUpdate.frag in Resources */,
 				CE53ADDE209E2BC300749A96 /* fabric02_disp.jpg in Resources */,
+				CEC2196E20C0744E00767342 /* Fabric05_mask.jpg in Resources */,
 				CE4DE2451FA60CFF0067729A /* sponzaPBR.mtl in Resources */,
 				CE4DE24B1FA60CFF0067729A /* VaseHanging_roughness.tga in Resources */,
 				CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */,
+				CEC2195C20C0744E00767342 /* PavingStones09_AO.jpg in Resources */,
 				CE70FA641F8F8F7400AD9027 /* Skybox.frag in Resources */,
 				CE4DE2221FA60CFE0067729A /* Sponza_Column_c_diffuse.tga in Resources */,
 				CE4DE2311FA60CFF0067729A /* Sponza_Fabric_Blue_diffuse.tga in Resources */,
@@ -3297,6 +3464,7 @@
 				CE53ADD6209E191700749A96 /* cornell_box_covered.obj in Resources */,
 				CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */,
 				CE4DE2421FA60CFF0067729A /* Sponza_Thorn_diffuse.tga in Resources */,
+				CE4BF64D20C28DA8001B0458 /* bricks2_normal.jpg in Resources */,
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
 				CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */,
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
@@ -3306,50 +3474,67 @@
 				CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */,
 				CE4DE2301FA60CFF0067729A /* Sponza_Details_roughness.tga in Resources */,
 				CE4DE2101FA60CFE0067729A /* Lion_Normal.tga in Resources */,
+				CEC2196D20C0744E00767342 /* Fabric05_nrm.jpg in Resources */,
 				CE70FA731F8F8F7400AD9027 /* rustediron2_roughness.png in Resources */,
+				CEC2195320C0744E00767342 /* Bricks08_disp.jpg in Resources */,
 				CE4DE23D1FA60CFF0067729A /* Sponza_Floor_normal.tga in Resources */,
 				CE4DE24F1FA60CFF0067729A /* VaseRound_diffuse.tga in Resources */,
 				CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */,
 				CE70FA741F8F8F7400AD9027 /* rustediron2_normal.png in Resources */,
+				CEC2195F20C0744E00767342 /* PavingStones09_disp.jpg in Resources */,
 				CE4DE23C1FA60CFF0067729A /* Sponza_Floor_diffuse.tga in Resources */,
 				CE82DAF320511ABB00329E2E /* CubeRendering.vert in Resources */,
 				CE4DE2341FA60CFF0067729A /* Sponza_Fabric_Green_normal.tga in Resources */,
+				CEC2195620C0744E00767342 /* PavingStones10_rgh.jpg in Resources */,
 				CE4DE2071FA60CFE0067729A /* Background_roughness.tga in Resources */,
 				CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */,
 				CE4DE2481FA60CFF0067729A /* Vase_roughness.tga in Resources */,
+				CEC2195A20C0744E00767342 /* PavingStones10_AO.jpg in Resources */,
 				CE70FA751F8F8F7400AD9027 /* rustediron2_basecolor.png in Resources */,
 				CE5683EC2099F9E300C827F5 /* cornell_box_lux.obj in Resources */,
 				CE70FA761F8F8F7400AD9027 /* rustediron2_metallic.png in Resources */,
+				CEC2195920C0744E00767342 /* PavingStones10_nrm.jpg in Resources */,
 				AC59F2912073C6B500698E55 /* LightProbeLinksRendering.frag in Resources */,
 				CE4DE24D1FA60CFF0067729A /* VasePlant_normal.tga in Resources */,
 				CE4DE2351FA60CFF0067729A /* Sponza_Fabric_metallic.tga in Resources */,
+				CEC2196620C0744E00767342 /* Rocks01_nrm.jpg in Resources */,
 				CE4DE2411FA60CFF0067729A /* Sponza_Roof_roughness.tga in Resources */,
 				CE4DE2491FA60CFF0067729A /* VaseHanging_diffuse.tga in Resources */,
+				CE4BF64C20C28DA8001B0458 /* bricks2_disp.jpg in Resources */,
 				CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */,
 				CE4DE21A1FA60CFE0067729A /* Sponza_Ceiling_normal.tga in Resources */,
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
 				CE7A013A20B165850002D422 /* ProbeOcclusionRendering.frag in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
+				CEC2195D20C0744E00767342 /* PavingStones09_col.jpg in Resources */,
 				CE4DE2381FA60CFF0067729A /* Sponza_Fabric_roughness.tga in Resources */,
 				CE4DE2461FA60CFF0067729A /* Vase_diffuse.tga in Resources */,
 				CE4DE22A1FA60CFF0067729A /* Sponza_Curtain_Red_diffuse.tga in Resources */,
+				CEC2195B20C0744E00767342 /* PavingStones09_rgh.jpg in Resources */,
 				CE4DE2081FA60CFE0067729A /* ChainTexture_Albedo.tga in Resources */,
 				AC3C9EB92072111500F35EB3 /* GridLightProbeRendering.frag in Resources */,
+				CEC2196420C0744E00767342 /* Fabric06_disp.jpg in Resources */,
 				CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */,
+				CEC2196720C0744E00767342 /* Rocks01_AO.jpg in Resources */,
 				CE4DE2391FA60CFF0067729A /* Sponza_FlagPole_diffuse.tga in Resources */,
 				CE4DE24C1FA60CFF0067729A /* VasePlant_diffuse.tga in Resources */,
 				CE4DE2111FA60CFE0067729A /* Lion_Roughness.tga in Resources */,
+				CEC2195420C0744E00767342 /* Bricks08_rgh.jpg in Resources */,
+				CEC2196320C0744E00767342 /* Fabric06_rgh.jpg in Resources */,
 				CE4DE23F1FA60CFF0067729A /* Sponza_Roof_diffuse.tga in Resources */,
 				CE4DE20B1FA60CFE0067729A /* ChainTexture_Roughness.tga in Resources */,
 				CE4DE21F1FA60CFE0067729A /* Sponza_Column_b_diffuse.tga in Resources */,
 				CE4DE22D1FA60CFF0067729A /* Sponza_Details_diffuse.tga in Resources */,
 				AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */,
+				CEC2196920C0744E00767342 /* Rocks01_disp.jpg in Resources */,
 				ACCCC1E3203C859400905557 /* SurfelRendering.frag in Resources */,
 				CE4DE22B1FA60CFF0067729A /* Sponza_Curtain_Red_normal.tga in Resources */,
 				AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */,
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
+				CE4BF64E20C28DA8001B0458 /* bricks2.jpg in Resources */,
+				CEC2196C20C0744E00767342 /* Fabric05_disp.jpg in Resources */,
 				CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */,
 				CE4DE2471FA60CFF0067729A /* Vase_normal.tga in Resources */,
 				ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */,
@@ -3358,14 +3543,18 @@
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
 				CE53ADDF209E2BC300749A96 /* fabric02_nrm.jpg in Resources */,
 				CE7A013C20B165850002D422 /* ProbeOcclusionRendering.vert in Resources */,
+				CEC2195520C0744E00767342 /* Bricks08_AO.jpg in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
 				CE70FA7A1F8F8F7400AD9027 /* plane.obj in Resources */,
+				CEC2195820C0744E00767342 /* PavingStones10_col.jpg in Resources */,
 				AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */,
+				CEC2195720C0744E00767342 /* PavingStones10_disp.jpg in Resources */,
 				CE4DE24A1FA60CFF0067729A /* VaseHanging_normal.tga in Resources */,
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
 				CE4DE2161FA60CFE0067729A /* Sponza_Bricks_a_Albedo.tga in Resources */,
 				CE4DE2261FA60CFF0067729A /* Sponza_Curtain_Blue_normal.tga in Resources */,
 				ACE9F62320873BF3005ACC47 /* LightmapLightProbesUpdate.vert in Resources */,
+				CEC2196520C0744E00767342 /* Rocks01_col.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3409,6 +3598,7 @@
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
+				CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */,
 				CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */,
 				CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */,
 				AC859C2E1FD6BB4F00227038 /* GLCubemapFace.cpp in Sources */,

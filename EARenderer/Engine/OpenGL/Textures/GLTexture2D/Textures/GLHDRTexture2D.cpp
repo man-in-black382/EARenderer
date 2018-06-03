@@ -28,8 +28,10 @@ namespace EARenderer {
         if (!pixelData) {
             throw std::runtime_error(string_format("Unable to read texture file: %s", imagePath.c_str()));
         }
-        
-        initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, GL_RGB16F, GL_RGB, GL_FLOAT, pixelData);
+
+        // The default min filter is GL_NEAREST_MIPMAP_LINEAR, so by default you have to provide texture mipmaps, otherwise, texture is invalid.
+        initialize(Size2D(width, height), Filter::Bilinear, WrapMode::Repeat, GL_RGB16F, GL_RGB, GL_FLOAT, pixelData);
+
         stbi_image_free(pixelData);
     };
 

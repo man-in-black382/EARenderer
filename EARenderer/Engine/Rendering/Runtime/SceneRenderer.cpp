@@ -257,7 +257,7 @@ namespace EARenderer {
 
         mSurfelLightingShader.bind();
         mSurfelLightingShader.setLight(directionalLight);
-        mSurfelLightingShader.setMultibounceEnabled(mSettings.lightMultibounceEnabled);
+        mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
@@ -329,6 +329,7 @@ namespace EARenderer {
         
         mCookTorranceShader.bind();
         mCookTorranceShader.ensureSamplerValidity([&]() {
+            mCookTorranceShader.setSettings(mSettings);
             mCookTorranceShader.setCamera(*(mScene->camera()));
             mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
@@ -367,7 +368,7 @@ namespace EARenderer {
 //        GLViewport(viewportRect).apply();
 //
 //        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(*mDiffuseProbeData->occlusionMapAtlas());
+//            mFSQuadShader.setTexture(mScene->skybox()->equirectangularMap());
 //        });
 //
 //        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

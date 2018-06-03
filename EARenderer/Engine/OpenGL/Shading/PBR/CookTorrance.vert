@@ -31,6 +31,8 @@ out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInLightSpace[kMaxCascades];
 out vec4 vPosInCameraSpace;
+out vec3 vPosInTangentSpace;
+out vec3 vCameraPosInTangentSpace;
 
 // Functions
 
@@ -54,16 +56,21 @@ mat3 orthogonalTBN() {
 
 void main() {
     vec4 worldPosition = uModelMat * iPosition;
-    
+
+    mat3 TBN = TBN();
+    mat3 inverseTBN = transpose(TBN);
+
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vLightmapCoords = iLightmapCoords;
     vWorldPosition = worldPosition.xyz;
-    vTBN = orthogonalTBN();
+    vTBN = TBN;
+    vPosInCameraSpace = uCameraSpaceMat * worldPosition;
+    vPosInTangentSpace = inverseTBN * worldPosition.xyz;
+    vCameraPosInTangentSpace = inverseTBN * uCameraPosition;
     
     for (int i = 0; i < uNumberOfCascades; ++i) {
         vPosInLightSpace[i] = uLightSpaceMatrices[i] * worldPosition;
     }
-    
-    vPosInCameraSpace = uCameraSpaceMat * worldPosition;
+
     gl_Position = vPosInCameraSpace;
 }

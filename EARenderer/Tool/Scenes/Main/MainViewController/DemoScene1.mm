@@ -11,6 +11,7 @@
 #import "MeshInstance.hpp"
 #import "SurfelGenerator.hpp"
 #import "Measurement.hpp"
+#import "MaterialLoader.h"
 
 #import <string>
 #import <memory>
@@ -74,6 +75,20 @@
     EARenderer::ID _25_MaterialID = [self load_Material25_ToPool:resourcePool];
     EARenderer::ID roof_MaterialID = [self load_Roof_MaterialToPool:resourcePool];
 
+    EARenderer::ID bricks08_MaterialID = [MaterialLoader load_bricks08_MaterialToPool:resourcePool];
+
+    EARenderer::ID fabric05_MaterialID = [MaterialLoader load_fabric05_MaterialToPool:resourcePool];
+
+    EARenderer::ID fabric06_MaterialID = [MaterialLoader load_fabric06_MaterialToPool:resourcePool];
+
+    EARenderer::ID rocks01_MaterialID = [MaterialLoader load_rocks01_MaterialToPool:resourcePool];
+
+    EARenderer::ID pavingStone09_MaterialID = [MaterialLoader load_pavingStones09_MaterialToPool:resourcePool];
+
+    EARenderer::ID pavingStone10_MaterialID = [MaterialLoader load_pavingStones10_MaterialToPool:resourcePool];
+
+    EARenderer::ID testBricks_MaterialID = [MaterialLoader load_testBricks_MaterialToPool:resourcePool];
+
     printf("Materials loaded\n\n");
     
     // Instances
@@ -83,84 +98,82 @@
     sponzaTransform.translation.y = -2.0;
     sponzaTransform.scale *= 30.0;
     sponzaInstance.setTransformation(sponzaTransform);
-    
+
+//    EARenderer::MeshInstance planeInstance(sponzaMeshID);
+//    EARenderer::Transformation planeTransform = planeInstance.transformation();
+//    sponzaTransform.translation.y = -2.0;
+//    sponzaTransform.scale *= 30.0;
+//    planeInstance.setTransformation(planeTransform);
+
     auto& sponzaMesh = resourcePool->meshes[sponzaMeshID];
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto& subMesh = sponzaMesh.subMeshes()[subMeshID];
         
 //        printf("Material %s\n", subMesh.materialName().c_str());
 
-        if (subMesh.materialName() == "leaf") {
-            sponzaInstance.setMaterialIDForSubMeshID(leaf_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "vase_round") {
-            sponzaInstance.setMaterialIDForSubMeshID(vaseRound_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "Material_57") {
-            sponzaInstance.setMaterialIDForSubMeshID(_57_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "Material__298") {
-            sponzaInstance.setMaterialIDForSubMeshID(_25_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "bricks") {
-            sponzaInstance.setMaterialIDForSubMeshID(bricks_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "arch") {
-            sponzaInstance.setMaterialIDForSubMeshID(arch_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "ceiling") {
-            sponzaInstance.setMaterialIDForSubMeshID(ceiling_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "column_a") {
-            sponzaInstance.setMaterialIDForSubMeshID(columnA_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "floor") {
-            sponzaInstance.setMaterialIDForSubMeshID(floor_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "column_c") {
-            sponzaInstance.setMaterialIDForSubMeshID(columnC_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "details") {
-            sponzaInstance.setMaterialIDForSubMeshID(details_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "column_b") {
-            sponzaInstance.setMaterialIDForSubMeshID(columnB_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "flagpole") {
-            sponzaInstance.setMaterialIDForSubMeshID(flagpole_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_e") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricE_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_d") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricD_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_a") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricA_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_g") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricG_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_c") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricC_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_f") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricF_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "chain") {
-            sponzaInstance.setMaterialIDForSubMeshID(chain_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "vase_hanging") {
-            sponzaInstance.setMaterialIDForSubMeshID(vaseHanging_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "vase") {
-            sponzaInstance.setMaterialIDForSubMeshID(vase_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "Material__25") {
-            sponzaInstance.setMaterialIDForSubMeshID(_25_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "roof") {
-            sponzaInstance.setMaterialIDForSubMeshID(roof_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "Material__47") {
-            sponzaInstance.setMaterialIDForSubMeshID(bricks_MaterialID, subMeshID);
-        } else {
-            printf("missed material '%s'\n", subMesh.materialName().c_str());
-        }
+        sponzaInstance.setMaterialIDForSubMeshID(rocks01_MaterialID, subMeshID);
+
+//        if (subMesh.materialName() == "leaf") {
+//            sponzaInstance.setMaterialIDForSubMeshID(leaf_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "vase_round") {
+//            sponzaInstance.setMaterialIDForSubMeshID(vaseRound_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "Material_57") {
+//            sponzaInstance.setMaterialIDForSubMeshID(_57_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "Material__298") {
+//            sponzaInstance.setMaterialIDForSubMeshID(_25_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "bricks") {
+//            sponzaInstance.setMaterialIDForSubMeshID(bricks_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "arch") {
+//            sponzaInstance.setMaterialIDForSubMeshID(arch_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "ceiling") {
+//            sponzaInstance.setMaterialIDForSubMeshID(ceiling_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "column_a") {
+//            sponzaInstance.setMaterialIDForSubMeshID(columnA_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "floor") {
+//            sponzaInstance.setMaterialIDForSubMeshID(pavingStone09_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "column_c") {
+//            sponzaInstance.setMaterialIDForSubMeshID(columnC_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "details") {
+//            sponzaInstance.setMaterialIDForSubMeshID(details_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "column_b") {
+//            sponzaInstance.setMaterialIDForSubMeshID(columnB_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "flagpole") {
+//            sponzaInstance.setMaterialIDForSubMeshID(flagpole_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_e") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricE_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_d") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricD_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_a") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricA_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_g") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricG_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_c") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricC_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "fabric_f") {
+//            sponzaInstance.setMaterialIDForSubMeshID(fabricF_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "chain") {
+//            sponzaInstance.setMaterialIDForSubMeshID(chain_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "vase_hanging") {
+//            sponzaInstance.setMaterialIDForSubMeshID(vaseHanging_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "vase") {
+//            sponzaInstance.setMaterialIDForSubMeshID(vase_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "Material__25") {
+//            sponzaInstance.setMaterialIDForSubMeshID(_25_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "roof") {
+//            sponzaInstance.setMaterialIDForSubMeshID(roof_MaterialID, subMeshID);
+//        } else if (subMesh.materialName() == "Material__47") {
+//            sponzaInstance.setMaterialIDForSubMeshID(bricks_MaterialID, subMeshID);
+//        } else {
+//            printf("missed material '%s'\n", subMesh.materialName().c_str());
+//        }
     }
     
-    EARenderer::MeshInstance ironSphereInstance(sphereMeshID);
-    ironSphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
-    
-    EARenderer::MeshInstance scuffedTitaniumSphereInstance(sphereMeshID);
-    scuffedTitaniumSphereInstance.setMaterialIDForAllSubmeshes(scuffedTitaniumMaterialID);
-    EARenderer::Transformation t = scuffedTitaniumSphereInstance.transformation();
-    t.translation.x = -0.5;
-    scuffedTitaniumSphereInstance.setTransformation(t);
-    
-    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
-//    EARenderer::ID planeInstanceID = scene->meshInstances().insert(planeInstance);
-//    scene->addMeshInstanceWithIDAsStatic(planeInstanceID);
-//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(patchyCementSphereInstance));
-//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(scuffedTitaniumSphereInstance));
+    EARenderer::MeshInstance sphereInstance(sphereMeshID);
+    sphereInstance.setMaterialIDForAllSubmeshes(rocks01_MaterialID);
 
-    _sphereMeshInstanceID = scene->meshInstances().insert(ironSphereInstance);
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
+
+    _sphereMeshInstanceID = scene->meshInstances().insert(sphereInstance);
     scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
 
     // Skybox
@@ -168,7 +181,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(15.0, 15.0, 15.0));
+    scene->directionalLight().setColor(EARenderer::Color(60.0, 50.0, 50.0));
 
     scene->calculateGeometricProperties();
 

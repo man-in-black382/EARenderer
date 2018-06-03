@@ -16,19 +16,22 @@ namespace EARenderer {
                              const std::string& normalMapPath,
                              const std::string& metallicMapPath,
                              const std::string& roughnessMapPath,
-                             const std::string& ambientOcclusionMapPath)
+                             const std::string& ambientOcclusionMapPath,
+                             const std::string& displacementMapPath)
     :
     mAlbedoMap(albedoMapPath.length() != 0 ? new GLLDRTexture2D(albedoMapPath) : nullptr),
     mNormalMap(normalMapPath.length() != 0 ? new GLLDRTexture2D(normalMapPath) : nullptr),
     mMetallicMap(metallicMapPath.length() != 0 ? new GLLDRTexture2D(metallicMapPath) : nullptr),
     mRoughnessMap(roughnessMapPath.length() != 0 ? new GLLDRTexture2D(roughnessMapPath) : nullptr),
-    mAmbientOcclusionMap(ambientOcclusionMapPath.length() != 0 ? new GLLDRTexture2D(ambientOcclusionMapPath) : nullptr)
+    mAmbientOcclusionMap(ambientOcclusionMapPath.length() != 0 ? new GLLDRTexture2D(ambientOcclusionMapPath) : nullptr),
+    mDisplacementMap(displacementMapPath.length() != 0 ? new GLLDRTexture2D(displacementMapPath) : nullptr)
     {
         if (albedoMapPath.length()) mAlbedoMap->generateMipmaps();
         if (normalMapPath.length()) mNormalMap->generateMipmaps();
         if (metallicMapPath.length()) mMetallicMap->generateMipmaps();
         if (roughnessMapPath.length()) mRoughnessMap->generateMipmaps();
         if (ambientOcclusionMapPath.length()) mAmbientOcclusionMap->generateMipmaps();
+        if (displacementMapPath.length()) mDisplacementMap->generateMipmaps();
     }
     
     PBRMaterial::PBRMaterial(PBRMaterial&& that)
@@ -37,13 +40,15 @@ namespace EARenderer {
     mNormalMap(std::move(that.mNormalMap)),
     mMetallicMap(std::move(that.mMetallicMap)),
     mRoughnessMap(std::move(that.mRoughnessMap)),
-    mAmbientOcclusionMap(std::move(that.mAmbientOcclusionMap))
+    mAmbientOcclusionMap(std::move(that.mAmbientOcclusionMap)),
+    mDisplacementMap(std::move(that.mDisplacementMap))
     {
         that.mAlbedoMap = nullptr;
         that.mNormalMap = nullptr;
         that.mMetallicMap = nullptr;
         that.mRoughnessMap = nullptr;
         that.mAmbientOcclusionMap = nullptr;
+        that.mDisplacementMap = nullptr;
     }
     
     PBRMaterial& PBRMaterial::operator=(PBRMaterial rhs) {
@@ -57,6 +62,7 @@ namespace EARenderer {
         delete mMetallicMap;
         delete mRoughnessMap;
         delete mAmbientOcclusionMap;
+        delete mDisplacementMap;
     }
     
 #pragma mark - Swap
@@ -67,6 +73,7 @@ namespace EARenderer {
         std::swap(mMetallicMap, that.mMetallicMap);
         std::swap(mRoughnessMap, that.mRoughnessMap);
         std::swap(mAmbientOcclusionMap, that.mAmbientOcclusionMap);
+        std::swap(mDisplacementMap, that.mDisplacementMap);
     }
     
     void swap(PBRMaterial& lhs, PBRMaterial& rhs) {
@@ -93,6 +100,10 @@ namespace EARenderer {
     
     const GLLDRTexture2D* PBRMaterial::ambientOcclusionMap() const {
         return mAmbientOcclusionMap;
+    }
+
+    const GLLDRTexture2D* PBRMaterial::displacementMap() const {
+        return mDisplacementMap;
     }
     
 }

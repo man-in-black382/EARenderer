@@ -60,6 +60,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
 @property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
 
+@property (assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
+
 // DEBUG
 @property (strong, nonatomic) id<DemoSceneComposing> demoScene;
 
@@ -152,33 +154,39 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
 
-//    EARenderer::Measurement::ExecutionTime("Frame preparation took", [&]() {
-        self.sceneRenderer->prepareFrame();
-//        glFinish();
-//    });
+    self.sceneRenderer->prepareFrame();
 
-//    EARenderer::Measurement::ExecutionTime("Mesh rendering took", [&]() {
+    if (self.renderingSettings.meshSettings.meshRenderingEnabled) {
         self.sceneRenderer->renderMeshes();
-//        glFinish();
-//    });
+    }
 
-    self.sceneRenderer->renderDiffuseGridProbes(0.05);
-//    self.sceneRenderer->renderProbeOcclusionMap(500);
+    if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
+        self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
+    }
 
-//    self.sceneRenderer->renderSkybox();
+    if (self.renderingSettings.skyboxRenderingEnabled) {
+        self.sceneRenderer->renderSkybox();
+    }
 
-//    printf("\n");
-//    self.sceneRenderer->renderDiffuseLightmapProbes(0.05);
-//    self.sceneRenderer->renderLinksForDiffuseProbe(320);
-//    self.surfelRenderer->render(EARenderer::SurfelRenderer::Mode::Default, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+    if (self.renderingSettings.surfelSettings.renderingEnabled) {
+        self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
+    }
+
+    if (self.renderingSettings.triangleRenderingEnabled) {
+        self.triangleRenderer->render();
+    }
+
+    if (self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex >= 0) {
+        self.sceneRenderer->renderLinksForDiffuseProbe(self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex);
+    }
+
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
-//    self.axesRenderer->render();
-//    self.triangleRenderer->render();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 
-    glFinish();
+    self.axesRenderer->render();
+
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;
 
@@ -220,6 +228,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings
 {
+    self.renderingSettings = settings;
     self.sceneRenderer->setRenderingSettings(settings);
 }
 

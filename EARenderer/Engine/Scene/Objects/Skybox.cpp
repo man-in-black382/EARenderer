@@ -16,7 +16,7 @@ namespace EARenderer {
     
     Skybox::Skybox(const std::string& equirectangularImage)
     :
-    mEquirectangularMap(GLHDRTexture2D(equirectangularImage))
+    mEquirectangularMap(equirectangularImage)
     { }
     
 #pragma mark - Getters

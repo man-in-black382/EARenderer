@@ -24,13 +24,15 @@ namespace EARenderer {
         GLLDRTexture2D *mMetallicMap = nullptr;
         GLLDRTexture2D *mRoughnessMap = nullptr;
         GLLDRTexture2D *mAmbientOcclusionMap = nullptr;
+        GLLDRTexture2D *mDisplacementMap = nullptr;
         
         public:
         PBRMaterial(const std::string& albedoMapPath = "",
                     const std::string& normalMapPath = "",
                     const std::string& metallicMapPath = "",
                     const std::string& roughnessMapPath = "",
-                    const std::string& ambientOcclusionMapPath = "");
+                    const std::string& ambientOcclusionMapPath = "",
+                    const std::string& displacementMapPath = "");
         
         PBRMaterial(const PBRMaterial& that) = delete;
         PBRMaterial(PBRMaterial&& that);
@@ -44,7 +46,7 @@ namespace EARenderer {
         const GLLDRTexture2D* metallicMap() const;
         const GLLDRTexture2D* roughnessMap() const;
         const GLLDRTexture2D* ambientOcclusionMap() const;
-        
+        const GLLDRTexture2D* displacementMap() const;
     };
     
     void swap(PBRMaterial& lhs, PBRMaterial& rhs);

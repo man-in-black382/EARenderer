@@ -30,7 +30,6 @@ namespace EARenderer {
         void setCubemap(const GLTextureCubemap& cubemap);
         void setCubemap(const GLDepthTextureCubemap& cubemap);
         void setCubemap(const GLHDRTextureCubemap& cubemap);
-        void setCubemap(const GLLDRTextureCubemap& cubemap);
         void setEquirectangularMap(const GLHDRTexture2D& equireqMap);
     };
     

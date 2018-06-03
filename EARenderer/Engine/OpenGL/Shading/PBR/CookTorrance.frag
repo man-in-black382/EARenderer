@@ -28,6 +28,8 @@ in vec3 vWorldPosition;
 in mat3 vTBN;
 in vec4 vPosInLightSpace[kMaxCascades];
 in vec4 vPosInCameraSpace;
+in vec3 vPosInTangentSpace;
+in vec3 vCameraPosInTangentSpace;
 
 // Uniforms
 
@@ -53,7 +55,8 @@ struct Material {
     sampler2D normalMap;
     sampler2D metallicMap;
     sampler2D roughnessMap;
-//    sampler2D AOMap; // Ambient occlusion
+    sampler2D AOMap; // Ambient occlusion
+    sampler2D displacementMap; // Parallax occlusion displacements
 };
 
 struct SH {
@@ -82,6 +85,8 @@ uniform Spotlight uSpotlight;
 uniform Material uMaterial;
 
 uniform int uLightType;
+uniform uint uSettingsBitmask;
+uniform float uParallaxMappingStrength;
 
 // Shadow mapping
 uniform sampler2DArray uShadowMapArray;
@@ -116,6 +121,13 @@ vec3 AlignWithTexelCenters(vec3 texCoords) {
     vec3 reductionFactor = vec3(gridResolution - 1) / vec3(gridResolution);
     return texCoords * reductionFactor + halfTexel;
 }
+
+// Settings
+bool areMaterialsEnabled()          { return bool((uSettingsBitmask >> 4u) & 1u); }
+bool isGlobalIlluminationEnabled()  { return bool((uSettingsBitmask >> 3u) & 1u); }
+bool isLightMultibounceEnabled()    { return bool((uSettingsBitmask >> 2u) & 1u); }
+bool isMeshRenderingEnabled()       { return bool((uSettingsBitmask >> 1u) & 1u); }
+bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u); }
 
 ////////////////////////////////////////////////////////////
 /////////////////// Spherical harmonics ////////////////////
@@ -443,7 +455,7 @@ float GeometrySmith(float NdotL, float NdotV, float roughness) {
     return ggx1 * ggx2;
 }
 
-vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, vec3 radiance, vec3 indirectRadiance, float shadow) {
+vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, float ao, vec3 radiance, vec3 indirectRadiance, float shadow) {
     float NdotL     = max(dot(N, L), 0.0);
     float NdotV     = max(dot(N, V), 0.0);
     
@@ -464,7 +476,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     vec3 shadowedDirectRadiance = radiance * (1.0 - shadow) * NdotL;
 
     // Lambertian diffuse component with indirect light applied
-    vec3 diffuse    = Kd * (albedo / PI) * (shadowedDirectRadiance + indirectRadiance);
+    vec3 diffuse    = Kd * (albedo / PI) * (shadowedDirectRadiance + (indirectRadiance * ao));
 
     // Specular component is not affected by indirect light (probably will by a reflection probe later)
     specular        *= shadowedDirectRadiance;
@@ -577,49 +589,117 @@ vec3 LinearFromSRGB(vec3 sRGB) {
     return pow(sRGB, vec3(2.2));
 }
 
-vec3 FetchAlbedoMap() {
+vec3 FetchAlbedoMap(vec2 texCoords) {
 //    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 10).rgb);
-    return LinearFromSRGB(texture(uMaterial.albedoMap, vTexCoords.st).rgb);
+    return LinearFromSRGB(texture(uMaterial.albedoMap, texCoords).rgb);
+//    return texture(uMaterial.albedoMap, vTexCoords.st).rgb;
 }
 
-vec3 FetchNormalMap() {
-    vec3 normal = texture(uMaterial.normalMap, vTexCoords.st).xyz;
+vec3 FetchNormalMap(vec2 texCoords) {
+    vec3 normal = texture(uMaterial.normalMap, texCoords).xyz;
     return normalize(vTBN * (normal * 2.0 - 1.0));
 }
 
-float FetchMetallicMap() {
-    return texture(uMaterial.metallicMap, vTexCoords.st).r;
+float FetchMetallicMap(vec2 texCoords) {
+    return texture(uMaterial.metallicMap, texCoords).r;
 }
 
-float FetchRoughnessMap() {
-    return texture(uMaterial.roughnessMap, vTexCoords.st).r;
+float FetchRoughnessMap(vec2 texCoords) {
+    return texture(uMaterial.roughnessMap, texCoords).r;
 }
 
-//float FetchAOMap() {
-//    return texture(uMaterial.AOMap, vTexCoords.st).r;
-//}
+float FetchAOMap(vec2 texCoords) {
+    return texture(uMaterial.AOMap, texCoords).r;
+}
+
+float FetchDisplacementMap() {
+    return texture(uMaterial.displacementMap, vTexCoords.st).r;
+}
+
+////////////////////////////////////////////////////////////
+////////////// Parallax Occlusion Mapping //////////////////
+////////////////////////////////////////////////////////////
+
+vec2 DisplacedTextureCoords() {
+    vec2 texCoords = vTexCoords.st;
+    vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
+
+//     number of depth layers
+    const float minLayers = 8;
+    const float maxLayers = 32;
+    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+    // calculate the size of each layer
+    float layerDepth = 1.0 / numLayers;
+    // depth of current layer
+    float currentLayerDepth = 0.0;
+    // the amount to shift the texture coordinates per layer (from vector P)
+    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
+
+    vec2 deltaTexCoords = P / numLayers;
+
+    // get initial values
+    vec2  currentTexCoords     = texCoords;
+    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+
+    while(currentLayerDepth < currentDepthMapValue)
+    {
+        // shift texture coordinates along direction of P
+        currentTexCoords -= deltaTexCoords;
+        // get depthmap value at current texture coordinates
+        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+        // get depth of next layer
+        currentLayerDepth += layerDepth;
+    }
+
+    // get texture coordinates before collision (reverse operations)
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+    // get depth after and before collision for linear interpolation
+    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+
+    // interpolation of texture coordinates
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+//    if(finalTexCoords.x > 1.0 || finalTexCoords.y > 1.0 || finalTexCoords.x < 0.0 || finalTexCoords.y < 0.0) {
+//        discard;
+//    }
+
+    return finalTexCoords;
+}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
-    float roughness         = FetchRoughnessMap();
+    vec2 displacedTexCoords = isParallaxMappingEnabled() ? DisplacedTextureCoords() : vTexCoords.st;
+
+    float roughness         = FetchRoughnessMap(displacedTexCoords);
     
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
     float roughness2        = roughness * roughness;
     
-    float metallic          = FetchMetallicMap();
-//    float ao                = FetchAOMap();
-    vec3 albedo             = FetchAlbedoMap();
-    vec3 N                  = FetchNormalMap();
+    float metallic          = FetchMetallicMap(displacedTexCoords);
+    float ao                = FetchAOMap(displacedTexCoords);
+    vec3 albedo             = FetchAlbedoMap(displacedTexCoords);
+    vec3 N                  = FetchNormalMap(displacedTexCoords);
     vec3 V                  = normalize(uCameraPosition - vWorldPosition);
     vec3 L                  = vec3(0.0);
     vec3 H                  = normalize(L + V);
     vec3 radiance           = vec3(0.0);
     float shadow            = 0.0;
+
+    if (!areMaterialsEnabled()) {
+        albedo = vec3(1.0);
+        ao = 1.0;
+        roughness = 1.0;
+        roughness2 = 1.0;
+        metallic = 0.0;
+    }
 
     // Analytical lighting
     
@@ -637,14 +717,18 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, indirectRadiance, shadow);
+    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
+
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
 
     // Image based lighting
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
     vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    oFragColor = vec4(correctColor, 1.0);
-
-//    oFragColor = vec4(ReinhardToneMapAndGammaCorrect(indirectRadiance), 1.0);
+    if (uSettingsBitmask > 0) {
+        oFragColor = vec4(correctColor, 1.0);
+    } else {
+        oFragColor = vec4(1.0, 1.0, 0.0, 1.0);
+    }
 }

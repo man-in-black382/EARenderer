@@ -18,9 +18,7 @@ namespace EARenderer {
     GLSLCookTorrance::GLSLCookTorrance()
     :
     GLProgram("CookTorrance.vert", "CookTorrance.frag", "")
-    {
-//        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldEvaluateSphericalHarmonics")>).location(), GL_FALSE);
-    }
+    { }
     
 #pragma mark - Setters
     
@@ -51,7 +49,8 @@ namespace EARenderer {
         if (material.normalMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.normalMap")>, *material.normalMap()); }
         if (material.metallicMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.metallicMap")>, *material.metallicMap()); }
         if (material.roughnessMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.roughnessMap")>, *material.roughnessMap()); }
-//        if (material.ambientOcclusionMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.AOMap")>, *material.ambientOcclusionMap()); }
+        if (material.ambientOcclusionMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.AOMap")>, *material.ambientOcclusionMap()); }
+        if (material.displacementMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.displacementMap")>, *material.displacementMap()); }
     }
     
     void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
@@ -107,6 +106,12 @@ namespace EARenderer {
 
     void GLSLCookTorrance::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
+    }
+
+
+    void GLSLCookTorrance::setSettings(const RenderingSettings& settings) {
+        glUniform1ui(uniformByNameCRC32(uint32_constant<ctcrc32("uSettingsBitmask")>).location(), settings.meshSettings.booleanBitmask());
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uParallaxMappingStrength")>).location(), settings.meshSettings.parallaxMappingStrength);
     }
 
 }

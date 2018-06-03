@@ -18,6 +18,8 @@ namespace EARenderer {
         float height = 0.f;
         
         static const Size2D& zero();
+        static const Size2D& unit();
+
         Size2D() = default;
         Size2D(float w, float h);
         Size2D(float side);

@@ -24,6 +24,7 @@
 #include "FrustumCascades.hpp"
 #include "LightProbe.hpp"
 #include "AxisAlignedBox3D.hpp"
+#include "RenderingSettings.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -61,6 +62,7 @@ namespace EARenderer {
         void setCubemapTexCoordsMap(const GLLDRTextureCubemap& map);
         void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
+        void setSettings(const RenderingSettings& settings);
     };
     
 }
