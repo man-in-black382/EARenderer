@@ -8,6 +8,8 @@
 
 #include "Color.hpp"
 
+#include <glm/detail/func_exponential.hpp>
+
 namespace EARenderer {
     
 #pragma mark - Singletons
@@ -76,6 +78,11 @@ namespace EARenderer {
     
     glm::vec4 Color::rgba() const {
         return { r, g, b, a };
+    }
+
+    Color Color::linear() const {
+        glm::vec3 linearRGB = glm::pow(rgb(), glm::vec3(2.2));
+        return { linearRGB.r, linearRGB.g, linearRGB.b, a };
     }
     
 }

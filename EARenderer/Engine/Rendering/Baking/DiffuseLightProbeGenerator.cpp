@@ -41,6 +41,14 @@ namespace EARenderer {
             float solidAngle = surfelSolidAngle(surfel, probe);
 
             if (solidAngle > 0.0) {
+
+//                float Co = (albedo.r - albedo.b) / 2.0;
+//                float t = albedo.b + Co;
+//                float Cg = (albedo.g - t) / 2.0;
+//                float Y = t + Cg;
+//
+//                glm::vec3 YCoCg(Y, Co, Cg);
+
                 projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo, solidAngle);
             }
         }

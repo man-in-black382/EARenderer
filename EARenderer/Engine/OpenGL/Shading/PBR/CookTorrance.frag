@@ -177,6 +177,20 @@ SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH sevent
     return result;
 }
 
+// t = Y − Cg
+// G = Y + Cg
+// B = t − Co
+// R = t + Co
+
+vec3 RGB_From_YCoCg(vec3 YCoCg) {
+    float t = YCoCg.x - YCoCg.z;
+    float g = YCoCg.x + YCoCg.z;
+    float b = t - YCoCg.y;
+    float r = t + YCoCg.y;
+
+    return vec3(r, g, b);
+}
+
 SH UnpackSH(vec3 texCoords) {
     SH sh;
 
@@ -199,6 +213,16 @@ SH UnpackSH(vec3 texCoords) {
     sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
     sh.L20  = vec3(shMap5Data.gba);
     sh.L22  = vec3(shMap6Data.rgb);
+
+//    sh.L00  = RGB_From_YCoCg(sh.L00);
+//    sh.L11  = RGB_From_YCoCg(sh.L11);
+//    sh.L10  = RGB_From_YCoCg(sh.L10);
+//    sh.L1_1 = RGB_From_YCoCg(sh.L1_1);
+//    sh.L21  = RGB_From_YCoCg(sh.L21);
+//    sh.L2_1 = RGB_From_YCoCg(sh.L2_1);
+//    sh.L2_2 = RGB_From_YCoCg(sh.L2_2);
+//    sh.L20  = RGB_From_YCoCg(sh.L20);
+//    sh.L22  = RGB_From_YCoCg(sh.L22);
 
     return sh;
 }
@@ -662,10 +686,6 @@ vec2 DisplacedTextureCoords() {
     float weight = afterDepth / (afterDepth - beforeDepth);
     vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
 
-//    if(finalTexCoords.x > 1.0 || finalTexCoords.y > 1.0 || finalTexCoords.x < 0.0 || finalTexCoords.y < 0.0) {
-//        discard;
-//    }
-
     return finalTexCoords;
 }
 
@@ -726,9 +746,5 @@ void main() {
     vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    if (uSettingsBitmask > 0) {
-        oFragColor = vec4(correctColor, 1.0);
-    } else {
-        oFragColor = vec4(1.0, 1.0, 0.0, 1.0);
-    }
+    oFragColor = vec4(correctColor, 1.0);
 }

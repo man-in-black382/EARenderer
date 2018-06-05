@@ -33,6 +33,13 @@ namespace EARenderer {
         
         glm::vec3 rgb() const;
         glm::vec4 rgba() const;
+
+        /**
+         Assumes that current color is a sRGB color and linearizes it
+
+         @return linear color value
+         */
+        Color linear() const;
     };
     
 }

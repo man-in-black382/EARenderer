@@ -439,8 +439,6 @@ void main() {
     vec3 radiance  = vec3(0.0);
     float shadow   = 0.0;
 
-    albedo = LinearFromSRGB(albedo);
-
     // Analytical lighting
 
     if (uLightType == kLightTypeDirectional) {

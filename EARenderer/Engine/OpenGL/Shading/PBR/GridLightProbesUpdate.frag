@@ -123,10 +123,49 @@ SH UnpackSH(int surfelClusterIndex) {
     return sh;
 }
 
+// Co = (R − B) / 2
+// t = B + Co
+// Cg = (G − t) / 2
+// Y = t + Cg
+
+// t = Y − Cg
+// G = Y + Cg
+// B = t − Co
+// R = t + Co
+
+vec3 YCoCg_From_RGB(vec3 rgb) {
+    float Co = (rgb.r - rgb.b) / 2.0;
+    float t = rgb.b + Co;
+    float Cg = (rgb.g - t) / 2.0;
+    float Y = t + Cg;
+
+    return vec3(Y, Co, Cg);
+}
+
 // Pack SH coefficients into texels of 7 3D textures
 // since minimum of 7 4-component textures are required
 // to store 3rd order spherical harmonics for 3 color channels
 void PackSHToRenderTargets(SH sh) {
+
+//    SH SH_YCoCg;
+//    SH_YCoCg.L00  = YCoCg_From_RGB(sh.L00);
+//    SH_YCoCg.L11  = YCoCg_From_RGB(sh.L11);
+//    SH_YCoCg.L10  = YCoCg_From_RGB(sh.L10);
+//    SH_YCoCg.L1_1 = YCoCg_From_RGB(sh.L1_1);
+//    SH_YCoCg.L21  = YCoCg_From_RGB(sh.L21);
+//    SH_YCoCg.L2_1 = YCoCg_From_RGB(sh.L2_1);
+//    SH_YCoCg.L2_2 = YCoCg_From_RGB(sh.L2_2);
+//    SH_YCoCg.L20  = YCoCg_From_RGB(sh.L20);
+//    SH_YCoCg.L22  = YCoCg_From_RGB(sh.L22);
+//
+//    oFragData0 = vec4(SH_YCoCg.L00.rgb, SH_YCoCg.L11.r);
+//    oFragData1 = vec4(SH_YCoCg.L11.gb,  SH_YCoCg.L10.rg);
+//    oFragData2 = vec4(SH_YCoCg.L10.b,   SH_YCoCg.L1_1.rgb);
+//    oFragData3 = vec4(SH_YCoCg.L21.rgb, SH_YCoCg.L2_1.r);
+//    oFragData4 = vec4(SH_YCoCg.L2_1.gb, SH_YCoCg.L2_2.rg);
+//    oFragData5 = vec4(SH_YCoCg.L2_2.b,  SH_YCoCg.L20.rgb);
+//    oFragData6 = vec4(SH_YCoCg.L22.rgb, 0.0);
+
     oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
     oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
     oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
@@ -150,10 +189,6 @@ int FlattenTexCoords() {
     int index = uProbesGridResolution.y * uProbesGridResolution.x * int(z) + uProbesGridResolution.x * int(y) + int(x);
     return index;
 }
-
-//Y = 0.25·R+0.5·G+0.25·B
-//Co = 0.5·R−0.5·B (5)
-//Cg = −0.25·R+0.5·G−0.25·B
 
 // Schematically, the update of a single light probe on the GPU works like this:
 // • Read light probe metadata to determine which projections are used.
