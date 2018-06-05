@@ -132,7 +132,8 @@
         [self pathForResource:@"Fabric03_nrm.jpg"],
         [self pathForResource:@"blank_black.png"],
         [self pathForResource:@"Fabric03_rgh.jpg"],
-        [self pathForResource:@"blank_white.jpg"]
+        [self pathForResource:@"blank_white.jpg"],
+        [self pathForResource:@"Fabric03_disp.jpg"]
     });
 }
 
@@ -143,7 +144,8 @@
         [self pathForResource:@"fabric02_nrm.jpg"],
         [self pathForResource:@"blank_black.png"],
         [self pathForResource:@"fabric02_rgh.jpg"],
-        [self pathForResource:@"blank_white.jpg"]
+        [self pathForResource:@"blank_white.jpg"],
+        [self pathForResource:@"fabric02_disp.jpg"]
     });
 }
 

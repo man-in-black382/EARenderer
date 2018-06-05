@@ -151,6 +151,10 @@ int FlattenTexCoords() {
     return index;
 }
 
+//Y = 0.25·R+0.5·G+0.25·B
+//Co = 0.5·R−0.5·B (5)
+//Cg = −0.25·R+0.5·G−0.25·B
+
 // Schematically, the update of a single light probe on the GPU works like this:
 // • Read light probe metadata to determine which projections are used.
 // • Loop over all the projections and for every projection:
