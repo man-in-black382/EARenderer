@@ -13,15 +13,17 @@ layout(location = 6) out vec4 oFragData6;
 // Input
 
 in vec2 vTexCoords;
+in float vLayer;
 
 // Uniforms
+
+uniform ivec3 uProbesGridResolution;
 
 uniform samplerBuffer uProjectionClusterSphericalHarmonics;
 uniform usamplerBuffer uProjectionClusterIndices;
 uniform usamplerBuffer uProbeProjectionsMetadata;
 
 uniform sampler2D uSurfelClustersLuminanceMap;
-uniform usampler2D uLightmapProbeIndicesMap;
 
 // Types
 
@@ -121,21 +123,28 @@ SH UnpackSH(int surfelClusterIndex) {
     return sh;
 }
 
-// Pack SH coefficients into texels of 7 layers of 2D texture array
-// since minimum of 7 4-component layers are required
-// to store 3rd order spherical harmonics for 3 color channels
-void PackSHToRenderTargets(SH sh) {
-    // White and green
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+// Co = (R − B) / 2
+// t = B + Co
+// Cg = (G − t) / 2
+// Y = t + Cg
 
+// t = Y − Cg
+// G = Y + Cg
+// B = t − Co
+// R = t + Co
+
+vec3 YCoCg_From_RGB(vec3 rgb) {
+    float Co = (rgb.r - rgb.b) / 2.0;
+    float t = rgb.b + Co;
+    float Cg = (rgb.g - t) / 2.0;
+    float Y = t + Cg;
+
+    return vec3(Y, Co, Cg);
+}
+
+// Pack SH coefficients into texels of 3D textures
+// Use 3 SH bands for each color channel
+void WriteSH_333_ToRenderTargets(SH sh) {
     oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
     oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
     oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
@@ -143,6 +152,39 @@ void PackSHToRenderTargets(SH sh) {
     oFragData4 = vec4(sh.L2_1.gb, sh.L2_2.rg);
     oFragData5 = vec4(sh.L2_2.b, sh.L20.rgb);
     oFragData6 = vec4(sh.L22.rgb, 0.0);
+}
+
+// Pack SH coefficients into texels of 3D textures
+// Use 3 SH bands for first channel and 2 bands for second and third.
+void WriteSH_322_ToRenderTargets(SH sh) {
+    oFragData0 = vec4(sh.L00.r, sh.L11.r, sh.L10.r, sh.L1_1.r);
+    oFragData1 = vec4(sh.L21.r, sh.L2_1.r, sh.L2_2.r, sh.L20.r);
+    oFragData2 = vec4(sh.L22.r, /* 1st channel SH end */ sh.L00.g, sh.L11.g, sh.L10.g);
+    oFragData3 = vec4(sh.L1_1.g, /* 2nd channel SH end */ sh.L00.b, sh.L11.b, sh.L10.b);
+    oFragData4 = vec4(sh.L1_1.b, /* 3rd channel SH end */ 0.0, 0.0, 0.0);
+}
+
+// Pack SH coefficients into texels of 3D textures
+// Use 3 SH bands for first channel and 1 band for second and third.
+void WriteSH_311_ToRenderTargets(SH sh) {
+    oFragData0 = vec4(sh.L00.r, sh.L11.r, sh.L10.r, sh.L1_1.r);
+    oFragData1 = vec4(sh.L21.r, sh.L2_1.r, sh.L2_2.r, sh.L20.r);
+    oFragData2 = vec4(sh.L22.r, /* 1st channel SH end */ sh.L00.g, /* 2dn channel SH end */ sh.L00.b, /* 3rd channel SH end */ 0.0);
+}
+
+// Transform normalized texture corrdinates into a 1-dimensional integer index
+int FlattenTexCoords() {
+    // Texture coordinate interpolation gives us values at texel centers, not edges
+    // and so we're accounting for that by adding half a texel size to x and y
+    vec3 halfTexel = 1.0 / vec3(uProbesGridResolution) / 2.0;
+    vec3 resolution = vec3(uProbesGridResolution - 1);
+    float x = (vTexCoords.x + halfTexel.x) * resolution.x;
+    float y = (vTexCoords.y + halfTexel.y) * resolution.y;
+    // vLayer is not normalized, therefore we're using it as-is
+    float z = vLayer;
+
+    int index = uProbesGridResolution.y * uProbesGridResolution.x * int(z) + uProbesGridResolution.x * int(y) + int(x);
+    return index;
 }
 
 // Schematically, the update of a single light probe on the GPU works like this:
@@ -155,33 +197,14 @@ void PackSHToRenderTargets(SH sh) {
 // – Add the product of the SH and the luminance to the result SHs.
 //
 void main() {
-    ivec2 lightMapSize = textureSize(uLightmapProbeIndicesMap, 0);
+    int metadataIndex = FlattenTexCoords() * 2; // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
 
-    // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
-    int probeIndex = int(texture(uLightmapProbeIndicesMap, vTexCoords));
-    int metadataIndex = probeIndex * 2;
-
-    if (probeIndex < 0 || probeIndex >= lightMapSize.x * lightMapSize.y) {
-        SH sh;
-        sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-        sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-        sh.L10  = vec3(0.0);
-        sh.L1_1 = vec3(0.0);
-        sh.L21  = vec3(0.0);
-        sh.L2_1 = vec3(0.0);
-        sh.L2_2 = vec3(0.0);
-        sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-        sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
-        PackSHToRenderTargets(sh);
-        return;
-    }
+    uint projectionGroupOffset = texelFetch(uProbeProjectionsMetadata, metadataIndex).r;
+    uint projectionGroupSize = texelFetch(uProbeProjectionsMetadata, metadataIndex + 1).r;
 
     ivec2 luminanceMapSize = textureSize(uSurfelClustersLuminanceMap, 0);
     int luminanceMapWidth = luminanceMapSize.x;
     int luminanceMapHeight = luminanceMapSize.y;
-
-    uint projectionGroupOffset = texelFetch(uProbeProjectionsMetadata, metadataIndex).r;
-    uint projectionGroupSize = texelFetch(uProbeProjectionsMetadata, metadataIndex + 1).r;
 
     SH resultingSH = ZeroSH();
 
@@ -200,5 +223,5 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
-    PackSHToRenderTargets(resultingSH);
+    WriteSH_311_ToRenderTargets(resultingSH);
 }

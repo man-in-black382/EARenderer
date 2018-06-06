@@ -121,8 +121,6 @@ namespace EARenderer {
     void SceneRenderer::setupGLState() {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
@@ -224,6 +222,26 @@ namespace EARenderer {
         }
     }
 
+    void SceneRenderer::performDepthPrepass() {
+        bindDefaultFramebuffer();
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        mDepthPrepassShader.bind();
+        mDepthPrepassShader.setCamera(*mScene->camera());
+
+        for (ID instanceID : mScene->meshInstances()) {
+            auto& instance = mScene->meshInstances()[instanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+            mDepthPrepassShader.setModelMatrix(instance.transformation().modelMatrix());
+
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                subMesh.draw();
+            }
+        }
+    }
+
     void SceneRenderer::renderShadowMapsForDirectionalLights() {
         // Fill shadow map
         mDirectionalDepthShader.bind();
@@ -317,27 +335,26 @@ namespace EARenderer {
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
-
-        bindDefaultFramebuffer();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        performDepthPrepass();
     }
 
     void SceneRenderer::renderMeshes() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
 
         bindDefaultFramebuffer();
+        glClear(GL_COLOR_BUFFER_BIT);
         
         mCookTorranceShader.bind();
+
+        mCookTorranceShader.setSettings(mSettings);
+        mCookTorranceShader.setCamera(*(mScene->camera()));
+        mCookTorranceShader.setLight(directionalLight);
+        mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
+
         mCookTorranceShader.ensureSamplerValidity([&]() {
-            mCookTorranceShader.setSettings(mSettings);
-            mCookTorranceShader.setCamera(*(mScene->camera()));
-            mCookTorranceShader.setLight(directionalLight);
             mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
-            mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
-//            mCookTorranceShader.setDiffuseProbeOcclusionMapsAtlas(*mDiffuseProbeData->occlusionMapAtlas());
-//            mCookTorranceShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
-            mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
@@ -358,21 +375,6 @@ namespace EARenderer {
                 subMesh.draw();
             }
         }
-
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(Size2D(600, 600));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mScene->skybox()->equirectangularMap());
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

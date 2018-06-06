@@ -24,6 +24,7 @@
 #include "DiffuseLightProbeData.hpp"
 #include "RenderingSettings.hpp"
 
+#include "GLSLDepthPrepass.hpp"
 #include "GLSLCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLDirectionalDepth.hpp"
@@ -68,7 +69,8 @@ namespace EARenderer {
         DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
         GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
         FrustumCascades mShadowCascades;
-    
+
+        GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalDepth mDirectionalDepthShader;
         GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
@@ -111,6 +113,7 @@ namespace EARenderer {
 
         void bindDefaultFramebuffer();
 
+        void performDepthPrepass();
         void renderShadowMapsForDirectionalLights();
         void relightSurfels();
         void averageSurfelClusterLuminances();

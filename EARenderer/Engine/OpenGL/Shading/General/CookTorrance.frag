@@ -133,6 +133,26 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
 
+SH ZeroSH() {
+    SH result;
+
+    result.L00  = vec3(0.0);
+
+    result.L1_1 = vec3(0.0);
+    result.L10  = vec3(0.0);
+    result.L11  = vec3(0.0);
+
+    result.L2_2 = vec3(0.0);
+    result.L2_1 = vec3(0.0);
+    result.L21  = vec3(0.0);
+
+    result.L20  = vec3(0.0);
+
+    result.L22  = vec3(0.0);
+
+    return result;
+}
+
 SH ScaleSH(SH sh, vec3 scale) {
     SH result;
 
@@ -191,7 +211,7 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     return vec3(r, g, b);
 }
 
-SH UnpackSH(vec3 texCoords) {
+SH UnpackSH_333(vec3 texCoords) {
     SH sh;
 
     ivec3 iTexCoords = ivec3(texCoords);
@@ -214,15 +234,53 @@ SH UnpackSH(vec3 texCoords) {
     sh.L20  = vec3(shMap5Data.gba);
     sh.L22  = vec3(shMap6Data.rgb);
 
-//    sh.L00  = RGB_From_YCoCg(sh.L00);
-//    sh.L11  = RGB_From_YCoCg(sh.L11);
-//    sh.L10  = RGB_From_YCoCg(sh.L10);
-//    sh.L1_1 = RGB_From_YCoCg(sh.L1_1);
-//    sh.L21  = RGB_From_YCoCg(sh.L21);
-//    sh.L2_1 = RGB_From_YCoCg(sh.L2_1);
-//    sh.L2_2 = RGB_From_YCoCg(sh.L2_2);
-//    sh.L20  = RGB_From_YCoCg(sh.L20);
-//    sh.L22  = RGB_From_YCoCg(sh.L22);
+    return sh;
+}
+
+SH UnpackSH_322(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+
+    // Y
+    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
+    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
+    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+
+    // Co
+    sh.L00.g = shMap2Data.g; sh.L11.g = shMap2Data.b; sh.L10.g = shMap2Data.a; sh.L1_1.g = shMap3Data.r;
+
+    // Cg
+    sh.L00.b = shMap3Data.g; sh.L11.b = shMap3Data.b; sh.L10.b = shMap3Data.a; sh.L1_1.b = shMap4Data.r;
+
+    return sh;
+}
+
+SH UnpackSH_311(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+
+    // Y
+    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
+    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
+    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+
+    // Co
+    sh.L00.g = shMap2Data.g;
+
+    // Cg
+    sh.L00.b = shMap2Data.b;
 
     return sh;
 }
@@ -333,14 +391,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH(cp0);
-    SH sh1 = UnpackSH(cp1);
-    SH sh2 = UnpackSH(cp2);
-    SH sh3 = UnpackSH(cp3);
-    SH sh4 = UnpackSH(cp4);
-    SH sh5 = UnpackSH(cp5);
-    SH sh6 = UnpackSH(cp6);
-    SH sh7 = UnpackSH(cp7);
+    SH sh0 = UnpackSH_311(cp0);
+    SH sh1 = UnpackSH_311(cp1);
+    SH sh2 = UnpackSH_311(cp2);
+    SH sh3 = UnpackSH_311(cp3);
+    SH sh4 = UnpackSH_311(cp4);
+    SH sh5 = UnpackSH_311(cp5);
+    SH sh6 = UnpackSH_311(cp6);
+    SH sh7 = UnpackSH_311(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal);
     float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
@@ -416,7 +474,8 @@ float SHRadiance(SH sh, vec3 direction, int component) {
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
     SH sh = TriLerpSurroundingProbes(direction);
-    return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+    vec3 color = vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
+    return color;
 }
 
 ////////////////////////////////////////////////////////////
@@ -614,9 +673,7 @@ vec3 LinearFromSRGB(vec3 sRGB) {
 }
 
 vec3 FetchAlbedoMap(vec2 texCoords) {
-//    return LinearFromSRGB(textureLod(uMaterial.albedoMap, vTexCoords.st, 10).rgb);
     return LinearFromSRGB(texture(uMaterial.albedoMap, texCoords).rgb);
-//    return texture(uMaterial.albedoMap, vTexCoords.st).rgb;
 }
 
 vec3 FetchNormalMap(vec2 texCoords) {
@@ -648,7 +705,7 @@ vec2 DisplacedTextureCoords() {
     vec2 texCoords = vTexCoords.st;
     vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
 
-//     number of depth layers
+//  number of depth layers
     const float minLayers = 8;
     const float maxLayers = 32;
     float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
@@ -737,6 +794,7 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
+    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
@@ -746,5 +804,5 @@ void main() {
     vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    oFragColor = vec4(correctColor, 1.0);
+    oFragColor = vec4(indirectRadiance, 1.0);
 }

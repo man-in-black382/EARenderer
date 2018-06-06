@@ -82,10 +82,10 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
     }
 
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {

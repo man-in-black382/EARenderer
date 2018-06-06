@@ -215,7 +215,7 @@ namespace EARenderer {
 
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
-        return Surfel(surfelCandidate.position, surfelCandidate.normal, albedoLinear.rgb(), uv, singleSurfelArea);
+        return Surfel(surfelCandidate.position, surfelCandidate.normal, albedoLinear.YCoCg(), uv, singleSurfelArea);
     }
     
     void SurfelGenerator::generateSurflesOnMeshInstance(const MeshInstance& instance) {
@@ -415,7 +415,7 @@ namespace EARenderer {
         // Y = t + Cg
 
         glm::vec3 color0(1.0, 1.0, 0.0);
-        glm::vec3 color1(2.0, 2.0, 0.0);
+        glm::vec3 color1(2.0, 2.0, 2.0);
         glm::vec3 color2(5.0, 5.0, 5.0);
 
         float co0 = (color0.r - color0.g) / 2.0;

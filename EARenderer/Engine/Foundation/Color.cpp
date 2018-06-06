@@ -80,6 +80,14 @@ namespace EARenderer {
         return { r, g, b, a };
     }
 
+    glm::vec3 Color::YCoCg() const {
+        float Co = (r - b) / 2.0;
+        float t = b + Co;
+        float Cg = (g - t) / 2.0;
+        float Y = t + Cg;
+        return { Y, Co, Cg };
+    }
+
     Color Color::linear() const {
         glm::vec3 linearRGB = glm::pow(rgb(), glm::vec3(2.2));
         return { linearRGB.r, linearRGB.g, linearRGB.b, a };
