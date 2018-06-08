@@ -184,6 +184,13 @@ namespace EARenderer {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
+    void GLFramebuffer::attachTexture(const GLLDRTexture3D& texture,
+                                      ColorAttachment colorAttachment,
+                                      uint16_t mipLevel)
+    {
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+    }
+
     void GLFramebuffer::attachTextureLayer(const GLHDRTexture2DArray& textures,
                                            uint16_t layer,
                                            ColorAttachment colorAttachment,

@@ -55,8 +55,8 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
     }
 
     void GLSLSurfelLighting::setWorldBoundingBox(const AxisAlignedBox3D& box) {

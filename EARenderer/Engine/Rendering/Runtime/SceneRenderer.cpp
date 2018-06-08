@@ -55,6 +55,11 @@ namespace EARenderer {
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
+    mGridProbesSHIntegerMaps {
+        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+    },
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
@@ -135,13 +140,17 @@ namespace EARenderer {
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
+//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
+
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
     }
 
 #pragma mark - Rendering
@@ -354,7 +363,8 @@ namespace EARenderer {
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
-            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
+//            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
+            mCookTorranceShader.setGridProbesSHIntegerTextures(mGridProbesSHIntegerMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 

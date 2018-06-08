@@ -408,33 +408,6 @@ namespace EARenderer {
     }
 
     std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
-
-        // Co = (R − B) / 2
-        // t = B + Co
-        // Cg = (G − t) / 2
-        // Y = t + Cg
-
-        glm::vec3 color0(1.0, 1.0, 0.0);
-        glm::vec3 color1(2.0, 2.0, 2.0);
-        glm::vec3 color2(5.0, 5.0, 5.0);
-
-        float co0 = (color0.r - color0.g) / 2.0;
-        float t0 = color0.b + co0;
-        float cg0 = (color0.g - t0) / 2.0;
-        float y0 = t0 + cg0;
-
-        float co1 = (color1.r - color1.g) / 2.0;
-        float t1 = color1.b + co1;
-        float cg1 = (color1.g - t1) / 2.0;
-        float y1 = t1 + cg1;
-
-        float co2 = (color2.r - color2.g) / 2.0;
-        float t2 = color2.b + co2;
-        float cg2 = (color2.g - t2) / 2.0;
-        float y2 = t2 + cg2;
-
-
-
         mSurfelDataContainer = std::make_shared<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);

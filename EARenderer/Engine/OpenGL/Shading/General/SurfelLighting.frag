@@ -95,6 +95,14 @@ struct vec8 {
     float value4; float value5; float value6; float value7;
 };
 
+SH ZeroSH() {
+    SH result;
+    result.L00  = vec3(0.0); result.L1_1 = vec3(0.0); result.L10  = vec3(0.0);
+    result.L11  = vec3(0.0); result.L2_2 = vec3(0.0); result.L2_1 = vec3(0.0);
+    result.L21  = vec3(0.0); result.L20  = vec3(0.0); result.L22  = vec3(0.0);
+    return result;
+}
+
 SH ScaleSH(SH sh, vec3 scale) {
     SH result;
 
@@ -139,7 +147,16 @@ SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH sevent
     return result;
 }
 
-SH UnpackSH(vec3 texCoords) {
+vec3 RGB_From_YCoCg(vec3 YCoCg) {
+    float t = YCoCg.x - YCoCg.z;
+    float g = YCoCg.x + YCoCg.z;
+    float b = t - YCoCg.y;
+    float r = t + YCoCg.y;
+
+    return vec3(r, g, b);
+}
+
+SH UnpackSH_333(vec3 texCoords) {
     SH sh;
 
     ivec3 iTexCoords = ivec3(texCoords);
@@ -161,6 +178,31 @@ SH UnpackSH(vec3 texCoords) {
     sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
     sh.L20  = vec3(shMap5Data.gba);
     sh.L22  = vec3(shMap6Data.rgb);
+
+    return sh;
+}
+
+SH UnpackSH_322(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+
+    // Y
+    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
+    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
+    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+
+    // Co
+    sh.L00.g = shMap2Data.g; sh.L11.g = shMap2Data.b; sh.L10.g = shMap2Data.a; sh.L1_1.g = shMap3Data.r;
+
+    // Cg
+    sh.L00.b = shMap3Data.g; sh.L11.b = shMap3Data.b; sh.L10.b = shMap3Data.a; sh.L1_1.b = shMap4Data.r;
 
     return sh;
 }
@@ -241,14 +283,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal, vec3 worldPosition) {
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH(cp0);
-    SH sh1 = UnpackSH(cp1);
-    SH sh2 = UnpackSH(cp2);
-    SH sh3 = UnpackSH(cp3);
-    SH sh4 = UnpackSH(cp4);
-    SH sh5 = UnpackSH(cp5);
-    SH sh6 = UnpackSH(cp6);
-    SH sh7 = UnpackSH(cp7);
+    SH sh0 = UnpackSH_322(cp0);
+    SH sh1 = UnpackSH_322(cp1);
+    SH sh2 = UnpackSH_322(cp2);
+    SH sh3 = UnpackSH_322(cp3);
+    SH sh4 = UnpackSH_322(cp4);
+    SH sh5 = UnpackSH_322(cp5);
+    SH sh6 = UnpackSH_322(cp6);
+    SH sh7 = UnpackSH_322(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal, worldPosition);
     float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal, worldPosition);
@@ -461,7 +503,9 @@ void main() {
     // in the spherical harmonics precomputation step.
 
     vec3 diffuseRadiance = radiance * NdotL;
-    vec3 indirectRadiance = max(vec3(0.0), EvaluateSphericalHarmonics(N, position));
+    
+    vec3 indirectRadiance = RGB_From_YCoCg(EvaluateSphericalHarmonics(N, position));
+    indirectRadiance = max(vec3(0.0), indirectRadiance);
 
     // Apply shadow factor
     diffuseRadiance *= 1.0 - shadow;

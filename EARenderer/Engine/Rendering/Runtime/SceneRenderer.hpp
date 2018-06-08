@@ -48,6 +48,7 @@
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
+#include "GLLDRTexture3D.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLBufferTexture.hpp"
 
@@ -97,6 +98,7 @@ namespace EARenderer {
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
         std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
+        std::array<GLLDRTexture3D, 3> mGridProbesSHIntegerMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;

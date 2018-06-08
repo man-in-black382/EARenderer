@@ -95,13 +95,17 @@ uniform int uNumberOfCascades;
 
 // Shperical harmonics
 
-uniform sampler3D uGridSHMap0;
-uniform sampler3D uGridSHMap1;
-uniform sampler3D uGridSHMap2;
-uniform sampler3D uGridSHMap3;
-uniform sampler3D uGridSHMap4;
-uniform sampler3D uGridSHMap5;
-uniform sampler3D uGridSHMap6;
+//uniform sampler3D uGridSHMap0;
+//uniform sampler3D uGridSHMap1;
+//uniform sampler3D uGridSHMap2;
+//uniform sampler3D uGridSHMap3;
+//uniform sampler3D uGridSHMap4;
+//uniform sampler3D uGridSHMap5;
+//uniform sampler3D uGridSHMap6;
+
+uniform usampler3D uGridSHMap0;
+uniform usampler3D uGridSHMap1;
+uniform usampler3D uGridSHMap2;
 
 uniform samplerBuffer uProbePositions;
 
@@ -135,21 +139,9 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 
 SH ZeroSH() {
     SH result;
-
-    result.L00  = vec3(0.0);
-
-    result.L1_1 = vec3(0.0);
-    result.L10  = vec3(0.0);
-    result.L11  = vec3(0.0);
-
-    result.L2_2 = vec3(0.0);
-    result.L2_1 = vec3(0.0);
-    result.L21  = vec3(0.0);
-
-    result.L20  = vec3(0.0);
-
-    result.L22  = vec3(0.0);
-
+    result.L00  = vec3(0.0); result.L1_1 = vec3(0.0); result.L10  = vec3(0.0);
+    result.L11  = vec3(0.0); result.L2_2 = vec3(0.0); result.L2_1 = vec3(0.0);
+    result.L21  = vec3(0.0); result.L20  = vec3(0.0); result.L22  = vec3(0.0);
     return result;
 }
 
@@ -197,11 +189,6 @@ SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH sevent
     return result;
 }
 
-// t = Y − Cg
-// G = Y + Cg
-// B = t − Co
-// R = t + Co
-
 vec3 RGB_From_YCoCg(vec3 YCoCg) {
     float t = YCoCg.x - YCoCg.z;
     float g = YCoCg.x + YCoCg.z;
@@ -211,79 +198,125 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     return vec3(r, g, b);
 }
 
-SH UnpackSH_333(vec3 texCoords) {
-    SH sh;
+vec2 UnpackSnorm2x16(uint package) {
+    const float range = 1000.0;
+    const float base = 32767.0;
 
-    ivec3 iTexCoords = ivec3(texCoords);
+    uint uFirst = package >> 16;
+    uint uSecond = package & 0x0000FFFFu;
 
-    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
-    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
-    vec4 shMap5Data = texelFetch(uGridSHMap5, iTexCoords, 0);
-    vec4 shMap6Data = texelFetch(uGridSHMap6, iTexCoords, 0);
+    float first = (float(uFirst) / base) * range;
+    float second = (float(uSecond) / base) * range;
 
-    sh.L00  = vec3(shMap0Data.rgb);
-    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
-    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
-    sh.L1_1 = vec3(shMap2Data.gba);
-    sh.L21  = vec3(shMap3Data.rgb);
-    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
-    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
-    sh.L20  = vec3(shMap5Data.gba);
-    sh.L22  = vec3(shMap6Data.rgb);
-
-    return sh;
+    return vec2(first, second);
 }
 
-SH UnpackSH_322(vec3 texCoords) {
+SH UnpackSH_322_HalfPacked(vec3 texCoords) {
     SH sh = ZeroSH();
 
     ivec3 iTexCoords = ivec3(texCoords);
 
-    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
-    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r);
+    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b);
+    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r);
+    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b);
+    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r);
 
     // Y
-    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
-    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
-    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
+    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
+    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
 
     // Co
-    sh.L00.g = shMap2Data.g; sh.L11.g = shMap2Data.b; sh.L10.g = shMap2Data.a; sh.L1_1.g = shMap3Data.r;
+    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y; sh.L1_1.g = pair6.x;
 
     // Cg
-    sh.L00.b = shMap3Data.g; sh.L11.b = shMap3Data.b; sh.L10.b = shMap3Data.a; sh.L1_1.b = shMap4Data.r;
+    sh.L00.b  = pair6.x;  sh.L11.b  = pair7.x;  sh.L10.b  = pair7.y; sh.L1_1.b = pair8.x;
 
     return sh;
 }
 
-SH UnpackSH_311(vec3 texCoords) {
-    SH sh = ZeroSH();
+//SH UnpackSH_333(vec3 texCoords) {
+//    SH sh;
+//
+//    ivec3 iTexCoords = ivec3(texCoords);
+//
+//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+//    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+//    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+//    vec4 shMap5Data = texelFetch(uGridSHMap5, iTexCoords, 0);
+//    vec4 shMap6Data = texelFetch(uGridSHMap6, iTexCoords, 0);
+//
+//    sh.L00  = vec3(shMap0Data.rgb);
+//    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
+//    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
+//    sh.L1_1 = vec3(shMap2Data.gba);
+//    sh.L21  = vec3(shMap3Data.rgb);
+//    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
+//    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
+//    sh.L20  = vec3(shMap5Data.gba);
+//    sh.L22  = vec3(shMap6Data.rgb);
+//
+//    return sh;
+//}
 
-    ivec3 iTexCoords = ivec3(texCoords);
+//SH UnpackSH_322(vec3 texCoords) {
+//    SH sh = ZeroSH();
+//
+//    ivec3 iTexCoords = ivec3(texCoords);
+//
+//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+//    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+//    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
+//
+//    // Y
+//    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
+//    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
+//    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+//
+//    // Co
+//    sh.L00.g = shMap2Data.g; sh.L11.g = shMap2Data.b; sh.L10.g = shMap2Data.a; sh.L1_1.g = shMap3Data.r;
+//
+//    // Cg
+//    sh.L00.b = shMap3Data.g; sh.L11.b = shMap3Data.b; sh.L10.b = shMap3Data.a; sh.L1_1.b = shMap4Data.r;
+//
+//    return sh;
+//}
 
-    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-
-    // Y
-    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
-    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
-    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
-
-    // Co
-    sh.L00.g = shMap2Data.g;
-
-    // Cg
-    sh.L00.b = shMap2Data.b;
-
-    return sh;
-}
+//SH UnpackSH_311(vec3 texCoords) {
+//    SH sh = ZeroSH();
+//
+//    ivec3 iTexCoords = ivec3(texCoords);
+//
+//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+//
+//    // Y
+//    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
+//    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
+//    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
+//
+//    // Co
+//    sh.L00.g = shMap2Data.g;
+//
+//    // Cg
+//    sh.L00.b = shMap2Data.b;
+//
+//    return sh;
+//}
 
 vec3 CubeSampleCoords(vec3 sampleVector) {
     int majorAxis = 0;
@@ -391,14 +424,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_311(cp0);
-    SH sh1 = UnpackSH_311(cp1);
-    SH sh2 = UnpackSH_311(cp2);
-    SH sh3 = UnpackSH_311(cp3);
-    SH sh4 = UnpackSH_311(cp4);
-    SH sh5 = UnpackSH_311(cp5);
-    SH sh6 = UnpackSH_311(cp6);
-    SH sh7 = UnpackSH_311(cp7);
+    SH sh0 = UnpackSH_322_HalfPacked(cp0);
+    SH sh1 = UnpackSH_322_HalfPacked(cp1);
+    SH sh2 = UnpackSH_322_HalfPacked(cp2);
+    SH sh3 = UnpackSH_322_HalfPacked(cp3);
+    SH sh4 = UnpackSH_322_HalfPacked(cp4);
+    SH sh5 = UnpackSH_322_HalfPacked(cp5);
+    SH sh6 = UnpackSH_322_HalfPacked(cp6);
+    SH sh7 = UnpackSH_322_HalfPacked(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal);
     float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
@@ -805,4 +838,12 @@ void main() {
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
     oFragColor = vec4(indirectRadiance, 1.0);
+
+//    uvec4 shMap0Data = texelFetch(uGridSHMap0, ivec3(0), 0);
+//    uvec4 shMap1Data = texelFetch(uGridSHMap1, ivec3(0), 0);
+//    uvec4 shMap2Data = texelFetch(uGridSHMap2, ivec3(0), 0);
+//
+//    vec2 testPair = UnpackSnorm2x16(shMap2Data.r);
+//
+//    oFragColor = vec4(testPair, 0.0, 1.0);
 }

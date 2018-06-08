@@ -23,6 +23,7 @@
 #include "GLHDRTexture2DArray.hpp"
 #include "GLDepthRenderbuffer.hpp"
 #include "GLHDRTexture3D.hpp"
+#include "GLLDRTexture3D.hpp"
 
 #include "Size2D.hpp"
 #include "Range.hpp"
@@ -88,6 +89,10 @@ namespace EARenderer {
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLHDRTexture3D& texture,
+                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           uint16_t mipLevel = 0);
+
+        void attachTexture(const GLLDRTexture3D& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Attachment0,
                            uint16_t mipLevel = 0);
 
