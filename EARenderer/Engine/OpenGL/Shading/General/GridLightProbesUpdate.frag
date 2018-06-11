@@ -140,9 +140,9 @@ uint PackSnorm2x16(float first, float second) {
     uint iFirst = uint(first / range * base);
     uint iSecond = uint(second / range * base);
 
-    uint firstSignMask = iFirst & (1 << 31); // Leave only sign bit
+    uint firstSignMask = iFirst & (1u << 31); // Leave only sign bit
 
-    uint secondSignMask = iSecond & (1 << 31); // Leave only sign bit
+    uint secondSignMask = iSecond & (1u << 31); // Leave only sign bit
     secondSignMask >>= 16; // Move sign mask by 16 since second value will be stored in LSB of the final uint
 
     // Move uFirst into MS bits
@@ -203,9 +203,6 @@ void WriteSH_322_HalfPacked_ToRenderTargets(SH sh) {
     oFragData0 = uvec4(pair0, pair1, pair2, pair3);
     oFragData1 = uvec4(pair4, pair5, pair6, pair7);
     oFragData2 = uvec4(pair8, 0, 0, 0);
-
-//    uint testPair = PackSnorm2x16(0.8, 0.5);
-//    oFragData2 = uvec4(testPair, 0, 0, 0);
 }
 
 // Transform normalized texture corrdinates into a 1-dimensional integer index

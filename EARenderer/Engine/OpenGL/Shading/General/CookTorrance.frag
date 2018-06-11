@@ -202,13 +202,27 @@ vec2 UnpackSnorm2x16(uint package) {
     const float range = 1000.0;
     const float base = 32767.0;
 
+    // Unpack encoded floats into individual variables
     uint uFirst = package >> 16;
     uint uSecond = package & 0x0000FFFFu;
 
-    float first = (float(uFirst) / base) * range;
-    float second = (float(uSecond) / base) * range;
+    // Extract sign bits
+    uint firstSignMask = uFirst & (1u << 15);
+    uint secondSignMask = uSecond & (1u << 15);
 
-    return vec2(first, second);
+    // If sign bit indicates negativity, fill MS 16 bits with 1s
+    uFirst |= firstSignMask != 0 ? 0xFFFF0000u : 0x0u;
+    uSecond |= secondSignMask != 0 ? 0xFFFF0000u : 0x0u;
+
+    // Now get signed integer representation
+    int iFirst = int(uFirst);
+    int iSecond = int(uSecond);
+
+    // At last, convert integers back to floats using range and base
+    float fFirst = (float(iFirst) / base) * range;
+    float fSecond = (float(iSecond) / base) * range;
+
+    return vec2(fFirst, fSecond);
 }
 
 SH UnpackSH_322_HalfPacked(vec3 texCoords) {
@@ -845,5 +859,10 @@ void main() {
 //
 //    vec2 testPair = UnpackSnorm2x16(shMap2Data.r);
 //
-//    oFragColor = vec4(testPair, 0.0, 1.0);
+//    if (testPair.y < -0.4 && testPair.y > -0.6) {
+//        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+//    } else {
+//        oFragColor = vec4(testPair.x, 0.0, 0.0, 1.0);
+//    }
+
 }

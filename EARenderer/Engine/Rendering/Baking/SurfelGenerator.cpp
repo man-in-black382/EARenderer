@@ -408,6 +408,59 @@ namespace EARenderer {
     }
 
     std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
+
+        const float range = 1000.0;
+        const float base = 32767.0;
+
+        float first = 347.8;
+        float second = -678.5;
+
+        uint32_t packed = 0;
+        uint32_t iFirst = uint32_t(first / range * base);
+        uint32_t iSecond = uint32_t(second / range * base);
+
+        uint32_t firstSignMask = iFirst & (1 << 31); // Leave only sign bit
+
+        uint32_t secondSignMask = iSecond & (1 << 31); // Leave only sign bit
+        secondSignMask >>= 16; // Move sign mask by 16 since second value will be stored in LSB of the final uint
+
+        // Move uFirst into MS bits
+        packed |= iFirst;
+        packed <<= 16;
+        packed |= firstSignMask; // Set sign bit
+
+        // Move uSecond into LS bits
+        packed |= iSecond & 0x0000FFFFu;
+        packed |= secondSignMask; // Set sign bit
+
+///////////////////// Convert back
+
+        uint32_t uFirstResult = packed >> 16;
+        uint32_t uSecondResult = packed & 0x0000FFFFu;
+
+        uint32_t firstSignMaskResult = uFirstResult & (1 << 15);
+        uint32_t secondSignMaskResult = uSecondResult & (1 << 15);
+
+//        uFirstResult &= ~(1 << 15);
+//        uSecondResult &= ~(1 << 15);
+
+        if (firstSignMaskResult) {
+            uFirstResult |= 0xFFFF0000u;
+        }
+
+        if (secondSignMaskResult) {
+            uSecondResult |= 0xFFFF0000u;
+        }
+
+        int32_t intFirstResult = (int32_t)uFirstResult;
+        int32_t intSecondResult = (int32_t)uSecondResult;
+
+        first = (float(intFirstResult) / base) * range;
+        second = (float(intSecondResult) / base) * range;
+
+
+///////////////////////
+
         mSurfelDataContainer = std::make_shared<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
