@@ -88,10 +88,11 @@ namespace EARenderer {
 //        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
     }
 
-    void GLSLCookTorrance::setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 3>& textures) {
+    void GLSLCookTorrance::setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 4>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
     }
 
     void GLSLCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {

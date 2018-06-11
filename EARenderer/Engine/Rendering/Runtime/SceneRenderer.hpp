@@ -98,7 +98,7 @@ namespace EARenderer {
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
         std::array<GLHDRTexture3D, 7> mGridProbesSHMaps;
-        std::array<GLLDRTexture3D, 3> mGridProbesSHIntegerMaps;
+        std::array<GLLDRTexture3D, 4> mGridProbesSHIntegerMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
         GLDepthTexture2DArray mShadowMaps;

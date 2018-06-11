@@ -106,6 +106,7 @@ uniform int uNumberOfCascades;
 uniform usampler3D uGridSHMap0;
 uniform usampler3D uGridSHMap1;
 uniform usampler3D uGridSHMap2;
+uniform usampler3D uGridSHMap3;
 
 uniform samplerBuffer uProbePositions;
 
@@ -199,7 +200,7 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
 }
 
 vec2 UnpackSnorm2x16(uint package) {
-    const float range = 1000.0;
+    const float range = 50.0;
     const float base = 32767.0;
 
     // Unpack encoded floats into individual variables
@@ -254,6 +255,49 @@ SH UnpackSH_322_HalfPacked(vec3 texCoords) {
 
     // Cg
     sh.L00.b  = pair6.x;  sh.L11.b  = pair7.x;  sh.L10.b  = pair7.y; sh.L1_1.b = pair8.x;
+
+    return sh;
+}
+
+SH UnpackSH_333_HalfPacked(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+    uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r);
+    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b);
+    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r);
+    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b);
+    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r);
+    vec2 pair9 = UnpackSnorm2x16(shMap2Data.g);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b);
+    vec2 pair11 = UnpackSnorm2x16(shMap2Data.a);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r);
+    vec2 pair13 = UnpackSnorm2x16(shMap3Data.g);
+
+    // Y
+    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
+    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
+    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
+
+    // Co
+    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y;
+    sh.L1_1.g = pair6.x;  sh.L21.g  = pair6.y;  sh.L2_1.g = pair7.x;
+    sh.L2_2.g = pair7.y;  sh.L20.g  = pair8.x;  sh.L22.g  = pair8.y;
+
+    // Cg
+    sh.L00.b  = pair9.x;  sh.L11.b  = pair9.y;  sh.L10.b  = pair10.x;
+    sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
+    sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
 
     return sh;
 }
@@ -332,36 +376,6 @@ SH UnpackSH_322_HalfPacked(vec3 texCoords) {
 //    return sh;
 //}
 
-vec3 CubeSampleCoords(vec3 sampleVector) {
-    int majorAxis = 0;
-    vec3 a = abs(sampleVector);
-
-    if (a.y >= a.x && a.y >= a.z) {
-        majorAxis = 1;
-    } else if (a.z >= a.x && a.z >= a.y) {
-        majorAxis = 2;
-    }
-
-    if (sampleVector[majorAxis] < 0.0) {
-        majorAxis = majorAxis * 2 + 1;
-    } else {
-        majorAxis *= 2;
-    }
-
-    float tmpS = 0.0, tmpT = 0.0, m = 0.0, face = 0.0;
-
-    switch (majorAxis) {
-        /* +X */ case 0: tmpS = -sampleVector.z; tmpT = -sampleVector.y; m = a.x; face = 0.0; break;
-        /* -X */ case 1: tmpS =  sampleVector.z; tmpT = -sampleVector.y; m = a.x; face = 1.0; break;
-        /* +Y */ case 2: tmpS =  sampleVector.x; tmpT =  sampleVector.z; m = a.y; face = 2.0; break;
-        /* -Y */ case 3: tmpS =  sampleVector.x; tmpT = -sampleVector.z; m = a.y; face = 3.0; break;
-        /* +Z */ case 4: tmpS =  sampleVector.x; tmpT = -sampleVector.y; m = a.z; face = 4.0; break;
-        /* -Z */ case 5: tmpS = -sampleVector.x; tmpT = -sampleVector.y; m = a.z; face = 5.0; break;
-    }
-
-    return vec3(0.5 * (tmpS / m + 1.0), 0.5 * (tmpT / m + 1.0), face);
-}
-
 float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
 
     // [x + WIDTH * (y + HEIGHT * z)]
@@ -438,14 +452,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_322_HalfPacked(cp0);
-    SH sh1 = UnpackSH_322_HalfPacked(cp1);
-    SH sh2 = UnpackSH_322_HalfPacked(cp2);
-    SH sh3 = UnpackSH_322_HalfPacked(cp3);
-    SH sh4 = UnpackSH_322_HalfPacked(cp4);
-    SH sh5 = UnpackSH_322_HalfPacked(cp5);
-    SH sh6 = UnpackSH_322_HalfPacked(cp6);
-    SH sh7 = UnpackSH_322_HalfPacked(cp7);
+    SH sh0 = UnpackSH_333_HalfPacked(cp0);
+    SH sh1 = UnpackSH_333_HalfPacked(cp1);
+    SH sh2 = UnpackSH_333_HalfPacked(cp2);
+    SH sh3 = UnpackSH_333_HalfPacked(cp3);
+    SH sh4 = UnpackSH_333_HalfPacked(cp4);
+    SH sh5 = UnpackSH_333_HalfPacked(cp5);
+    SH sh6 = UnpackSH_333_HalfPacked(cp6);
+    SH sh7 = UnpackSH_333_HalfPacked(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal);
     float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
@@ -841,28 +855,30 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
+//    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
 
     // Image based lighting
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
+    vec3 toneMappedColor       = ReinhardToneMap(indirectRadiance);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    oFragColor = vec4(indirectRadiance, 1.0);
+    oFragColor = vec4(correctColor, 1.0);
 
-//    uvec4 shMap0Data = texelFetch(uGridSHMap0, ivec3(0), 0);
-//    uvec4 shMap1Data = texelFetch(uGridSHMap1, ivec3(0), 0);
-//    uvec4 shMap2Data = texelFetch(uGridSHMap2, ivec3(0), 0);
+
+
 //
-//    vec2 testPair = UnpackSnorm2x16(shMap2Data.r);
+//    uvec4 shMap3Data = texelFetch(uGridSHMap3, ivec3(0), 0);
 //
-//    if (testPair.y < -0.4 && testPair.y > -0.6) {
-//        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+//    vec2 testPair = UnpackSnorm2x16(shMap3Data.b);
+//
+//    if (testPair.x < -10.0//testPair.x > -400.0 && testPair.x < -300.0
+//        /*&& testPair.y > -344.1 && testPair.y < -343.9*/) {
+//        oFragColor = vec4(0.0, 1.0, 0.3, 1.0);
 //    } else {
-//        oFragColor = vec4(testPair.x, 0.0, 0.0, 1.0);
+//        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
 //    }
 
 }

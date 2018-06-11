@@ -59,6 +59,7 @@ namespace EARenderer {
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
     {
@@ -151,6 +152,7 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
     }
 
 #pragma mark - Rendering

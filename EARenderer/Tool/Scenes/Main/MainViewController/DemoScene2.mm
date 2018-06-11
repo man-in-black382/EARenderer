@@ -62,7 +62,7 @@
     }
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(cornellBoxInstance));
-    scene->directionalLight().setColor(EARenderer::Color(10.0, 10.0, 10.0));
+    scene->directionalLight().setColor(EARenderer::Color(5.0, 5.0, 5.0));
     scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];

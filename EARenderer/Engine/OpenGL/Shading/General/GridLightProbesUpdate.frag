@@ -5,7 +5,7 @@
 layout(location = 0) out uvec4 oFragData0;
 layout(location = 1) out uvec4 oFragData1;
 layout(location = 2) out uvec4 oFragData2;
-//layout(location = 3) out vec4 oFragData3;
+layout(location = 3) out uvec4 oFragData3;
 //layout(location = 4) out vec4 oFragData4;
 //layout(location = 5) out vec4 oFragData5;
 //layout(location = 6) out vec4 oFragData6;
@@ -133,12 +133,12 @@ vec3 YCoCg_From_RGB(vec3 rgb) {
 }
 
 uint PackSnorm2x16(float first, float second) {
-    const float range = 1000.0;
+    const float range = 50.0;
     const float base = 32767.0;
 
     uint packed = 0;
-    uint iFirst = uint(first / range * base);
-    uint iSecond = uint(second / range * base);
+    uint iFirst = uint(int(first / range * base));
+    uint iSecond = uint(int(second / range * base));
 
     uint firstSignMask = iFirst & (1u << 31); // Leave only sign bit
 
@@ -205,6 +205,59 @@ void WriteSH_322_HalfPacked_ToRenderTargets(SH sh) {
     oFragData2 = uvec4(pair8, 0, 0, 0);
 }
 
+void WriteSH_333_HalfPacked_ToRenderTargets(SH sh) {
+
+    uint pair0 = PackSnorm2x16(sh.L00.r ,
+                               sh.L11.r);
+
+    uint pair1 = PackSnorm2x16(sh.L10.r ,
+                               sh.L1_1.r);
+
+    uint pair2 = PackSnorm2x16(sh.L21.r ,
+                               sh.L2_1.r);
+
+    uint pair3 = PackSnorm2x16(sh.L2_2.r,
+                               sh.L20.r);
+
+    uint pair4 = PackSnorm2x16(sh.L22.r ,
+                               sh.L00.g);
+
+    uint pair5 = PackSnorm2x16(sh.L11.g ,
+                               sh.L10.g);
+
+    uint pair6 = PackSnorm2x16(sh.L1_1.g ,
+                               sh.L21.g);
+
+    uint pair7 = PackSnorm2x16(sh.L2_1.g ,
+                               sh.L2_2.g);
+
+    uint pair8 = PackSnorm2x16(sh.L20.g,
+                               sh.L22.g);
+
+    uint pair9 = PackSnorm2x16(sh.L00.b ,
+                               sh.L11.b);
+
+    uint pair10 = PackSnorm2x16(sh.L10.b ,
+                                sh.L1_1.b);
+
+    uint pair11 = PackSnorm2x16(sh.L21.b ,
+                                sh.L2_1.b);
+
+    uint pair12 = PackSnorm2x16(sh.L2_2.b,
+                                sh.L20.b);
+
+    uint pair13 = PackSnorm2x16(sh.L22.b ,
+                                0.0);
+
+    oFragData0 = uvec4(pair0, pair1, pair2, pair3);
+    oFragData1 = uvec4(pair4, pair5, pair6, pair7);
+    oFragData2 = uvec4(pair8, pair9, pair10, pair11);
+    oFragData3 = uvec4(pair12, pair13, 0, 0);
+
+    vec2 test = vec2(-344.0, -344.0);
+    oFragData3.b = PackSnorm2x16(test.x, test.y);
+}
+
 // Transform normalized texture corrdinates into a 1-dimensional integer index
 int FlattenTexCoords() {
     // Texture coordinate interpolation gives us values at texel centers, not edges
@@ -256,5 +309,5 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
-    WriteSH_322_HalfPacked_ToRenderTargets(resultingSH);
+    WriteSH_333_HalfPacked_ToRenderTargets(resultingSH);
 }

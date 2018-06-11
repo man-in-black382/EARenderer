@@ -55,7 +55,7 @@ namespace EARenderer {
         
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
         void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
-        void setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 3>& textures);
+        void setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setLightmapProbesSHTextures(const GLHDRTexture2DArray& textures);
         void setDedicatedProbesSHTextures(const GLHDRTexture2DArray& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
