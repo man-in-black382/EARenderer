@@ -199,8 +199,8 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     return vec3(r, g, b);
 }
 
-vec2 UnpackSnorm2x16(uint package) {
-    const float range = 50.0;
+vec2 UnpackSnorm2x16(uint package, float range) {
+//    range = 1000.0;
     const float base = 32767.0;
 
     // Unpack encoded floats into individual variables
@@ -235,15 +235,17 @@ SH UnpackSH_322_HalfPacked(vec3 texCoords) {
     uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
     uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r);
-    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b);
-    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r);
-    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b);
-    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r);
+    float range = uintBitsToFloat(shMap2Data.a);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);
+    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);
 
     // Y
     sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
@@ -269,32 +271,34 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
     uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
     uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r);
-    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b);
-    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r);
-    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b);
-    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r);
-    vec2 pair9 = UnpackSnorm2x16(shMap2Data.g);
-    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b);
-    vec2 pair11 = UnpackSnorm2x16(shMap2Data.a);
-    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r);
-    vec2 pair13 = UnpackSnorm2x16(shMap3Data.g);
+    float range = uintBitsToFloat(shMap3Data.a);
 
-    // Y
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);
+    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);
+    vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range);
+    vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range);
+    vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
+
+    // Y | R
     sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
     sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
     sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
 
-    // Co
+    // Co | G
     sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y;
     sh.L1_1.g = pair6.x;  sh.L21.g  = pair6.y;  sh.L2_1.g = pair7.x;
     sh.L2_2.g = pair7.y;  sh.L20.g  = pair8.x;  sh.L22.g  = pair8.y;
 
-    // Cg
+    // Cg | B
     sh.L00.b  = pair9.x;  sh.L11.b  = pair9.y;  sh.L10.b  = pair10.x;
     sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
     sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
@@ -865,20 +869,9 @@ void main() {
     vec3 toneMappedColor       = ReinhardToneMap(indirectRadiance);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    oFragColor = vec4(correctColor, 1.0);
-
-
-
-//
-//    uvec4 shMap3Data = texelFetch(uGridSHMap3, ivec3(0), 0);
-//
-//    vec2 testPair = UnpackSnorm2x16(shMap3Data.b);
-//
-//    if (testPair.x < -10.0//testPair.x > -400.0 && testPair.x < -300.0
-//        /*&& testPair.y > -344.1 && testPair.y < -343.9*/) {
-//        oFragColor = vec4(0.0, 1.0, 0.3, 1.0);
-//    } else {
-//        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
-//    }
-
+    if (indirectRadiance.x < 0.0 || indirectRadiance.y < 0.0 || indirectRadiance.z < 0.0) {
+        oFragColor = vec4(0.7, 0.7, 0.0, 1.0);
+    } else {
+        oFragColor = vec4(correctColor, 1.0);
+    }
 }

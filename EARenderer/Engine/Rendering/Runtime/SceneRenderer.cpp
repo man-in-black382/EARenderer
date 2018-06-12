@@ -290,7 +290,8 @@ namespace EARenderer {
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
-            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
+//            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
+            mSurfelLightingShader.setGridProbesSHIntegerTextures(mGridProbesSHIntegerMaps);
             mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mSurfelLightingShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
         });
