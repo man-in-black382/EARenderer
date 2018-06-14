@@ -23,6 +23,7 @@
 #include "SurfelData.hpp"
 #include "DiffuseLightProbeData.hpp"
 #include "RenderingSettings.hpp"
+#include "GaussianBlurEffect.hpp"
 
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLCookTorrance.hpp"

@@ -14,6 +14,7 @@
 #include "Collision.hpp"
 #include "ThreadPool.hpp"
 #include "SparseOctree.hpp"
+#include "GaussianFunction.hpp"
 
 #include <random>
 #include <limits>
