@@ -61,7 +61,10 @@ namespace EARenderer {
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
     },
-    mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y))
+    mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
+
+    // Filters
+    mBlurFilter(std::shared_ptr<const GLHDRTexture2D>(&scene->skybox()->equirectangularMap()))
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -317,7 +320,7 @@ namespace EARenderer {
     void SceneRenderer::updateGridProbes() {
         // Disable blending because this is spherical harmonics, not colors!
         // Nothing to blend here
-        glDisable(GL_BLEND);
+//        glDisable(GL_BLEND);
 
         mGridProbesUpdateShader.bind();
         mGridProbesUpdateShader.ensureSamplerValidity([&] {
@@ -334,7 +337,11 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
 
-        glEnable(GL_BLEND);
+//        glEnable(GL_BLEND);
+    }
+
+    void SceneRenderer::blurShadowMaps() {
+        mBlurFilter.blur(9);
     }
 
 #pragma mark - Public interface
@@ -344,6 +351,7 @@ namespace EARenderer {
         mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
 
         renderShadowMapsForDirectionalLights();
+        blurShadowMaps();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
@@ -396,7 +404,8 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+//            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+            mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
         });
         mScene->skybox()->draw();
     }

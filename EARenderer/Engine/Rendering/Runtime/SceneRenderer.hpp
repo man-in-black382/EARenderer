@@ -23,7 +23,7 @@
 #include "SurfelData.hpp"
 #include "DiffuseLightProbeData.hpp"
 #include "RenderingSettings.hpp"
-#include "GaussianBlurEffect.hpp"
+#include "GaussianBlurFilter.hpp"
 
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLCookTorrance.hpp"
@@ -110,6 +110,8 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
+        GaussianBlurFilter mBlurFilter;
+
         void setupGLState();
         void setupTextures();
         void setupFramebuffers();
@@ -121,6 +123,7 @@ namespace EARenderer {
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
+        void blurShadowMaps();
 
         void convertEquirectangularMapToCubemap();
         void buildDiffuseIrradianceMap();

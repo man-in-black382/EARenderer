@@ -21,13 +21,19 @@ namespace EARenderer {
     GaussianFunction::Kernel1D GaussianFunction::Produce1DKernel(size_t radius, float sigma) {
         float sum = 0;
 
-        GaussianFunction::Kernel1D kernel(2 * radius + 1, 0.0);
+        GaussianFunction::Kernel1D kernel(radius + 1, 0.0);
 
-        for (size_t i = 0; i < kernel.size(); i++) {
+        size_t kernelSize = 2 * radius + 1;
+        size_t startIndex = kernelSize / 2;
+
+        for (size_t i = startIndex; i < kernelSize; i++) {
             float weight = Gaussian(i, radius, sigma);
-            kernel[i] = weight;
+            kernel[i - startIndex] = weight;
             sum += weight;
         }
+
+        sum *= 2.0;
+        sum -= kernel[0];
 
         for (float& weight : kernel) {
             weight /= sum;

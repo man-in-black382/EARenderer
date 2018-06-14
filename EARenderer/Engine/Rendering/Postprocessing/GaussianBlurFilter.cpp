@@ -6,14 +6,14 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "GaussianBlurEffect.hpp"
+#include "GaussianBlurFilter.hpp"
 #include "GaussianFunction.hpp"
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GaussianBlurEffect::GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage)
+    GaussianBlurFilter::GaussianBlurFilter(std::shared_ptr<const GLHDRTexture2D> inputImage)
     :
     mInputImage(inputImage),
     mFirstOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size())),
@@ -29,19 +29,19 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::outputImage() const {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::outputImage() const {
         return mFirstOutputImage;
     }
 
 #pragma mark - Blur
 
-    std::vector<float> GaussianBlurEffect::textureOffsets() const {
+    std::vector<float> GaussianBlurFilter::textureOffsets() const {
         auto kernel = GaussianFunction::Produce1DKernel(3, 1.0);
         std::vector<float> halfKerhel(kernel.begin() + kernel.size() / 2, kernel.end());
         return halfKerhel;
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(size_t radius) {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius) {
         return mSecondOutputImage;
     }
 

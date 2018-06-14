@@ -19,7 +19,7 @@
 
 namespace EARenderer {
 
-    class GaussianBlurEffect {
+    class GaussianBlurFilter {
     private:
         std::shared_ptr<const GLHDRTexture2D> mInputImage;
         std::shared_ptr<GLHDRTexture2D> mFirstOutputImage;
@@ -31,7 +31,7 @@ namespace EARenderer {
         std::vector<float> textureOffsets() const;
 
     public:
-        GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage);
+        GaussianBlurFilter(std::shared_ptr<const GLHDRTexture2D> inputImage);
 
         std::shared_ptr<GLHDRTexture2D> outputImage() const;
         std::shared_ptr<GLHDRTexture2D> blur(size_t radius);
