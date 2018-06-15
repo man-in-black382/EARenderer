@@ -41,6 +41,7 @@
 #include "GLSLGridLightProbeRendering.hpp"
 #include "GLSLLightProbeLinksRendering.hpp"
 #include "GLSLProbeOcclusionRendering.hpp"
+#include "GLSLDirectionalExponentialShadowMap.hpp"
 
 #include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
@@ -73,6 +74,7 @@ namespace EARenderer {
         FrustumCascades mShadowCascades;
 
         GLSLDepthPrepass mDepthPrepassShader;
+        GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
         GLSLDirectionalDepth mDirectionalDepthShader;
         GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
@@ -102,15 +104,16 @@ namespace EARenderer {
         std::array<GLLDRTexture3D, 4> mGridProbesSHIntegerMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
+        GLHDRTexture2D mDirectionalExponentialShadowMap;
         GLDepthTexture2DArray mShadowMaps;
         GLDepthTextureCubemap mShadowCubeMap;
-        GLFramebuffer mDepthFramebuffer;
+        GLFramebuffer mDirectionalShadowFramebuffer;
 
         GLSLGridLightProbeRendering mGridProbeRenderingShader;
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
-        GaussianBlurFilter mBlurFilter;
+        GaussianBlurFilter mShadowBlurFilter;
 
         void setupGLState();
         void setupTextures();
@@ -119,11 +122,11 @@ namespace EARenderer {
         void bindDefaultFramebuffer();
 
         void performDepthPrepass();
-        void renderShadowMapsForDirectionalLights();
+        void renderTratitionalShadowMapsForDirectionalLight();
+        void renderExponentialShadowMapsForDirectionalLight();
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
-        void blurShadowMaps();
 
         void convertEquirectangularMapToCubemap();
         void buildDiffuseIrradianceMap();

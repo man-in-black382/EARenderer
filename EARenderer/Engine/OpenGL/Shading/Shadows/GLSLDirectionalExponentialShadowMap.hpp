@@ -15,14 +15,14 @@
 
 namespace EARenderer {
 
-    class GLSLDirectionalShadowMap: public GLProgram {
+    class GLSLDirectionalExponentialShadowMap: public GLProgram {
     public:
         using GLProgram::GLProgram;
 
-        GLSLDirectionalShadowMap();
+        GLSLDirectionalExponentialShadowMap();
 
-        void setModelMatrix(const glm::mat4& matrix);
-        void setViewProjectionMatrix(const glm::mat4& matrix);
+        void setMVPMatrix(const glm::mat4& matrix);
+        void setESMFactor(float factor);
     };
 
 }

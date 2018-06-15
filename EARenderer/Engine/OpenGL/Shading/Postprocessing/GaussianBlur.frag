@@ -6,7 +6,8 @@
 
 uniform vec2 uBlurDirection;
 uniform sampler2D uTexture;
-uniform vec2 uKernelData[32];
+uniform float uKernelWeights[32];
+uniform float uTextureOffsets[32];
 uniform int uKernelSize;
 
 // Inputs
@@ -23,18 +24,18 @@ void main()
 {
     vec2 imageResolution = vec2(textureSize(uTexture, 0));
 
-    float texelWeight = uKernelData[0].x;
-    float texOffset = uKernelData[0].y;
+    float texelWeight = uKernelWeights[0];
+    float texOffset = uTextureOffsets[0];
     vec2 currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
 
-    oFragColor = texture2D(uTexture, (vTexCoords + currentOffset) * texelWeight;
+    oFragColor = texture(uTexture, (vTexCoords + currentOffset)) * texelWeight;
 
     for (int i = 1; i < uKernelSize; i++) {
-        texelWeight = uKernelData[i].x;
-        texOffset = uKernelData[i].y;
+        texelWeight = uKernelWeights[i];
+        texOffset = uTextureOffsets[i];
         currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
 
-        oFragColor += texture2D(uTexture, (vTexCoords + currentOffset) * texelWeight;
-        oFragColor += texture2D(uTexture, (vTexCoords - currentOffset) * texelWeight;
+        oFragColor += texture(uTexture, (vTexCoords + currentOffset)) * texelWeight;
+        oFragColor += texture(uTexture, (vTexCoords - currentOffset)) * texelWeight;
     }
 }

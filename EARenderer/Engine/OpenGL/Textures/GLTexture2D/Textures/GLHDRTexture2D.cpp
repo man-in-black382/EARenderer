@@ -17,7 +17,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
     
     GLHDRTexture2D::GLHDRTexture2D(const Size2D& size, Filter filter) {
-        initialize(size, filter, WrapMode::ClampToEdge, GL_RGBA16F, GL_RGBA, GL_FLOAT);
+        initialize(size, filter, WrapMode::ClampToEdge, GL_RGBA32F, GL_RGBA, GL_FLOAT);
     }
     
     GLHDRTexture2D::GLHDRTexture2D(const std::string& imagePath) {
@@ -30,7 +30,7 @@ namespace EARenderer {
         }
 
         // The default min filter is GL_NEAREST_MIPMAP_LINEAR, so by default you have to provide texture mipmaps, otherwise, texture is invalid.
-        initialize(Size2D(width, height), Filter::Bilinear, WrapMode::Repeat, GL_RGB16F, GL_RGB, GL_FLOAT, pixelData);
+        initialize(Size2D(width, height), Filter::Bilinear, WrapMode::Repeat, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
 
         stbi_image_free(pixelData);
     };

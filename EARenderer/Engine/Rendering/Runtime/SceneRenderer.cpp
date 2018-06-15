@@ -28,9 +28,10 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
+    mDirectionalExponentialShadowMap(Size2D(1024)),
     mShadowMaps(Size2D(1024), mNumberOfCascades),
     mShadowCubeMap(Size2D(1024)),
-    mDepthFramebuffer(Size2D(1024)),
+    mDirectionalShadowFramebuffer(Size2D(1024)),
 
     // Image based lighting (IBL)
     mEnvironmentMapCube(Size2D(512)),
@@ -64,7 +65,7 @@ namespace EARenderer {
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Filters
-    mBlurFilter(std::shared_ptr<const GLHDRTexture2D>(&scene->skybox()->equirectangularMap()))
+    mShadowBlurFilter(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap))
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -141,6 +142,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::setupFramebuffers() {
+        mDirectionalShadowFramebuffer.attachTexture(mDirectionalExponentialShadowMap);
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
@@ -256,15 +258,14 @@ namespace EARenderer {
         }
     }
 
-    void SceneRenderer::renderShadowMapsForDirectionalLights() {
-        // Fill shadow map
+    void SceneRenderer::renderTratitionalShadowMapsForDirectionalLight() {
         mDirectionalDepthShader.bind();
-        mDepthFramebuffer.bind();
-        mDepthFramebuffer.viewport().apply();
+        mDirectionalShadowFramebuffer.bind();
+        mDirectionalShadowFramebuffer.viewport().apply();
 
         for (uint8_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
-            mDepthFramebuffer.attachTextureLayer(mShadowMaps, cascade);
-            glClear(GL_DEPTH_BUFFER_BIT);
+            mDirectionalShadowFramebuffer.attachTextureLayer(mShadowMaps, cascade);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             for (ID meshInstanceID : mScene->meshInstances()) {
                 auto& instance = mScene->meshInstances()[meshInstanceID];
@@ -279,6 +280,30 @@ namespace EARenderer {
                 }
             }
         }
+    }
+
+    void SceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
+        mDirectionalESMShader.bind();
+        mDirectionalShadowFramebuffer.bind();
+        mDirectionalShadowFramebuffer.viewport().apply();
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        for (ID meshInstanceID : mScene->meshInstances()) {
+            auto& instance = mScene->meshInstances()[meshInstanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+            auto mvp = instance.transformation().modelMatrix() * mShadowCascades.lightViewProjections[0];
+            mDirectionalESMShader.setMVPMatrix(mvp);
+            mDirectionalESMShader.setESMFactor(0.5);
+
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                subMesh.draw();
+            }
+        }
+
+        mShadowBlurFilter.blur(8);
     }
 
     void SceneRenderer::relightSurfels() {
@@ -318,10 +343,6 @@ namespace EARenderer {
     }
 
     void SceneRenderer::updateGridProbes() {
-        // Disable blending because this is spherical harmonics, not colors!
-        // Nothing to blend here
-//        glDisable(GL_BLEND);
-
         mGridProbesUpdateShader.bind();
         mGridProbesUpdateShader.ensureSamplerValidity([&] {
             mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
@@ -336,12 +357,6 @@ namespace EARenderer {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
-
-//        glEnable(GL_BLEND);
-    }
-
-    void SceneRenderer::blurShadowMaps() {
-        mBlurFilter.blur(9);
     }
 
 #pragma mark - Public interface
@@ -350,8 +365,7 @@ namespace EARenderer {
         const DirectionalLight& directionalLight = mScene->directionalLight();
         mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
 
-        renderShadowMapsForDirectionalLights();
-        blurShadowMaps();
+        renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
@@ -404,8 +418,8 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-//            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
-            mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+//            mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
         });
         mScene->skybox()->draw();
     }

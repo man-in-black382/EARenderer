@@ -27,8 +27,11 @@ namespace EARenderer {
         GLFramebuffer mFirstFramebuffer;
         GLFramebuffer mSecondFramebuffer;
         GLSLGaussianBlur mBlurShader;
+        std::vector<float> mWeights;
+        std::vector<float> mTextureOffsets;
+        size_t mBlurRadius = 0;
 
-        std::vector<float> textureOffsets() const;
+        void computeWeightsAndOffsets();
 
     public:
         GaussianBlurFilter(std::shared_ptr<const GLHDRTexture2D> inputImage);
