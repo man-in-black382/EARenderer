@@ -28,8 +28,7 @@ namespace EARenderer {
         void setLight(const DirectionalLight& light);
         void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
         void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
-        void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
-        void setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 4>& textures);
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setMultibounceEnabled(bool multibounceEnabled);

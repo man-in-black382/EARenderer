@@ -36,7 +36,7 @@ namespace EARenderer {
 #pragma mark - Blur
 
     void GaussianBlurFilter::computeWeightsAndOffsets() {
-        auto weights = GaussianFunction::Produce1DKernel(mBlurRadius);
+        auto weights = GaussianFunction::Produce1DKernel(mBlurRadius, mStandardDeviation);
 
         mWeights.clear();
         mTextureOffsets.clear();
@@ -61,12 +61,13 @@ namespace EARenderer {
         }
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius) {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius, size_t standardDeviation) {
         if (radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
-        if (mBlurRadius != radius) {
+        if (mBlurRadius != radius || mStandardDeviation != standardDeviation) {
             bool isOdd = radius % 2 == 1;
             mBlurRadius = isOdd ? radius + 1 : radius;
+            mStandardDeviation = standardDeviation;
             computeWeightsAndOffsets();
         }
 
@@ -96,6 +97,10 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         return mSecondOutputImage;
+    }
+
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius) {
+        return blur(radius, radius / 2);
     }
 
 }

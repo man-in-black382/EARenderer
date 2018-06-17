@@ -30,6 +30,7 @@ namespace EARenderer {
         std::vector<float> mWeights;
         std::vector<float> mTextureOffsets;
         size_t mBlurRadius = 0;
+        size_t mStandardDeviation = 1.0;
 
         void computeWeightsAndOffsets();
 
@@ -38,6 +39,7 @@ namespace EARenderer {
 
         std::shared_ptr<GLHDRTexture2D> outputImage() const;
         std::shared_ptr<GLHDRTexture2D> blur(size_t radius);
+        std::shared_ptr<GLHDRTexture2D> blur(size_t radius, size_t standardDeviation);
     };
 
 }

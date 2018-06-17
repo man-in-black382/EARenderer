@@ -23,13 +23,11 @@ out vec4 oFragColor;
 // Input
 
 in vec3 vTexCoords;
-in vec2 vLightmapCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
-in vec4 vPosInLightSpace[kMaxCascades];
-in vec4 vPosInCameraSpace;
-in vec3 vPosInTangentSpace;
-in vec3 vCameraPosInTangentSpace;
+in vec4 vPosInLightSpace;
+//in vec3 vPosInTangentSpace;
+//in vec3 vCameraPosInTangentSpace;
 
 // Uniforms
 
@@ -89,19 +87,14 @@ uniform uint uSettingsBitmask;
 uniform float uParallaxMappingStrength;
 
 // Shadow mapping
-uniform sampler2DArray uShadowMapArray;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 
-// Shperical harmonics
+uniform float uESMFactor;
+uniform float uESMDarkeningFactor;
+uniform sampler2D uExponentialShadowMap;
 
-//uniform sampler3D uGridSHMap0;
-//uniform sampler3D uGridSHMap1;
-//uniform sampler3D uGridSHMap2;
-//uniform sampler3D uGridSHMap3;
-//uniform sampler3D uGridSHMap4;
-//uniform sampler3D uGridSHMap5;
-//uniform sampler3D uGridSHMap6;
+// Shperical harmonics
 
 uniform usampler3D uGridSHMap0;
 uniform usampler3D uGridSHMap1;
@@ -148,45 +141,23 @@ SH ZeroSH() {
 
 SH ScaleSH(SH sh, vec3 scale) {
     SH result;
-
-    result.L00  = scale * sh.L00;
-
-    result.L1_1 = scale * sh.L1_1;
-    result.L10  = scale * sh.L10;
-    result.L11  = scale * sh.L11;
-
-    result.L2_2 = scale * sh.L2_2;
-    result.L2_1 = scale * sh.L2_1;
-    result.L21  = scale * sh.L21;
-
-    result.L20  = scale * sh.L20;
-
-    result.L22  = scale * sh.L22;
-
+    result.L00  = scale * sh.L00; result.L1_1 = scale * sh.L1_1; result.L10  = scale * sh.L10;
+    result.L11  = scale * sh.L11; result.L2_2 = scale * sh.L2_2; result.L2_1 = scale * sh.L2_1;
+    result.L21  = scale * sh.L21; result.L20  = scale * sh.L20;  result.L22  = scale * sh.L22;
     return result;
 }
 
 SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
     SH result;
-
     result.L00  = first.L00 + second.L00 + third.L00 + fourth.L00 + fifth.L00 + sixth.L00 + seventh.L00 + eighth.L00;
-
     result.L1_1 = first.L1_1 + second.L1_1 + third.L1_1 + fourth.L1_1 + fifth.L1_1 + sixth.L1_1 + seventh.L1_1 + eighth.L1_1;
-
     result.L10  = first.L10 + second.L10 + third.L10 + fourth.L10 + fifth.L10 + sixth.L10 + seventh.L10 + eighth.L10;
-
     result.L11  = first.L11 + second.L11 + third.L11 + fourth.L11 + fifth.L11 + sixth.L11 + seventh.L11 + eighth.L11;
-
     result.L2_2 = first.L2_2 + second.L2_2 + third.L2_2 + fourth.L2_2 + fifth.L2_2 + sixth.L2_2 + seventh.L2_2 + eighth.L2_2;
-
     result.L2_1 = first.L2_1 + second.L2_1 + third.L2_1 + fourth.L2_1 + fifth.L2_1 + sixth.L2_1 + seventh.L2_1 + eighth.L2_1;
-
     result.L21  = first.L21 + second.L21 + third.L21 + fourth.L21 + fifth.L21 + sixth.L21 + seventh.L21 + eighth.L21;
-
     result.L20  = first.L20 + second.L20 + third.L20 + fourth.L20 + fifth.L20 + sixth.L20 + seventh.L20 + eighth.L20;
-
     result.L22  = first.L22 + second.L22 + third.L22 + fourth.L22 + fifth.L22 + sixth.L22 + seventh.L22 + eighth.L22;
-
     return result;
 }
 
@@ -200,7 +171,6 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
 }
 
 vec2 UnpackSnorm2x16(uint package, float range) {
-//    range = 1000.0;
     const float base = 32767.0;
 
     // Unpack encoded floats into individual variables
@@ -224,6 +194,31 @@ vec2 UnpackSnorm2x16(uint package, float range) {
     float fSecond = (float(iSecond) / base) * range;
 
     return vec2(fFirst, fSecond);
+}
+
+SH UnpackSH_311_HalfPacked(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+
+    float range = uintBitsToFloat(shMap1Data.a);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range); vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range); vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range); vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
+
+    // Y
+    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
+    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
+    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
+
+    // Co, Cg
+    sh.L00.g  = pair4.y; sh.L00.b  = pair5.x;
+
+    return sh;
 }
 
 SH UnpackSH_322_HalfPacked(vec3 texCoords) {
@@ -268,25 +263,18 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
 
     uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
     uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-    uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
+    uvec4 shMap2Data = shMap0Data;//texelFetch(uGridSHMap2, iTexCoords, 0);
+    uvec4 shMap3Data = shMap1Data;//texelFetch(uGridSHMap3, iTexCoords, 0);
 
     float range = uintBitsToFloat(shMap3Data.a);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);
-    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);
-    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);
-    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);
-    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);
-    vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
-    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range);
-    vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
-    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range);
-    vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);  vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);  vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range); vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
 
     // Y | R
     sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
@@ -305,80 +293,6 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
 
     return sh;
 }
-
-//SH UnpackSH_333(vec3 texCoords) {
-//    SH sh;
-//
-//    ivec3 iTexCoords = ivec3(texCoords);
-//
-//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-//    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
-//    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
-//    vec4 shMap5Data = texelFetch(uGridSHMap5, iTexCoords, 0);
-//    vec4 shMap6Data = texelFetch(uGridSHMap6, iTexCoords, 0);
-//
-//    sh.L00  = vec3(shMap0Data.rgb);
-//    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
-//    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
-//    sh.L1_1 = vec3(shMap2Data.gba);
-//    sh.L21  = vec3(shMap3Data.rgb);
-//    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
-//    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
-//    sh.L20  = vec3(shMap5Data.gba);
-//    sh.L22  = vec3(shMap6Data.rgb);
-//
-//    return sh;
-//}
-
-//SH UnpackSH_322(vec3 texCoords) {
-//    SH sh = ZeroSH();
-//
-//    ivec3 iTexCoords = ivec3(texCoords);
-//
-//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-//    vec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
-//    vec4 shMap4Data = texelFetch(uGridSHMap4, iTexCoords, 0);
-//
-//    // Y
-//    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
-//    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
-//    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
-//
-//    // Co
-//    sh.L00.g = shMap2Data.g; sh.L11.g = shMap2Data.b; sh.L10.g = shMap2Data.a; sh.L1_1.g = shMap3Data.r;
-//
-//    // Cg
-//    sh.L00.b = shMap3Data.g; sh.L11.b = shMap3Data.b; sh.L10.b = shMap3Data.a; sh.L1_1.b = shMap4Data.r;
-//
-//    return sh;
-//}
-
-//SH UnpackSH_311(vec3 texCoords) {
-//    SH sh = ZeroSH();
-//
-//    ivec3 iTexCoords = ivec3(texCoords);
-//
-//    vec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-//    vec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-//    vec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-//
-//    // Y
-//    sh.L00.r = shMap0Data.r; sh.L11.r = shMap0Data.g; sh.L10.r = shMap0Data.b;
-//    sh.L1_1.r = shMap0Data.a; sh.L21.r = shMap1Data.r; sh.L2_1.r = shMap1Data.g;
-//    sh.L2_2.r = shMap1Data.b; sh.L20.r = shMap1Data.a; sh.L22.r = shMap2Data.r;
-//
-//    // Co
-//    sh.L00.g = shMap2Data.g;
-//
-//    // Cg
-//    sh.L00.b = shMap2Data.b;
-//
-//    return sh;
-//}
 
 float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
 
@@ -447,32 +361,20 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     //  -----------> X
     //
 
-    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
-    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
-    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
+    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z); vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
+    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z); vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
+    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z); vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
+    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z); vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_333_HalfPacked(cp0);
-    SH sh1 = UnpackSH_333_HalfPacked(cp1);
-    SH sh2 = UnpackSH_333_HalfPacked(cp2);
-    SH sh3 = UnpackSH_333_HalfPacked(cp3);
-    SH sh4 = UnpackSH_333_HalfPacked(cp4);
-    SH sh5 = UnpackSH_333_HalfPacked(cp5);
-    SH sh6 = UnpackSH_333_HalfPacked(cp6);
-    SH sh7 = UnpackSH_333_HalfPacked(cp7);
+    SH sh0 = UnpackSH_311_HalfPacked(cp0); SH sh1 = UnpackSH_311_HalfPacked(cp1);
+    SH sh2 = UnpackSH_311_HalfPacked(cp2); SH sh3 = UnpackSH_311_HalfPacked(cp3);
+    SH sh4 = UnpackSH_311_HalfPacked(cp4); SH sh5 = UnpackSH_311_HalfPacked(cp5);
+    SH sh6 = UnpackSH_311_HalfPacked(cp6); SH sh7 = UnpackSH_311_HalfPacked(cp7);
 
-    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal);
-    float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
-    float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal);
-    float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
-    float probe4OcclusionFactor = ProbeOcclusionFactor(cp4, gridSize, fragNormal);
-    float probe5OcclusionFactor = ProbeOcclusionFactor(cp5, gridSize, fragNormal);
-    float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, gridSize, fragNormal);
-    float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, gridSize, fragNormal);
+    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal); float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
+    float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal); float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
+    float probe4OcclusionFactor = ProbeOcclusionFactor(cp4, gridSize, fragNormal); float probe5OcclusionFactor = ProbeOcclusionFactor(cp5, gridSize, fragNormal);
+    float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, gridSize, fragNormal); float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, gridSize, fragNormal);
 
     vec8 weights = TriLerp(minCoords, maxCoords, unnormCoords);
 
@@ -504,23 +406,15 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
 
     float weightScale = 1.0 / (1.0 - excludedWeight);
 
-    weights.value0 *= weightScale;
-    weights.value1 *= weightScale;
-    weights.value2 *= weightScale;
-    weights.value3 *= weightScale;
-    weights.value4 *= weightScale;
-    weights.value5 *= weightScale;
-    weights.value6 *= weightScale;
-    weights.value7 *= weightScale;
+    weights.value0 *= weightScale; weights.value1 *= weightScale;
+    weights.value2 *= weightScale; weights.value3 *= weightScale;
+    weights.value4 *= weightScale; weights.value5 *= weightScale;
+    weights.value6 *= weightScale; weights.value7 *= weightScale;
 
-    sh0 = ScaleSH(sh0, vec3(weights.value0));
-    sh1 = ScaleSH(sh1, vec3(weights.value1));
-    sh2 = ScaleSH(sh2, vec3(weights.value2));
-    sh3 = ScaleSH(sh3, vec3(weights.value3));
-    sh4 = ScaleSH(sh4, vec3(weights.value4));
-    sh5 = ScaleSH(sh5, vec3(weights.value5));
-    sh6 = ScaleSH(sh6, vec3(weights.value6));
-    sh7 = ScaleSH(sh7, vec3(weights.value7));
+    sh0 = ScaleSH(sh0, vec3(weights.value0)); sh1 = ScaleSH(sh1, vec3(weights.value1));
+    sh2 = ScaleSH(sh2, vec3(weights.value2)); sh3 = ScaleSH(sh3, vec3(weights.value3));
+    sh4 = ScaleSH(sh4, vec3(weights.value4)); sh5 = ScaleSH(sh5, vec3(weights.value5));
+    sh6 = ScaleSH(sh6, vec3(weights.value6)); sh7 = ScaleSH(sh7, vec3(weights.value7));
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -669,56 +563,19 @@ vec3 DirectionalLightRadiance() {
 ///////////////////////// Shadows //////////////////////////
 ////////////////////////////////////////////////////////////
 
-int shadowCascadeIndex()
-{
-    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
-    // No need to transform to [0,1] range,
-    // because splits passed from client are in [-1; 1]
-
-    float fragDepth = projCoords.z;
-    
-    for (int i = 0; i < uNumberOfCascades; ++i) {
-        if (fragDepth < uDepthSplits[i]) {
-            return i;
-        }
-    }
-}
-
-float Shadow(in vec3 N, in vec3 L)
-{
-    int shadowCascadeIndex = shadowCascadeIndex();
-    
-    // perform perspective division
-    vec3 projCoords = vPosInLightSpace[shadowCascadeIndex].xyz / vPosInLightSpace[shadowCascadeIndex].w;
-    
-    // Transformation to [0,1] range
+float ExponentialShadow() {
+    vec3 projCoords = vPosInLightSpace.xyz / vPosInLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
-    
-    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-    
-    // Get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
-    
-    // Check whether current frag pos is in shadow
-    float bias = max(0.01 * (1.0 - dot(N, L)), 0.005);
-    
-//    float shadow = 0.0;
-//    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
-//    for(int x = -2; x <= 2; ++x) {
-//        for(int y = -2; y <= 2; ++y) {
-//            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
-//            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
-//            float unbiasedDepth = currentDepth - bias;
-//            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
-//        }
-//    }
-//    shadow /= 36.0;
-//    return shadow;
-    
-    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-    float unbiasedDepth = currentDepth - bias;
-    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+
+    // Linear Z a.k.a disntance from light
+    // Distance to the fragment from a near clip plane of directional light's frustum
+    float linearZ = vPosInLightSpace.z;
+
+    float occluder = texture(uExponentialShadowMap, projCoords.xy).r;
+    float receiver = exp(uESMDarkeningFactor - uESMFactor * linearZ);
+    float visibility = clamp(occluder * receiver, 0.0, 1.0);
+
+    return 1.0 - visibility;
 }
 
 ////////////////////////////////////////////////////////////
@@ -766,57 +623,56 @@ float FetchDisplacementMap() {
 ////////////// Parallax Occlusion Mapping //////////////////
 ////////////////////////////////////////////////////////////
 
-vec2 DisplacedTextureCoords() {
-    vec2 texCoords = vTexCoords.st;
-    vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
-
-//  number of depth layers
-    const float minLayers = 8;
-    const float maxLayers = 32;
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-    // calculate the size of each layer
-    float layerDepth = 1.0 / numLayers;
-    // depth of current layer
-    float currentLayerDepth = 0.0;
-    // the amount to shift the texture coordinates per layer (from vector P)
-    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
-
-    vec2 deltaTexCoords = P / numLayers;
-
-    // get initial values
-    vec2  currentTexCoords     = texCoords;
-    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
-
-    while(currentLayerDepth < currentDepthMapValue)
-    {
-        // shift texture coordinates along direction of P
-        currentTexCoords -= deltaTexCoords;
-        // get depthmap value at current texture coordinates
-        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
-        // get depth of next layer
-        currentLayerDepth += layerDepth;
-    }
-
-    // get texture coordinates before collision (reverse operations)
-    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-
-    // get depth after and before collision for linear interpolation
-    float afterDepth  = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
-
-    // interpolation of texture coordinates
-    float weight = afterDepth / (afterDepth - beforeDepth);
-    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
-
-    return finalTexCoords;
-}
+//vec2 DisplacedTextureCoords() {
+//    vec2 texCoords = vTexCoords.st;
+//    vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
+//
+////  number of depth layers
+//    const float minLayers = 8;
+//    const float maxLayers = 32;
+//    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+//    // calculate the size of each layer
+//    float layerDepth = 1.0 / numLayers;
+//    // depth of current layer
+//    float currentLayerDepth = 0.0;
+//    // the amount to shift the texture coordinates per layer (from vector P)
+//    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
+//
+//    vec2 deltaTexCoords = P / numLayers;
+//
+//    // get initial values
+//    vec2  currentTexCoords     = texCoords;
+//    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+//
+//    while(currentLayerDepth < currentDepthMapValue) {
+//        // shift texture coordinates along direction of P
+//        currentTexCoords -= deltaTexCoords;
+//        // get depthmap value at current texture coordinates
+//        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+//        // get depth of next layer
+//        currentLayerDepth += layerDepth;
+//    }
+//
+//    // get texture coordinates before collision (reverse operations)
+//    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+//
+//    // get depth after and before collision for linear interpolation
+//    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+//    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+//
+//    // interpolation of texture coordinates
+//    float weight = afterDepth / (afterDepth - beforeDepth);
+//    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+//
+//    return finalTexCoords;
+//}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
-    vec2 displacedTexCoords = isParallaxMappingEnabled() ? DisplacedTextureCoords() : vTexCoords.st;
+    vec2 displacedTexCoords = /*isParallaxMappingEnabled() ? DisplacedTextureCoords() : */vTexCoords.st;
 
     float roughness         = FetchRoughnessMap(displacedTexCoords);
     
@@ -848,7 +704,7 @@ void main() {
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = Shadow(N, L);
+        shadow      = ExponentialShadow();
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N);
@@ -859,19 +715,15 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-//    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
+    indirectRadiance = RGB_From_YCoCg(indirectRadiance) * 10.0;
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
 
     // Image based lighting
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 toneMappedColor       = ReinhardToneMap(indirectRadiance);
+    vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    if (indirectRadiance.x < 0.0 || indirectRadiance.y < 0.0 || indirectRadiance.z < 0.0) {
-        oFragColor = vec4(0.7, 0.7, 0.0, 1.0);
-    } else {
-        oFragColor = vec4(correctColor, 1.0);
-    }
+    oFragColor = vec4(correctColor, 1.0);
 }

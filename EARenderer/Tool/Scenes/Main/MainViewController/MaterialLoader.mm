@@ -113,4 +113,28 @@
     });
 }
 
++ (EARenderer::ID)load_BlueFabric_MaterialToPool:(EARenderer::ResourcePool *)pool
+{
+    return pool->materials.insert({
+        [self pathForResource:@"Fabric03_col.jpg"],
+        [self pathForResource:@"Fabric03_nrm.jpg"],
+        [self pathForResource:@"blank_black.png"],
+        [self pathForResource:@"Fabric03_rgh.jpg"],
+        [self pathForResource:@"blank_white.jpg"],
+        [self pathForResource:@"Fabric03_disp.jpg"]
+    });
+}
+
++ (EARenderer::ID)load_RedFabric_MaterialToPool:(EARenderer::ResourcePool *)pool
+{
+    return pool->materials.insert({
+        [self pathForResource:@"fabric02_col.jpg"],
+        [self pathForResource:@"fabric02_nrm.jpg"],
+        [self pathForResource:@"blank_black.png"],
+        [self pathForResource:@"fabric02_rgh.jpg"],
+        [self pathForResource:@"blank_white.jpg"],
+        [self pathForResource:@"fabric02_disp.jpg"]
+    });
+}
+
 @end

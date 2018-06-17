@@ -116,7 +116,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -157,7 +157,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneRenderer->prepareFrame();
 
     if (self.renderingSettings.meshSettings.meshRenderingEnabled) {
-        self.sceneRenderer->renderMeshes();
+        EARenderer::Measurement::ExecutionTime("" , [&]() {
+            self.sceneRenderer->renderMeshes();
+            glFinish();
+        });
     }
 
     if (self.renderingSettings.probeSettings.probeRenderingEnabled) {

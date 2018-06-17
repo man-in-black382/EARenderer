@@ -20,6 +20,10 @@
 
 + (EARenderer::ID)load_fabric06_MaterialToPool:(EARenderer::ResourcePool *)pool;
 
++ (EARenderer::ID)load_BlueFabric_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
++ (EARenderer::ID)load_RedFabric_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
 + (EARenderer::ID)load_rocks01_MaterialToPool:(EARenderer::ResourcePool *)pool;
 
 + (EARenderer::ID)load_pavingStones09_MaterialToPool:(EARenderer::ResourcePool *)pool;

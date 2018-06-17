@@ -1,4 +1,4 @@
-//
+
 //  Renderer.cpp
 //  EARenderer
 //
@@ -28,10 +28,11 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDirectionalExponentialShadowMap(Size2D(1024)),
-    mShadowMaps(Size2D(1024), mNumberOfCascades),
-    mShadowCubeMap(Size2D(1024)),
-    mDirectionalShadowFramebuffer(Size2D(1024)),
+    mDepthRenderbuffer(Size2D(768)),
+    mDirectionalExponentialShadowMap(Size2D(768)),
+    mShadowMaps(Size2D(768), mNumberOfCascades),
+    mShadowCubeMap(Size2D(768)),
+    mDirectionalShadowFramebuffer(Size2D(768)),
 
     // Image based lighting (IBL)
     mEnvironmentMapCube(Size2D(512)),
@@ -48,15 +49,6 @@ namespace EARenderer {
 
     // Diffuse light probes
     mGridProbesSHMaps {
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLHDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
-    },
-    mGridProbesSHIntegerMaps {
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
         GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
@@ -143,21 +135,15 @@ namespace EARenderer {
 
     void SceneRenderer::setupFramebuffers() {
         mDirectionalShadowFramebuffer.attachTexture(mDirectionalExponentialShadowMap);
+        mDirectionalShadowFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[4], GLFramebuffer::ColorAttachment::Attachment4);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[5], GLFramebuffer::ColorAttachment::Attachment5);
-//        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[6], GLFramebuffer::ColorAttachment::Attachment6);
-
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHIntegerMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
+        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
     }
 
 #pragma mark - Rendering
@@ -293,9 +279,9 @@ namespace EARenderer {
             auto& instance = mScene->meshInstances()[meshInstanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
-            auto mvp = instance.transformation().modelMatrix() * mShadowCascades.lightViewProjections[0];
+            auto mvp = mShadowCascades.lightViewProjections[0] * instance.transformation().modelMatrix();
             mDirectionalESMShader.setMVPMatrix(mvp);
-            mDirectionalESMShader.setESMFactor(0.5);
+            mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
 
             for (ID subMeshID : subMeshes) {
                 auto& subMesh = subMeshes[subMeshID];
@@ -303,7 +289,8 @@ namespace EARenderer {
             }
         }
 
-        mShadowBlurFilter.blur(8);
+        size_t radius = mSettings.meshSettings.shadowBlurRadius;
+        mShadowBlurFilter.blur(radius, radius / 2);
     }
 
     void SceneRenderer::relightSurfels() {
@@ -316,10 +303,9 @@ namespace EARenderer {
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
+//            mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
-//            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
-            mSurfelLightingShader.setGridProbesSHIntegerTextures(mGridProbesSHIntegerMaps);
+            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mSurfelLightingShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
         });
@@ -364,6 +350,7 @@ namespace EARenderer {
     void SceneRenderer::prepareFrame() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
         mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
+//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 1);
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();
@@ -387,9 +374,9 @@ namespace EARenderer {
         mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
-            mCookTorranceShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
-//            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
-            mCookTorranceShader.setGridProbesSHIntegerTextures(mGridProbesSHIntegerMaps);
+            mCookTorranceShader.setFrustumCascades(mShadowCascades);
+            mCookTorranceShader.setExponentialShadowMap(*mShadowBlurFilter.outputImage());
+            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 

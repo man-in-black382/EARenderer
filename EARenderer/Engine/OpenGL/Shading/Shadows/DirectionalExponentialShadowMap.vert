@@ -1,14 +1,14 @@
 #version 400 core
 
-uniform mat4 uModelMatrix;
-uniform mat4 uViewProjectionMatrix;
+uniform mat4 uModelViewProjectionMatrix;
 
 layout (location = 0) in vec4 iPosition;
 
-out vec4 vFragClipSpacePosition;
+out vec3 vFragClipSpacePosition;
 
 void main() {
-    vFragClipSpacePosition = uViewProjectionMatrix * uModelMatrix * iPosition;
-    gl_Position = vFragClipSpacePosition;
+    vec4 lightSpacePosition = uModelViewProjectionMatrix * iPosition;
+    vFragClipSpacePosition = lightSpacePosition.xyz;
+    gl_Position = lightSpacePosition;
 }
 

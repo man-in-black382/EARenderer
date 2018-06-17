@@ -36,8 +36,6 @@ namespace EARenderer {
     
     class GLSLCookTorrance: public GLProgram {
     public:
-        enum class GeometryType { StaticLightmapped, StaticDedicated, Dynamic };
-
         using GLProgram::GLProgram;
         
         GLSLCookTorrance();
@@ -53,16 +51,10 @@ namespace EARenderer {
                             const GLHDRTexture2D& BRDFIntegrationMap,
                             int8_t specularIrradianceMapMaxLOD);
         
-        void setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps);
-        void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
-        void setGridProbesSHIntegerTextures(const std::array<GLLDRTexture3D, 4>& textures);
-        void setLightmapProbesSHTextures(const GLHDRTexture2DArray& textures);
-        void setDedicatedProbesSHTextures(const GLHDRTexture2DArray& textures);
+        void setFrustumCascades(const FrustumCascades& cascades);
+        void setExponentialShadowMap(const GLHDRTexture2D& map);
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setGeometryType(GeometryType type);
-        void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
-        void setCubemapTexCoordsMap(const GLLDRTextureCubemap& map);
-        void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setSettings(const RenderingSettings& settings);
     };

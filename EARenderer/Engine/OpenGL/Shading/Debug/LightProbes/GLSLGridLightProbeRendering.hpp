@@ -10,7 +10,7 @@
 #define GLSLLightProbeRendering_hpp
 
 #include "GLProgram.hpp"
-#include "GLHDRTexture3D.hpp"
+#include "GLLDRTexture3D.hpp"
 #include "Camera.hpp"
 
 namespace EARenderer {
@@ -20,7 +20,7 @@ namespace EARenderer {
         GLSLGridLightProbeRendering();
 
         void setCamera(const Camera& camera);
-        void setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures);
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbesGridResolution(const glm::ivec3& resolution);
         void setSphereRadius(float radius);

@@ -24,6 +24,9 @@ namespace EARenderer {
             bool parallaxMappingEnabled = true;
 
             float parallaxMappingStrength = 0.05;
+            float ESMFactor = 0.5;
+            float ESMDarkeningFactor = 1.0;
+            uint32_t shadowBlurRadius = 8;
 
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;

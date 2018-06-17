@@ -16,10 +16,15 @@
 
 @property (weak, nonatomic) IBOutlet NSButton *renderMeshesEnabledButton;
 @property (weak, nonatomic) IBOutlet NSButton *parallaxMappingEnabledButton;
+@property (weak, nonatomic) IBOutlet NSTextField *parallaxMappingStrengthTextField;
 @property (weak, nonatomic) IBOutlet NSButton *lightMultibounceEnabledButton;
 @property (weak, nonatomic) IBOutlet NSButton *skyboxRenderingEnabledButton;
 @property (weak, nonatomic) IBOutlet NSButton *triangleRenderingEnabledButton;
 @property (weak, nonatomic) IBOutlet NSButton *frameMeasurementEnabledButton;
+
+@property (weak, nonatomic) IBOutlet NSTextField *ESMFactorTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *ESMDarkeningTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *shadowBlurRadiusTextField;
 
 @property (weak, nonatomic) IBOutlet NSButton *surfelRenderingEnabledButton;
 @property (weak, nonatomic) IBOutlet NSPopUpButton *surfelRenderingModeButton;
@@ -38,6 +43,12 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+
+    self.parallaxMappingStrengthTextField.floatValue = mSettings.meshSettings.parallaxMappingStrength;
+    self.ESMFactorTextField.floatValue = mSettings.meshSettings.ESMFactor;
+    self.ESMDarkeningTextField.floatValue = mSettings.meshSettings.ESMDarkeningFactor;
+    self.shadowBlurRadiusTextField.intValue = mSettings.meshSettings.shadowBlurRadius;
+    self.surfelProbeIndexTextField.intValue = mSettings.surfelSettings.POVProbeIndex;
 }
 
 #pragma mark - Actions
@@ -52,8 +63,8 @@
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
-- (IBAction)parallaxMappingStrengthChanged:(NSSlider *)sender {
-    mSettings.meshSettings.parallaxMappingStrength = sender.floatValue / 100.0;
+- (IBAction)parallaxMappingStrengthChanged:(NSTextField *)sender {
+    mSettings.meshSettings.parallaxMappingStrength = sender.floatValue;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
@@ -86,6 +97,25 @@
 //    mSettings. = sender.state == NSControlStateValueOn;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
+
+#pragma mark - Shadows
+
+- (IBAction)ESMFactorChanged:(NSTextField *)sender {
+    mSettings.meshSettings.ESMFactor = sender.floatValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)ESMDarkeningFactorChanged:(NSTextField *)sender {
+    mSettings.meshSettings.ESMDarkeningFactor = sender.floatValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)shadowBlurRadiusChanged:(NSTextField *)sender {
+    mSettings.meshSettings.shadowBlurRadius = sender.intValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+#pragma mark - Surfels
 
 - (IBAction)surfelRenderingToggled:(NSButton *)sender {
     mSettings.surfelSettings.renderingEnabled = sender.state == NSControlStateValueOn;

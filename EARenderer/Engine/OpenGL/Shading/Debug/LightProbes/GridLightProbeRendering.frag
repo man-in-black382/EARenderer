@@ -24,13 +24,10 @@ out vec4 oFragColor;
 uniform float uRadius;
 uniform ivec3 uProbesGridResolution;
 
-uniform sampler3D uGridSHMap0;
-uniform sampler3D uGridSHMap1;
-uniform sampler3D uGridSHMap2;
-uniform sampler3D uGridSHMap3;
-uniform sampler3D uGridSHMap4;
-uniform sampler3D uGridSHMap5;
-uniform sampler3D uGridSHMap6;
+uniform usampler3D uGridSHMap0;
+uniform usampler3D uGridSHMap1;
+uniform usampler3D uGridSHMap2;
+uniform usampler3D uGridSHMap3;
 
 // Types
 
@@ -56,39 +53,61 @@ vec3 AlignWithTexelCenters(vec3 texCoords) {
     return texCoords * reductionFactor + halfTexel;
 }
 
-SH UnpackSH() {
-    SH sh;
+SH ZeroSH() {
+    SH result;
+    result.L00  = vec3(0.0); result.L1_1 = vec3(0.0); result.L10  = vec3(0.0);
+    result.L11  = vec3(0.0); result.L2_2 = vec3(0.0); result.L2_1 = vec3(0.0);
+    result.L21  = vec3(0.0); result.L20  = vec3(0.0); result.L22  = vec3(0.0);
+    return result;
+}
 
-    vec3 shMapCoords = AlignWithTexelCenters(vTexCoords);
+vec2 UnpackSnorm2x16(uint package, float range) {
+    const float base = 32767.0;
 
-    vec4 shMap0Data = texture(uGridSHMap0, shMapCoords);
-    vec4 shMap1Data = texture(uGridSHMap1, shMapCoords);
-    vec4 shMap2Data = texture(uGridSHMap2, shMapCoords);
-    vec4 shMap3Data = texture(uGridSHMap3, shMapCoords);
-    vec4 shMap4Data = texture(uGridSHMap4, shMapCoords);
-    vec4 shMap5Data = texture(uGridSHMap5, shMapCoords);
-    vec4 shMap6Data = texture(uGridSHMap6, shMapCoords);
+    // Unpack encoded floats into individual variables
+    uint uFirst = package >> 16;
+    uint uSecond = package & 0x0000FFFFu;
 
-    sh.L00  = vec3(shMap0Data.rgb);
-    sh.L11  = vec3(shMap0Data.a, shMap1Data.rg);
-    sh.L10  = vec3(shMap1Data.ba, shMap2Data.r);
-    sh.L1_1 = vec3(shMap2Data.gba);
-    sh.L21  = vec3(shMap3Data.rgb);
-    sh.L2_1 = vec3(shMap3Data.a, shMap4Data.rg);
-    sh.L2_2 = vec3(shMap4Data.ba, shMap5Data.r);
-    sh.L20  = vec3(shMap5Data.gba);
-    sh.L22  = vec3(shMap6Data.rgb);
+    // Extract sign bits
+    uint firstSignMask = uFirst & (1u << 15);
+    uint secondSignMask = uSecond & (1u << 15);
 
-//    // White and green
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+    // If sign bit indicates negativity, fill MS 16 bits with 1s
+    uFirst |= firstSignMask != 0 ? 0xFFFF0000u : 0x0u;
+    uSecond |= secondSignMask != 0 ? 0xFFFF0000u : 0x0u;
+
+    // Now get signed integer representation
+    int iFirst = int(uFirst);
+    int iSecond = int(uSecond);
+
+    // At last, convert integers back to floats using range and base
+    float fFirst = (float(iFirst) / base) * range;
+    float fSecond = (float(iSecond) / base) * range;
+
+    return vec2(fFirst, fSecond);
+}
+
+SH UnpackSH_311_HalfPacked() {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(AlignWithTexelCenters(vTexCoords) * uProbesGridResolution);
+
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+
+    float range = uintBitsToFloat(shMap1Data.a);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range); vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range); vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range); vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
+
+    // Y
+    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
+    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
+    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
+
+    // Co, Cg
+    sh.L00.g  = pair4.y; sh.L00.b  = pair5.x;
 
     return sh;
 }
@@ -105,12 +124,21 @@ float SHRadiance(SH sh, vec3 direction, int component) {
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = UnpackSH();
+    SH sh = UnpackSH_311_HalfPacked();
     return vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
 }
 
 vec3 ReinhardToneMap(vec3 color) {
     return color / (color + vec3(1.0));
+}
+
+vec3 RGB_From_YCoCg(vec3 YCoCg) {
+    float t = YCoCg.x - YCoCg.z;
+    float g = YCoCg.x + YCoCg.z;
+    float b = t - YCoCg.y;
+    float r = t + YCoCg.y;
+
+    return vec3(r, g, b);
 }
 
 // Drawing a sphere using billboard
@@ -134,6 +162,7 @@ void main() {
     normal = vNormalMatrix * normal;
 
     vec3 color = EvaluateSphericalHarmonics(normal);
+    color = RGB_From_YCoCg(color);
     color = ReinhardToneMap(color);
 
     oFragColor = vec4(color, 1.0);

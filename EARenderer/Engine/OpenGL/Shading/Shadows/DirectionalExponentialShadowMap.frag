@@ -6,7 +6,7 @@ uniform float uESMFactor;
 
 // Input
 
-in vec4 vFragClipSpacePosition;
+in vec3 vFragClipSpacePosition;
 
 // Output
 

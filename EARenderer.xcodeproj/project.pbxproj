@@ -59,7 +59,6 @@
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
 		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
 		CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */; };
-		CE2C470920B49211004E5BE7 /* sponza.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE2C470820B49211004E5BE7 /* sponza.obj */; };
 		CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */; };
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
@@ -341,6 +340,7 @@
 		CEC2196E20C0744E00767342 /* Fabric05_mask.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CEC2195020C0744E00767342 /* Fabric05_mask.jpg */; };
 		CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2197020C076B000767342 /* MaterialLoader.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
+		CECD41DD20D67FDA00D40D32 /* sponza_lightweight.obj in Resources */ = {isa = PBXBuildFile; fileRef = CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF0162020D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */; };
 		CEF0162120D41A9800E0F0AB /* DirectionalExponentialShadowMap.vert in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161F20D41A9700E0F0AB /* DirectionalExponentialShadowMap.vert */; };
@@ -694,7 +694,6 @@
 		CE2221F91FC0B06D009B6804 /* LightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbe.hpp; sourceTree = "<group>"; };
 		CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
 		CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRCubemapSampler.hpp; sourceTree = "<group>"; };
-		CE2C470820B49211004E5BE7 /* sponza.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza.obj; sourceTree = "<group>"; };
 		CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_roughness.png"; sourceTree = "<group>"; };
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
@@ -1384,6 +1383,7 @@
 		CEC2196F20C076B000767342 /* MaterialLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MaterialLoader.h; sourceTree = "<group>"; };
 		CEC2197020C076B000767342 /* MaterialLoader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MaterialLoader.mm; sourceTree = "<group>"; };
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
+		CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight.obj; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalExponentialShadowMap.frag; sourceTree = "<group>"; };
@@ -2311,7 +2311,7 @@
 		CE70F81F1F8F8EBD00AD9027 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				CE2C470820B49211004E5BE7 /* sponza.obj */,
+				CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */,
 				CE53ADD5209E191600749A96 /* cornell_box_covered.obj */,
 				CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */,
 				CE70F8201F8F8EBD00AD9027 /* suzanne.obj */,
@@ -3465,6 +3465,7 @@
 				CEC2196820C0744E00767342 /* Rocks01_rgh.jpg in Resources */,
 				CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */,
 				CEC2196A20C0744E00767342 /* Fabric05_rgh.jpg in Resources */,
+				CECD41DD20D67FDA00D40D32 /* sponza_lightweight.obj in Resources */,
 				CE70FA581F8F8F7400AD9027 /* CubemapRendering.geom in Resources */,
 				CE70FA591F8F8F7400AD9027 /* FullScreenQuad.vert in Resources */,
 				CE4DE24E1FA60CFF0067729A /* VasePlant_roughness.tga in Resources */,
@@ -3558,7 +3559,6 @@
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,
-				CE2C470920B49211004E5BE7 /* sponza.obj in Resources */,
 				CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */,
 				CE4DE2301FA60CFF0067729A /* Sponza_Details_roughness.tga in Resources */,
 				CE4DE2101FA60CFE0067729A /* Lion_Normal.tga in Resources */,

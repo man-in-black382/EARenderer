@@ -26,14 +26,11 @@ namespace EARenderer {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
     }
 
-    void GLSLGridLightProbeRendering::setGridProbesSHTextures(const std::array<GLHDRTexture3D, 7>& textures) {
+    void GLSLGridLightProbeRendering::setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap4")>, textures[4]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap5")>, textures[5]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap6")>, textures[6]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
     }
 
     void GLSLGridLightProbeRendering::setWorldBoundingBox(const AxisAlignedBox3D& box) {

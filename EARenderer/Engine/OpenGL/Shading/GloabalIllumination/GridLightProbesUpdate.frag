@@ -6,9 +6,6 @@ layout(location = 0) out uvec4 oFragData0;
 layout(location = 1) out uvec4 oFragData1;
 layout(location = 2) out uvec4 oFragData2;
 layout(location = 3) out uvec4 oFragData3;
-//layout(location = 4) out vec4 oFragData4;
-//layout(location = 5) out vec4 oFragData5;
-//layout(location = 6) out vec4 oFragData6;
 
 // Input
 
@@ -149,7 +146,6 @@ vec3 YCoCg_From_RGB(vec3 rgb) {
 }
 
 uint PackSnorm2x16(float first, float second, float range) {
-//    range = 1000.0;
     const float base = 32767.0;
 
     uint packed = 0;
@@ -173,35 +169,20 @@ uint PackSnorm2x16(float first, float second, float range) {
     return packed;
 }
 
-//// Pack SH coefficients into texels of 3D textures
-//// Use 3 SH bands for each color channel
-//void WriteSH_333_ToRenderTargets(SH sh) {
-//    oFragData0 = vec4(sh.L00.rgb, sh.L11.r);
-//    oFragData1 = vec4(sh.L11.gb, sh.L10.rg);
-//    oFragData2 = vec4(sh.L10.b, sh.L1_1.rgb);
-//    oFragData3 = vec4(sh.L21.rgb, sh.L2_1.r);
-//    oFragData4 = vec4(sh.L2_1.gb, sh.L2_2.rg);
-//    oFragData5 = vec4(sh.L2_2.b, sh.L20.rgb);
-//    oFragData6 = vec4(sh.L22.rgb, 0.0);
-//}
-//
-//// Pack SH coefficients into texels of 3D textures
-//// Use 3 SH bands for first channel and 2 bands for second and third.
-//void WriteSH_322_ToRenderTargets(SH sh) {
-//    oFragData0 = vec4(sh.L00.r, sh.L11.r, sh.L10.r, sh.L1_1.r);
-//    oFragData1 = vec4(sh.L21.r, sh.L2_1.r, sh.L2_2.r, sh.L20.r);
-//    oFragData2 = vec4(sh.L22.r, /* 1st channel SH end */ sh.L00.g, sh.L11.g, sh.L10.g);
-//    oFragData3 = vec4(sh.L1_1.g, /* 2nd channel SH end */ sh.L00.b, sh.L11.b, sh.L10.b);
-//    oFragData4 = vec4(sh.L1_1.b, /* 3rd channel SH end */ 0.0, 0.0, 0.0);
-//}
+void WriteSH_311_HalfPacked_ToRenderTargets(SH sh) {
+    float maximum = ceil(MaxSHCoefficient(sh));
+    uint uMaximum = floatBitsToUint(maximum);
 
-//// Pack SH coefficients into texels of 3D textures
-//// Use 3 SH bands for first channel and 1 band for second and third.
-//void WriteSH_311_ToRenderTargets(SH sh) {
-//    oFragData0 = vec4(sh.L00.r, sh.L11.r, sh.L10.r, sh.L1_1.r);
-//    oFragData1 = vec4(sh.L21.r, sh.L2_1.r, sh.L2_2.r, sh.L20.r);
-//    oFragData2 = vec4(sh.L22.r, /* 1st channel SH end */ sh.L00.g, /* 2dn channel SH end */ sh.L00.b, /* 3rd channel SH end */ 0.0);
-//}
+    uint pair0 = PackSnorm2x16(sh.L00.r , sh.L11.r,  maximum);
+    uint pair1 = PackSnorm2x16(sh.L10.r , sh.L1_1.r, maximum);
+    uint pair2 = PackSnorm2x16(sh.L21.r , sh.L2_1.r, maximum);
+    uint pair3 = PackSnorm2x16(sh.L2_2.r, sh.L20.r,  maximum);
+    uint pair4 = PackSnorm2x16(sh.L22.r , sh.L00.g,  maximum);
+    uint pair5 = PackSnorm2x16(sh.L00.b , 0.0,  maximum);
+
+    oFragData0 = uvec4(pair0, pair1, pair2, pair3);
+    oFragData1 = uvec4(pair4, pair5, 0, uMaximum);
+}
 
 // Pack SH coefficients into texels of 3D textures
 // Use 3 SH bands for first channel and 2 bands for second and third.
@@ -322,10 +303,6 @@ void main() {
 
         float luma = 0.2126 * surfelClusterLuminance.r + 0.7152 * surfelClusterLuminance.g + 0.0722 * surfelClusterLuminance.b;
 
-//        vec3 luma = vec3(YCoCg_From_RGB(surfelClusterLuminance));
-
-//        float luma = 10.0;
-
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
         SH luminanceSH = MultiplySHByColor(surfelClusterPrecomputedSH, vec3(luma));
@@ -333,5 +310,5 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
-    WriteSH_333_HalfPacked_ToRenderTargets(resultingSH);
+    WriteSH_311_HalfPacked_ToRenderTargets(resultingSH);
 }
