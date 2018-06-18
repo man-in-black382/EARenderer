@@ -148,6 +148,8 @@ vec3 YCoCg_From_RGB(vec3 rgb) {
 uint PackSnorm2x16(float first, float second, float range) {
     const float base = 32767.0;
 
+    range = 50.0;
+
     uint packed = 0;
     uint iFirst = uint(int(first / range * base));
     uint iSecond = uint(int(second / range * base));
@@ -206,6 +208,19 @@ void WriteSH_322_HalfPacked_ToRenderTargets(SH sh) {
 }
 
 void WriteSH_333_HalfPacked_ToRenderTargets(SH sh) {
+    // Green & White
+    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
+    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
+    sh.L10  = vec3(0.0);
+    sh.L1_1 = vec3(0.0);
+    sh.L21  = vec3(0.0);
+    sh.L2_1 = vec3(0.0);
+    sh.L2_2 = vec3(0.0);
+    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
+    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+
+    sh = MultiplySHByColor(sh, vec3(10.0));
+
     float maximum = ceil(MaxSHCoefficient(sh));
     uint uMaximum = floatBitsToUint(maximum);
 
