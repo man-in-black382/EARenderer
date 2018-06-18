@@ -263,8 +263,8 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
 
     uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
     uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    uvec4 shMap2Data = shMap0Data;//texelFetch(uGridSHMap2, iTexCoords, 0);
-    uvec4 shMap3Data = shMap1Data;//texelFetch(uGridSHMap3, iTexCoords, 0);
+    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+    uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
 
     float range = uintBitsToFloat(shMap3Data.a);
 
@@ -366,10 +366,10 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z); vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z); vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_311_HalfPacked(cp0); SH sh1 = UnpackSH_311_HalfPacked(cp1);
-    SH sh2 = UnpackSH_311_HalfPacked(cp2); SH sh3 = UnpackSH_311_HalfPacked(cp3);
-    SH sh4 = UnpackSH_311_HalfPacked(cp4); SH sh5 = UnpackSH_311_HalfPacked(cp5);
-    SH sh6 = UnpackSH_311_HalfPacked(cp6); SH sh7 = UnpackSH_311_HalfPacked(cp7);
+    SH sh0 = UnpackSH_333_HalfPacked(cp0); SH sh1 = UnpackSH_333_HalfPacked(cp1);
+    SH sh2 = UnpackSH_333_HalfPacked(cp2); SH sh3 = UnpackSH_333_HalfPacked(cp3);
+    SH sh4 = UnpackSH_333_HalfPacked(cp4); SH sh5 = UnpackSH_333_HalfPacked(cp5);
+    SH sh6 = UnpackSH_333_HalfPacked(cp6); SH sh7 = UnpackSH_333_HalfPacked(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal); float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
     float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal); float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
@@ -715,7 +715,7 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-    indirectRadiance = RGB_From_YCoCg(indirectRadiance) * 10.0;
+//    indirectRadiance = RGB_From_YCoCg(indirectRadiance) * 10.0;
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);

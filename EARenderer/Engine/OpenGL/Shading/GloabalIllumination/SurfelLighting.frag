@@ -551,7 +551,8 @@ void main() {
 
     vec3 diffuseRadiance = radiance * NdotL;
     
-    vec3 indirectRadiance = RGB_From_YCoCg(EvaluateSphericalHarmonics(N, position));
+    vec3 indirectRadiance = EvaluateSphericalHarmonics(N, position);
+    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance = max(vec3(0.0), indirectRadiance);
 
     // Apply shadow factor
