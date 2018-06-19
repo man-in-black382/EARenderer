@@ -45,6 +45,7 @@ namespace EARenderer {
             }
         }
 
+        projection.sphericalHarmonics.convolve();
         projection.sphericalHarmonics.normalize();
 
         return projection;
@@ -65,7 +66,7 @@ namespace EARenderer {
             }
         }
 
-        printf("");
+
     }
 
     void DiffuseLightProbeGenerator::calculateOcclusionTextureResolution() {
