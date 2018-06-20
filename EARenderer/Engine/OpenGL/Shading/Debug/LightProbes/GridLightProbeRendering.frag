@@ -124,8 +124,6 @@ SH UnpackSH_333_HalfPacked() {
 
     float range = uintBitsToFloat(shMap3Data.a);
 
-    range = 50.0;
-
     vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
     vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);  vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
     vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);

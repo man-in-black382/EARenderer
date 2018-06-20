@@ -303,11 +303,13 @@ namespace EARenderer {
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-//            mSurfelLightingShader.setShadowMapsUniforms(mShadowCascades, mShadowMaps);
+            mSurfelLightingShader.setShadowCascades(mShadowCascades);
+            mSurfelLightingShader.setExponentialShadowMap(mDirectionalExponentialShadowMap);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
             mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mSurfelLightingShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
+            mSurfelLightingShader.setSettings(mSettings);
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

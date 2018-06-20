@@ -19,7 +19,7 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void GLSLSurfelLighting::setShadowMapsUniforms(const FrustumCascades& cascades, const GLDepthTexture2DArray& shadowMaps) {
+    void GLSLSurfelLighting::setShadowCascades(const FrustumCascades& cascades) {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), cascades.amount);
 
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(),
@@ -29,8 +29,10 @@ namespace EARenderer {
         glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
                      static_cast<GLsizei>(cascades.splits.size()),
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+    }
 
-        setUniformTexture(uint32_constant<ctcrc32("uShadowMapArray")>, shadowMaps);
+    void GLSLSurfelLighting::setExponentialShadowMap(const GLHDRTexture2D& map) {
+        setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
     }
 
     void GLSLSurfelLighting::setLight(const DirectionalLight& light) {
@@ -66,6 +68,11 @@ namespace EARenderer {
 
     void GLSLSurfelLighting::setMultibounceEnabled(bool multibounceEnabled) {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uEnableMultibounce")>).location(), multibounceEnabled);
+    }
+
+    void GLSLSurfelLighting::setSettings(const RenderingSettings& settings) {
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMDarkeningFactor")>).location(), settings.meshSettings.ESMDarkeningFactor);
     }
 
 }

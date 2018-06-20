@@ -29,8 +29,8 @@ namespace EARenderer {
     void GLSLGridLightProbeRendering::setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
-//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
-//        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
     }
 
     void GLSLGridLightProbeRendering::setWorldBoundingBox(const AxisAlignedBox3D& box) {

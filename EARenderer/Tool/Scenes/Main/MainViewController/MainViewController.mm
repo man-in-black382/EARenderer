@@ -183,8 +183,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         self.sceneRenderer->renderLinksForDiffuseProbe(self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex);
     }
 
-//    self.sceneRenderer->renderSurfelLuminances();
-//    self.sceneRenderer->renderSurfelClusterLuminances();
+    self.sceneRenderer->renderSurfelLuminances();
+    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
 //    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
 

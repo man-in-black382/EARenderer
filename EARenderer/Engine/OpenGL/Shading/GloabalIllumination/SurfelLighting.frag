@@ -57,7 +57,9 @@ uniform int uLightType;
 uniform bool uEnableMultibounce;
 
 // Shadow mapping
-uniform sampler2DArray uShadowMapArray;
+uniform sampler2D uExponentialShadowMap;
+uniform float uESMFactor;
+uniform float uESMDarkeningFactor;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
@@ -451,44 +453,25 @@ int shadowCascadeIndex()
     return 0;
 }
 
-float Shadow(in vec3 N, in vec3 L, in vec3 worldPosition)
-{
-//    int shadowCascadeIndex = shadowCascadeIndex();
-//
-//    vec4 lightSpacePosition = uLightSpaceMatrices[shadowCascadeIndex] * vec4(worldPosition, 1.0);
-//    // perform perspective division
-//    vec3 projCoords = lightSpacePosition.xyz / lightSpacePosition.w;
-//
-//    // Transformation to [0,1] range
-//    projCoords = projCoords * 0.5 + 0.5;
-//
-//    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-//    float closestDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-//
-//    // Get depth of current fragment from light's perspective
-//    float currentDepth = projCoords.z;
-//
-//    // Check whether current frag pos is in shadow
-//    float bias = max(0.01 * (1.0 - dot(N, L)), 0.005);
-//
-//    //    float shadow = 0.0;
-//    //    vec3 texelSize = 1.0 / textureSize(uShadowMapArray, 0);
-//    //    for(int x = -2; x <= 2; ++x) {
-//    //        for(int y = -2; y <= 2; ++y) {
-//    //            vec2 xy = projCoords.xy + vec2(x, y) * texelSize.xy;
-//    //            float pcfDepth = texture(uShadowMapArray, vec3(xy, shadowCascadeIndex)).r;
-//    //            float unbiasedDepth = currentDepth - bias;
-//    //            shadow += unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
-//    //        }
-//    //    }
-//    //    shadow /= 36.0;
-//    //    return shadow;
-//
-//    float pcfDepth = texture(uShadowMapArray, vec3(projCoords.xy, shadowCascadeIndex)).r;
-//    float unbiasedDepth = currentDepth - bias;
-//    return unbiasedDepth > pcfDepth && unbiasedDepth <= 1.0 ? 1.0 : 0.0;
+float ExponentialShadow(vec3 surfelPosition) {
+    int shadowCascadeIndex = shadowCascadeIndex();
 
-    return 0.0;
+    vec4 lightSpacePosition = uLightSpaceMatrices[shadowCascadeIndex] * vec4(surfelPosition, 1.0);
+    // perform perspective division
+    vec3 projCoords = lightSpacePosition.xyz / lightSpacePosition.w;
+
+    // Transformation to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // Linear Z a.k.a disntance from light
+    // Distance to the fragment from a near clip plane of directional light's frustum
+    float linearZ = lightSpacePosition.z;
+
+    float occluder = texture(uExponentialShadowMap, projCoords.xy).r;
+    float receiver = exp(uESMDarkeningFactor - uESMFactor * linearZ);
+    float visibility = clamp(occluder * receiver, 0.0, 1.0);
+
+    return 1.0 - visibility;
 }
 
 ////////////////////////////////////////////////////////////
@@ -533,7 +516,7 @@ void main() {
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = Shadow(N, L, position);
+        shadow      = ExponentialShadow(position);
     } else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N, position);
         L           = normalize(uPointLight.position - position);
@@ -551,16 +534,14 @@ void main() {
 
     vec3 diffuseRadiance = radiance * NdotL;
     
-    vec3 indirectRadiance = EvaluateSphericalHarmonics(N, position);
-    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
+    vec3 indirectRadiance = uEnableMultibounce ? EvaluateSphericalHarmonics(N, position) : vec3(0.0);
+//    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance = max(vec3(0.0), indirectRadiance);
 
     // Apply shadow factor
-    diffuseRadiance *= 1.0 - shadow;
+    diffuseRadiance *= shadow;
 
-    vec3 finalColor = diffuseRadiance;
-
-    if (uEnableMultibounce) { finalColor += indirectRadiance; }
+    vec3 finalColor = diffuseRadiance;// + indirectRadiance;
 
     oFragColor = vec4(finalColor, 1.0);
 }

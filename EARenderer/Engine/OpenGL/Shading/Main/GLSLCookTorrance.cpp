@@ -97,14 +97,12 @@ namespace EARenderer {
     void GLSLCookTorrance::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
     }
-    
-    
+
     void GLSLCookTorrance::setSettings(const RenderingSettings& settings) {
         glUniform1ui(uniformByNameCRC32(uint32_constant<ctcrc32("uSettingsBitmask")>).location(), settings.meshSettings.booleanBitmask());
 //        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uParallaxMappingStrength")>).location(), settings.meshSettings.parallaxMappingStrength);
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMDarkeningFactor")>).location(), settings.meshSettings.ESMDarkeningFactor);
-        
     }
     
 }
