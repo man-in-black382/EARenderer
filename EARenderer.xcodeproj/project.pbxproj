@@ -192,7 +192,6 @@
 		CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */; };
 		CE70FA2E1F8F8EF600AD9027 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */; };
 		CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8881F8F8EBD00AD9027 /* Light.cpp */; };
-		CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8891F8F8EBD00AD9027 /* FrustumCascades.cpp */; };
 		CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */; };
 		CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */; };
 		CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */; };
@@ -839,7 +838,6 @@
 		CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
 		CE70F8881F8F8EBD00AD9027 /* Light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
-		CE70F8891F8F8EBD00AD9027 /* FrustumCascades.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrustumCascades.cpp; sourceTree = "<group>"; };
 		CE70F88A1F8F8EBD00AD9027 /* Light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
 		CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FrustumCascades.hpp; sourceTree = "<group>"; };
 		CE70F88C1F8F8EBD00AD9027 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
@@ -2531,7 +2529,6 @@
 			children = (
 				CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */,
 				CE70F88C1F8F8EBD00AD9027 /* DirectionalLight.hpp */,
-				CE70F8891F8F8EBD00AD9027 /* FrustumCascades.cpp */,
 				CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */,
 				CE70F8881F8F8EBD00AD9027 /* Light.cpp */,
 				CE70F88A1F8F8EBD00AD9027 /* Light.hpp */,
@@ -3722,7 +3719,6 @@
 				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
-				CE70FA301F8F8EF600AD9027 /* FrustumCascades.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
 				CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */,
 				CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */,

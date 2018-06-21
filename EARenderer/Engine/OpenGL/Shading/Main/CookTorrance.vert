@@ -30,6 +30,7 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInLightSpace;
+out vec4 vPosInCameraSpace;
 //out vec3 vPosInTangentSpace;
 //out vec3 vCameraPosInTangentSpace;
 
@@ -63,6 +64,7 @@ void main() {
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;
     vPosInLightSpace = uLightSpaceMat * worldPosition;
+    vPosInCameraSpace = uCameraSpaceMat * worldPosition;
 //    vPosInTangentSpace = inverseTBN * worldPosition.xyz;
 //    vCameraPosInTangentSpace = inverseTBN * uCameraPosition;
 

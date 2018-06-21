@@ -26,6 +26,7 @@ in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
 in vec4 vPosInLightSpace;
+in vec4 vPosInCameraSpace;
 //in vec3 vPosInTangentSpace;
 //in vec3 vCameraPosInTangentSpace;
 
@@ -87,6 +88,7 @@ uniform uint uSettingsBitmask;
 uniform float uParallaxMappingStrength;
 
 // Shadow mapping
+uniform mat4 uLightSpaceMatrices[kMaxCascades];
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 
@@ -515,7 +517,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     Kd              *= 1.0 - metallic;  // This will turn diffuse component of metallic surfaces to 0
 
     // Radiance of analytical light with shadow applied and Normal to Light vectors angle accounted
-    vec3 shadowedDirectRadiance = radiance * (1.0 - shadow) * NdotL;
+    vec3 shadowedDirectRadiance = radiance * shadow * NdotL;
 
     // Lambertian diffuse component with indirect light applied
     vec3 diffuse    = Kd * (albedo /*/ PI*/) * (shadowedDirectRadiance + (indirectRadiance * ao));
@@ -563,19 +565,42 @@ vec3 DirectionalLightRadiance() {
 ///////////////////////// Shadows //////////////////////////
 ////////////////////////////////////////////////////////////
 
+int ShadowCascadeIndex()
+{
+    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
+    // No need to transform to [0,1] range,
+    // because splits passed from client are in [-1; 1]
+
+    float fragDepth = projCoords.z;
+
+    for (int i = 0; i < kMaxCascades; ++i) {
+        if (fragDepth < uDepthSplits[i]) {
+            return i;
+        }
+    }
+
+    return 0;
+}
+
 float ExponentialShadow() {
-    vec3 projCoords = vPosInLightSpace.xyz / vPosInLightSpace.w;
+    int cascade = ShadowCascadeIndex();
+    mat4 relevantLightMatrix = uLightSpaceMatrices[cascade];
+    vec4 positionInLightSpace = relevantLightMatrix * vec4(vWorldPosition, 1.0);
+
+    vec3 projCoords = positionInLightSpace.xyz / positionInLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
 
     // Linear Z a.k.a disntance from light
     // Distance to the fragment from a near clip plane of directional light's frustum
-    float linearZ = vPosInLightSpace.z;
+    float linearZ = positionInLightSpace.z;
 
-    float occluder = texture(uExponentialShadowMap, projCoords.xy).r;
+    vec4 occluders = texture(uExponentialShadowMap, projCoords.xy);
+
+    float occluder = occluders[cascade];
     float receiver = exp(uESMDarkeningFactor - uESMFactor * linearZ);
     float visibility = clamp(occluder * receiver, 0.0, 1.0);
 
-    return 1.0 - visibility;
+    return visibility;
 }
 
 ////////////////////////////////////////////////////////////

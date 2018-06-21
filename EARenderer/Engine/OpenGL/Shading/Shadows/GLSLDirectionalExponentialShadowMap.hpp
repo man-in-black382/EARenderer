@@ -10,6 +10,8 @@
 #define GLSLDirectionalShadowMap_hpp
 
 #include "GLProgram.hpp"
+#include "FrustumCascades.hpp"
+#include "Camera.hpp"
 
 #include <glm/mat4x4.hpp>
 
@@ -21,8 +23,10 @@ namespace EARenderer {
 
         GLSLDirectionalExponentialShadowMap();
 
-        void setMVPMatrix(const glm::mat4& matrix);
+        void setModelMatrix(const glm::mat4& modelMatrix);
+        void setCamera(const Camera& camera);
         void setESMFactor(float factor);
+        void setFrustumCascades(const FrustumCascades& cascades);
     };
 
 }

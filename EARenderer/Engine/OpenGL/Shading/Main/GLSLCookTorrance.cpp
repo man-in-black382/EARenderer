@@ -65,18 +65,18 @@ namespace EARenderer {
     }
     
     void GLSLCookTorrance::setFrustumCascades(const FrustumCascades& cascades) {
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMat")>).location(), 1, GL_FALSE,
-                           reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMat")>).location(), 1, GL_FALSE,
+//                           reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
 
 //        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), cascades.amount);
 
-//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(),
-//                           static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE,
-//                           reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(),
+                           static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE,
+                           reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
 
-//        glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
-//                     static_cast<GLsizei>(cascades.splits.size()),
-//                     reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+        glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
+                     static_cast<GLsizei>(cascades.splits.size()),
+                     reinterpret_cast<const GLfloat *>(cascades.splits.data()));
     }
     
     void GLSLCookTorrance::setExponentialShadowMap(const GLHDRTexture2D& map) {

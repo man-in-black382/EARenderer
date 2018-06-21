@@ -273,19 +273,21 @@ namespace EARenderer {
         mDirectionalShadowFramebuffer.bind();
         mDirectionalShadowFramebuffer.viewport().apply();
 
+        mDirectionalESMShader.setCamera(*mScene->camera());
+        mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
+        mDirectionalESMShader.setFrustumCascades(mShadowCascades);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (ID meshInstanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[meshInstanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
-            auto mvp = mShadowCascades.lightViewProjections[0] * instance.transformation().modelMatrix();
-            mDirectionalESMShader.setMVPMatrix(mvp);
-            mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
+            mDirectionalESMShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
                 auto& subMesh = subMeshes[subMeshID];
-                subMesh.draw();
+                subMesh.drawInstanced(mShadowCascades.amount);
             }
         }
 
@@ -351,8 +353,8 @@ namespace EARenderer {
 
     void SceneRenderer::prepareFrame() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
-        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
-//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 1);
+//        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
+        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 4);
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();
@@ -399,6 +401,22 @@ namespace EARenderer {
                 subMesh.draw();
             }
         }
+
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+
+        Rect2D viewportRect(Size2D(200, 200));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {
