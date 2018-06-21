@@ -518,7 +518,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     vec3 shadowedDirectRadiance = radiance * (1.0 - shadow) * NdotL;
 
     // Lambertian diffuse component with indirect light applied
-    vec3 diffuse    = Kd * (albedo / PI) * (shadowedDirectRadiance + (indirectRadiance * ao));
+    vec3 diffuse    = Kd * (albedo /*/ PI*/) * (shadowedDirectRadiance + (indirectRadiance * ao));
 
     // Specular component is not affected by indirect light (probably will by a reflection probe later)
     specular        *= shadowedDirectRadiance;

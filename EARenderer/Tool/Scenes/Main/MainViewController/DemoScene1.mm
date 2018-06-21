@@ -177,7 +177,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(60.0, 50.0, 50.0));
+    scene->directionalLight().setColor(EARenderer::Color(5.0, 5.0, 5.0));
 
     scene->calculateGeometricProperties();
 
@@ -218,7 +218,7 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(-0.3, -1.0, 0.45);
+    glm::vec3 lightStart(0.7, -1.0, 0.45);
     glm::vec3 lightEnd(-0.3, -1.0, -0.45);
 
     choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);

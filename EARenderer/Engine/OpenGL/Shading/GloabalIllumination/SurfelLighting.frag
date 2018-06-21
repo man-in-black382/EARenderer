@@ -471,7 +471,7 @@ float ExponentialShadow(vec3 surfelPosition) {
     float receiver = exp(uESMDarkeningFactor - uESMFactor * linearZ);
     float visibility = clamp(occluder * receiver, 0.0, 1.0);
 
-    return 1.0 - visibility;
+    return visibility;
 }
 
 ////////////////////////////////////////////////////////////
