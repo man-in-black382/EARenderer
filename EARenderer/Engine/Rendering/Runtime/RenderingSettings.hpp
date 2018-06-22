@@ -24,6 +24,8 @@ namespace EARenderer {
             bool parallaxMappingEnabled = true;
 
             float parallaxMappingStrength = 0.05;
+
+            uint32_t shadowCascadesCount = 4;
             float ESMFactor = 0.5;
             float ESMDarkeningFactor = 1.0;
             uint32_t shadowBlurRadius = 8;

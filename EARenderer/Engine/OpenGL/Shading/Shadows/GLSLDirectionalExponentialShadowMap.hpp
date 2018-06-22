@@ -24,9 +24,8 @@ namespace EARenderer {
         GLSLDirectionalExponentialShadowMap();
 
         void setModelMatrix(const glm::mat4& modelMatrix);
-        void setCamera(const Camera& camera);
+        void setLightMatrix(const glm::mat4& lightMatrix);
         void setESMFactor(float factor);
-        void setFrustumCascades(const FrustumCascades& cascades);
     };
 
 }

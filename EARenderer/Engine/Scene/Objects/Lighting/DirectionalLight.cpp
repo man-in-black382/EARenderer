@@ -56,7 +56,7 @@ namespace EARenderer {
         return glm::lookAt(glm::zero<glm::vec3>(), mDirection, reference);
     }
     
-    FrustumCascades DirectionalLight::cascadesForCamera(const Camera& camera, uint8_t numberOfCascades) const {
+    FrustumCascades DirectionalLight::cascadesForCamera(const Camera& camera, uint8_t numberOfCascades, const glm::vec3& scale) const {
         // Cascaded shadow maps http://ogldev.atspace.co.uk/www/tutorial49/tutorial49.html
         
         FrustumCascades cascades;
@@ -93,10 +93,12 @@ namespace EARenderer {
             };
             
             AxisAlignedBox3D box{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
-            
+
+            glm::mat4 scaleMat = glm::scale(scale);
+
             for (auto& point : cornerPoints) {
                 glm::vec4 p = point;
-                p = lightViewMat * inverseCameraViewMat * p;
+                p = lightViewMat * scaleMat * inverseCameraViewMat * p;
                 box.min = glm::min(box.min, glm::vec3{p});
                 box.max = glm::max(box.max, glm::vec3{p});
             }

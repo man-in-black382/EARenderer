@@ -751,4 +751,12 @@ void main() {
     vec3 correctColor          = GammaCorrect(toneMappedColor);
 
     oFragColor = vec4(correctColor, 1.0);
+
+//    int cascade = ShadowCascadeIndex();
+//    switch (cascade) {
+//        case 0: oFragColor += vec4(0.3, 0.0, 0.0, 0.0); break;
+//        case 1: oFragColor += vec4(0.0, 0.3, 0.0, 0.0); break;
+//        case 2: oFragColor += vec4(0.0, 0.0, 0.3, 0.0); break;
+//        case 3: oFragColor += vec4(0.3, 0.3, 0.0, 0.0); break;
+//    }
 }

@@ -27,7 +27,7 @@ namespace EARenderer {
         DirectionalLight(const Color& color, const glm::vec3& direction, float frustumSize);
         
         glm::mat4 viewMatrix() const;
-        FrustumCascades cascadesForCamera(const Camera& camera, uint8_t numberOfCascades) const;
+        FrustumCascades cascadesForCamera(const Camera& camera, uint8_t numberOfCascades, const glm::vec3& scale = glm::vec3(1.0)) const;
         FrustumCascades cascadesForWorldBoundingBox(const AxisAlignedBox3D& box) const;
         
         const glm::vec3& direction() const;
