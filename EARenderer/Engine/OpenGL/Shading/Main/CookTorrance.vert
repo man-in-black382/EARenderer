@@ -17,11 +17,10 @@ layout (location = 5) in vec3 iBitangent;
 uniform mat4 uModelMat;
 uniform mat4 uNormalMat;
 uniform mat4 uCameraSpaceMat;
-uniform mat4 uLightSpaceMat;
 uniform vec3 uCameraPosition;
 
 /* Shadow mapping */
-uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform mat4 uCSMSplitSpaceMat;
 uniform int uNumberOfCascades;
 
 // Output
@@ -30,7 +29,7 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInLightSpace;
-out vec4 vPosInCameraSpace;
+out vec4 vPosInCSMSplitSpace;
 //out vec3 vPosInTangentSpace;
 //out vec3 vCameraPosInTangentSpace;
 
@@ -55,7 +54,6 @@ mat3 OrthogonalTBN() {
 
 void main() {
     vec4 worldPosition = uModelMat * iPosition;
-    vec4 positionInCameraSpace = uCameraSpaceMat * worldPosition;
 
     mat3 TBN = TBN();
 //    mat3 inverseTBN = transpose(TBN);
@@ -63,10 +61,9 @@ void main() {
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;
-    vPosInLightSpace = uLightSpaceMat * worldPosition;
-    vPosInCameraSpace = uCameraSpaceMat * worldPosition;
+    vPosInCSMSplitSpace = uCSMSplitSpaceMat * worldPosition;
 //    vPosInTangentSpace = inverseTBN * worldPosition.xyz;
 //    vCameraPosInTangentSpace = inverseTBN * uCameraPosition;
 
-    gl_Position = positionInCameraSpace;
+    gl_Position = uCameraSpaceMat * worldPosition;
 }

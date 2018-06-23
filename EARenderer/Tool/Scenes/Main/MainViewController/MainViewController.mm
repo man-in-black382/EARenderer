@@ -106,7 +106,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
 
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 50.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 10.f);
     camera->moveTo(glm::vec3(0, 1, 0));
     camera->lookAt(glm::vec3(-1, -0.5, 0));
     
@@ -116,7 +116,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 

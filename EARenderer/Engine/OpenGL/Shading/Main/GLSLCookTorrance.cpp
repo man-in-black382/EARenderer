@@ -77,6 +77,8 @@ namespace EARenderer {
         glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
                      static_cast<GLsizei>(cascades.splits.size()),
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCSMSplitSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
     }
     
     void GLSLCookTorrance::setExponentialShadowMap(const GLHDRTexture2D& map) {

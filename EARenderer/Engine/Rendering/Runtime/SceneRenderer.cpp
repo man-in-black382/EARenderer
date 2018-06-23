@@ -279,7 +279,7 @@ namespace EARenderer {
 
         for (size_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
             // Ensure only one texture channel will be written to for each respective cascade
-            glColorMask(cascade == 0, cascade == 1, cascade == 2, cascade == 4);
+            glColorMask(cascade == 0, cascade == 1, cascade == 2, cascade == 3);
 
             mDirectionalESMShader.setLightMatrix(mShadowCascades.lightViewProjections[cascade]);
 
@@ -360,9 +360,9 @@ namespace EARenderer {
 
     void SceneRenderer::prepareFrame() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
-//        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
-        auto cascadeScale = glm::vec3(1.0, 5.0, 1.0);
-        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 4/*, cascadeScale*/);
+        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox(), 4);
+//        auto cascadeScale = glm::vec3(1.0, 1.0, 1.0);
+//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 4/*, cascadeScale*/);
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();

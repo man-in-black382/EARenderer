@@ -25,8 +25,7 @@ out vec4 oFragColor;
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
-in vec4 vPosInLightSpace;
-in vec4 vPosInCameraSpace;
+in vec4 vPosInCSMSplitSpace;
 //in vec3 vPosInTangentSpace;
 //in vec3 vCameraPosInTangentSpace;
 
@@ -567,7 +566,7 @@ vec3 DirectionalLightRadiance() {
 
 int ShadowCascadeIndex()
 {
-    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
+    vec3 projCoords = vPosInCSMSplitSpace.xyz / vPosInCSMSplitSpace.w;
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
 
@@ -754,9 +753,23 @@ void main() {
 
 //    int cascade = ShadowCascadeIndex();
 //    switch (cascade) {
-//        case 0: oFragColor += vec4(0.3, 0.0, 0.0, 0.0); break;
-//        case 1: oFragColor += vec4(0.0, 0.3, 0.0, 0.0); break;
-//        case 2: oFragColor += vec4(0.0, 0.0, 0.3, 0.0); break;
-//        case 3: oFragColor += vec4(0.3, 0.3, 0.0, 0.0); break;
+//        case 0: oFragColor = vec4(0.5, 0.0, 0.0, 0.0); break;
+//        case 1: oFragColor = vec4(0.0, 0.5, 0.0, 0.0); break;
+//        case 2: oFragColor = vec4(0.0, 0.0, 0.5, 0.0); break;
+//        case 3: oFragColor = vec4(0.5, 0.5, 0.0, 0.0); break;
+//    }
+
+//    vec3 projCoords = vPosInCSMSplitSpace.xyz / vPosInCSMSplitSpace.w;
+//    // No need to transform to [0,1] range,
+//    // because splits passed from client are in [-1; 1]
+//
+//    float fragDepth = projCoords.z;
+//
+//    if (fragDepth < 0.0) {
+//        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
+//    } else if (fragDepth > 1.0) {
+//        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
+//    } else {
+//        oFragColor = vec4(vec3(fragDepth), 1.0);
 //    }
 }
