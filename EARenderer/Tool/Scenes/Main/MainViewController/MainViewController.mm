@@ -106,7 +106,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
 
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 10.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 25.f);
     camera->moveTo(glm::vec3(0, 1, 0));
     camera->lookAt(glm::vec3(-1, -0.5, 0));
     
@@ -116,7 +116,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -143,7 +143,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), { self.scene->lightBakingVolume() } );
+    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
 
     self.scene->destroyAuxiliaryData();
 
@@ -186,7 +186,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 //    self.sceneRenderer->renderSurfelLuminances();
 //    self.sceneRenderer->renderSurfelClusterLuminances();
 //    self.sceneRenderer->renderSurfelsGBuffer();
-//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Full);
+
+//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
+//    glm::mat4 inverseLightViewMatrix = glm::transpose(self.scene->directionalLight().viewMatrix());
+//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Edges, inverseLightViewMatrix);
 
     self.axesRenderer->render();
 

@@ -106,8 +106,6 @@ namespace EARenderer {
 
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLHDRTexture2D mDirectionalExponentialShadowMap;
-        GLDepthTexture2DArray mShadowMaps;
-        GLDepthTextureCubemap mShadowCubeMap;
         GLFramebuffer mDirectionalShadowFramebuffer;
 
         GLSLGridLightProbeRendering mGridProbeRenderingShader;
@@ -123,7 +121,6 @@ namespace EARenderer {
         void bindDefaultFramebuffer();
 
         void performDepthPrepass();
-        void renderTratitionalShadowMapsForDirectionalLight();
         void renderExponentialShadowMapsForDirectionalLight();
         void relightSurfels();
         void averageSurfelClusterLuminances();
@@ -136,7 +133,9 @@ namespace EARenderer {
 
     public:
         SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData);
-        
+
+        const FrustumCascades& shadowCascades() const;
+
         void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void setRenderingSettings(const RenderingSettings& settings);
         bool raySelectsMesh(const Ray3D& ray, ID& meshID);

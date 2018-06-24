@@ -475,28 +475,6 @@ float ExponentialShadow(vec3 surfelPosition) {
 }
 
 ////////////////////////////////////////////////////////////
-///////////////////////// Helpers //////////////////////////
-////////////////////////////////////////////////////////////
-
-vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
-    vec3 mappedColor = color / (color + vec3(1.0));
-    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.2));
-    return gammaCorrectedColor;
-}
-
-vec3 ReinhardToneMap(vec3 color) {
-    return color / (color + vec3(1.0));
-}
-
-vec3 GammaCorrect(vec3 color) {
-    return pow(color, vec3(1.0 / 2.2));
-}
-
-vec3 LinearFromSRGB(vec3 sRGB) {
-    return pow(sRGB, vec3(2.2));
-}
-
-////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
@@ -528,10 +506,6 @@ void main() {
 
     // Surfel's color (albedo) is not needed here because it's already incoded
     // in the precomputed spherical harmonics.
-    // Same goes for the division by Pi, which usually takes place
-    // in Lambert's diffuse component calculation - normalization has already been done
-    // in the spherical harmonics precomputation step.
-
     vec3 diffuseRadiance = radiance * NdotL;
     
     vec3 indirectRadiance = uEnableMultibounce ? EvaluateSphericalHarmonics(N, position) : vec3(0.0);
@@ -541,7 +515,7 @@ void main() {
     // Apply shadow factor
     diffuseRadiance *= shadow;
 
-    vec3 finalColor = diffuseRadiance;// + indirectRadiance;
+    vec3 finalColor = diffuseRadiance + indirectRadiance;
 
     oFragColor = vec4(finalColor, 1.0);
 }

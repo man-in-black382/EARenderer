@@ -99,8 +99,8 @@
     
     EARenderer::MeshInstance sponzaInstance(sponzaMeshID);
     EARenderer::Transformation sponzaTransform = sponzaInstance.transformation();
-    sponzaTransform.translation.y = -2.0;
-    sponzaTransform.scale *= 30.0;
+//    sponzaTransform.translation.y = -2.0;
+    sponzaTransform.scale *= 20.0;
     sponzaInstance.setTransformation(sponzaTransform);
 
     auto& sponzaMesh = resourcePool->meshes[sponzaMeshID];
@@ -218,7 +218,7 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(0.7, -1.0, 0.45);
+    glm::vec3 lightStart(-0.3, -1.0, 0.45);
     glm::vec3 lightEnd(-0.3, -1.0, -0.45);
 
     choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);

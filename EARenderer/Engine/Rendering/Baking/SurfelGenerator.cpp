@@ -409,10 +409,6 @@ namespace EARenderer {
     }
 
     std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
-        for (float weight : GaussianFunction::Produce1DKernel(3.0, 1.0)) {
-            printf("Weight: %f \n", weight);
-        }
-
         mSurfelDataContainer = std::make_shared<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);

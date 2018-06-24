@@ -13,6 +13,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include <array>
+#include "Sphere.hpp"
 
 namespace EARenderer {
     
@@ -125,13 +126,16 @@ namespace EARenderer {
 
         glm::mat4 lightViewMat = viewMatrix();
         AxisAlignedBox3D frustum{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
-        
-        auto cornerPoints = box.cornerPoints();
-        for (auto& point : cornerPoints) {
-            glm::vec4 p = lightViewMat * point;
-            frustum.min = glm::min(frustum.min, glm::vec3{p});
-            frustum.max = glm::max(frustum.max, glm::vec3{p});
-        }
+
+        // Calculate rotationally invariant box to solve shimmering issues
+        glm::vec3 frustumCenter = box.center();
+        glm::vec3 diff = frustumCenter - box.min;
+
+        float describedSphereRadius = glm::length(diff);
+
+        glm::vec4 lightSpaceFrustumCenter = lightViewMat * glm::vec4(frustumCenter, 1.0);
+        frustum.min = lightSpaceFrustumCenter - describedSphereRadius;
+        frustum.max = lightSpaceFrustumCenter + describedSphereRadius;
 
         float zDelta = frustum.max.z - frustum.min.z;
         float zStep = zDelta / numberOfCascades;
@@ -142,25 +146,19 @@ namespace EARenderer {
             glm::vec3 max(frustum.max.x, frustum.max.y, frustum.min.z + zStep * (i + 1));
             AxisAlignedBox3D cascade(min, max);
 
+            cascades.lightSpaceCascades.emplace_back(cascade);
             cascades.lightViewProjections.emplace_back(cascade.asFrustum() * lightViewMat);
-
-//            glm::vec4 split(0.0, 0.0, zStep * (i + 1), 1.0);
-//            split = cascade.asFrustum() * split;
-//            split /= split.w;
-//
-//            cascades.splits.push_back(split.z);
 
             float split = zStep / zDelta * (i + 1);
             // Transform to [-1; 1] range
             split = split * 2.0 - 1.0;
+            // Account for OpenGL handedness by inverting split distance, which is located on the Z axis
+//            split *= -1;
 
             cascades.splits.push_back(split);
         }
 
         cascades.splitSpaceMatrix = frustum.asFrustum() * lightViewMat;
-
-        auto mn = cascades.splitSpaceMatrix * glm::vec4(box.min, 1.0);
-        auto mx = cascades.splitSpaceMatrix * glm::vec4(box.max, 1.0);
         
         return cascades;
     }

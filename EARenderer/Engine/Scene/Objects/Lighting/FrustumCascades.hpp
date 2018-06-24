@@ -20,6 +20,7 @@ namespace EARenderer {
     struct FrustumCascades {
         std::vector<glm::mat4> lightViewProjections;
         std::vector<float> splits;
+        std::vector<AxisAlignedBox3D> lightSpaceCascades;
         glm::mat4 splitSpaceMatrix;
         uint8_t amount;
     };

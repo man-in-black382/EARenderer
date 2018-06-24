@@ -33,7 +33,7 @@ namespace EARenderer {
         BoxRenderer(const Camera *camera, const std::vector<AxisAlignedBox3D>& boxes);
         BoxRenderer(Scene *scene);
 
-        void render(Mode renderingMode);
+        void render(Mode renderingMode, const glm::mat4& boxTransform = glm::mat4(1.0));
     };
 
 }

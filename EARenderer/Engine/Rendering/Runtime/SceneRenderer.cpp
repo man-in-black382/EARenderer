@@ -28,11 +28,9 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDepthRenderbuffer(Size2D(768)),
-    mDirectionalExponentialShadowMap(Size2D(768)),
-    mShadowMaps(Size2D(768), mNumberOfCascades),
-    mShadowCubeMap(Size2D(768)),
-    mDirectionalShadowFramebuffer(Size2D(768)),
+    mDepthRenderbuffer(Size2D(1500)),
+    mDirectionalExponentialShadowMap(Size2D(1500)),
+    mDirectionalShadowFramebuffer(Size2D(1500)),
 
     // Image based lighting (IBL)
     mEnvironmentMapCube(Size2D(512)),
@@ -87,6 +85,12 @@ namespace EARenderer {
         mSettings = settings;
     }
 
+#pragma mark - Getters
+
+    const FrustumCascades& SceneRenderer::shadowCascades() const {
+        return mShadowCascades;
+    }
+
 #pragma mark - Math
     
     bool SceneRenderer::raySelectsMesh(const Ray3D& ray, ID& meshID) {
@@ -124,6 +128,7 @@ namespace EARenderer {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+        glDisable(GL_BLEND);
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
@@ -244,30 +249,6 @@ namespace EARenderer {
         }
     }
 
-    void SceneRenderer::renderTratitionalShadowMapsForDirectionalLight() {
-        mDirectionalDepthShader.bind();
-        mDirectionalShadowFramebuffer.bind();
-        mDirectionalShadowFramebuffer.viewport().apply();
-
-        for (uint8_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
-            mDirectionalShadowFramebuffer.attachTextureLayer(mShadowMaps, cascade);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            for (ID meshInstanceID : mScene->meshInstances()) {
-                auto& instance = mScene->meshInstances()[meshInstanceID];
-                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-
-                mDirectionalDepthShader.setModelMatrix(instance.transformation().modelMatrix());
-                mDirectionalDepthShader.setViewProjectionMatrix(mShadowCascades.lightViewProjections[cascade]);
-
-                for (ID subMeshID : subMeshes) {
-                    auto& subMesh = subMeshes[subMeshID];
-                    subMesh.draw();
-                }
-            }
-        }
-    }
-
     void SceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
         mDirectionalESMShader.bind();
         mDirectionalShadowFramebuffer.bind();
@@ -299,7 +280,7 @@ namespace EARenderer {
         glColorMask(true, true, true, true);
 
         size_t radius = mSettings.meshSettings.shadowBlurRadius;
-        mShadowBlurFilter.blur(radius, radius);
+        mShadowBlurFilter.blur(radius, 2);
     }
 
     void SceneRenderer::relightSurfels() {
@@ -360,9 +341,9 @@ namespace EARenderer {
 
     void SceneRenderer::prepareFrame() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
-        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox(), 4);
-//        auto cascadeScale = glm::vec3(1.0, 1.0, 1.0);
-//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 4/*, cascadeScale*/);
+        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
+//        auto cascadeScale = glm::vec3(5.0, 5.0, 5.0);
+//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 3, cascadeScale);
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();
@@ -410,21 +391,21 @@ namespace EARenderer {
             }
         }
 
-//        bindDefaultFramebuffer();
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//
-//        Rect2D viewportRect(Size2D(200, 200));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        Rect2D viewportRect(Size2D(200, 200));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

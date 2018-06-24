@@ -753,10 +753,10 @@ void main() {
 
 //    int cascade = ShadowCascadeIndex();
 //    switch (cascade) {
-//        case 0: oFragColor = vec4(0.5, 0.0, 0.0, 0.0); break;
-//        case 1: oFragColor = vec4(0.0, 0.5, 0.0, 0.0); break;
-//        case 2: oFragColor = vec4(0.0, 0.0, 0.5, 0.0); break;
-//        case 3: oFragColor = vec4(0.5, 0.5, 0.0, 0.0); break;
+//        case 0: oFragColor += vec4(0.5, 0.0, 0.0, 0.0); break;
+//        case 1: oFragColor += vec4(0.0, 0.5, 0.0, 0.0); break;
+//        case 2: oFragColor += vec4(0.0, 0.0, 0.5, 0.0); break;
+//        case 3: oFragColor += vec4(0.5, 0.5, 0.0, 0.0); break;
 //    }
 
 //    vec3 projCoords = vPosInCSMSplitSpace.xyz / vPosInCSMSplitSpace.w;
