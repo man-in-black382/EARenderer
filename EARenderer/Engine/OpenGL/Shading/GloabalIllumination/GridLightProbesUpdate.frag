@@ -169,100 +169,35 @@ uint PackSnorm2x16(float first, float second, float range) {
     return packed;
 }
 
-void WriteSH_311_HalfPacked_ToRenderTargets(SH sh) {
-    float maximum = ceil(MaxSHCoefficient(sh));
-    uint uMaximum = floatBitsToUint(maximum);
-
-    uint pair0 = PackSnorm2x16(sh.L00.r , sh.L11.r,  maximum);
-    uint pair1 = PackSnorm2x16(sh.L10.r , sh.L1_1.r, maximum);
-    uint pair2 = PackSnorm2x16(sh.L21.r , sh.L2_1.r, maximum);
-    uint pair3 = PackSnorm2x16(sh.L2_2.r, sh.L20.r,  maximum);
-    uint pair4 = PackSnorm2x16(sh.L22.r , sh.L00.g,  maximum);
-    uint pair5 = PackSnorm2x16(sh.L00.b , 0.0,  maximum);
-
-    oFragData0 = uvec4(pair0, pair1, pair2, pair3);
-    oFragData1 = uvec4(pair4, pair5, 0, uMaximum);
-}
-
-// Pack SH coefficients into texels of 3D textures
-// Use 3 SH bands for first channel and 2 bands for second and third.
-void WriteSH_322_HalfPacked_ToRenderTargets(SH sh) {
-    float maximum = ceil(MaxSHCoefficient(sh));
-    uint uMaximum = floatBitsToUint(maximum);
-
-    uint pair0 = PackSnorm2x16(sh.L00.r , sh.L11.r,  maximum);
-    uint pair1 = PackSnorm2x16(sh.L10.r , sh.L1_1.r, maximum);
-    uint pair2 = PackSnorm2x16(sh.L21.r , sh.L2_1.r, maximum);
-    uint pair3 = PackSnorm2x16(sh.L2_2.r, sh.L20.r,  maximum);
-    uint pair4 = PackSnorm2x16(sh.L22.r , sh.L00.g,  maximum);
-    uint pair5 = PackSnorm2x16(sh.L11.g , sh.L10.g,  maximum);
-    uint pair6 = PackSnorm2x16(sh.L1_1.g, sh.L00.b,  maximum);
-    uint pair7 = PackSnorm2x16(sh.L11.b , sh.L10.b,  maximum);
-    uint pair8 = PackSnorm2x16(sh.L1_1.b, 0.0, maximum);
-
-    oFragData0 = uvec4(pair0, pair1, pair2, pair3);
-    oFragData1 = uvec4(pair4, pair5, pair6, pair7);
-    oFragData2 = uvec4(pair8, 0, 0, uMaximum);
-}
-
-void WriteSH_333_HalfPacked_ToRenderTargets(SH sh) {
-//    // Green & White
-//    sh.L00  = vec3(1.77245402, 3.54490805, 1.77245402);
-//    sh.L11  = vec3(3.06998014, 0.0, 3.06998014);
-//    sh.L10  = vec3(0.0);
-//    sh.L1_1 = vec3(0.0);
-//    sh.L21  = vec3(0.0);
-//    sh.L2_1 = vec3(0.0);
-//    sh.L2_2 = vec3(0.0);
-//    sh.L20  = vec3(-1.9816637, -3.96332741, -1.9816637);
-//    sh.L22  = vec3(3.43234229, 6.86468458, 3.43234229);
+// Packing scheme:
+//                         Y    Y      Y    Y       Y    Y       Y     Y      Y   Co
+// 9 Luma coefficients  [(L00, L11), (L10, L1_1), (L21, L2_1), (L2_2, L20), (L22, L00),
+// 9 Co and 9 Cg coeff.   Cg   Co     Co   Co      Cg   Cg      Cg   Co      Co    Co
+// are mixed up          (L00, L11), (L10, L1_1), (L11, L10), (L1_1, L21), (L2_1, L2_2),
+//                        Co   Co     Cg   Cg      Cg    Cg     Cg
+//                       (L20, L22), (L21, L2_1), (L2_2, L20), (L22, 0.0)]
 //
-//    sh = ScaleSH(sh, vec3(10.0));
-
+// This packing pattern ensures minimum texture fetches are needed for each compression quality.
+// Only 2 texture fetches will be required to obtain 311-spherical harmonics, 3 fetches for 322 and 4 fetches for 333.
+//
+void PackSHToRenderTargets(SH sh) {
     float maximum = ceil(MaxSHCoefficient(sh));
     uint uMaximum = floatBitsToUint(maximum);
 
-    uint pair0 = PackSnorm2x16(sh.L00.r ,
-                               sh.L11.r, maximum);
-
-    uint pair1 = PackSnorm2x16(sh.L10.r ,
-                               sh.L1_1.r, maximum);
-
-    uint pair2 = PackSnorm2x16(sh.L21.r ,
-                               sh.L2_1.r, maximum);
-
-    uint pair3 = PackSnorm2x16(sh.L2_2.r,
-                               sh.L20.r, maximum);
-
-    uint pair4 = PackSnorm2x16(sh.L22.r ,
-                               sh.L00.g, maximum);
-
-    uint pair5 = PackSnorm2x16(sh.L11.g ,
-                               sh.L10.g, maximum);
-
-    uint pair6 = PackSnorm2x16(sh.L1_1.g ,
-                               sh.L21.g, maximum);
-
-    uint pair7 = PackSnorm2x16(sh.L2_1.g ,
-                               sh.L2_2.g, maximum);
-
-    uint pair8 = PackSnorm2x16(sh.L20.g,
-                               sh.L22.g, maximum);
-
-    uint pair9 = PackSnorm2x16(sh.L00.b ,
-                               sh.L11.b, maximum);
-
-    uint pair10 = PackSnorm2x16(sh.L10.b ,
-                                sh.L1_1.b, maximum);
-
-    uint pair11 = PackSnorm2x16(sh.L21.b ,
-                                sh.L2_1.b, maximum);
-
-    uint pair12 = PackSnorm2x16(sh.L2_2.b,
-                                sh.L20.b, maximum);
-
-    uint pair13 = PackSnorm2x16(sh.L22.b ,
-                                0.0, maximum);
+    //                              Y         Y                                                  Y          Y
+    uint pair0  = PackSnorm2x16(sh.L00.r,  sh.L11.r,  maximum);  uint pair1  = PackSnorm2x16(sh.L10.r,  sh.L1_1.r, maximum);
+    //                              Y         Y                                                  Y          Y
+    uint pair2  = PackSnorm2x16(sh.L21.r,  sh.L2_1.r, maximum);  uint pair3  = PackSnorm2x16(sh.L2_2.r, sh.L20.r,  maximum);
+    //                              Y         Co                                                 Cg         Co
+    uint pair4  = PackSnorm2x16(sh.L22.r,  sh.L00.g,  maximum);  uint pair5  = PackSnorm2x16(sh.L00.b,  sh.L11.g,  maximum);
+    //                              Co        Co                                                 Cg         Cg
+    uint pair6  = PackSnorm2x16(sh.L10.g,  sh.L1_1.g, maximum);  uint pair7  = PackSnorm2x16(sh.L11.b,  sh.L10.b,  maximum);
+    //                              Cg        Co                                                 Co         Co
+    uint pair8  = PackSnorm2x16(sh.L1_1.b, sh.L21.g,  maximum);  uint pair9  = PackSnorm2x16(sh.L2_1.g, sh.L2_2.g, maximum);
+    //                              Co        Co                                                 Cg         Cg
+    uint pair10 = PackSnorm2x16(sh.L20.g,  sh.L22.g,  maximum);  uint pair11 = PackSnorm2x16(sh.L21.b,  sh.L2_1.b, maximum);
+    //                              Cg        Cg                                                 Cg
+    uint pair12 = PackSnorm2x16(sh.L2_2.b, sh.L20.b,  maximum);  uint pair13 = PackSnorm2x16(sh.L22.b,  0.0,       maximum);
 
     oFragData0 = uvec4(pair0, pair1, pair2, pair3);
     oFragData1 = uvec4(pair4, pair5, pair6, pair7);
@@ -323,5 +258,5 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
-    WriteSH_322_HalfPacked_ToRenderTargets(resultingSH);
+    PackSHToRenderTargets(resultingSH);
 }
