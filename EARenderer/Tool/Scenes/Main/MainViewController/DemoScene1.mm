@@ -177,7 +177,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(60.0, 50.0, 50.0));
+    scene->directionalLight().setColor(EARenderer::Color(5.0, 5.0, 5.0));
 
     scene->calculateGeometricProperties();
 

@@ -366,10 +366,10 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z); vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z); vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_333_HalfPacked(cp0); SH sh1 = UnpackSH_333_HalfPacked(cp1);
-    SH sh2 = UnpackSH_333_HalfPacked(cp2); SH sh3 = UnpackSH_333_HalfPacked(cp3);
-    SH sh4 = UnpackSH_333_HalfPacked(cp4); SH sh5 = UnpackSH_333_HalfPacked(cp5);
-    SH sh6 = UnpackSH_333_HalfPacked(cp6); SH sh7 = UnpackSH_333_HalfPacked(cp7);
+    SH sh0 = UnpackSH_322_HalfPacked(cp0); SH sh1 = UnpackSH_322_HalfPacked(cp1);
+    SH sh2 = UnpackSH_322_HalfPacked(cp2); SH sh3 = UnpackSH_322_HalfPacked(cp3);
+    SH sh4 = UnpackSH_322_HalfPacked(cp4); SH sh5 = UnpackSH_322_HalfPacked(cp5);
+    SH sh6 = UnpackSH_322_HalfPacked(cp6); SH sh7 = UnpackSH_322_HalfPacked(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal); float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
     float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal); float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
@@ -422,13 +422,42 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
 }
 
 float SHRadiance(SH sh, vec3 direction, int component) {
+
     int c = component;
-    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-            kC3 * sh.L20[c] * (direction.z * direction.z) +
-            kC4 * sh.L00[c] -
-            kC5 * sh.L20[c] +
-            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+
+    float Y00 = 0.28209479177387814347; // 1 / (2*sqrt(pi))
+    float Y11 = -0.48860251190291992159; // sqrt(3 /(4pi))
+    float Y10 = 0.48860251190291992159;
+    float Y1_1 = -0.48860251190291992159;
+    float Y21 = -1.09254843059207907054; // 1 / (2*sqrt(pi))
+    float Y2_1 = -1.09254843059207907054;
+    float Y2_2 = 1.09254843059207907054;
+    float Y20 = 0.31539156525252000603; // 1/4 * sqrt(5/pi)
+    float Y22 = 0.54627421529603953527; // 1/4 * sqrt(15/pi)
+
+    float result = 0.0;
+
+    result += sh.L00[c] * Y00;
+
+    result += sh.L1_1[c] * Y1_1 * direction.y;
+    result += sh.L10[c] * Y10 * direction.z;
+    result += sh.L11[c] * Y11 * direction.x;
+
+    result += sh.L2_2[c] * Y2_2 * (direction.x * direction.y);
+    result += sh.L2_1[c] * Y2_1 * (direction.y * direction.z);
+    result += sh.L21[c] * Y21 * (direction.x * direction.z);
+    result += sh.L20[c] * Y20 * (3.0f * direction.z * direction.z - 1.0f);
+    result += sh.L22[c] * Y22 * (direction.x * direction.x - direction.y * direction.y);
+
+    return result;
+
+//    int c = component;
+//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
+//            kC3 * sh.L20[c] * (direction.z * direction.z) +
+//            kC4 * sh.L00[c] -
+//            kC5 * sh.L20[c] +
+//            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
+//            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
@@ -518,7 +547,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     vec3 shadowedDirectRadiance = radiance * (1.0 - shadow) * NdotL;
 
     // Lambertian diffuse component with indirect light applied
-    vec3 diffuse    = Kd * (albedo / PI) * (shadowedDirectRadiance + (indirectRadiance * ao));
+    vec3 diffuse    = Kd * (albedo/* / PI*/) * (shadowedDirectRadiance + (indirectRadiance * ao));
 
     // Specular component is not affected by indirect light (probably will by a reflection probe later)
     specular        *= shadowedDirectRadiance;
@@ -715,7 +744,7 @@ void main() {
     }
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
-//    indirectRadiance = RGB_From_YCoCg(indirectRadiance) * 10.0;
+    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
