@@ -1,6 +1,7 @@
 #version 400 core
 
 // Constants
+const float PI = 3.1415926535897932384626433832795;
 
 // Spherical harmonics
 const float kC1 = 0.429043;
@@ -58,6 +59,14 @@ SH ZeroSH() {
     result.L00  = vec3(0.0); result.L1_1 = vec3(0.0); result.L10  = vec3(0.0);
     result.L11  = vec3(0.0); result.L2_2 = vec3(0.0); result.L2_1 = vec3(0.0);
     result.L21  = vec3(0.0); result.L20  = vec3(0.0); result.L22  = vec3(0.0);
+    return result;
+}
+
+SH ScaleSH(SH sh, vec3 scale) {
+    SH result;
+    result.L00  = scale * sh.L00; result.L1_1 = scale * sh.L1_1; result.L10  = scale * sh.L10;
+    result.L11  = scale * sh.L11; result.L2_2 = scale * sh.L2_2; result.L2_1 = scale * sh.L2_1;
+    result.L21  = scale * sh.L21; result.L20  = scale * sh.L20;  result.L22  = scale * sh.L22;
     return result;
 }
 
@@ -147,18 +156,58 @@ SH UnpackSH_333_HalfPacked() {
     sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
     sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
 
+    /////////
+//    sh.L00  = vec3(5.56832886, 11.1366577, 5.56832886);
+//    sh.L11  = vec3(-6.42975139, 0.0, -6.42975139);
+//    sh.L10  = vec3(0.0);
+//    sh.L1_1 = vec3(0.0);
+//    sh.L21  = vec3(0.0);
+//    sh.L2_1 = vec3(0.0);
+//    sh.L2_2 = vec3(0.0);
+//    sh.L20  = vec3(-1.55639505, -3.11279011, -1.55639505);
+//    sh.L22  = vec3(2.69575548, 5.39151096, 2.69575548);
+//
+//    sh = ScaleSH(sh, vec3(50.0));
+    /////////
+
     return sh;
 }
 
 float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
 
-    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-            kC3 * sh.L20[c] * (direction.z * direction.z) +
-            kC4 * sh.L00[c] -
-            kC5 * sh.L20[c] +
-            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+    float result = 0.0;
+
+    float Y00 = 0.28209479177387814347f; // 1 / (2*sqrt(pi))
+    float Y11 = -0.48860251190291992159f; // sqrt(3 /(4pi))
+    float Y10 = 0.48860251190291992159f;
+    float Y1_1 = -0.48860251190291992159f;
+    float Y21 = -1.09254843059207907054f; // 1 / (2*sqrt(pi))
+    float Y2_1 = -1.09254843059207907054f;
+    float Y2_2 = 1.09254843059207907054f;
+    float Y20 = 0.31539156525252000603f; // 1/4 * sqrt(5/pi)
+    float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
+
+    result += sh.L00[c] * Y00;
+
+    result += sh.L1_1[c] * Y1_1 * direction.y;
+    result += sh.L10[c] * Y10 * direction.z;
+    result += sh.L11[c] * Y11 * direction.x;
+
+    result += sh.L2_2[c] * Y2_2 * (direction.x * direction.y);
+    result += sh.L2_1[c] * Y2_1 * (direction.y * direction.z);
+    result += sh.L21[c] * Y21 * (direction.x * direction.z);
+    result += sh.L20[c] * Y20 * (3.0f * direction.z * direction.z - 1.0f);
+    result += sh.L22[c] * Y22 * (direction.x * direction.x - direction.y * direction.y);
+
+    return result;
+
+//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
+//            kC3 * sh.L20[c] * (direction.z * direction.z) +
+//            kC4 * sh.L00[c] -
+//            kC5 * sh.L20[c] +
+//            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
+//            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
@@ -200,7 +249,15 @@ void main() {
     normal = vNormalMatrix * normal;
 
     vec3 color = EvaluateSphericalHarmonics(normal);
+    color = max(vec3(0.0), color);
+
+    float maxComponent = max(max(color.r, color.g), color.b);
+    float minComponent = min(min(color.r, color.g), color.b);
+    float diff = maxComponent - minComponent;
+    color /= diff;
+
 //    color = RGB_From_YCoCg(color);
+
     color = ReinhardToneMap(color);
 
     oFragColor = vec4(color, 1.0);

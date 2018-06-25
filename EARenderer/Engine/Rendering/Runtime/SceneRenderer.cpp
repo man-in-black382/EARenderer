@@ -391,21 +391,21 @@ namespace EARenderer {
             }
         }
 
-        bindDefaultFramebuffer();
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(true);
-
-        Rect2D viewportRect(Size2D(200, 200));
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
-        });
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glEnable(GL_DEPTH_TEST);
+//        bindDefaultFramebuffer();
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(true);
+//
+//        Rect2D viewportRect(Size2D(200, 200));
+//        GLViewport(viewportRect).apply();
+//
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
+//        });
+//
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

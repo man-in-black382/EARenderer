@@ -13,24 +13,33 @@
 
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp>
+#include <cmath>
 
 namespace EARenderer {
     
     // An Efficient Representation for Irradiance Environment Maps using spherical harmonics
     // by Ravi Ramamoorthi & Pat Hanrahan
     // https://graphics.stanford.edu/papers/envmap/envmap.pdf
+
+    // https://seblagarde.wordpress.com/2012/01/08/pi-or-not-to-pi-in-game-lighting-equation/
     
     class SphericalHarmonics {
     public:
         static constexpr float Y00 = 0.28209479177387814347f; // 1 / (2*sqrt(pi))
-        static constexpr float Y11 = 0.48860251190291992159f; // sqrt(3 /(4pi))
-        static constexpr float Y10 = Y11;
-        static constexpr float Y1_1 = Y11;
-        static constexpr float Y21 = 1.09254843059207907054f; // 1 / (2*sqrt(pi))
-        static constexpr float Y2_1 = Y21;
-        static constexpr float Y2_2 = Y21;
+        static constexpr float Y11 = -0.48860251190291992159f; // sqrt(3 /(4pi))
+        static constexpr float Y10 = 0.48860251190291992159f;
+        static constexpr float Y1_1 = -0.48860251190291992159f;
+        static constexpr float Y21 = -1.09254843059207907054f; // 1 / (2*sqrt(pi))
+        static constexpr float Y2_1 = -1.09254843059207907054f;
+        static constexpr float Y2_2 = 1.09254843059207907054f;
         static constexpr float Y20 = 0.31539156525252000603f; // 1/4 * sqrt(5/pi)
         static constexpr float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
+
+        static constexpr float CosineLobeBandFactors[] = {
+            M_PI,
+            2.0f * M_PI / 3.0f, 2.0f * M_PI / 3.0f, 2.0f * M_PI / 3.0f,
+            M_PI / 4.0f, M_PI / 4.0f, M_PI / 4.0f, M_PI / 4.0f, M_PI / 4.0f
+        };
         
     private:
         glm::vec3 mL00 = glm::zero<glm::vec3>();
@@ -57,6 +66,7 @@ namespace EARenderer {
         const glm::vec3& L20() const;
         const glm::vec3& L22() const;
 
+        void convolve();
         void normalize();
 
         float magnitude() const;
@@ -64,6 +74,9 @@ namespace EARenderer {
 
         void contribute(const glm::vec3& direction, const glm::vec3& value, float weight);
         void contribute(const glm::vec3& direction, const Color& color, float weight);
+        void scale(const glm::vec3& scaleFactors);
+
+        glm::vec3 evaluate(const glm::vec3& direction) const;
     };
     
 }

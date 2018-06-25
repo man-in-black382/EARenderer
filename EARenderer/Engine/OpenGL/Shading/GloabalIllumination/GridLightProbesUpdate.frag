@@ -306,8 +306,6 @@ void main() {
 
     SH resultingSH = ZeroSH();
 
-    float totalLuma = 0.0;
-
     for (uint i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupSize; ++i) {
         uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, int(i)).r;
 
@@ -318,8 +316,6 @@ void main() {
 
         float luma = 0.2126 * surfelClusterLuminance.r + 0.7152 * surfelClusterLuminance.g + 0.0722 * surfelClusterLuminance.b;
 
-        totalLuma += luma;
-
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 
         SH luminanceSH = ScaleSH(surfelClusterPrecomputedSH, vec3(luma));
@@ -327,7 +323,5 @@ void main() {
         resultingSH = AddTwoSH(resultingSH, luminanceSH);
     }
 
-//    resultingSH = ScaleSH(resultingSH, vec3(1.0 / totalLuma));
-
-    WriteSH_333_HalfPacked_ToRenderTargets(resultingSH);
+    WriteSH_322_HalfPacked_ToRenderTargets(resultingSH);
 }

@@ -88,6 +88,20 @@ namespace EARenderer {
         glm::dot(mL22, mL22);
     }
 
+    void SphericalHarmonics::convolve() {
+        mL00 *= CosineLobeBandFactors[0];
+
+        mL1_1 *= CosineLobeBandFactors[1];
+        mL10 *= CosineLobeBandFactors[2];
+        mL11 *= CosineLobeBandFactors[3];
+
+        mL2_2 *= CosineLobeBandFactors[4];
+        mL2_1 *= CosineLobeBandFactors[5];
+        mL21 *= CosineLobeBandFactors[6];
+        mL20 *= CosineLobeBandFactors[7];
+        mL22 *= CosineLobeBandFactors[8];
+    }
+
     void SphericalHarmonics::contribute(const glm::vec3& direction, const glm::vec3& value, float weight) {
         // l, m = 0, 0
         mL00 += value * Y00 * weight;
@@ -115,6 +129,38 @@ namespace EARenderer {
 
     void SphericalHarmonics::contribute(const glm::vec3& direction, const Color& color, float weight) {
         contribute(direction, color.rgb(), weight);
+    }
+
+    void SphericalHarmonics::scale(const glm::vec3& scaleFactors) {
+        mL00 *= scaleFactors;
+
+        mL1_1 *= scaleFactors;
+        mL10 *= scaleFactors;
+        mL11 *= scaleFactors;
+
+        mL2_2 *= scaleFactors;
+        mL2_1 *= scaleFactors;
+        mL21 *= scaleFactors;
+        mL20 *= scaleFactors;
+        mL22 *= scaleFactors;
+    }
+
+    glm::vec3 SphericalHarmonics::evaluate(const glm::vec3& direction) const {
+        glm::vec3 result(0.0);
+
+        result += mL00 * Y00;
+
+        result += mL1_1 * Y1_1 * direction.y;
+        result += mL10 * Y10 * direction.z;
+        result += mL11 * Y11 * direction.x;
+
+        result += mL2_2 * Y2_2 * (direction.x * direction.y);
+        result += mL2_1 * Y2_1 * (direction.y * direction.z);
+        result += mL21 * Y21 * (direction.x * direction.z);
+        result += mL20 * Y20 * (3.0f * direction.z * direction.z - 1.0f);
+        result += mL22 * Y22 * (direction.x * direction.x - direction.y * direction.y);
+
+        return result;
     }
 
 }
