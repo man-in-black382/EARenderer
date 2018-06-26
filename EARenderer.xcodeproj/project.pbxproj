@@ -11,6 +11,7 @@
 		AC10304920C7E0F300920690 /* DepthPrepass.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC10304720C7E0F200920690 /* DepthPrepass.frag */; };
 		AC10304A20C7E0F300920690 /* DepthPrepass.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC10304820C7E0F300920690 /* DepthPrepass.vert */; };
 		AC10304D20C7E0FF00920690 /* GLSLDepthPrepass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC10304B20C7E0FF00920690 /* GLSLDepthPrepass.cpp */; };
+		AC1F6BDA20E2321200E81EB0 /* BloomEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */; };
 		AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */; };
 		AC3275B420D24FA800899697 /* GaussianFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3275B220D24FA800899697 /* GaussianFunction.cpp */; };
 		AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */; };
@@ -28,7 +29,7 @@
 		AC6CD81220D11838000E6A22 /* GLSLGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */; };
 		AC6CD81520D11B9A000E6A22 /* GaussianBlur.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81320D11B9A000E6A22 /* GaussianBlur.vert */; };
 		AC6CD81620D11B9A000E6A22 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */; };
-		AC71D95720D26F9D001524BC /* GaussianBlurFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurFilter.cpp */; };
+		AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */; };
 		AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
@@ -589,6 +590,10 @@
 		AC10304B20C7E0FF00920690 /* GLSLDepthPrepass.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDepthPrepass.cpp; sourceTree = "<group>"; };
 		AC10304C20C7E0FF00920690 /* GLSLDepthPrepass.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDepthPrepass.hpp; sourceTree = "<group>"; };
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
+		AC1F6BD620E2301400E81EB0 /* ThreadPool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadPool.hpp; sourceTree = "<group>"; };
+		AC1F6BD720E2301400E81EB0 /* ThreadSafeQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadSafeQueue.hpp; sourceTree = "<group>"; };
+		AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BloomEffect.cpp; sourceTree = "<group>"; };
+		AC1F6BD920E2321200E81EB0 /* BloomEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BloomEffect.hpp; sourceTree = "<group>"; };
 		AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeGenerator.cpp; sourceTree = "<group>"; };
 		AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
 		AC3275B220D24FA800899697 /* GaussianFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianFunction.cpp; sourceTree = "<group>"; };
@@ -608,8 +613,6 @@
 		AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.frag; sourceTree = "<group>"; };
 		AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.geom; sourceTree = "<group>"; };
 		AC59F2902073C6B400698E55 /* LightProbeLinksRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.vert; sourceTree = "<group>"; };
-		AC5BD7BA2091B400006E8A3C /* ThreadPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ThreadPool.hpp; sourceTree = "<group>"; };
-		AC5BD7BD2091B42C006E8A3C /* ThreadSafeQueue.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ThreadSafeQueue.hpp; sourceTree = "<group>"; };
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
@@ -619,8 +622,8 @@
 		AC6CD81120D11838000E6A22 /* GLSLGaussianBlur.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLGaussianBlur.hpp; sourceTree = "<group>"; };
 		AC6CD81320D11B9A000E6A22 /* GaussianBlur.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GaussianBlur.vert; sourceTree = "<group>"; };
 		AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GaussianBlur.frag; sourceTree = "<group>"; };
-		AC71D95520D26F9D001524BC /* GaussianBlurFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianBlurFilter.cpp; sourceTree = "<group>"; };
-		AC71D95620D26F9D001524BC /* GaussianBlurFilter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurFilter.hpp; sourceTree = "<group>"; };
+		AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianBlurEffect.cpp; sourceTree = "<group>"; };
+		AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurEffect.hpp; sourceTree = "<group>"; };
 		AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLLDRTexture3D.cpp; sourceTree = "<group>"; };
 		AC823D2320CA7F5900D25CB3 /* GLLDRTexture3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLLDRTexture3D.hpp; sourceTree = "<group>"; };
 		AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeEnvironmentCapture.cpp; sourceTree = "<group>"; };
@@ -1769,11 +1772,11 @@
 			path = constraint;
 			sourceTree = "<group>";
 		};
-		AC5BD7B82091B3EE006E8A3C /* Threading */ = {
+		AC1F6BD520E2301400E81EB0 /* Threading */ = {
 			isa = PBXGroup;
 			children = (
-				AC5BD7BA2091B400006E8A3C /* ThreadPool.hpp */,
-				AC5BD7BD2091B42C006E8A3C /* ThreadSafeQueue.hpp */,
+				AC1F6BD620E2301400E81EB0 /* ThreadPool.hpp */,
+				AC1F6BD720E2301400E81EB0 /* ThreadSafeQueue.hpp */,
 			);
 			path = Threading;
 			sourceTree = "<group>";
@@ -1860,8 +1863,10 @@
 		AC71D95820D26FA6001524BC /* Postprocessing */ = {
 			isa = PBXGroup;
 			children = (
-				AC71D95520D26F9D001524BC /* GaussianBlurFilter.cpp */,
-				AC71D95620D26F9D001524BC /* GaussianBlurFilter.hpp */,
+				AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */,
+				AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */,
+				AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */,
+				AC1F6BD920E2321200E81EB0 /* BloomEffect.hpp */,
 			);
 			path = Postprocessing;
 			sourceTree = "<group>";
@@ -2360,7 +2365,7 @@
 			isa = PBXGroup;
 			children = (
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
-				AC5BD7B82091B3EE006E8A3C /* Threading */,
+				AC1F6BD520E2301400E81EB0 /* Threading */,
 				CE70F8521F8F8EBD00AD9027 /* Rendering */,
 				CE70F85F1F8F8EBD00AD9027 /* Containers */,
 				CE70F8611F8F8EBD00AD9027 /* Geometry */,
@@ -3678,6 +3683,7 @@
 				CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */,
 				ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */,
 				AC3C9EB720720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp in Sources */,
+				AC1F6BDA20E2321200E81EB0 /* BloomEffect.cpp in Sources */,
 				CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
@@ -3773,7 +3779,7 @@
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,
 				CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */,
-				AC71D95720D26F9D001524BC /* GaussianBlurFilter.cpp in Sources */,
+				AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */,
 				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
 				AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */,
 				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,

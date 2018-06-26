@@ -23,7 +23,8 @@
 #include "SurfelData.hpp"
 #include "DiffuseLightProbeData.hpp"
 #include "RenderingSettings.hpp"
-#include "GaussianBlurFilter.hpp"
+#include "GaussianBlurEffect.hpp"
+#include "BloomEffect.hpp"
 
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLCookTorrance.hpp"
@@ -112,7 +113,8 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
-        GaussianBlurFilter mShadowBlurFilter;
+        GaussianBlurEffect mShadowBlurEffect;
+//        BloomEffect mBloomEffect;
 
         void setupGLState();
         void setupTextures();

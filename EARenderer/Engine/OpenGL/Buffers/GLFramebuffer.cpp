@@ -16,8 +16,10 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLFramebuffer::GLFramebuffer(const Size2D& size)
+    GLFramebuffer::GLFramebuffer(const Size2D& size, Role role)
     :
+    mRole(role),
+    mBindingPoint(glBindingPoint(role)),
     mSize(size),
     mViewport(Rect2D(size))
     {
@@ -39,7 +41,7 @@ namespace EARenderer {
     }
     
     bool GLFramebuffer::isComplete() const {
-        return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+        return glCheckFramebufferStatus(mBindingPoint) == GL_FRAMEBUFFER_COMPLETE;
     }
     
     const GLViewport& GLFramebuffer::viewport() const {
@@ -49,7 +51,7 @@ namespace EARenderer {
 #pragma mark - Binding
     
     void GLFramebuffer::bind() const {
-        glBindFramebuffer(GL_FRAMEBUFFER, mName);
+        glBindFramebuffer(mBindingPoint, mName);
     }
     
 #pragma mark - Private helpers
@@ -64,9 +66,9 @@ namespace EARenderer {
         texture.bind();
         
         if (layer == -1) {
-            glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
+            glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
         } else {
-            glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
+            glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
         }
         
         if (mDrawBuffers.empty()) {
@@ -83,9 +85,9 @@ namespace EARenderer {
         GLenum attachment = glColorAttachment(colorAttachment);
 
         if (layer == -1) {
-            glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture.name(), mipLevel);
+            glFramebufferTexture(mBindingPoint, attachment, texture.name(), mipLevel);
         } else {
-            glFramebufferTextureLayer(GL_FRAMEBUFFER, attachment, texture.name(), mipLevel, layer);
+            glFramebufferTextureLayer(mBindingPoint, attachment, texture.name(), mipLevel, layer);
         }
 
         mDrawBuffers.insert(attachment);
@@ -124,14 +126,21 @@ namespace EARenderer {
             case ColorAttachment::Attachment15: return GL_COLOR_ATTACHMENT15;
         }
     }
-    
+
+    GLint GLFramebuffer::glBindingPoint(Role role) {
+        switch (role) {
+            case Role::ReadBuffer: return GL_READ_FRAMEBUFFER;
+            case Role::DrawBuffer: return GL_DRAW_FRAMEBUFFER;
+        }
+    }
+
     void GLFramebuffer::detachAllAttachments() {
         bind();
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0);
-        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, 0, 0, 0);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0);
-        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, 0, 0, 0);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
+        glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, 0, 0);
+        glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, 0, 0, 0);
+        glFramebufferTexture(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0);
+        glFramebufferTextureLayer(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0, 0);
+        glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
         mDrawBuffers.clear();
     }
     
@@ -208,7 +217,7 @@ namespace EARenderer {
     
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
         renderbuffer.bind();
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
+        glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
     }
     
 }

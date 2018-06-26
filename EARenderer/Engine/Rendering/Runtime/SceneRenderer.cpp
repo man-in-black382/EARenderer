@@ -55,7 +55,7 @@ namespace EARenderer {
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Filters
-    mShadowBlurFilter(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap))
+    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap))
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -280,7 +280,7 @@ namespace EARenderer {
         glColorMask(true, true, true, true);
 
         size_t radius = mSettings.meshSettings.shadowBlurRadius;
-        mShadowBlurFilter.blur(radius, 2);
+        mShadowBlurEffect.blur(radius, 2);
     }
 
     void SceneRenderer::relightSurfels() {
@@ -368,7 +368,7 @@ namespace EARenderer {
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setFrustumCascades(mShadowCascades);
-            mCookTorranceShader.setExponentialShadowMap(*mShadowBlurFilter.outputImage());
+            mCookTorranceShader.setExponentialShadowMap(*mShadowBlurEffect.outputImage());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });

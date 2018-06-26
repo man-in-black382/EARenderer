@@ -6,7 +6,7 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "GaussianBlurFilter.hpp"
+#include "GaussianBlurEffect.hpp"
 #include "GaussianFunction.hpp"
 
 #include <stdexcept>
@@ -15,7 +15,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GaussianBlurFilter::GaussianBlurFilter(std::shared_ptr<const GLHDRTexture2D> inputImage)
+    GaussianBlurEffect::GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage)
     :
     mInputImage(inputImage),
     mFirstOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size())),
@@ -29,13 +29,13 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::outputImage() const {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::outputImage() const {
         return mSecondOutputImage;
     }
 
 #pragma mark - Blur
 
-    void GaussianBlurFilter::computeWeightsAndOffsets() {
+    void GaussianBlurEffect::computeWeightsAndOffsets() {
         auto weights = GaussianFunction::Produce1DKernel(mBlurRadius, mStandardDeviation);
 
         mWeights.clear();
@@ -61,7 +61,7 @@ namespace EARenderer {
         }
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius, size_t standardDeviation) {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(size_t radius, size_t standardDeviation) {
         if (radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         if (mBlurRadius != radius || mStandardDeviation != standardDeviation) {
@@ -99,7 +99,7 @@ namespace EARenderer {
         return mSecondOutputImage;
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurFilter::blur(size_t radius) {
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(size_t radius) {
         return blur(radius, radius / 2);
     }
 
