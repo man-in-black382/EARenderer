@@ -17,11 +17,15 @@ namespace EARenderer {
 
         struct MeshSettings {
 
+            enum class SphericalHarmonicsCompression { Uncompressed, Compressed322, Compressed311 };
+
             bool materialsEnabled = true;
             bool globalIlluminationEnabled = true;
             bool lightMultibounceEnabled = true;
             bool meshRenderingEnabled = true;
             bool parallaxMappingEnabled = true;
+
+            SphericalHarmonicsCompression SHCompression = SphericalHarmonicsCompression::Compressed311;
 
             float parallaxMappingStrength = 0.05;
 

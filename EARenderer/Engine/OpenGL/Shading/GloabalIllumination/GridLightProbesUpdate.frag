@@ -199,10 +199,10 @@ void PackSHToRenderTargets(SH sh) {
     //                              Cg        Cg                                                 Cg
     uint pair12 = PackSnorm2x16(sh.L2_2.b, sh.L20.b,  maximum);  uint pair13 = PackSnorm2x16(sh.L22.b,  0.0,       maximum);
 
-    oFragData0 = uvec4(pair0, pair1, pair2, pair3);
-    oFragData1 = uvec4(pair4, pair5, pair6, pair7);
-    oFragData2 = uvec4(pair8, pair9, pair10, pair11);
-    oFragData3 = uvec4(pair12, pair13, 0, uMaximum);
+    oFragData0 = uvec4(uMaximum, pair0, pair1, pair2);
+    oFragData1 = uvec4(pair3, pair4, pair5, pair6);
+    oFragData2 = uvec4(pair7, pair8, pair9, pair10);
+    oFragData3 = uvec4(pair11, pair12, pair13, 0);
 }
 
 // Transform normalized texture corrdinates into a 1-dimensional integer index

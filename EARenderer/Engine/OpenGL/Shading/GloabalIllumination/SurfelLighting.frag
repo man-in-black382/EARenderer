@@ -181,42 +181,15 @@ vec2 UnpackSnorm2x16(uint package, float range) {
     return vec2(fFirst, fSecond);
 }
 
-SH UnpackSH_322_HalfPacked(vec3 texCoords) {
-    SH sh = ZeroSH();
-
-    ivec3 iTexCoords = ivec3(texCoords);
-
-    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-
-    float range = uintBitsToFloat(shMap2Data.a);
-
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);
-    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);
-    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);
-    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);
-    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);
-
-    // Y
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co
-    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y; sh.L1_1.g = pair6.x;
-
-    // Cg
-    sh.L00.b  = pair6.x;  sh.L11.b  = pair7.x;  sh.L10.b  = pair7.y; sh.L1_1.b = pair8.x;
-
-    return sh;
-}
-
-SH UnpackSH_333_HalfPacked(vec3 texCoords) {
+// Packing scheme:
+//                         Y    Y      Y    Y       Y    Y       Y     Y      Y   Co
+// 9 Luma coefficients  [(L00, L11), (L10, L1_1), (L21, L2_1), (L2_2, L20), (L22, L00),
+// 9 Co and 9 Cg coeff.   Cg   Co     Co   Co      Cg   Cg      Cg   Co      Co    Co
+// are mixed up          (L00, L11), (L10, L1_1), (L11, L10), (L1_1, L21), (L2_1, L2_2),
+//                        Co   Co     Cg   Cg      Cg    Cg     Cg
+//                       (L20, L22), (L21, L2_1), (L2_2, L20), (L22, 0.0)]
+//
+SH UnpackSH_333(vec3 texCoords) {
     SH sh = ZeroSH();
 
     ivec3 iTexCoords = ivec3(texCoords);
@@ -226,30 +199,23 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
     uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
     uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
 
-    float range = uintBitsToFloat(shMap3Data.a);
+    float range = uintBitsToFloat(shMap0Data.r);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);  vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);  vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
-    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range); vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
-    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.g, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.a, range);  vec2 pair3 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.g, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.a, range);  vec2 pair7 = UnpackSnorm2x16(shMap2Data.r, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.g, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.b, range);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.a, range); vec2 pair11 = UnpackSnorm2x16(shMap3Data.r, range);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.g, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.b, range);
 
-    // Y | R
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co | G
-    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y;
-    sh.L1_1.g = pair6.x;  sh.L21.g  = pair6.y;  sh.L2_1.g = pair7.x;
-    sh.L2_2.g = pair7.y;  sh.L20.g  = pair8.x;  sh.L22.g  = pair8.y;
-
-    // Cg | B
-    sh.L00.b  = pair9.x;  sh.L11.b  = pair9.y;  sh.L10.b  = pair10.x;
-    sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
-    sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
+    sh.L00.r = pair0.x;   sh.L11.r = pair0.y;   sh.L10.r = pair1.x;   sh.L1_1.r = pair1.y;
+    sh.L21.r = pair2.x;   sh.L2_1.r = pair2.y;  sh.L2_2.r = pair3.x;  sh.L20.r = pair3.y;
+    sh.L22.r = pair4.x;   sh.L00.g = pair4.y;   sh.L00.b = pair5.x;   sh.L11.g = pair5.y;
+    sh.L10.g = pair6.x,   sh.L1_1.g = pair6.y;  sh.L11.b = pair7.x;   sh.L10.b = pair7.y;
+    sh.L1_1.b = pair8.x;  sh.L21.g = pair8.y;   sh.L2_1.g = pair9.x;  sh.L2_2.g = pair9.y;
+    sh.L20.g = pair10.x,  sh.L22.g = pair10.y;  sh.L21.b = pair11.x,  sh.L2_1.b = pair11.y;
+    sh.L2_2.b = pair12.x; sh.L20.b = pair12.y;  sh.L22.b = pair13.x;
 
     return sh;
 }
@@ -321,23 +287,15 @@ SH TriLerpSurroundingProbes(vec3 fragNormal, vec3 worldPosition) {
     //  -----------> X
     //
 
-    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z);
-    vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z);
-    vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
-    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z);
-    vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z);
-    vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
+    vec3 cp0 = vec3(minCoords.x, minCoords.y, minCoords.z); vec3 cp1 = vec3(minCoords.x, maxCoords.y, minCoords.z);
+    vec3 cp2 = vec3(maxCoords.x, maxCoords.y, minCoords.z); vec3 cp3 = vec3(maxCoords.x, minCoords.y, minCoords.z);
+    vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z); vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
+    vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z); vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_333_HalfPacked(cp0);
-    SH sh1 = UnpackSH_333_HalfPacked(cp1);
-    SH sh2 = UnpackSH_333_HalfPacked(cp2);
-    SH sh3 = UnpackSH_333_HalfPacked(cp3);
-    SH sh4 = UnpackSH_333_HalfPacked(cp4);
-    SH sh5 = UnpackSH_333_HalfPacked(cp5);
-    SH sh6 = UnpackSH_333_HalfPacked(cp6);
-    SH sh7 = UnpackSH_333_HalfPacked(cp7);
+    SH sh0 = UnpackSH_333(cp0); SH sh1 = UnpackSH_333(cp1);
+    SH sh2 = UnpackSH_333(cp2); SH sh3 = UnpackSH_333(cp3);
+    SH sh4 = UnpackSH_333(cp4); SH sh5 = UnpackSH_333(cp5);
+    SH sh6 = UnpackSH_333(cp6); SH sh7 = UnpackSH_333(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal, worldPosition);
     float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal, worldPosition);
@@ -378,23 +336,15 @@ SH TriLerpSurroundingProbes(vec3 fragNormal, vec3 worldPosition) {
 
     float weightScale = 1.0 / (1.0 - excludedWeight);
 
-    weights.value0 *= weightScale;
-    weights.value1 *= weightScale;
-    weights.value2 *= weightScale;
-    weights.value3 *= weightScale;
-    weights.value4 *= weightScale;
-    weights.value5 *= weightScale;
-    weights.value6 *= weightScale;
-    weights.value7 *= weightScale;
+    weights.value0 *= weightScale; weights.value1 *= weightScale;
+    weights.value2 *= weightScale; weights.value3 *= weightScale;
+    weights.value4 *= weightScale; weights.value5 *= weightScale;
+    weights.value6 *= weightScale; weights.value7 *= weightScale;
 
-    sh0 = ScaleSH(sh0, vec3(weights.value0));
-    sh1 = ScaleSH(sh1, vec3(weights.value1));
-    sh2 = ScaleSH(sh2, vec3(weights.value2));
-    sh3 = ScaleSH(sh3, vec3(weights.value3));
-    sh4 = ScaleSH(sh4, vec3(weights.value4));
-    sh5 = ScaleSH(sh5, vec3(weights.value5));
-    sh6 = ScaleSH(sh6, vec3(weights.value6));
-    sh7 = ScaleSH(sh7, vec3(weights.value7));
+    sh0 = ScaleSH(sh0, vec3(weights.value0)); sh1 = ScaleSH(sh1, vec3(weights.value1));
+    sh2 = ScaleSH(sh2, vec3(weights.value2)); sh3 = ScaleSH(sh3, vec3(weights.value3));
+    sh4 = ScaleSH(sh4, vec3(weights.value4)); sh5 = ScaleSH(sh5, vec3(weights.value5));
+    sh6 = ScaleSH(sh6, vec3(weights.value6)); sh7 = ScaleSH(sh7, vec3(weights.value7));
 
     SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
@@ -403,12 +353,32 @@ SH TriLerpSurroundingProbes(vec3 fragNormal, vec3 worldPosition) {
 
 float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
-    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-    kC3 * sh.L20[c] * (direction.z * direction.z) +
-    kC4 * sh.L00[c] -
-    kC5 * sh.L20[c] +
-    2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-    2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
+
+    const float Y00 = 0.28209479177387814347; // 1 / (2*sqrt(pi))
+    const float Y11 = -0.48860251190291992159; // sqrt(3 /(4pi))
+    const float Y10 = 0.48860251190291992159;
+    const float Y1_1 = -0.48860251190291992159;
+    const float Y21 = -1.09254843059207907054; // 1 / (2*sqrt(pi))
+    const float Y2_1 = -1.09254843059207907054;
+    const float Y2_2 = 1.09254843059207907054;
+    const float Y20 = 0.31539156525252000603; // 1/4 * sqrt(5/pi)
+    const float Y22 = 0.54627421529603953527; // 1/4 * sqrt(15/pi)
+
+    float result = 0.0;
+
+    result += sh.L00[c] * Y00;
+
+    result += sh.L1_1[c] * Y1_1 * direction.y;
+    result += sh.L10[c] * Y10 * direction.z;
+    result += sh.L11[c] * Y11 * direction.x;
+
+    result += sh.L2_2[c] * Y2_2 * (direction.x * direction.y);
+    result += sh.L2_1[c] * Y2_1 * (direction.y * direction.z);
+    result += sh.L21[c] * Y21 * (direction.x * direction.z);
+    result += sh.L20[c] * Y20 * (3.0f * direction.z * direction.z - 1.0f);
+    result += sh.L22[c] * Y22 * (direction.x * direction.x - direction.y * direction.y);
+
+    return result;
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction, vec3 worldPosition) {

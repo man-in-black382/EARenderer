@@ -9,6 +9,10 @@ const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
 const int kLightTypeSpot        = 2;
 
+const int kSHCompression333 = 0;
+const int kSHCompression322 = 1;
+const int kSHCompression311 = 2;
+
 // Spherical harmonics
 const float kC1 = 0.429043;
 const float kC2 = 0.511664;
@@ -85,6 +89,7 @@ uniform Material uMaterial;
 uniform int uLightType;
 uniform uint uSettingsBitmask;
 uniform float uParallaxMappingStrength;
+uniform int uSHCompressionType;
 
 // Shadow mapping
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
@@ -197,67 +202,15 @@ vec2 UnpackSnorm2x16(uint package, float range) {
     return vec2(fFirst, fSecond);
 }
 
-SH UnpackSH_311_HalfPacked(vec3 texCoords) {
-    SH sh = ZeroSH();
-
-    ivec3 iTexCoords = ivec3(texCoords);
-
-    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-
-    float range = uintBitsToFloat(shMap1Data.a);
-
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range); vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range); vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range); vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-
-    // Y
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co, Cg
-    sh.L00.g  = pair4.y; sh.L00.b  = pair5.x;
-
-    return sh;
-}
-
-SH UnpackSH_322_HalfPacked(vec3 texCoords) {
-    SH sh = ZeroSH();
-
-    ivec3 iTexCoords = ivec3(texCoords);
-
-    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
-    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
-    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
-
-    float range = uintBitsToFloat(shMap2Data.a);
-
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);
-    vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);
-    vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);
-    vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);
-    vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);
-
-    // Y
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co
-    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y; sh.L1_1.g = pair6.x;
-
-    // Cg
-    sh.L00.b  = pair6.x;  sh.L11.b  = pair7.x;  sh.L10.b  = pair7.y; sh.L1_1.b = pair8.x;
-
-    return sh;
-}
-
-SH UnpackSH_333_HalfPacked(vec3 texCoords) {
+// Packing scheme:
+//                         Y    Y      Y    Y       Y    Y       Y     Y      Y   Co
+// 9 Luma coefficients  [(L00, L11), (L10, L1_1), (L21, L2_1), (L2_2, L20), (L22, L00),
+// 9 Co and 9 Cg coeff.   Cg   Co     Co   Co      Cg   Cg      Cg   Co      Co    Co
+// are mixed up          (L00, L11), (L10, L1_1), (L11, L10), (L1_1, L21), (L2_1, L2_2),
+//                        Co   Co     Cg   Cg      Cg    Cg     Cg
+//                       (L20, L22), (L21, L2_1), (L2_2, L20), (L22, 0.0)]
+//
+SH UnpackSH_333(vec3 texCoords) {
     SH sh = ZeroSH();
 
     ivec3 iTexCoords = ivec3(texCoords);
@@ -267,36 +220,85 @@ SH UnpackSH_333_HalfPacked(vec3 texCoords) {
     uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
     uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
 
-    float range = uintBitsToFloat(shMap3Data.a);
+    float range = uintBitsToFloat(shMap0Data.r);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);  vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);  vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
-    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range); vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
-    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.g, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.a, range);  vec2 pair3 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.g, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.a, range);  vec2 pair7 = UnpackSnorm2x16(shMap2Data.r, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.g, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.b, range);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.a, range); vec2 pair11 = UnpackSnorm2x16(shMap3Data.r, range);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.g, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.b, range);
 
-    // Y | R
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co | G
-    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y;
-    sh.L1_1.g = pair6.x;  sh.L21.g  = pair6.y;  sh.L2_1.g = pair7.x;
-    sh.L2_2.g = pair7.y;  sh.L20.g  = pair8.x;  sh.L22.g  = pair8.y;
-
-    // Cg | B
-    sh.L00.b  = pair9.x;  sh.L11.b  = pair9.y;  sh.L10.b  = pair10.x;
-    sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
-    sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
+    sh.L00.r = pair0.x;   sh.L11.r = pair0.y;   sh.L10.r = pair1.x;   sh.L1_1.r = pair1.y;
+    sh.L21.r = pair2.x;   sh.L2_1.r = pair2.y;  sh.L2_2.r = pair3.x;  sh.L20.r = pair3.y;
+    sh.L22.r = pair4.x;   sh.L00.g = pair4.y;   sh.L00.b = pair5.x;   sh.L11.g = pair5.y;
+    sh.L10.g = pair6.x,   sh.L1_1.g = pair6.y;  sh.L11.b = pair7.x;   sh.L10.b = pair7.y;
+    sh.L1_1.b = pair8.x;  sh.L21.g = pair8.y;   sh.L2_1.g = pair9.x;  sh.L2_2.g = pair9.y;
+    sh.L20.g = pair10.x,  sh.L22.g = pair10.y;  sh.L21.b = pair11.x,  sh.L2_1.b = pair11.y;
+    sh.L2_2.b = pair12.x; sh.L20.b = pair12.y;  sh.L22.b = pair13.x;
 
     return sh;
 }
 
-float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
+SH UnpackSH_322(vec3 texCoords) {
+    SH sh = ZeroSH();
 
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+    uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
+
+    float range = uintBitsToFloat(shMap0Data.r);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.g, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.a, range);  vec2 pair3 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.g, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.a, range);  vec2 pair7 = UnpackSnorm2x16(shMap2Data.r, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.g, range);
+
+    sh.L00.r = pair0.x;   sh.L11.r = pair0.y;   sh.L10.r = pair1.x;   sh.L1_1.r = pair1.y;
+    sh.L21.r = pair2.x;   sh.L2_1.r = pair2.y;  sh.L2_2.r = pair3.x;  sh.L20.r = pair3.y;
+    sh.L22.r = pair4.x;   sh.L00.g = pair4.y;   sh.L00.b = pair5.x;   sh.L11.g = pair5.y;
+    sh.L10.g = pair6.x,   sh.L1_1.g = pair6.y;  sh.L11.b = pair7.x;   sh.L10.b = pair7.y;
+    sh.L1_1.b = pair8.x;
+
+    return sh;
+}
+
+SH UnpackSH_311(vec3 texCoords) {
+    SH sh = ZeroSH();
+
+    ivec3 iTexCoords = ivec3(texCoords);
+
+    uvec4 shMap0Data = texelFetch(uGridSHMap0, iTexCoords, 0);
+    uvec4 shMap1Data = texelFetch(uGridSHMap1, iTexCoords, 0);
+
+    float range = uintBitsToFloat(shMap0Data.r);
+
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.g, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.a, range);  vec2 pair3 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.g, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.b, range);
+
+    sh.L00.r = pair0.x;   sh.L11.r = pair0.y;   sh.L10.r = pair1.x;   sh.L1_1.r = pair1.y;
+    sh.L21.r = pair2.x;   sh.L2_1.r = pair2.y;  sh.L2_2.r = pair3.x;  sh.L20.r = pair3.y;
+    sh.L22.r = pair4.x;   sh.L00.g = pair4.y;   sh.L00.b = pair5.x;
+
+    return sh;
+}
+
+SH UnpackSH(vec3 texCoords) {
+//    switch (uSHCompressionType) {
+//        case kSHCompression333: return UnpackSH_333(texCoords);
+//        case kSHCompression322: return UnpackSH_322(texCoords);
+//        case kSHCompression311: return UnpackSH_311(texCoords);
+//        default: return UnpackSH_333(texCoords);
+//    }
+    return UnpackSH_322(texCoords);
+}
+
+float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
     // [x + WIDTH * (y + HEIGHT * z)]
     int gridWidth = gridSize.x;
     int gridHeight = gridSize.y;
@@ -367,10 +369,10 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     vec3 cp4 = vec3(minCoords.x, minCoords.y, maxCoords.z); vec3 cp5 = vec3(minCoords.x, maxCoords.y, maxCoords.z);
     vec3 cp6 = vec3(maxCoords.x, maxCoords.y, maxCoords.z); vec3 cp7 = vec3(maxCoords.x, minCoords.y, maxCoords.z);
 
-    SH sh0 = UnpackSH_322_HalfPacked(cp0); SH sh1 = UnpackSH_322_HalfPacked(cp1);
-    SH sh2 = UnpackSH_322_HalfPacked(cp2); SH sh3 = UnpackSH_322_HalfPacked(cp3);
-    SH sh4 = UnpackSH_322_HalfPacked(cp4); SH sh5 = UnpackSH_322_HalfPacked(cp5);
-    SH sh6 = UnpackSH_322_HalfPacked(cp6); SH sh7 = UnpackSH_322_HalfPacked(cp7);
+    SH sh0 = UnpackSH(cp0); SH sh1 = UnpackSH(cp1);
+    SH sh2 = UnpackSH(cp2); SH sh3 = UnpackSH(cp3);
+    SH sh4 = UnpackSH(cp4); SH sh5 = UnpackSH(cp5);
+    SH sh6 = UnpackSH(cp6); SH sh7 = UnpackSH(cp7);
 
     float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal); float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
     float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal); float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
@@ -423,18 +425,17 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
 }
 
 float SHRadiance(SH sh, vec3 direction, int component) {
-
     int c = component;
 
-    float Y00 = 0.28209479177387814347; // 1 / (2*sqrt(pi))
-    float Y11 = -0.48860251190291992159; // sqrt(3 /(4pi))
-    float Y10 = 0.48860251190291992159;
-    float Y1_1 = -0.48860251190291992159;
-    float Y21 = -1.09254843059207907054; // 1 / (2*sqrt(pi))
-    float Y2_1 = -1.09254843059207907054;
-    float Y2_2 = 1.09254843059207907054;
-    float Y20 = 0.31539156525252000603; // 1/4 * sqrt(5/pi)
-    float Y22 = 0.54627421529603953527; // 1/4 * sqrt(15/pi)
+    const float Y00 = 0.28209479177387814347; // 1 / (2*sqrt(pi))
+    const float Y11 = -0.48860251190291992159; // sqrt(3 /(4pi))
+    const float Y10 = 0.48860251190291992159;
+    const float Y1_1 = -0.48860251190291992159;
+    const float Y21 = -1.09254843059207907054; // 1 / (2*sqrt(pi))
+    const float Y2_1 = -1.09254843059207907054;
+    const float Y2_2 = 1.09254843059207907054;
+    const float Y20 = 0.31539156525252000603; // 1/4 * sqrt(5/pi)
+    const float Y22 = 0.54627421529603953527; // 1/4 * sqrt(15/pi)
 
     float result = 0.0;
 
@@ -451,14 +452,6 @@ float SHRadiance(SH sh, vec3 direction, int component) {
     result += sh.L22[c] * Y22 * (direction.x * direction.x - direction.y * direction.y);
 
     return result;
-
-//    int c = component;
-//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-//            kC3 * sh.L20[c] * (direction.z * direction.z) +
-//            kC4 * sh.L00[c] -
-//            kC5 * sh.L20[c] +
-//            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-//            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
