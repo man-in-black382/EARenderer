@@ -18,25 +18,28 @@
 namespace EARenderer {
 
     class BloomEffect {
-    private:
+    public:
         std::shared_ptr<const GLHDRTexture2D> mBaseImage;
-        std::shared_ptr<const GLHDRTexture2D> mSmallThresholdFilteredImage;
-        std::shared_ptr<const GLHDRTexture2D> mMediumThresholdFilteredImage;
-        std::shared_ptr<const GLHDRTexture2D> mLargeThresholdFilteredImage;
+        std::shared_ptr<const GLHDRTexture2D> mThresholdFilteredImage;
+        std::shared_ptr<GLHDRTexture2D> mSmallThresholdFilteredImage;
+        std::shared_ptr<GLHDRTexture2D> mMediumThresholdFilteredImage;
+        std::shared_ptr<GLHDRTexture2D> mLargeThresholdFilteredImage;
         std::shared_ptr<GLHDRTexture2D> mOutputImage;
 
         GaussianBlurEffect mSmallBlurEffect;
         GaussianBlurEffect mMediumBlurEffect;
         GaussianBlurEffect mLargeBlurEffect;
 
-        GLFramebuffer mSourceFramebuffer;
-        GLFramebuffer mSmallFramebuffer;
-        GLFramebuffer mMediumFramebuffer;
-        GLFramebuffer mLargeFramebuffer;
+        GLFramebuffer mFramebuffer;
+//        GLFramebuffer mSmallFramebuffer;
+//        GLFramebuffer mMediumFramebuffer;
+//        GLFramebuffer mLargeFramebuffer;
 
     public:
         BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
                     std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage);
+
+        std::shared_ptr<GLHDRTexture2D> bloom();
     };
 
 }

@@ -8,18 +8,19 @@
 
 #include "GLFramebuffer.hpp"
 #include "Macros.h"
+#include "StringUtils.hpp"
 
 #include <OpenGL/gl3.h>
 #include <vector>
+#include <stdexcept>
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    GLFramebuffer::GLFramebuffer(const Size2D& size, Role role)
+    GLFramebuffer::GLFramebuffer(const Size2D& size)
     :
-    mRole(role),
-    mBindingPoint(glBindingPoint(role)),
+    mBindingPoint(GL_FRAMEBUFFER),
     mSize(size),
     mViewport(Rect2D(size))
     {
@@ -60,6 +61,21 @@ namespace EARenderer {
         glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &mMaximumColorAttachments);
         glGetIntegerv(GL_MAX_DRAW_BUFFERS, &mMaximumDrawBuffers);
     }
+
+    void GLFramebuffer::setRequestedDrawBuffers() {
+        std::array<GLenum, 16> drawBuffers;
+
+        size_t i = 0;
+        for (GLenum drawBuffer : mRequestedAttachments) {
+            drawBuffers[i] = drawBuffer;
+            i++;
+        }
+
+        std::sort(drawBuffers.begin(), drawBuffers.begin() + i);
+
+        glDrawBuffers((GLsizei)mRequestedAttachments.size(), drawBuffers.data());
+        glReadBuffer(GL_NONE);
+    }
     
     void GLFramebuffer::attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel, int16_t layer) {
         bind();
@@ -71,7 +87,7 @@ namespace EARenderer {
             glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
         }
         
-        if (mDrawBuffers.empty()) {
+        if (mRequestedAttachments.empty()) {
             glDrawBuffer(GL_NONE);
         }
         
@@ -90,20 +106,8 @@ namespace EARenderer {
             glFramebufferTextureLayer(mBindingPoint, attachment, texture.name(), mipLevel, layer);
         }
 
-        mDrawBuffers.insert(attachment);
-
-        std::array<GLenum, 16> drawBuffers;
-
-        size_t i = 0;
-        for (GLenum drawBuffer : mDrawBuffers) {
-            drawBuffers[i] = drawBuffer;
-            i++;
-        }
-
-        std::sort(drawBuffers.begin(), drawBuffers.begin() + i);
-
-        glDrawBuffers((GLsizei)mDrawBuffers.size(), drawBuffers.data());
-        glReadBuffer(GL_NONE);
+        mRequestedAttachments.insert(attachment);
+        setRequestedDrawBuffers();
     }
 
     GLenum GLFramebuffer::glColorAttachment(ColorAttachment attachment) const {
@@ -127,13 +131,6 @@ namespace EARenderer {
         }
     }
 
-    GLint GLFramebuffer::glBindingPoint(Role role) {
-        switch (role) {
-            case Role::ReadBuffer: return GL_READ_FRAMEBUFFER;
-            case Role::DrawBuffer: return GL_DRAW_FRAMEBUFFER;
-        }
-    }
-
     void GLFramebuffer::detachAllAttachments() {
         bind();
         glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, 0, 0);
@@ -141,7 +138,7 @@ namespace EARenderer {
         glFramebufferTexture(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0);
         glFramebufferTextureLayer(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0, 0);
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-        mDrawBuffers.clear();
+        mRequestedAttachments.clear();
     }
     
 #pragma mark - Public
@@ -218,6 +215,29 @@ namespace EARenderer {
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
         renderbuffer.bind();
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
+    }
+
+    void GLFramebuffer::blit(GLFramebuffer::ColorAttachment sourceAttachment, const Rect2D& srcRect,
+                             GLFramebuffer::ColorAttachment destinationAttachment, const Rect2D& dstRect,
+                             bool useLinearFilter)
+    {
+        auto srcAttachment = glColorAttachment(sourceAttachment);
+        auto dstAttachment = glColorAttachment(destinationAttachment);
+
+        if (mRequestedAttachments.find(srcAttachment) == mRequestedAttachments.end()) {
+            throw std::invalid_argument("Nothing is attached to passed source attachment");
+        }
+
+        if (mRequestedAttachments.find(dstAttachment) == mRequestedAttachments.end()) {
+            throw std::invalid_argument("Nothing is attached to passed destination attachment");
+        }
+
+        bind();
+        glReadBuffer(srcAttachment);
+        glDrawBuffer(dstAttachment);
+        glBlitFramebuffer(srcRect.origin.x, srcRect.origin.y, srcRect.origin.x + srcRect.size.width, srcRect.origin.y + srcRect.size.height,
+                          dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
+                          GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
     }
     
 }

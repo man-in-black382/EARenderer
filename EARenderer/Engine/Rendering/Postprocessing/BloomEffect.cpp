@@ -10,10 +10,13 @@
 
 namespace EARenderer {
 
+#pragma mark - Lifecycle
+
     BloomEffect::BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
                              std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage)
     :
     mBaseImage(baseImage),
+    mThresholdFilteredImage(thresholdFilteredImage),
     mOutputImage(std::make_shared<GLHDRTexture2D>(baseImage->size())),
 
     mLargeThresholdFilteredImage(std::make_shared<GLHDRTexture2D>(thresholdFilteredImage->size())),
@@ -24,12 +27,36 @@ namespace EARenderer {
     mMediumBlurEffect(mMediumThresholdFilteredImage),
     mSmallBlurEffect(mLargeThresholdFilteredImage),
 
-    mSourceFramebuffer(thresholdFilteredImage->size()),
-    mSmallFramebuffer(mSmallThresholdFilteredImage->size()),
-    mMediumFramebuffer(mMediumThresholdFilteredImage->size()),
-    mLargeFramebuffer(mLargeThresholdFilteredImage->size())
+    mFramebuffer(thresholdFilteredImage->size())
+//    mSmallFramebuffer(mSmallThresholdFilteredImage->size()),
+//    mMediumFramebuffer(mMediumThresholdFilteredImage->size()),
+//    mLargeFramebuffer(mLargeThresholdFilteredImage->size())
     {
+        mFramebuffer.attachTexture(*mThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment0);
+        mFramebuffer.attachTexture(*mLargeThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment1);
+        mFramebuffer.attachTexture(*mMediumThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment2);
+        mFramebuffer.attachTexture(*mSmallThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment3);
+    }
 
+#pragma mark - Filter
+
+    std::shared_ptr<GLHDRTexture2D> BloomEffect::bloom() {
+        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
+                          Rect2D(mThresholdFilteredImage->size()),
+                          GLFramebuffer::ColorAttachment::Attachment1,
+                          Rect2D(mLargeThresholdFilteredImage->size()));
+
+        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
+                          Rect2D(mThresholdFilteredImage->size()),
+                          GLFramebuffer::ColorAttachment::Attachment2,
+                          Rect2D(mMediumThresholdFilteredImage->size()));
+
+        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
+                          Rect2D(mThresholdFilteredImage->size()),
+                          GLFramebuffer::ColorAttachment::Attachment3,
+                          Rect2D(mSmallThresholdFilteredImage->size()));
+
+        return mOutputImage;
     }
 
 }

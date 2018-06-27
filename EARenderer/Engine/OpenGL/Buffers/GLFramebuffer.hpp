@@ -36,8 +36,6 @@ namespace EARenderer {
     
     class GLFramebuffer: public GLNamedObject, public GLBindable {
     public:
-        enum class Role { Source, Destination };
-
         enum class ColorAttachment {
             Attachment0, Attachment1, Attachment2, Attachment3,
             Attachment4, Attachment5, Attachment6, Attachment7,
@@ -46,22 +44,21 @@ namespace EARenderer {
         };
 
     private:
-        Role mRole;
         GLint mBindingPoint;
         Size2D mSize;
         GLViewport mViewport;
         GLint mMaximumColorAttachments;
         GLint mMaximumDrawBuffers;
-        std::unordered_set<GLenum> mDrawBuffers;
+        std::unordered_set<GLenum> mRequestedAttachments;
 
         void obtainHardwareLimits();
+        void setRequestedDrawBuffers();
         void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
         void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
         GLenum glColorAttachment(ColorAttachment attachment) const;
-        GLint glBindingPoint(Role role);
         
     public:
-        GLFramebuffer(const Size2D& size, Role role = Role::Destination);
+        GLFramebuffer(const Size2D& size);
         GLFramebuffer(GLFramebuffer&& that) = default;
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
         ~GLFramebuffer() override;
@@ -114,7 +111,9 @@ namespace EARenderer {
         
         void detachAllAttachments();
 
-//        void blit();
+        void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
+                  ColorAttachment destinationAttachment, const Rect2D& dstRect,
+                  bool useLinearFilter = true);
     };
     
 }

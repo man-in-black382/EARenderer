@@ -54,8 +54,16 @@ namespace EARenderer {
     },
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
-    // Filters
-    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap))
+    // Output frame
+    mOutputFrame(Size2D(1280, 720)),
+    mThresholdFilteredOutputFrame(mOutputFrame.size()),
+    mOutputDepthRenderbuffer(mOutputFrame.size()),
+    mOutputFramebuffer(mOutputFrame.size()),
+
+    // Effects
+    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap)),
+    mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
+                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame))
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -66,13 +74,6 @@ namespace EARenderer {
         setupGLState();
         setupTextures();
         setupFramebuffers();
-        
-//        mIBLFramebuffer.attachColorTextures({ mSurfelsLuminanceMap, mSurfelClustersLuminanceMap });
-
-//        convertEquirectangularMapToCubemap();
-//        buildDiffuseIrradianceMap();
-//        buildSpecularIrradianceMap();
-//        buildBRDFIntegrationMap();
     }
     
 #pragma mark - Setters
@@ -149,6 +150,10 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+
+        mOutputFramebuffer.attachTexture(mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
+        mOutputFramebuffer.attachTexture(mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
+        mOutputFramebuffer.attachRenderbuffer(mOutputDepthRenderbuffer);
     }
 
 #pragma mark - Rendering
@@ -340,10 +345,7 @@ namespace EARenderer {
 #pragma mark - Public interface
 
     void SceneRenderer::prepareFrame() {
-        const DirectionalLight& directionalLight = mScene->directionalLight();
-        mShadowCascades = directionalLight.cascadesForWorldBoundingBox(mScene->boundingBox());
-//        auto cascadeScale = glm::vec3(5.0, 5.0, 5.0);
-//        mShadowCascades = directionalLight.cascadesForCamera(*mScene->camera(), 3, cascadeScale);
+        mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();
@@ -355,8 +357,9 @@ namespace EARenderer {
     void SceneRenderer::renderMeshes() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
 
-        bindDefaultFramebuffer();
-        glClear(GL_COLOR_BUFFER_BIT);
+        mOutputFramebuffer.bind();
+        mOutputFramebuffer.viewport().apply();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
 
@@ -391,21 +394,20 @@ namespace EARenderer {
             }
         }
 
-//        bindDefaultFramebuffer();
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(true);
-//
-//        Rect2D viewportRect(Size2D(200, 200));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([this]() {
-//            mFSQuadShader.setTexture(mDirectionalExponentialShadowMap);
-//        });
-//
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glEnable(GL_DEPTH_TEST);
+        mBloomEffect.bloom();
+
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(*mBloomEffect.mLargeThresholdFilteredImage);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

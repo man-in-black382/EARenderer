@@ -20,6 +20,7 @@
 		AC3C9EB720720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3C9EB520720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp */; };
 		AC3C9EB92072111500F35EB3 /* GridLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EB82072111500F35EB3 /* GridLightProbeRendering.frag */; };
 		AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EBD207219FF00F35EB3 /* GridLightProbeRendering.geom */; };
+		AC40397E20E38A680079112E /* ToneMappingEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC40397C20E38A680079112E /* ToneMappingEffect.cpp */; };
 		AC59F28D207373C100698E55 /* GLSLLightProbeLinksRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */; };
 		AC59F2912073C6B500698E55 /* LightProbeLinksRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */; };
 		AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */; };
@@ -607,6 +608,8 @@
 		AC3C9EB620720F5C00F35EB3 /* GLSLGridLightProbeRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLGridLightProbeRendering.hpp; sourceTree = "<group>"; };
 		AC3C9EB82072111500F35EB3 /* GridLightProbeRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbeRendering.frag; sourceTree = "<group>"; };
 		AC3C9EBD207219FF00F35EB3 /* GridLightProbeRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbeRendering.geom; sourceTree = "<group>"; };
+		AC40397C20E38A680079112E /* ToneMappingEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ToneMappingEffect.cpp; sourceTree = "<group>"; };
+		AC40397D20E38A680079112E /* ToneMappingEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ToneMappingEffect.hpp; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
 		AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeLinksRendering.cpp; sourceTree = "<group>"; };
 		AC59F28C207373C100698E55 /* GLSLLightProbeLinksRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeLinksRendering.hpp; sourceTree = "<group>"; };
@@ -1867,6 +1870,8 @@
 				AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */,
 				AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */,
 				AC1F6BD920E2321200E81EB0 /* BloomEffect.hpp */,
+				AC40397C20E38A680079112E /* ToneMappingEffect.cpp */,
+				AC40397D20E38A680079112E /* ToneMappingEffect.hpp */,
 			);
 			path = Postprocessing;
 			sourceTree = "<group>";
@@ -3725,6 +3730,7 @@
 				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CE70FA3C1F8F8EF600AD9027 /* GLDepthTexture2D.cpp in Sources */,
 				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
+				AC40397E20E38A680079112E /* ToneMappingEffect.cpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
 				CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */,
 				CE4E19CD20837DB700AF181A /* MeshLoader.cpp in Sources */,

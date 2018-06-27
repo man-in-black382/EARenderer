@@ -22,7 +22,8 @@ const float kC5 = 0.247708;
 
 // Output
 
-out vec4 oFragColor;
+layout(location = 0) out vec4 oBaseOutput;
+layout(location = 1) out vec4 oBrightOutput;
 
 // Input
 
@@ -768,10 +769,11 @@ void main() {
 
     // Image based lighting
 //    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
-    vec3 toneMappedColor       = ReinhardToneMap(specularAndDiffuse);
-    vec3 correctColor          = GammaCorrect(toneMappedColor);
 
-    oFragColor = vec4(correctColor, 1.0);
+    oBaseOutput = vec4(specularAndDiffuse, 1.0);
+
+    float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
+    oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 
 //    int cascade = ShadowCascadeIndex();
 //    switch (cascade) {

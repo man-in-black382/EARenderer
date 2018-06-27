@@ -113,8 +113,13 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
         GLSLGenericGeometry mGenericShader;
 
+        GLHDRTexture2D mOutputFrame;
+        GLHDRTexture2D mThresholdFilteredOutputFrame;
+        GLDepthRenderbuffer mOutputDepthRenderbuffer;
+        GLFramebuffer mOutputFramebuffer;
+
         GaussianBlurEffect mShadowBlurEffect;
-//        BloomEffect mBloomEffect;
+        BloomEffect mBloomEffect;
 
         void setupGLState();
         void setupTextures();
