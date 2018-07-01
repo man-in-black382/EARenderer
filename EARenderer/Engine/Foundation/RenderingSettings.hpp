@@ -1,22 +1,24 @@
 //
-//  RenderingSettings.hpp
+//  Settings.hpp
 //  EARenderer
 //
-//  Created by Pavlo Muratov on 30.05.2018.
+//  Created by Pavlo Muratov on 28.06.2018.
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#ifndef RenderingSettings_hpp
-#define RenderingSettings_hpp
+#ifndef Settings_hpp
+#define Settings_hpp
 
 #include "SurfelRenderer.hpp"
+#include "GaussianBlurSettings.hpp"
+#include "BloomSettings.hpp"
+#include "Size2D.hpp"
 
 namespace EARenderer {
 
     struct RenderingSettings {
 
-        struct MeshSettings {
-
+        struct Mesh {
             enum class SphericalHarmonicsCompression { Uncompressed, Compressed322, Compressed311 };
 
             bool materialsEnabled = true;
@@ -31,8 +33,7 @@ namespace EARenderer {
 
             uint32_t shadowCascadesCount = 4;
             float ESMFactor = 0.5;
-            float ESMDarkeningFactor = 1.0;
-            uint32_t shadowBlurRadius = 8;
+            GaussianBlurSettings shadowBlur { 8, 8 };
 
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;
@@ -45,26 +46,29 @@ namespace EARenderer {
             }
         };
 
-        struct SurfelSettings {
+        struct Surfel {
             bool renderingEnabled = false;
             SurfelRenderer::Mode renderingMode = SurfelRenderer::Mode::Default;
             int32_t POVProbeIndex = -1;
         };
 
-        struct ProbeSettings {
+        struct Probe {
             bool probeRenderingEnabled = false;
             int32_t clusterLinksRenderingProbeIndex = -1;
             float sphereRadius = 0.05;
         };
 
-        MeshSettings meshSettings;
-        SurfelSettings surfelSettings;
-        ProbeSettings probeSettings;
+        Mesh meshSettings;
+        Surfel surfelSettings;
+        Probe probeSettings;
+        BloomSettings bloomSettings;
 
         bool skyboxRenderingEnabled = true;
         bool triangleRenderingEnabled = false;
+
+        Size2D resolution { 1280, 720 };
     };
 
 }
 
-#endif /* RenderingSettings_hpp */
+#endif /* Settings_hpp */

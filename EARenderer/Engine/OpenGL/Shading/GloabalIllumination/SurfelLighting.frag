@@ -59,7 +59,6 @@ uniform bool uEnableMultibounce;
 // Shadow mapping
 uniform sampler2D uExponentialShadowMap;
 uniform float uESMFactor;
-uniform float uESMDarkeningFactor;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
@@ -438,7 +437,7 @@ float ExponentialShadow(vec3 surfelPosition) {
     float linearZ = lightSpacePosition.z;
 
     float occluder = texture(uExponentialShadowMap, projCoords.xy).r;
-    float receiver = exp(uESMDarkeningFactor - uESMFactor * linearZ);
+    float receiver = exp(-uESMFactor * linearZ);
     float visibility = clamp(occluder * receiver, 0.0, 1.0);
 
     return visibility;

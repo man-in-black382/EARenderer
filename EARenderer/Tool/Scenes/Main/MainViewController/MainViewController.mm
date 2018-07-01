@@ -21,7 +21,9 @@
 
 #import "Color.hpp"
 #import "Scene.hpp"
+#import "SceneGBufferRenderer.hpp"
 #import "SceneRenderer.hpp"
+#import "DeferredSceneRenderer.hpp"
 #import "AxesRenderer.hpp"
 #import "SceneInteractor.hpp"
 #import "Cameraman.hpp"
@@ -49,7 +51,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 // C++ raw pointers
 @property (assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::Scene *scene;
+@property (assign, nonatomic) EARenderer::SceneGBufferRenderer *sceneGBufferRenderer;
 @property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
+@property (assign, nonatomic) EARenderer::DeferredSceneRenderer *deferredSceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
 @property (assign, nonatomic) EARenderer::Cameraman *cameraman;
@@ -99,9 +103,10 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view
 {
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
-    
+
     EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
-    
+
+    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.scene = new EARenderer::Scene();
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
@@ -131,7 +136,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
+    self.sceneGBufferRenderer = new EARenderer::SceneGBufferRenderer(self.scene, self.renderingSettings);
     self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
+    self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings, surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
@@ -140,7 +147,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
                                                            self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
 
-    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
     self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
     self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
@@ -154,11 +160,16 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
 
-    self.sceneRenderer->prepareFrame();
+//    self.sceneRenderer->prepareFrame();
 
     if (self.renderingSettings.meshSettings.meshRenderingEnabled) {
-        EARenderer::Measurement::ExecutionTime("" , [&]() {
-            self.sceneRenderer->renderMeshes();
+        EARenderer::Measurement::ExecutionTime("GBuffer generation took" , [&]() {
+            self.sceneGBufferRenderer->render();
+            glFinish();
+        });
+        EARenderer::Measurement::ExecutionTime("Mesh rendering took" , [&]() {
+//            self.sceneRenderer->renderMeshes();
+            self.deferredSceneRenderer->renderMeshes();
             glFinish();
         });
     }
@@ -168,7 +179,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     }
 
     if (self.renderingSettings.skyboxRenderingEnabled) {
-        self.sceneRenderer->renderSkybox();
+        self.deferredSceneRenderer->renderSkybox();
     }
 
     if (self.renderingSettings.surfelSettings.renderingEnabled) {

@@ -12,6 +12,7 @@
 #include "GLHDRTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
+#include "GLSLToneMapping.hpp"
 
 #include <memory>
 
@@ -22,6 +23,7 @@ namespace EARenderer {
         std::shared_ptr<const GLHDRTexture2D> mInputImage;
         std::shared_ptr<GLHDRTexture2D> mOutputImage;
         GLFramebuffer mFramebuffer;
+        GLSLToneMapping mToneMappingShader;
 
     public:
         ToneMappingEffect(std::shared_ptr<const GLHDRTexture2D> inputImage);

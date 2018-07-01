@@ -12,13 +12,15 @@
 #include "GLHDRTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
+#include "GLSLBloom.hpp"
+#include "BloomSettings.hpp"
 
 #include <memory>
 
 namespace EARenderer {
 
     class BloomEffect {
-    public:
+    private:
         std::shared_ptr<const GLHDRTexture2D> mBaseImage;
         std::shared_ptr<const GLHDRTexture2D> mThresholdFilteredImage;
         std::shared_ptr<GLHDRTexture2D> mSmallThresholdFilteredImage;
@@ -31,15 +33,16 @@ namespace EARenderer {
         GaussianBlurEffect mLargeBlurEffect;
 
         GLFramebuffer mFramebuffer;
-//        GLFramebuffer mSmallFramebuffer;
-//        GLFramebuffer mMediumFramebuffer;
-//        GLFramebuffer mLargeFramebuffer;
+        GLFramebuffer mOutputFramebuffer;
+
+        GLSLBloom mBloomShader;
 
     public:
         BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
                     std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage);
 
-        std::shared_ptr<GLHDRTexture2D> bloom();
+        std::shared_ptr<GLHDRTexture2D> outputImage() const;
+        std::shared_ptr<GLHDRTexture2D> bloom(const BloomSettings& settings);
     };
 
 }

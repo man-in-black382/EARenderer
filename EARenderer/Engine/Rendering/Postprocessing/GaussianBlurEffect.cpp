@@ -36,7 +36,7 @@ namespace EARenderer {
 #pragma mark - Blur
 
     void GaussianBlurEffect::computeWeightsAndOffsets() {
-        auto weights = GaussianFunction::Produce1DKernel(mBlurRadius, mStandardDeviation);
+        auto weights = GaussianFunction::Produce1DKernel(mSettings.radius, mSettings.sigma);
 
         mWeights.clear();
         mTextureOffsets.clear();
@@ -46,7 +46,7 @@ namespace EARenderer {
         mTextureOffsets.push_back(0.0);
 
         // Calculate texture offsets and combined weights to make advantage of hardware interpolation
-        for (size_t i = 1; i <= mBlurRadius; i += 2) {
+        for (size_t i = 1; i <= mSettings.radius; i += 2) {
             float weight1 = weights[i];
             float weight2 = weights[i + 1];
             float totalWeight = weight1 + weight2;
@@ -61,13 +61,13 @@ namespace EARenderer {
         }
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(size_t radius, size_t standardDeviation) {
-        if (radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
+    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(const GaussianBlurSettings& settings) {
+        if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
-        if (mBlurRadius != radius || mStandardDeviation != standardDeviation) {
-            bool isOdd = radius % 2 == 1;
-            mBlurRadius = isOdd ? radius + 1 : radius;
-            mStandardDeviation = standardDeviation;
+        if (settings != mSettings) {
+            bool isOdd = settings.radius % 2 == 1;
+            mSettings.radius = isOdd ? settings.radius + 1 : settings.radius;
+            mSettings.sigma = settings.sigma;
             computeWeightsAndOffsets();
         }
 
@@ -97,10 +97,6 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         return mSecondOutputImage;
-    }
-
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(size_t radius) {
-        return blur(radius, radius / 2);
     }
 
 }

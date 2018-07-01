@@ -20,7 +20,9 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    SceneRenderer::SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData)
+    SceneRenderer::SceneRenderer(const Scene* scene,
+                                 std::shared_ptr<const SurfelData> surfelData,
+                                 std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData)
     :
     mScene(scene),
     mSurfelData(surfelData),
@@ -63,7 +65,8 @@ namespace EARenderer {
     // Effects
     mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap)),
     mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
-                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame))
+                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame)),
+    mToneMappingEffect(mBloomEffect.outputImage())
     {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
             GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
@@ -284,8 +287,7 @@ namespace EARenderer {
 
         glColorMask(true, true, true, true);
 
-        size_t radius = mSettings.meshSettings.shadowBlurRadius;
-        mShadowBlurEffect.blur(radius, 2);
+        mShadowBlurEffect.blur(mSettings.meshSettings.shadowBlur);
     }
 
     void SceneRenderer::relightSurfels() {
@@ -356,10 +358,6 @@ namespace EARenderer {
 
     void SceneRenderer::renderMeshes() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
-
-        mOutputFramebuffer.bind();
-        mOutputFramebuffer.viewport().apply();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
         mCookTorranceShader.bind();
 
@@ -375,6 +373,11 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
 //            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
+
+//        mOutputFramebuffer.bind();
+//        mOutputFramebuffer.viewport().apply();
+        bindDefaultFramebuffer();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (ID instanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[instanceID];
@@ -394,20 +397,21 @@ namespace EARenderer {
             }
         }
 
-        mBloomEffect.bloom();
-
-        bindDefaultFramebuffer();
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(true);
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(*mBloomEffect.mLargeThresholdFilteredImage);
-        });
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glEnable(GL_DEPTH_TEST);
+//        mBloomEffect.bloom(mSettings.bloomSettings);
+//        mToneMappingEffect.toneMap();
+//
+//        bindDefaultFramebuffer();
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//
+//        mFSQuadShader.ensureSamplerValidity([this]() {
+//            mFSQuadShader.setTexture(*mToneMappingEffect.outputImage());
+//        });
+//
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glEnable(GL_DEPTH_TEST);
     }
 
     void SceneRenderer::renderSkybox() {

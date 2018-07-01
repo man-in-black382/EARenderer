@@ -22,7 +22,13 @@ namespace EARenderer {
     :
     mBindingPoint(GL_FRAMEBUFFER),
     mSize(size),
-    mViewport(Rect2D(size))
+    mViewport(Rect2D(size)),
+    mAvailableAttachments({
+        ColorAttachment::Attachment0, ColorAttachment::Attachment1, ColorAttachment::Attachment2, ColorAttachment::Attachment3,
+        ColorAttachment::Attachment4, ColorAttachment::Attachment5, ColorAttachment::Attachment6, ColorAttachment::Attachment7,
+        ColorAttachment::Attachment8, ColorAttachment::Attachment9, ColorAttachment::Attachment10, ColorAttachment::Attachment11,
+        ColorAttachment::Attachment12, ColorAttachment::Attachment13, ColorAttachment::Attachment14, ColorAttachment::Attachment15
+    })
     {
         ASSERT(size.width > 0, "Framebuffer width should be greater than 0");
         ASSERT(size.height > 0, "Framebuffer height should be greater than 0");
@@ -128,17 +134,8 @@ namespace EARenderer {
             case ColorAttachment::Attachment13: return GL_COLOR_ATTACHMENT13;
             case ColorAttachment::Attachment14: return GL_COLOR_ATTACHMENT14;
             case ColorAttachment::Attachment15: return GL_COLOR_ATTACHMENT15;
+            default: return 0;
         }
-    }
-
-    void GLFramebuffer::detachAllAttachments() {
-        bind();
-        glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, 0, 0);
-        glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, 0, 0, 0);
-        glFramebufferTexture(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0);
-        glFramebufferTextureLayer(mBindingPoint, GL_COLOR_ATTACHMENT0, 0, 0, 0);
-        glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-        mRequestedAttachments.clear();
     }
     
 #pragma mark - Public
@@ -213,6 +210,7 @@ namespace EARenderer {
     }
     
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
+        bind();
         renderbuffer.bind();
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
     }

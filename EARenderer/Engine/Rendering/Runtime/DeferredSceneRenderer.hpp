@@ -1,13 +1,13 @@
 //
-//  Renderer.hpp
+//  DeferredSceneRenderer.hpp
 //  EARenderer
 //
-//  Created by Pavlo Muratov on 29.03.17.
-//  Copyright © 2017 MPO. All rights reserved.
+//  Created by Pavlo Muratov on 30.06.2018.
+//  Copyright © 2018 MPO. All rights reserved.
 //
 
-#ifndef Renderer_hpp
-#define Renderer_hpp
+#ifndef DeferredSceneRenderer_hpp
+#define DeferredSceneRenderer_hpp
 
 #include <unordered_set>
 #include <array>
@@ -28,7 +28,7 @@
 #include "ToneMappingEffect.hpp"
 
 #include "GLSLDepthPrepass.hpp"
-#include "GLSLCookTorrance.hpp"
+#include "GLSLDeferredCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLDirectionalDepth.hpp"
 #include "GLSLOmnidirectionalDepth.hpp"
@@ -58,45 +58,31 @@
 #include "GLDepthRenderbuffer.hpp"
 
 namespace EARenderer {
-    
-    class SceneRenderer {
+
+    class DeferredSceneRenderer {
     private:
         uint8_t mNumberOfCascades = 1;
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
-        
+
         const Scene *mScene = nullptr;
+        const DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
 
         RenderingSettings mSettings;
 
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
+        std::shared_ptr<const GLHDRTexture2DArray> mGBuffer;
 
-        DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
-        GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
         FrustumCascades mShadowCascades;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
-        GLSLDirectionalDepth mDirectionalDepthShader;
-        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
         GLSLSkybox mSkyboxShader;
-        GLSLCookTorrance mCookTorranceShader;
-        GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
-        GLSLRadianceConvolution mRadianceConvolutionShader;
-        GLSLBRDFIntegration mBRDFIntegrationShader;
+        GLSLDeferredCookTorrance mCookTorranceShader;
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
-
-        GLSLLightProbeLinksRendering mLightProbeLinksRenderingShader;
-        GLSLProbeOcclusionRendering mProbeOcclusionRenderingShader;
-        
-        GLHDRTextureCubemap mEnvironmentMapCube;
-        GLHDRTextureCubemap mDiffuseIrradianceMap;
-        GLHDRTextureCubemap mSpecularIrradianceMap;
-        GLHDRTexture2D mBRDFIntegrationMap;
-        GLFramebuffer mIBLFramebuffer;
 
         GLHDRTexture2D mSurfelsLuminanceMap;
         GLHDRTexture2D mSurfelClustersLuminanceMap;
@@ -110,9 +96,7 @@ namespace EARenderer {
         GLHDRTexture2D mDirectionalExponentialShadowMap;
         GLFramebuffer mDirectionalShadowFramebuffer;
 
-        GLSLGridLightProbeRendering mGridProbeRenderingShader;
         GLSLFullScreenQuad mFSQuadShader;
-        GLSLGenericGeometry mGenericShader;
 
         GLHDRTexture2D mOutputFrame;
         GLHDRTexture2D mThresholdFilteredOutputFrame;
@@ -124,7 +108,6 @@ namespace EARenderer {
         ToneMappingEffect mToneMappingEffect;
 
         void setupGLState();
-        void setupTextures();
         void setupFramebuffers();
 
         void bindDefaultFramebuffer();
@@ -135,32 +118,22 @@ namespace EARenderer {
         void averageSurfelClusterLuminances();
         void updateGridProbes();
 
-        void convertEquirectangularMapToCubemap();
-        void buildDiffuseIrradianceMap();
-        void buildSpecularIrradianceMap();
-        void buildBRDFIntegrationMap();
-
     public:
-        SceneRenderer(const Scene* scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData);
+        DeferredSceneRenderer(const Scene* scene,
+                              const DefaultRenderComponentsProviding *provider,
+                              const RenderingSettings& settings,
+                              std::shared_ptr<const SurfelData> surfelData,
+                              std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
+                              std::shared_ptr<const GLHDRTexture2DArray> GBuffer);
 
         const FrustumCascades& shadowCascades() const;
 
-        void setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider);
         void setRenderingSettings(const RenderingSettings& settings);
-        bool raySelectsMesh(const Ray3D& ray, ID& meshID);
-
-        void prepareFrame();
 
         void renderMeshes();
         void renderSkybox();
-        void renderSurfelsGBuffer();
-        void renderSurfelLuminances();
-        void renderSurfelClusterLuminances();
-        void renderDiffuseGridProbes(float radius);
-        void renderLinksForDiffuseProbe(size_t probeIndex);
-        void renderProbeOcclusionMap(size_t probeIndex);
     };
-    
+
 }
 
-#endif /* Renderer_hpp */
+#endif /* DeferredSceneRenderer_hpp */

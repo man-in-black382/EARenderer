@@ -15,8 +15,8 @@ namespace EARenderer {
     
     class DefaultRenderComponentsProviding {
     public:
-        virtual void bindSystemFramebuffer() = 0;
-        virtual const GLViewport& defaultViewport() = 0;
+        virtual void bindSystemFramebuffer() const = 0;
+        virtual const GLViewport& defaultViewport() const = 0;
     };
     
 }

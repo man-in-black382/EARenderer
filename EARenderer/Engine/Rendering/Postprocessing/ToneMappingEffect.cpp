@@ -30,6 +30,17 @@ namespace EARenderer {
 #pragma mark - Tone mapping
 
     std::shared_ptr<GLHDRTexture2D> ToneMappingEffect::toneMap() {
+        mFramebuffer.bind();
+        mFramebuffer.viewport().apply();
+
+        mToneMappingShader.bind();
+        mToneMappingShader.ensureSamplerValidity([&]() {
+            mToneMappingShader.setImage(*mInputImage);
+        });
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
         return mOutputImage;
     }
 

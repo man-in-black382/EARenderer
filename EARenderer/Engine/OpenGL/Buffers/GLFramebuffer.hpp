@@ -37,6 +37,7 @@ namespace EARenderer {
     class GLFramebuffer: public GLNamedObject, public GLBindable {
     public:
         enum class ColorAttachment {
+            Automatic,
             Attachment0, Attachment1, Attachment2, Attachment3,
             Attachment4, Attachment5, Attachment6, Attachment7,
             Attachment8, Attachment9, Attachment10, Attachment11,
@@ -50,6 +51,7 @@ namespace EARenderer {
         GLint mMaximumColorAttachments;
         GLint mMaximumDrawBuffers;
         std::unordered_set<GLenum> mRequestedAttachments;
+        std::unordered_set<ColorAttachment> mAvailableAttachments;
 
         void obtainHardwareLimits();
         void setRequestedDrawBuffers();
@@ -66,36 +68,36 @@ namespace EARenderer {
         void bind() const override;
         
         const Size2D& size() const;
-        bool isComplete() const;
         const GLViewport& viewport() const;
+        bool isComplete() const;
 
         void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
 
         void attachTexture(const GLTexture2D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLTextureCubemap& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLHDRTexture2D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLDepthTextureCubemap& texture,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLHDRTextureCubemap& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLHDRTexture3D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTexture(const GLLDRTexture3D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
         void attachTextureLayer(const GLDepthTexture2DArray& textures,
@@ -104,12 +106,12 @@ namespace EARenderer {
 
         void attachTextureLayer(const GLHDRTexture2DArray& textures,
                                 uint16_t layer,
-                                ColorAttachment colorAttachment = ColorAttachment::Attachment0,
+                                ColorAttachment colorAttachment = ColorAttachment::Automatic,
                                 uint16_t mipLevel = 0);
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
-        
-        void detachAllAttachments();
+
+        void redirectRenderingIntoAttachment(ColorAttachment attachment);
 
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,

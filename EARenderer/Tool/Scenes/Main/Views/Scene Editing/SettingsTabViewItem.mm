@@ -26,6 +26,15 @@
 @property (weak, nonatomic) IBOutlet NSTextField *ESMDarkeningTextField;
 @property (weak, nonatomic) IBOutlet NSTextField *shadowBlurRadiusTextField;
 
+// Bloom
+@property (weak, nonatomic) IBOutlet NSTextField *bloomStrengthTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurRadiusTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurRadiusTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurRadiusTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurWeightTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurWeightTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurWeightTextField;
+
 @property (weak, nonatomic) IBOutlet NSButton *surfelRenderingEnabledButton;
 @property (weak, nonatomic) IBOutlet NSPopUpButton *surfelRenderingModeButton;
 @property (weak, nonatomic) IBOutlet NSTextField *surfelProbeIndexTextField;
@@ -46,9 +55,16 @@
 
     self.parallaxMappingStrengthTextField.floatValue = mSettings.meshSettings.parallaxMappingStrength;
     self.ESMFactorTextField.floatValue = mSettings.meshSettings.ESMFactor;
-    self.ESMDarkeningTextField.floatValue = mSettings.meshSettings.ESMDarkeningFactor;
-    self.shadowBlurRadiusTextField.intValue = mSettings.meshSettings.shadowBlurRadius;
+    self.shadowBlurRadiusTextField.integerValue = mSettings.meshSettings.shadowBlur.radius;
     self.surfelProbeIndexTextField.intValue = mSettings.surfelSettings.POVProbeIndex;
+
+    self.bloomStrengthTextField.floatValue = mSettings.bloomSettings.bloomStrength;
+    self.bloomSmallBlurRadiusTextField.integerValue = mSettings.bloomSettings.smallBlurSettings.radius;
+    self.bloomMediumBlurRadiusTextField.integerValue = mSettings.bloomSettings.mediumBlurSettings.radius;
+    self.bloomLargeBlurRadiusTextField.integerValue = mSettings.bloomSettings.largeBlurSettings.radius;
+    self.bloomSmallBlurWeightTextField.integerValue = mSettings.bloomSettings.smallBlurWeight;
+    self.bloomMediumBlurWeightTextField.integerValue = mSettings.bloomSettings.mediumBlurWeight;
+    self.bloomLargeBlurWeightTextField.integerValue = mSettings.bloomSettings.largeBlurWeight;
 }
 
 #pragma mark - Actions
@@ -105,13 +121,49 @@
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
-- (IBAction)ESMDarkeningFactorChanged:(NSTextField *)sender {
-    mSettings.meshSettings.ESMDarkeningFactor = sender.floatValue;
+- (IBAction)shadowBlurRadiusChanged:(NSTextField *)sender {
+    mSettings.meshSettings.shadowBlur.radius = sender.intValue;
+    mSettings.meshSettings.shadowBlur.sigma = sender.intValue;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
-- (IBAction)shadowBlurRadiusChanged:(NSTextField *)sender {
-    mSettings.meshSettings.shadowBlurRadius = sender.intValue;
+#pragma mark - Bloom
+
+- (IBAction)bloomSmallBlurRadiusChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.smallBlurSettings.radius = sender.intValue;
+    mSettings.bloomSettings.smallBlurSettings.sigma = sender.intValue / 2;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomMediumBlurRadiusChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.mediumBlurSettings.radius = sender.intValue;
+    mSettings.bloomSettings.mediumBlurSettings.sigma = sender.intValue / 2;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomLargeBlurRadiusChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.largeBlurSettings.radius = sender.intValue;
+    mSettings.bloomSettings.largeBlurSettings.sigma = sender.intValue / 2;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomSmallBlurWeightChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.smallBlurWeight = sender.intValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomMediumBlurWeightChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.mediumBlurWeight = sender.intValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomLargeBlurWeightChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.largeBlurWeight = sender.intValue;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomStrengthChanged:(NSTextField *)sender {
+    mSettings.bloomSettings.bloomStrength = sender.floatValue;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 

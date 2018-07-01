@@ -72,7 +72,6 @@ namespace EARenderer {
 
     void GLSLSurfelLighting::setSettings(const RenderingSettings& settings) {
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMDarkeningFactor")>).location(), settings.meshSettings.ESMDarkeningFactor);
     }
 
 }

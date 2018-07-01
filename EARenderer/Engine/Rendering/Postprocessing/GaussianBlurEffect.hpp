@@ -13,6 +13,7 @@
 #include "GLHDRTexture2D.hpp"
 #include "Size2D.hpp"
 #include "GLSLGaussianBlur.hpp"
+#include "GaussianBlurSettings.hpp"
 
 #include <memory>
 #include <vector>
@@ -29,8 +30,7 @@ namespace EARenderer {
         GLSLGaussianBlur mBlurShader;
         std::vector<float> mWeights;
         std::vector<float> mTextureOffsets;
-        size_t mBlurRadius = 0;
-        size_t mStandardDeviation = 1.0;
+        GaussianBlurSettings mSettings;
 
         void computeWeightsAndOffsets();
 
@@ -38,8 +38,7 @@ namespace EARenderer {
         GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage);
 
         std::shared_ptr<GLHDRTexture2D> outputImage() const;
-        std::shared_ptr<GLHDRTexture2D> blur(size_t radius);
-        std::shared_ptr<GLHDRTexture2D> blur(size_t radius, size_t standardDeviation);
+        std::shared_ptr<GLHDRTexture2D> blur(const GaussianBlurSettings& settings);
     };
 
 }

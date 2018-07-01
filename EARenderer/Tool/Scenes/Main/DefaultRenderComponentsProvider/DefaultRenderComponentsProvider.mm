@@ -14,10 +14,10 @@ DefaultRenderComponentsProvider::DefaultRenderComponentsProvider(EARenderer::GLV
 mMainViewport(mainViewport)
 { }
 
-void DefaultRenderComponentsProvider::bindSystemFramebuffer() {
+void DefaultRenderComponentsProvider::bindSystemFramebuffer() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-const EARenderer::GLViewport& DefaultRenderComponentsProvider::defaultViewport() {
+const EARenderer::GLViewport& DefaultRenderComponentsProvider::defaultViewport() const {
     return *mMainViewport;
 }

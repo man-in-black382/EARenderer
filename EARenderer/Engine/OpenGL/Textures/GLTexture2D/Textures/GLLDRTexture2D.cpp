@@ -36,10 +36,6 @@ namespace EARenderer {
             case 2: texComponents = GL_COMPRESSED_RG; break;
             case 3: texComponents = GL_COMPRESSED_RGB; break;
             default: texComponents = GL_COMPRESSED_RGBA; break;
-//            case 1: texComponents = GL_RED; break;
-//            case 2: texComponents = GL_RG; break;
-//            case 3: texComponents = GL_RGB; break;
-//            default: texComponents = GL_RGBA; break;
         }
 
         initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, texComponents, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);

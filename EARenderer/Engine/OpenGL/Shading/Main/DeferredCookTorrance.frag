@@ -27,12 +27,7 @@ layout(location = 1) out vec4 oBrightOutput;
 
 // Input
 
-in vec3 vTexCoords;
-in vec3 vWorldPosition;
-in mat3 vTBN;
-in vec4 vPosInCSMSplitSpace;
-//in vec3 vPosInTangentSpace;
-//in vec3 vCameraPosInTangentSpace;
+in vec2 vTexCoords;
 
 // Uniforms
 
@@ -53,15 +48,6 @@ struct Spotlight {
     float cutOffAngleCos;
 };
 
-struct Material {
-    sampler2D albedoMap;
-    sampler2D normalMap;
-    sampler2D metallicMap;
-    sampler2D roughnessMap;
-    sampler2D AOMap; // Ambient occlusion
-    sampler2D displacementMap; // Parallax occlusion displacements
-};
-
 struct SH {
     vec3 L00;
     vec3 L11;
@@ -79,13 +65,17 @@ struct vec8 {
     float value4; float value5; float value6; float value7;
 };
 
+uniform sampler2DArray uGBuffer;
+
 uniform vec3 uCameraPosition;
+uniform mat4 uCameraViewMat;
+uniform mat4 uCameraViewInverse;
+uniform mat4 uCameraProjectionInverse;
 uniform mat4 uWorldBoudningBoxTransform;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
-uniform Material uMaterial;
 
 uniform int uLightType;
 uniform uint uSettingsBitmask;
@@ -93,6 +83,7 @@ uniform float uParallaxMappingStrength;
 uniform int uSHCompressionType;
 
 // Shadow mapping
+uniform mat4 uCSMSplitSpaceMat;
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
@@ -108,12 +99,6 @@ uniform usampler3D uGridSHMap2;
 uniform usampler3D uGridSHMap3;
 
 uniform samplerBuffer uProbePositions;
-
-// IBL
-//uniform sampler2D uBRDFIntegrationMap;
-//uniform samplerCube uSpecularIrradianceMap;
-//uniform samplerCube uDiffuseIrradianceMap;
-//uniform int uSpecularIrradianceMapLOD;
 
 // Functions
 
@@ -298,7 +283,7 @@ SH UnpackSH(vec3 texCoords) {
     return UnpackSH_322(texCoords);
 }
 
-float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
+float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm, vec3 fragWorldPos) {
     // [x + WIDTH * (y + HEIGHT * z)]
     int gridWidth = gridSize.x;
     int gridHeight = gridSize.y;
@@ -306,7 +291,7 @@ float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm) {
 
     vec3 probePosition = texelFetch(uProbePositions, probeCoord1D).xyz;
 
-    vec3 fragToProbeVector = normalize(probePosition - vWorldPosition);
+    vec3 fragToProbeVector = normalize(probePosition - fragWorldPos);
     float weight = max(0.0, dot(fragToProbeVector, fragNorm));
     return weight;
 }
@@ -342,11 +327,11 @@ vec8 TriLerp(vec3 pMin, vec3 pMax, vec3 p) {
     return weights;
 }
 
-SH TriLerpSurroundingProbes(vec3 fragNormal) {
+SH TriLerpSurroundingProbes(vec3 fragNormal, vec3 fragWorldPos) {
 
     ivec3 gridSize = textureSize(uGridSHMap0, 0);
     ivec3 gridResolution = gridSize - 1;
-    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(vWorldPosition, 1.0)).xyz;
+    vec3 texCoords = (uWorldBoudningBoxTransform * vec4(fragWorldPos, 1.0)).xyz;
 
     vec3 unnormCoords = texCoords * vec3(gridResolution);
     vec3 minCoords = floor(unnormCoords);
@@ -374,10 +359,14 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     SH sh4 = UnpackSH(cp4); SH sh5 = UnpackSH(cp5);
     SH sh6 = UnpackSH(cp6); SH sh7 = UnpackSH(cp7);
 
-    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal); float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal);
-    float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal); float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal);
-    float probe4OcclusionFactor = ProbeOcclusionFactor(cp4, gridSize, fragNormal); float probe5OcclusionFactor = ProbeOcclusionFactor(cp5, gridSize, fragNormal);
-    float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, gridSize, fragNormal); float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, gridSize, fragNormal);
+    float probe0OcclusionFactor = ProbeOcclusionFactor(cp0, gridSize, fragNormal, fragWorldPos);
+    float probe1OcclusionFactor = ProbeOcclusionFactor(cp1, gridSize, fragNormal, fragWorldPos);
+    float probe2OcclusionFactor = ProbeOcclusionFactor(cp2, gridSize, fragNormal, fragWorldPos);
+    float probe3OcclusionFactor = ProbeOcclusionFactor(cp3, gridSize, fragNormal, fragWorldPos);
+    float probe4OcclusionFactor = ProbeOcclusionFactor(cp4, gridSize, fragNormal, fragWorldPos);
+    float probe5OcclusionFactor = ProbeOcclusionFactor(cp5, gridSize, fragNormal, fragWorldPos);
+    float probe6OcclusionFactor = ProbeOcclusionFactor(cp6, gridSize, fragNormal, fragWorldPos);
+    float probe7OcclusionFactor = ProbeOcclusionFactor(cp7, gridSize, fragNormal, fragWorldPos);
 
     vec8 weights = TriLerp(minCoords, maxCoords, unnormCoords);
 
@@ -454,8 +443,8 @@ float SHRadiance(SH sh, vec3 direction, int component) {
     return result;
 }
 
-vec3 EvaluateSphericalHarmonics(vec3 direction) {
-    SH sh = TriLerpSurroundingProbes(direction);
+vec3 EvaluateSphericalHarmonics(vec3 direction, vec3 fragWorldPos) {
+    SH sh = TriLerpSurroundingProbes(direction, fragWorldPos);
     vec3 color = vec3(SHRadiance(sh, direction, 0), SHRadiance(sh, direction, 1), SHRadiance(sh, direction, 2));
     return color;
 }
@@ -570,8 +559,8 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
 //////////// Radiance of different light types /////////////
 ////////////////////////////////////////////////////////////
 
-vec3 PointLightRadiance(vec3 N) {
-    vec3 Wi                 = normalize(uPointLight.position - vWorldPosition);     // To light vector
+vec3 PointLightRadiance(vec3 N, vec3 fragWorldPosition) {
+    vec3 Wi                 = normalize(uPointLight.position - fragWorldPosition);     // To light vector
     float distance          = length(Wi);                                           // Distance from fragment to light
     float attenuation       = 1.0 / (distance * distance);                          // How much enegry has light lost at current distance
     
@@ -586,9 +575,11 @@ vec3 DirectionalLightRadiance() {
 ///////////////////////// Shadows //////////////////////////
 ////////////////////////////////////////////////////////////
 
-int ShadowCascadeIndex()
+int ShadowCascadeIndex(vec3 worldPosition)
 {
-    vec3 projCoords = vPosInCSMSplitSpace.xyz / vPosInCSMSplitSpace.w;
+    vec4 posInCSMSplitSpace = uCSMSplitSpaceMat * vec4(worldPosition, 1.0);
+
+    vec3 projCoords = posInCSMSplitSpace.xyz / posInCSMSplitSpace.w;
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
 
@@ -603,10 +594,10 @@ int ShadowCascadeIndex()
     return 0;
 }
 
-float ExponentialShadow() {
-    int cascade = ShadowCascadeIndex();
+float ExponentialShadow(vec3 worldPosition) {
+    int cascade = ShadowCascadeIndex(worldPosition);
     mat4 relevantLightMatrix = uLightSpaceMatrices[cascade];
-    vec4 positionInLightSpace = relevantLightMatrix * vec4(vWorldPosition, 1.0);
+    vec4 positionInLightSpace = relevantLightMatrix * vec4(worldPosition, 1.0);
 
     vec3 projCoords = positionInLightSpace.xyz / positionInLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
@@ -625,105 +616,98 @@ float ExponentialShadow() {
 }
 
 ////////////////////////////////////////////////////////////
-///////////////////////// Helpers //////////////////////////
+///////////////////////// Reflections  /////////////////////
 ////////////////////////////////////////////////////////////
 
-vec3 LinearFromSRGB(vec3 sRGB) {
-    return pow(sRGB, vec3(2.2));
+const float step = 0.1;
+const float minRayStep = 0.1;
+const float maxSteps = 30;
+const int numBinarySearchSteps = 5;
+const float reflectionSpecularFalloffExponent = 3.0;
+
+vec3 Hash(vec3 a) {
+    vec3 scale = vec3(0.8);
+    float K = 19.19;
+
+    a = fract(a * scale);
+    a += dot(a, a.yxz + K);
+
+    return fract((a.xxy + a.yxx)*a.zyx);
 }
 
-vec3 FetchAlbedoMap(vec2 texCoords) {
-    return LinearFromSRGB(texture(uMaterial.albedoMap, texCoords).rgb);
+vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
+
+    dir *= step;
+
+    float depth;
+    int steps;
+    vec4 projectedCoord;
+
+    for(int i = 0; i < maxSteps; i++) {
+
+        hitCoord += dir;
+
+        // Transform our 3D vector into a 2D screen coordinate to detch the depth buffer and check for a collision
+        projectedCoord = projection * vec4(hitCoord, 1.0);
+        projectedCoord.xy /= projectedCoord.w;
+        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+
+        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
+        if(depth > 1000.0)
+            continue;
+
+        dDepth = hitCoord.z - depth;
+
+        if((dir.z - dDepth) < 1.2) {
+            if(dDepth <= 0.0) {
+                vec4 Result;
+                Result = vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
+
+                return Result;
+            }
+        }
+
+        steps++;
+    }
+
+    return vec4(projectedCoord.xy, depth, 0.0);
 }
 
-vec3 FetchNormalMap(vec2 texCoords) {
-    vec3 normal = texture(uMaterial.normalMap, texCoords).xyz;
-    return normalize(vTBN * (normal * 2.0 - 1.0));
+void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
+    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
+    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
+
+    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
+    vec3 hitPosition = viewPosition;
+
+    float depth = 0.0;
+
+
 }
-
-float FetchMetallicMap(vec2 texCoords) {
-    return texture(uMaterial.metallicMap, texCoords).r;
-}
-
-float FetchRoughnessMap(vec2 texCoords) {
-    return texture(uMaterial.roughnessMap, texCoords).r;
-}
-
-float FetchAOMap(vec2 texCoords) {
-    return texture(uMaterial.AOMap, texCoords).r;
-}
-
-float FetchDisplacementMap() {
-    return texture(uMaterial.displacementMap, vTexCoords.st).r;
-}
-
-////////////////////////////////////////////////////////////
-////////////// Parallax Occlusion Mapping //////////////////
-////////////////////////////////////////////////////////////
-
-//vec2 DisplacedTextureCoords() {
-//    vec2 texCoords = vTexCoords.st;
-//    vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
-//
-////  number of depth layers
-//    const float minLayers = 8;
-//    const float maxLayers = 32;
-//    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-//    // calculate the size of each layer
-//    float layerDepth = 1.0 / numLayers;
-//    // depth of current layer
-//    float currentLayerDepth = 0.0;
-//    // the amount to shift the texture coordinates per layer (from vector P)
-//    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
-//
-//    vec2 deltaTexCoords = P / numLayers;
-//
-//    // get initial values
-//    vec2  currentTexCoords     = texCoords;
-//    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
-//
-//    while(currentLayerDepth < currentDepthMapValue) {
-//        // shift texture coordinates along direction of P
-//        currentTexCoords -= deltaTexCoords;
-//        // get depthmap value at current texture coordinates
-//        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
-//        // get depth of next layer
-//        currentLayerDepth += layerDepth;
-//    }
-//
-//    // get texture coordinates before collision (reverse operations)
-//    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-//
-//    // get depth after and before collision for linear interpolation
-//    float afterDepth  = currentDepthMapValue - currentLayerDepth;
-//    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
-//
-//    // interpolation of texture coordinates
-//    float weight = afterDepth / (afterDepth - beforeDepth);
-//    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
-//
-//    return finalTexCoords;
-//}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
-    vec2 displacedTexCoords = /*isParallaxMappingEnabled() ? DisplacedTextureCoords() : */vTexCoords.st;
+    vec4 albedoAndRoughness = texture(uGBuffer, vec3(vTexCoords, 0));
+    vec4 normalAndMetalness = texture(uGBuffer, vec3(vTexCoords, 1));
+    vec4 worldPositionAndAO = texture(uGBuffer, vec3(vTexCoords, 2));
 
-    float roughness         = FetchRoughnessMap(displacedTexCoords);
+    vec3 worldPosition = worldPositionAndAO.rgb;
+
+    float roughness         = albedoAndRoughness.a;
     
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
     float roughness2        = roughness * roughness;
     
-    float metallic          = FetchMetallicMap(displacedTexCoords);
-    float ao                = FetchAOMap(displacedTexCoords);
-    vec3 albedo             = FetchAlbedoMap(displacedTexCoords);
-    vec3 N                  = FetchNormalMap(displacedTexCoords);
-    vec3 V                  = normalize(uCameraPosition - vWorldPosition);
+    float metallic          = normalAndMetalness.a;
+    float ao                = worldPositionAndAO.a;
+    vec3 albedo             = albedoAndRoughness.rgb;
+    vec3 N                  = normalAndMetalness.rgb;
+    vec3 V                  = normalize(uCameraPosition - worldPosition);
     vec3 L                  = vec3(0.0);
     vec3 H                  = normalize(L + V);
     vec3 radiance           = vec3(0.0);
@@ -742,49 +726,33 @@ void main() {
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = ExponentialShadow();
+        shadow      = ExponentialShadow(worldPosition);
     }
     else if (uLightType == kLightTypePoint) {
-        radiance    = PointLightRadiance(N);
-        L           = normalize(uPointLight.position - vWorldPosition);
+        radiance    = PointLightRadiance(N, worldPosition);
+        L           = normalize(uPointLight.position - worldPosition);
     }
     else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
     }
 
-    vec3 indirectRadiance = EvaluateSphericalHarmonics(N);
+    vec3 indirectRadiance = EvaluateSphericalHarmonics(N, worldPosition);
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
-
-    // Image based lighting
-//    vec3 ambient            = /*IBL(N, V, H, albedo, roughness, metallic)*/vec3(0.01) * ao * albedo;
 
     oBaseOutput = vec4(specularAndDiffuse, 1.0);
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 
-//    int cascade = ShadowCascadeIndex();
-//    switch (cascade) {
-//        case 0: oFragColor += vec4(0.5, 0.0, 0.0, 0.0); break;
-//        case 1: oFragColor += vec4(0.0, 0.5, 0.0, 0.0); break;
-//        case 2: oFragColor += vec4(0.0, 0.0, 0.5, 0.0); break;
-//        case 3: oFragColor += vec4(0.5, 0.5, 0.0, 0.0); break;
-//    }
+    /////// DEBUG
 
-//    vec3 projCoords = vPosInCSMSplitSpace.xyz / vPosInCSMSplitSpace.w;
-//    // No need to transform to [0,1] range,
-//    // because splits passed from client are in [-1; 1]
+//    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
+//    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
 //
-//    float fragDepth = projCoords.z;
+//    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
 //
-//    if (fragDepth < 0.0) {
-//        oFragColor = vec4(1.0, 0.0, 0.0, 1.0);
-//    } else if (fragDepth > 1.0) {
-//        oFragColor = vec4(0.0, 0.0, 1.0, 1.0);
-//    } else {
-//        oFragColor = vec4(vec3(fragDepth), 1.0);
-//    }
+//    oBaseOutput = vec4(reflected, 1.0);
 }
