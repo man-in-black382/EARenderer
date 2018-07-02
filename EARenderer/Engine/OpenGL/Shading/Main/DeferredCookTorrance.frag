@@ -748,12 +748,13 @@ void main() {
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
+//    shadow = 1.0;
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
 
     specularAndDiffuse = ReinhardToneMap(specularAndDiffuse);
     specularAndDiffuse = GammaCorrect(specularAndDiffuse);
 
-    oBaseOutput = vec4(vec3(specularAndDiffuse), 1.0);
+    oBaseOutput = vec4(specularAndDiffuse, 1.0);
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);

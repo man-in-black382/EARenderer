@@ -22,19 +22,22 @@ namespace EARenderer {
     :
     mBindingPoint(GL_FRAMEBUFFER),
     mSize(size),
-    mViewport(Rect2D(size)),
-    mAvailableAttachments({
-        ColorAttachment::Attachment0, ColorAttachment::Attachment1, ColorAttachment::Attachment2, ColorAttachment::Attachment3,
-        ColorAttachment::Attachment4, ColorAttachment::Attachment5, ColorAttachment::Attachment6, ColorAttachment::Attachment7,
-        ColorAttachment::Attachment8, ColorAttachment::Attachment9, ColorAttachment::Attachment10, ColorAttachment::Attachment11,
-        ColorAttachment::Attachment12, ColorAttachment::Attachment13, ColorAttachment::Attachment14, ColorAttachment::Attachment15
-    })
+    mViewport(Rect2D(size))
     {
         ASSERT(size.width > 0, "Framebuffer width should be greater than 0");
         ASSERT(size.height > 0, "Framebuffer height should be greater than 0");
         
         glGenFramebuffers(1, &mName);
         obtainHardwareLimits();
+
+        std::vector<ColorAttachment> colorAttachments {
+            ColorAttachment::Attachment0, ColorAttachment::Attachment1, ColorAttachment::Attachment2, ColorAttachment::Attachment3,
+            ColorAttachment::Attachment4, ColorAttachment::Attachment5, ColorAttachment::Attachment6, ColorAttachment::Attachment7,
+            ColorAttachment::Attachment8, ColorAttachment::Attachment9, ColorAttachment::Attachment10, ColorAttachment::Attachment11,
+            ColorAttachment::Attachment12, ColorAttachment::Attachment13, ColorAttachment::Attachment14, ColorAttachment::Attachment15
+        };
+
+        mAvailableAttachments = std::unordered_set<ColorAttachment>(colorAttachments.begin(), colorAttachments.begin() + mMaximumColorAttachments);
     }
     
     GLFramebuffer::~GLFramebuffer() {
@@ -109,6 +112,10 @@ namespace EARenderer {
             throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
         }
 
+        if (mRequestedAttachments.size() >= mMaximumColorAttachments) {
+            throw std::runtime_error(string_format("Exceeded maximum amount of color attachments (%d)", mMaximumColorAttachments));
+        }
+
         bind();
         texture.bind();
 
@@ -116,14 +123,11 @@ namespace EARenderer {
 
         if (colorAttachment == ColorAttachment::Automatic) {
             auto freeAttachmentIt = mAvailableAttachments.begin();
-            if (freeAttachmentIt == mAvailableAttachments.end() || mRequestedAttachments.size() >= mMaximumColorAttachments) {
-                throw std::runtime_error(string_format("Exceeded maximum amount of color attachments (%d)", mMaximumColorAttachments));
-            } else {
-                attachment = glColorAttachment(*freeAttachmentIt);
-                mAvailableAttachments.erase(freeAttachmentIt);
-            }
+            attachment = glColorAttachment(*freeAttachmentIt);
+            mAvailableAttachments.erase(freeAttachmentIt);
         } else {
             attachment = glColorAttachment(colorAttachment);
+            mAvailableAttachments.erase(colorAttachment);
         }
 
         mTextureAttachmentMap[texture.name()] = attachment;

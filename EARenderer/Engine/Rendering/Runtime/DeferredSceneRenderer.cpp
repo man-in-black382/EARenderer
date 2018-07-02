@@ -256,6 +256,7 @@ namespace EARenderer {
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setGBuffer(*mGBuffer);
             mCookTorranceShader.setExponentialShadowMap(*mShadowBlurEffect.outputImage());
+//            mCookTorranceShader.setExponentialShadowMap(mDirectionalExponentialShadowMap);
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
