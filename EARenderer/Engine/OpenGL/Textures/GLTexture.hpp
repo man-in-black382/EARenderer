@@ -13,6 +13,7 @@
 #include "GLBindable.hpp"
 #include "Size2D.hpp"
 #include "Color.hpp"
+#include "GLTextureFormat.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -23,6 +24,19 @@ namespace EARenderer {
     public:
         enum class Filter { None, Bilinear, Trilinear };
         enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
+
+        enum class NormalizedFormat {
+            RCompressed, RGCompressed, RGBCompressed, RGBACompressed
+        };
+
+        enum class IntegerFormat {
+            R32UI, RG32UI, RGB32UI, RGBA32UI
+        };
+
+        enum class FloatFormat {
+            R16F, RG16F, RGB16F, RGBA16F,
+            R32F, RG32F, RGB32F, RGBA32F
+        };
 
     private:
         GLenum mBindingPoint;
@@ -36,6 +50,10 @@ namespace EARenderer {
 
         void setFilter(Filter filter);
         void setWrapMode(WrapMode wrapMode);
+
+        GLTextureFormat glFormat(NormalizedFormat format);
+        GLTextureFormat glFormat(IntegerFormat format);
+        GLTextureFormat glFormat(FloatFormat format);
         
     public:
         GLTexture(const GLTexture& that) = default;

@@ -27,7 +27,7 @@
 #include "GLBindable.hpp"
 #include "GLTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
-#include "GLDepthTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2DArray.hpp"

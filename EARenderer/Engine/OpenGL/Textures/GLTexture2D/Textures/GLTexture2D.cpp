@@ -40,4 +40,25 @@ namespace EARenderer {
         setWrapMode(wrapMode);
     }
 
-}
+    GLNormalizedTexture2D::GLNormalizedTexture2D(const Size2D& size, NormalizedFormat format, void *data, Filter filter, WrapMode wrapMode) {
+        GLTextureFormat f = glFormat(format);
+        initialize(size, filter, wrapMode, f.internalFormat, f.inputPixelFormat, f.inputPixelType);
+    }
+
+    GLIntegerTexture2D::GLIntegerTexture2D(const Size2D& size, IntegerFormat format, void *data) {
+        GLTextureFormat f = glFormat(format);
+        initialize(size, Filter::None, WrapMode::ClampToEdge, f.internalFormat, f.inputPixelFormat, f.inputPixelType);
+    }
+
+    GLFloatTexture2D::GLFloatTexture2D(const Size2D& size, FloatFormat format, void *data, Filter filter, WrapMode wrapMode) {
+        GLTextureFormat f = glFormat(format);
+        initialize(size, filter, wrapMode, f.internalFormat, f.inputPixelFormat, f.inputPixelType);
+    }
+
+    GLDepthTexture2D::GLDepthTexture2D(const Size2D& size) {
+        initialize(size, Filter::Bilinear, WrapMode::ClampToBorder, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT);
+        // Prevent oversampling by supplying 1.0 depth values when texture is sampled beyond [0.0; 1.0] range
+        GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    }
+};

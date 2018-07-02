@@ -16,7 +16,6 @@
 #include "GLTexture2D.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
-#include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLDepthTexture2DArray.hpp"
@@ -30,6 +29,7 @@
 
 #include <functional>
 #include <unordered_set>
+#include <unordered_map>
 #include <vector>
 
 namespace EARenderer {
@@ -52,6 +52,7 @@ namespace EARenderer {
         GLint mMaximumDrawBuffers;
         std::unordered_set<GLenum> mRequestedAttachments;
         std::unordered_set<ColorAttachment> mAvailableAttachments;
+        std::unordered_map<GLint, GLenum> mTextureAttachmentMap;
 
         void obtainHardwareLimits();
         void setRequestedDrawBuffers();
@@ -111,7 +112,7 @@ namespace EARenderer {
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
 
-        void redirectRenderingIntoAttachment(ColorAttachment attachment);
+        void redirectRenderingIntoAttachedTexture(const GLTexture& texture);
 
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,

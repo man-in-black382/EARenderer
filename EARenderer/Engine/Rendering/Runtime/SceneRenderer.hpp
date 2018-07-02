@@ -45,7 +45,6 @@
 #include "GLSLProbeOcclusionRendering.hpp"
 #include "GLSLDirectionalExponentialShadowMap.hpp"
 
-#include "GLDepthTexture2D.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLDepthTexture2DArray.hpp"

@@ -64,6 +64,37 @@ namespace EARenderer {
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
     }
 
+    GLTextureFormat GLTexture::glFormat(NormalizedFormat format) {
+        switch (format) {
+            case NormalizedFormat::RCompressed:     return { GL_COMPRESSED_RED,  GL_RGBA, GL_UNSIGNED_BYTE };
+            case NormalizedFormat::RGCompressed:    return { GL_COMPRESSED_RG,   GL_RGBA, GL_UNSIGNED_BYTE };
+            case NormalizedFormat::RGBCompressed:   return { GL_COMPRESSED_RGB,  GL_RGBA, GL_UNSIGNED_BYTE };
+            case NormalizedFormat::RGBACompressed:  return { GL_COMPRESSED_RGBA, GL_RGBA, GL_UNSIGNED_BYTE };
+        }
+    }
+
+    GLTextureFormat GLTexture::glFormat(IntegerFormat format){
+        switch (format) {
+            case IntegerFormat::R32UI:      return { GL_R32UI,    GL_RED_INTEGER,  GL_UNSIGNED_INT };
+            case IntegerFormat::RG32UI:     return { GL_RG32UI,   GL_RG_INTEGER,   GL_UNSIGNED_INT };
+            case IntegerFormat::RGB32UI:    return { GL_RGB32UI,  GL_RGB_INTEGER,  GL_UNSIGNED_INT };
+            case IntegerFormat::RGBA32UI:   return { GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT };
+        }
+    }
+
+    GLTextureFormat GLTexture::glFormat(FloatFormat format) {
+        switch (format) {
+            case FloatFormat::R16F:     return { GL_R16F,     GL_RED,  GL_FLOAT };
+            case FloatFormat::RG16F:    return { GL_RG16F,    GL_RG,   GL_FLOAT };
+            case FloatFormat::RGB16F:   return { GL_RGB16F,   GL_RGB,  GL_FLOAT };
+            case FloatFormat::RGBA16F:  return { GL_RGBA16F,  GL_RGBA, GL_FLOAT };
+            case FloatFormat::R32F:     return { GL_R32UI,    GL_RED,  GL_FLOAT };
+            case FloatFormat::RG32F:    return { GL_RG32UI,   GL_RG,   GL_FLOAT };
+            case FloatFormat::RGB32F:   return { GL_RGB32UI,  GL_RGB,  GL_FLOAT };
+            case FloatFormat::RGBA32F:  return { GL_RGBA32UI, GL_RGBA, GL_FLOAT };
+        }
+    }
+
 #pragma mark - Static
 
     glm::vec2 GLTexture::WrapCoordinates(const glm::vec2& uv) {

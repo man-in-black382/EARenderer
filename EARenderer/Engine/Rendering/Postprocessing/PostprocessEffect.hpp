@@ -9,15 +9,18 @@
 #ifndef PostprocessingEffect_hpp
 #define PostprocessingEffect_hpp
 
+#include "GLFramebuffer.hpp"
+
 #include <memory>
 
 namespace EARenderer {
 
     class PostprocessEffect {
     protected:
+        std::shared_ptr<GLFramebuffer> mSharedFramebuffer;
 
     public:
-
+        PostprocessEffect(std::shared_ptr<GLFramebuffer> framebuffer);
     };
 
 }

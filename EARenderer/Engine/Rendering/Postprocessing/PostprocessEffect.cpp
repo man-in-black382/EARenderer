@@ -7,3 +7,14 @@
 //
 
 #include "PostprocessEffect.hpp"
+
+namespace EARenderer {
+
+#pragma mark - Lifecycle
+
+    PostprocessEffect::PostprocessEffect(std::shared_ptr<GLFramebuffer> framebuffer)
+    :
+    mSharedFramebuffer(framebuffer)
+    { }
+
+}

@@ -23,6 +23,34 @@ namespace EARenderer {
         GLTexture2D();
         virtual ~GLTexture2D() = 0;
     };
+
+    class GLNormalizedTexture2D: public GLTexture2D {
+    public:
+        GLNormalizedTexture2D(const Size2D& size, NormalizedFormat format, void *data = nullptr,
+                              Filter filter = Filter::Bilinear, WrapMode wrapMode = WrapMode::ClampToEdge);
+
+        ~GLNormalizedTexture2D() = default;
+    };
+
+    class GLIntegerTexture2D: public GLTexture2D {
+    public:
+        GLIntegerTexture2D(const Size2D& size, IntegerFormat format, void *data = nullptr);
+        ~GLIntegerTexture2D() = default;
+    };
+
+    class GLFloatTexture2D: public GLTexture2D {
+    public:
+        GLFloatTexture2D(const Size2D& size, FloatFormat format, void *data = nullptr,
+                         Filter filter = Filter::Bilinear, WrapMode wrapMode = WrapMode::ClampToEdge);
+
+        ~GLFloatTexture2D() = default;
+    };
+
+    class GLDepthTexture2D: public GLTexture2D {
+    public:
+        GLDepthTexture2D(const Size2D& size);
+        ~GLDepthTexture2D() = default;
+    };
     
 }
 

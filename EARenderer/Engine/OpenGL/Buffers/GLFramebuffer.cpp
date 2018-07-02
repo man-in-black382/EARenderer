@@ -105,6 +105,7 @@ namespace EARenderer {
         texture.bind();
 
         GLenum attachment = glColorAttachment(colorAttachment);
+        mTextureAttachmentMap[texture.name()] = attachment;
 
         if (layer == -1) {
             glFramebufferTexture(mBindingPoint, attachment, texture.name(), mipLevel);
@@ -213,6 +214,14 @@ namespace EARenderer {
         bind();
         renderbuffer.bind();
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
+    }
+
+    void GLFramebuffer::redirectRenderingIntoAttachedTexture(const GLTexture& texture) {
+        auto attachmentIt = mTextureAttachmentMap.find(texture.name());
+        if (attachmentIt == mTextureAttachmentMap.end()) {
+            throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
+        }
+        glDrawBuffer(attachmentIt->second);
     }
 
     void GLFramebuffer::blit(GLFramebuffer::ColorAttachment sourceAttachment, const Rect2D& srcRect,
