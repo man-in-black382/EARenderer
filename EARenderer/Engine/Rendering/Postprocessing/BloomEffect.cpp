@@ -13,29 +13,26 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     BloomEffect::BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
-                             std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage)
+                             std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage,
+                             std::shared_ptr<GLFramebuffer> sharedFramebuffer)
     :
+    PostprocessEffect(sharedFramebuffer),
     mBaseImage(baseImage),
     mThresholdFilteredImage(thresholdFilteredImage),
     mOutputImage(std::make_shared<GLHDRTexture2D>(baseImage->size())),
-    mOutputFramebuffer(mOutputImage->size()),
 
     mLargeThresholdFilteredImage(std::make_shared<GLHDRTexture2D>(thresholdFilteredImage->size())),
     mMediumThresholdFilteredImage(std::make_shared<GLHDRTexture2D>(thresholdFilteredImage->size().transformedBy(glm::vec2(0.5)))),
     mSmallThresholdFilteredImage(std::make_shared<GLHDRTexture2D>(thresholdFilteredImage->size().transformedBy(glm::vec2(0.25)))),
 
-    mLargeBlurEffect(mSmallThresholdFilteredImage),
-    mMediumBlurEffect(mMediumThresholdFilteredImage),
-    mSmallBlurEffect(mLargeThresholdFilteredImage),
-
-    mFramebuffer(thresholdFilteredImage->size())
+    mLargeBlurEffect(mSmallThresholdFilteredImage, sharedFramebuffer),
+    mMediumBlurEffect(mMediumThresholdFilteredImage, sharedFramebuffer),
+    mSmallBlurEffect(mLargeThresholdFilteredImage, sharedFramebuffer)
     {
-        mFramebuffer.attachTexture(*mThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(*mLargeThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachTexture(*mMediumThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment2);
-        mFramebuffer.attachTexture(*mSmallThresholdFilteredImage, GLFramebuffer::ColorAttachment::Attachment3);
-
-        mOutputFramebuffer.attachTexture(*mOutputImage);
+        mSharedFramebuffer->attachTexture(*mLargeThresholdFilteredImage);
+        mSharedFramebuffer->attachTexture(*mMediumThresholdFilteredImage);
+        mSharedFramebuffer->attachTexture(*mSmallThresholdFilteredImage);
+        mSharedFramebuffer->attachTexture(*mOutputImage);
     }
 
 #pragma mark -
@@ -45,20 +42,9 @@ namespace EARenderer {
     }
 
     std::shared_ptr<GLHDRTexture2D> BloomEffect::bloom(const BloomSettings& settings) {
-        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
-                          Rect2D(mThresholdFilteredImage->size()),
-                          GLFramebuffer::ColorAttachment::Attachment1,
-                          Rect2D(mLargeThresholdFilteredImage->size()));
-
-        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
-                          Rect2D(mThresholdFilteredImage->size()),
-                          GLFramebuffer::ColorAttachment::Attachment2,
-                          Rect2D(mMediumThresholdFilteredImage->size()));
-
-        mFramebuffer.blit(GLFramebuffer::ColorAttachment::Attachment0,
-                          Rect2D(mThresholdFilteredImage->size()),
-                          GLFramebuffer::ColorAttachment::Attachment3,
-                          Rect2D(mSmallThresholdFilteredImage->size()));
+        mSharedFramebuffer->blit(*mThresholdFilteredImage, *mLargeThresholdFilteredImage);
+        mSharedFramebuffer->blit(*mThresholdFilteredImage, *mMediumThresholdFilteredImage);
+        mSharedFramebuffer->blit(*mThresholdFilteredImage, *mSmallThresholdFilteredImage);
 
         mSmallBlurEffect.blur(settings.smallBlurSettings);
         mMediumBlurEffect.blur(settings.mediumBlurSettings);
@@ -79,9 +65,9 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        mOutputFramebuffer.bind();
-        mOutputFramebuffer.viewport().apply();
-
+        mSharedFramebuffer->bind();
+        mSharedFramebuffer->redirectRenderingIntoAttachedTexture(*mOutputImage);
+        
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

@@ -176,7 +176,6 @@
 		CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84B1F8F8EBD00AD9027 /* FileManager.cpp */; };
 		CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */; };
 		CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */; };
-		CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */; };
 		CE70FA1A1F8F8EF600AD9027 /* AxesSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */; };
 		CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */; };
 		CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F85B1F8F8EBD00AD9027 /* AxesSelection.cpp */; };
@@ -3859,7 +3858,6 @@
 				AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */,
 				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
-				CE70FA181F8F8EF600AD9027 /* SceneRenderer.cpp in Sources */,
 				CE1C97582067B09E006A4A73 /* Cue.cpp in Sources */,
 				CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */,
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,

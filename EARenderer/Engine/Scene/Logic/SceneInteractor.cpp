@@ -19,13 +19,11 @@ namespace EARenderer {
     SceneInteractor::SceneInteractor(Input* userInput,
                                      Scene* scene,
                                      AxesRenderer* axesRenderer,
-                                     SceneRenderer* sceneRenderer,
                                      GLViewport* mainViewport)
     :
     mUserInput(userInput),
     mScene(scene),
     mAxesRenderer(axesRenderer),
-    mSceneRenderer(sceneRenderer),
     mMainViewport(mainViewport)
     {
         mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Move] += { "move", this, &SceneInteractor::handleMouseMove };
@@ -137,16 +135,17 @@ namespace EARenderer {
         }
         
         ID selectedMeshID = IDNotFound;
-        if (mSceneRenderer->raySelectsMesh(cameraRay, selectedMeshID)) {
-            MeshInstance& meshInstance = mScene->meshInstances()[selectedMeshID];
-            // Select, but unhighlight mesh
-            meshInstance.setIsSelected(true);
-            meshInstance.setIsHighlighted(false);
-            mPreviouslySelectedMeshID = selectedMeshID;
-            mMeshSelectionEvent(selectedMeshID);
-        } else {
-            mAllObjectsDeselectionEvent();
-        }
+        // FIXME: Refactor selection logic
+//        if (mSceneRenderer->raySelectsMesh(cameraRay, selectedMeshID)) {
+//            MeshInstance& meshInstance = mScene->meshInstances()[selectedMeshID];
+//            // Select, but unhighlight mesh
+//            meshInstance.setIsSelected(true);
+//            meshInstance.setIsHighlighted(false);
+//            mPreviouslySelectedMeshID = selectedMeshID;
+//            mMeshSelectionEvent(selectedMeshID);
+//        } else {
+//            mAllObjectsDeselectionEvent();
+//        }
     }
     
 #pragma mark - Getters

@@ -117,6 +117,8 @@ namespace EARenderer {
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,
                   bool useLinearFilter = true);
+
+        void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
     };
     
 }

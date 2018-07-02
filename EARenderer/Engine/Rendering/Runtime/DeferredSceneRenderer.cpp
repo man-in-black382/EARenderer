@@ -36,9 +36,11 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDepthRenderbuffer(Size2D(1500)),
-    mDirectionalExponentialShadowMap(Size2D(1500)),
-    mDirectionalShadowFramebuffer(Size2D(1500)),
+    mDirectionalShadowFramebuffer(std::make_shared<GLFramebuffer>(Size2D(1500))),
+    mDepthRenderbuffer(mDirectionalShadowFramebuffer->size()),
+    mDirectionalExponentialShadowMap(mDirectionalShadowFramebuffer->size()),
+    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap),
+                      mDirectionalShadowFramebuffer),
 
     // Surfels and surfel clusters
     mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
@@ -59,13 +61,16 @@ namespace EARenderer {
     mOutputFrame(settings.resolution),
     mThresholdFilteredOutputFrame(mOutputFrame.size()),
     mOutputDepthRenderbuffer(mOutputFrame.size()),
-    mOutputFramebuffer(mOutputFrame.size()),
+    mOutputFramebuffer(mOutputFrame.size())
 
     // Effects
-    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap)),
-    mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
-                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame)),
-    mToneMappingEffect(mBloomEffect.outputImage())
+//    mPostprocessFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
+//
+//    mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
+//                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame),
+//                 mPostprocessFramebuffer),
+//
+//    mToneMappingEffect(mBloomEffect.outputImage())
     {
         setupGLState();
         setupFramebuffers();
@@ -96,8 +101,8 @@ namespace EARenderer {
     }
 
     void DeferredSceneRenderer::setupFramebuffers() {
-        mDirectionalShadowFramebuffer.attachTexture(mDirectionalExponentialShadowMap);
-        mDirectionalShadowFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+        mDirectionalShadowFramebuffer->attachTexture(mDirectionalExponentialShadowMap);
+        mDirectionalShadowFramebuffer->attachRenderbuffer(mDepthRenderbuffer);
 
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
@@ -144,8 +149,8 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
         mDirectionalESMShader.bind();
-        mDirectionalShadowFramebuffer.bind();
-        mDirectionalShadowFramebuffer.viewport().apply();
+        mDirectionalShadowFramebuffer->bind();
+        mDirectionalShadowFramebuffer->viewport().apply();
 
         mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
 

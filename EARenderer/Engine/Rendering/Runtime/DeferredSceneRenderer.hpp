@@ -91,9 +91,10 @@ namespace EARenderer {
         std::array<GLLDRTexture3D, 4> mGridProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
+        std::shared_ptr<GLFramebuffer> mDirectionalShadowFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLHDRTexture2D mDirectionalExponentialShadowMap;
-        GLFramebuffer mDirectionalShadowFramebuffer;
+        GaussianBlurEffect mShadowBlurEffect;
 
         GLSLFullScreenQuad mFSQuadShader;
 
@@ -102,9 +103,9 @@ namespace EARenderer {
         GLDepthRenderbuffer mOutputDepthRenderbuffer;
         GLFramebuffer mOutputFramebuffer;
 
-        GaussianBlurEffect mShadowBlurEffect;
-        BloomEffect mBloomEffect;
-        ToneMappingEffect mToneMappingEffect;
+//        std::shared_ptr<GLFramebuffer> mPostprocessFramebuffer;
+//        BloomEffect mBloomEffect;
+//        ToneMappingEffect mToneMappingEffect;
 
         void setupGLState();
         void setupFramebuffers();

@@ -9,6 +9,7 @@
 #ifndef BloomFilter_hpp
 #define BloomFilter_hpp
 
+#include "PostprocessEffect.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
@@ -19,7 +20,7 @@
 
 namespace EARenderer {
 
-    class BloomEffect {
+    class BloomEffect: public PostprocessEffect {
     private:
         std::shared_ptr<const GLHDRTexture2D> mBaseImage;
         std::shared_ptr<const GLHDRTexture2D> mThresholdFilteredImage;
@@ -32,14 +33,12 @@ namespace EARenderer {
         GaussianBlurEffect mMediumBlurEffect;
         GaussianBlurEffect mLargeBlurEffect;
 
-        GLFramebuffer mFramebuffer;
-        GLFramebuffer mOutputFramebuffer;
-
         GLSLBloom mBloomShader;
 
     public:
         BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
-                    std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage);
+                    std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage,
+                    std::shared_ptr<GLFramebuffer> sharedFramebuffer);
 
         std::shared_ptr<GLHDRTexture2D> outputImage() const;
         std::shared_ptr<GLHDRTexture2D> bloom(const BloomSettings& settings);

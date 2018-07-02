@@ -52,7 +52,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::Scene *scene;
 @property (assign, nonatomic) EARenderer::SceneGBufferRenderer *sceneGBufferRenderer;
-@property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
+//@property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
 @property (assign, nonatomic) EARenderer::DeferredSceneRenderer *deferredSceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
@@ -86,7 +86,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)dealloc
 {
     delete self.scene;
-    delete self.sceneRenderer;
+    // FIXME: Fix dealloc
+//    delete self.sceneRenderer;
     delete self.axesRenderer;
     delete self.defaultRenderComponentsProvider;
     delete self.sceneInteractor;
@@ -137,19 +138,18 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferRenderer(self.scene, self.renderingSettings);
-    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
+//    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings, surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
                                                            self.scene,
                                                            self.axesRenderer,
-                                                           self.sceneRenderer,
                                                            &EARenderer::GLViewport::main());
 
-    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
+//    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
 
-    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
+//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
 
     self.scene->destroyAuxiliaryData();
 
@@ -175,7 +175,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     }
 
     if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
-        self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
+//        self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
     }
 
     if (self.renderingSettings.skyboxRenderingEnabled) {
@@ -191,7 +191,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     }
 
     if (self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex >= 0) {
-        self.sceneRenderer->renderLinksForDiffuseProbe(self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex);
+//        self.sceneRenderer->renderLinksForDiffuseProbe(self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex);
     }
 
 //    self.sceneRenderer->renderSurfelLuminances();
@@ -246,7 +246,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings
 {
     self.renderingSettings = settings;
-    self.sceneRenderer->setRenderingSettings(settings);
+    // FIXME: Fix rendering settings
+//    self.sceneRenderer->setRenderingSettings(settings);
 }
 
 #pragma mark - Helper methods

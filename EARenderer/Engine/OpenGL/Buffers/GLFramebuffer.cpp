@@ -84,6 +84,10 @@ namespace EARenderer {
     }
     
     void GLFramebuffer::attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel, int16_t layer) {
+        if (texture.size().width > mSize.width || texture.size().height > mSize.height) {
+            throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
+        }
+        
         bind();
         texture.bind();
         
@@ -101,10 +105,27 @@ namespace EARenderer {
     }
     
     void GLFramebuffer::attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel, int16_t layer) {
+        if (texture.size().width > mSize.width || texture.size().height > mSize.height) {
+            throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
+        }
+
         bind();
         texture.bind();
 
-        GLenum attachment = glColorAttachment(colorAttachment);
+        GLenum attachment;
+
+        if (colorAttachment == ColorAttachment::Automatic) {
+            auto freeAttachmentIt = mAvailableAttachments.begin();
+            if (freeAttachmentIt == mAvailableAttachments.end() || mRequestedAttachments.size() >= mMaximumColorAttachments) {
+                throw std::runtime_error(string_format("Exceeded maximum amount of color attachments (%d)", mMaximumColorAttachments));
+            } else {
+                attachment = glColorAttachment(*freeAttachmentIt);
+                mAvailableAttachments.erase(freeAttachmentIt);
+            }
+        } else {
+            attachment = glColorAttachment(colorAttachment);
+        }
+
         mTextureAttachmentMap[texture.name()] = attachment;
 
         if (layer == -1) {
@@ -222,6 +243,7 @@ namespace EARenderer {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
         }
         glDrawBuffer(attachmentIt->second);
+        GLViewport(texture.size()).apply();
     }
 
     void GLFramebuffer::blit(GLFramebuffer::ColorAttachment sourceAttachment, const Rect2D& srcRect,
@@ -242,6 +264,28 @@ namespace EARenderer {
         bind();
         glReadBuffer(srcAttachment);
         glDrawBuffer(dstAttachment);
+        glBlitFramebuffer(srcRect.origin.x, srcRect.origin.y, srcRect.origin.x + srcRect.size.width, srcRect.origin.y + srcRect.size.height,
+                          dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
+                          GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
+    }
+
+    void GLFramebuffer::blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter) {
+        auto fromAttachmentIt = mTextureAttachmentMap.find(fromTexture.name());
+        if (fromAttachmentIt == mTextureAttachmentMap.end()) {
+            throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot blit from it.", fromTexture.name()));
+        }
+        auto toAttachmentIt = mTextureAttachmentMap.find(toTexture.name());
+        if (toAttachmentIt == mTextureAttachmentMap.end()) {
+            throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot blit to it.", toTexture.name()));
+        }
+
+        bind();
+        glReadBuffer(fromAttachmentIt->second);
+        glDrawBuffer(toAttachmentIt->second);
+
+        Rect2D srcRect(fromTexture.size());
+        Rect2D dstRect(toTexture.size());
+
         glBlitFramebuffer(srcRect.origin.x, srcRect.origin.y, srcRect.origin.x + srcRect.size.width, srcRect.origin.y + srcRect.size.height,
                           dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
                           GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);

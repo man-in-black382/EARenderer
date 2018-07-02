@@ -15,16 +15,16 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GaussianBlurEffect::GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage)
+    GaussianBlurEffect::GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage,
+                                           std::shared_ptr<GLFramebuffer> sharedFramebuffer)
     :
+    PostprocessEffect(sharedFramebuffer),
     mInputImage(inputImage),
     mFirstOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size())),
-    mSecondOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size())),
-    mFirstFramebuffer(inputImage->size()),
-    mSecondFramebuffer(inputImage->size())
+    mSecondOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size()))
     {
-        mFirstFramebuffer.attachTexture(*mFirstOutputImage);
-        mSecondFramebuffer.attachTexture(*mSecondOutputImage);
+        sharedFramebuffer->attachTexture(*mFirstOutputImage);
+        sharedFramebuffer->attachTexture(*mSecondOutputImage);
     }
 
 #pragma mark - Getters
@@ -71,6 +71,9 @@ namespace EARenderer {
             computeWeightsAndOffsets();
         }
 
+        mSharedFramebuffer->bind();
+        mSharedFramebuffer->viewport().apply();
+
         mBlurShader.bind();
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
@@ -80,8 +83,7 @@ namespace EARenderer {
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        mFirstFramebuffer.bind();
-        mFirstFramebuffer.viewport().apply();
+        mSharedFramebuffer->redirectRenderingIntoAttachedTexture(*mFirstOutputImage);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
@@ -91,8 +93,7 @@ namespace EARenderer {
             mBlurShader.setTexture(*mFirstOutputImage);
         });
 
-        mSecondFramebuffer.bind();
-        mSecondFramebuffer.viewport().apply();
+        mSharedFramebuffer->redirectRenderingIntoAttachedTexture(*mSecondOutputImage);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

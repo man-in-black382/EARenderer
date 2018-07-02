@@ -619,59 +619,59 @@ float ExponentialShadow(vec3 worldPosition) {
 ///////////////////////// Reflections  /////////////////////
 ////////////////////////////////////////////////////////////
 
-const float step = 0.1;
-const float minRayStep = 0.1;
-const float maxSteps = 30;
-const int numBinarySearchSteps = 5;
-const float reflectionSpecularFalloffExponent = 3.0;
+//const float step = 0.1;
+//const float minRayStep = 0.1;
+//const float maxSteps = 30;
+//const int numBinarySearchSteps = 5;
+//const float reflectionSpecularFalloffExponent = 3.0;
+//
+//vec3 Hash(vec3 a) {
+//    vec3 scale = vec3(0.8);
+//    float K = 19.19;
+//
+//    a = fract(a * scale);
+//    a += dot(a, a.yxz + K);
+//
+//    return fract((a.xxy + a.yxx)*a.zyx);
+//}
 
-vec3 Hash(vec3 a) {
-    vec3 scale = vec3(0.8);
-    float K = 19.19;
-
-    a = fract(a * scale);
-    a += dot(a, a.yxz + K);
-
-    return fract((a.xxy + a.yxx)*a.zyx);
-}
-
-vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
-
-    dir *= step;
-
-    float depth;
-    int steps;
-    vec4 projectedCoord;
-
-    for(int i = 0; i < maxSteps; i++) {
-
-        hitCoord += dir;
-
-        // Transform our 3D vector into a 2D screen coordinate to detch the depth buffer and check for a collision
-        projectedCoord = projection * vec4(hitCoord, 1.0);
-        projectedCoord.xy /= projectedCoord.w;
-        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
-
-        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
-        if(depth > 1000.0)
-            continue;
-
-        dDepth = hitCoord.z - depth;
-
-        if((dir.z - dDepth) < 1.2) {
-            if(dDepth <= 0.0) {
-                vec4 Result;
-                Result = vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
-
-                return Result;
-            }
-        }
-
-        steps++;
-    }
-
-    return vec4(projectedCoord.xy, depth, 0.0);
-}
+//vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
+//
+//    dir *= step;
+//
+//    float depth;
+//    int steps;
+//    vec4 projectedCoord;
+//
+//    for(int i = 0; i < maxSteps; i++) {
+//
+//        hitCoord += dir;
+//
+//        // Transform our 3D vector into a 2D screen coordinate to detch the depth buffer and check for a collision
+//        projectedCoord = projection * vec4(hitCoord, 1.0);
+//        projectedCoord.xy /= projectedCoord.w;
+//        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+//
+//        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
+//        if(depth > 1000.0)
+//            continue;
+//
+//        dDepth = hitCoord.z - depth;
+//
+//        if((dir.z - dDepth) < 1.2) {
+//            if(dDepth <= 0.0) {
+//                vec4 Result;
+//                Result = vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
+//
+//                return Result;
+//            }
+//        }
+//
+//        steps++;
+//    }
+//
+//    return vec4(projectedCoord.xy, depth, 0.0);
+//}
 
 void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
@@ -683,6 +683,14 @@ void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     float depth = 0.0;
 
 
+}
+
+vec3 ReinhardToneMap(vec3 color) {
+    return color / (color + vec3(1.0));
+}
+
+vec3 GammaCorrect(vec3 color) {
+    return pow(color, vec3(1.0 / 2.2));
 }
 
 ////////////////////////////////////////////////////////////
@@ -742,7 +750,10 @@ void main() {
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
 
-    oBaseOutput = vec4(specularAndDiffuse, 1.0);
+    specularAndDiffuse = ReinhardToneMap(specularAndDiffuse);
+    specularAndDiffuse = GammaCorrect(specularAndDiffuse);
+
+    oBaseOutput = vec4(vec3(specularAndDiffuse), 1.0);
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);

@@ -31,7 +31,6 @@ namespace EARenderer {
         Input *mUserInput = nullptr;
         Scene *mScene = nullptr;
         AxesRenderer *mAxesRenderer = nullptr;
-        SceneRenderer *mSceneRenderer = nullptr;
         GLViewport *mMainViewport = nullptr;
         
         ID mPreviouslyHighlightedMeshID = IDNotFound;
@@ -57,7 +56,6 @@ namespace EARenderer {
         SceneInteractor(Input* userInput,
                         Scene* scene,
                         AxesRenderer* axesRenderer,
-                        SceneRenderer* sceneRenderer,
                         GLViewport* mainViewport);
         
         SceneInteractor(const SceneInteractor& that) = default;
