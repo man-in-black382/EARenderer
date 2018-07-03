@@ -15,23 +15,10 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GaussianBlurEffect::GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage,
-                                           std::shared_ptr<GLFramebuffer> sharedFramebuffer)
-    :
-    PostprocessEffect(sharedFramebuffer),
-    mInputImage(inputImage),
-    mFirstOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size())),
-    mSecondOutputImage(std::make_shared<GLHDRTexture2D>(inputImage->size()))
-    {
-        sharedFramebuffer->attachTexture(*mFirstOutputImage);
-        sharedFramebuffer->attachTexture(*mSecondOutputImage);
-    }
+    GaussianBlurEffect::GaussianBlurEffect() { }
 
 #pragma mark - Getters
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::outputImage() const {
-        return mSecondOutputImage;
-    }
 
 #pragma mark - Blur
 
@@ -61,7 +48,11 @@ namespace EARenderer {
         }
     }
 
-    std::shared_ptr<GLHDRTexture2D> GaussianBlurEffect::blur(const GaussianBlurSettings& settings) {
+    void GaussianBlurEffect::blur(std::shared_ptr<const GLHDRTexture2D> inputImage,
+                                  std::shared_ptr<GLHDRTexture2D> outputImage,
+                                  std::shared_ptr<PostprocessTexturePool> texturePool,
+                                  const GaussianBlurSettings& settings)
+    {
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         if (settings != mSettings) {
@@ -71,33 +62,34 @@ namespace EARenderer {
             computeWeightsAndOffsets();
         }
 
-        mSharedFramebuffer->bind();
-        mSharedFramebuffer->viewport().apply();
+        auto intermediateTexture = texturePool->claim();
 
         mBlurShader.bind();
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*mInputImage);
+            mBlurShader.setTexture(*inputImage);
         });
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        mSharedFramebuffer->redirectRenderingIntoAttachedTexture(*mFirstOutputImage);
-        glClear(GL_COLOR_BUFFER_BIT);
+        texturePool->redirectRenderingToTexture(intermediateTexture);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Vertical);
 
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*mFirstOutputImage);
+            mBlurShader.setTexture(*intermediateTexture);
         });
 
-        mSharedFramebuffer->redirectRenderingIntoAttachedTexture(*mSecondOutputImage);
+        texturePool->redirectRenderingToTexture(outputImage);
+
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-        return mSecondOutputImage;
+        texturePool->putBack(intermediateTexture);
     }
 
 }

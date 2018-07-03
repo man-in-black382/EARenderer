@@ -35,12 +35,10 @@ namespace EARenderer {
     mGBuffer(GBuffer),
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
+    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(1500))),
+
     // Shadow maps
-    mDirectionalShadowFramebuffer(std::make_shared<GLFramebuffer>(Size2D(1500))),
-    mDepthRenderbuffer(mDirectionalShadowFramebuffer->size()),
-    mDirectionalExponentialShadowMap(mDirectionalShadowFramebuffer->size()),
-    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap),
-                      mDirectionalShadowFramebuffer),
+    mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
 
     // Surfels and surfel clusters
     mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
@@ -101,9 +99,6 @@ namespace EARenderer {
     }
 
     void DeferredSceneRenderer::setupFramebuffers() {
-        mDirectionalShadowFramebuffer->attachTexture(mDirectionalExponentialShadowMap);
-        mDirectionalShadowFramebuffer->attachRenderbuffer(mDepthRenderbuffer);
-
         mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
         mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
 
@@ -148,13 +143,13 @@ namespace EARenderer {
     }
 
     void DeferredSceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
-        mDirectionalESMShader.bind();
-        mDirectionalShadowFramebuffer->bind();
-        mDirectionalShadowFramebuffer->viewport().apply();
-
-        mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
+        auto renderTarget = mDirectionalShadowTexturePool->claim();
+        mDirectionalShadowTexturePool->redirectRenderingToTexture(renderTarget);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        mDirectionalESMShader.bind();
+        mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
 
         for (size_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
             // Ensure only one texture channel will be written to for each respective cascade
@@ -177,7 +172,10 @@ namespace EARenderer {
 
         glColorMask(true, true, true, true);
 
-        mShadowBlurEffect.blur(mSettings.meshSettings.shadowBlur);
+        mShadowBlurEffect.blur(renderTarget, mDirectionalExponentialShadowMap,
+                               mDirectionalShadowTexturePool, mSettings.meshSettings.shadowBlur);
+
+        mDirectionalShadowTexturePool->putBack(renderTarget);
     }
 
     void DeferredSceneRenderer::relightSurfels() {
@@ -191,7 +189,7 @@ namespace EARenderer {
         mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setShadowCascades(mShadowCascades);
-            mSurfelLightingShader.setExponentialShadowMap(mDirectionalExponentialShadowMap);
+            mSurfelLightingShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
             mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
@@ -255,8 +253,7 @@ namespace EARenderer {
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setGBuffer(*mGBuffer);
-            mCookTorranceShader.setExponentialShadowMap(*mShadowBlurEffect.outputImage());
-//            mCookTorranceShader.setExponentialShadowMap(mDirectionalExponentialShadowMap);
+            mCookTorranceShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
@@ -265,6 +262,23 @@ namespace EARenderer {
         bindDefaultFramebuffer();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        // DEBUG //
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        Rect2D viewportRect(Size2D(200, 200));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([this]() {
+            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
+        });
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void DeferredSceneRenderer::renderSkybox() {

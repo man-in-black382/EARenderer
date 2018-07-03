@@ -16,6 +16,7 @@
 #include <glm/vec2.hpp>
 
 #include "Scene.hpp"
+#include "PostprocessTexturePool.hpp"
 #include "GLFramebuffer.hpp"
 #include "DefaultRenderComponentsProviding.hpp"
 #include "FrustumCascades.hpp"
@@ -74,6 +75,8 @@ namespace EARenderer {
         std::shared_ptr<const GLHDRTexture2DArray> mGBuffer;
 
         FrustumCascades mShadowCascades;
+        std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
+//        PostprocessTexturePool mPostprocessTexturePool;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
@@ -91,9 +94,7 @@ namespace EARenderer {
         std::array<GLLDRTexture3D, 4> mGridProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
-        std::shared_ptr<GLFramebuffer> mDirectionalShadowFramebuffer;
-        GLDepthRenderbuffer mDepthRenderbuffer;
-        GLHDRTexture2D mDirectionalExponentialShadowMap;
+        std::shared_ptr<GLHDRTexture2D> mDirectionalExponentialShadowMap;
         GaussianBlurEffect mShadowBlurEffect;
 
         GLSLFullScreenQuad mFSQuadShader;

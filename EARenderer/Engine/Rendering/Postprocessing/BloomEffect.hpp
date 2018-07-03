@@ -21,27 +21,27 @@
 namespace EARenderer {
 
     class BloomEffect: public PostprocessEffect {
-    private:
-        std::shared_ptr<const GLHDRTexture2D> mBaseImage;
-        std::shared_ptr<const GLHDRTexture2D> mThresholdFilteredImage;
-        std::shared_ptr<GLHDRTexture2D> mSmallThresholdFilteredImage;
-        std::shared_ptr<GLHDRTexture2D> mMediumThresholdFilteredImage;
-        std::shared_ptr<GLHDRTexture2D> mLargeThresholdFilteredImage;
-        std::shared_ptr<GLHDRTexture2D> mOutputImage;
-
-        GaussianBlurEffect mSmallBlurEffect;
-        GaussianBlurEffect mMediumBlurEffect;
-        GaussianBlurEffect mLargeBlurEffect;
-
-        GLSLBloom mBloomShader;
-
-    public:
-        BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
-                    std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage,
-                    std::shared_ptr<GLFramebuffer> sharedFramebuffer);
-
-        std::shared_ptr<GLHDRTexture2D> outputImage() const;
-        std::shared_ptr<GLHDRTexture2D> bloom(const BloomSettings& settings);
+//    private:
+//        std::shared_ptr<const GLHDRTexture2D> mBaseImage;
+//        std::shared_ptr<const GLHDRTexture2D> mThresholdFilteredImage;
+//        std::shared_ptr<GLHDRTexture2D> mSmallThresholdFilteredImage;
+//        std::shared_ptr<GLHDRTexture2D> mMediumThresholdFilteredImage;
+//        std::shared_ptr<GLHDRTexture2D> mLargeThresholdFilteredImage;
+//        std::shared_ptr<GLHDRTexture2D> mOutputImage;
+//
+//        GaussianBlurEffect mSmallBlurEffect;
+//        GaussianBlurEffect mMediumBlurEffect;
+//        GaussianBlurEffect mLargeBlurEffect;
+//
+//        GLSLBloom mBloomShader;
+//
+//    public:
+//        BloomEffect(std::shared_ptr<const GLHDRTexture2D> baseImage,
+//                    std::shared_ptr<const GLHDRTexture2D> thresholdFilteredImage,
+//                    std::shared_ptr<GLFramebuffer> sharedFramebuffer);
+//
+//        std::shared_ptr<GLHDRTexture2D> outputImage() const;
+//        std::shared_ptr<GLHDRTexture2D> bloom(const BloomSettings& settings);
     };
 
 }

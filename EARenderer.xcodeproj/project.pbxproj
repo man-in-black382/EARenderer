@@ -29,6 +29,7 @@
 		AC6CD80A20D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD80820D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp */; };
 		AC6CD81220D11838000E6A22 /* GLSLGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */; };
 		AC6CD81620D11B9A000E6A22 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */; };
+		AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */; };
 		AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */; };
 		AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */; };
 		AC82F68A20EA11F300375B41 /* GLTextureFormat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC82F68820EA11F300375B41 /* GLTextureFormat.cpp */; };
@@ -355,7 +356,6 @@
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF0162020D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */; };
 		CEF0162120D41A9800E0F0AB /* DirectionalExponentialShadowMap.vert in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161F20D41A9700E0F0AB /* DirectionalExponentialShadowMap.vert */; };
-		CEF0BF9B20E93B6E00087B21 /* GLFramebufferPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF0BF9920E93B6E00087B21 /* GLFramebufferPool.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
 		CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */; };
 		CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF4DBF12062D43400A68C09 /* GLSLSurfelLighting.cpp */; };
@@ -635,6 +635,8 @@
 		AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGaussianBlur.cpp; sourceTree = "<group>"; };
 		AC6CD81120D11838000E6A22 /* GLSLGaussianBlur.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLGaussianBlur.hpp; sourceTree = "<group>"; };
 		AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GaussianBlur.frag; sourceTree = "<group>"; };
+		AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PostprocessTexturePool.cpp; sourceTree = "<group>"; };
+		AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PostprocessTexturePool.hpp; sourceTree = "<group>"; };
 		AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianBlurEffect.cpp; sourceTree = "<group>"; };
 		AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurEffect.hpp; sourceTree = "<group>"; };
 		AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLLDRTexture3D.cpp; sourceTree = "<group>"; };
@@ -1424,8 +1426,6 @@
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalExponentialShadowMap.frag; sourceTree = "<group>"; };
 		CEF0161F20D41A9700E0F0AB /* DirectionalExponentialShadowMap.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalExponentialShadowMap.vert; sourceTree = "<group>"; };
-		CEF0BF9920E93B6E00087B21 /* GLFramebufferPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLFramebufferPool.cpp; sourceTree = "<group>"; };
-		CEF0BF9A20E93B6E00087B21 /* GLFramebufferPool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLFramebufferPool.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
 		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
 		CEF4DBEC20625BB700A68C09 /* SurfelLighting.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelLighting.frag; sourceTree = "<group>"; };
@@ -1923,6 +1923,8 @@
 				AC40397C20E38A680079112E /* ToneMappingEffect.cpp */,
 				AC40397D20E38A680079112E /* ToneMappingEffect.hpp */,
 				CE2B60F120E524CC00370844 /* ToneMappingSettings.hpp */,
+				AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */,
+				AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */,
 			);
 			path = Postprocessing;
 			sourceTree = "<group>";
@@ -3031,8 +3033,6 @@
 				CEC101A91FDD98B900C56F26 /* GLDepthRenderbuffer.hpp */,
 				CE4BED0C2039FD5100978231 /* GLVertexAttribute.cpp */,
 				CE4BED0A2039F40800978231 /* GLVertexAttribute.hpp */,
-				CEF0BF9920E93B6E00087B21 /* GLFramebufferPool.cpp */,
-				CEF0BF9A20E93B6E00087B21 /* GLFramebufferPool.hpp */,
 			);
 			path = Buffers;
 			sourceTree = "<group>";
@@ -3765,7 +3765,6 @@
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
 				CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
-				CEF0BF9B20E93B6E00087B21 /* GLFramebufferPool.cpp in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
 				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
@@ -3849,6 +3848,7 @@
 				CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */,
 				CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */,
 				CE891BC7205EB48500D2B09D /* GLLDRTexture2DSampler.cpp in Sources */,
+				AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.cpp in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,

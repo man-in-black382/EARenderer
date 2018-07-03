@@ -409,18 +409,6 @@ namespace EARenderer {
     }
 
     std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
-        SphericalHarmonics sh;
-        sh.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 1.0), M_PI * 2.0);
-        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), M_PI * 2.0);
-        sh.convolve();
-//        sh.normalize();
-        sh.scale(glm::vec3(50.0));
-
-        auto e1 = sh.evaluate(glm::vec3(1.0, 0.0, 0.0));
-        auto e2 = sh.evaluate(glm::vec3(-1.0, 0.0, 0.0));
-        auto e3 = sh.evaluate(glm::vec3(-1.0, 1.0, 0.0));
-        auto e4 = sh.evaluate(glm::vec3(-1.0, -1.0, 0.0));
-
         mSurfelDataContainer = std::make_shared<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);

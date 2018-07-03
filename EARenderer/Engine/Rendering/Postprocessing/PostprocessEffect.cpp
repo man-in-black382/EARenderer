@@ -12,9 +12,9 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    PostprocessEffect::PostprocessEffect(std::shared_ptr<GLFramebuffer> framebuffer)
+    PostprocessEffect::PostprocessEffect(std::shared_ptr<PostprocessTexturePool> texturePool)
     :
-    mSharedFramebuffer(framebuffer)
+    mTexturePool(texturePool)
     { }
 
 }

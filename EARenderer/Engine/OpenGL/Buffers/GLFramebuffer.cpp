@@ -57,6 +57,10 @@ namespace EARenderer {
     const GLViewport& GLFramebuffer::viewport() const {
         return mViewport;
     }
+
+    size_t GLFramebuffer::maximumColorAttachmentsCount() const {
+        return mMaximumColorAttachments;
+    }
     
 #pragma mark - Binding
     
@@ -241,13 +245,13 @@ namespace EARenderer {
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
     }
 
-    void GLFramebuffer::redirectRenderingIntoAttachedTexture(const GLTexture& texture) {
+    void GLFramebuffer::activateDrawBufferWithTexture(const GLTexture& texture) {
         auto attachmentIt = mTextureAttachmentMap.find(texture.name());
         if (attachmentIt == mTextureAttachmentMap.end()) {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
         }
+        bind();
         glDrawBuffer(attachmentIt->second);
-        GLViewport(texture.size()).apply();
     }
 
     void GLFramebuffer::blit(GLFramebuffer::ColorAttachment sourceAttachment, const Rect2D& srcRect,

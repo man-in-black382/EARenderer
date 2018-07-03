@@ -9,6 +9,7 @@
 #ifndef GaussianBlurEffect_hpp
 #define GaussianBlurEffect_hpp
 
+#include "PostprocessTexturePool.hpp"
 #include "PostprocessEffect.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLHDRTexture2D.hpp"
@@ -21,11 +22,8 @@
 
 namespace EARenderer {
 
-    class GaussianBlurEffect: public PostprocessEffect {
+    class GaussianBlurEffect {
     private:
-        std::shared_ptr<const GLHDRTexture2D> mInputImage;
-        std::shared_ptr<GLHDRTexture2D> mFirstOutputImage;
-        std::shared_ptr<GLHDRTexture2D> mSecondOutputImage;
         GLSLGaussianBlur mBlurShader;
         std::vector<float> mWeights;
         std::vector<float> mTextureOffsets;
@@ -34,11 +32,12 @@ namespace EARenderer {
         void computeWeightsAndOffsets();
 
     public:
-        GaussianBlurEffect(std::shared_ptr<const GLHDRTexture2D> inputImage,
-                           std::shared_ptr<GLFramebuffer> sharedFramebuffer);
+        GaussianBlurEffect();
 
-        std::shared_ptr<GLHDRTexture2D> outputImage() const;
-        std::shared_ptr<GLHDRTexture2D> blur(const GaussianBlurSettings& settings);
+        void blur(std::shared_ptr<const GLHDRTexture2D> inputImage,
+                  std::shared_ptr<GLHDRTexture2D> outputImage,
+                  std::shared_ptr<PostprocessTexturePool> texturePool,
+                  const GaussianBlurSettings& settings);
     };
 
 }

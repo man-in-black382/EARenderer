@@ -71,6 +71,7 @@ namespace EARenderer {
         const Size2D& size() const;
         const GLViewport& viewport() const;
         bool isComplete() const;
+        size_t maximumColorAttachmentsCount() const;
 
         void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
 
@@ -112,7 +113,7 @@ namespace EARenderer {
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
 
-        void redirectRenderingIntoAttachedTexture(const GLTexture& texture);
+        void activateDrawBufferWithTexture(const GLTexture& texture);
 
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,
