@@ -10,7 +10,6 @@
 #define GaussianBlurEffect_hpp
 
 #include "PostprocessTexturePool.hpp"
-#include "PostprocessEffect.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "Size2D.hpp"

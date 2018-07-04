@@ -68,7 +68,7 @@ namespace EARenderer {
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*inputImage);
+            mBlurShader.setTexture(*inputImage, settings.imageMipLevel);
         });
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
@@ -81,7 +81,7 @@ namespace EARenderer {
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Vertical);
 
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*intermediateTexture);
+            mBlurShader.setTexture(*intermediateTexture, settings.imageMipLevel);
         });
 
         texturePool->redirectRenderingToTexture(outputImage);

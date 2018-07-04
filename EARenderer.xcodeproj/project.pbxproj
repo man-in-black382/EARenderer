@@ -303,7 +303,6 @@
 		CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617711FF8287A00A5E9FC /* GLSLTriangleRendering.cpp */; };
 		CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE9617761FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp */; };
 		CE96177A1FF83E5200A5E9FC /* SurfelRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE9617791FF83E5200A5E9FC /* SurfelRendering.vert */; };
-		CEA0B90620E6AB3F00257E37 /* PostprocessEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B90420E6AB3E00257E37 /* PostprocessEffect.cpp */; };
 		CEA0B90920E7733400257E37 /* SceneGBufferRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B90720E7733400257E37 /* SceneGBufferRenderer.cpp */; };
 		CEA0B90C20E7741E00257E37 /* GLSLGBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B90A20E7741E00257E37 /* GLSLGBuffer.cpp */; };
 		CEA0B90F20E7743700257E37 /* GBuffer.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEA0B90D20E7743700257E37 /* GBuffer.frag */; };
@@ -630,6 +629,7 @@
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
+		AC6A3E2920ECC096008238E9 /* SceneGBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneGBuffer.hpp; sourceTree = "<group>"; };
 		AC6CD80820D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDirectionalExponentialShadowMap.cpp; sourceTree = "<group>"; };
 		AC6CD80920D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectionalExponentialShadowMap.hpp; sourceTree = "<group>"; };
 		AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGaussianBlur.cpp; sourceTree = "<group>"; };
@@ -1359,8 +1359,6 @@
 		CE97750E1FA5D73900F5699C /* sponzaPBR.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = sponzaPBR.mtl; sourceTree = "<group>"; };
 		CE97750F1FA5D73900F5699C /* Sponza_Column_a_diffuse.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Column_a_diffuse.tga; sourceTree = "<group>"; };
 		CE9775101FA5D73900F5699C /* Sponza_Column_c_roughness.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Sponza_Column_c_roughness.tga; sourceTree = "<group>"; };
-		CEA0B90420E6AB3E00257E37 /* PostprocessEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PostprocessEffect.cpp; sourceTree = "<group>"; };
-		CEA0B90520E6AB3F00257E37 /* PostprocessEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PostprocessEffect.hpp; sourceTree = "<group>"; };
 		CEA0B90720E7733400257E37 /* SceneGBufferRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneGBufferRenderer.cpp; sourceTree = "<group>"; };
 		CEA0B90820E7733400257E37 /* SceneGBufferRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneGBufferRenderer.hpp; sourceTree = "<group>"; };
 		CEA0B90A20E7741E00257E37 /* GLSLGBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGBuffer.cpp; sourceTree = "<group>"; };
@@ -1912,8 +1910,6 @@
 		AC71D95820D26FA6001524BC /* Postprocessing */ = {
 			isa = PBXGroup;
 			children = (
-				CEA0B90420E6AB3E00257E37 /* PostprocessEffect.cpp */,
-				CEA0B90520E6AB3F00257E37 /* PostprocessEffect.hpp */,
 				AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */,
 				AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */,
 				CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */,
@@ -2005,6 +2001,7 @@
 				CE70F85A1F8F8EBD00AD9027 /* SceneRenderer.hpp */,
 				CEA0B90720E7733400257E37 /* SceneGBufferRenderer.cpp */,
 				CEA0B90820E7733400257E37 /* SceneGBufferRenderer.hpp */,
+				AC6A3E2920ECC096008238E9 /* SceneGBuffer.hpp */,
 				CEA0B91120E799DC00257E37 /* DeferredSceneRenderer.cpp */,
 				CEA0B91220E799DC00257E37 /* DeferredSceneRenderer.hpp */,
 				CE70F8581F8F8EBD00AD9027 /* AxesRenderer.cpp */,
@@ -3768,7 +3765,6 @@
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
 				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
-				CEA0B90620E6AB3F00257E37 /* PostprocessEffect.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
 				CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */,
 				CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */,

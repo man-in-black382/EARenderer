@@ -76,7 +76,6 @@ namespace EARenderer {
 
         FrustumCascades mShadowCascades;
         std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
-//        PostprocessTexturePool mPostprocessTexturePool;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
@@ -99,14 +98,14 @@ namespace EARenderer {
 
         GLSLFullScreenQuad mFSQuadShader;
 
-        GLHDRTexture2D mOutputFrame;
-        GLHDRTexture2D mThresholdFilteredOutputFrame;
+        std::shared_ptr<GLHDRTexture2D> mOutputFrame;
+        std::shared_ptr<GLHDRTexture2D> mThresholdFilteredOutputFrame;
         GLDepthRenderbuffer mOutputDepthRenderbuffer;
         GLFramebuffer mOutputFramebuffer;
 
-//        std::shared_ptr<GLFramebuffer> mPostprocessFramebuffer;
-//        BloomEffect mBloomEffect;
-//        ToneMappingEffect mToneMappingEffect;
+        BloomEffect mBloomEffect;
+        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
+        ToneMappingEffect mToneMappingEffect;
 
         void setupGLState();
         void setupFramebuffers();
@@ -118,6 +117,8 @@ namespace EARenderer {
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
+        void renderMeshes();
+        void renderFinalImage(const GLHDRTexture2D& image);
 
     public:
         DeferredSceneRenderer(const Scene* scene,
@@ -131,7 +132,7 @@ namespace EARenderer {
 
         void setRenderingSettings(const RenderingSettings& settings);
 
-        void renderMeshes();
+        void render();
         void renderSkybox();
     };
 

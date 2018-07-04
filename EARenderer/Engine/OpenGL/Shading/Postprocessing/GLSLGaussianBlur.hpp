@@ -26,7 +26,7 @@ namespace EARenderer {
         GLSLGaussianBlur();
 
         void setBlurDirection(BlurDirection direction);
-        void setTexture(const GLHDRTexture2D& texture);
+        void setTexture(const GLHDRTexture2D& texture, size_t mipLevel);
         void setKernelWeights(const std::vector<float>& weights);
         void setTextureOffsets(const std::vector<float>& offsets);
     };

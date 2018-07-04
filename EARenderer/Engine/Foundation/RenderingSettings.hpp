@@ -32,7 +32,7 @@ namespace EARenderer {
             float parallaxMappingStrength = 0.05;
 
             uint32_t shadowCascadesCount = 4;
-            float ESMFactor = 0.5;
+            float ESMFactor = 70.0;
             GaussianBlurSettings shadowBlur { 8, 8 };
 
             uint32_t booleanBitmask() const {
@@ -66,7 +66,7 @@ namespace EARenderer {
         bool skyboxRenderingEnabled = true;
         bool triangleRenderingEnabled = false;
 
-        Size2D resolution { 1280, 720 };
+        Size2D resolution { 420, 236 };
     };
 
 }

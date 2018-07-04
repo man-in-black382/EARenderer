@@ -56,19 +56,13 @@ namespace EARenderer {
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Output frame
-    mOutputFrame(settings.resolution),
-    mThresholdFilteredOutputFrame(mOutputFrame.size()),
-    mOutputDepthRenderbuffer(mOutputFrame.size()),
-    mOutputFramebuffer(mOutputFrame.size())
+    mOutputFrame(std::make_shared<GLHDRTexture2D>(settings.resolution)),
+    mThresholdFilteredOutputFrame(std::make_shared<GLHDRTexture2D>(mOutputFrame->size())),
+    mOutputDepthRenderbuffer(mOutputFrame->size()),
+    mOutputFramebuffer(mOutputFrame->size()),
 
     // Effects
-//    mPostprocessFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
-//
-//    mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
-//                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame),
-//                 mPostprocessFramebuffer),
-//
-//    mToneMappingEffect(mBloomEffect.outputImage())
+    mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution))
     {
         setupGLState();
         setupFramebuffers();
@@ -107,8 +101,8 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
 
-        mOutputFramebuffer.attachTexture(mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
-        mOutputFramebuffer.attachTexture(mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
+        mOutputFramebuffer.attachTexture(*mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
+        mOutputFramebuffer.attachTexture(*mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
         mOutputFramebuffer.attachRenderbuffer(mOutputDepthRenderbuffer);
     }
 
@@ -232,16 +226,7 @@ namespace EARenderer {
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
     }
 
-#pragma mark - Public interface
-
     void DeferredSceneRenderer::renderMeshes() {
-        mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
-
-        renderExponentialShadowMapsForDirectionalLight();
-        relightSurfels();
-        averageSurfelClusterLuminances();
-        updateGridProbes();
-
         mCookTorranceShader.bind();
 
         mCookTorranceShader.setSettings(mSettings);
@@ -257,28 +242,48 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        //        mOutputFramebuffer.bind();
-        //        mOutputFramebuffer.viewport().apply();
-        bindDefaultFramebuffer();
+        mOutputFramebuffer.bind();
+        mOutputFramebuffer.viewport().apply();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    }
 
-        // DEBUG //
+    void DeferredSceneRenderer::renderFinalImage(const GLHDRTexture2D& image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(true);
-
-        Rect2D viewportRect(Size2D(200, 200));
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([this]() {
-            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
+        mFSQuadShader.setApplyToneMapping(false);
+        mFSQuadShader.ensureSamplerValidity([&]() {
+            mFSQuadShader.setTexture(image);
         });
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glEnable(GL_DEPTH_TEST);
+    }
+
+#pragma mark - Public interface
+
+    void DeferredSceneRenderer::render() {
+        mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
+
+        renderExponentialShadowMapsForDirectionalLight();
+        relightSurfels();
+        averageSurfelClusterLuminances();
+        updateGridProbes();
+        renderMeshes();
+
+        auto bloomOutputTexture = mPostprocessTexturePool->claim();
+        mBloomEffect.bloom(mOutputFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+
+        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+
+        renderFinalImage(*toneMappingOutputTexture);
+
+        mPostprocessTexturePool->putBack(bloomOutputTexture);
+        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
 
     void DeferredSceneRenderer::renderSkybox() {

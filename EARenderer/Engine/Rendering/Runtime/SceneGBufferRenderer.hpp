@@ -16,6 +16,7 @@
 #include "GLSLGBuffer.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "RenderingSettings.hpp"
+#include "SceneGBuffer.hpp"
 
 #include <memory>
 

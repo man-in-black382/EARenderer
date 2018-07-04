@@ -14,9 +14,9 @@
 namespace EARenderer {
 
     struct BloomSettings {
-        GaussianBlurSettings smallBlurSettings { 8, 8 };
-        GaussianBlurSettings mediumBlurSettings { 16, 16 };
-        GaussianBlurSettings largeBlurSettings { 32, 32 };
+        GaussianBlurSettings smallBlurSettings { 6, 6, 0 };
+        GaussianBlurSettings mediumBlurSettings { 14, 14, 1 };
+        GaussianBlurSettings largeBlurSettings { 24, 24, 2 };
 
         size_t smallBlurWeight = 2;
         size_t mediumBlurWeight = 1;

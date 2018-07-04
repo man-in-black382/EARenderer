@@ -9,6 +9,7 @@ uniform sampler2D uTexture;
 uniform float uKernelWeights[32];
 uniform float uTextureOffsets[32];
 uniform int uKernelSize;
+uniform int uMipLevel;
 
 // Inputs
 
@@ -28,14 +29,16 @@ void main()
     float texOffset = uTextureOffsets[0];
     vec2 currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
 
-    oFragColor = texture(uTexture, (vTexCoords + currentOffset)) * texelWeight;
+    float mipLevel = float(uMipLevel);
+
+    oFragColor = textureLod(uTexture, (vTexCoords + currentOffset), mipLevel) * texelWeight;
 
     for (int i = 1; i < uKernelSize; i++) {
         texelWeight = uKernelWeights[i];
         texOffset = uTextureOffsets[i];
         currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
 
-        oFragColor += texture(uTexture, (vTexCoords + currentOffset)) * texelWeight;
-        oFragColor += texture(uTexture, (vTexCoords - currentOffset)) * texelWeight;
+        oFragColor += textureLod(uTexture, (vTexCoords + currentOffset), mipLevel) * texelWeight;
+        oFragColor += textureLod(uTexture, (vTexCoords - currentOffset), mipLevel) * texelWeight;
     }
 }

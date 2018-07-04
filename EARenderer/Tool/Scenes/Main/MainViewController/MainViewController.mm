@@ -169,7 +169,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         });
         EARenderer::Measurement::ExecutionTime("Mesh rendering took" , [&]() {
 //            self.sceneRenderer->renderMeshes();
-            self.deferredSceneRenderer->renderMeshes();
+            self.deferredSceneRenderer->render();
             glFinish();
         });
     }
@@ -247,7 +247,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.renderingSettings = settings;
     // FIXME: Fix rendering settings
-//    self.sceneRenderer->setRenderingSettings(settings);
+    self.deferredSceneRenderer->setRenderingSettings(settings);
 }
 
 #pragma mark - Helper methods
