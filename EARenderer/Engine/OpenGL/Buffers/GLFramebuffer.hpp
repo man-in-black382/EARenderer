@@ -73,8 +73,12 @@ namespace EARenderer {
         bool isComplete() const;
         size_t maximumColorAttachmentsCount() const;
 
+        void attachTexture(const GLNormalizedTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic, uint16_t mipLevel = 0);
+        void attachTexture(const GLFloatTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic, uint16_t mipLevel = 0);
         void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
+        void attachTexture(const GLIntegerTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
+        // FIXME: Deprecated attachment functions
         void attachTexture(const GLTexture2D& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);

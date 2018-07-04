@@ -6,10 +6,8 @@ const float PI = 3.1415926535897932384626433832795;
 
 // Output
 
-layout(location = 0) out vec4 oOutputData;
-layout(location = 0) out vec4 oAlbedoAndRoughness;
-layout(location = 1) out vec4 oNormalAndMetalness;
-layout(location = 2) out vec4 oWorldPositionAndAO;
+layout(location = 0) out uvec3 oAlbedoRoughnessMetalnessAONormal;
+layout(location = 0) out float oDepth;
 
 // Input
 
@@ -65,12 +63,36 @@ float FetchDisplacementMap() {
     return texture(uMaterial.displacementMap, vTexCoords.st).r;
 }
 
-float Encode8888(vec4 vector) {
+uint Encode8888(vec4 vector) {
     uint rgba = (uint(vector.x * 255.0) << 24) |
                 (uint(vector.y * 255.0) << 16) |
                 (uint(vector.z * 255.0) << 8) |
                  uint(vector.w * 255.0);
-    return uintBitsToFloat(rgba);
+    return rgba;
+}
+
+uint PackSnorm2x16(float first, float second, float range) {
+    const float base = 32767.0;
+
+    uint packed = 0;
+    uint iFirst = uint(int(first / range * base));
+    uint iSecond = uint(int(second / range * base));
+
+    uint firstSignMask = iFirst & (1u << 31); // Leave only sign bit
+
+    uint secondSignMask = iSecond & (1u << 31); // Leave only sign bit
+    secondSignMask >>= 16; // Move sign mask by 16 since second value will be stored in LSB of the final uint
+
+    // Move uFirst into MS bits
+    packed |= iFirst;
+    packed <<= 16;
+    packed |= firstSignMask; // Set sign bit
+
+    // Move uSecond into LS bits
+    packed |= iSecond & 0x0000FFFFu;
+    packed |= secondSignMask; // Set sign bit
+
+    return packed;
 }
 
 ////////////////////////////////////////////////////////////
@@ -78,15 +100,35 @@ float Encode8888(vec4 vector) {
 ////////////////////////////////////////////////////////////
 
 void main() {
+    // Packing scheme
+    //
+    // | Albedo R | Albedo G | Albedo B | Rougness | Metalness |    AO    |        Normal Z      |
+    // |          |          |          |          |           |          |                      |
+    // |  1 Byte  |  1 Byte  |  1 Byte  |  1 Byte  |  1 Byte   |  1 Byte  |        2 Bytes       |
+    // |__________|__________|__________|__________|___________|__________|______________________|
+    // |______First component of output UVEC3______|_______Second component of output UVEC3______|
+    //
+    //
+    // |        Normal X      |        Normal Y      |
+    // |                      |                      |
+    // |        2 Bytes       |        2 Bytes       |
+    // |______________________|______________________|
+    // |________Third component of output UVEC3______|
+
     float roughness = FetchRoughnessMap(vTexCoords.st);
     float metallic  = FetchMetallicMap(vTexCoords.st);
     float ao        = FetchAOMap(vTexCoords.st);
     vec3 albedo     = FetchAlbedoMap(vTexCoords.st);
     vec3 N          = FetchNormalMap(vTexCoords.st);
 
-//    oOutputData.r = Encode8888(vec4(albedo, roughness));
+    uint albedoRoughness = Encode8888(vec4(albedo, roughness));
+    uint metalnessAO     = Encode8888(vec4(metallic, ao, 0.0, 0.0)); // Metalness and AO are packed to MSB
 
-    oAlbedoAndRoughness = vec4(albedo, roughness);
-    oNormalAndMetalness = vec4(N, metallic);
-    oWorldPositionAndAO = vec4(vWorldPosition, ao);
+    uint normalZ  = PackSnorm2x16(0.0, N.z, 1.0); // Pack Z to LSB
+    uint normalXY = PackSnorm2x16(N.x, N.y, 1.0);
+
+    uint metalnessAONormalZ = metalnessAO | normalZ;
+
+    oAlbedoRoughnessMetalnessAONormal = uvec4(albedoRoughness, metalnessAONormalZ, normalXY);
+    oDepth = gl_FragCoord.z;
 }

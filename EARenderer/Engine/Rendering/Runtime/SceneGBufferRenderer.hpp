@@ -31,12 +31,13 @@ namespace EARenderer {
         GLSLGBuffer mGBufferShader;
         GLSLFullScreenQuad mFSQuadShader;
 
-        std::shared_ptr<GLHDRTexture2DArray> mGBuffer;
+//        std::shared_ptr<GLHDRTexture2DArray> mGBuffer;
+        std::shared_ptr<SceneGBuffer> mGBuffer;
 
     public:
         SceneGBufferRenderer(const Scene* scene, const RenderingSettings& settings);
 
-        std::shared_ptr<const GLHDRTexture2DArray> GBuffer() const;
+        std::shared_ptr<const SceneGBuffer> GBuffer() const;
 
         void render();
     };

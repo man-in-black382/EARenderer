@@ -65,7 +65,8 @@ struct vec8 {
     float value4; float value5; float value6; float value7;
 };
 
-uniform sampler2DArray uGBuffer;
+uniform uvec3 oGBufferAlbedoRoughnessMetalnessAONormal;
+uniform float uGBufferDepth;
 
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewMat;
@@ -685,12 +686,12 @@ void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
 }
 
-vec3 ReinhardToneMap(vec3 color) {
-    return color / (color + vec3(1.0));
-}
+////////////////////////////////////////////////////////////
+//////////////////////// G Buffer //////////////////////////
+////////////////////////////////////////////////////////////
 
-vec3 GammaCorrect(vec3 color) {
-    return pow(color, vec3(1.0 / 2.2));
+struct GBuffer {
+    
 }
 
 ////////////////////////////////////////////////////////////
@@ -698,6 +699,8 @@ vec3 GammaCorrect(vec3 color) {
 ////////////////////////////////////////////////////////////
 
 void main() {
+    uvec3 albedoRoughnessMetalnessAONormal = texture(oGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords.st);
+
     vec4 albedoAndRoughness = texture(uGBuffer, vec3(vTexCoords, 0));
     vec4 normalAndMetalness = texture(uGBuffer, vec3(vTexCoords, 1));
     vec4 worldPositionAndAO = texture(uGBuffer, vec3(vTexCoords, 2));
@@ -748,11 +751,7 @@ void main() {
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
-//    shadow = 1.0;
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
-
-//    specularAndDiffuse = ReinhardToneMap(specularAndDiffuse);
-//    specularAndDiffuse = GammaCorrect(specularAndDiffuse);
 
     oBaseOutput = vec4(specularAndDiffuse, 1.0);
 

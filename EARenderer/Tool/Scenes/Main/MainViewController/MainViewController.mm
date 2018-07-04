@@ -168,7 +168,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
             glFinish();
         });
         EARenderer::Measurement::ExecutionTime("Mesh rendering took" , [&]() {
-//            self.sceneRenderer->renderMeshes();
             self.deferredSceneRenderer->render();
             glFinish();
         });

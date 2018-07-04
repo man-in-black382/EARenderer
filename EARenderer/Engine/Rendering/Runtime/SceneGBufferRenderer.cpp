@@ -17,17 +17,16 @@ namespace EARenderer {
     mScene(scene),
     mFramebuffer(settings.resolution),
     mDepthRenderbuffer(settings.resolution),
-    mGBuffer(std::make_shared<GLHDRTexture2DArray>(settings.resolution, 3, GLTexture::Filter::None))
+    mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
-        mFramebuffer.attachTextureLayer(*mGBuffer, 0, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTextureLayer(*mGBuffer, 1, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachTextureLayer(*mGBuffer, 2, GLFramebuffer::ColorAttachment::Attachment2);
+        mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAO, GLFramebuffer::ColorAttachment::Attachment0);
+        mFramebuffer.attachTexture(mGBuffer->depth, GLFramebuffer::ColorAttachment::Attachment0);
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 
 #pragma mark - Getters
 
-    std::shared_ptr<const GLHDRTexture2DArray> SceneGBufferRenderer::GBuffer() const {
+    std::shared_ptr<const SceneGBuffer> SceneGBufferRenderer::GBuffer() const {
         return mGBuffer;
     }
 
