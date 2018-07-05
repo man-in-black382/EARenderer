@@ -70,6 +70,7 @@ uniform sampler2D uGBufferDepth;
 
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewMat;
+uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 uniform mat4 uWorldBoudningBoxTransform;
@@ -616,75 +617,6 @@ float ExponentialShadow(vec3 worldPosition) {
     return visibility;
 }
 
-////////////////////////////////////////////////////////////
-///////////////////////// Reflections  /////////////////////
-////////////////////////////////////////////////////////////
-
-//const float step = 0.1;
-//const float minRayStep = 0.1;
-//const float maxSteps = 30;
-//const int numBinarySearchSteps = 5;
-//const float reflectionSpecularFalloffExponent = 3.0;
-//
-//vec3 Hash(vec3 a) {
-//    vec3 scale = vec3(0.8);
-//    float K = 19.19;
-//
-//    a = fract(a * scale);
-//    a += dot(a, a.yxz + K);
-//
-//    return fract((a.xxy + a.yxx)*a.zyx);
-//}
-
-//vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
-//
-//    dir *= step;
-//
-//    float depth;
-//    int steps;
-//    vec4 projectedCoord;
-//
-//    for(int i = 0; i < maxSteps; i++) {
-//
-//        hitCoord += dir;
-//
-//        // Transform our 3D vector into a 2D screen coordinate to detch the depth buffer and check for a collision
-//        projectedCoord = projection * vec4(hitCoord, 1.0);
-//        projectedCoord.xy /= projectedCoord.w;
-//        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
-//
-//        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
-//        if(depth > 1000.0)
-//            continue;
-//
-//        dDepth = hitCoord.z - depth;
-//
-//        if((dir.z - dDepth) < 1.2) {
-//            if(dDepth <= 0.0) {
-//                vec4 Result;
-//                Result = vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
-//
-//                return Result;
-//            }
-//        }
-//
-//        steps++;
-//    }
-//
-//    return vec4(projectedCoord.xy, depth, 0.0);
-//}
-
-void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
-    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
-    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
-
-    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
-    vec3 hitPosition = viewPosition;
-
-    float depth = 0.0;
-
-
-}
 
 ////////////////////////////////////////////////////////////
 //////////////////////// G Buffer //////////////////////////
@@ -762,31 +694,138 @@ vec3 ReconstructWorldPosition(float depth) {
 }
 
 ////////////////////////////////////////////////////////////
+///////////////////////// Reflections  /////////////////////
+////////////////////////////////////////////////////////////
+
+// http://imanolfotia.com/blog/update/2017/03/11/ScreenSpaceReflections.html
+
+const float step = 0.1;
+const float minRayStep = 0.1;
+const float maxSteps = 30;
+const int numBinarySearchSteps = 5;
+const float reflectionSpecularFalloffExponent = 3.0;
+
+vec3 Hash(vec3 a) {
+    const vec3 scale = vec3(0.8);
+    const float K = 19.19;
+
+    a = fract(a * scale);
+    a += dot(a, a.yxz + K);
+
+    return fract((a.xxy + a.yxx)*a.zyx);
+}
+
+vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth) {
+
+    float depth = 0.0;
+    vec4 projectedCoord = vec4(0.0);
+
+    for(int i = 0; i < numBinarySearchSteps; i++) {
+        // To get texture coords we only need to multiply by projection matrix
+        // since assumed hit coordinate belongs to camera's view space
+        projectedCoord = uCameraProjectionMat * vec4(hitCoord, 1.0);
+        projectedCoord.xy /= projectedCoord.w;
+        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+
+        // Sample higher mip level to improve performance
+        depth = textureLod(gBufferDepth, projectedCoord.xy, 2).z;
+
+        dDepth = hitCoord.z - depth;
+
+        // Bounce direction vector and hit coordinate back and forth
+        // to increase hit precision. More iterations - more precision.
+        dir *= 0.5;
+
+        if(dDepth > 0.0) {
+            hitCoord += dir;
+        } else {
+            hitCoord -= dir;
+        }
+    }
+
+    projectedCoord = uCameraProjectionMat * vec4(hitCoord, 1.0);
+    projectedCoord.xy /= projectedCoord.w;
+    projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+
+    return vec3(projectedCoord.xy, depth);
+}
+
+vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
+
+    dir *= step;
+
+    float depth = 0.0;
+    vec4 projectedCoord = vec4(0.0);
+
+    for(int i = 0; i < maxSteps; i++) {
+
+        hitCoord += dir;
+
+        // Transform our 3D vector into a 2D screen coordinate to fetch the depth buffer and check for a collision
+        projectedCoord = uCameraProjectionMat * vec4(hitCoord, 1.0);
+        projectedCoord.xy /= projectedCoord.w;
+        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+
+        // Sample higher mip level to improve performance
+        depth = textureLod(gBufferDepth, projectedCoord.xy, 2).r;
+
+        if(depth > 1000.0) {
+            continue;
+        }
+
+        dDepth = hitCoord.z - depth;
+
+        // Check to see if we're close enough to the sampled fragment
+        if((dir.z - dDepth) < 1.2) {
+            // Perform binary search if reflected vector has more depth
+            // than the sampled fragment
+            if(dDepth <= 0.0) {
+                return vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
+            }
+        }
+    }
+
+    return vec4(projectedCoord.xy, depth, 0.0);
+}
+
+void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
+    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
+    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
+
+    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
+    vec3 hitPosition = viewPosition;
+
+    float depth = 0.0;
+
+
+}
+
+////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
-    GBuffer gBuffer = DecodeGBuffer();
+    GBuffer gBuffer     = DecodeGBuffer();
 
-    float depth             = texture(uGBufferDepth, vTexCoords.st).x;
-    vec3 worldPosition      = ReconstructWorldPosition(depth);
+    float depth         = texture(uGBufferDepth, vTexCoords.st).x;
+    vec3 worldPosition  = ReconstructWorldPosition(depth);
 
-    float roughness         = gBuffer.roughness;
+    float roughness     = gBuffer.roughness;
     
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
-    float roughness2        = roughness * roughness;
+    float roughness2    = roughness * roughness;
     
-    float metallic          = gBuffer.metalness;
-    float ao                = gBuffer.AO;
-    vec3 albedo             = gBuffer.albedo;
-    vec3 N                  = gBuffer.normal;
-    vec3 V                  = normalize(uCameraPosition - worldPosition);
-    vec3 L                  = vec3(0.0);
-    vec3 H                  = normalize(L + V);
-    vec3 radiance           = vec3(0.0);
-    float shadow            = 0.0;
+    float metallic      = gBuffer.metalness;
+    float ao            = gBuffer.AO;
+    vec3 albedo         = gBuffer.albedo;
+    vec3 N              = gBuffer.normal;
+    vec3 V              = normalize(uCameraPosition - worldPosition);
+    vec3 L              = vec3(0.0);
+    vec3 H              = normalize(L + V);
+    vec3 radiance       = vec3(0.0);
+    float shadow        = 0.0;
 
     if (!areMaterialsEnabled()) {
         albedo = vec3(1.0);
