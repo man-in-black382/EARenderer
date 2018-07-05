@@ -19,8 +19,8 @@ namespace EARenderer {
     mDepthRenderbuffer(settings.resolution),
     mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
-        mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAO, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(mGBuffer->depth, GLFramebuffer::ColorAttachment::Attachment0);
+        mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
+        mFramebuffer.attachTexture(mGBuffer->depth, GLFramebuffer::ColorAttachment::Attachment1);
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 

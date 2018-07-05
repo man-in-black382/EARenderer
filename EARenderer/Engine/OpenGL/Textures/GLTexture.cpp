@@ -88,10 +88,10 @@ namespace EARenderer {
             case FloatFormat::RG16F:    return { GL_RG16F,    GL_RG,   GL_FLOAT };
             case FloatFormat::RGB16F:   return { GL_RGB16F,   GL_RGB,  GL_FLOAT };
             case FloatFormat::RGBA16F:  return { GL_RGBA16F,  GL_RGBA, GL_FLOAT };
-            case FloatFormat::R32F:     return { GL_R32UI,    GL_RED,  GL_FLOAT };
-            case FloatFormat::RG32F:    return { GL_RG32UI,   GL_RG,   GL_FLOAT };
-            case FloatFormat::RGB32F:   return { GL_RGB32UI,  GL_RGB,  GL_FLOAT };
-            case FloatFormat::RGBA32F:  return { GL_RGBA32UI, GL_RGBA, GL_FLOAT };
+            case FloatFormat::R32F:     return { GL_R32F,     GL_RED,  GL_FLOAT };
+            case FloatFormat::RG32F:    return { GL_RG32F,    GL_RG,   GL_FLOAT };
+            case FloatFormat::RGB32F:   return { GL_RGB32F,   GL_RGB,  GL_FLOAT };
+            case FloatFormat::RGBA32F:  return { GL_RGBA32F,  GL_RGBA, GL_FLOAT };
         }
     }
 

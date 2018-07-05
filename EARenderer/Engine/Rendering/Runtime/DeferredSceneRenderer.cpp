@@ -25,7 +25,7 @@ namespace EARenderer {
                                                  const RenderingSettings& settings,
                                                  std::shared_ptr<const SurfelData> surfelData,
                                                  std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
-                                                 std::shared_ptr<const GLHDRTexture2DArray> GBuffer)
+                                                 std::shared_ptr<const SceneGBuffer> GBuffer)
     :
     mScene(scene),
     mDefaultRenderComponentsProvider(provider),

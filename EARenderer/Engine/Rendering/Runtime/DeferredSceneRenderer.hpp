@@ -16,6 +16,7 @@
 #include <glm/vec2.hpp>
 
 #include "Scene.hpp"
+#include "SceneGBuffer.hpp"
 #include "PostprocessTexturePool.hpp"
 #include "GLFramebuffer.hpp"
 #include "DefaultRenderComponentsProviding.hpp"
@@ -72,7 +73,7 @@ namespace EARenderer {
 
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
-        std::shared_ptr<const GLHDRTexture2DArray> mGBuffer;
+        std::shared_ptr<const SceneGBuffer> mGBuffer;
 
         FrustumCascades mShadowCascades;
         std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
@@ -126,7 +127,7 @@ namespace EARenderer {
                               const RenderingSettings& settings,
                               std::shared_ptr<const SurfelData> surfelData,
                               std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
-                              std::shared_ptr<const GLHDRTexture2DArray> GBuffer);
+                              std::shared_ptr<const SceneGBuffer> GBuffer);
 
         const FrustumCascades& shadowCascades() const;
 

@@ -26,10 +26,10 @@ namespace EARenderer {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
 //        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE,
 //                           glm::value_ptr(camera.viewMatrix()));
-//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewInverse")>).location(), 1, GL_FALSE,
-//                           glm::value_ptr(glm::inverse(camera.viewMatrix())));
-//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
-//                           glm::value_ptr(glm::inverse(camera.projectionMatrix())));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewInverse")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(glm::inverse(camera.viewMatrix())));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(glm::inverse(camera.projectionMatrix())));
     }
 
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {
@@ -44,8 +44,9 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 0);
     }
 
-    void GLSLDeferredCookTorrance::setGBuffer(const GLHDRTexture2DArray& GBuffer) {
-        setUniformTexture(uint32_constant<ctcrc32("uGBuffer")>, GBuffer);
+    void GLSLDeferredCookTorrance::setGBuffer(const SceneGBuffer& GBuffer) {
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferDepth")>, GBuffer.depth);
     }
 
     void GLSLDeferredCookTorrance::setFrustumCascades(const FrustumCascades& cascades) {

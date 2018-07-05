@@ -7,7 +7,7 @@ const float PI = 3.1415926535897932384626433832795;
 // Output
 
 layout(location = 0) out uvec3 oAlbedoRoughnessMetalnessAONormal;
-layout(location = 0) out float oDepth;
+layout(location = 1) out float oDepth;
 
 // Input
 
@@ -129,6 +129,6 @@ void main() {
 
     uint metalnessAONormalZ = metalnessAO | normalZ;
 
-    oAlbedoRoughnessMetalnessAONormal = uvec4(albedoRoughness, metalnessAONormalZ, normalXY);
+    oAlbedoRoughnessMetalnessAONormal = uvec3(albedoRoughness, metalnessAONormalZ, normalXY);
     oDepth = gl_FragCoord.z;
 }

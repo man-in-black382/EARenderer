@@ -26,6 +26,7 @@
 #include "LightProbe.hpp"
 #include "AxisAlignedBox3D.hpp"
 #include "RenderingSettings.hpp"
+#include "SceneGBuffer.hpp"
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -44,7 +45,7 @@ namespace EARenderer {
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
 
-        void setGBuffer(const GLHDRTexture2DArray& GBuffer);
+        void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
         void setExponentialShadowMap(const GLHDRTexture2D& map);
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
