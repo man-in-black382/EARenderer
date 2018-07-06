@@ -799,6 +799,8 @@ void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     float depth = 0.0;
 
+    vec4 previousFrameColor = texture(uPreviousFrame, vTexCoords);
+
 
 }
 
@@ -862,6 +864,9 @@ void main() {
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+
+    // Stub
+    ScreenSpaceReflection(N, worldPosition);
 
     /////// DEBUG
 

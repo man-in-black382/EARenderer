@@ -12,8 +12,8 @@ namespace EARenderer {
 
 #pragma mark - Tone mapping
     
-    void ToneMappingEffect::toneMap(std::shared_ptr<const GLHDRTexture2D> inputImage,
-                                    std::shared_ptr<GLHDRTexture2D> outputImage,
+    void ToneMappingEffect::toneMap(std::shared_ptr<const GLFloatTexture2D> inputImage,
+                                    std::shared_ptr<GLFloatTexture2D> outputImage,
                                     std::shared_ptr<PostprocessTexturePool> texturePool)
     {
         mToneMappingShader.bind();

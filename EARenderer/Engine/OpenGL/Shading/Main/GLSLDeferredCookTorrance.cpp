@@ -44,7 +44,7 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 0);
     }
 
-    void GLSLDeferredCookTorrance::setPreviousFrame(const GLHDRTexture2D& previousFrame) {
+    void GLSLDeferredCookTorrance::setPreviousFrame(const GLFloatTexture2D& previousFrame) {
         setUniformTexture(uint32_constant<ctcrc32("uPreviousFrame")>, previousFrame);
     }
 
@@ -65,7 +65,7 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCSMSplitSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
     }
 
-    void GLSLDeferredCookTorrance::setExponentialShadowMap(const GLHDRTexture2D& map) {
+    void GLSLDeferredCookTorrance::setExponentialShadowMap(const GLFloatTexture2D& map) {
         setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
     }
 

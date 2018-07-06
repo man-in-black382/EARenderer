@@ -19,7 +19,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    void GLSLToneMapping::setImage(const GLHDRTexture2D& image) {
+    void GLSLToneMapping::setImage(const GLFloatTexture2D& image) {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 

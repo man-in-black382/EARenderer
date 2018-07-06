@@ -14,6 +14,7 @@
 #include "GLHDRTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
+#include "GLTexture2D.hpp"
 #include "GLHDRTexture2D.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
@@ -34,7 +35,7 @@ namespace EARenderer {
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setMultibounceEnabled(bool multibounceEnabled);
         void setShadowCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLHDRTexture2D& map);
+        void setExponentialShadowMap(const GLFloatTexture2D& map);
         void setSettings(const RenderingSettings& settings);
     };
 

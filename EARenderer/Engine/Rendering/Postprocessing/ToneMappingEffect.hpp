@@ -9,7 +9,7 @@
 #ifndef ToneMappingEffect_hpp
 #define ToneMappingEffect_hpp
 
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLSLToneMapping.hpp"
@@ -24,8 +24,8 @@ namespace EARenderer {
         GLSLToneMapping mToneMappingShader;
 
     public:
-        void toneMap(std::shared_ptr<const GLHDRTexture2D> inputImage,
-                     std::shared_ptr<GLHDRTexture2D> outputImage,
+        void toneMap(std::shared_ptr<const GLFloatTexture2D> inputImage,
+                     std::shared_ptr<GLFloatTexture2D> outputImage,
                      std::shared_ptr<PostprocessTexturePool> texturePool);
     };
 

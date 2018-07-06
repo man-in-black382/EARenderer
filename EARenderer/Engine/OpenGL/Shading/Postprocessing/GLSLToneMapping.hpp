@@ -10,7 +10,7 @@
 #define GLSLToneMapping_hpp
 
 #include "GLProgram.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 
 #include <glm/mat4x4.hpp>
 #include <vector>
@@ -23,7 +23,7 @@ namespace EARenderer {
 
         GLSLToneMapping();
 
-        void setImage(const GLHDRTexture2D& image);
+        void setImage(const GLFloatTexture2D& image);
     };
 
 }

@@ -101,10 +101,6 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
-
-//        mOutputFramebuffer.attachTexture(*mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
-//        mOutputFramebuffer.attachTexture(*mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
-//        mOutputFramebuffer.attachRenderbuffer(mOutputDepthRenderbuffer);
     }
 
 #pragma mark - Rendering
@@ -250,14 +246,11 @@ namespace EARenderer {
 
         mPostprocessTexturePool->redirectRenderingToTextures(mFrame, mThresholdFilteredOutputFrame);
 
-//        mOutputFramebuffer.bind();
-//        mOutputFramebuffer.viewport().apply();
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void DeferredSceneRenderer::renderFinalImage(const GLHDRTexture2D& image) {
+    void DeferredSceneRenderer::renderFinalImage(const GLFloatTexture2D& image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 

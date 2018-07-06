@@ -9,7 +9,7 @@
 #ifndef TexturePool_hpp
 #define TexturePool_hpp
 
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLDepthRenderbuffer.hpp"
 
@@ -20,20 +20,20 @@ namespace EARenderer {
 
     class PostprocessTexturePool {
     private:
-        using TexturePointerSet = std::unordered_set<std::shared_ptr<GLHDRTexture2D>>;
+        using TexturePointerSet = std::unordered_set<std::shared_ptr<GLFloatTexture2D>>;
 
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         TexturePointerSet mFreeTextures;
         TexturePointerSet mClaimedTextures;
 
-        std::vector<std::shared_ptr<GLHDRTexture2D>> mTexturesToActivate;
+        std::vector<std::shared_ptr<GLFloatTexture2D>> mTexturesToActivate;
 
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
-        std::shared_ptr<GLHDRTexture2D> claim();
-        void putBack(std::shared_ptr<GLHDRTexture2D> texture);
+        std::shared_ptr<GLFloatTexture2D> claim();
+        void putBack(std::shared_ptr<GLFloatTexture2D> texture);
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures) {

@@ -18,14 +18,14 @@ namespace EARenderer {
     mDepthRenderbuffer(resolution)
     {
         for (size_t i = 0; i < mFramebuffer.maximumColorAttachmentsCount(); i++) {
-            auto texture = std::make_shared<GLHDRTexture2D>(resolution);
+            auto texture = std::make_shared<GLFloatTexture2D>(resolution, GLTexture::FloatFormat::RGBA16F);
             mFreeTextures.insert(texture);
             mFramebuffer.attachTexture(*texture);
         }
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 
-    std::shared_ptr<GLHDRTexture2D> PostprocessTexturePool::claim() {
+    std::shared_ptr<GLFloatTexture2D> PostprocessTexturePool::claim() {
         if (mFreeTextures.empty()) {
             throw std::runtime_error("Texture pool is empty: all textures have been claimed");
         }
@@ -36,7 +36,7 @@ namespace EARenderer {
         return texture;
     }
 
-    void PostprocessTexturePool::putBack(std::shared_ptr<GLHDRTexture2D> texture) {
+    void PostprocessTexturePool::putBack(std::shared_ptr<GLFloatTexture2D> texture) {
         auto textureIt = mClaimedTextures.find(texture);
         if (textureIt == mClaimedTextures.end()) {
             throw std::invalid_argument("Attempt to put a texture in a pool that was never in it in the first place");

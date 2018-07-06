@@ -31,7 +31,7 @@ namespace EARenderer {
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
     }
 
-    void GLSLSurfelLighting::setExponentialShadowMap(const GLHDRTexture2D& map) {
+    void GLSLSurfelLighting::setExponentialShadowMap(const GLFloatTexture2D& map) {
         setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
     }
 

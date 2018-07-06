@@ -10,7 +10,7 @@
 #define GLSLBloom_hpp
 
 #include "GLProgram.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 
 #include <glm/mat4x4.hpp>
 #include <vector>
@@ -23,10 +23,10 @@ namespace EARenderer {
 
         GLSLBloom();
 
-        void setTextures(const GLHDRTexture2D& baseImageTexture,
-                         const GLHDRTexture2D& smallBlurTexture,
-                         const GLHDRTexture2D& mediumBlurTexture,
-                         const GLHDRTexture2D& largeBlurTexture);
+        void setTextures(const GLFloatTexture2D& baseImageTexture,
+                         const GLFloatTexture2D& smallBlurTexture,
+                         const GLFloatTexture2D& mediumBlurTexture,
+                         const GLFloatTexture2D& largeBlurTexture);
 
         void setTextureWeights(float smallBlurWeight, float mediumBlurWeight, float largeBlurWeight);
     };

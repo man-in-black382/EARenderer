@@ -10,7 +10,7 @@
 #define GLSLGaussianBlur_hpp
 
 #include "GLProgram.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 
 #include <glm/mat4x4.hpp>
 #include <vector>
@@ -26,7 +26,7 @@ namespace EARenderer {
         GLSLGaussianBlur();
 
         void setBlurDirection(BlurDirection direction);
-        void setTexture(const GLHDRTexture2D& texture, size_t mipLevel);
+        void setTexture(const GLFloatTexture2D& texture, size_t mipLevel);
         void setKernelWeights(const std::vector<float>& weights);
         void setTextureOffsets(const std::vector<float>& offsets);
     };

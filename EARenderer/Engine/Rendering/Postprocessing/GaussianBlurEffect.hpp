@@ -11,7 +11,7 @@
 
 #include "PostprocessTexturePool.hpp"
 #include "GLFramebuffer.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "Size2D.hpp"
 #include "GLSLGaussianBlur.hpp"
 #include "GaussianBlurSettings.hpp"
@@ -33,8 +33,8 @@ namespace EARenderer {
     public:
         GaussianBlurEffect();
 
-        void blur(std::shared_ptr<const GLHDRTexture2D> inputImage,
-                  std::shared_ptr<GLHDRTexture2D> outputImage,
+        void blur(std::shared_ptr<const GLFloatTexture2D> inputImage,
+                  std::shared_ptr<GLFloatTexture2D> outputImage,
                   std::shared_ptr<PostprocessTexturePool> texturePool,
                   const GaussianBlurSettings& settings);
     };

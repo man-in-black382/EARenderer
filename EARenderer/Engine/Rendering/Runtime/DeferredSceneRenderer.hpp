@@ -94,7 +94,7 @@ namespace EARenderer {
         std::array<GLLDRTexture3D, 4> mGridProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
 
-        std::shared_ptr<GLHDRTexture2D> mDirectionalExponentialShadowMap;
+        std::shared_ptr<GLFloatTexture2D> mDirectionalExponentialShadowMap;
         GaussianBlurEffect mShadowBlurEffect;
 
         GLSLFullScreenQuad mFSQuadShader;
@@ -103,9 +103,9 @@ namespace EARenderer {
         ToneMappingEffect mToneMappingEffect;
         std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
 
-        std::shared_ptr<GLHDRTexture2D> mFrame;
-        std::shared_ptr<GLHDRTexture2D> mPreviousFrame;
-        std::shared_ptr<GLHDRTexture2D> mThresholdFilteredOutputFrame;
+        std::shared_ptr<GLFloatTexture2D> mFrame;
+        std::shared_ptr<GLFloatTexture2D> mPreviousFrame;
+        std::shared_ptr<GLFloatTexture2D> mThresholdFilteredOutputFrame;
 
         void setupGLState();
         void setupFramebuffers();
@@ -118,7 +118,7 @@ namespace EARenderer {
         void averageSurfelClusterLuminances();
         void updateGridProbes();
         void renderMeshes();
-        void renderFinalImage(const GLHDRTexture2D& image);
+        void renderFinalImage(const GLFloatTexture2D& image);
 
     public:
         DeferredSceneRenderer(const Scene* scene,
