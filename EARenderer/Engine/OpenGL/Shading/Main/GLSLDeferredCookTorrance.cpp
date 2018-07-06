@@ -44,6 +44,10 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 0);
     }
 
+    void GLSLDeferredCookTorrance::setPreviousFrame(const GLHDRTexture2D& previousFrame) {
+        setUniformTexture(uint32_constant<ctcrc32("uPreviousFrame")>, previousFrame);
+    }
+
     void GLSLDeferredCookTorrance::setGBuffer(const SceneGBuffer& GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
         setUniformTexture(uint32_constant<ctcrc32("uGBufferDepth")>, GBuffer.depth);

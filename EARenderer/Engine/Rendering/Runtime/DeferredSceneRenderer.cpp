@@ -59,8 +59,8 @@ namespace EARenderer {
     mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
 
     // Output frame
-    mOutputFrame1(mPostprocessTexturePool->claim()),
-    mOutputFrame2(mPostprocessTexturePool->claim()),
+    mFrame(mPostprocessTexturePool->claim()),
+    mPreviousFrame(mPostprocessTexturePool->claim()),
     mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())//,
 //    mOutputDepthRenderbuffer(mOutputFrame->size()),
 //    mOutputFramebuffer(mOutputFrame->size())
@@ -115,6 +115,10 @@ namespace EARenderer {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
+    }
+
+    void DeferredSceneRenderer::swapFrames() {
+        std::swap(mFrame, mPreviousFrame);
     }
 
     void DeferredSceneRenderer::performDepthPrepass() {
@@ -238,12 +242,13 @@ namespace EARenderer {
         mCookTorranceShader.setFrustumCascades(mShadowCascades);
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
+            mCookTorranceShader.setPreviousFrame(*mPreviousFrame);
             mCookTorranceShader.setGBuffer(*mGBuffer);
             mCookTorranceShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        mPostprocessTexturePool->redirectRenderingToTextures(mOutputFrame1, mThresholdFilteredOutputFrame);
+        mPostprocessTexturePool->redirectRenderingToTextures(mFrame, mThresholdFilteredOutputFrame);
 
 //        mOutputFramebuffer.bind();
 //        mOutputFramebuffer.viewport().apply();
@@ -270,6 +275,8 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::render() {
         mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
+
+        swapFrames();
 
         renderExponentialShadowMapsForDirectionalLight();
         relightSurfels();

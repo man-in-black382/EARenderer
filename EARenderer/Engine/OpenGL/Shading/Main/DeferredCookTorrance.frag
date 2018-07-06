@@ -65,6 +65,8 @@ struct vec8 {
     float value4; float value5; float value6; float value7;
 };
 
+uniform sampler2D uPreviousFrame;
+
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferDepth;
 

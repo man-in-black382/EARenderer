@@ -103,17 +103,15 @@ namespace EARenderer {
         ToneMappingEffect mToneMappingEffect;
         std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
 
-        std::shared_ptr<GLHDRTexture2D> mOutputFrame1;
-        std::shared_ptr<GLHDRTexture2D> mOutputFrame2;
+        std::shared_ptr<GLHDRTexture2D> mFrame;
+        std::shared_ptr<GLHDRTexture2D> mPreviousFrame;
         std::shared_ptr<GLHDRTexture2D> mThresholdFilteredOutputFrame;
-//        GLDepthRenderbuffer mOutputDepthRenderbuffer;
-//        GLFramebuffer mOutputFramebuffer;
 
         void setupGLState();
         void setupFramebuffers();
 
         void bindDefaultFramebuffer();
-
+        void swapFrames();
         void performDepthPrepass();
         void renderExponentialShadowMapsForDirectionalLight();
         void relightSurfels();
