@@ -55,14 +55,15 @@ namespace EARenderer {
     },
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
-    // Output frame
-    mOutputFrame(std::make_shared<GLHDRTexture2D>(settings.resolution)),
-    mThresholdFilteredOutputFrame(std::make_shared<GLHDRTexture2D>(mOutputFrame->size())),
-    mOutputDepthRenderbuffer(mOutputFrame->size()),
-    mOutputFramebuffer(mOutputFrame->size()),
-
     // Effects
-    mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution))
+    mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
+
+    // Output frame
+    mOutputFrame1(mPostprocessTexturePool->claim()),
+    mOutputFrame2(mPostprocessTexturePool->claim()),
+    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())//,
+//    mOutputDepthRenderbuffer(mOutputFrame->size()),
+//    mOutputFramebuffer(mOutputFrame->size())
     {
         setupGLState();
         setupFramebuffers();
@@ -101,9 +102,9 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
 
-        mOutputFramebuffer.attachTexture(*mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
-        mOutputFramebuffer.attachTexture(*mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
-        mOutputFramebuffer.attachRenderbuffer(mOutputDepthRenderbuffer);
+//        mOutputFramebuffer.attachTexture(*mOutputFrame, GLFramebuffer::ColorAttachment::Attachment0);
+//        mOutputFramebuffer.attachTexture(*mThresholdFilteredOutputFrame, GLFramebuffer::ColorAttachment::Attachment1);
+//        mOutputFramebuffer.attachRenderbuffer(mOutputDepthRenderbuffer);
     }
 
 #pragma mark - Rendering
@@ -138,7 +139,7 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
         auto renderTarget = mDirectionalShadowTexturePool->claim();
-        mDirectionalShadowTexturePool->redirectRenderingToTexture(renderTarget);
+        mDirectionalShadowTexturePool->redirectRenderingToTextures(renderTarget);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -242,8 +243,10 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        mOutputFramebuffer.bind();
-        mOutputFramebuffer.viewport().apply();
+        mPostprocessTexturePool->redirectRenderingToTextures(mOutputFrame1, mThresholdFilteredOutputFrame);
+
+//        mOutputFramebuffer.bind();
+//        mOutputFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -275,7 +278,7 @@ namespace EARenderer {
         renderMeshes();
 
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mOutputFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+        mBloomEffect.bloom(mOutputFrame1, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
 
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);

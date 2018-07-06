@@ -27,12 +27,19 @@ namespace EARenderer {
         TexturePointerSet mFreeTextures;
         TexturePointerSet mClaimedTextures;
 
+        std::vector<std::shared_ptr<GLHDRTexture2D>> mTexturesToActivate;
+
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
         std::shared_ptr<GLHDRTexture2D> claim();
         void putBack(std::shared_ptr<GLHDRTexture2D> texture);
-        void redirectRenderingToTexture(std::shared_ptr<GLHDRTexture2D> texture);
+
+        template<class... TexturePtrs>
+        void redirectRenderingToTextures(TexturePtrs... textures) {
+            mFramebuffer.activateDrawBuffers(*textures...);
+            mFramebuffer.viewport().apply();
+        }
     };
 
 }

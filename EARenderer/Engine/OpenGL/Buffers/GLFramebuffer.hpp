@@ -26,6 +26,7 @@
 
 #include "Size2D.hpp"
 #include "Range.hpp"
+#include "StringUtils.hpp"
 
 #include <functional>
 #include <unordered_set>
@@ -53,13 +54,14 @@ namespace EARenderer {
         std::unordered_set<GLenum> mRequestedAttachments;
         std::unordered_set<ColorAttachment> mAvailableAttachments;
         std::unordered_map<GLint, GLenum> mTextureAttachmentMap;
+        std::vector<GLenum> mDrawBuffers;
 
         void obtainHardwareLimits();
         void setRequestedDrawBuffers();
         void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
         void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
         GLenum glColorAttachment(ColorAttachment attachment) const;
-        
+
     public:
         GLFramebuffer(const Size2D& size);
         GLFramebuffer(GLFramebuffer&& that) = default;
@@ -117,7 +119,29 @@ namespace EARenderer {
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
 
-        void activateDrawBufferWithTexture(const GLTexture& texture);
+        template<class Texture>
+        void activateDrawBuffers(const Texture& texture) {
+            auto attachmentIt = mTextureAttachmentMap.find(texture.name());
+            if (attachmentIt == mTextureAttachmentMap.end()) {
+                throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
+            }
+
+            bind();
+            mDrawBuffers.emplace_back(attachmentIt->second);
+            glDrawBuffers(GLsizei(mDrawBuffers.size()), mDrawBuffers.data());
+            mDrawBuffers.clear();
+        }
+
+        template<class Texture, class... Textures>
+        void activateDrawBuffers(const Texture& head, const Textures&... tail) {
+            auto attachmentIt = mTextureAttachmentMap.find(head.name());
+            if (attachmentIt == mTextureAttachmentMap.end()) {
+                throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", head.name()));
+            }
+
+            mDrawBuffers.emplace_back(attachmentIt->second);
+            activateDrawBuffers(tail...);
+        }
 
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,

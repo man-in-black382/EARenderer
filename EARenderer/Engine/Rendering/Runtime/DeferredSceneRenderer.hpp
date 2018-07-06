@@ -99,14 +99,15 @@ namespace EARenderer {
 
         GLSLFullScreenQuad mFSQuadShader;
 
-        std::shared_ptr<GLHDRTexture2D> mOutputFrame;
-        std::shared_ptr<GLHDRTexture2D> mThresholdFilteredOutputFrame;
-        GLDepthRenderbuffer mOutputDepthRenderbuffer;
-        GLFramebuffer mOutputFramebuffer;
-
         BloomEffect mBloomEffect;
-        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
         ToneMappingEffect mToneMappingEffect;
+        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
+
+        std::shared_ptr<GLHDRTexture2D> mOutputFrame1;
+        std::shared_ptr<GLHDRTexture2D> mOutputFrame2;
+        std::shared_ptr<GLHDRTexture2D> mThresholdFilteredOutputFrame;
+//        GLDepthRenderbuffer mOutputDepthRenderbuffer;
+//        GLFramebuffer mOutputFramebuffer;
 
         void setupGLState();
         void setupFramebuffers();

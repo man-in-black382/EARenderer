@@ -45,12 +45,4 @@ namespace EARenderer {
         mFreeTextures.insert(texture);
     }
 
-    void PostprocessTexturePool::redirectRenderingToTexture(std::shared_ptr<GLHDRTexture2D> texture) {
-        if (mClaimedTextures.find(texture) == mClaimedTextures.end()) {
-            throw std::invalid_argument("Cannot redirect rendering to a texture that doesn't belong to this pool");
-        }
-        mFramebuffer.activateDrawBufferWithTexture(*texture);
-        mFramebuffer.viewport().apply();
-    }
-
 }

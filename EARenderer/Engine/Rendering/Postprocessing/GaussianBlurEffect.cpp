@@ -73,7 +73,7 @@ namespace EARenderer {
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        texturePool->redirectRenderingToTexture(intermediateTexture);
+        texturePool->redirectRenderingToTextures(intermediateTexture);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -84,7 +84,7 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.imageMipLevel);
         });
 
-        texturePool->redirectRenderingToTexture(outputImage);
+        texturePool->redirectRenderingToTextures(outputImage);
 
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

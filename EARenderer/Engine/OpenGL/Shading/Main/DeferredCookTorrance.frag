@@ -728,7 +728,7 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth) {
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
         // Sample higher mip level to improve performance
-        depth = textureLod(gBufferDepth, projectedCoord.xy, 2).z;
+        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).z;
 
         dDepth = hitCoord.z - depth;
 
@@ -767,7 +767,7 @@ vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
         // Sample higher mip level to improve performance
-        depth = textureLod(gBufferDepth, projectedCoord.xy, 2).r;
+        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).r;
 
         if(depth > 1000.0) {
             continue;
