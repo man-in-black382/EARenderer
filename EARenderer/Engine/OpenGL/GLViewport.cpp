@@ -62,5 +62,22 @@ namespace EARenderer {
     glm::vec2 GLViewport::pointFromNDC(const glm::vec2& NDCPoint) const {
         return glm::vec2((NDCPoint.x + 1.0) / 2.0 * mFrame.size.width, (NDCPoint.y + 1.0) / 2.0 * mFrame.size.height);
     }
+
+    glm::mat4 GLViewport::transformationMatrix() const {
+        constexpr float defaultDepthNear = -1.0;
+        constexpr float defaultDepthFar = 1.0;
+
+        glm::mat4 matrix;
+//        matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
+//        matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
+//        matrix[2] = glm::vec4(0.0, 0.0, (defaultDepthFar - defaultDepthNear) / 2.0, 0.0);
+//        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, (defaultDepthFar + defaultDepthNear) / 2.0, 1.0);
+        matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
+        matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
+        matrix[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
+        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, 0.0, 1.0);
+
+        return matrix;
+    }
     
 }

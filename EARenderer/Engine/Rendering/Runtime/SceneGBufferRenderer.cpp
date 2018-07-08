@@ -58,6 +58,8 @@ namespace EARenderer {
                 subMesh.draw();
             }
         }
+
+        mGBuffer->depth.generateMipmaps(2);
     }
 
 }

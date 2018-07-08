@@ -6,8 +6,8 @@
 
 uniform vec2 uBlurDirection;
 uniform sampler2D uTexture;
-uniform float uKernelWeights[32];
-uniform float uTextureOffsets[32];
+uniform float uKernelWeights[64];
+uniform float uTextureOffsets[64];
 uniform int uKernelSize;
 uniform int uMipLevel;
 

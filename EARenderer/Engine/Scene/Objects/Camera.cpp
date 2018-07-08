@@ -167,6 +167,18 @@ namespace EARenderer {
         float fovV = mFieldOfView / mViewportAspectRatio;
         return glm::perspective(glm::radians(fovV), mViewportAspectRatio, mNearClipPlane, mFarClipPlane);
     }
+
+    glm::mat4 Camera::inverseViewProjectionMatrix() const {
+        return glm::inverse(viewProjectionMatrix());
+    }
+
+    glm::mat4 Camera::inverseViewMatrix() const {
+        return glm::inverse(viewMatrix());
+    }
+
+    glm::mat4 Camera::inverseProjectionMatrix() const {
+        return glm::inverse(projectionMatrix());
+    }
     
 #pragma mark - Setters
     

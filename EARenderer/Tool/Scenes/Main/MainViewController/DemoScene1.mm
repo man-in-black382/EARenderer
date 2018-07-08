@@ -99,7 +99,7 @@
     
     EARenderer::MeshInstance sponzaInstance(sponzaMeshID);
     EARenderer::Transformation sponzaTransform = sponzaInstance.transformation();
-//    sponzaTransform.translation.y = -2.0;
+    sponzaTransform.translation.y = -2.0;
     sponzaTransform.scale *= 20.0;
     sponzaInstance.setTransformation(sponzaTransform);
 
@@ -164,13 +164,13 @@
         }
     }
     
-//    EARenderer::MeshInstance sphereInstance(sphereMeshID);
-//    sphereInstance.setMaterialIDForAllSubmeshes(rocks01_MaterialID);
+    EARenderer::MeshInstance sphereInstance(sphereMeshID);
+    sphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
 
-//    _sphereMeshInstanceID = scene->meshInstances().insert(sphereInstance);
-//    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
+    _sphereMeshInstanceID = scene->meshInstances().insert(sphereInstance);
+    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
 
     // Skybox
 

@@ -24,12 +24,19 @@ namespace EARenderer {
 
     void GLSLDeferredCookTorrance::setCamera(const Camera& camera) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
-//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE,
-//                           glm::value_ptr(camera.viewMatrix()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(camera.viewMatrix()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionMat")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(camera.projectionMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewInverse")>).location(), 1, GL_FALSE,
                            glm::value_ptr(glm::inverse(camera.viewMatrix())));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
                            glm::value_ptr(glm::inverse(camera.projectionMatrix())));
+    }
+
+    void GLSLDeferredCookTorrance::setViewport(const GLViewport &viewport) {
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewportTransformMat")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(viewport.transformationMatrix()));
     }
 
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {

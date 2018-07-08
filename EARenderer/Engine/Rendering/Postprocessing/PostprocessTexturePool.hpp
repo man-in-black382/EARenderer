@@ -32,6 +32,8 @@ namespace EARenderer {
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
+        const GLFramebuffer& framebuffer() const;
+
         std::shared_ptr<GLFloatTexture2D> claim();
         void putBack(std::shared_ptr<GLFloatTexture2D> texture);
 

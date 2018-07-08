@@ -10,6 +10,8 @@
 #define GLViewport_hpp
 
 #include <glm/vec2.hpp>
+#include <glm/mat4x4.hpp>
+
 #include "Rect2D.hpp"
 
 namespace EARenderer {
@@ -34,6 +36,14 @@ namespace EARenderer {
         
         glm::vec2 NDCFromPoint(const glm::vec2& screenPoint) const;
         glm::vec2 pointFromNDC(const glm::vec2& NDCPoint) const;
+
+        /**
+         Calculates a matrix for transformation from NDC to viewport space.
+         Depth range is considered to be default [-1; 1]
+
+         @return Matrix that transforms NDC points to viewport space
+         */
+        glm::mat4 transformationMatrix() const;
     };
     
 }

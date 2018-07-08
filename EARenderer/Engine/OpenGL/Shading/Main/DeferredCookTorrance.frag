@@ -76,6 +76,7 @@ uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 uniform mat4 uWorldBoudningBoxTransform;
+uniform mat4 uViewportTransformMat;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -513,7 +514,7 @@ float GeometrySmith(float NdotL, float NdotV, float roughness) {
     return ggx1 * ggx2;
 }
 
-vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, float ao, vec3 radiance, vec3 indirectRadiance, float shadow) {
+vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albedo, float metallic, float ao, vec3 radiance, vec3 indirectRadiance, float shadow, vec3 reflection) {
     float NdotL     = max(dot(N, L), 0.0);
     float NdotV     = max(dot(N, V), 0.0);
     
@@ -539,7 +540,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     // Specular component is not affected by indirect light (probably will by a reflection probe later)
     specular        *= shadowedDirectRadiance;
 
-    return diffuse + specular;
+    return diffuse + specular + reflection * Ks;
 }
 
 //vec3 IBL(vec3 N, vec3 V, vec3 H, vec3 albedo, float roughness, float metallic) {
@@ -705,7 +706,6 @@ const float step = 0.1;
 const float minRayStep = 0.1;
 const float maxSteps = 30;
 const int numBinarySearchSteps = 5;
-const float reflectionSpecularFalloffExponent = 3.0;
 
 vec3 Hash(vec3 a) {
     const vec3 scale = vec3(0.8);
@@ -730,7 +730,7 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth) {
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
         // Sample higher mip level to improve performance
-        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).z;
+        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).r;
 
         dDepth = hitCoord.z - depth;
 
@@ -752,56 +752,269 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth) {
     return vec3(projectedCoord.xy, depth);
 }
 
-vec4 RayMarch(vec3 dir, vec3 worldPos, inout vec3 hitCoord, out float dDepth) {
+//vec4 RayMarch(vec3 dir, inout vec3 hitCoord, out float dDepth) {
+//
+//    dir *= step;
+//
+//    float depth = 0.0;
+//    vec4 projectedCoord = vec4(0.0);
+//
+//    for(int i = 0; i < maxSteps; i++) {
+//
+//        hitCoord += dir;
+//
+//        // Transform our 3D vector into a 2D screen coordinate to fetch the depth buffer and check for a collision
+//        projectedCoord = uCameraProjectionMat * vec4(hitCoord, 1.0);
+//        projectedCoord.xy /= projectedCoord.w;
+//        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+//
+//        // Sample higher mip level to improve performance
+//        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).r;
+//
+////        if(depth > 1000.0) {
+////            continue;
+////        }
+//
+//        dDepth = hitCoord.z - depth;
+//
+//        // Check to see if we're close enough to the sampled fragment
+//        if((dir.z - dDepth) < 0.2) {
+//            // Perform binary search if reflected vector has more depth
+//            // than the sampled fragment
+//            if(dDepth <= 0.0) {
+//                return vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
+//            }
+//        }
+//    }
+//
+//    return vec4(projectedCoord.xy, depth, 0.0);
+//}
+//
+//vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
+//    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
+//    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
+//
+//    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
+//    vec3 hitPosition = viewPosition;
+//
+//    float dDepth = 0.0;
+//
+////    vec3 wp = vec3(vec4(viewPos, 1.0) * invView);
+////    vec3 jitt = mix(vec3(0.0), vec3(hash(wp)), spec);
+//    vec4 coords = RayMarch((reflected * max(minRayStep, viewPosition.z)), hitPosition, dDepth);
+//
+////    vec4 coords = RayMarch((reflected * minRayStep), hitPosition, dDepth);
+//
+//    // Fade away artifacts at the edges of the screen
+//    vec2 dCoords = smoothstep(0.2, 0.6, abs(vec2(0.5, 0.5) - coords.xy));
+//
+//    // Ray may point towards the camera or going off the screen.
+//    // Discurd the result in such case.
+//    float screenEdgefactor = clamp(1.0 - (dCoords.x + dCoords.y), 0.0, 1.0); // Discarding off-the-screen rays
+//    float reflectionMultiplier = clamp(screenEdgefactor * reflected.z, 0.0, 0.9); // Discarding back-to-camera rays
+//
+//    // Get color
+//    vec3 SSR = textureLod(uPreviousFrame, coords.xy, 0).rgb * screenEdgefactor;
+//
+//    return vec3(SSR);
+//}
 
-    dir *= step;
+// By Morgan McGuire and Michael Mara at Williams College 2014
+// Released as open source under the BSD 2-Clause License
+// http://opensource.org/licenses/BSD-2-Clause
+#define point2 vec2
+#define point3 vec3
+#define int2 ivec2
 
-    float depth = 0.0;
-    vec4 projectedCoord = vec4(0.0);
+float DistanceSquared(vec2 a, vec2 b) { a -= b; return dot(a, a); }
 
-    for(int i = 0; i < maxSteps; i++) {
+// Returns true if the ray hit something
+bool TraceScreenSpaceRay1(
+                          // Camera-space ray origin, which must be within the view volume
+                          point3 csOrig,
 
-        hitCoord += dir;
+                          // Unit length camera-space ray direction
+                          vec3 csDir,
 
-        // Transform our 3D vector into a 2D screen coordinate to fetch the depth buffer and check for a collision
-        projectedCoord = uCameraProjectionMat * vec4(hitCoord, 1.0);
-        projectedCoord.xy /= projectedCoord.w;
-        projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
+                          // A projection matrix that maps to pixel coordinates (not [-1, +1]
+                          // normalized device coordinates)
+                          mat4x4 proj,
 
-        // Sample higher mip level to improve performance
-        depth = textureLod(uGBufferDepth, projectedCoord.xy, 2).r;
+                          // The camera-space Z buffer (all negative values)
+                          sampler2D csZBuffer,
 
-        if(depth > 1000.0) {
-            continue;
-        }
+                          // Dimensions of csZBuffer
+                          vec2 csZBufferSize,
 
-        dDepth = hitCoord.z - depth;
+                          // Camera space thickness to ascribe to each pixel in the depth buffer
+                          float zThickness,
 
-        // Check to see if we're close enough to the sampled fragment
-        if((dir.z - dDepth) < 1.2) {
-            // Perform binary search if reflected vector has more depth
-            // than the sampled fragment
-            if(dDepth <= 0.0) {
-                return vec4(BinarySearch(dir, hitCoord, dDepth), 1.0);
-            }
-        }
+                          // (Negative number)
+                          float nearPlaneZ,
+
+                          // Step in horizontal or vertical pixels between samples. This is a float
+                          // because integer math is slow on GPUs, but should be set to an integer >= 1
+                          float stride,
+
+                          // Number between 0 and 1 for how far to bump the ray in stride units
+                          // to conceal banding artifacts
+                          float jitter,
+
+                          // Maximum number of iterations. Higher gives better images but may be slow
+                          const float maxSteps,
+
+                          // Maximum camera-space distance to trace before returning a miss
+                          float maxDistance,
+
+                          // Pixel coordinates of the first intersection with the scene
+                          out point2 hitPixel,
+
+                          // Camera space location of the ray hit
+                          out point3 hitPoint) {
+
+    // Clip to the near plane
+    float rayLength = ((csOrig.z + csDir.z * maxDistance) > nearPlaneZ) ?
+    (nearPlaneZ - csOrig.z) / csDir.z : maxDistance;
+    point3 csEndPoint = csOrig + csDir * rayLength;
+
+    // Project into homogeneous clip space
+    vec4 H0 = proj * vec4(csOrig, 1.0);
+    vec4 H1 = proj * vec4(csEndPoint, 1.0);
+    float k0 = 1.0 / H0.w, k1 = 1.0 / H1.w;
+
+    // The interpolated homogeneous version of the camera-space points
+    point3 Q0 = csOrig * k0, Q1 = csEndPoint * k1;
+
+    // Screen-space endpoints
+    point2 P0 = H0.xy * k0, P1 = H1.xy * k1;
+
+    // If the line is degenerate, make it cover at least one pixel
+    // to avoid handling zero-pixel extent as a special case later
+    P1 += vec2((DistanceSquared(P0, P1) < 0.0001) ? 0.01 : 0.0);
+    vec2 delta = P1 - P0;
+
+    // Permute so that the primary iteration is in x to collapse
+    // all quadrant-specific DDA cases later
+    bool permute = false;
+    if (abs(delta.x) < abs(delta.y)) {
+        // This is a more-vertical line
+        permute = true; delta = delta.yx; P0 = P0.yx; P1 = P1.yx;
     }
 
-    return vec4(projectedCoord.xy, depth, 0.0);
+    float stepDir = sign(delta.x);
+    float invdx = stepDir / delta.x;
+
+    // Track the derivatives of Q and k
+    vec3  dQ = (Q1 - Q0) * invdx;
+    float dk = (k1 - k0) * invdx;
+    vec2  dP = vec2(stepDir, delta.y * invdx);
+
+    // Scale derivatives by the desired pixel stride and then
+    // offset the starting values by the jitter fraction
+    dP *= stride; dQ *= stride; dk *= stride;
+    P0 += dP * jitter; Q0 += dQ * jitter; k0 += dk * jitter;
+
+    // Slide P from P0 to P1, (now-homogeneous) Q from Q0 to Q1, k from k0 to k1
+    point3 Q = Q0;
+
+    // Adjust end condition for iteration direction
+    float  end = P1.x * stepDir;
+
+    float k = k0, stepCount = 0.0, prevZMaxEstimate = csOrig.z;
+    float rayZMin = prevZMaxEstimate, rayZMax = prevZMaxEstimate;
+    float sceneZMax = rayZMax + 100;
+    for (point2 P = P0;
+         ((P.x * stepDir) <= end) && (stepCount < maxSteps) &&
+         ((rayZMax < sceneZMax - zThickness) || (rayZMin > sceneZMax)) &&
+         (sceneZMax != 0);
+         P += dP, Q.z += dQ.z, k += dk, ++stepCount) {
+
+        rayZMin = prevZMaxEstimate;
+        rayZMax = (dQ.z * 0.5 + Q.z) / (dk * 0.5 + k);
+        prevZMaxEstimate = rayZMax;
+        if (rayZMin > rayZMax) {
+            float t = rayZMin; rayZMin = rayZMax; rayZMax = t;
+        }
+
+        hitPixel = permute ? P.yx : P;
+        // You may need hitPixel.y = csZBufferSize.y - hitPixel.y; here if your vertical axis
+        // is different than ours in screen space
+        sceneZMax = texelFetch(csZBuffer, int2(hitPixel), 0).r;
+    }
+
+    // Advance Q based on the number of steps
+    Q.xy += dQ.xy * stepCount;
+    hitPoint = Q * (1.0 / k);
+    return (rayZMax >= sceneZMax - zThickness) && (rayZMin < sceneZMax);
 }
 
-void ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
+vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
     vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
 
     vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
-    vec3 hitPosition = viewPosition;
 
-    float depth = 0.0;
+    vec2 hitTexel = vec2(0.0);
+    vec3 viewSpaceHitPoint = vec3(0.0);
+    
+    bool hitDetected = TraceScreenSpaceRay1(
+                                            // Camera-space ray origin, which must be within the view volume
+                                            viewPosition,
+                                            
+                                            // Unit length camera-space ray direction
+                                            reflected,
+                                            
+                                            // A projection matrix that maps to pixel coordinates (not [-1, +1]
+                                            // normalized device coordinates)
+                                            uViewportTransformMat * uCameraProjectionMat,
+                                            
+                                            // The camera-space Z buffer (all negative values)
+                                            uGBufferDepth,
+                                            
+                                            // Dimensions of csZBuffer
+                                            textureSize(uGBufferDepth, 0),
+                                            
+                                            // Camera space thickness to ascribe to each pixel in the depth buffer
+                                            10.0,
+                                            
+                                            // Near plane Z (Negative number)
+                                            -0.05,
+                                            
+                                            // Step in horizontal or vertical pixels between samples. This is a float
+                                            // because integer math is slow on GPUs, but should be set to an integer >= 1
+                                            // (Stride)
+                                            1.0,
+                                            
+                                            // Number between 0 and 1 for how far to bump the ray in stride units
+                                            // to conceal banding artifacts
+                                            // (Jitter)
+                                            0.0,
+                                            
+                                            // Maximum number of iterations. Higher gives better images but may be slow
+                                            25,
+                                            
+                                            // Maximum camera-space distance to trace before returning a miss
+                                            25.0,
+                                            
+                                            // Pixel coordinates of the first intersection with the scene
+                                            hitTexel,
+                                            
+                                            // Camera space location of the ray hit
+                                            viewSpaceHitPoint);
 
-    vec4 previousFrameColor = texture(uPreviousFrame, vTexCoords);
+//    hitTexel.y = 1.0 - hitTexel.y;
 
+    vec3 c = texelFetch(uPreviousFrame, ivec2(hitTexel), 0).rgb;
 
+    return c;
+
+    if (hitDetected/*hitTexel.s > 1.0 || hitTexel.t > 1.0*/) {
+        return vec3(0.2, 1.0, 0.2);
+    } else {
+        return vec3(0.5, 0.0, 0.7);
+    }
+//
+//    return vec3(hitTexel, 0.0);
 }
 
 ////////////////////////////////////////////////////////////
@@ -858,22 +1071,14 @@ void main() {
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow);
+    vec3 SSR = vec3(0.0);//ScreenSpaceReflection(N, worldPosition);
+
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow, SSR);
 
     oBaseOutput = vec4(specularAndDiffuse, 1.0);
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 
-    // Stub
-    ScreenSpaceReflection(N, worldPosition);
-
-    /////// DEBUG
-
-//    vec3 viewNormal = (uCameraViewMat * vec4(N, 0.0)).xyz;
-//    vec3 viewPosition = (uCameraViewMat * vec4(worldPosition, 1.0)).xyz;
-//
-//    vec3 reflected = normalize(reflect(normalize(viewPosition), normalize(viewNormal)));
-//
-//    oBaseOutput = vec4(reflected, 1.0);
+    oBrightOutput = vec4(ScreenSpaceReflection(N, worldPosition), 1.0);
 }

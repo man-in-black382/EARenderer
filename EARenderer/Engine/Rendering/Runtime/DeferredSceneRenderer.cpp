@@ -232,6 +232,7 @@ namespace EARenderer {
 
         mCookTorranceShader.setSettings(mSettings);
         mCookTorranceShader.setCamera(*(mScene->camera()));
+        mCookTorranceShader.setViewport(mPostprocessTexturePool->framebuffer().viewport());
         mCookTorranceShader.setLight(mScene->directionalLight());
         mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
         mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
@@ -269,6 +270,19 @@ namespace EARenderer {
     void DeferredSceneRenderer::render() {
         mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
 
+        auto projmat = mScene->camera()->projectionMatrix();
+
+        float near = (2.0f*projmat[2][3])/(2.0f*projmat[2][2]-2.0f);
+        float far = ((projmat[2][2]-1.0f)*near)/(projmat[2][2]+1.0);
+
+        glm::vec4 center(0.0, 0.0, 5.0, 1.0);
+        center = /*mPostprocessTexturePool->framebuffer().viewport().transformationMatrix() */ projmat /* mScene->camera()->viewMatrix() */* center;
+
+        center = mPostprocessTexturePool->framebuffer().viewport().transformationMatrix() * center;
+
+        center /= center.w;
+        printf("Screen pos: %f %f | Depth: %f \n\n\n\n\n", center.x, center.y, center.z);
+
         swapFrames();
 
         renderExponentialShadowMapsForDirectionalLight();
@@ -283,7 +297,7 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        renderFinalImage(*toneMappingOutputTexture);
+        renderFinalImage(*mThresholdFilteredOutputFrame);
 
         mPostprocessTexturePool->putBack(bloomOutputTexture);
         mPostprocessTexturePool->putBack(toneMappingOutputTexture);

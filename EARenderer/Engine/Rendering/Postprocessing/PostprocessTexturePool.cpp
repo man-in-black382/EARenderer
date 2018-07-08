@@ -12,6 +12,8 @@
 
 namespace EARenderer {
 
+#pragma mark - Lifecycle
+
     PostprocessTexturePool::PostprocessTexturePool(const Size2D& resolution)
     :
     mFramebuffer(resolution),
@@ -23,6 +25,12 @@ namespace EARenderer {
             mFramebuffer.attachTexture(*texture);
         }
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+    }
+
+#pragma mark - Getters & Setters
+
+    const GLFramebuffer& PostprocessTexturePool::framebuffer() const {
+        return mFramebuffer;
     }
 
     std::shared_ptr<GLFloatTexture2D> PostprocessTexturePool::claim() {

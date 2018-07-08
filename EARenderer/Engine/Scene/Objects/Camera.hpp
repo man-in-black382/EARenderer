@@ -63,6 +63,9 @@ namespace EARenderer {
         glm::mat4 viewProjectionMatrix() const;
         glm::mat4 viewMatrix() const;
         glm::mat4 projectionMatrix() const;
+        glm::mat4 inverseViewProjectionMatrix() const;
+        glm::mat4 inverseViewMatrix() const;
+        glm::mat4 inverseProjectionMatrix() const;
         
         void setViewportAspectRatio(float aspectRatio);
     };
