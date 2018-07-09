@@ -99,23 +99,13 @@ uint PackSnorm2x16(float first, float second, float range) {
 }
 
 float LinearDepth() {
-    float near = uCameraNearFarPlanes.x;
-    float far = uCameraNearFarPlanes.y;
-    float z = gl_FragCoord.z * 2.0 - 1.0; // [-1; 1]
-
-    float viewSpaceLinearDepth = (2.0 * near * far) / (far + near - z * (far - near));
-    float normalizedLinearDepth = viewSpaceLinearDepth / (far - near);
-
-//    return -viewSpaceLinearDepth;
-//    return -gl_FragCoord.z * 2.0 - 1.0;
+    float near = -uCameraNearFarPlanes.x;
+    float far = -uCameraNearFarPlanes.y;
 
     // REMINDER: Opengl is LEFT-HANDED (positive Z pointing into the screen)
     // Camera is RIGHT-HANDED (positive Z pointing FROM the screen into your face!) therefore
     // camera view space depth (Z) values are NEGATIVE
-
-//    return vZ / (far - near);
-
-    vec3 clipInfo = vec3(-near * -far, -near - -far, -far);
+    vec3 clipInfo = vec3(near * far, near - far, far);
     return clipInfo[0] / (gl_FragCoord.z * clipInfo[1] + clipInfo[2]);
 }
 

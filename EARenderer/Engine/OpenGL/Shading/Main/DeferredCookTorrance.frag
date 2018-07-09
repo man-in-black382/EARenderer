@@ -976,8 +976,8 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     vec3 reflected = normalize(reflect(viewPosition, viewNormal));
 
-    Point2 hitTexel;// = vec2(0.0);
-    Point3 viewSpaceHitPoint;// = vec3(0.0);
+    Point2 hitTexel;
+    Point3 viewSpaceHitPoint;
     int which = 0;
 
     vec2 frameResolution = textureSize(uGBufferLinearDepth, 0);
@@ -987,7 +987,7 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
                                             uViewportTransformMat * uCameraProjectionMat,
                                             uGBufferLinearDepth,
                                             frameResolution,
-                                            1.0,
+                                            2.0,
                                             false,
                                             vec3(0.0), // Clip info
                                             -0.05, // Near clip plane
@@ -1003,14 +1003,17 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     projectedHitPoint.xy /= projectedHitPoint.w;
     projectedHitPoint.xy = projectedHitPoint.xy * 0.5 + 0.5;
 
-    return texture(uPreviousFrame, projectedHitPoint.xy).rgb;
+    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, projectedHitPoint.xy).xyz;
+    vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
 
-//    if (hitDetected) {
-//        return texelFetch(uPreviousFrame, ivec2(hitTexel), 0).rgb;
-//    } else {
-////        return texture(uPreviousFrame, vTexCoords).rgb;
-//        return vec3(1.0, 1.0, 0.0);
-//    }
+    vec3 prevFrame = texture(uPreviousFrame, projectedHitPoint.xy).rgb;
+
+
+    if (hitDetected) {
+        return albedoRoughness.rgb;
+    } else {
+        return vec3(0.5, 0.5, 0.0);
+    }
 }
 
 ////////////////////////////////////////////////////////////

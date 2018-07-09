@@ -29,9 +29,9 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionMat")>).location(), 1, GL_FALSE,
                            glm::value_ptr(camera.projectionMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewInverse")>).location(), 1, GL_FALSE,
-                           glm::value_ptr(glm::inverse(camera.viewMatrix())));
+                           glm::value_ptr(camera.inverseViewMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
-                           glm::value_ptr(glm::inverse(camera.projectionMatrix())));
+                           glm::value_ptr(camera.inverseProjectionMatrix()));
     }
 
     void GLSLDeferredCookTorrance::setViewport(const GLViewport &viewport) {

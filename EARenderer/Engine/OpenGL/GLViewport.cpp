@@ -81,6 +81,8 @@ namespace EARenderer {
         scale[0][0] = 1.0 / mFrame.size.width;
         scale[1][1] = 1.0 / mFrame.size.height;
 
+//        matrix = scale * matrix;
+
         return matrix;
     }
     
