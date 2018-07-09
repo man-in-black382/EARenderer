@@ -15,12 +15,14 @@ namespace EARenderer {
 
     struct SceneGBuffer {
         GLIntegerTexture2D albedoRoughnessMetalnessAONormal;
-        GLFloatTexture2D depth;
+        GLFloatTexture2D linearDepth;
+        GLDepthTexture2D hyperbolicDepth;
 
         SceneGBuffer(const Size2D& resolution)
         :
         albedoRoughnessMetalnessAONormal(resolution, GLTexture::IntegerFormat::RGB32UI),
-        depth(resolution, GLTexture::FloatFormat::R32F)
+        linearDepth(resolution, GLTexture::FloatFormat::R32F),
+        hyperbolicDepth(resolution)
         { }
     };
 

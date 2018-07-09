@@ -68,14 +68,18 @@ namespace EARenderer {
         constexpr float defaultDepthFar = 1.0;
 
         glm::mat4 matrix;
-//        matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
-//        matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
-//        matrix[2] = glm::vec4(0.0, 0.0, (defaultDepthFar - defaultDepthNear) / 2.0, 0.0);
-//        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, (defaultDepthFar + defaultDepthNear) / 2.0, 1.0);
         matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
         matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
-        matrix[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
-        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, 0.0, 1.0);
+        matrix[2] = glm::vec4(0.0, 0.0, (defaultDepthFar - defaultDepthNear) / 2.0, 0.0);
+        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, (defaultDepthFar + defaultDepthNear) / 2.0, 1.0);
+//        matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
+//        matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
+//        matrix[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
+//        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, 0.0, 1.0);
+
+        glm::mat4 scale(1.0);
+        scale[0][0] = 1.0 / mFrame.size.width;
+        scale[1][1] = 1.0 / mFrame.size.height;
 
         return matrix;
     }

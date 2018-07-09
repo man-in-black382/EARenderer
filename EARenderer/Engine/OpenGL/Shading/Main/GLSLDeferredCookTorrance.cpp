@@ -57,7 +57,8 @@ namespace EARenderer {
 
     void GLSLDeferredCookTorrance::setGBuffer(const SceneGBuffer& GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
-        setUniformTexture(uint32_constant<ctcrc32("uGBufferDepth")>, GBuffer.depth);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferLinearDepth")>, GBuffer.linearDepth);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferHyperbolicDepth")>, GBuffer.hyperbolicDepth);
     }
 
     void GLSLDeferredCookTorrance::setFrustumCascades(const FrustumCascades& cascades) {

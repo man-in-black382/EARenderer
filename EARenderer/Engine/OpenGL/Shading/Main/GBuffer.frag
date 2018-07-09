@@ -14,6 +14,7 @@ layout(location = 1) out float oDepth;
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
+in float vZ;
 
 // Uniforms
 
@@ -105,8 +106,17 @@ float LinearDepth() {
     float viewSpaceLinearDepth = (2.0 * near * far) / (far + near - z * (far - near));
     float normalizedLinearDepth = viewSpaceLinearDepth / (far - near);
 
-    return -viewSpaceLinearDepth;
+//    return -viewSpaceLinearDepth;
 //    return -gl_FragCoord.z * 2.0 - 1.0;
+
+    // REMINDER: Opengl is LEFT-HANDED (positive Z pointing into the screen)
+    // Camera is RIGHT-HANDED (positive Z pointing FROM the screen into your face!) therefore
+    // camera view space depth (Z) values are NEGATIVE
+
+//    return vZ / (far - near);
+
+    vec3 clipInfo = vec3(-near * -far, -near - -far, -far);
+    return clipInfo[0] / (gl_FragCoord.z * clipInfo[1] + clipInfo[2]);
 }
 
 ////////////////////////////////////////////////////////////

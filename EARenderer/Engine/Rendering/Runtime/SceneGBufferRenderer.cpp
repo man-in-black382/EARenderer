@@ -20,8 +20,8 @@ namespace EARenderer {
     mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
         mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(mGBuffer->depth, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+        mFramebuffer.attachTexture(mGBuffer->linearDepth, GLFramebuffer::ColorAttachment::Attachment1);
+        mFramebuffer.attachTexture(mGBuffer->hyperbolicDepth);
     }
 
 #pragma mark - Getters
@@ -59,7 +59,7 @@ namespace EARenderer {
             }
         }
 
-        mGBuffer->depth.generateMipmaps(2);
+        mGBuffer->linearDepth.generateMipmaps(2);
     }
 
 }

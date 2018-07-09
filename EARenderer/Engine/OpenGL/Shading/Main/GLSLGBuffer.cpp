@@ -20,7 +20,8 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLGBuffer::setCamera(const Camera& camera) {
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.viewMatrix()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.projectionMatrix()));
 
         glm::vec2 nearFar(camera.nearClipPlane(), camera.farClipPlane());
         glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraNearFarPlanes")>).location(), 1, glm::value_ptr(nearFar));

@@ -77,6 +77,8 @@ namespace EARenderer {
 
         FrustumCascades mShadowCascades;
         std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
+        std::shared_ptr<GLFloatTexture2D> mDirectionalExponentialShadowMap;
+        GaussianBlurEffect mShadowBlurEffect;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
@@ -93,9 +95,6 @@ namespace EARenderer {
 
         std::array<GLLDRTexture3D, 4> mGridProbesSHMaps;
         GLFramebuffer mGridProbesSHFramebuffer;
-
-        std::shared_ptr<GLFloatTexture2D> mDirectionalExponentialShadowMap;
-        GaussianBlurEffect mShadowBlurEffect;
 
         GLSLFullScreenQuad mFSQuadShader;
 

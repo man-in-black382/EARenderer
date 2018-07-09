@@ -16,7 +16,8 @@ layout (location = 5) in vec3 iBitangent;
 
 uniform mat4 uModelMat;
 uniform mat4 uNormalMat;
-uniform mat4 uCameraSpaceMat;
+uniform mat4 uCameraViewMat;
+uniform mat4 uCameraProjectionMat;
 uniform mat4 uCSMSplitSpaceMat;
 
 // Output
@@ -25,6 +26,7 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInCSMSplitSpace;
+out float vZ;
 
 // Functions
 
@@ -55,5 +57,8 @@ void main() {
     vTBN = TBN;
     vPosInCSMSplitSpace = uCSMSplitSpaceMat * worldPosition;
 
-    gl_Position = uCameraSpaceMat * worldPosition;
+    vec4 viewSpacePosition = uCameraViewMat * worldPosition;
+    vZ = viewSpacePosition.z;
+
+    gl_Position = uCameraProjectionMat * viewSpacePosition;
 }

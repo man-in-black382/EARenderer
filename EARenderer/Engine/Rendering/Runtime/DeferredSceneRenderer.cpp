@@ -35,9 +35,8 @@ namespace EARenderer {
     mGBuffer(GBuffer),
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
-    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(1500))),
-
     // Shadow maps
+    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(1500))),
     mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
 
     // Surfels and surfel clusters
@@ -282,6 +281,11 @@ namespace EARenderer {
 
         center /= center.w;
         printf("Screen pos: %f %f | Depth: %f \n\n\n\n\n", center.x, center.y, center.z);
+
+//        glm::vec4 center(0.0, 0.0, 5.0, 1.0);     
+//        auto viewMat = mScene->camera()->viewMatrix();
+//        center = viewMat * center;
+//        printf("Screen pos: %f %f | Depth: %f \n\n\n\n\n", center.x, center.y, center.z);
 
         swapFrames();
 
