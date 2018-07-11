@@ -9,6 +9,7 @@
 #include "GLViewport.hpp"
 
 #include <OpenGL/gl3.h>
+#include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
     
@@ -63,7 +64,7 @@ namespace EARenderer {
         return glm::vec2((NDCPoint.x + 1.0) / 2.0 * mFrame.size.width, (NDCPoint.y + 1.0) / 2.0 * mFrame.size.height);
     }
 
-    glm::mat4 GLViewport::transformationMatrix() const {
+    glm::mat4 GLViewport::screenSpaceMatrix() const {
         constexpr float defaultDepthNear = -1.0;
         constexpr float defaultDepthFar = 1.0;
 
@@ -72,18 +73,15 @@ namespace EARenderer {
         matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
         matrix[2] = glm::vec4(0.0, 0.0, (defaultDepthFar - defaultDepthNear) / 2.0, 0.0);
         matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, (defaultDepthFar + defaultDepthNear) / 2.0, 1.0);
-//        matrix[0] = glm::vec4((mFrame.maxX() - mFrame.minX()) / 2.0, 0.0, 0.0, 0.0);
-//        matrix[1] = glm::vec4(0.0, (mFrame.maxY() - mFrame.minY()) / 2.0, 0.0, 0.0);
-//        matrix[2] = glm::vec4(0.0, 0.0, 1.0, 0.0);
-//        matrix[3] = glm::vec4((mFrame.maxX() + mFrame.minX()) / 2.0, (mFrame.maxY() + mFrame.minY()) / 2.0, 0.0, 1.0);
-
-        glm::mat4 scale(1.0);
-        scale[0][0] = 1.0 / mFrame.size.width;
-        scale[1][1] = 1.0 / mFrame.size.height;
-
-//        matrix = scale * matrix;
-
         return matrix;
+    }
+
+    glm::mat4 GLViewport::textureSpaceMatrix() const {
+        glm::mat4 mulHalf = glm::scale(glm::vec3(0.5, 0.5, 0.0));
+        glm::mat4 addHalf = glm::translate(glm::vec3(0.5, 0.5, 0.0));
+        glm::mat4 mulSS = glm::scale(glm::vec3( mFrame.size.width, mFrame.size.height, 0.0 ));
+
+        return mulSS * addHalf * mulHalf;
     }
     
 }

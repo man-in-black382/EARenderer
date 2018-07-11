@@ -35,8 +35,8 @@ namespace EARenderer {
     }
 
     void GLSLDeferredCookTorrance::setViewport(const GLViewport &viewport) {
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewportTransformMat")>).location(), 1, GL_FALSE,
-                           glm::value_ptr(viewport.transformationMatrix()));
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewportTextureSpaceMat")>).location(), 1, GL_FALSE,
+                           glm::value_ptr(viewport.textureSpaceMatrix()));
     }
 
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {

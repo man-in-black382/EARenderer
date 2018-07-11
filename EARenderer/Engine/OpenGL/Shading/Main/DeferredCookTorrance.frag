@@ -77,7 +77,7 @@ uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 uniform mat4 uWorldBoudningBoxTransform;
-uniform mat4 uViewportTransformMat;
+uniform mat4 uViewportTextureSpaceMat;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -830,10 +830,7 @@ bool TraceScreenSpaceRay1
  Vector3         csDirection,
  mat4x4          projectToPixelMatrix,
  sampler2D       csZBuffer,
- float2          csZBufferSize,
  float           csZThickness,
- const in bool   csZBufferIsHyperbolic,
- float3          clipInfo,
  float           nearPlaneZ,
  float            stride,
  float           jitterFraction,
@@ -956,11 +953,6 @@ bool TraceScreenSpaceRay1
 
         // Camera-space z of the background
         sceneZMax = texelFetch(csZBuffer, int2(hitPixel), 0).r;
-
-        // This compiles away when csZBufferIsHyperbolic = false
-        if (csZBufferIsHyperbolic) {
-            sceneZMax = reconstructCSZ(sceneZMax, clipInfo);
-        }
     } // pixel on ray
 
     Q.xy += dQ.xy * stepCount;
@@ -980,21 +972,16 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     Point3 viewSpaceHitPoint;
     int which = 0;
 
-    vec2 frameResolution = textureSize(uGBufferLinearDepth, 0);
-
     bool hitDetected = TraceScreenSpaceRay1(viewPosition,
                                             reflected,
-                                            uViewportTransformMat * uCameraProjectionMat,
+                                            uViewportTextureSpaceMat,// * uCameraProjectionMat,
                                             uGBufferLinearDepth,
-                                            frameResolution,
-                                            2.0,
-                                            false,
-                                            vec3(0.0), // Clip info
-                                            -0.05, // Near clip plane
+                                            0.001,
+                                            -1.0, // Near clip plane
                                             1.0, // Stride
                                             0.0, // Jitter fraction
-                                            25.0, // Max steps
-                                            25.0, // Max trace distance (Far clip plane?)
+                                            100.0, // Max steps
+                                            200.0, // Max trace distance (Far clip plane?)
                                             hitTexel,
                                             which, // Depth layer, will be 0 in our case
                                             viewSpaceHitPoint);
@@ -1003,11 +990,12 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     projectedHitPoint.xy /= projectedHitPoint.w;
     projectedHitPoint.xy = projectedHitPoint.xy * 0.5 + 0.5;
 
-    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, projectedHitPoint.xy).xyz;
+//    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, projectedHitPoint.xy).xyz;
+    uvec3 albedoRoughnessMetalnessAONormal = texelFetch(uGBufferAlbedoRoughnessMetalnessAONormal, ivec2(hitTexel), 0).xyz;
     vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
 
-    vec3 prevFrame = texture(uPreviousFrame, projectedHitPoint.xy).rgb;
-
+    vec3 prevFrame = texelFetch(uPreviousFrame, ivec2(hitTexel), 0).rgb;
+//    return prevFrame;
 
     if (hitDetected) {
         return albedoRoughness.rgb;

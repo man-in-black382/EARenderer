@@ -43,7 +43,9 @@ namespace EARenderer {
 
          @return Matrix that transforms NDC points to viewport space
          */
-        glm::mat4 transformationMatrix() const;
+        glm::mat4 screenSpaceMatrix() const;
+
+        glm::mat4 textureSpaceMatrix() const;
     };
     
 }

@@ -105,8 +105,10 @@ float LinearDepth() {
     // REMINDER: Opengl is LEFT-HANDED (positive Z pointing into the screen)
     // Camera is RIGHT-HANDED (positive Z pointing FROM the screen into your face!) therefore
     // camera view space depth (Z) values are NEGATIVE
-    vec3 clipInfo = vec3(near * far, near - far, far);
-    return clipInfo[0] / (gl_FragCoord.z * clipInfo[1] + clipInfo[2]);
+//    vec3 clipInfo = vec3(near * far, near - far, far);
+//    return clipInfo[0] / (gl_FragCoord.z * clipInfo[1] + clipInfo[2]);
+
+    return vZ;
 }
 
 ////////////////////////////////////////////////////////////
