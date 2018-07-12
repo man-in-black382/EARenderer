@@ -838,7 +838,9 @@ bool TraceScreenSpaceRay1
  in float        maxRayTraceDistance,
  out Point2      hitPixel,
  out int         which,
- out Point3      csHitPoint) {
+ out Point3      csHitPoint,
+ // DEBUG
+ out vec3 debugColor) {
 
     // Clip ray to a near plane in 3D (doesn't have to be *the* near plane, although that would be a good idea)
     float rayLength = ((csOrigin.z + csDirection.z * maxRayTraceDistance) > nearPlaneZ) ?
@@ -897,11 +899,11 @@ bool TraceScreenSpaceRay1
 
     float stepDirection = sign(delta.x);
     float invdx = stepDirection / delta.x;
-    Vector2 dP = Vector2(stepDirection, invdx * delta.y);
 
     // Track the derivatives of Q and k
     Vector3 dQ = (Q1 - Q0) * invdx;
     float   dk = (k1 - k0) * invdx;
+    Vector2 dP = Vector2(stepDirection, invdx * delta.y);
 
     // Scale derivatives by the desired pixel stride
     dP *= stride; dQ *= stride; dk *= stride;
@@ -932,7 +934,7 @@ bool TraceScreenSpaceRay1
     for (Point2 P = P0;
          ((P.x * stepDirection) <= end) &&
          (stepCount < maxSteps) &&
-         ((rayZMax < sceneZMax - csZThickness) ||
+         ((rayZMax < (sceneZMax - csZThickness)) ||
           (rayZMin > sceneZMax)) &&
          (sceneZMax != 0.0);
          P += dP, Q.z += dQ.z, k += dk, stepCount += 1.0) {
@@ -951,6 +953,9 @@ bool TraceScreenSpaceRay1
         prevZMaxEstimate = rayZMax;
         if (rayZMin > rayZMax) { swap(rayZMin, rayZMax); }
 
+        //
+//        hitPixel.y = 300.0 - hitPixel.y;
+
         // Camera-space z of the background
         sceneZMax = texelFetch(csZBuffer, int2(hitPixel), 0).r;
     } // pixel on ray
@@ -958,8 +963,26 @@ bool TraceScreenSpaceRay1
     Q.xy += dQ.xy * stepCount;
     csHitPoint = Q * (1.0 / k);
 
+    if (rayZMax < sceneZMax) {
+        debugColor = vec3(0.0, 0.7, 0.0);
+    } else {
+        debugColor = vec3(0.7, 0.0, 0.0);
+    }
+
+//    if (stepCount < 1.0) {
+//        debugColor = vec3(0.7, 0.0, 0.0);
+//    } else if (stepCount < 2.0) {
+//        debugColor = vec3(0.7, 0.7, 0.0);
+//    } else if (stepCount < 10.0) {
+//        debugColor = vec3(0.0, 0.0, 0.7);
+//    } else if (stepCount < 20.0) {
+//        debugColor = vec3(0.0, 7.0, 0.0);
+//    } else {
+//        debugColor = vec3(0.7);
+//    }
+
     // Matches the new loop condition:
-    return (rayZMax >= sceneZMax - csZThickness) && (rayZMin <= sceneZMax);
+    return (rayZMax >= sceneZMax - csZThickness);// && (rayZMin <= sceneZMax);
 }
 
 vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
@@ -972,32 +995,52 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     Point3 viewSpaceHitPoint;
     int which = 0;
 
+    vec3 debugColor;
+
     bool hitDetected = TraceScreenSpaceRay1(viewPosition,
                                             reflected,
-                                            uViewportTextureSpaceMat,// * uCameraProjectionMat,
+                                            uViewportTextureSpaceMat * uCameraProjectionMat,
                                             uGBufferLinearDepth,
-                                            0.001,
-                                            -1.0, // Near clip plane
+                                            0.0,
+                                            -0.5, // Near clip plane
                                             1.0, // Stride
                                             0.0, // Jitter fraction
-                                            100.0, // Max steps
-                                            200.0, // Max trace distance (Far clip plane?)
+                                            540.0, // Max steps
+                                            10.0, // Max trace distance (Far clip plane?)
                                             hitTexel,
                                             which, // Depth layer, will be 0 in our case
-                                            viewSpaceHitPoint);
+                                            viewSpaceHitPoint,
+                                            // DBUG
+                                            debugColor);
 
-    vec4 projectedHitPoint = uCameraProjectionMat * vec4(viewSpaceHitPoint, 1.0);
-    projectedHitPoint.xy /= projectedHitPoint.w;
-    projectedHitPoint.xy = projectedHitPoint.xy * 0.5 + 0.5;
+
+
+//    vec4 projectedHitPoint = uCameraProjectionMat * vec4(viewSpaceHitPoint, 1.0);
+//    projectedHitPoint.xy /= projectedHitPoint.w;
+//    projectedHitPoint.xy = projectedHitPoint.xy * 0.5 + 0.5;
+
+    vec3 hitt = vec3(hitTexel / vec2(450.0, 300.0), 0.0);
+//
+
 
 //    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, projectedHitPoint.xy).xyz;
-    uvec3 albedoRoughnessMetalnessAONormal = texelFetch(uGBufferAlbedoRoughnessMetalnessAONormal, ivec2(hitTexel), 0).xyz;
+    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, hitt.xy).xyz;
+//    uvec3 albedoRoughnessMetalnessAONormal = texelFetch(uGBufferAlbedoRoughnessMetalnessAONormal, ivec2(hitTexel), 0).xyz;
     vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
 
-    vec3 prevFrame = texelFetch(uPreviousFrame, ivec2(hitTexel), 0).rgb;
+    vec3 prevFrame = texture(uPreviousFrame, hitt.xy).rgb;
 //    return prevFrame;
 
+//    float depth = texelFetch(uGBufferLinearDepth, int2(vTexCoords * vec2(450.0, 300.0)), 0).r;
+//
+//    if (depth < -2.0) {
+//        return vec3(0.2, 0.7, 0.2);
+//    } else {
+//        return vec3(0.7, 0.2, 0.2);
+//    }
+
     if (hitDetected) {
+//        return debugColor;
         return albedoRoughness.rgb;
     } else {
         return vec3(0.5, 0.5, 0.0);

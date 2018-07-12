@@ -79,7 +79,11 @@ namespace EARenderer {
     glm::mat4 GLViewport::textureSpaceMatrix() const {
         glm::mat4 mulHalf = glm::scale(glm::vec3(0.5, 0.5, 0.0));
         glm::mat4 addHalf = glm::translate(glm::vec3(0.5, 0.5, 0.0));
-        glm::mat4 mulSS = glm::scale(glm::vec3( mFrame.size.width, mFrame.size.height, 0.0 ));
+        glm::mat4 mulSS = glm::scale(glm::vec3( mFrame.size.width, mFrame.size.height, 0.0));
+
+        mulHalf[2][2] = 1.0;
+        addHalf[2][2] = 1.0;
+        mulSS[2][2] = 1.0;
 
         return mulSS * addHalf * mulHalf;
     }

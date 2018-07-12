@@ -174,6 +174,8 @@ namespace EARenderer {
 
             hitPixel = permute ? glm::vec2(P.y, P.x) : P;
 
+            printf("Hit pixel: %d %d \n", int32_t(hitPixel.x), int32_t(hitPixel.y));
+
             // The depth range that the ray covers within this loop
             // iteration.  Assume that the ray is moving in increasing z
             // and swap if backwards.  Because one end of the interval is
@@ -186,14 +188,11 @@ namespace EARenderer {
             prevZMaxEstimate = rayZMax;
             if (rayZMin > rayZMax) { swap(rayZMin, rayZMax); }
 
-            // Camera-space z of the background
-            sceneZMax = -20.0;
-//            sceneZMax = texelFetch(csZBuffer, int2(hitPixel), 0).r;
+            printf("Zmin: %f | Zmax: %f \n", rayZMin, rayZMax);
 
-            // This compiles away when csZBufferIsHyperbolic = false
-//            if (csZBufferIsHyperbolic) {
-//                sceneZMax = reconstructCSZ(sceneZMax, clipInfo);
-//            }
+            // Camera-space z of the background
+            sceneZMax = -8.0;
+//            sceneZMax = texelFetch(csZBuffer, int2(hitPixel), 0).r;
         } // pixel on ray
 
         Q.x += dQ.x * stepCount;
@@ -457,23 +456,7 @@ namespace EARenderer {
 
         auto viewMat = mScene->camera()->viewMatrix();
         auto projmat = mScene->camera()->projectionMatrix();
-        auto pixelMat = mPostprocessTexturePool->framebuffer().viewport().screenSpaceMatrix();
-
-        float near = (2.0f*projmat[2][3])/(2.0f*projmat[2][2]-2.0f);
-        float far = ((projmat[2][2]-1.0f)*near)/(projmat[2][2]+1.0);
-
-        glm::vec4 center(1.0, 1.0, -10.0, 1.0);
-        center = /*mPostprocessTexturePool->framebuffer().viewport().transformationMatrix() */ projmat /* mScene->camera()->viewMatrix() */* center;
-
-        center = pixelMat * center;
-
-//        center /= center.w;
-        printf("Screen pos: %f %f | Depth: %f \n\n\n\n\n", center.x, center.y, center.z);
-
-//        glm::vec4 center(0.0, 0.0, 5.0, 1.0);     
-//        auto viewMat = mScene->camera()->viewMatrix();
-//        center = viewMat * center;
-//        printf("Screen pos: %f %f | Depth: %f \n\n\n\n\n", center.x, center.y, center.z);
+        auto pixelMat = mPostprocessTexturePool->framebuffer().viewport().textureSpaceMatrix();
 
         // DEBUG
 
@@ -491,16 +474,16 @@ namespace EARenderer {
 
         bool hitDetected = TraceScreenSpaceRay1(viewPosition,
                                                 reflected,
-                                                pixelMat,// * projmat,
+                                                pixelMat * projmat,
 //                                                uGBufferLinearDepth,
                                                 glm::vec2(1280, 720),
-                                                2.0,
+                                                0.01,
 //                                                false,
                                                 glm::vec3(0.0), // Clip info
                                                 -0.05, // Near clip plane
                                                 1.0, // Stride
                                                 0.0, // Jitter fraction
-                                                25.0, // Max steps
+                                                250.0, // Max steps
                                                 25.0, // Max trace distance (Far clip plane?)
                                                 hitTexel,
                                                 which, // Depth layer, will be 0 in our case
