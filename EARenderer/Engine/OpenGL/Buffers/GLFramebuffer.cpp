@@ -300,5 +300,12 @@ namespace EARenderer {
                           dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
                           GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
     }
+
+    void GLFramebuffer::clear(UnderlyingBuffer bufferMask) {
+        using underlying = typename std::underlying_type<UnderlyingBuffer>::type;
+        auto bitmask = static_cast<underlying>(bufferMask);
+        bind();
+        glClear(bitmask);
+    }
     
 }

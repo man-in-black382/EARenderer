@@ -178,7 +178,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     }
 
     if (self.renderingSettings.skyboxRenderingEnabled) {
-        self.deferredSceneRenderer->renderSkybox();
+//        self.deferredSceneRenderer->renderSkybox();
     }
 
     if (self.renderingSettings.surfelSettings.renderingEnabled) {

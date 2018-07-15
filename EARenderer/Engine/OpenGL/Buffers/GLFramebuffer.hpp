@@ -27,6 +27,7 @@
 #include "Size2D.hpp"
 #include "Range.hpp"
 #include "StringUtils.hpp"
+#include "BitwiseEnum.hpp"
 
 #include <functional>
 #include <unordered_set>
@@ -43,6 +44,10 @@ namespace EARenderer {
             Attachment4, Attachment5, Attachment6, Attachment7,
             Attachment8, Attachment9, Attachment10, Attachment11,
             Attachment12, Attachment13, Attachment14, Attachment15
+        };
+
+        enum class UnderlyingBuffer {
+            Color = GL_COLOR_BUFFER_BIT, Depth = GL_DEPTH_BUFFER_BIT, Stencil = GL_STENCIL_BUFFER_BIT
         };
 
     private:
@@ -148,8 +153,12 @@ namespace EARenderer {
                   bool useLinearFilter = true);
 
         void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
+
+        void clear(UnderlyingBuffer bufferMask);
     };
     
 }
+
+ENABLE_BITMASK_OPERATORS(EARenderer::GLFramebuffer::UnderlyingBuffer);
 
 #endif /* GLFramebuffer_hpp */

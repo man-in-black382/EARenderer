@@ -11,6 +11,8 @@
 
 #include <type_traits>
 
+// http://blog.bitwigglers.org/using-enum-classes-as-type-safe-bitmasks/
+
 template<typename Enum>
 struct EnableBitMaskOperators
 {
@@ -95,5 +97,12 @@ operator ^=(Enum &lhs, Enum rhs)
                              );
     return lhs;
 }
+
+#define ENABLE_BITMASK_OPERATORS(x)  \
+template<>                           \
+struct EnableBitMaskOperators<x>     \
+{                                    \
+static const bool enable = true; \
+};
 
 #endif /* BitwiseEnum_hpp */

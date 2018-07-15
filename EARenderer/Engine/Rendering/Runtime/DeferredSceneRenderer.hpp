@@ -28,6 +28,7 @@
 #include "GaussianBlurEffect.hpp"
 #include "BloomEffect.hpp"
 #include "ToneMappingEffect.hpp"
+#include "ScreenSpaceReflectionEffect.hpp"
 
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLDeferredCookTorrance.hpp"
@@ -56,7 +57,6 @@
 #include "GLLDRTexture3D.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLBufferTexture.hpp"
-#include "GLDepthRenderbuffer.hpp"
 
 namespace EARenderer {
 
@@ -100,6 +100,7 @@ namespace EARenderer {
 
         BloomEffect mBloomEffect;
         ToneMappingEffect mToneMappingEffect;
+        ScreenSpaceReflectionEffect mSSREffect;
         std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
 
         std::shared_ptr<GLFloatTexture2D> mFrame;
@@ -132,7 +133,6 @@ namespace EARenderer {
         void setRenderingSettings(const RenderingSettings& settings);
 
         void render();
-        void renderSkybox();
     };
 
 }

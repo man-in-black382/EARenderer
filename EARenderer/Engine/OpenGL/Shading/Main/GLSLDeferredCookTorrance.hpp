@@ -42,7 +42,6 @@ namespace EARenderer {
         GLSLDeferredCookTorrance();
 
         void setCamera(const Camera& camera);
-        void setViewport(const GLViewport& viewport);
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
 

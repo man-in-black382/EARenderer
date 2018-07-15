@@ -352,6 +352,9 @@
 		CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2197020C076B000767342 /* MaterialLoader.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CECD41DD20D67FDA00D40D32 /* sponza_lightweight.obj in Resources */ = {isa = PBXBuildFile; fileRef = CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */; };
+		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp */; };
+		CEEE4CE220FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */; };
+		CEEE4CE420FB877700CCBBF5 /* SSR.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEEE4CE320FB877700CCBBF5 /* SSR.frag */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF0162020D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */; };
 		CEF0162120D41A9800E0F0AB /* DirectionalExponentialShadowMap.vert in Resources */ = {isa = PBXBuildFile; fileRef = CEF0161F20D41A9700E0F0AB /* DirectionalExponentialShadowMap.vert */; };
@@ -1420,6 +1423,11 @@
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
+		CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenSpaceReflectionEffect.cpp; sourceTree = "<group>"; };
+		CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.hpp; sourceTree = "<group>"; };
+		CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLScreenSpaceReflections.cpp; sourceTree = "<group>"; };
+		CEEE4CE120FB874D00CCBBF5 /* GLSLScreenSpaceReflections.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLScreenSpaceReflections.hpp; sourceTree = "<group>"; };
+		CEEE4CE320FB877700CCBBF5 /* SSR.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SSR.frag; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalExponentialShadowMap.frag; sourceTree = "<group>"; };
@@ -1900,6 +1908,9 @@
 				CE3D9DF920E40039004405A7 /* GLSLBloom.cpp */,
 				CE3D9DFA20E40039004405A7 /* GLSLBloom.hpp */,
 				CE3D9DFD20E40050004405A7 /* Bloom.frag */,
+				CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */,
+				CEEE4CE120FB874D00CCBBF5 /* GLSLScreenSpaceReflections.hpp */,
+				CEEE4CE320FB877700CCBBF5 /* SSR.frag */,
 				CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */,
 				CE2B60F420E5348200370844 /* GLSLToneMapping.hpp */,
 				CE2B60F620E534E100370844 /* ToneMapping.frag */,
@@ -1919,6 +1930,8 @@
 				AC40397C20E38A680079112E /* ToneMappingEffect.cpp */,
 				AC40397D20E38A680079112E /* ToneMappingEffect.hpp */,
 				CE2B60F120E524CC00370844 /* ToneMappingSettings.hpp */,
+				CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp */,
+				CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */,
 				AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */,
 				AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */,
 			);
@@ -3652,6 +3665,7 @@
 				CE4DE2411FA60CFF0067729A /* Sponza_Roof_roughness.tga in Resources */,
 				CE4DE2491FA60CFF0067729A /* VaseHanging_diffuse.tga in Resources */,
 				CE4BF64C20C28DA8001B0458 /* bricks2_disp.jpg in Resources */,
+				CEEE4CE420FB877700CCBBF5 /* SSR.frag in Resources */,
 				CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */,
 				CE4DE21A1FA60CFE0067729A /* Sponza_Ceiling_normal.tga in Resources */,
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
@@ -3732,6 +3746,7 @@
 				CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */,
 				CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */,
 				CE70FA4E1F8F8EF600AD9027 /* GLSLDirectionalDepth.cpp in Sources */,
+				CEEE4CE220FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp in Sources */,
 				CE70FA281F8F8EF600AD9027 /* Cameraman.cpp in Sources */,
 				CE70FA211F8F8EF600AD9027 /* Vertex1P3.cpp in Sources */,
 				CE70FA1E1F8F8EF600AD9027 /* Ray3D.cpp in Sources */,
@@ -3869,6 +3884,7 @@
 				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N2UV1T1BT.cpp in Sources */,
 				CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */,
+				CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp in Sources */,
 				CE70FA911F8F912300AD9027 /* MeshListTabViewItem.mm in Sources */,
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,
 				CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */,

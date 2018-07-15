@@ -23,6 +23,9 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLDeferredCookTorrance::setCamera(const Camera& camera) {
+        glm::vec2 nearFar(camera.nearClipPlane(), camera.farClipPlane());
+        glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraNearFarPlanes")>).location(), 1, glm::value_ptr(nearFar));
+        
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE,
                            glm::value_ptr(camera.viewMatrix()));
@@ -32,11 +35,6 @@ namespace EARenderer {
                            glm::value_ptr(camera.inverseViewMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
                            glm::value_ptr(camera.inverseProjectionMatrix()));
-    }
-
-    void GLSLDeferredCookTorrance::setViewport(const GLViewport &viewport) {
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewportTextureSpaceMat")>).location(), 1, GL_FALSE,
-                           glm::value_ptr(viewport.textureSpaceMatrix()));
     }
 
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {

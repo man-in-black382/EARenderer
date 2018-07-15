@@ -29,12 +29,4 @@ std::terminate(); \
 #endif
 
 
-#define ENABLE_BITMASK_OPERATORS(x)  \
-template<>                           \
-struct EnableBitMaskOperators<x>     \
-{                                    \
-static const bool enable = true; \
-};
-
-
 #endif /* Macros_h */

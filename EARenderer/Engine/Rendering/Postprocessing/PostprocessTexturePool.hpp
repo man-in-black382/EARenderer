@@ -41,6 +41,7 @@ namespace EARenderer {
         void redirectRenderingToTextures(TexturePtrs... textures) {
             mFramebuffer.activateDrawBuffers(*textures...);
             mFramebuffer.viewport().apply();
+            mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
         }
     };
 
