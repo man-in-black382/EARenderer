@@ -45,7 +45,6 @@ namespace EARenderer {
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
 
-        void setPreviousFrame(const GLFloatTexture2D& previousFrame);
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
         void setExponentialShadowMap(const GLFloatTexture2D& map);

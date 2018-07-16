@@ -71,14 +71,10 @@ uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferLinearDepth;
 uniform sampler2D uGBufferHyperbolicDepth;
 
-uniform vec2 uCameraNearFarPlanes;
 uniform vec3 uCameraPosition;
-uniform mat4 uCameraViewMat;
-uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 uniform mat4 uWorldBoudningBoxTransform;
-uniform mat4 uViewportTextureSpaceMat;
 
 uniform DirectionalLight uDirectionalLight;
 uniform PointLight uPointLight;
@@ -752,8 +748,7 @@ void main() {
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
-    vec3 SSR = ScreenSpaceReflection(N, worldPosition);
-    SSR = vec3(0.0);
+    vec3 SSR = vec3(0.0);
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow, SSR);
 
@@ -761,9 +756,4 @@ void main() {
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
-
-    // DEBUG
-//    SSR = ScreenSpaceReflection(N, worldPosition);
-//
-//    oBrightOutput = vec4(SSR, 1.0);
 }

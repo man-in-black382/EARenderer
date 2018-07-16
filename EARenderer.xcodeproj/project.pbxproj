@@ -26,6 +26,8 @@
 		AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */; };
 		AC59F2932073C6B500698E55 /* LightProbeLinksRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC59F2902073C6B400698E55 /* LightProbeLinksRendering.vert */; };
 		AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC62416B205657AD009B36DF /* SurfelCluster.cpp */; };
+		AC6B0A4D20FC941800B49BB8 /* GLSLHiZBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6B0A4B20FC941800B49BB8 /* GLSLHiZBuffer.cpp */; };
+		AC6B0A4F20FC943200B49BB8 /* HiZBuffer.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6B0A4E20FC943200B49BB8 /* HiZBuffer.frag */; };
 		AC6CD80A20D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD80820D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp */; };
 		AC6CD81220D11838000E6A22 /* GLSLGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */; };
 		AC6CD81620D11B9A000E6A22 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */; };
@@ -633,6 +635,9 @@
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
 		AC6A3E2920ECC096008238E9 /* SceneGBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneGBuffer.hpp; sourceTree = "<group>"; };
+		AC6B0A4B20FC941800B49BB8 /* GLSLHiZBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLHiZBuffer.cpp; sourceTree = "<group>"; };
+		AC6B0A4C20FC941800B49BB8 /* GLSLHiZBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLHiZBuffer.hpp; sourceTree = "<group>"; };
+		AC6B0A4E20FC943200B49BB8 /* HiZBuffer.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HiZBuffer.frag; sourceTree = "<group>"; };
 		AC6CD80820D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDirectionalExponentialShadowMap.cpp; sourceTree = "<group>"; };
 		AC6CD80920D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectionalExponentialShadowMap.hpp; sourceTree = "<group>"; };
 		AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGaussianBlur.cpp; sourceTree = "<group>"; };
@@ -1857,6 +1862,9 @@
 				CEA0B90B20E7741E00257E37 /* GLSLGBuffer.hpp */,
 				CEA0B90D20E7743700257E37 /* GBuffer.frag */,
 				CEA0B90E20E7743700257E37 /* GBuffer.vert */,
+				AC6B0A4B20FC941800B49BB8 /* GLSLHiZBuffer.cpp */,
+				AC6B0A4C20FC941800B49BB8 /* GLSLHiZBuffer.hpp */,
+				AC6B0A4E20FC943200B49BB8 /* HiZBuffer.frag */,
 				CEA0B91420E79D1300257E37 /* GLSLDeferredCookTorrance.cpp */,
 				CEA0B91520E79D1300257E37 /* GLSLDeferredCookTorrance.hpp */,
 				CEA0B91720E79D8F00257E37 /* DeferredCookTorrance.frag */,
@@ -3573,6 +3581,7 @@
 				CEC2196120C0744E00767342 /* Fabric06_mask.jpg in Resources */,
 				CE70FA5F1F8F8F7400AD9027 /* OmnidirectionalDepth.geom in Resources */,
 				CE4DE21C1FA60CFE0067729A /* Sponza_Column_a_diffuse.tga in Resources */,
+				AC6B0A4F20FC943200B49BB8 /* HiZBuffer.frag in Resources */,
 				CE1C9727206657CE006A4A73 /* SurfelClusterAveraging.frag in Resources */,
 				CEF4DBEE20625BB800A68C09 /* SurfelLighting.frag in Resources */,
 				CE4DE2061FA60CFE0067729A /* Background_Normal.tga in Resources */,
@@ -3834,6 +3843,7 @@
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
 				CEA0B90C20E7741E00257E37 /* GLSLGBuffer.cpp in Sources */,
 				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,
+				AC6B0A4D20FC941800B49BB8 /* GLSLHiZBuffer.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
 				CE70FA4D1F8F8EF600AD9027 /* GLSLOmnidirectionalDepth.cpp in Sources */,
 				CE70FA3D1F8F8EF600AD9027 /* GLHDRTexture2D.cpp in Sources */,

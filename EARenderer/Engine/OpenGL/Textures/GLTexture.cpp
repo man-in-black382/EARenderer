@@ -166,5 +166,14 @@ namespace EARenderer {
         mMipMapsCount = floor(std::log2(std::max(mSize.width, mSize.height)));
         mMipMapsCount = std::min(mMipMapsCount, uint16_t(count));
     }
+
+    Size2D GLTexture::mipMapSize(size_t mipLevel) const {
+        bind();
+        GLint w = 0;
+        GLint h = 0;
+        glGetTexLevelParameteriv(mBindingPoint, GLint(mipLevel), GL_TEXTURE_WIDTH, &w);
+        glGetTexLevelParameteriv(mBindingPoint, GLint(mipLevel), GL_TEXTURE_HEIGHT, &h);
+        return { float(w), float(h) };
+    }
     
 }

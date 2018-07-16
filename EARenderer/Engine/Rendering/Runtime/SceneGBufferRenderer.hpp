@@ -14,7 +14,7 @@
 #include "GLDepthRenderbuffer.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLSLGBuffer.hpp"
-#include "GLSLFullScreenQuad.hpp"
+#include "GLSLHiZBuffer.hpp"
 #include "RenderingSettings.hpp"
 #include "SceneGBuffer.hpp"
 
@@ -29,10 +29,12 @@ namespace EARenderer {
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLSLGBuffer mGBufferShader;
-        GLSLFullScreenQuad mFSQuadShader;
+        GLSLHiZBuffer mHiZBufferShader;
 
-//        std::shared_ptr<GLHDRTexture2DArray> mGBuffer;
         std::shared_ptr<SceneGBuffer> mGBuffer;
+
+        void generateGBuffer();
+        void generateHiZBuffer();
 
     public:
         SceneGBufferRenderer(const Scene* scene, const RenderingSettings& settings);

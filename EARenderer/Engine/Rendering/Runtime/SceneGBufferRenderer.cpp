@@ -22,6 +22,9 @@ namespace EARenderer {
         mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
         mFramebuffer.attachTexture(mGBuffer->linearDepth, GLFramebuffer::ColorAttachment::Attachment1);
         mFramebuffer.attachTexture(mGBuffer->hyperbolicDepth);
+
+        // Preallocate HiZ buffer mipmaps
+        mGBuffer->linearDepth.generateMipmaps();
     }
 
 #pragma mark - Getters
@@ -31,15 +34,16 @@ namespace EARenderer {
     }
 
 #pragma mark - Rendering
+#pragma mark - Private Helpers
 
-    void SceneGBufferRenderer::render() {
+    void SceneGBufferRenderer::generateGBuffer() {
         mFramebuffer.bind();
         mFramebuffer.viewport().apply();
 
         mGBufferShader.bind();
         mGBufferShader.setCamera(*(mScene->camera()));
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
         for (ID instanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[instanceID];
@@ -58,8 +62,31 @@ namespace EARenderer {
                 subMesh.draw();
             }
         }
+    }
 
-        mGBuffer->linearDepth.generateMipmaps(2);
+    void SceneGBufferRenderer::generateHiZBuffer() {
+        mFramebuffer.bind();
+
+        mHiZBufferShader.bind();
+        mHiZBufferShader.ensureSamplerValidity([&]() {
+            mHiZBufferShader.setTexture(mGBuffer->linearDepth);
+        });
+
+        size_t unnecessaryHighestMipsCount = 3; // We're stopping at 8x8 mip level, which means we don't need 3 highest mips
+        for (size_t mipLevel = 0; mipLevel < mGBuffer->linearDepth.mipMapsCount() - unnecessaryHighestMipsCount; mipLevel++) {
+            mHiZBufferShader.setMipLevel(mipLevel);
+            mFramebuffer.attachTexture(mGBuffer->linearDepth, GLFramebuffer::ColorAttachment::Attachment0, mipLevel + 1);
+            GLViewport(mGBuffer->linearDepth.mipMapSize(mipLevel + 1)).apply();
+            mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
+    }
+
+#pragma mark - Public Interface
+
+    void SceneGBufferRenderer::render() {
+        generateGBuffer();
+//        generateHiZBuffer();
     }
 
 }

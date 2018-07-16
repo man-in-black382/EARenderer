@@ -235,7 +235,6 @@ namespace EARenderer {
         mCookTorranceShader.setFrustumCascades(mShadowCascades);
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
-            mCookTorranceShader.setPreviousFrame(*mPreviousFrame);
             mCookTorranceShader.setGBuffer(*mGBuffer);
             mCookTorranceShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
