@@ -108,12 +108,6 @@ float LinearDepth() {
     float normalizedLinearDepth = viewSpaceLinearDepth / (far - near);
 
     return normalizedLinearDepth;
-
-    // REMINDER: Opengl is LEFT-HANDED (positive Z pointing into the screen)
-    // Camera is RIGHT-HANDED (positive Z pointing FROM the screen into your face!) therefore
-    // camera view space depth (Z) values are NEGATIVE
-
-//    return vZ;
 }
 
 ////////////////////////////////////////////////////////////

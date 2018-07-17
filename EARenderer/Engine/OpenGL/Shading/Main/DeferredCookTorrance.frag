@@ -69,11 +69,11 @@ uniform sampler2D uPreviousFrame;
 
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferLinearDepth;
-uniform sampler2D uGBufferHyperbolicDepth;
 
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
+uniform vec2 uCameraNearFarPlanes;
 uniform mat4 uWorldBoudningBoxTransform;
 
 uniform DirectionalLight uDirectionalLight;
@@ -675,8 +675,18 @@ GBuffer DecodeGBuffer() {
     return gBuffer;
 }
 
+// Input is linear [0; 1] depth value
+// Output is [-1; 1] non-linear depth value ready to be used in WP reconstruction
+float NDCHyperbolicDepthFromLinearDepth(float linearDepth) {
+    float zNear = uCameraNearFarPlanes.x;
+    float zFar = uCameraNearFarPlanes.y;
+    float nonLinearDepth = (zFar + zNear - 2.0 * zNear * zFar / linearDepth) / (zFar - zNear);
+    return nonLinearDepth;
+}
+
 vec3 ReconstructWorldPosition() {
-    float depth = texture(uGBufferHyperbolicDepth, vTexCoords).r;
+    float linearDepth = texture(uGBufferLinearDepth, vTexCoords).r;
+    float depth = NDCHyperbolicDepthFromLinearDepth(linearDepth);
 
     // Depth range in NDC is [-1; 1]
     // Default value for glDepthRange is [-1; 1]

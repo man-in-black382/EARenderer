@@ -14,8 +14,8 @@ in vec2 vTexCoords;
 uniform sampler2D uFrame;
 
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
-uniform sampler2D uGBufferLinearDepth;
-uniform sampler2D uGBufferHyperbolicDepth;
+uniform sampler2D uGBufferLinearDepthHZB;
+uniform int uHiZBufferMipCount;
 
 uniform vec2 uCameraNearFarPlanes;
 uniform vec3 uCameraPosition;
@@ -110,8 +110,26 @@ GBuffer DecodeGBuffer() {
     return gBuffer;
 }
 
+// Input depth is expected to be in [-1; 1] DNC range
+// Outputs [0; 1] linear depth
+float LinearDepth(float hyperbolicDepth, float nearClipPlane, float farClipPlane) {
+    float viewSpaceLinearDepth = (2.0 * nearClipPlane * farClipPlane) / (farClipPlane + nearClipPlane - hyperbolicDepth * (farClipPlane - nearClipPlane));
+    float normalizedLinearDepth = viewSpaceLinearDepth / (farClipPlane - nearClipPlane);
+    return normalizedLinearDepth;
+}
+
+// Input is linear [0; 1] depth value
+// Output is [-1; 1] non-linear depth value ready to be used in WP reconstruction
+float NDCHyperbolicDepthFromLinearDepth(float linearDepth) {
+    float zNear = uCameraNearFarPlanes.x;
+    float zFar = uCameraNearFarPlanes.y;
+    float nonLinearDepth = (zFar + zNear - 2.0 * zNear * zFar / linearDepth) / (zFar - zNear);
+    return nonLinearDepth;
+}
+
 vec3 ReconstructWorldPosition() {
-    float depth = texture(uGBufferHyperbolicDepth, vTexCoords).r;
+    float linearDepth = texture(uGBufferLinearDepthHZB, vTexCoords).r;
+    float depth = NDCHyperbolicDepthFromLinearDepth(linearDepth);
 
     // Depth range in NDC is [-1; 1]
     // Default value for glDepthRange is [-1; 1]
@@ -155,14 +173,6 @@ vec3 Hash(vec3 a) {
 // Thanks to Sakib Saikia
 // and his post https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html#fn:fn3
 
-// Input depth is expected to be in [-1; 1] DNC range
-// Outputs [0; 1] linear depth
-float LinearizeDepth(float hyperbolicDepth, float nearClipPlane, float farClipPlane) {
-    float viewSpaceLinearDepth = (2.0 * nearClipPlane * farClipPlane) / (farClipPlane + nearClipPlane - hyperbolicDepth * (farClipPlane - nearClipPlane));
-    float normalizedLinearDepth = viewSpaceLinearDepth / (farClipPlane - nearClipPlane);
-    return normalizedLinearDepth;
-}
-
 bool IsSamplingOutsideViewport(vec3 raySample, inout float attenuationFactor) {
     // Any rays that march outside the screen viewport will not have any valid pixel information. These need to be dropped.
     vec2 UVSamplingAttenuation = smoothstep(0.0, 0.05, raySample.xy) * (1 - smoothstep(0.95, 1, raySample.xy));
@@ -192,73 +202,155 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
 }
 
+void StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
+{
+    // Constant offset to make sure you cross to the next cell
+    const float kCellStepOffset = 0.05;
+
+//    vec2 bufferSize = ;
+
+    // Size of current mip
+    ivec2 mipSize = textureSize(uGBufferLinearDepthHZB, mipLevel);//ivec2(bufferSize) >> mipLevel;
+
+    // UV converted to index in the mip
+    vec2 mipCellIndex = raySample.xy * vec2(mipSize);
+
+    // Find the cell boundary UV based on the direction of the ray
+    // Take floor() or ceil() depending on the sign of rayDir.xy
+    //
+    vec2 boundaryUV;
+    boundaryUV.x = rayDir.x > 0 ? ceil(mipCellIndex.x) / float(mipSize.x) : floor(mipCellIndex.x) / float(mipSize.x);
+    boundaryUV.y = rayDir.y > 0 ? ceil(mipCellIndex.y) / float(mipSize.y) : floor(mipCellIndex.y) / float(mipSize.y);
+
+    // We can now represent the cell boundary as being formed by the intersection of
+    // two lines which can be represented by
+    //
+    // x = boundaryUV.x
+    // y = boundaryUV.y
+    //
+    // Intersect the parametric equation of the Ray with each of these lines
+    //
+    vec2 t;
+    t.x = (boundaryUV.x - raySample.x) / rayDir.x;
+    t.y = (boundaryUV.y - raySample.y) / rayDir.y;
+
+    // Pick the cell intersection that is closer, and march to that cell
+    float axis = abs(t.x) < abs(t.y) ? t.x : t.y;
+    raySample += (axis + kCellStepOffset) * rayDir;
+}
+
 bool GetReflection(vec3 worldReflectionVec,
                    vec3 screenSpaceReflectionVec,
                    vec3 screenSpacePos,
                    out vec3 reflectionColor)
 {
-    bool bFoundIntersection = false;
-    vec3 minRaySample = vec3(0.0);
-    vec3 maxRaySample = vec3(0.0);
+//    bool bFoundIntersection = false;
+//    vec3 minraySample = vec3(0.0);
+//    vec3 maxraySample = vec3(0.0);
+//
+//    float viewportAttenuationFactor = 1.0;
+//
+//    // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
+//    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
+//
+//        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
+//
+//        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
+//            reflectionColor = vec3(0.5, 0.0, 0.0);
+//            return false;
+//        }
+//
+//        float ZBufferVal = texture(uGBufferLinearDepthHZB, raySample.xy).r;
+//
+//        maxraySample = raySample;
+//
+//        if (raySample.z > ZBufferVal + 0.1) {
+//            bFoundIntersection = true;
+//            break;
+//        }
+//
+//        minraySample = maxraySample;
+//    }
+//
+//    if (bFoundIntersection) {
+//
+//        vec3 midraySample;
+//        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
+//        {
+//            midraySample = mix(minraySample, maxraySample, 0.5);
+//            float ZBufferVal = texture(uGBufferLinearDepthHZB, midraySample.xy).r;
+//
+//            if (midraySample.z > ZBufferVal) {
+//                maxraySample = midraySample;
+//            } else {
+//                minraySample = midraySample;
+//            }
+//        }
+//
+//        reflectionColor = texture(uFrame, midraySample.xy).rgb;
+//
+//        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midraySample.xy).xyz;
+//        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
+//        reflectionColor = albedoRoughness.rgb;
+//
+//        float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
+//        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
+//    }
+//
+//    return bFoundIntersection;
 
-    float viewportAttenuationFactor = 1.0;
+    ////////
+    vec3 raySample = screenSpaceReflectionVec + screenSpacePos;
+    float viewportAttenuationFactor = 0.0;
+    int mipLevel = 0;
 
-    // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
-    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
+    while (mipLevel > -1 && mipLevel < uHiZBufferMipCount) {
+        // Cross a single texel in the HZB for the current mipLevel
+        StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
 
-        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
+//        // Constrain raymarch UV to (0-1) range with a flalloff
+//        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
+//            reflectionColor = vec3(0.5, 0.0, 0.0);
+//            return false;
+//        }
 
-        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-            reflectionColor = vec3(0.5, 0.0, 0.0);
-            return false;
+        raySample.xy = clamp(raySample.xy, vec2(0.0), vec2(1.0));
+
+        float ZBufferValue = texture(uGBufferLinearDepthHZB, raySample.xy).r;
+
+        if (raySample.z < ZBufferValue) {
+            // If we did not intersect, perform successive test on the next
+            // higher mip level (and thus take larger steps)
+            mipLevel++;
+        } else {
+            // If we intersected, pull back the ray to the point of intersection (for that mipLevel)
+            float t = (raySample.z - ZBufferValue) / screenSpaceReflectionVec.z;
+            raySample -= screenSpaceReflectionVec * t;
+
+            // And, then perform successive test on the next lower mip level.
+            // Once we've got a valid intersection with mip 0, we've found our intersection point
+            mipLevel--;
         }
-
-        float ZBufferVal = texture(uGBufferLinearDepth, raySample.xy).r;
-
-        maxRaySample = raySample;
-
-        if (raySample.z > ZBufferVal + 0.1) {
-            bFoundIntersection = true;
-            break;
-        }
-
-        minRaySample = maxRaySample;
     }
 
-    if (bFoundIntersection) {
+    reflectionColor = texture(uFrame, raySample.xy).rgb;
 
-        vec3 midRaySample;
-        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
-        {
-            midRaySample = mix(minRaySample, maxRaySample, 0.5);
-            float ZBufferVal = texture(uGBufferLinearDepth, midRaySample.xy).r;
+    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, raySample.xy).xyz;
+    vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
+    reflectionColor = albedoRoughness.rgb;
 
-            if (midRaySample.z > ZBufferVal) {
-                maxRaySample = midRaySample;
-            } else {
-                minRaySample = midRaySample;
-            }
-        }
+    float backFaceAttenuationFactor = BackFaceAttenuation(raySample, worldReflectionVec);
+    reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
 
-        reflectionColor = texture(uFrame, midRaySample.xy).rgb;
-
-        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midRaySample.xy).xyz;
-        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-        reflectionColor = albedoRoughness.rgb;
-
-        float backFaceAttenuationFactor = BackFaceAttenuation(midRaySample, worldReflectionVec);
-        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
-    }
-
-    return bFoundIntersection;
+    return true;
 }
 
 vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
-    vec2 frameSize = textureSize(uGBufferLinearDepth, 0);
+    vec2 frameSize = textureSize(uGBufferLinearDepthHZB, 0);
     vec2 currentFragUV = vTexCoords;
 
     // Prerequisites
-    float currentFragLinearDepth = texture(uGBufferLinearDepth, currentFragUV).r;
+    float currentFragLinearDepth = texture(uGBufferLinearDepthHZB, currentFragUV).r;
     vec3 cameraToFrag = normalize(worldPosition - uCameraPosition);
 
     // ScreenSpacePos --> (screencoord.xy, device_z)
@@ -277,7 +369,7 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     vec4 screenSpaceReflectionPoint = uCameraProjectionMat * uCameraViewMat * pointAlongReflectionVec;
     screenSpaceReflectionPoint /= screenSpaceReflectionPoint.w;
     screenSpaceReflectionPoint.xy = screenSpaceReflectionPoint.xy * 0.5 + 0.5; // To [0; 1]
-    screenSpaceReflectionPoint.z = LinearizeDepth(screenSpaceReflectionPoint.z, uCameraNearFarPlanes.x, uCameraNearFarPlanes.y);
+    screenSpaceReflectionPoint.z = LinearDepth(screenSpaceReflectionPoint.z, uCameraNearFarPlanes.x, uCameraNearFarPlanes.y);
 
     // Compute the sreen space reflection vector as the difference of the two screen space points
     vec3 screenSpaceReflectionVec = normalize(screenSpaceReflectionPoint.xyz - screenSpacePos.xyz);

@@ -36,8 +36,8 @@ namespace EARenderer {
 
     void GLSLScreenSpaceReflections::setGBuffer(const SceneGBuffer& GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
-        setUniformTexture(uint32_constant<ctcrc32("uGBufferLinearDepth")>, GBuffer.linearDepth);
-        setUniformTexture(uint32_constant<ctcrc32("uGBufferHyperbolicDepth")>, GBuffer.hyperbolicDepth);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferLinearDepthHZB")>, GBuffer.linearDepthHZB);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uHiZBufferMipCount")>).location(), GBuffer.HiZBufferMipCount);
     }
 
     void GLSLScreenSpaceReflections::setFrame(const GLFloatTexture2D& frame) {

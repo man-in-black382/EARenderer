@@ -20,11 +20,11 @@ namespace EARenderer {
     mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
         mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(mGBuffer->linearDepth, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachTexture(mGBuffer->hyperbolicDepth);
+        mFramebuffer.attachTexture(mGBuffer->linearDepthHZB, GLFramebuffer::ColorAttachment::Attachment1);
+        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
 
         // Preallocate HiZ buffer mipmaps
-        mGBuffer->linearDepth.generateMipmaps();
+        mGBuffer->linearDepthHZB.generateMipmaps();
     }
 
 #pragma mark - Getters
@@ -43,6 +43,9 @@ namespace EARenderer {
         mGBufferShader.bind();
         mGBufferShader.setCamera(*(mScene->camera()));
 
+        // Attach 0 mip again after HiZ buffer construction
+        mFramebuffer.attachTexture(mGBuffer->linearDepthHZB, GLFramebuffer::ColorAttachment::Attachment1, 0);
+        mFramebuffer.activateDrawBuffers(mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->linearDepthHZB);
         mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
         for (ID instanceID : mScene->meshInstances()) {
@@ -69,15 +72,23 @@ namespace EARenderer {
 
         mHiZBufferShader.bind();
         mHiZBufferShader.ensureSamplerValidity([&]() {
-            mHiZBufferShader.setTexture(mGBuffer->linearDepth);
+            mHiZBufferShader.setTexture(mGBuffer->linearDepthHZB);
         });
 
         size_t unnecessaryHighestMipsCount = 3; // We're stopping at 8x8 mip level, which means we don't need 3 highest mips
-        for (size_t mipLevel = 0; mipLevel < mGBuffer->linearDepth.mipMapsCount() - unnecessaryHighestMipsCount; mipLevel++) {
+        mGBuffer->HiZBufferMipCount = mGBuffer->linearDepthHZB.mipMapsCount() - unnecessaryHighestMipsCount;
+
+        for (size_t mipLevel = 0; mipLevel < mGBuffer->HiZBufferMipCount; mipLevel++) {
             mHiZBufferShader.setMipLevel(mipLevel);
-            mFramebuffer.attachTexture(mGBuffer->linearDepth, GLFramebuffer::ColorAttachment::Attachment0, mipLevel + 1);
-            GLViewport(mGBuffer->linearDepth.mipMapSize(mipLevel + 1)).apply();
+
+            Size2D mipSize = mGBuffer->linearDepthHZB.mipMapSize(mipLevel + 1);
+            GLViewport(mipSize).apply();
+
+            mFramebuffer.attachTexture(mGBuffer->linearDepthHZB, GLFramebuffer::ColorAttachment::Attachment1, mipLevel + 1);
+            // Leave only linear depth attachment active so that other textures won't get corrupted
+            mFramebuffer.activateDrawBuffers(mGBuffer->linearDepthHZB);
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
+
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
     }
@@ -86,7 +97,7 @@ namespace EARenderer {
 
     void SceneGBufferRenderer::render() {
         generateGBuffer();
-//        generateHiZBuffer();
+        generateHiZBuffer();
     }
 
 }
