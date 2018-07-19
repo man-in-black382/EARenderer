@@ -28,9 +28,6 @@ namespace EARenderer {
                            glm::value_ptr(camera.inverseViewMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
                            glm::value_ptr(camera.inverseProjectionMatrix()));
-
-        glm::vec2 nearFar(camera.nearClipPlane(), camera.farClipPlane());
-        glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraNearFarPlanes")>).location(), 1, glm::value_ptr(nearFar));
     }
 
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {
@@ -47,7 +44,7 @@ namespace EARenderer {
 
     void GLSLDeferredCookTorrance::setGBuffer(const SceneGBuffer& GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
-        setUniformTexture(uint32_constant<ctcrc32("uGBufferLinearDepth")>, GBuffer.linearDepthHZB);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferHiZBuffer")>, GBuffer.HiZBuffer);
     }
 
     void GLSLDeferredCookTorrance::setFrustumCascades(const FrustumCascades& cascades) {

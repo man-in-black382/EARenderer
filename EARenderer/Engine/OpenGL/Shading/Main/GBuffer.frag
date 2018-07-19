@@ -29,8 +29,6 @@ struct Material {
 
 uniform Material uMaterial;
 
-uniform vec2 uCameraNearFarPlanes;
-
 // Functions
 
 ////////////////////////////////////////////////////////////
@@ -98,18 +96,6 @@ uint PackSnorm2x16(float first, float second, float range) {
     return packed;
 }
 
-float LinearDepth() {
-    float near = uCameraNearFarPlanes.x;
-    float far = uCameraNearFarPlanes.y;
-
-    float z = gl_FragCoord.z * 2.0 - 1.0; // [-1; 1]
-
-    float viewSpaceLinearDepth = (2.0 * near * far) / (far + near - z * (far - near));
-    float normalizedLinearDepth = viewSpaceLinearDepth / (far - near);
-
-    return normalizedLinearDepth;
-}
-
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -145,5 +131,5 @@ void main() {
     uint metalnessAONormalZ = metalnessAO | normalZ;
 
     oAlbedoRoughnessMetalnessAONormal = uvec3(albedoRoughness, metalnessAONormalZ, normalXY);
-    oDepth = LinearDepth();
+    oDepth =  gl_FragCoord.z;
 }

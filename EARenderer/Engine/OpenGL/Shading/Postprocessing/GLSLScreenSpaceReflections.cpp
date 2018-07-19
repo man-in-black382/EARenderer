@@ -20,9 +20,6 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     void GLSLScreenSpaceReflections::setCamera(const Camera& camera) {
-        glm::vec2 nearFar(camera.nearClipPlane(), camera.farClipPlane());
-        glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraNearFarPlanes")>).location(), 1, glm::value_ptr(nearFar));
-
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(camera.position()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewMat")>).location(), 1, GL_FALSE,
                            glm::value_ptr(camera.viewMatrix()));
@@ -36,7 +33,7 @@ namespace EARenderer {
 
     void GLSLScreenSpaceReflections::setGBuffer(const SceneGBuffer& GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferAlbedoRoughnessMetalnessAONormal")>, GBuffer.albedoRoughnessMetalnessAONormal);
-        setUniformTexture(uint32_constant<ctcrc32("uGBufferLinearDepthHZB")>, GBuffer.linearDepthHZB);
+        setUniformTexture(uint32_constant<ctcrc32("uGBufferHiZBuffer")>, GBuffer.HiZBuffer);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uHiZBufferMipCount")>).location(), GBuffer.HiZBufferMipCount);
     }
 

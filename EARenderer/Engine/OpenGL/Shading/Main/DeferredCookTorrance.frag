@@ -68,7 +68,7 @@ struct vec8 {
 uniform sampler2D uPreviousFrame;
 
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
-uniform sampler2D uGBufferLinearDepth;
+uniform sampler2D uGBufferHiZBuffer;
 
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewInverse;
@@ -685,8 +685,7 @@ float NDCHyperbolicDepthFromLinearDepth(float linearDepth) {
 }
 
 vec3 ReconstructWorldPosition() {
-    float linearDepth = texture(uGBufferLinearDepth, vTexCoords).r;
-    float depth = NDCHyperbolicDepthFromLinearDepth(linearDepth);
+    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
 
     // Depth range in NDC is [-1; 1]
     // Default value for glDepthRange is [-1; 1]
