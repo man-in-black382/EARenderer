@@ -19,7 +19,7 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void GLSLHiZBuffer::setTexture(const GLFloatTexture2D &texture) {
+    void GLSLHiZBuffer::setTexture(const GLFloatTexture2D<GLTexture::Float::R32F> &texture) {
         setUniformTexture(uint32_constant<ctcrc32("uLinearDepthTexture")>, texture);
     }
 

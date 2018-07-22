@@ -199,8 +199,12 @@ namespace EARenderer {
 
         return { position, normal, barycentric, it };
     }
-    
-    Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin, const GLTexture2DSampler& albedoMapSampler) {
+
+    template<class TextureFormat, TextureFormat Format>
+    Surfel SurfelGenerator::generateSurfel(SurfelCandidate& surfelCandidate,
+                                           LogarithmicBin<TransformedTriangleData>& transformedVerticesBin,
+                                           const GLTexture2DSampler<TextureFormat, Format>& albedoMapSampler)
+    {
         TransformedTriangleData& triangleData = *surfelCandidate.logarithmicBinIterator;
 
         glm::vec2 p1p2 = triangleData.UVs.p2 - triangleData.UVs.p1;
@@ -212,7 +216,8 @@ namespace EARenderer {
 
         uv = GLTexture::WrapCoordinates(uv);
 
-        Color albedoLinear = albedoMapSampler.sample(uv).linear();
+        auto texel = albedoMapSampler.sample(uv);
+        Color albedoLinear = Color(texel.r, texel.g, texel.b).linear();
 
         float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
         
@@ -231,7 +236,7 @@ namespace EARenderer {
             // Sample higher mip level to get rid of high frequency color information
             // It will be better to use low-frequency, blurred albedo texture since this algorithm is all about diffuse GI
             int32_t mipLevel = material.albedoMap()->mipMapsCount() * 0.6;
-            GLLDRTexture2DSampler sampler = material.albedoMap()->sampleTexels(mipLevel);
+            GLTexture2DSampler sampler = material.albedoMap()->sampleTexels(mipLevel);
 
             // Actual algorithm that uniformly distributes surfels on geometry
             while (!bin.empty()) {
@@ -373,23 +378,13 @@ namespace EARenderer {
         return bufferData;
     }
 
-    std::vector<uint8_t> SurfelGenerator::surfelClustersGBufferData() const {
-        std::vector<uint8_t> data;
-
-        // Pack surfel offset's 24 LS bits into 3 consequtive ubyte values
-        // Then pack the surfel count into 1 ubyte that follows 3 offset bytes
-        // Surfel generator cannot generate more than 256 surfels per cluster by design
-        // so 1 byte per surfel count will be enough
-        // Fragment shader will then unpack these values from RGB and Alpha channels respectively
+    std::vector<uint32_t> SurfelGenerator::surfelClustersGBufferData() const {
+        std::vector<uint32_t> data;
         for (auto& cluster : mSurfelDataContainer->mSurfelClusters) {
-            uint8_t b = cluster.surfelOffset & 0xFF;
-            uint8_t g = (cluster.surfelOffset >> 8) & 0xFF;
-            uint8_t r = (cluster.surfelOffset >> 16) & 0xFF;
-            uint8_t a = cluster.surfelCount;
-            data.push_back(r);
-            data.push_back(g);
-            data.push_back(b);
-            data.push_back(a);
+            uint32_t encoded = 0;
+            encoded |= cluster.surfelOffset << 8;
+            encoded |= cluster.surfelCount & 0xFF;
+            data.push_back(encoded);
         }
         return data;
     }
@@ -430,7 +425,10 @@ namespace EARenderer {
         });
 
         mSurfelDataContainer->mSurfelsGBuffer = std::make_shared<GLHDRTexture2DArray>(surfelsGBufferData());
-        mSurfelDataContainer->mSurfelClustersGBuffer = std::make_shared<GLLDRTexture2D>(surfelClustersGBufferData());
+
+        auto clustersGBuffer = surfelClustersGBufferData();
+        auto clusterGBufferSize = GLTexture::EstimatedSize(clustersGBuffer.size());
+        mSurfelDataContainer->mSurfelClustersGBuffer = std::make_shared<GLIntegerTexture2D<GLTexture::Integer::R32UI>>(clusterGBufferSize, clustersGBuffer.data());
 
         mSurfelDataContainer->mSurfelClusterCentersBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
         mSurfelDataContainer->mSurfelClusterCentersBufferTexture->buffer().initialize(surfelClusterCenters());

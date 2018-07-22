@@ -23,7 +23,7 @@ namespace EARenderer {
         glUniform3iv(uniformByNameCRC32(uint32_constant<ctcrc32("uProbesGridResolution")>).location(), 1, glm::value_ptr(resolution));
     }
 
-    void GLSLGridLightProbesUpdate::setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap) {
+    void GLSLGridLightProbesUpdate::setSurfelClustersLuminaceMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& luminanceMap) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelClustersLuminanceMap")>, luminanceMap);
     }
 

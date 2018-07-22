@@ -10,7 +10,7 @@
 #define GLSLSurfelClusterLuminanceAveraging_hpp
 
 #include "GLProgram.hpp"
-#include "GLLDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "GLHDRTexture2D.hpp"
 
 namespace EARenderer {
@@ -19,8 +19,8 @@ namespace EARenderer {
     public:
         GLSLSurfelClusterAveraging();
 
-        void setSurfelClustersGBuffer(const GLLDRTexture2D& gBuffer);
-        void setSurfelsLuminaceMap(const GLHDRTexture2D& map);
+        void setSurfelClustersGBuffer(const GLIntegerTexture2D<GLTexture::Integer::R32UI>& gBuffer);
+        void setSurfelsLuminaceMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& map);
     };
 
 }

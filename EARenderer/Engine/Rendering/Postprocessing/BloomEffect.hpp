@@ -28,9 +28,9 @@ namespace EARenderer {
         GLSLBloom mBloomShader;
 
     public:
-        void bloom(std::shared_ptr<const GLFloatTexture2D> baseImage,
-                   std::shared_ptr<GLFloatTexture2D> thresholdFilteredImage,
-                   std::shared_ptr<GLFloatTexture2D> outputImage,
+        void bloom(std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> baseImage,
+                   std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> thresholdFilteredImage,
+                   std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
                    std::shared_ptr<PostprocessTexturePool> texturePool,
                    const BloomSettings& settings);
     };

@@ -7,6 +7,7 @@
 //
 
 #include "PBRMaterial.hpp"
+#include "GLTextureFactory.hpp"
 
 namespace EARenderer {
     
@@ -19,91 +20,45 @@ namespace EARenderer {
                              const std::string& ambientOcclusionMapPath,
                              const std::string& displacementMapPath)
     :
-    mAlbedoMap(albedoMapPath.length() != 0 ? new GLLDRTexture2D(albedoMapPath) : nullptr),
-    mNormalMap(normalMapPath.length() != 0 ? new GLLDRTexture2D(normalMapPath) : nullptr),
-    mMetallicMap(metallicMapPath.length() != 0 ? new GLLDRTexture2D(metallicMapPath) : nullptr),
-    mRoughnessMap(roughnessMapPath.length() != 0 ? new GLLDRTexture2D(roughnessMapPath) : nullptr),
-    mAmbientOcclusionMap(ambientOcclusionMapPath.length() != 0 ? new GLLDRTexture2D(ambientOcclusionMapPath) : nullptr),
-    mDisplacementMap(displacementMapPath.length() != 0 ? new GLLDRTexture2D(displacementMapPath) : nullptr)
+    mAlbedoMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RGBACompressed>(albedoMapPath)),
+    mNormalMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RGBCompressed>(normalMapPath)),
+    mMetallicMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(metallicMapPath)),
+    mRoughnessMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(roughnessMapPath)),
+    mAmbientOcclusionMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(ambientOcclusionMapPath)),
+    mDisplacementMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(displacementMapPath))
     {
-        if (albedoMapPath.length()) mAlbedoMap->generateMipmaps();
-        if (normalMapPath.length()) mNormalMap->generateMipmaps();
-        if (metallicMapPath.length()) mMetallicMap->generateMipmaps();
-        if (roughnessMapPath.length()) mRoughnessMap->generateMipmaps();
-        if (ambientOcclusionMapPath.length()) mAmbientOcclusionMap->generateMipmaps();
-        if (displacementMapPath.length()) mDisplacementMap->generateMipmaps();
-    }
-    
-    PBRMaterial::PBRMaterial(PBRMaterial&& that)
-    :
-    mAlbedoMap(std::move(that.mAlbedoMap)),
-    mNormalMap(std::move(that.mNormalMap)),
-    mMetallicMap(std::move(that.mMetallicMap)),
-    mRoughnessMap(std::move(that.mRoughnessMap)),
-    mAmbientOcclusionMap(std::move(that.mAmbientOcclusionMap)),
-    mDisplacementMap(std::move(that.mDisplacementMap))
-    {
-        that.mAlbedoMap = nullptr;
-        that.mNormalMap = nullptr;
-        that.mMetallicMap = nullptr;
-        that.mRoughnessMap = nullptr;
-        that.mAmbientOcclusionMap = nullptr;
-        that.mDisplacementMap = nullptr;
-    }
-    
-    PBRMaterial& PBRMaterial::operator=(PBRMaterial rhs) {
-        swap(rhs);
-        return *this;
-    }
-    
-    PBRMaterial::~PBRMaterial() {
-        delete mAlbedoMap;
-        delete mNormalMap;
-        delete mMetallicMap;
-        delete mRoughnessMap;
-        delete mAmbientOcclusionMap;
-        delete mDisplacementMap;
-    }
-    
-#pragma mark - Swap
-    
-    void PBRMaterial::swap(PBRMaterial& that) {
-        std::swap(mAlbedoMap, that.mAlbedoMap);
-        std::swap(mNormalMap, that.mNormalMap);
-        std::swap(mMetallicMap, that.mMetallicMap);
-        std::swap(mRoughnessMap, that.mRoughnessMap);
-        std::swap(mAmbientOcclusionMap, that.mAmbientOcclusionMap);
-        std::swap(mDisplacementMap, that.mDisplacementMap);
-    }
-    
-    void swap(PBRMaterial& lhs, PBRMaterial& rhs) {
-        lhs.swap(rhs);
+        if (mAlbedoMap) mAlbedoMap->generateMipmaps();
+        if (mNormalMap) mNormalMap->generateMipmaps();
+        if (mMetallicMap) mMetallicMap->generateMipmaps();
+        if (mRoughnessMap) mRoughnessMap->generateMipmaps();
+        if (mAmbientOcclusionMap) mAmbientOcclusionMap->generateMipmaps();
+        if (mDisplacementMap) mDisplacementMap->generateMipmaps();
     }
     
 #pragma mark - Getters
 
-    const GLLDRTexture2D* PBRMaterial::albedoMap() const {
-        return mAlbedoMap;
-    }
-    
-    const GLLDRTexture2D* PBRMaterial::normalMap() const {
-        return mNormalMap;
-    }
-    
-    const GLLDRTexture2D* PBRMaterial::metallicMap() const {
-        return mMetallicMap;
-    }
-    
-    const GLLDRTexture2D* PBRMaterial::roughnessMap() const {
-        return mRoughnessMap;
-    }
-    
-    const GLLDRTexture2D* PBRMaterial::ambientOcclusionMap() const {
-        return mAmbientOcclusionMap;
+    const PBRMaterial::AlbedoMap* PBRMaterial::albedoMap() const {
+        return mAlbedoMap.get();
     }
 
-    const GLLDRTexture2D* PBRMaterial::displacementMap() const {
-        return mDisplacementMap;
+    const PBRMaterial::NormalMap* PBRMaterial::normalMap() const {
+        return mNormalMap.get();
+    }
+
+    const PBRMaterial::MetallnessMap* PBRMaterial::metallicMap() const {
+        return mMetallicMap.get();
+    }
+
+    const PBRMaterial::RoughnessMap* PBRMaterial::roughnessMap() const {
+        return mRoughnessMap.get();
+    }
+
+    const PBRMaterial::AmbientOcclusionMap* PBRMaterial::ambientOcclusionMap() const {
+        return mAmbientOcclusionMap.get();
+    }
+
+    const PBRMaterial::DisplacementMap* PBRMaterial::displacementMap() const {
+        return mDisplacementMap.get();
     }
     
 }

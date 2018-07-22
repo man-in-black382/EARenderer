@@ -23,8 +23,14 @@ namespace EARenderer {
         using GLProgram::GLProgram;
         
         GLSLFullScreenQuad();
+
+        template<class TextureFormat, TextureFormat Format>
+        void setTexture(const GLTexture2D<TextureFormat, Format>& texture) {
+            setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_FALSE);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSample3DTexture")>).location(), GL_FALSE);
+        }
         
-        void setTexture(const GLTexture2D& texture);
         void setTexture(const GLTexture2DArray& texture, uint8_t index);
         void setTexture(const GLTexture3D& texture, float depth);
         void setApplyToneMapping(bool toneMap);

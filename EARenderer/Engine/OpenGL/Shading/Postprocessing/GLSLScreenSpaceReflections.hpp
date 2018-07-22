@@ -24,7 +24,7 @@ namespace EARenderer {
 
         void setCamera(const Camera& camera);
         void setGBuffer(const SceneGBuffer& GBuffer);
-        void setFrame(const GLFloatTexture2D& frame);
+        void setFrame(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& frame);
     };
 
 }

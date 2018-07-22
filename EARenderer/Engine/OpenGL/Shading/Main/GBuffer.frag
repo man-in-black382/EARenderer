@@ -131,5 +131,5 @@ void main() {
     uint metalnessAONormalZ = metalnessAO | normalZ;
 
     oAlbedoRoughnessMetalnessAONormal = uvec3(albedoRoughness, metalnessAONormalZ, normalXY);
-    oDepth =  gl_FragCoord.z;
+    oDepth = gl_FragCoord.z;
 }

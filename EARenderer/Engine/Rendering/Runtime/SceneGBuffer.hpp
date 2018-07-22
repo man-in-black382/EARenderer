@@ -14,16 +14,14 @@
 namespace EARenderer {
 
     struct SceneGBuffer {
-        GLIntegerTexture2D albedoRoughnessMetalnessAONormal;
-        // Linearized depth in range [0; 1] with HiZ buffer encoded in its mip maps
-        GLFloatTexture2D HiZBuffer;
-
+        GLIntegerTexture2D<GLTexture::Integer::RGB32UI> albedoRoughnessMetalnessAONormal;
+        GLFloatTexture2D<GLTexture::Float::R32F> HiZBuffer;
         int8_t HiZBufferMipCount;
 
         SceneGBuffer(const Size2D& resolution)
         :
-        albedoRoughnessMetalnessAONormal(resolution, GLTexture::IntegerFormat::RGB32UI),
-        HiZBuffer(resolution, GLTexture::FloatFormat::R32F),
+        albedoRoughnessMetalnessAONormal(resolution),
+        HiZBuffer(resolution),
         HiZBufferMipCount(0)
         { }
     };

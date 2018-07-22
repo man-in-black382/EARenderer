@@ -30,7 +30,7 @@ namespace EARenderer {
         std::vector<SurfelCluster> mSurfelClusters;
 
         std::shared_ptr<GLHDRTexture2DArray> mSurfelsGBuffer;
-        std::shared_ptr<GLLDRTexture2D> mSurfelClustersGBuffer;
+        std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::R32UI>> mSurfelClustersGBuffer;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mSurfelClusterCentersBufferTexture;
 
     public:

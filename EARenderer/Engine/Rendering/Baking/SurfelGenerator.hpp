@@ -58,7 +58,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 0.4;
+        float mMinimumSurfelDistance = 0.02;
         size_t mMaximumSurfelClusterSize = 256;
         
         std::mt19937 mEngine;
@@ -136,7 +136,10 @@ namespace EARenderer {
          @param transformedVerticesBin Bin that holds all transformed triangle data of the sub mesh on which candidate was generated on
          @return Surfel ready to be added to a scene and participate in rendering
          */
-        Surfel generateSurfel(SurfelCandidate& surfelCandidate, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin, const GLTexture2DSampler& albedoMapSampler);
+        template<class TextureFormat, TextureFormat Format>
+        Surfel generateSurfel(SurfelCandidate& surfelCandidate,
+                              LogarithmicBin<TransformedTriangleData>& transformedVerticesBin,
+                              const GLTexture2DSampler<TextureFormat, Format>& albedoMapSampler);
         
         /**
          Generates surfels for a single mesh instance
@@ -172,7 +175,7 @@ namespace EARenderer {
 
          @return array of surfel offset - count pairs
          */
-        std::vector<uint8_t> surfelClustersGBufferData() const;
+        std::vector<uint32_t> surfelClustersGBufferData() const;
 
         /**
          Returns an array of surfel cluster centers

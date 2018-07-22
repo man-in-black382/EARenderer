@@ -15,18 +15,14 @@ uniform sampler2D uSurfelsLuminanceMap;
 
 // Functions
 
-uint UnpackSurfelOffset(uvec4 texel) {
-    uint offset = 0;
-    offset |= texel.r;
-    offset <<= 8;
-    offset |= texel.g;
-    offset <<= 8;
-    offset |= texel.b;
+uint UnpackSurfelOffset(uint encoded) {
+    uint offset = encoded >> 8u;
     return offset;
 }
 
-uint UnpackSurfelCount(uvec4 texel) {
-    return texel.a;
+uint UnpackSurfelCount(uint encoded) {
+    uint count = encoded & 0xFFu;
+    return count;
 }
 
 void main() {
@@ -36,7 +32,7 @@ void main() {
     int luminanceMapWidth = luminanceMapSize.x;
     int luminanceMapHeight = luminanceMapSize.y;
 
-    uvec4 clusterMetadata = texture(uSurfelClustersGBuffer, vTexCoords);
+    uint clusterMetadata = texture(uSurfelClustersGBuffer, vTexCoords).r;
 
     uint surfelOffset = UnpackSurfelOffset(clusterMetadata);
     uint surfelCount = UnpackSurfelCount(clusterMetadata);

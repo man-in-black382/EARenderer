@@ -170,29 +170,29 @@ namespace EARenderer {
     
 #pragma mark - Public
 
-    void GLFramebuffer::attachTexture(const GLNormalizedTexture2D& texture, ColorAttachment colorAttachment, uint16_t mipLevel) {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    void GLFramebuffer::attachTexture(const GLFloatTexture2D& texture, ColorAttachment colorAttachment, uint16_t mipLevel) {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) {
-        attachTextureToDepthAttachment(texture, mipLevel);
-    }
-
-    void GLFramebuffer::attachTexture(const GLIntegerTexture2D& texture, ColorAttachment colorAttachment) {
-        attachTextureToColorAttachment(texture, colorAttachment, 0);
-    }
+//    void GLFramebuffer::attachTexture(const GLNormalizedTexture2D& texture, ColorAttachment colorAttachment, uint16_t mipLevel) {
+//        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+//    }
+//
+//    void GLFramebuffer::attachTexture(const GLFloatTexture2D& texture, ColorAttachment colorAttachment, uint16_t mipLevel) {
+//        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+//    }
+//
+//    void GLFramebuffer::attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) {
+//        attachTextureToDepthAttachment(texture, mipLevel);
+//    }
+//
+//    void GLFramebuffer::attachTexture(const GLIntegerTexture2D& texture, ColorAttachment colorAttachment) {
+//        attachTextureToColorAttachment(texture, colorAttachment, 0);
+//    }
 
     // FIXME: Remove deprecated attachment functions
-    void GLFramebuffer::attachTexture(const GLTexture2D& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
+//    void GLFramebuffer::attachTexture(const GLTexture2D& texture,
+//                                      ColorAttachment colorAttachment,
+//                                      uint16_t mipLevel)
+//    {
+//        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+//    }
 
     void GLFramebuffer::attachTexture(const GLTextureCubemap& texture,
                                       ColorAttachment colorAttachment,
@@ -201,12 +201,12 @@ namespace EARenderer {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
-    void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
+//    void GLFramebuffer::attachTexture(const GLHDRTexture2D& texture,
+//                                      ColorAttachment colorAttachment,
+//                                      uint16_t mipLevel)
+//    {
+//        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+//    }
 
     void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture,
                                       ColorAttachment colorAttachment,

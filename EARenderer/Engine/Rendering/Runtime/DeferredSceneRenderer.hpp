@@ -77,7 +77,7 @@ namespace EARenderer {
 
         FrustumCascades mShadowCascades;
         std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
-        std::shared_ptr<GLFloatTexture2D> mDirectionalExponentialShadowMap;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mDirectionalExponentialShadowMap;
         GaussianBlurEffect mShadowBlurEffect;
 
         GLSLDepthPrepass mDepthPrepassShader;
@@ -88,8 +88,8 @@ namespace EARenderer {
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
 
-        GLHDRTexture2D mSurfelsLuminanceMap;
-        GLHDRTexture2D mSurfelClustersLuminanceMap;
+        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelsLuminanceMap;
+        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelClustersLuminanceMap;
         GLFramebuffer mSurfelsLuminanceFramebuffer;
         GLFramebuffer mSurfelClustersLuminanceFramebuffer;
 
@@ -103,9 +103,9 @@ namespace EARenderer {
         ScreenSpaceReflectionEffect mSSREffect;
         std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
 
-        std::shared_ptr<GLFloatTexture2D> mFrame;
-        std::shared_ptr<GLFloatTexture2D> mPreviousFrame;
-        std::shared_ptr<GLFloatTexture2D> mThresholdFilteredOutputFrame;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mPreviousFrame;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mThresholdFilteredOutputFrame;
 
         void setupGLState();
         void setupFramebuffers();
@@ -118,7 +118,7 @@ namespace EARenderer {
         void averageSurfelClusterLuminances();
         void updateGridProbes();
         void renderMeshes();
-        void renderFinalImage(const GLFloatTexture2D& image);
+        void renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
 
     public:
         DeferredSceneRenderer(const Scene* scene,

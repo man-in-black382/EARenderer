@@ -26,5 +26,44 @@ namespace EARenderer {
     }
 
     GLTextureSampler::~GLTextureSampler() { }
+
+#pragma mark - Formats
+
+    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Normalized format) {
+        switch (format) {
+            case GLTexture::Normalized::RCompressed:     return { GL_RGBA, GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGCompressed:    return { GL_RGBA, GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGBCompressed:   return { GL_RGBA, GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGBACompressed:  return { GL_RGBA, GL_UNSIGNED_BYTE };
+        }
+    }
+
+    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Float format) {
+        switch (format) {
+            case GLTexture::Float::R16F:     return { GL_RED,  GL_HALF_FLOAT };
+            case GLTexture::Float::RG16F:    return { GL_RG,   GL_HALF_FLOAT };
+            case GLTexture::Float::RGB16F:   return { GL_RGB,  GL_HALF_FLOAT };
+            case GLTexture::Float::RGBA16F:  return { GL_RGBA, GL_HALF_FLOAT };
+            case GLTexture::Float::R32F:     return { GL_RED,  GL_FLOAT };
+            case GLTexture::Float::RG32F:    return { GL_RG,   GL_FLOAT };
+            case GLTexture::Float::RGB32F:   return { GL_RGB,  GL_FLOAT };
+            case GLTexture::Float::RGBA32F:  return { GL_RGBA, GL_FLOAT };
+        }
+    }
+
+    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Integer format) {
+        switch (format) {
+            case GLTexture::Integer::R32UI:      return { GL_RED_INTEGER,  GL_UNSIGNED_INT };
+            case GLTexture::Integer::RG32UI:     return { GL_RG_INTEGER,   GL_UNSIGNED_INT };
+            case GLTexture::Integer::RGB32UI:    return { GL_RGB_INTEGER,  GL_UNSIGNED_INT };
+            case GLTexture::Integer::RGBA32UI:   return { GL_RGBA_INTEGER, GL_UNSIGNED_INT };
+        }
+    }
+
+    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Depth format) {
+        switch (format) {
+            case GLTexture::Depth::Default: return { GL_DEPTH_COMPONENT, GL_FLOAT };
+        }
+    }
     
 }

@@ -25,17 +25,21 @@ namespace EARenderer {
         enum class Filter { None, Bilinear, Trilinear };
         enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
 
-        enum class NormalizedFormat {
+        enum class Normalized {
             RCompressed, RGCompressed, RGBCompressed, RGBACompressed
         };
 
-        enum class IntegerFormat {
+        enum class Integer {
             R32UI, RG32UI, RGB32UI, RGBA32UI
         };
 
-        enum class FloatFormat {
+        enum class Float {
             R16F, RG16F, RGB16F, RGBA16F,
             R32F, RG32F, RGB32F, RGBA32F
+        };
+
+        enum class Depth {
+            Default
         };
 
     private:
@@ -44,16 +48,17 @@ namespace EARenderer {
     protected:
         Size2D mSize;
         uint16_t mMipMapsCount = 0;
-    
+
         GLTexture(GLenum bindingPoint);
         GLTexture(const Size2D& size, GLenum bindingPoint);
 
         void setFilter(Filter filter);
         void setWrapMode(WrapMode wrapMode);
 
-        GLTextureFormat glFormat(NormalizedFormat format);
-        GLTextureFormat glFormat(IntegerFormat format);
-        GLTextureFormat glFormat(FloatFormat format);
+        GLTextureFormat glFormat(Normalized format);
+        GLTextureFormat glFormat(Integer format);
+        GLTextureFormat glFormat(Float format);
+        GLTextureFormat glFormat(Depth format);
         
     public:
         GLTexture(const GLTexture& that) = default;

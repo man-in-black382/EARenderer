@@ -19,11 +19,11 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void GLSLSurfelClusterAveraging::setSurfelClustersGBuffer(const GLLDRTexture2D& gBuffer) {
+    void GLSLSurfelClusterAveraging::setSurfelClustersGBuffer(const GLIntegerTexture2D<GLTexture::Integer::R32UI>& gBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelClustersGBuffer")>, gBuffer);
     }
 
-    void GLSLSurfelClusterAveraging::setSurfelsLuminaceMap(const GLHDRTexture2D& map) {
+    void GLSLSurfelClusterAveraging::setSurfelsLuminaceMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& map) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelsLuminanceMap")>, map);
     }
 

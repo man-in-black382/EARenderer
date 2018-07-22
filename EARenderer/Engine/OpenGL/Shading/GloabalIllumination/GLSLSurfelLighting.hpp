@@ -35,7 +35,7 @@ namespace EARenderer {
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setMultibounceEnabled(bool multibounceEnabled);
         void setShadowCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLFloatTexture2D& map);
+        void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& map);
         void setSettings(const RenderingSettings& settings);
     };
 

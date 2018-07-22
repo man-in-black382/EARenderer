@@ -30,7 +30,7 @@ namespace EARenderer {
         glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uBlurDirection")>).location(), 1, glm::value_ptr(dir));
     }
 
-    void GLSLGaussianBlur::setTexture(const GLFloatTexture2D& texture, size_t mipLevel) {
+    void GLSLGaussianBlur::setTexture(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& texture, size_t mipLevel) {
         setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipLevel")>).location(), GLint(mipLevel));
     }

@@ -19,23 +19,26 @@
 namespace EARenderer {
 
     class PostprocessTexturePool {
+    public:
+        using PostprocessTexture = GLFloatTexture2D<GLTexture::Float::RGBA16F>;
+
     private:
-        using TexturePointerSet = std::unordered_set<std::shared_ptr<GLFloatTexture2D>>;
+        using TexturePointerSet = std::unordered_set<std::shared_ptr<PostprocessTexture>>;
 
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         TexturePointerSet mFreeTextures;
         TexturePointerSet mClaimedTextures;
 
-        std::vector<std::shared_ptr<GLFloatTexture2D>> mTexturesToActivate;
+        std::vector<std::shared_ptr<PostprocessTexture>> mTexturesToActivate;
 
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
         const GLFramebuffer& framebuffer() const;
 
-        std::shared_ptr<GLFloatTexture2D> claim();
-        void putBack(std::shared_ptr<GLFloatTexture2D> texture);
+        std::shared_ptr<PostprocessTexture> claim();
+        void putBack(std::shared_ptr<PostprocessTexture> texture);
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures) {

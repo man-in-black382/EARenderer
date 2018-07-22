@@ -23,7 +23,7 @@ namespace EARenderer {
 
         GLSLToneMapping();
 
-        void setImage(const GLFloatTexture2D& image);
+        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
     };
 
 }

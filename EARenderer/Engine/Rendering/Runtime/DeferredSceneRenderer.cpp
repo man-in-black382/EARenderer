@@ -40,8 +40,8 @@ namespace EARenderer {
     mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
 
     // Surfels and surfel clusters
-    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), GLTexture::Filter::None),
+    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
+    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None),
     mSurfelsLuminanceFramebuffer(mSurfelsLuminanceMap.size()),
     mSurfelClustersLuminanceFramebuffer(mSurfelClustersLuminanceMap.size()),
 
@@ -245,7 +245,7 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void DeferredSceneRenderer::renderFinalImage(const GLFloatTexture2D& image) {
+    void DeferredSceneRenderer::renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
@@ -272,8 +272,8 @@ namespace EARenderer {
         updateGridProbes();
         renderMeshes();
 
-        auto ssrOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
+//        auto ssrOutputTexture = mPostprocessTexturePool->claim();
+//        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
 
 //        auto bloomOutputTexture = mPostprocessTexturePool->claim();
 //        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
@@ -281,9 +281,9 @@ namespace EARenderer {
 //        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
 //        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        renderFinalImage(*ssrOutputTexture);
+        renderFinalImage(*mFrame);
 
-        mPostprocessTexturePool->putBack(ssrOutputTexture);
+//        mPostprocessTexturePool->putBack(ssrOutputTexture);
 //        mPostprocessTexturePool->putBack(bloomOutputTexture);
 //        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }

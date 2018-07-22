@@ -80,23 +80,45 @@ namespace EARenderer {
         bool isComplete() const;
         size_t maximumColorAttachmentsCount() const;
 
-        void attachTexture(const GLNormalizedTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic, uint16_t mipLevel = 0);
-        void attachTexture(const GLFloatTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic, uint16_t mipLevel = 0);
-        void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
-        void attachTexture(const GLIntegerTexture2D& texture, ColorAttachment colorAttachment = ColorAttachment::Automatic);
+        template <GLTexture::Normalized Format>
+        void attachTexture(const GLNormalizedTexture2D<Format>& texture,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
+                           uint16_t mipLevel = 0)
+        {
+            attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+        }
+
+        template <GLTexture::Float Format>
+        void attachTexture(const GLFloatTexture2D<Format>& texture,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
+                           uint16_t mipLevel = 0)
+        {
+            attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+        }
+
+        template<GLTexture::Integer Format>
+        void attachTexture(const GLIntegerTexture2D<Format>& texture,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic)
+        {
+            attachTextureToColorAttachment(texture, colorAttachment, 0);
+        }
+
+        void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0) {
+            attachTextureToDepthAttachment(texture, mipLevel);
+        }
 
         // FIXME: Deprecated attachment functions
-        void attachTexture(const GLTexture2D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
+//        void attachTexture(const GLTexture2D& texture,
+//                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
+//                           uint16_t mipLevel = 0);
 
         void attachTexture(const GLTextureCubemap& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
 
-        void attachTexture(const GLHDRTexture2D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
+//        void attachTexture(const GLHDRTexture2D& texture,
+//                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
+//                           uint16_t mipLevel = 0);
 
         void attachTexture(const GLDepthTextureCubemap& texture,
                            uint16_t mipLevel = 0);

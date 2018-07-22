@@ -11,7 +11,7 @@
 
 #include "GLProgram.hpp"
 #include "GLTextureBuffer.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 #include "SphericalHarmonics.hpp"
 
 namespace EARenderer {
@@ -21,7 +21,7 @@ namespace EARenderer {
         GLSLGridLightProbesUpdate();
 
         void setProbesGridResolution(const glm::ivec3& resolution);
-        void setSurfelClustersLuminaceMap(const GLHDRTexture2D& luminanceMap);
+        void setSurfelClustersLuminaceMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& luminanceMap);
         void setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH);
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
         void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);

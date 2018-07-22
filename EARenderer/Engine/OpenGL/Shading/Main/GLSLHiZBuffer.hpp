@@ -20,7 +20,7 @@ namespace EARenderer {
 
         GLSLHiZBuffer();
 
-        void setTexture(const GLFloatTexture2D& texture);
+        void setTexture(const GLFloatTexture2D<GLTexture::Float::R32F>& texture);
         void setMipLevel(int8_t mipLevel);
     };
 

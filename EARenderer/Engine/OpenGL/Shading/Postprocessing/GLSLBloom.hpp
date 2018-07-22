@@ -23,10 +23,10 @@ namespace EARenderer {
 
         GLSLBloom();
 
-        void setTextures(const GLFloatTexture2D& baseImageTexture,
-                         const GLFloatTexture2D& smallBlurTexture,
-                         const GLFloatTexture2D& mediumBlurTexture,
-                         const GLFloatTexture2D& largeBlurTexture);
+        void setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& baseImageTexture,
+                         const GLFloatTexture2D<GLTexture::Float::RGBA16F>& smallBlurTexture,
+                         const GLFloatTexture2D<GLTexture::Float::RGBA16F>& mediumBlurTexture,
+                         const GLFloatTexture2D<GLTexture::Float::RGBA16F>& largeBlurTexture);
 
         void setTextureWeights(float smallBlurWeight, float mediumBlurWeight, float largeBlurWeight);
     };
