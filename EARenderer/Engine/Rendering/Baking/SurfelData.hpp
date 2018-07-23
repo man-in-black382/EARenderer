@@ -12,7 +12,6 @@
 #include "Surfel.hpp"
 #include "SurfelCluster.hpp"
 #include "GLHDRTexture2DArray.hpp"
-#include "GLLDRTexture2D.hpp"
 #include "GLBufferTexture.hpp"
 
 #include <vector>

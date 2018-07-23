@@ -22,12 +22,12 @@ namespace EARenderer {
     private:
         friend GLTexture2D<TextureFormat, Format>;
 
-        std::unique_ptr<void> mPixelBuffer;
+        std::unique_ptr<GLubyte> mPixelBuffer;
 
         GLTexture2DSampler(const GLTexture2D<TextureFormat, Format>& texture, uint8_t mipLevel)
         :
         GLTextureSampler(texture, mipLevel),
-        mPixelBuffer(new GLubyte[mMipSize.width * mMipSize.height * 4])
+        mPixelBuffer(new GLubyte[mMipSize.width * mMipSize.height * 4 * GLTextureDataInterpreter<TextureFormat, Format>::BytesPerChannel])
         {
             auto format = glUnpackFormat(Format);
             glGetTexImage(GL_TEXTURE_2D, mipLevel, format.pixelFormat, format.pixelType, mPixelBuffer.get());
