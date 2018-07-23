@@ -14,6 +14,7 @@
 #include <memory>
 
 #include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
 #include "Scene.hpp"
 #include "SceneGBuffer.hpp"
@@ -119,6 +120,24 @@ namespace EARenderer {
         void updateGridProbes();
         void renderMeshes();
         void renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
+
+        // SSR DEBUG
+        struct GBuffer {
+            glm::vec3 albedo;
+            glm::vec3 normal;
+            float roughness;
+            float metalness;
+            float AO;
+        };
+
+        GBuffer decodeGBuffer(const glm::uvec3& GBuffer);
+        glm::vec3 ReconstructWorldPosition(const Camera& camera, float depth, const glm::vec2& pixelCoords);
+        void StepThroughCell(glm::vec3& raySample, glm::vec3 rayDir, int mipLevel);
+        bool GetReflection(glm::vec3 worldReflectionVec,
+                           glm::vec3 screenSpaceReflectionVec,
+                           glm::vec3 screenSpacePos,
+                           glm::vec3& reflectionColor);
+        void debugSSR();
 
     public:
         DeferredSceneRenderer(const Scene* scene,

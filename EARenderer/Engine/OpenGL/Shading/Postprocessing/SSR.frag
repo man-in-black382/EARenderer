@@ -271,7 +271,6 @@ bool GetReflection(vec3 worldReflectionVec,
 }
 
 vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
-    vec2 frameSize = textureSize(uGBufferHiZBuffer, 0);
     vec2 currentFragUV = vTexCoords;
 
     // Prerequisites

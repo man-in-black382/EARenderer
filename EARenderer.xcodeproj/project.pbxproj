@@ -212,7 +212,6 @@
 		CE70FA3D1F8F8EF600AD9027 /* GLHDRTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */; };
 		CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9C31F8F8EBD00AD9027 /* GLTextureCubemap.cpp */; };
 		CE70FA401F8F8EF600AD9027 /* GLDepthTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9C61F8F8EBD00AD9027 /* GLDepthTextureCubemap.cpp */; };
-		CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */; };
 		CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */; };
 		CE70FA441F8F8EF600AD9027 /* GLElementArrayBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9D41F8F8EBD00AD9027 /* GLElementArrayBuffer.cpp */; };
 		CE70FA451F8F8EF600AD9027 /* GLSLCubemapRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9D81F8F8EBD00AD9027 /* GLSLCubemapRendering.cpp */; };
@@ -1171,7 +1170,6 @@
 		CE70F9C71F8F8EBD00AD9027 /* GLTexture.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTexture.hpp; sourceTree = "<group>"; };
 		CE70F9C81F8F8EBD00AD9027 /* GLHDRTextureCubemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTextureCubemap.hpp; sourceTree = "<group>"; };
 		CE70F9C91F8F8EBD00AD9027 /* GLDepthTexture2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLDepthTexture2DArray.hpp; sourceTree = "<group>"; };
-		CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture2D.cpp; sourceTree = "<group>"; };
 		CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLFramebuffer.cpp; sourceTree = "<group>"; };
 		CE70F9CE1F8F8EBD00AD9027 /* GLElementArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLElementArrayBuffer.hpp; sourceTree = "<group>"; };
 		CE70F9CF1F8F8EBD00AD9027 /* GLVertexArrayBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArrayBuffer.hpp; sourceTree = "<group>"; };
@@ -1943,7 +1941,6 @@
 		ACB0AA431FF4EC3500CD6A11 /* GLTexture2D */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F9CA1F8F8EBD00AD9027 /* GLTexture2D.cpp */,
 				CE70F9BC1F8F8EBD00AD9027 /* GLTexture2D.hpp */,
 				ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */,
 				CE70F9C01F8F8EBD00AD9027 /* GLHDRTexture2D.cpp */,
@@ -3858,7 +3855,6 @@
 				CEA0B90920E7733400257E37 /* SceneGBufferRenderer.cpp in Sources */,
 				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
 				CE7311162098C920002A8DE7 /* Rect.cpp in Sources */,
-				CE70FA411F8F8EF600AD9027 /* GLTexture2D.cpp in Sources */,
 				CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
 				CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */,
