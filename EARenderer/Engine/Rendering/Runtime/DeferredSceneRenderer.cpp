@@ -272,8 +272,8 @@ namespace EARenderer {
         updateGridProbes();
         renderMeshes();
 
-//        auto ssrOutputTexture = mPostprocessTexturePool->claim();
-//        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
+        auto ssrOutputTexture = mPostprocessTexturePool->claim();
+        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
 
 //        auto bloomOutputTexture = mPostprocessTexturePool->claim();
 //        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
@@ -281,11 +281,11 @@ namespace EARenderer {
 //        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
 //        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        renderFinalImage(*mFrame);
+        renderFinalImage(*ssrOutputTexture);
 
-        debugSSR();
+//        debugSSR();
 
-//        mPostprocessTexturePool->putBack(ssrOutputTexture);
+        mPostprocessTexturePool->putBack(ssrOutputTexture);
 //        mPostprocessTexturePool->putBack(bloomOutputTexture);
 //        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
@@ -373,6 +373,7 @@ namespace EARenderer {
 
         // Size of current mip
         Size2D mipSize = mGBuffer->HiZBuffer.mipMapSize(mipLevel);
+        glm::vec2 cellSize = 1.0f / glm::vec2(mipSize.width, mipSize.height);
 
         // UV converted to index in the mip
         glm::vec2 mipCellIndex = glm::vec2(raySample) * glm::vec2(mipSize.width, mipSize.height);
@@ -384,24 +385,37 @@ namespace EARenderer {
         boundaryUV.x = rayDir.x > 0 ? ceil(mipCellIndex.x) / float(mipSize.width) : floor(mipCellIndex.x) / float(mipSize.width);
         boundaryUV.y = rayDir.y > 0 ? ceil(mipCellIndex.y) / float(mipSize.height) : floor(mipCellIndex.y) / float(mipSize.height);
 
-        // We can now represent the cell boundary as being formed by the intersection of
-        // two lines which can be represented by
-        //
-        // x = boundaryUV.x
-        // y = boundaryUV.y
-        //
-        // Intersect the parametric equation of the Ray with each of these lines
-        //
+//         We can now represent the cell boundary as being formed by the intersection of
+//         two lines which can be represented by
+//
+//         x = boundaryUV.x
+//         y = boundaryUV.y
+//
+//         Intersect the parametric equation of the Ray with each of these lines
+
+//        boundaryUV.x = 3.3;
+//        boundaryUV.y = 10;
+//
+//        raySample.x = 1;
+//        raySample.y = 1;
+//
+//        rayDir.x = 1;
+//        rayDir.y = 1;
+//        rayDir.z = 0;
+//        rayDir = glm::normalize(rayDir);
+
         glm::vec2 t;
         t.x = (boundaryUV.x - raySample.x) / rayDir.x;
         t.y = (boundaryUV.y - raySample.y) / rayDir.y;
-
-        // Pick the cell intersection that is closer, and march to that cell
+//
+//        // Pick the cell intersection that is closer, and march to that cell
         float axis = abs(t.x) < abs(t.y) ? t.x : t.y;
-        raySample += (axis/* + kCellStepOffset*/) * rayDir;
+//        float offset = abs(t.x) < abs(t.y) ? 0.2 * cellSize.x : 0.2 * cellSize.y;
 
-        glm::vec2 newMipCellIndex = glm::vec2(raySample) * glm::vec2(mipSize.width, mipSize.height);
-        printf("");
+        raySample += (axis * 1.05f) * rayDir;
+
+        glm::vec2 newMipCellIndex = glm::floor(glm::vec2(raySample) * glm::vec2(mipSize.width, mipSize.height));
+        printf("Cell index: (%d %d) | New CellIndex: (%d %d) \n", (int)mipCellIndex.x, (int)mipCellIndex.y, (int)newMipCellIndex.x, (int)newMipCellIndex.y);
     }
 
     bool DeferredSceneRenderer::GetReflection(glm::vec3 worldReflectionVec,
@@ -418,6 +432,10 @@ namespace EARenderer {
         while (mipLevel > -1 && mipLevel <= mGBuffer->HiZBufferMipCount) {
             // Cross a single texel in the HZB for the current mipLevel
             StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
+
+            if (raySample.x < 0.0 || raySample.x > 1.0 || raySample.x < 0.0 || raySample.y > 1.0) {
+                return false;
+            }
 
             glm::vec2 raySampleXY(raySample);
 
