@@ -135,18 +135,6 @@ vec3 ReconstructWorldPosition() {
 ///////////////////////// Reflections  /////////////////////
 ////////////////////////////////////////////////////////////
 
-// http://imanolfotia.com/blog/update/2017/03/11/ScreenSpaceReflections.html
-
-vec3 Hash(vec3 a) {
-    const vec3 scale = vec3(0.8);
-    const float K = 19.19;
-
-    a = fract(a * scale);
-    a += dot(a, a.yxz + K);
-
-    return fract((a.xxy + a.yxx)*a.zyx);
-}
-
 // Thanks to Sakib Saikia
 // and his post https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html#fn:fn3
 
@@ -179,7 +167,7 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
 }
 
-void StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
+vec3 StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
 {
     // Constant offset to make sure you cross to the next cell
     const float kCellStepOffset = 0.05;
@@ -209,15 +197,23 @@ void StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
     t.x = (boundaryUV.x - raySample.x) / rayDir.x;
     t.y = (boundaryUV.y - raySample.y) / rayDir.y;
 
+    vec2 overExtension = kCellStepOffset / vec2(mipSize);
+
     // Pick the cell intersection that is closer, and march to that cell
-    float axis = abs(t.x) < abs(t.y) ? t.x : t.y;
-    raySample += (axis + 0.05) * rayDir;
+    if (abs(t.x) < abs(t.y)) {
+        raySample += (abs(t.x) + overExtension.x) * rayDir;
+    } else {
+        raySample += (abs(t.y) + overExtension.y) * rayDir;
+    }
 
     vec2 newMipCellIndex = raySample.xy * vec2(mipSize);
 
-    if (abs(newMipCellIndex.x - mipCellIndex.x) > 2.0 || abs(newMipCellIndex.y - mipCellIndex.y) > 2.0) {
-
+    if (abs(newMipCellIndex.x - mipCellIndex.x) > 1.1 || abs(newMipCellIndex.y - mipCellIndex.y) > 1.1) {
+        return vec3(1.0, 0.5, 0.0);
     }
+
+    return vec3(0.0);
+
 }
 
 #define MAX_REFLECTION_RAY_MARCH_STEP 0.01
@@ -292,10 +288,15 @@ bool GetReflection(vec3 worldReflectionVec,
 
     while (mipLevel > -1 && mipLevel < uHiZBufferMipCount - 1) {
         // Cross a single texel in the HZB for the current mipLevel
-        StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
+        vec3 debugColor = StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
 
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
             reflectionColor = vec3(0.5, 0.5, 0.0);
+            return false;
+        }
+
+        if (debugColor.r > 0.0 || debugColor.g > 0.0 || debugColor.b > 0.0) {
+            reflectionColor = debugColor;
             return false;
         }
 
