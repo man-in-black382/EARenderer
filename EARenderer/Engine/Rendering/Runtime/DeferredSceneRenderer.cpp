@@ -409,10 +409,10 @@ namespace EARenderer {
         t.y = (boundaryUV.y - raySample.y) / rayDir.y;
 //
 //        // Pick the cell intersection that is closer, and march to that cell
-        float axis = abs(t.x) < abs(t.y) ? t.x : t.y;
-//        float offset = abs(t.x) < abs(t.y) ? 0.2 * cellSize.x : 0.2 * cellSize.y;
+        float axis = abs(t.x) < abs(t.y) ? abs(t.x) : abs(t.y);
+        glm::vec2 overExtension = 0.25f / glm::vec2(mipSize.width, mipSize.height);
 
-        raySample += (axis * 1.05f) * rayDir;
+        raySample += (axis + overExtension.x) * rayDir;
 
         glm::vec2 newMipCellIndex = glm::floor(glm::vec2(raySample) * glm::vec2(mipSize.width, mipSize.height));
         printf("Cell index: (%d %d) | New CellIndex: (%d %d) \n", (int)mipCellIndex.x, (int)mipCellIndex.y, (int)newMipCellIndex.x, (int)newMipCellIndex.y);
@@ -423,7 +423,7 @@ namespace EARenderer {
                                               glm::vec3 screenSpacePos,
                                               glm::vec3& reflectionColor)
     {
-        glm::vec3 raySample = screenSpacePos;
+        glm::vec3 raySample = screenSpacePos + 0.5f / 1024.f;
         float viewportAttenuationFactor = 0.0;
         int mipLevel = 0;
 

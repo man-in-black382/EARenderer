@@ -26,7 +26,7 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInCSMSplitSpace;
-out float vZ;
+out vec3 vDebugNormal;
 
 // Functions
 
@@ -52,13 +52,13 @@ void main() {
 
     mat3 TBN = TBN();
 
+    vDebugNormal = iNormal;
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;
     vPosInCSMSplitSpace = uCSMSplitSpaceMat * worldPosition;
 
     vec4 viewSpacePosition = uCameraViewMat * worldPosition;
-    vZ = viewSpacePosition.z;
 
     gl_Position = uCameraProjectionMat * viewSpacePosition;
 }

@@ -135,6 +135,94 @@ vec3 ReconstructWorldPosition() {
 ///////////////////////// Reflections  /////////////////////
 ////////////////////////////////////////////////////////////
 
+// Autodesk tracing
+
+#define HIZ_START_LEVEL 6
+#define HIZ_STOP_LEVEL 0
+#define HIZ_MAX_LEVEL 7
+#define MAX_ITERATIONS 100
+
+vec2 cell(vec2 ray, vec2 cell_count, uint camera) {
+    return floor(ray.xy * cell_count);
+}
+
+vec2 cell_count(float level) {
+    vec2 texSize = vec2(textureSize(uGBufferHiZBuffer, 0));
+    return texSize / (level == 0.0 ? 1.0 : exp2(level));
+//    return input_texture2_size / (level == 0.0 ? 1.0 : exp2(level));
+}
+
+vec3 intersect_cell_boundary(vec3 pos, vec3 dir, vec2 cell_id, vec2 cell_count, vec2 cross_step, vec2 cross_offset, uint camera) {
+    vec2 cell_size = 1.0 / cell_count;
+    vec2 planes = cell_id/cell_count + cell_size * cross_step;
+
+    vec2 solutions = (planes - pos.xy)/dir.xy;
+    vec3 intersection_pos = pos + dir * min(solutions.x, solutions.y);
+
+    intersection_pos.xy += (solutions.x < solutions.y) ? vec2(cross_offset.x, 0.0) : vec2(0.0, cross_offset.y);
+
+    return intersection_pos;
+}
+
+bool crossed_cell_boundary(vec2 cell_id_one, vec2 cell_id_two) {
+    return int(cell_id_one.x) != int(cell_id_two.x) || int(cell_id_one.y) != int(cell_id_two.y);
+}
+
+float minimum_depth_plane(vec2 ray, float level, vec2 cell_count, uint camera) {
+    return textureLod(uGBufferHiZBuffer, ray, level).r;
+//    return input_texture2.Load(int3(vr_stereo_to_mono(ray.xy, camera) * cell_count, level)).r;
+}
+
+vec3 hi_z_trace(vec3 p, vec3 v, in uint camera, out uint iterations) {
+    float level = HIZ_START_LEVEL;
+    vec3 v_z = v/v.z;
+    vec2 hi_z_size = cell_count(level);
+    vec3 ray = p;
+
+    vec2 cross_step = vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);
+    vec2 cross_offset = cross_step * 0.00001;
+    cross_step = clamp(cross_step, 0.0, 1.0);
+
+    vec2 ray_cell = cell(ray.xy, hi_z_size.xy, camera);
+    ray = intersect_cell_boundary(ray, v, ray_cell, hi_z_size, cross_step, cross_offset, camera);
+
+    iterations = 0;
+    while(level >= HIZ_STOP_LEVEL && iterations < MAX_ITERATIONS) {
+        // get the cell number of the current ray
+        vec2 current_cell_count = cell_count(level);
+        vec2 old_cell_id = cell(ray.xy, current_cell_count, camera);
+
+        // get the minimum depth plane in which the current ray resides
+        float min_z = minimum_depth_plane(ray.xy, level, current_cell_count, camera);
+
+        // intersect only if ray depth is below the minimum depth plane
+        vec3 tmp_ray = ray;
+        if(v.z > 0) {
+            float min_minus_ray = min_z - ray.z;
+            tmp_ray = min_minus_ray > 0 ? ray + v_z*min_minus_ray : tmp_ray;
+            vec2 new_cell_id = cell(tmp_ray.xy, current_cell_count, camera);
+            if(crossed_cell_boundary(old_cell_id, new_cell_id)) {
+                tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
+                level = min(HIZ_MAX_LEVEL, level + 2.0f);
+            }else{
+                if(level == 1 && abs(min_minus_ray) > 0.0001) {
+                    tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
+                    level = 2;
+                }
+            }
+        } else if(ray.z < min_z) {
+            tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
+            level = min(HIZ_MAX_LEVEL, level + 2.0f);
+        }
+
+        ray.xyz = tmp_ray.xyz;
+        --level;
+
+        ++iterations;
+    }
+    return ray;
+}
+
 // Thanks to Sakib Saikia
 // and his post https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html#fn:fn3
 
@@ -169,9 +257,6 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
 
 vec3 StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
 {
-    // Constant offset to make sure you cross to the next cell
-    const float kCellStepOffset = 0.05;
-
     // Size of current mip
     ivec2 mipSize = textureSize(uGBufferHiZBuffer, mipLevel);
 
@@ -197,132 +282,147 @@ vec3 StepThroughCell(inout vec3 raySample, vec3 rayDir, int mipLevel)
     t.x = (boundaryUV.x - raySample.x) / rayDir.x;
     t.y = (boundaryUV.y - raySample.y) / rayDir.y;
 
+    if (abs(t.x) < 0.000001 && abs(t.y) < 0.000001) {
+        return vec3(1.0, 0.0, 0.5);
+    }
+
+    // Constant offset to make sure you cross to the next cell
+    const float kCellStepOffset = 0.05;
     vec2 overExtension = kCellStepOffset / vec2(mipSize);
 
     // Pick the cell intersection that is closer, and march to that cell
     if (abs(t.x) < abs(t.y)) {
-        raySample += (abs(t.x) + overExtension.x) * rayDir;
+        raySample += (t.x) * rayDir;
+        raySample += vec3(sign(rayDir.x) * overExtension.x, 0.0, 0.0);
     } else {
-        raySample += (abs(t.y) + overExtension.y) * rayDir;
+        raySample += (t.y) * rayDir;
+        raySample += vec3(0.0, sign(rayDir.y) * overExtension.y, 0.0);
     }
 
-    vec2 newMipCellIndex = raySample.xy * vec2(mipSize);
+    vec2 texelSize = 1.0 / vec2(mipSize);
+    vec2 delta = raySample.xy - boundaryUV;
 
-    if (abs(newMipCellIndex.x - mipCellIndex.x) > 1.1 || abs(newMipCellIndex.y - mipCellIndex.y) > 1.1) {
+    if (abs(delta.x) > texelSize.x || abs(delta.y) > texelSize.y) {
         return vec3(1.0, 0.5, 0.0);
     }
 
     return vec3(0.0);
-
 }
 
-#define MAX_REFLECTION_RAY_MARCH_STEP 0.01
-#define NUM_RAY_MARCH_SAMPLES 100
-#define NUM_BINARY_SEARCH_SAMPLES 6
+#define MAX_REFLECTION_RAY_MARCH_STEP 0.05
+#define NUM_RAY_MARCH_SAMPLES 50
+#define NUM_BINARY_SEARCH_SAMPLES 5
 
 bool GetReflection(vec3 worldReflectionVec,
                    vec3 screenSpaceReflectionVec,
                    vec3 screenSpacePos,
                    out vec3 reflectionColor)
 {
-//    int stub = uHiZBufferMipCount;
-//    bool bFoundIntersection = false;
-//    vec3 minraySample = vec3(0.0);
-//    vec3 maxraySample = vec3(0.0);
-//
-//    float viewportAttenuationFactor = 1.0;
-//
-//    // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
-//    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
-//
-//        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
-//
-//        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-//            reflectionColor = vec3(0.5, 0.5, 0.0);
-//            return false;
-//        }
-//
-//        float ZBufferVal = texture(uGBufferHiZBuffer, raySample.xy).r;
-//
-//        maxraySample = raySample;
-//
-//        if (raySample.z > ZBufferVal + 0.0001) {
-//            bFoundIntersection = true;
-//            break;
-//        }
-//
-//        minraySample = maxraySample;
-//    }
-//
-//    if (bFoundIntersection) {
-//
-//        vec3 midraySample;
-//        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
-//        {
-//            midraySample = mix(minraySample, maxraySample, 0.5);
-//            float ZBufferVal = texture(uGBufferHiZBuffer, midraySample.xy).r;
-//
-//            if (midraySample.z > ZBufferVal) {
-//                maxraySample = midraySample;
-//            } else {
-//                minraySample = midraySample;
-//            }
-//        }
-//
-//        reflectionColor = texture(uFrame, midraySample.xy).rgb;
-//
-//        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midraySample.xy).xyz;
-//        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-//        reflectionColor = albedoRoughness.rgb;
-//
-//        float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
-//        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
-//    }
-//
-//    return bFoundIntersection;
-    vec3 raySample = screenSpacePos;
+    int stub = uHiZBufferMipCount;
+    bool bFoundIntersection = false;
+    vec3 minraySample = vec3(0.0);
+    vec3 maxraySample = vec3(0.0);
+
     float viewportAttenuationFactor = 1.0;
-    int mipLevel = 0;
 
-    int iterations = 0;
+    // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
+    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
 
-    while (mipLevel > -1 && mipLevel < uHiZBufferMipCount - 1) {
-        // Cross a single texel in the HZB for the current mipLevel
-        vec3 debugColor = StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
+        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
 
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
             reflectionColor = vec3(0.5, 0.5, 0.0);
             return false;
         }
 
-        if (debugColor.r > 0.0 || debugColor.g > 0.0 || debugColor.b > 0.0) {
-            reflectionColor = debugColor;
-            return false;
+        float ZBufferVal = texture(uGBufferHiZBuffer, raySample.xy).r;
+
+        maxraySample = raySample;
+
+        float bias = rayStepIdx == 0 ? 0.001 : 0.0;
+
+        if (raySample.z > ZBufferVal + bias) {
+            bFoundIntersection = true;
+            break;
         }
 
-        float ZBufferValue = textureLod(uGBufferHiZBuffer, raySample.xy, mipLevel).r;
-
-        if (raySample.z < ZBufferValue) {
-            // If we did not intersect, perform successive test on the next
-            // higher mip level (and thus take larger steps)
-            mipLevel++;
-        } else {
-            // If we intersected, pull back the ray to the point of intersection (for that mipLevel)
-            float t = (raySample.z - ZBufferValue) / screenSpaceReflectionVec.z;
-            raySample -= screenSpaceReflectionVec * t;
-
-            // And, then perform successive test on the next lower mip level.
-            // Once we've got a valid intersection with mip 0, we've found our intersection point
-            mipLevel--;
-        }
-
-        iterations++;
-        if (iterations > 1000) {
-            reflectionColor = vec3(0.0, 0.0, 0.7);
-            return true;
-        }
+        minraySample = maxraySample;
     }
 
+    if (bFoundIntersection) {
+
+        vec3 midraySample;
+        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
+        {
+            midraySample = mix(minraySample, maxraySample, 0.5);
+            float ZBufferVal = texture(uGBufferHiZBuffer, midraySample.xy).r;
+
+            if (midraySample.z > ZBufferVal) {
+                maxraySample = midraySample;
+            } else {
+                minraySample = midraySample;
+            }
+        }
+
+        reflectionColor = texture(uFrame, midraySample.xy).rgb;
+
+        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midraySample.xy).xyz;
+        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
+        reflectionColor = albedoRoughness.rgb;
+
+        float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
+        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
+    }
+
+    return bFoundIntersection;
+
+//    vec3 raySample = screenSpacePos;
+//    float viewportAttenuationFactor = 1.0;
+//    int mipLevel = 1;
+//
+//    int iterations = 0;
+//
+//    while (mipLevel > -1 && mipLevel < uHiZBufferMipCount - 1) {
+//        // Cross a single texel in the HZB for the current mipLevel
+//        vec3 debugColor = StepThroughCell(raySample, screenSpaceReflectionVec, mipLevel);
+//
+//        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
+//            reflectionColor = vec3(0.5, 0.5, 0.0);
+//            return false;
+//        }
+//
+//        if (debugColor.r > 0.0 || debugColor.g > 0.0 || debugColor.b > 0.0) {
+//            reflectionColor = debugColor;
+//            return false;
+//        }
+//
+//        float ZBufferValue = textureLod(uGBufferHiZBuffer, raySample.xy, mipLevel).r;
+//
+//        if (raySample.z < ZBufferValue) {
+//            // If we did not intersect, perform successive test on the next
+//            // higher mip level (and thus take larger steps)
+//            mipLevel++;
+//        } else {
+//            // If we intersected, pull back the ray to the point of intersection (for that mipLevel)
+//            float t = (raySample.z - ZBufferValue) / screenSpaceReflectionVec.z;
+//            raySample -= screenSpaceReflectionVec * t;
+//
+//            // And, then perform successive test on the next lower mip level.
+//            // Once we've got a valid intersection with mip 0, we've found our intersection point
+//            mipLevel--;
+//        }
+//
+//        iterations++;
+//        if (iterations > 100) {
+//            reflectionColor = vec3(0.0, 0.0, 0.7);
+//            return true;
+//        }
+//    }
+
+    vec3 raySample = screenSpacePos;
+//    uint iterations = 0;
+//    raySample = hi_z_trace(raySample, screenSpaceReflectionVec, 0, iterations);
+//
     reflectionColor = texture(uFrame, raySample.xy).rgb;
 
     uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, raySample.xy).xyz;
