@@ -51,6 +51,12 @@ namespace EARenderer {
         };
 
     private:
+        struct AttachmentMetadata {
+            ColorAttachment colorAttachment;
+            GLenum glColorAttachment;
+            uint16_t mipLevel;
+        };
+
         GLint mBindingPoint;
         Size2D mSize;
         GLViewport mViewport;
@@ -58,7 +64,7 @@ namespace EARenderer {
         GLint mMaximumDrawBuffers;
         std::unordered_set<GLenum> mRequestedAttachments;
         std::unordered_set<ColorAttachment> mAvailableAttachments;
-        std::unordered_map<GLint, GLenum> mTextureAttachmentMap;
+        std::unordered_map<GLint, AttachmentMetadata> mTextureAttachmentMap;
         std::vector<GLenum> mDrawBuffers;
 
         void obtainHardwareLimits();
@@ -108,17 +114,10 @@ namespace EARenderer {
         }
 
         // FIXME: Deprecated attachment functions
-//        void attachTexture(const GLTexture2D& texture,
-//                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-//                           uint16_t mipLevel = 0);
 
         void attachTexture(const GLTextureCubemap& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
-
-//        void attachTexture(const GLHDRTexture2D& texture,
-//                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-//                           uint16_t mipLevel = 0);
 
         void attachTexture(const GLDepthTextureCubemap& texture,
                            uint16_t mipLevel = 0);
@@ -154,7 +153,7 @@ namespace EARenderer {
             }
 
             bind();
-            mDrawBuffers.emplace_back(attachmentIt->second);
+            mDrawBuffers.emplace_back(attachmentIt->second.glColorAttachment);
             glDrawBuffers(GLsizei(mDrawBuffers.size()), mDrawBuffers.data());
             mDrawBuffers.clear();
         }
@@ -166,9 +165,13 @@ namespace EARenderer {
                 throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", head.name()));
             }
 
-            mDrawBuffers.emplace_back(attachmentIt->second);
+            mDrawBuffers.emplace_back(attachmentIt->second.glColorAttachment);
             activateDrawBuffers(tail...);
         }
+
+        void activateAllDrawBuffers();
+
+        void replaceMipLevel(const GLTexture& texture, uint16_t newMipLevel);
 
         void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
                   ColorAttachment destinationAttachment, const Rect2D& dstRect,

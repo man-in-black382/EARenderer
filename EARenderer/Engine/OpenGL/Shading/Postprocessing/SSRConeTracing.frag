@@ -255,15 +255,15 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
 }
 
+#define MAX_REFLECTION_RAY_MARCH_STEP 0.05
+#define NUM_RAY_MARCH_SAMPLES 50
+#define NUM_BINARY_SEARCH_SAMPLES 5
+
 bool GetReflection(vec3 worldReflectionVec,
                    vec3 screenSpaceReflectionVec,
                    vec3 screenSpacePos,
                    out vec3 reflectionColor)
 {
-    const float kMaxRayMarchStep = 0.05;
-    const int kMaxRayMarchInterations = 50;
-    const int kMaxBinarySearchSamples = 5;
-
     int stub = uHiZBufferMipCount;
     bool bFoundIntersection = false;
     vec3 minraySample = vec3(0.0);
@@ -272,9 +272,9 @@ bool GetReflection(vec3 worldReflectionVec,
     float viewportAttenuationFactor = 1.0;
 
     // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
-    for (int rayStepIdx = 0; rayStepIdx < kMaxRayMarchInterations; rayStepIdx++) {
+    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
 
-        vec3 raySample = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec + screenSpacePos;
+        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
 
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
             reflectionColor = vec3(0.5, 0.5, 0.0);
@@ -298,7 +298,8 @@ bool GetReflection(vec3 worldReflectionVec,
     if (bFoundIntersection) {
 
         vec3 midraySample;
-        for (int i = 0; i < kMaxBinarySearchSamples; i++) {
+        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
+        {
             midraySample = mix(minraySample, maxraySample, 0.5);
             float ZBufferVal = texture(uGBufferHiZBuffer, midraySample.xy).r;
 
@@ -356,6 +357,46 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
         return outReflectionColor;
     }
 }
+
+////////////////////////////////////////////////////////////
+////////////////////// Cone Tracing ////////////////////////
+////////////////////////////////////////////////////////////
+
+float SpecularPowerToConeAngle(float specularPower) {
+    // based on phong distribution model
+    const float kMaxSpecExp = 16.0;
+    if(specularPower >= exp2(kMaxSpecExp)) {
+        return 0.0f;
+    }
+    const float xi = 0.244f;
+    float exponent = 1.0f / (specularPower + 1.0f);
+    return acos(pow(xi, exponent));
+}
+
+float IsoscelesTriangleOpposite(float adjacentLength, float coneTheta) {
+    return 2.0f * tan(coneTheta) * adjacentLength;
+}
+
+// a - opposite length of the triangle
+// h - adjacent length of the triangle
+float IsoscelesTriangleInscribedCircleRadius(float a, float h) {
+    float a2 = a * a;
+    float fh2 = 4.0f * h * h;
+    return (a * (sqrt(a2 + fh2) - a)) / (4.0f * h);
+}
+
+//vec4 ConeSampleWeightedColor(float2 samplePos, float mipChannel, float gloss)
+//{
+//    vec3 sampleColor = colorBuffer.SampleLevel(sampTrilinearClamp, samplePos, mipChannel).rgb;
+//    return float4(sampleColor * gloss, gloss);
+//}
+
+float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius)
+{
+    // subtract the diameter of the incircle to get the adjacent side of the next level on the cone
+    return adjacentLength - (incircleRadius * 2.0f);
+}
+
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////

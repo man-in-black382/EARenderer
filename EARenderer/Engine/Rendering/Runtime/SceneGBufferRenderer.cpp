@@ -44,7 +44,7 @@ namespace EARenderer {
         mGBufferShader.setCamera(*(mScene->camera()));
 
         // Attach 0 mip again after HiZ buffer construction
-        mFramebuffer.attachTexture(mGBuffer->HiZBuffer, GLFramebuffer::ColorAttachment::Attachment1, 0);
+        mFramebuffer.replaceMipLevel(mGBuffer->HiZBuffer, 0);
         mFramebuffer.activateDrawBuffers(mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
         mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
@@ -83,7 +83,7 @@ namespace EARenderer {
             Size2D mipSize = mGBuffer->HiZBuffer.mipMapSize(mipLevel + 1);
             GLViewport(mipSize).apply();
 
-            mFramebuffer.attachTexture(mGBuffer->HiZBuffer, GLFramebuffer::ColorAttachment::Attachment1, mipLevel + 1);
+            mFramebuffer.replaceMipLevel(mGBuffer->HiZBuffer, mipLevel + 1);
             // Leave only linear depth attachment active so that other textures won't get corrupted
             mFramebuffer.activateDrawBuffers(mGBuffer->HiZBuffer);
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);

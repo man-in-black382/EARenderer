@@ -33,6 +33,8 @@
 		AC6CD81620D11B9A000E6A22 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */; };
 		AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */; };
 		AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */; };
+		AC740EB8210F038A0029B99A /* SSRConeTracing.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC740EB7210F038A0029B99A /* SSRConeTracing.frag */; };
+		AC740EBB210F039D0029B99A /* GLSLConeTracing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC740EB9210F039D0029B99A /* GLSLConeTracing.cpp */; };
 		AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */; };
 		AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC859C241FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp */; };
 		AC859C2A1FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC859C291FD5AE6A00227038 /* LightProbeEnvironmentCapture.geom */; };
@@ -643,6 +645,9 @@
 		AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PostprocessTexturePool.hpp; sourceTree = "<group>"; };
 		AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianBlurEffect.cpp; sourceTree = "<group>"; };
 		AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurEffect.hpp; sourceTree = "<group>"; };
+		AC740EB7210F038A0029B99A /* SSRConeTracing.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SSRConeTracing.frag; sourceTree = "<group>"; };
+		AC740EB9210F039D0029B99A /* GLSLConeTracing.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLConeTracing.cpp; sourceTree = "<group>"; };
+		AC740EBA210F039D0029B99A /* GLSLConeTracing.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLConeTracing.hpp; sourceTree = "<group>"; };
 		AC823D2220CA7F5900D25CB3 /* GLLDRTexture3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLLDRTexture3D.cpp; sourceTree = "<group>"; };
 		AC823D2320CA7F5900D25CB3 /* GLLDRTexture3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLLDRTexture3D.hpp; sourceTree = "<group>"; };
 		AC82F68920EA11F300375B41 /* GLTextureFormat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFormat.hpp; sourceTree = "<group>"; };
@@ -1911,6 +1916,9 @@
 				CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */,
 				CEEE4CE120FB874D00CCBBF5 /* GLSLScreenSpaceReflections.hpp */,
 				CEEE4CE320FB877700CCBBF5 /* SSR.frag */,
+				AC740EB9210F039D0029B99A /* GLSLConeTracing.cpp */,
+				AC740EBA210F039D0029B99A /* GLSLConeTracing.hpp */,
+				AC740EB7210F038A0029B99A /* SSRConeTracing.frag */,
 				CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */,
 				CE2B60F420E5348200370844 /* GLSLToneMapping.hpp */,
 				CE2B60F620E534E100370844 /* ToneMapping.frag */,
@@ -3541,6 +3549,7 @@
 				CE70FA5C1F8F8F7400AD9027 /* OmnidirectionalDepth.frag in Resources */,
 				CE4DE20C1FA60CFE0067729A /* copyright.txt in Resources */,
 				CE70FA5D1F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.vert in Resources */,
+				AC740EB8210F038A0029B99A /* SSRConeTracing.frag in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
 				AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */,
@@ -3761,6 +3770,7 @@
 				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
+				AC740EBB210F039D0029B99A /* GLSLConeTracing.cpp in Sources */,
 				CE70FA1D1F8F8EF600AD9027 /* Rect2D.cpp in Sources */,
 				CE70FA891F8F912300AD9027 /* SceneObjectMarker.mm in Sources */,
 				CE2B60F520E5348200370844 /* GLSLToneMapping.cpp in Sources */,

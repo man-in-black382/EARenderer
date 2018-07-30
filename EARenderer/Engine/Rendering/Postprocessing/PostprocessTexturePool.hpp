@@ -38,7 +38,10 @@ namespace EARenderer {
         const GLFramebuffer& framebuffer() const;
 
         std::shared_ptr<PostprocessTexture> claim();
+
         void putBack(std::shared_ptr<PostprocessTexture> texture);
+
+        void redirectRenderingToTextureMip(std::shared_ptr<PostprocessTexture> texture, uint8_t mipLevel);
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures) {
