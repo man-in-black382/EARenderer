@@ -25,7 +25,7 @@ void main()
     } else if (uShouldSample3DTexture) {
         oFragColor = vec4(texture(uTexture3D, vec3(vTexCoords, uDepth)).rgb, 1.0);
     } else {
-        oFragColor = vec4(texture(uTexture, vTexCoords).rgb, 1.0);
+        oFragColor = vec4(textureLod(uTexture, vTexCoords, 0).rgb, 1.0);
     }
 
     if (uShouldApplyToneMapping) {

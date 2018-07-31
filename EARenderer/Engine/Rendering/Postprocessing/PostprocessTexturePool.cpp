@@ -24,7 +24,7 @@ namespace EARenderer {
 
             // Preallocate mip map memory, because mips are gonna be needed in
             // postprocessing algorithms
-//            texture->generateMipMaps();
+            texture->generateMipMaps();
 
             mFreeTextures.insert(texture);
             mFramebuffer.attachTexture(*texture);

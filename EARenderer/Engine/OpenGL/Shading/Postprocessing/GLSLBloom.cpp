@@ -21,14 +21,10 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     void GLSLBloom::setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& baseImageTexture,
-                                const GLFloatTexture2D<GLTexture::Float::RGBA16F>& smallBlurTexture,
-                                const GLFloatTexture2D<GLTexture::Float::RGBA16F>& mediumBlurTexture,
-                                const GLFloatTexture2D<GLTexture::Float::RGBA16F>& largeBlurTexture)
+                                const GLFloatTexture2D<GLTexture::Float::RGBA16F>& blurTexture)
     {
         setUniformTexture(uint32_constant<ctcrc32("uBaseImageTexture")>, baseImageTexture);
-        setUniformTexture(uint32_constant<ctcrc32("uSmallBlurTexture")>, smallBlurTexture);
-        setUniformTexture(uint32_constant<ctcrc32("uMediumBlurTexture")>, mediumBlurTexture);
-        setUniformTexture(uint32_constant<ctcrc32("uLargeBlurTexture")>, largeBlurTexture);
+        setUniformTexture(uint32_constant<ctcrc32("uBlurTexture")>, blurTexture);
     }
 
     void GLSLBloom::setTextureWeights(float smallBlurWeight, float mediumBlurWeight, float largeBlurWeight) {

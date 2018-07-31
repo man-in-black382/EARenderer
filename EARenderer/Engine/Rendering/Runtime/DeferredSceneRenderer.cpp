@@ -281,7 +281,7 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        renderFinalImage(*bloomOutputTexture);
+        renderFinalImage(*toneMappingOutputTexture);
 
 //        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

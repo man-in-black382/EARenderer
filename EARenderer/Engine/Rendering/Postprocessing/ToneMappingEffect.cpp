@@ -21,7 +21,7 @@ namespace EARenderer {
             mToneMappingShader.setImage(*inputImage);
         });
 
-        texturePool->redirectRenderingToTextures(outputImage);
+        texturePool->redirectRenderingToTextureMip(outputImage, 0);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
