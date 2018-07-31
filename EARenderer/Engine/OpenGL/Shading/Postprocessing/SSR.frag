@@ -3,13 +3,13 @@
 // Output
 
 layout(location = 0) out vec4 oOutputColor;
+layout(location = 1) out vec4 oRayHitInfo;
 
 // Input
 
 in vec2 vTexCoords;
 
 // Uniforms
-
 
 uniform sampler2D uFrame;
 
@@ -24,6 +24,8 @@ uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 
+// Types
+
 struct GBuffer {
     vec3 albedo;
     vec3 normal;
@@ -31,6 +33,12 @@ struct GBuffer {
     float metalness;
     float AO;
 };
+
+struct RayHit {
+    bool hitDetected;
+    vec3 texelColor;
+    vec3 ssHitPosition;
+}
 
 vec2 UnpackSnorm2x16(uint package, float range) {
     const float base = 32767.0;
@@ -255,13 +263,14 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
 }
 
-bool GetReflection(vec3 worldReflectionVec,
-                   vec3 screenSpaceReflectionVec,
-                   vec3 screenSpacePos,
-                   out vec3 reflectionColor)
+bool RayMarch(vec3 worldReflectionVec,
+              vec3 screenSpaceReflectionVec,
+              vec3 screenSpacePos,
+              out vec3 reflectionColor,
+              out vec3 hitPosition)
 {
     const float kMaxRayMarchStep = 0.05;
-    const int kMaxRayMarchInterations = 50;
+    const int kMaxRayMarchIterations = 50;
     const int kMaxBinarySearchSamples = 5;
 
     int stub = uHiZBufferMipCount;
@@ -272,7 +281,7 @@ bool GetReflection(vec3 worldReflectionVec,
     float viewportAttenuationFactor = 1.0;
 
     // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
-    for (int rayStepIdx = 0; rayStepIdx < kMaxRayMarchInterations; rayStepIdx++) {
+    for (int rayStepIdx = 0; rayStepIdx < kMaxRayMarchIterations; rayStepIdx++) {
 
         vec3 raySample = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec + screenSpacePos;
 
@@ -317,12 +326,14 @@ bool GetReflection(vec3 worldReflectionVec,
 
         float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
         reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
+
+        hitPosition = midraySample;
     }
 
     return bFoundIntersection;
 }
 
-vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
+RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     vec2 currentFragUV = vTexCoords;
 
     // Prerequisites
@@ -349,12 +360,12 @@ vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     // Compute the sreen space reflection vector as the difference of the two screen space points
     vec3 screenSpaceReflectionVec = normalize(screenSpaceReflectionPoint.xyz - screenSpacePos.xyz);
 
-    vec3 outReflectionColor;
-    if (GetReflection(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outReflectionColor)) {
-        return outReflectionColor * attenuationFactor;
-    } else {
-        return outReflectionColor;
-    }
+    vec3 outReflectionColor = vec3(0.0);
+    vec3 outHitPosition = vec3(0.0);
+
+    bool rayHitDetected = RayMarch(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outReflectionColor, outHitPosition);
+
+    return RayHit(true, outReflectionColor * attenuationFactor, outHitPosition);
 }
 
 ////////////////////////////////////////////////////////////
@@ -371,6 +382,7 @@ void main() {
     vec3 albedo         = gBuffer.albedo;
     vec3 N              = gBuffer.normal;
 
-    vec3 SSR = ScreenSpaceReflection(N, worldPosition);
-    oOutputColor = vec4(SSR, 1.0);
+    RayHit SSR = ScreenSpaceReflection(N, worldPosition);
+    oOutputColor = vec4(SSR.texelColor, 1.0);
+    oRayHitInfo = vec4(SSR.ssHitPosition, SSR.hitDetected ? 1.0 : 0.0);
 }

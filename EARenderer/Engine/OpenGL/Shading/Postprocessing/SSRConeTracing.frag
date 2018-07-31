@@ -10,12 +10,10 @@ in vec2 vTexCoords;
 
 // Uniforms
 
-
-uniform sampler2D uFrame;
-
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferHiZBuffer;
-uniform int uHiZBufferMipCount;
+uniform sampler2D uReflections;
+uniform sampler2D uRayHitInfo;
 
 uniform vec2 uCameraNearFarPlanes;
 uniform vec3 uCameraPosition;
@@ -132,235 +130,11 @@ vec3 ReconstructWorldPosition() {
 }
 
 ////////////////////////////////////////////////////////////
-///////////////////////// Reflections  /////////////////////
-////////////////////////////////////////////////////////////
-
-// Autodesk tracing
-
-#define HIZ_START_LEVEL 6
-#define HIZ_STOP_LEVEL 0
-#define HIZ_MAX_LEVEL 7
-#define MAX_ITERATIONS 100
-
-vec2 cell(vec2 ray, vec2 cell_count, uint camera) {
-    return floor(ray.xy * cell_count);
-}
-
-vec2 cell_count(float level) {
-    vec2 texSize = vec2(textureSize(uGBufferHiZBuffer, 0));
-    return texSize / (level == 0.0 ? 1.0 : exp2(level));
-//    return input_texture2_size / (level == 0.0 ? 1.0 : exp2(level));
-}
-
-vec3 intersect_cell_boundary(vec3 pos, vec3 dir, vec2 cell_id, vec2 cell_count, vec2 cross_step, vec2 cross_offset, uint camera) {
-    vec2 cell_size = 1.0 / cell_count;
-    vec2 planes = cell_id/cell_count + cell_size * cross_step;
-
-    vec2 solutions = (planes - pos.xy)/dir.xy;
-    vec3 intersection_pos = pos + dir * min(solutions.x, solutions.y);
-
-    intersection_pos.xy += (solutions.x < solutions.y) ? vec2(cross_offset.x, 0.0) : vec2(0.0, cross_offset.y);
-
-    return intersection_pos;
-}
-
-bool crossed_cell_boundary(vec2 cell_id_one, vec2 cell_id_two) {
-    return int(cell_id_one.x) != int(cell_id_two.x) || int(cell_id_one.y) != int(cell_id_two.y);
-}
-
-float minimum_depth_plane(vec2 ray, float level, vec2 cell_count, uint camera) {
-    return textureLod(uGBufferHiZBuffer, ray, level).r;
-//    return input_texture2.Load(int3(vr_stereo_to_mono(ray.xy, camera) * cell_count, level)).r;
-}
-
-vec3 hi_z_trace(vec3 p, vec3 v, in uint camera, out uint iterations) {
-    float level = HIZ_START_LEVEL;
-    vec3 v_z = v/v.z;
-    vec2 hi_z_size = cell_count(level);
-    vec3 ray = p;
-
-    vec2 cross_step = vec2(v.x >= 0.0 ? 1.0 : -1.0, v.y >= 0.0 ? 1.0 : -1.0);
-    vec2 cross_offset = cross_step * 0.00001;
-    cross_step = clamp(cross_step, 0.0, 1.0);
-
-    vec2 ray_cell = cell(ray.xy, hi_z_size.xy, camera);
-    ray = intersect_cell_boundary(ray, v, ray_cell, hi_z_size, cross_step, cross_offset, camera);
-
-    iterations = 0;
-    while(level >= HIZ_STOP_LEVEL && iterations < MAX_ITERATIONS) {
-        // get the cell number of the current ray
-        vec2 current_cell_count = cell_count(level);
-        vec2 old_cell_id = cell(ray.xy, current_cell_count, camera);
-
-        // get the minimum depth plane in which the current ray resides
-        float min_z = minimum_depth_plane(ray.xy, level, current_cell_count, camera);
-
-        // intersect only if ray depth is below the minimum depth plane
-        vec3 tmp_ray = ray;
-        if(v.z > 0) {
-            float min_minus_ray = min_z - ray.z;
-            tmp_ray = min_minus_ray > 0 ? ray + v_z*min_minus_ray : tmp_ray;
-            vec2 new_cell_id = cell(tmp_ray.xy, current_cell_count, camera);
-            if(crossed_cell_boundary(old_cell_id, new_cell_id)) {
-                tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
-                level = min(HIZ_MAX_LEVEL, level + 2.0f);
-            }else{
-                if(level == 1 && abs(min_minus_ray) > 0.0001) {
-                    tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
-                    level = 2;
-                }
-            }
-        } else if(ray.z < min_z) {
-            tmp_ray = intersect_cell_boundary(ray, v, old_cell_id, current_cell_count, cross_step, cross_offset, camera);
-            level = min(HIZ_MAX_LEVEL, level + 2.0f);
-        }
-
-        ray.xyz = tmp_ray.xyz;
-        --level;
-
-        ++iterations;
-    }
-    return ray;
-}
-
-// Thanks to Sakib Saikia
-// and his post https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html#fn:fn3
-
-bool IsSamplingOutsideViewport(vec3 raySample, inout float attenuationFactor) {
-    // Any rays that march outside the screen viewport will not have any valid pixel information. These need to be dropped.
-    vec2 UVSamplingAttenuation = smoothstep(0.0, 0.05, raySample.xy) * (1 - smoothstep(0.95, 1, raySample.xy));
-    attenuationFactor = UVSamplingAttenuation.x * UVSamplingAttenuation.y;
-    return attenuationFactor <= 0;
-}
-
-bool IsReflectedBackToCamera(vec3 reflection, vec3 fragToCamera, inout float attenuationFactor) {
-    // This will check the direction of the reflection vector with the view direction,
-    // and if they are pointing in the same direction, it will drown out those reflections
-    // since we are limited to pixels visible on screen. Attenuate reflections for angles between
-    // 60 degrees and 75 degrees, and drop all contribution beyond the (-60,60)  degree range
-    attenuationFactor = 1.0 - smoothstep(0.25, 0.5, dot(fragToCamera, reflection));
-
-    // Reject if the reflection vector is pointing back at the viewer.
-    return attenuationFactor <= 0;
-}
-
-float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
-    // This will check the direction of the normal of the reflection sample with the
-    // direction of the reflection vector, and if they are pointing in the same direction,
-    // it will drown out those reflections since backward facing pixels are not available
-    // for screen space reflection. Attenuate reflections for angles between 90 degrees
-    // and 100 degrees, and drop all contribution beyond the (-100,100)  degree range
-    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, raySample.xy).xyz;
-    vec3 reflectionNormal = DecodeGBufferNormal(albedoRoughnessMetalnessAONormal);
-    return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
-}
-
-#define MAX_REFLECTION_RAY_MARCH_STEP 0.05
-#define NUM_RAY_MARCH_SAMPLES 50
-#define NUM_BINARY_SEARCH_SAMPLES 5
-
-bool GetReflection(vec3 worldReflectionVec,
-                   vec3 screenSpaceReflectionVec,
-                   vec3 screenSpacePos,
-                   out vec3 reflectionColor)
-{
-    int stub = uHiZBufferMipCount;
-    bool bFoundIntersection = false;
-    vec3 minraySample = vec3(0.0);
-    vec3 maxraySample = vec3(0.0);
-
-    float viewportAttenuationFactor = 1.0;
-
-    // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
-    for (int rayStepIdx = 0; rayStepIdx < NUM_RAY_MARCH_SAMPLES; rayStepIdx++) {
-
-        vec3 raySample = (float(rayStepIdx) * MAX_REFLECTION_RAY_MARCH_STEP) * screenSpaceReflectionVec + screenSpacePos;
-
-        if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-            reflectionColor = vec3(0.5, 0.5, 0.0);
-            return false;
-        }
-
-        float ZBufferVal = texture(uGBufferHiZBuffer, raySample.xy).r;
-
-        maxraySample = raySample;
-
-        float bias = rayStepIdx == 0 ? 0.001 : 0.0;
-
-        if (raySample.z > ZBufferVal + bias) {
-            bFoundIntersection = true;
-            break;
-        }
-
-        minraySample = maxraySample;
-    }
-
-    if (bFoundIntersection) {
-
-        vec3 midraySample;
-        for (int i = 0; i < NUM_BINARY_SEARCH_SAMPLES; i++)
-        {
-            midraySample = mix(minraySample, maxraySample, 0.5);
-            float ZBufferVal = texture(uGBufferHiZBuffer, midraySample.xy).r;
-
-            if (midraySample.z > ZBufferVal) {
-                maxraySample = midraySample;
-            } else {
-                minraySample = midraySample;
-            }
-        }
-
-        reflectionColor = texture(uFrame, midraySample.xy).rgb;
-
-        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midraySample.xy).xyz;
-        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-        reflectionColor = albedoRoughness.rgb;
-
-        float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
-        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
-    }
-
-    return bFoundIntersection;
-}
-
-vec3 ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
-    vec2 currentFragUV = vTexCoords;
-
-    // Prerequisites
-    float fragDepth = texture(uGBufferHiZBuffer, currentFragUV).r;
-    vec3 cameraToFrag = normalize(worldPosition - uCameraPosition);
-
-    // ScreenSpacePos --> (screencoord.xy, device_z)
-    vec4 screenSpacePos = vec4(currentFragUV, fragDepth, 1.0);
-
-    // Compute world space reflection vector
-    vec3 reflectionWorldVec = reflect(cameraToFrag, N);
-
-    float attenuationFactor;
-    if (IsReflectedBackToCamera(reflectionWorldVec, -cameraToFrag, attenuationFactor)) {
-        return vec3(0.5, 0.0, 0.0);
-    }
-
-    // Compute second screen space point so that we can get the SS reflection vector
-    vec4 pointAlongReflectionVec = vec4(10.0 * reflectionWorldVec + worldPosition, 1.0);
-    vec4 screenSpaceReflectionPoint = uCameraProjectionMat * uCameraViewMat * pointAlongReflectionVec;
-    screenSpaceReflectionPoint /= screenSpaceReflectionPoint.w;
-    screenSpaceReflectionPoint.xyz = screenSpaceReflectionPoint.xyz * 0.5 + 0.5; // To [0; 1]
-
-    // Compute the sreen space reflection vector as the difference of the two screen space points
-    vec3 screenSpaceReflectionVec = normalize(screenSpaceReflectionPoint.xyz - screenSpacePos.xyz);
-
-    vec3 outReflectionColor;
-    if (GetReflection(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outReflectionColor)) {
-        return outReflectionColor * attenuationFactor;
-    } else {
-        return outReflectionColor;
-    }
-}
-
-////////////////////////////////////////////////////////////
 ////////////////////// Cone Tracing ////////////////////////
 ////////////////////////////////////////////////////////////
+
+// Thanks to GPU Pro 5 and Will Pearce's article
+// http://roar11.com/2015/07/screen-space-glossy-reflections/
 
 float SpecularPowerToConeAngle(float specularPower) {
     // based on phong distribution model
@@ -385,18 +159,23 @@ float IsoscelesTriangleInscribedCircleRadius(float a, float h) {
     return (a * (sqrt(a2 + fh2) - a)) / (4.0f * h);
 }
 
-//vec4 ConeSampleWeightedColor(float2 samplePos, float mipChannel, float gloss)
-//{
-//    vec3 sampleColor = colorBuffer.SampleLevel(sampTrilinearClamp, samplePos, mipChannel).rgb;
-//    return float4(sampleColor * gloss, gloss);
-//}
+vec4 ConeSampleWeightedColor(vec2 samplePos, float mipChannel, float gloss) {
+    vec3 sampleColor = textureLod(uReflections, samplePos, mipChannel).rgb;
+    return vec4(sampleColor * gloss, gloss);
+}
 
-float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius)
-{
+float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) {
     // subtract the diameter of the incircle to get the adjacent side of the next level on the cone
     return adjacentLength - (incircleRadius * 2.0f);
 }
 
+// https://seblagarde.wordpress.com/2012/06/10/amd-cubemapgen-for-physically-based-rendering/
+float RoughnessToSpecularPower(float roughness) {
+    const float kGlossScale = 10.0;
+    const float kGlossBias = 1.0;
+    float gloss = 1.0f - roughness;
+    return exp2(kGlossScale * gloss + kGlossBias);
+}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
@@ -405,13 +184,104 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius)
 void main() {
     GBuffer gBuffer     = DecodeGBuffer();
 
-    vec3 worldPosition  = ReconstructWorldPosition();
+//    vec3 worldPosition  = ReconstructWorldPosition();
     float roughness     = gBuffer.roughness;
-    float metallic      = gBuffer.metalness;
-    float ao            = gBuffer.AO;
-    vec3 albedo         = gBuffer.albedo;
-    vec3 N              = gBuffer.normal;
+//    float metallic      = gBuffer.metalness;
+//    float ao            = gBuffer.AO;
+//    vec3 albedo         = gBuffer.albedo;
+//    vec3 N              = gBuffer.normal;
 
-    vec3 SSR = ScreenSpaceReflection(N, worldPosition);
-    oOutputColor = vec4(SSR, 1.0);
+//    vec3 SSR = ScreenSpaceReflection(N, worldPosition);
+//    oOutputColor = vec4(SSR, 1.0);
+//
+//    int3 loadIndices = int3(pIn.posH.xy, 0);
+//    // get screen-space ray intersection point
+//    float4 raySS = rayTracingBuffer.Load(loadIndices).xyzw;
+//    float3 fallbackColor = indirectSpecularBuffer.Load(loadIndices).rgb;
+//    if(raySS.w <= 0.0f) // either means no hit or the ray faces back towards the camera
+//    {
+//        // no data for this point - a fallback like localized environment maps should be used
+//        return float4(fallbackColor, 1.0f);
+//    }
+//    float depth = depthBuffer.Load(loadIndices).r;
+//    float3 positionSS = float3(pIn.tex, depth);
+//    float linearDepth = linearizeDepth(depth);
+//    float3 positionVS = pIn.viewRay * linearDepth;
+//    // since calculations are in view-space, we can just normalize the position to point at it
+//    float3 toPositionVS = normalize(positionVS);
+//    float3 normalVS = normalBuffer.Load(loadIndices).rgb;
+
+    // get specular power from roughness
+    float gloss = 1.0f - roughness;
+    float specularPower = RoughnessToSpecularPower(roughness);
+
+    // Convert to cone angle (maximum extent of the specular lobe aperture)
+    // Only want half the full cone angle since we're slicing the isosceles triangle in half to get a right triangle
+    float coneTheta = SpecularPowerToConeAngle(specularPower) * 0.5f;
+
+    // P1 = positionSS, P2 = raySS, adjacent length = ||P2 - P1||
+    vec2 deltaP = raySS.xy - positionSS.xy;
+    float adjacentLength = length(deltaP);
+    vec2 adjacentUnit = normalize(deltaP);
+
+    vec4 totalColor = vec4(0.0);
+    float remainingAlpha = 1.0f;
+    float maxMipLevel = (float)cb_numMips - 1.0f;
+    float glossMult = gloss;
+
+    // Cone-tracing using an isosceles triangle to approximate a cone in screen space
+    for(int i = 0; i < 14; ++i)
+    {
+        // intersection length is the adjacent side, get the opposite side using trig
+        float oppositeLength = isoscelesTriangleOpposite(adjacentLength, coneTheta);
+
+        // calculate in-radius of the isosceles triangle
+        float incircleSize = isoscelesTriangleInRadius(oppositeLength, adjacentLength);
+
+        // get the sample position in screen space
+        float2 samplePos = positionSS.xy + adjacentUnit * (adjacentLength - incircleSize);
+
+        // convert the in-radius into screen size then check what power N to raise 2 to reach it - that power N becomes mip level to sample from
+        float mipChannel = clamp(log2(incircleSize * max(cb_depthBufferSize.x, cb_depthBufferSize.y)), 0.0f, maxMipLevel);
+
+        /*
+         * Read color and accumulate it using trilinear filtering and weight it.
+         * Uses pre-convolved image (color buffer) and glossiness to weigh color contributions.
+         * Visibility is accumulated in the alpha channel. Break if visibility is 100% or greater (>= 1.0f).
+         */
+        float4 newColor = coneSampleWeightedColor(samplePos, mipChannel, glossMult);
+
+        remainingAlpha -= newColor.a;
+        if(remainingAlpha < 0.0f)
+        {
+            newColor.rgb *= (1.0f - abs(remainingAlpha));
+        }
+        totalColor += newColor;
+
+        if(totalColor.a >= 1.0f)
+        {
+            break;
+        }
+
+        adjacentLength = isoscelesTriangleNextAdjacent(adjacentLength, incircleSize);
+        glossMult *= gloss;
+    }
+
+    float3 toEye = -toPositionVS;
+    float3 specular = calculateFresnelTerm(specularAll.rgb, abs(dot(normalVS, toEye))) * CNST_1DIVPI;
+
+    // fade rays close to screen edge
+    float2 boundary = abs(raySS.xy - float2(0.5f, 0.5f)) * 2.0f;
+    const float fadeDiffRcp = 1.0f / (cb_fadeEnd - cb_fadeStart);
+    float fadeOnBorder = 1.0f - saturate((boundary.x - cb_fadeStart) * fadeDiffRcp);
+    fadeOnBorder *= 1.0f - saturate((boundary.y - cb_fadeStart) * fadeDiffRcp);
+    fadeOnBorder = smoothstep(0.0f, 1.0f, fadeOnBorder);
+    float3 rayHitPositionVS = viewSpacePositionFromDepth(raySS.xy, raySS.z);
+    float fadeOnDistance = 1.0f - saturate(distance(rayHitPositionVS, positionVS) / cb_maxDistance);
+    // ray tracing steps stores rdotv in w component - always > 0 due to check at start of this method
+    float fadeOnPerpendicular = saturate(lerp(0.0f, 1.0f, saturate(raySS.w * 4.0f)));
+    float fadeOnRoughness = saturate(lerp(0.0f, 1.0f, gloss * 4.0f));
+    float totalFade = fadeOnBorder * fadeOnDistance * fadeOnPerpendicular * fadeOnRoughness * (1.0f - saturate(remainingAlpha));
+
+    return float4(lerp(fallbackColor, totalColor.rgb * specular, totalFade), 1.0f);
 }
