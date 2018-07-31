@@ -4,6 +4,7 @@
 
 // Uniforms
 
+uniform vec2 uRenderTargetSize;
 uniform vec2 uBlurDirection;
 uniform sampler2D uTexture;
 uniform float uKernelWeights[64];
@@ -23,11 +24,11 @@ out vec4 oFragColor;
 
 void main()
 {
-    vec2 imageResolution = vec2(textureSize(uTexture, uMipLevel));
+    vec2 imageResolutionInv = 1.0 / uRenderTargetSize;
 
     float texelWeight = uKernelWeights[0];
     float texOffset = uTextureOffsets[0];
-    vec2 currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
+    vec2 currentOffset = vec2(texOffset) * imageResolutionInv * uBlurDirection;
 
     float mipLevel = float(uMipLevel);
 
@@ -36,7 +37,7 @@ void main()
     for (int i = 1; i < uKernelSize; i++) {
         texelWeight = uKernelWeights[i];
         texOffset = uTextureOffsets[i];
-        currentOffset = vec2(texOffset) / imageResolution * uBlurDirection;
+        currentOffset = vec2(texOffset) * imageResolutionInv * uBlurDirection;
 
         oFragColor += textureLod(uTexture, (vTexCoords + currentOffset), mipLevel) * texelWeight;
         oFragColor += textureLod(uTexture, (vTexCoords - currentOffset), mipLevel) * texelWeight;

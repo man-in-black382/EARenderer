@@ -15,12 +15,12 @@ namespace EARenderer {
 
     struct GaussianBlurSettings {
         size_t radius = 2;
-        size_t sigma = 2;
+        float sigma = 2;
         size_t inputImageMipLevel = 0;
         size_t outputImageMipLevel = 0;
 
         bool operator==(const GaussianBlurSettings& rhs) const {
-            return this->radius == rhs.radius && this->sigma == rhs.sigma;
+            return this->radius == rhs.radius && std::fabs(this->sigma - rhs.sigma) < 0.001;
         }
 
         bool operator!=(const GaussianBlurSettings& rhs) const {

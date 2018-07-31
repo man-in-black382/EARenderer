@@ -29,6 +29,7 @@ namespace EARenderer {
         void setTexture(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& texture, size_t mipLevel);
         void setKernelWeights(const std::vector<float>& weights);
         void setTextureOffsets(const std::vector<float>& offsets);
+        void setRenderTargetSize(const Size2D& RTSize);
     };
 
 }

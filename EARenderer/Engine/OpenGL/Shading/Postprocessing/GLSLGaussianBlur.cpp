@@ -45,4 +45,9 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uKernelSize")>).location(), (GLint)offsets.size());
     }
 
+    void GLSLGaussianBlur::setRenderTargetSize(const Size2D& RTSize) {
+        glm::vec2 size(RTSize.width, RTSize.height);
+        glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uRenderTargetSize")>).location(), 1, glm::value_ptr(size));
+    }
+
 }

@@ -22,7 +22,15 @@ namespace EARenderer {
 
 #pragma mark - Blur
 
-    void GaussianBlurEffect::computeWeightsAndOffsets() {
+    void GaussianBlurEffect::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings) {
+        if (settings == mSettings && !mWeights.empty()) {
+            return;
+        }
+
+        bool isOdd = settings.radius % 2 == 1;
+        mSettings.radius = isOdd ? settings.radius + 1 : settings.radius;
+        mSettings.sigma = settings.sigma;
+
         auto weights = GaussianFunction::Produce1DKernel(mSettings.radius, mSettings.sigma);
 
         mWeights.clear();
@@ -55,16 +63,12 @@ namespace EARenderer {
     {
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
-        if (settings != mSettings) {
-            bool isOdd = settings.radius % 2 == 1;
-            mSettings.radius = isOdd ? settings.radius + 1 : settings.radius;
-            mSettings.sigma = settings.sigma;
-            computeWeightsAndOffsets();
-        }
+        computeWeightsAndOffsetsIfNeeded(settings);
 
         auto intermediateTexture = texturePool->claim();
 
         mBlurShader.bind();
+        mBlurShader.setRenderTargetSize(inputImage->mipMapSize(settings.outputImageMipLevel));
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
         mBlurShader.ensureSamplerValidity([&]() {

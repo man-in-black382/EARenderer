@@ -609,7 +609,9 @@ float ExponentialShadow(vec3 worldPosition) {
     // Distance to the fragment from a near clip plane of directional light's frustum
     float linearZ = positionInLightSpace.z;
 
-    vec4 occluders = texture(uExponentialShadowMap, projCoords.xy);
+    // Explicitly reading from 0 LOD because shadow map comes from a postprocess texture pool
+    // and is a subject to mipmapping
+    vec4 occluders = textureLod(uExponentialShadowMap, projCoords.xy, 0);
 
     float occluder = occluders[cascade];
     float receiver = exp(-uESMFactor * linearZ);

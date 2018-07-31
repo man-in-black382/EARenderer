@@ -28,7 +28,7 @@ namespace EARenderer {
         std::vector<float> mTextureOffsets;
         GaussianBlurSettings mSettings;
 
-        void computeWeightsAndOffsets();
+        void computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings);
 
     public:
         GaussianBlurEffect();
