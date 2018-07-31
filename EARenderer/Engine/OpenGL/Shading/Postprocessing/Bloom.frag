@@ -32,4 +32,6 @@ void main() {
                     smallBlurTexData * uSmallBlurWeight;
 
     oFragColor = vec4(combined + baseTexData, 1.0);
+
+//    oFragColor = vec4(mediumBlurTexData, 1.0);
 }

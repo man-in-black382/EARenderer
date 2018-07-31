@@ -163,7 +163,7 @@ namespace EARenderer {
         glBindTexture(mBindingPoint, mName);
     }
     
-    void GLTexture::generateMipmaps(size_t count) {
+    void GLTexture::generateMipMaps(size_t count) {
         bind();
         glTexParameteri(mBindingPoint, GL_TEXTURE_MAX_LEVEL, GLint(count));
         glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

@@ -116,34 +116,52 @@ namespace EARenderer {
             throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
         }
 
-        if (mRequestedAttachments.size() >= mMaximumColorAttachments) {
-            throw std::runtime_error(string_format("Exceeded maximum amount of color attachments (%d)", mMaximumColorAttachments));
+        if (mipLevel > texture.mipMapsCount()) {
+            throw std::invalid_argument(string_format("Texture %d doesn't have %d mip level, therefore cannot attach it to the FBO.", texture.name(), mipLevel));
         }
 
         bind();
         texture.bind();
 
-        GLenum attachment;
+        GLenum glAttachment;
 
         if (colorAttachment == ColorAttachment::Automatic) {
-            auto freeAttachmentIt = mAvailableAttachments.begin();
-            attachment = glColorAttachment(*freeAttachmentIt);
-            mAvailableAttachments.erase(freeAttachmentIt);
-        } else {
-            attachment = glColorAttachment(colorAttachment);
+            auto attachmentIt = mTextureAttachmentMap.find(texture.name());
+            bool textureAlreadyAttached = attachmentIt != mTextureAttachmentMap.end();
+
+            // If texture was already attached to the framebuffer
+            // reuse attachment info and reattach (possible) different mip level
+            if (textureAlreadyAttached) {
+                glAttachment = attachmentIt->second.glColorAttachment;
+                colorAttachment = attachmentIt->second.colorAttachment;
+            } else {
+
+                if (mRequestedAttachments.size() >= mMaximumColorAttachments) {
+                    throw std::runtime_error(string_format("Exceeded maximum amount of color attachments (%d)", mMaximumColorAttachments));
+                }
+
+                auto freeAttachmentIt = mAvailableAttachments.begin();
+                glAttachment = glColorAttachment(*freeAttachmentIt);
+                mAvailableAttachments.erase(freeAttachmentIt);
+            }
+        }
+        else {
+            glAttachment = glColorAttachment(colorAttachment);
             mAvailableAttachments.erase(colorAttachment);
         }
 
-        AttachmentMetadata attachmentMetadata { colorAttachment, attachment, mipLevel };
+        AttachmentMetadata attachmentMetadata { colorAttachment, glAttachment, mipLevel };
         mTextureAttachmentMap[texture.name()] = attachmentMetadata;
 
         if (layer == -1) {
-            glFramebufferTexture(mBindingPoint, attachment, texture.name(), mipLevel);
+            glFramebufferTexture(mBindingPoint, glAttachment, texture.name(), mipLevel);
         } else {
-            glFramebufferTextureLayer(mBindingPoint, attachment, texture.name(), mipLevel, layer);
+            glFramebufferTextureLayer(mBindingPoint, glAttachment, texture.name(), mipLevel, layer);
         }
 
-        mRequestedAttachments.insert(attachment);
+        mRequestedAttachments.insert(glAttachment);
+
+        // FIXME: Delete this line, then ensure rendering works across the application
         setRequestedDrawBuffers();
     }
 

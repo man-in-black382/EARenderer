@@ -18,7 +18,7 @@ namespace EARenderer {
                             std::shared_ptr<PostprocessTexturePool> texturePool,
                             const BloomSettings& settings)
     {
-        thresholdFilteredImage->generateMipmaps(2);
+        thresholdFilteredImage->generateMipMaps(2);
 
         auto smallBlurTexture = texturePool->claim();
         auto mediumBlurTexture = texturePool->claim();
@@ -39,7 +39,8 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        texturePool->redirectRenderingToTextures(outputImage);
+        texturePool->redirectRenderingToTextureMip(outputImage, 0);
+//        texturePool->redirectRenderingToTextures(outputImage);
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

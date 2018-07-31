@@ -68,21 +68,23 @@ namespace EARenderer {
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*inputImage, settings.imageMipLevel);
+            mBlurShader.setTexture(*inputImage, settings.inputImageMipLevel);
         });
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        texturePool->redirectRenderingToTextures(intermediateTexture);
+        texturePool->redirectRenderingToTextureMip(intermediateTexture, settings.outputImageMipLevel);
+//        texturePool->redirectRenderingToTextures(intermediateTexture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Vertical);
 
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*intermediateTexture, settings.imageMipLevel);
+            mBlurShader.setTexture(*intermediateTexture, settings.inputImageMipLevel);
         });
 
-        texturePool->redirectRenderingToTextures(outputImage);
+        texturePool->redirectRenderingToTextureMip(outputImage, settings.outputImageMipLevel);
+//        texturePool->redirectRenderingToTextures(outputImage);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         texturePool->putBack(intermediateTexture);

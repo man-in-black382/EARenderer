@@ -76,7 +76,7 @@ namespace EARenderer {
         uint16_t mipMapsCount() const;
         
         void bind() const override;
-        void generateMipmaps(size_t count = 1000);
+        void generateMipMaps(size_t count = 1000);
         Size2D mipMapSize(size_t mipLevel) const;
     };
     

@@ -24,7 +24,7 @@ namespace EARenderer {
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
 
         // Preallocate HiZ buffer mipmaps
-        mGBuffer->HiZBuffer.generateMipmaps();
+        mGBuffer->HiZBuffer.generateMipMaps();
     }
 
 #pragma mark - Getters

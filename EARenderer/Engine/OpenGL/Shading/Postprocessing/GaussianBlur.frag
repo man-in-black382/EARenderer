@@ -23,7 +23,7 @@ out vec4 oFragColor;
 
 void main()
 {
-    vec2 imageResolution = vec2(textureSize(uTexture, uMipLevel));
+    vec2 imageResolution = vec2(textureSize(uTexture, 0));
 
     float texelWeight = uKernelWeights[0];
     float texOffset = uTextureOffsets[0];

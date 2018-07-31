@@ -21,9 +21,15 @@ namespace EARenderer {
     {
         for (size_t i = 0; i < mFramebuffer.maximumColorAttachmentsCount(); i++) {
             auto texture = std::make_shared<PostprocessTexture>(resolution);
+
+            // Preallocate mip map memory, because mips are gonna be needed in
+            // postprocessing algorithms
+//            texture->generateMipMaps();
+
             mFreeTextures.insert(texture);
             mFramebuffer.attachTexture(*texture);
         }
+
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 

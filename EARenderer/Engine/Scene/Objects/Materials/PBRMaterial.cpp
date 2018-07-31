@@ -27,12 +27,12 @@ namespace EARenderer {
     mAmbientOcclusionMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(ambientOcclusionMapPath)),
     mDisplacementMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(displacementMapPath))
     {
-        if (mAlbedoMap) mAlbedoMap->generateMipmaps();
-        if (mNormalMap) mNormalMap->generateMipmaps();
-        if (mMetallicMap) mMetallicMap->generateMipmaps();
-        if (mRoughnessMap) mRoughnessMap->generateMipmaps();
-        if (mAmbientOcclusionMap) mAmbientOcclusionMap->generateMipmaps();
-        if (mDisplacementMap) mDisplacementMap->generateMipmaps();
+        if (mAlbedoMap) mAlbedoMap->generateMipMaps();
+        if (mNormalMap) mNormalMap->generateMipMaps();
+        if (mMetallicMap) mMetallicMap->generateMipMaps();
+        if (mRoughnessMap) mRoughnessMap->generateMipMaps();
+        if (mAmbientOcclusionMap) mAmbientOcclusionMap->generateMipMaps();
+        if (mDisplacementMap) mDisplacementMap->generateMipMaps();
     }
     
 #pragma mark - Getters
