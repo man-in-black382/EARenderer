@@ -14,6 +14,8 @@ uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferHiZBuffer;
 uniform sampler2D uReflections;
 uniform sampler2D uRayHitInfo;
+uniform int uHiZBufferMipCount;
+uniform int uMipCount;
 
 uniform vec2 uCameraNearFarPlanes;
 uniform vec3 uCameraPosition;
@@ -133,18 +135,26 @@ vec3 ReconstructWorldPosition() {
 ////////////////////// Cone Tracing ////////////////////////
 ////////////////////////////////////////////////////////////
 
-// Thanks to GPU Pro 5 and Will Pearce's article
+// Thanks to Will Pearce's article
 // http://roar11.com/2015/07/screen-space-glossy-reflections/
+
+const float kMaxSpecularExponent = 16.0;
+const float kSpecularBias = 1.0;
 
 float SpecularPowerToConeAngle(float specularPower) {
     // based on phong distribution model
-    const float kMaxSpecExp = 16.0;
-    if(specularPower >= exp2(kMaxSpecExp)) {
+    if(specularPower >= exp2(kMaxSpecularExponent)) {
         return 0.0f;
     }
     const float xi = 0.244f;
     float exponent = 1.0f / (specularPower + 1.0f);
     return acos(pow(xi, exponent));
+}
+
+// https://seblagarde.wordpress.com/2012/06/10/amd-cubemapgen-for-physically-based-rendering/
+float RoughnessToSpecularPower(float roughness) {
+    float gloss = 1.0f - roughness;
+    return exp2(kMaxSpecularExponent * gloss + kSpecularBias);
 }
 
 float IsoscelesTriangleOpposite(float adjacentLength, float coneTheta) {
@@ -169,47 +179,30 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
     return adjacentLength - (incircleRadius * 2.0f);
 }
 
-// https://seblagarde.wordpress.com/2012/06/10/amd-cubemapgen-for-physically-based-rendering/
-float RoughnessToSpecularPower(float roughness) {
-    const float kGlossScale = 10.0;
-    const float kGlossBias = 1.0;
-    float gloss = 1.0f - roughness;
-    return exp2(kGlossScale * gloss + kGlossBias);
-}
-
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
+    int stub = uHiZBufferMipCount;
+
     GBuffer gBuffer     = DecodeGBuffer();
 
-//    vec3 worldPosition  = ReconstructWorldPosition();
     float roughness     = gBuffer.roughness;
-//    float metallic      = gBuffer.metalness;
-//    float ao            = gBuffer.AO;
-//    vec3 albedo         = gBuffer.albedo;
-//    vec3 N              = gBuffer.normal;
 
-//    vec3 SSR = ScreenSpaceReflection(N, worldPosition);
-//    oOutputColor = vec4(SSR, 1.0);
-//
-//    int3 loadIndices = int3(pIn.posH.xy, 0);
-//    // get screen-space ray intersection point
-//    float4 raySS = rayTracingBuffer.Load(loadIndices).xyzw;
-//    float3 fallbackColor = indirectSpecularBuffer.Load(loadIndices).rgb;
-//    if(raySS.w <= 0.0f) // either means no hit or the ray faces back towards the camera
-//    {
-//        // no data for this point - a fallback like localized environment maps should be used
-//        return float4(fallbackColor, 1.0f);
-//    }
-//    float depth = depthBuffer.Load(loadIndices).r;
-//    float3 positionSS = float3(pIn.tex, depth);
-//    float linearDepth = linearizeDepth(depth);
-//    float3 positionVS = pIn.viewRay * linearDepth;
-//    // since calculations are in view-space, we can just normalize the position to point at it
-//    float3 toPositionVS = normalize(positionVS);
-//    float3 normalVS = normalBuffer.Load(loadIndices).rgb;
+    // Explicitly reading from 0 LOD because texture comes from a postprocess texture pool
+    // and is a subject to mipmapping
+    vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
+
+    if (rayHitInfo.a == 0) {
+        oOutputColor = vec4(0.0, 0.0, 0.0, 1.0);
+        return;
+    }
+
+    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
+
+    vec3 raySS = rayHitInfo.xyz;
+    vec3 positionSS = vec3(vTexCoords, depth);
 
     // get specular power from roughness
     float gloss = 1.0f - roughness;
@@ -226,62 +219,47 @@ void main() {
 
     vec4 totalColor = vec4(0.0);
     float remainingAlpha = 1.0f;
-    float maxMipLevel = (float)cb_numMips - 1.0f;
+    float maxMipLevel = float(uMipCount) - 1.0f;
     float glossMult = gloss;
 
+    vec2 texSize = vec2(textureSize(uReflections, 0));
+
     // Cone-tracing using an isosceles triangle to approximate a cone in screen space
-    for(int i = 0; i < 14; ++i)
-    {
+    for(int i = 0; i < 14; ++i) {
         // intersection length is the adjacent side, get the opposite side using trig
-        float oppositeLength = isoscelesTriangleOpposite(adjacentLength, coneTheta);
+        float oppositeLength = IsoscelesTriangleOpposite(adjacentLength, coneTheta);
 
         // calculate in-radius of the isosceles triangle
-        float incircleSize = isoscelesTriangleInRadius(oppositeLength, adjacentLength);
+        float incircleSize = IsoscelesTriangleInscribedCircleRadius(oppositeLength, adjacentLength);
 
         // get the sample position in screen space
-        float2 samplePos = positionSS.xy + adjacentUnit * (adjacentLength - incircleSize);
+        vec2 samplePos = positionSS.xy + adjacentUnit * (adjacentLength - incircleSize);
 
         // convert the in-radius into screen size then check what power N to raise 2 to reach it - that power N becomes mip level to sample from
-        float mipChannel = clamp(log2(incircleSize * max(cb_depthBufferSize.x, cb_depthBufferSize.y)), 0.0f, maxMipLevel);
+        float mipChannel = clamp(log2(incircleSize * max(texSize.x, texSize.y)), 0.0, maxMipLevel);
 
         /*
          * Read color and accumulate it using trilinear filtering and weight it.
          * Uses pre-convolved image (color buffer) and glossiness to weigh color contributions.
          * Visibility is accumulated in the alpha channel. Break if visibility is 100% or greater (>= 1.0f).
          */
-        float4 newColor = coneSampleWeightedColor(samplePos, mipChannel, glossMult);
+        vec4 newColor = ConeSampleWeightedColor(samplePos, mipChannel, glossMult);
 
         remainingAlpha -= newColor.a;
-        if(remainingAlpha < 0.0f)
-        {
+
+        if(remainingAlpha < 0.0f) {
             newColor.rgb *= (1.0f - abs(remainingAlpha));
         }
+
         totalColor += newColor;
 
-        if(totalColor.a >= 1.0f)
-        {
+        if(totalColor.a >= 1.0f) {
             break;
         }
 
-        adjacentLength = isoscelesTriangleNextAdjacent(adjacentLength, incircleSize);
+        adjacentLength = IsoscelesTriangleNextAdjacent(adjacentLength, incircleSize);
         glossMult *= gloss;
     }
 
-    float3 toEye = -toPositionVS;
-    float3 specular = calculateFresnelTerm(specularAll.rgb, abs(dot(normalVS, toEye))) * CNST_1DIVPI;
-
-    // fade rays close to screen edge
-    float2 boundary = abs(raySS.xy - float2(0.5f, 0.5f)) * 2.0f;
-    const float fadeDiffRcp = 1.0f / (cb_fadeEnd - cb_fadeStart);
-    float fadeOnBorder = 1.0f - saturate((boundary.x - cb_fadeStart) * fadeDiffRcp);
-    fadeOnBorder *= 1.0f - saturate((boundary.y - cb_fadeStart) * fadeDiffRcp);
-    fadeOnBorder = smoothstep(0.0f, 1.0f, fadeOnBorder);
-    float3 rayHitPositionVS = viewSpacePositionFromDepth(raySS.xy, raySS.z);
-    float fadeOnDistance = 1.0f - saturate(distance(rayHitPositionVS, positionVS) / cb_maxDistance);
-    // ray tracing steps stores rdotv in w component - always > 0 due to check at start of this method
-    float fadeOnPerpendicular = saturate(lerp(0.0f, 1.0f, saturate(raySS.w * 4.0f)));
-    float fadeOnRoughness = saturate(lerp(0.0f, 1.0f, gloss * 4.0f));
-    float totalFade = fadeOnBorder * fadeOnDistance * fadeOnPerpendicular * fadeOnRoughness * (1.0f - saturate(remainingAlpha));
-
-    return float4(lerp(fallbackColor, totalColor.rgb * specular, totalFade), 1.0f);
+    oOutputColor = vec4(totalColor.rgb, 1.0);
 }

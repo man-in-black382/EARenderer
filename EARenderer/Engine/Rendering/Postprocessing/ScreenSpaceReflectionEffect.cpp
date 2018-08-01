@@ -12,11 +12,12 @@ namespace EARenderer {
 
 #pragma mark - Pivate Helpers
 
-    void ScreenSpaceReflectionEffect::renderReflections(const Camera& camera,
-                                                        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> lightBuffer,
-                                                        std::shared_ptr<const SceneGBuffer> GBuffer,
-                                                        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mirrorReflections,
-                                                        std::shared_ptr<PostprocessTexturePool> texturePool)
+    void ScreenSpaceReflectionEffect::traceReflections(const Camera& camera,
+                                                       std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
+                                                       std::shared_ptr<const SceneGBuffer> GBuffer,
+                                                       std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
+                                                       std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo,
+                                                       std::shared_ptr<PostprocessTexturePool> texturePool)
     {
         mSSRShader.bind();
         mSSRShader.ensureSamplerValidity([&]() {
@@ -25,11 +26,14 @@ namespace EARenderer {
             mSSRShader.setGBuffer(*GBuffer);
         });
 
-        texturePool->redirectRenderingToTextureMip(mirrorReflections, 0);
+//        texturePool->useTextureMip(mirrorReflections, 0);
+//        texturePool->useTextureMip(rayHitInfo, 0);
+        texturePool->redirectRenderingToTextures(mirrorReflections, rayHitInfo);
+
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void ScreenSpaceReflectionEffect::blurReflections(std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mirrorReflections,
+    void ScreenSpaceReflectionEffect::blurReflections(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
                                                       std::shared_ptr<PostprocessTexturePool> texturePool)
     {
         // Shape up the Gaussian curve to obtain [0.474, 0.233, 0.028, 0.001] weights
@@ -43,26 +47,40 @@ namespace EARenderer {
         }
     }
 
-    void ScreenSpaceReflectionEffect::performConeTracing(const Camera& camera,
-                                                         std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> inputImage,
-                                                         std::shared_ptr<const SceneGBuffer> GBuffer,
-                                                         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
-                                                         std::shared_ptr<PostprocessTexturePool> texturePool)
+    void ScreenSpaceReflectionEffect::traceCones(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> reflections,
+                                                 std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> rayHitInfo,
+                                                 std::shared_ptr<const SceneGBuffer> GBuffer,
+                                                 std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
+                                                 std::shared_ptr<PostprocessTexturePool> texturePool)
     {
-        
+        mConeTracingShader.bind();
+        mConeTracingShader.ensureSamplerValidity([&]() {
+            mConeTracingShader.setGBuffer(*GBuffer);
+            mConeTracingShader.setRayHitInfo(*rayHitInfo);
+            mConeTracingShader.setReflections(*reflections);
+        });
+
+//        texturePool->useTextureMip(outputImage, 0);
+        texturePool->redirectRenderingToTextures(outputImage);
     }
 
 #pragma mark - Public Interface
 
     void ScreenSpaceReflectionEffect::applyReflections(const Camera& camera,
-                                                      std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> lightBuffer,
-                                                      std::shared_ptr<const SceneGBuffer> GBuffer,
-                                                      std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
-                                                      std::shared_ptr<PostprocessTexturePool> texturePool)
+                                                       std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
+                                                       std::shared_ptr<const SceneGBuffer> GBuffer,
+                                                       std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
+                                                       std::shared_ptr<PostprocessTexturePool> texturePool)
     {
-        auto mirrorReflections = outputImage;//texturePool->claim();
-        renderReflections(camera, lightBuffer, GBuffer, mirrorReflections, texturePool);
+        auto mirrorReflections = texturePool->claim();
+        auto rayTracingInfo = texturePool->claim();
+
+        traceReflections(camera, lightBuffer, GBuffer, mirrorReflections, rayTracingInfo, texturePool);
         blurReflections(mirrorReflections, texturePool);
+        traceCones(mirrorReflections, rayTracingInfo, GBuffer, outputImage, texturePool);
+
+        texturePool->putBack(mirrorReflections);
+        texturePool->putBack(rayTracingInfo);
     }
 
 }

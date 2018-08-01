@@ -38,7 +38,7 @@ struct RayHit {
     bool hitDetected;
     vec3 texelColor;
     vec3 ssHitPosition;
-}
+};
 
 vec2 UnpackSnorm2x16(uint package, float range) {
     const float base = 32767.0;
@@ -348,7 +348,7 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     float attenuationFactor;
     if (IsReflectedBackToCamera(reflectionWorldVec, -cameraToFrag, attenuationFactor)) {
-        return vec3(0.5, 0.0, 0.0);
+        return RayHit(false, vec3(0.0), vec3(0.0));
     }
 
     // Compute second screen space point so that we can get the SS reflection vector
