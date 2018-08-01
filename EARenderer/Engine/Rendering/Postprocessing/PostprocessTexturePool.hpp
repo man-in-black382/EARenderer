@@ -31,14 +31,14 @@ namespace EARenderer {
         TexturePointerSet mClaimedTextures;
 
         template<class TexturePtr>
-        void replaceMipLevelsInFramebuffer(TexturePtr texture, uint8_t mipLevel) {
+        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr texture) {
             mFramebuffer.replaceMipLevel(*texture, mipLevel);
         }
 
         template<class TexturePtr, class... TexturePtrs>
-        void replaceMipLevelsInFramebuffer(TexturePtr head, TexturePtrs... tail, uint8_t mipLevel) {
+        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr head, TexturePtrs... tail) {
             mFramebuffer.replaceMipLevel(*head, mipLevel);
-            replaceMipLevelsInFramebuffer(tail...);
+            replaceMipLevelsInFramebuffer(mipLevel, tail...);
         }
 
     public:
@@ -50,11 +50,9 @@ namespace EARenderer {
 
         void putBack(std::shared_ptr<PostprocessTexture> texture);
 
-        void redirectRenderingToTextureMip(std::shared_ptr<PostprocessTexture> texture, uint8_t mipLevel);
-
         template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(TexturePtrs... textures, uint8_t mipLevel) {
-            redirectRenderingToTexturesMip(textures..., mipLevel);
+        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
+            replaceMipLevelsInFramebuffer(mipLevel, textures...);
             mFramebuffer.activateDrawBuffers(*textures...);
             GLViewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel)).apply();
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);

@@ -24,8 +24,8 @@ namespace EARenderer {
         GLSLToneMapping mToneMappingShader;
 
     public:
-        void toneMap(std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> inputImage,
-                     std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
+        void toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
+                     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                      std::shared_ptr<PostprocessTexturePool> texturePool);
     };
 

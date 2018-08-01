@@ -12,9 +12,9 @@ namespace EARenderer {
 
 #pragma mark - 
 
-    void BloomEffect::bloom(std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> baseImage,
-                            std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> thresholdFilteredImage,
-                            std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
+    void BloomEffect::bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
+                            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
+                            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                             std::shared_ptr<PostprocessTexturePool> texturePool,
                             const BloomSettings& settings)
     {
@@ -38,7 +38,7 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        texturePool->redirectRenderingToTextureMip(outputImage, 0);
+        texturePool->redirectRenderingToTexturesMip(0, outputImage);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         texturePool->putBack(blurTexture);

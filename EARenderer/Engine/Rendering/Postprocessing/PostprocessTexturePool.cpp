@@ -50,13 +50,6 @@ namespace EARenderer {
         return texture;
     }
 
-    void PostprocessTexturePool::redirectRenderingToTextureMip(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> texture, uint8_t mipLevel) {
-        mFramebuffer.replaceMipLevel(*texture, mipLevel);
-        mFramebuffer.activateDrawBuffers(*texture);
-        GLViewport(texture->mipMapSize(mipLevel)).apply();
-        mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-    }
-
     void PostprocessTexturePool::putBack(std::shared_ptr<PostprocessTexture> texture) {
         auto textureIt = mClaimedTextures.find(texture);
         if (textureIt == mClaimedTextures.end()) {

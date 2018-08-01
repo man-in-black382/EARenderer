@@ -56,8 +56,8 @@ namespace EARenderer {
         }
     }
 
-    void GaussianBlurEffect::blur(std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA16F>> inputImage,
-                                  std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> outputImage,
+    void GaussianBlurEffect::blur(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
+                                  std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                                   std::shared_ptr<PostprocessTexturePool> texturePool,
                                   const GaussianBlurSettings& settings)
     {
@@ -77,7 +77,7 @@ namespace EARenderer {
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        texturePool->redirectRenderingToTextureMip(intermediateTexture, settings.outputImageMipLevel);
+        texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Vertical);
@@ -86,7 +86,7 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.inputImageMipLevel);
         });
 
-        texturePool->redirectRenderingToTextureMip(outputImage, settings.outputImageMipLevel);
+        texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
         texturePool->putBack(intermediateTexture);

@@ -136,7 +136,7 @@ namespace EARenderer {
         }
     }
 
-    void DeferredSceneRenderer::renderExponentialShadowMapsForDirectionalLight() {
+    void DeferredSceneRenderer::renderShadowMaps() {
         auto renderTarget = mDirectionalShadowTexturePool->claim();
         mDirectionalShadowTexturePool->redirectRenderingToTextures(renderTarget);
 
@@ -245,6 +245,19 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
+    void DeferredSceneRenderer::renderSkybox() {
+        mPostprocessTexturePool->redirectRenderingToTextures(mFrame);
+
+        mSkyboxShader.bind();
+        mSkyboxShader.ensureSamplerValidity([this]() {
+            mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
+            mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
+            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
+            // mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
+        });
+        mScene->skybox()->draw();
+    }
+
     void DeferredSceneRenderer::renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
@@ -266,11 +279,12 @@ namespace EARenderer {
 
         swapFrames();
 
-        renderExponentialShadowMapsForDirectionalLight();
+        renderShadowMaps();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
         renderMeshes();
+//        renderSkybox();
 
 //        auto ssrOutputTexture = mPostprocessTexturePool->claim();
 //        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
@@ -281,7 +295,7 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        renderFinalImage(*toneMappingOutputTexture);
+        renderFinalImage(*bloomOutputTexture);
 
 //        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

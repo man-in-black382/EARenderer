@@ -26,9 +26,7 @@ namespace EARenderer {
             mSSRShader.setGBuffer(*GBuffer);
         });
 
-//        texturePool->useTextureMip(mirrorReflections, 0);
-//        texturePool->useTextureMip(rayHitInfo, 0);
-        texturePool->redirectRenderingToTextures(mirrorReflections, rayHitInfo);
+        texturePool->redirectRenderingToTexturesMip(0, mirrorReflections, rayHitInfo);
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
@@ -60,8 +58,7 @@ namespace EARenderer {
             mConeTracingShader.setReflections(*reflections);
         });
 
-//        texturePool->useTextureMip(outputImage, 0);
-        texturePool->redirectRenderingToTextures(outputImage);
+        texturePool->redirectRenderingToTexturesMip(0, outputImage);
     }
 
 #pragma mark - Public Interface

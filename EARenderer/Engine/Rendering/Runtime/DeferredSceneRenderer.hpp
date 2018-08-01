@@ -114,11 +114,12 @@ namespace EARenderer {
         void bindDefaultFramebuffer();
         void swapFrames();
         void performDepthPrepass();
-        void renderExponentialShadowMapsForDirectionalLight();
+        void renderShadowMaps();
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();
         void renderMeshes();
+        void renderSkybox();
         void renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
 
     public:
