@@ -132,8 +132,14 @@ namespace EARenderer {
             // If texture was already attached to the framebuffer
             // reuse attachment info and reattach (possible) different mip level
             if (textureAlreadyAttached) {
+
+                if (attachmentIt->second.mipLevel == mipLevel) {
+                    return;
+                }
+
                 glAttachment = attachmentIt->second.glColorAttachment;
                 colorAttachment = attachmentIt->second.colorAttachment;
+
             } else {
 
                 if (mRequestedAttachments.size() >= mMaximumColorAttachments) {

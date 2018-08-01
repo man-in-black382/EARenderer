@@ -146,6 +146,10 @@ namespace EARenderer {
 
         return uv;
     }
+
+    Size2D GLTexture::EstimatedMipSize(const Size2D& textureSize, uint8_t mipLevel) {
+        return textureSize.transformedBy(glm::vec2(std::pow(0.5, mipLevel)));
+    }
     
 #pragma mark - Getters
     

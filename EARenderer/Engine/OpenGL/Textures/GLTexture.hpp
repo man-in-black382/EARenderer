@@ -71,6 +71,7 @@ namespace EARenderer {
         static glm::vec3 WrapCoordinates(const glm::vec3& uvr);
         static Size2D EstimatedSize(size_t texelCount);
         static glm::vec2 UVMap(const glm::vec3& vertex, const glm::vec3& normal);
+        static Size2D EstimatedMipSize(const Size2D& textureSize, uint8_t mipLevel);
 
         const Size2D& size() const;
         uint16_t mipMapsCount() const;

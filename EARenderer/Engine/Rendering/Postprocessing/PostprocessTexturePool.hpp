@@ -30,7 +30,16 @@ namespace EARenderer {
         TexturePointerSet mFreeTextures;
         TexturePointerSet mClaimedTextures;
 
-        std::vector<std::shared_ptr<PostprocessTexture>> mTexturesToActivate;
+        template<class TexturePtr>
+        void replaceMipLevelsInFramebuffer(TexturePtr texture, uint8_t mipLevel) {
+            mFramebuffer.replaceMipLevel(*texture, mipLevel);
+        }
+
+        template<class TexturePtr, class... TexturePtrs>
+        void replaceMipLevelsInFramebuffer(TexturePtr head, TexturePtrs... tail, uint8_t mipLevel) {
+            mFramebuffer.replaceMipLevel(*head, mipLevel);
+            replaceMipLevelsInFramebuffer(tail...);
+        }
 
     public:
         PostprocessTexturePool(const Size2D& resolution);
@@ -42,6 +51,14 @@ namespace EARenderer {
         void putBack(std::shared_ptr<PostprocessTexture> texture);
 
         void redirectRenderingToTextureMip(std::shared_ptr<PostprocessTexture> texture, uint8_t mipLevel);
+
+        template<class... TexturePtrs>
+        void redirectRenderingToTexturesMip(TexturePtrs... textures, uint8_t mipLevel) {
+            redirectRenderingToTexturesMip(textures..., mipLevel);
+            mFramebuffer.activateDrawBuffers(*textures...);
+            GLViewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel)).apply();
+            mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
+        }
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures) {
