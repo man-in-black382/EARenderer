@@ -304,6 +304,7 @@ bool RayMarch(vec3 worldReflectionVec,
         minraySample = maxraySample;
     }
 
+    // Binary search
     if (bFoundIntersection) {
 
         vec3 midraySample;
@@ -365,7 +366,7 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     bool rayHitDetected = RayMarch(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outReflectionColor, outHitPosition);
 
-    return RayHit(true, outReflectionColor * attenuationFactor, outHitPosition);
+    return RayHit(rayHitDetected, outReflectionColor * attenuationFactor, outHitPosition);
 }
 
 ////////////////////////////////////////////////////////////

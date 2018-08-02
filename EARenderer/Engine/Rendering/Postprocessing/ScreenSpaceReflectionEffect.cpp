@@ -59,6 +59,8 @@ namespace EARenderer {
         });
 
         texturePool->redirectRenderingToTexturesMip(0, outputImage);
+
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
 #pragma mark - Public Interface

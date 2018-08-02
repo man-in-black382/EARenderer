@@ -188,18 +188,18 @@ void main() {
 
     GBuffer gBuffer     = DecodeGBuffer();
 
-    float roughness     = gBuffer.roughness;
+    float roughness     = 0.0;//gBuffer.roughness;
 
     // Explicitly reading from 0 LOD because texture comes from a postprocess texture pool
     // and is a subject to mipmapping
     vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
 
     if (rayHitInfo.a == 0) {
-        oOutputColor = vec4(0.0, 0.0, 0.0, 1.0);
+        oOutputColor = vec4(1.0, 0.0, 0.0, 1.0);
         return;
     }
 
-    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
+    float depth = textureLod(uGBufferHiZBuffer, vTexCoords, 0).r;
 
     vec3 raySS = rayHitInfo.xyz;
     vec3 positionSS = vec3(vTexCoords, depth);
@@ -261,5 +261,7 @@ void main() {
         glossMult *= gloss;
     }
 
+//    oOutputColor = vec4(rayHitInfo.rg, 0.0, 1.0);
     oOutputColor = vec4(totalColor.rgb, 1.0);
+//    oOutputColor = vec4(textureLod(uReflections, vTexCoords, 3.5).rgb, 1.0);
 }

@@ -75,15 +75,21 @@ namespace EARenderer {
             mBlurShader.setTexture(*inputImage, settings.inputImageMipLevel);
         });
 
+        // For the first pass we read from input mip level and output
+        // to output mip level of the intermediate texture
+        //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
         texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+        // But, in the second pass, we read and write from and to the same
+        // mip level of intermediate and output textures
+        //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Vertical);
 
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*intermediateTexture, settings.inputImageMipLevel);
+            mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
         texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);

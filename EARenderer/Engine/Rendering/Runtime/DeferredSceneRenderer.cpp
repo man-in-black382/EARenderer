@@ -286,20 +286,20 @@ namespace EARenderer {
         renderMeshes();
 //        renderSkybox();
 
-//        auto ssrOutputTexture = mPostprocessTexturePool->claim();
-//        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
+        auto ssrOutputTexture = mPostprocessTexturePool->claim();
+        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
 
-        auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+//        auto bloomOutputTexture = mPostprocessTexturePool->claim();
+//        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+//
+//        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+//        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+        renderFinalImage(*ssrOutputTexture);
 
-        renderFinalImage(*bloomOutputTexture);
-
-//        mPostprocessTexturePool->putBack(ssrOutputTexture);
-        mPostprocessTexturePool->putBack(bloomOutputTexture);
-        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+        mPostprocessTexturePool->putBack(ssrOutputTexture);
+//        mPostprocessTexturePool->putBack(bloomOutputTexture);
+//        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
 
 }
