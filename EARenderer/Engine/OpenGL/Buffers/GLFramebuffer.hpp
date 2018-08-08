@@ -35,15 +35,15 @@
 #include <vector>
 
 namespace EARenderer {
-    
+
     class GLFramebuffer: public GLNamedObject, public GLBindable {
     public:
         enum class ColorAttachment {
-            Automatic,
-            Attachment0, Attachment1, Attachment2, Attachment3,
-            Attachment4, Attachment5, Attachment6, Attachment7,
-            Attachment8, Attachment9, Attachment10, Attachment11,
-            Attachment12, Attachment13, Attachment14, Attachment15
+            Automatic = 0,
+            Attachment0 = GL_COLOR_ATTACHMENT0, Attachment1 = GL_COLOR_ATTACHMENT1, Attachment2 = GL_COLOR_ATTACHMENT2, Attachment3 = GL_COLOR_ATTACHMENT3,
+            Attachment4 = GL_COLOR_ATTACHMENT4, Attachment5 = GL_COLOR_ATTACHMENT5, Attachment6 = GL_COLOR_ATTACHMENT6, Attachment7 = GL_COLOR_ATTACHMENT7,
+            Attachment8 = GL_COLOR_ATTACHMENT8, Attachment9 = GL_COLOR_ATTACHMENT9, Attachment10 = GL_COLOR_ATTACHMENT10, Attachment11 = GL_COLOR_ATTACHMENT11,
+            Attachment12 = GL_COLOR_ATTACHMENT12, Attachment13 = GL_COLOR_ATTACHMENT13, Attachment14 = GL_COLOR_ATTACHMENT14, Attachment15 = GL_COLOR_ATTACHMENT15
         };
 
         enum class UnderlyingBuffer {
@@ -51,10 +51,13 @@ namespace EARenderer {
         };
 
     private:
+        constexpr static int16_t NotLayered = -1;
+
         struct AttachmentMetadata {
-            ColorAttachment colorAttachment;
-            GLenum glColorAttachment;
-            uint16_t mipLevel;
+            ColorAttachment colorAttachment = ColorAttachment::Automatic;
+            GLenum glColorAttachment = GL_COLOR_ATTACHMENT0;
+            uint16_t mipLevel = 0;
+            int16_t layer = NotLayered;
         };
 
         GLint mBindingPoint;
@@ -63,7 +66,7 @@ namespace EARenderer {
         GLint mMaximumColorAttachments;
         GLint mMaximumDrawBuffers;
         std::unordered_set<GLenum> mRequestedAttachments;
-        std::unordered_set<ColorAttachment> mAvailableAttachments;
+        std::unordered_set<GLenum> mAvailableAttachments;
         std::unordered_map<GLint, AttachmentMetadata> mTextureAttachmentMap;
         std::vector<GLenum> mDrawBuffers;
 
@@ -71,47 +74,69 @@ namespace EARenderer {
         void setRequestedDrawBuffers();
         void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
         void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
-        GLenum glColorAttachment(ColorAttachment attachment) const;
 
     public:
         GLFramebuffer(const Size2D& size);
+
         GLFramebuffer(GLFramebuffer&& that) = default;
+
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
+
         ~GLFramebuffer() override;
         
         void bind() const override;
         
         const Size2D& size() const;
+
         const GLViewport& viewport() const;
+
         bool isComplete() const;
+
         size_t maximumColorAttachmentsCount() const;
+
+        template <class Texture>
+        void attachTextures(uint16_t mipLevel, const Texture& texture);
+
+        template <class Texture, class... Textures>
+        void attachTextures(uint16_t mipLevel, const Texture& head, const Textures&... tail);
 
         template <GLTexture::Normalized Format>
         void attachTexture(const GLNormalizedTexture2D<Format>& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0)
-        {
-            attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-        }
+                           uint16_t mipLevel = 0);
 
         template <GLTexture::Float Format>
         void attachTexture(const GLFloatTexture2D<Format>& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0)
-        {
-            attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-        }
+                           uint16_t mipLevel = 0);
 
         template<GLTexture::Integer Format>
         void attachTexture(const GLIntegerTexture2D<Format>& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic)
-        {
-            attachTextureToColorAttachment(texture, colorAttachment, 0);
-        }
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
         void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0) {
             attachTextureToDepthAttachment(texture, mipLevel);
         }
+
+        void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
+
+        void detachTexture(const GLTexture& texture);
+
+        void detachAllColorAttachments();
+
+        template<class Texture>
+        void activateDrawBuffers(const Texture& texture);
+
+        template<class Texture, class... Textures>
+        void activateDrawBuffers(const Texture& head, const Textures&... tail);
+
+        void activateAllDrawBuffers();
+
+        void replaceMipLevel(const GLTexture& texture, uint16_t newMipLevel);
+
+        void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
+
+        void clear(UnderlyingBuffer bufferMask);
 
         // FIXME: Deprecated attachment functions
 
@@ -142,48 +167,12 @@ namespace EARenderer {
                                 uint16_t layer,
                                 ColorAttachment colorAttachment = ColorAttachment::Automatic,
                                 uint16_t mipLevel = 0);
-
-        void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
-
-        template<class Texture>
-        void activateDrawBuffers(const Texture& texture) {
-            auto attachmentIt = mTextureAttachmentMap.find(texture.name());
-            if (attachmentIt == mTextureAttachmentMap.end()) {
-                throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
-            }
-
-            bind();
-            mDrawBuffers.emplace_back(attachmentIt->second.glColorAttachment);
-            glDrawBuffers(GLsizei(mDrawBuffers.size()), mDrawBuffers.data());
-            mDrawBuffers.clear();
-        }
-
-        template<class Texture, class... Textures>
-        void activateDrawBuffers(const Texture& head, const Textures&... tail) {
-            auto attachmentIt = mTextureAttachmentMap.find(head.name());
-            if (attachmentIt == mTextureAttachmentMap.end()) {
-                throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", head.name()));
-            }
-
-            mDrawBuffers.emplace_back(attachmentIt->second.glColorAttachment);
-            activateDrawBuffers(tail...);
-        }
-
-        void activateAllDrawBuffers();
-
-        void replaceMipLevel(const GLTexture& texture, uint16_t newMipLevel);
-
-        void blit(ColorAttachment sourceAttachment, const Rect2D& srcRect,
-                  ColorAttachment destinationAttachment, const Rect2D& dstRect,
-                  bool useLinearFilter = true);
-
-        void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
-
-        void clear(UnderlyingBuffer bufferMask);
     };
     
 }
 
 ENABLE_BITMASK_OPERATORS(EARenderer::GLFramebuffer::UnderlyingBuffer);
+
+#include "GLFramebuffer.tpp"
 
 #endif /* GLFramebuffer_hpp */

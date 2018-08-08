@@ -23,7 +23,7 @@ vec3 GammaCorrect(vec3 color) {
 }
 
 void main() {
-    vec3 color = texture(uImage, vTexCoords).rgb;
+    vec3 color = textureLod(uImage, vTexCoords, 0).rgb;
     color = ReinhardToneMap(color);
     color = GammaCorrect(color);
     oFragColor = vec4(color, 1.0);

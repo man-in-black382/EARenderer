@@ -131,19 +131,19 @@
 
 - (IBAction)bloomSmallBlurRadiusChanged:(NSTextField *)sender {
     mSettings.bloomSettings.smallBlurSettings.radius = sender.intValue;
-    mSettings.bloomSettings.smallBlurSettings.sigma = sender.intValue / 2;
+    mSettings.bloomSettings.smallBlurSettings.sigma = sender.floatValue / 4;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
 - (IBAction)bloomMediumBlurRadiusChanged:(NSTextField *)sender {
     mSettings.bloomSettings.mediumBlurSettings.radius = sender.intValue;
-    mSettings.bloomSettings.mediumBlurSettings.sigma = sender.intValue / 2;
+    mSettings.bloomSettings.mediumBlurSettings.sigma = sender.floatValue / 4;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
 - (IBAction)bloomLargeBlurRadiusChanged:(NSTextField *)sender {
     mSettings.bloomSettings.largeBlurSettings.radius = sender.intValue;
-    mSettings.bloomSettings.largeBlurSettings.sigma = sender.intValue / 2;
+    mSettings.bloomSettings.largeBlurSettings.sigma = sender.floatValue / 4;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 

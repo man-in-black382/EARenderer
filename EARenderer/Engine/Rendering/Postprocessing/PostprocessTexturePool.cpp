@@ -20,24 +20,20 @@ namespace EARenderer {
     mDepthRenderbuffer(resolution)
     {
         for (size_t i = 0; i < mFramebuffer.maximumColorAttachmentsCount(); i++) {
-            auto texture = std::make_shared<PostprocessTexture>(resolution);
+            auto texture = std::make_shared<PostprocessTexture>(resolution, nullptr, GLTexture::Filter::Trilinear);
 
             // Preallocate mip map memory, because mips are gonna be needed in
             // postprocessing algorithms
             texture->generateMipMaps();
 
             mFreeTextures.insert(texture);
-            mFramebuffer.attachTexture(*texture);
+//            mFramebuffer.attachTexture(*texture);
         }
 
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 
 #pragma mark - Getters & Setters
-
-    const GLFramebuffer& PostprocessTexturePool::framebuffer() const {
-        return mFramebuffer;
-    }
 
     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> PostprocessTexturePool::claim() {
         if (mFreeTextures.empty()) {

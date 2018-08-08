@@ -170,7 +170,7 @@ namespace EARenderer {
     void GLTexture::generateMipMaps(size_t count) {
         bind();
         glTexParameteri(mBindingPoint, GL_TEXTURE_MAX_LEVEL, GLint(count));
-        glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        setFilter(Filter::Trilinear);
         glGenerateMipmap(mBindingPoint);
 
         mMipMapsCount = floor(std::log2(std::max(mSize.width, mSize.height)));

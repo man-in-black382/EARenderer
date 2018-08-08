@@ -18,10 +18,9 @@ namespace EARenderer {
                             std::shared_ptr<PostprocessTexturePool> texturePool,
                             const BloomSettings& settings)
     {
-        thresholdFilteredImage->generateMipMaps(2);
+        thresholdFilteredImage->generateMipMaps();
 
         auto blurTexture = texturePool->claim();
-        blurTexture->generateMipMaps(2);
 
         mSmallBlurEffect.blur(thresholdFilteredImage, blurTexture, texturePool, settings.smallBlurSettings);
         mMediumBlurEffect.blur(thresholdFilteredImage, blurTexture, texturePool, settings.mediumBlurSettings);

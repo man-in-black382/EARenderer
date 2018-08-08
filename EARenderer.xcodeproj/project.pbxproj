@@ -1278,6 +1278,7 @@
 		CE895F9A204C429D00E63140 /* SpatialHashRangeImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashRangeImpl.hpp; sourceTree = "<group>"; };
 		CE895F9B204C43D800E63140 /* SpatialHashRangeIteratorImpl.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHashRangeIteratorImpl.hpp; sourceTree = "<group>"; };
 		CE8D36DA2003FA95005ECEBC /* SpatialHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SpatialHash.hpp; sourceTree = "<group>"; };
+		CE8D7971211759F500061A1F /* GLFramebuffer.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = GLFramebuffer.tpp; sourceTree = "<group>"; };
 		CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TriangleRenderer.cpp; sourceTree = "<group>"; };
 		CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TriangleRenderer.hpp; sourceTree = "<group>"; };
 		CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleRendering.geom; sourceTree = "<group>"; };
@@ -3048,6 +3049,7 @@
 				AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */,
 				CE70F9D11F8F8EBD00AD9027 /* GLVertexArray.hpp */,
 				CE70F9CD1F8F8EBD00AD9027 /* GLFramebuffer.cpp */,
+				CE8D7971211759F500061A1F /* GLFramebuffer.tpp */,
 				CE70F9D31F8F8EBD00AD9027 /* GLFramebuffer.hpp */,
 				CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */,
 				CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */,

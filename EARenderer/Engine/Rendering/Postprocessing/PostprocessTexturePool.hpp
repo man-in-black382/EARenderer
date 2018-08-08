@@ -44,15 +44,14 @@ namespace EARenderer {
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
-        const GLFramebuffer& framebuffer() const;
-
         std::shared_ptr<PostprocessTexture> claim();
 
         void putBack(std::shared_ptr<PostprocessTexture> texture);
 
         template<class... TexturePtrs>
         void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
-            replaceMipLevelsInFramebuffer(mipLevel, textures...);
+            mFramebuffer.detachAllColorAttachments();
+            mFramebuffer.attachTextures(mipLevel, *textures...);
             mFramebuffer.activateDrawBuffers(*textures...);
             GLViewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel)).apply();
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
@@ -60,6 +59,8 @@ namespace EARenderer {
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures) {
+            mFramebuffer.detachAllColorAttachments();
+            mFramebuffer.attachTextures(0, *textures...);
             mFramebuffer.activateDrawBuffers(*textures...);
             mFramebuffer.viewport().apply();
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);

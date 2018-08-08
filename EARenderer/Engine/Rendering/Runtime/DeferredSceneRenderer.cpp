@@ -138,7 +138,7 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::renderShadowMaps() {
         auto renderTarget = mDirectionalShadowTexturePool->claim();
-        mDirectionalShadowTexturePool->redirectRenderingToTextures(renderTarget);
+        mDirectionalShadowTexturePool->redirectRenderingToTexturesMip(0, renderTarget);
 
         mDirectionalESMShader.bind();
         mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
@@ -240,7 +240,7 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        mPostprocessTexturePool->redirectRenderingToTextures(mFrame, mThresholdFilteredOutputFrame);
+        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
@@ -289,17 +289,17 @@ namespace EARenderer {
         auto ssrOutputTexture = mPostprocessTexturePool->claim();
         mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
 
-//        auto bloomOutputTexture = mPostprocessTexturePool->claim();
-//        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
-//
-//        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-//        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+        auto bloomOutputTexture = mPostprocessTexturePool->claim();
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
 
-        renderFinalImage(*ssrOutputTexture);
+        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+
+        renderFinalImage(*toneMappingOutputTexture);
 
         mPostprocessTexturePool->putBack(ssrOutputTexture);
-//        mPostprocessTexturePool->putBack(bloomOutputTexture);
-//        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+        mPostprocessTexturePool->putBack(bloomOutputTexture);
+        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
 
 }

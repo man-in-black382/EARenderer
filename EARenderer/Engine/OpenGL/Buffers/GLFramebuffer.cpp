@@ -30,14 +30,14 @@ namespace EARenderer {
         glGenFramebuffers(1, &mName);
         obtainHardwareLimits();
 
-        std::vector<ColorAttachment> colorAttachments {
-            ColorAttachment::Attachment0, ColorAttachment::Attachment1, ColorAttachment::Attachment2, ColorAttachment::Attachment3,
-            ColorAttachment::Attachment4, ColorAttachment::Attachment5, ColorAttachment::Attachment6, ColorAttachment::Attachment7,
-            ColorAttachment::Attachment8, ColorAttachment::Attachment9, ColorAttachment::Attachment10, ColorAttachment::Attachment11,
-            ColorAttachment::Attachment12, ColorAttachment::Attachment13, ColorAttachment::Attachment14, ColorAttachment::Attachment15
+        std::vector<GLenum> colorAttachments {
+            GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
+            GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7,
+            GL_COLOR_ATTACHMENT8, GL_COLOR_ATTACHMENT9, GL_COLOR_ATTACHMENT10, GL_COLOR_ATTACHMENT11,
+            GL_COLOR_ATTACHMENT12, GL_COLOR_ATTACHMENT13, GL_COLOR_ATTACHMENT14, GL_COLOR_ATTACHMENT15
         };
 
-        mAvailableAttachments = std::unordered_set<ColorAttachment>(colorAttachments.begin(), colorAttachments.begin() + mMaximumColorAttachments);
+        mAvailableAttachments.insert(colorAttachments.begin(), colorAttachments.begin() + mMaximumColorAttachments);
     }
     
     GLFramebuffer::~GLFramebuffer() {
@@ -147,19 +147,19 @@ namespace EARenderer {
                 }
 
                 auto freeAttachmentIt = mAvailableAttachments.begin();
-                glAttachment = glColorAttachment(*freeAttachmentIt);
+                glAttachment = static_cast<std::underlying_type<ColorAttachment>::type>(*freeAttachmentIt);
                 mAvailableAttachments.erase(freeAttachmentIt);
             }
         }
         else {
-            glAttachment = glColorAttachment(colorAttachment);
-            mAvailableAttachments.erase(colorAttachment);
+            glAttachment = static_cast<std::underlying_type<ColorAttachment>::type>(colorAttachment);
+            mAvailableAttachments.erase(glAttachment);
         }
 
-        AttachmentMetadata attachmentMetadata { colorAttachment, glAttachment, mipLevel };
+        AttachmentMetadata attachmentMetadata { colorAttachment, glAttachment, mipLevel, layer };
         mTextureAttachmentMap[texture.name()] = attachmentMetadata;
 
-        if (layer == -1) {
+        if (layer == NotLayered) {
             glFramebufferTexture(mBindingPoint, glAttachment, texture.name(), mipLevel);
         } else {
             glFramebufferTextureLayer(mBindingPoint, glAttachment, texture.name(), mipLevel, layer);
@@ -169,28 +169,6 @@ namespace EARenderer {
 
         // FIXME: Delete this line, then ensure rendering works across the application
         setRequestedDrawBuffers();
-    }
-
-    GLenum GLFramebuffer::glColorAttachment(ColorAttachment attachment) const {
-        switch (attachment) {
-            case ColorAttachment::Attachment0: return GL_COLOR_ATTACHMENT0;
-            case ColorAttachment::Attachment1: return GL_COLOR_ATTACHMENT1;
-            case ColorAttachment::Attachment2: return GL_COLOR_ATTACHMENT2;
-            case ColorAttachment::Attachment3: return GL_COLOR_ATTACHMENT3;
-            case ColorAttachment::Attachment4: return GL_COLOR_ATTACHMENT4;
-            case ColorAttachment::Attachment5: return GL_COLOR_ATTACHMENT5;
-            case ColorAttachment::Attachment6: return GL_COLOR_ATTACHMENT6;
-            case ColorAttachment::Attachment7: return GL_COLOR_ATTACHMENT7;
-            case ColorAttachment::Attachment8: return GL_COLOR_ATTACHMENT8;
-            case ColorAttachment::Attachment9: return GL_COLOR_ATTACHMENT9;
-            case ColorAttachment::Attachment10: return GL_COLOR_ATTACHMENT10;
-            case ColorAttachment::Attachment11: return GL_COLOR_ATTACHMENT11;
-            case ColorAttachment::Attachment12: return GL_COLOR_ATTACHMENT12;
-            case ColorAttachment::Attachment13: return GL_COLOR_ATTACHMENT13;
-            case ColorAttachment::Attachment14: return GL_COLOR_ATTACHMENT14;
-            case ColorAttachment::Attachment15: return GL_COLOR_ATTACHMENT15;
-            default: return 0;
-        }
     }
     
 #pragma mark - Public
@@ -252,6 +230,41 @@ namespace EARenderer {
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
     }
 
+    void GLFramebuffer::detachTexture(const GLTexture& texture) {
+        auto attachmentIt = mTextureAttachmentMap.find(texture.name());
+        if (attachmentIt == mTextureAttachmentMap.end()) {
+            throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot detach it.", texture.name()));
+        }
+
+        AttachmentMetadata metadata = attachmentIt->second;
+
+        if (metadata.layer == NotLayered) {
+            glFramebufferTexture(mBindingPoint, metadata.glColorAttachment, 0, 0);
+        } else {
+            glFramebufferTextureLayer(mBindingPoint, metadata.glColorAttachment, 0, 0, 0);
+        }
+
+        mTextureAttachmentMap.erase(attachmentIt);
+        mRequestedAttachments.erase(metadata.glColorAttachment);
+        mAvailableAttachments.insert(metadata.glColorAttachment);
+    }
+
+    void GLFramebuffer::detachAllColorAttachments() {
+        for (auto kvPair : mTextureAttachmentMap) {
+            auto attachmentMetadata = kvPair.second;
+
+            if (attachmentMetadata.layer == NotLayered) {
+                glFramebufferTexture(mBindingPoint, attachmentMetadata.glColorAttachment, 0, 0);
+            } else {
+                glFramebufferTextureLayer(mBindingPoint, attachmentMetadata.glColorAttachment, 0, 0, 0);
+            }
+
+            mRequestedAttachments.erase(attachmentMetadata.glColorAttachment);
+            mAvailableAttachments.insert(attachmentMetadata.glColorAttachment);
+        }
+        mTextureAttachmentMap.clear();
+    }
+
     void GLFramebuffer::activateAllDrawBuffers() {
         setRequestedDrawBuffers();
     }
@@ -263,29 +276,6 @@ namespace EARenderer {
         }
 
         attachTextureToColorAttachment(texture, attachmentIt->second.colorAttachment, newMipLevel);
-    }
-
-    void GLFramebuffer::blit(GLFramebuffer::ColorAttachment sourceAttachment, const Rect2D& srcRect,
-                             GLFramebuffer::ColorAttachment destinationAttachment, const Rect2D& dstRect,
-                             bool useLinearFilter)
-    {
-        auto srcAttachment = glColorAttachment(sourceAttachment);
-        auto dstAttachment = glColorAttachment(destinationAttachment);
-
-        if (mRequestedAttachments.find(srcAttachment) == mRequestedAttachments.end()) {
-            throw std::invalid_argument("Nothing is attached to passed source attachment");
-        }
-
-        if (mRequestedAttachments.find(dstAttachment) == mRequestedAttachments.end()) {
-            throw std::invalid_argument("Nothing is attached to passed destination attachment");
-        }
-
-        bind();
-        glReadBuffer(srcAttachment);
-        glDrawBuffer(dstAttachment);
-        glBlitFramebuffer(srcRect.origin.x, srcRect.origin.y, srcRect.origin.x + srcRect.size.width, srcRect.origin.y + srcRect.size.height,
-                          dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
-                          GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
     }
 
     void GLFramebuffer::blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter) {
