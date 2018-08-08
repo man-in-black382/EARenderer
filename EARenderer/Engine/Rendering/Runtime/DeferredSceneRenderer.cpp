@@ -36,7 +36,7 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(1500))),
+    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(2048))),
     mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
 
     // Surfels and surfel clusters
