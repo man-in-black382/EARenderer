@@ -188,7 +188,7 @@ void main() {
 
     GBuffer gBuffer     = DecodeGBuffer();
 
-    float roughness     = 0.0;//gBuffer.roughness;
+    float roughness     = 0.5;//gBuffer.roughness;
 
     // Explicitly reading from 0 LOD because texture comes from a postprocess texture pool
     // and is a subject to mipmapping
@@ -224,8 +224,9 @@ void main() {
 
     vec2 texSize = vec2(textureSize(uReflections, 0));
 
+    int i;
     // Cone-tracing using an isosceles triangle to approximate a cone in screen space
-    for(int i = 0; i < 14; ++i) {
+    for(i = 0; i < 14; ++i) {
         // intersection length is the adjacent side, get the opposite side using trig
         float oppositeLength = IsoscelesTriangleOpposite(adjacentLength, coneTheta);
 
@@ -261,7 +262,6 @@ void main() {
         glossMult *= gloss;
     }
 
-//    oOutputColor = vec4(rayHitInfo.rg, 0.0, 1.0);
-    oOutputColor = vec4(totalColor.rgb, 1.0);
 //    oOutputColor = vec4(textureLod(uReflections, vTexCoords, 3.5).rgb, 1.0);
+    oOutputColor = vec4(totalColor.rgb, 1.0);
 }

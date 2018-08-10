@@ -9,6 +9,7 @@
 #ifndef GLPipelineState_hpp
 #define GLPipelineState_hpp
 
+#include <functional>
 #include <unordered_map>
 #include <OpenGL/gltypes.h>
 
@@ -17,6 +18,7 @@ namespace EARenderer {
     class GLPipelineState {
     public:
         using BindingPoint = GLenum;
+        using BindingAction = const std::function<void(BindingPoint, GLint)>&;
 
     private:
         std::unordered_map<BindingPoint, GLint> mBindings;
@@ -27,11 +29,13 @@ namespace EARenderer {
         GLPipelineState(const GLPipelineState& that) = delete;
         GLPipelineState& operator=(const GLPipelineState& rhs) = delete;
 
-    public:
-        static GLPipelineState& instance();
+        void registerBinding(BindingPoint bindingPoint, GLint glObjectName);
+        bool isGLObjectBindingRegistered(BindingPoint bindingPoint, GLint glObjectName);
 
-        inline void registerBinding(BindingPoint bindingPoint, GLint glObjectName);
-        inline bool isGLObjectBindingRegistered(BindingPoint bindingPoint, GLint glObjectName);
+    public:
+        static GLPipelineState& DefaultInstance();
+
+        void bindObjectIfNeeded(BindingPoint bindingPoint, GLint glObjectName, BindingAction bindingAction);
     };
 
 }

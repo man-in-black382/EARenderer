@@ -27,16 +27,14 @@ namespace EARenderer {
         GaussianBlurEffect mBlurEffect;
         
         void traceReflections(const Camera& camera,
-                              std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                               std::shared_ptr<const SceneGBuffer> GBuffer,
-                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
                               std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo,
                               std::shared_ptr<PostprocessTexturePool> texturePool);
 
-        void blurReflections(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
+        void blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
                              std::shared_ptr<PostprocessTexturePool> texturePool);
 
-        void traceCones(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> reflections,
+        void traceCones(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                         std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> rayHitInfo,
                         std::shared_ptr<const SceneGBuffer> GBuffer,
                         std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
@@ -44,8 +42,8 @@ namespace EARenderer {
 
     public:
         void applyReflections(const Camera& camera,
-                              std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                               std::shared_ptr<const SceneGBuffer> GBuffer,
+                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> lightBuffer,
                               std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                               std::shared_ptr<PostprocessTexturePool> texturePool);
     };

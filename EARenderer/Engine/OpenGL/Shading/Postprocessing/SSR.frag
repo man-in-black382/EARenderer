@@ -2,8 +2,7 @@
 
 // Output
 
-layout(location = 0) out vec4 oOutputColor;
-layout(location = 1) out vec4 oRayHitInfo;
+layout(location = 0) out vec4 oRayHitInfo;
 
 // Input
 
@@ -35,8 +34,7 @@ struct GBuffer {
 };
 
 struct RayHit {
-    bool hitDetected;
-    vec3 texelColor;
+    float attenuationFactor;
     vec3 ssHitPosition;
 };
 
@@ -266,8 +264,8 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
 bool RayMarch(vec3 worldReflectionVec,
               vec3 screenSpaceReflectionVec,
               vec3 screenSpacePos,
-              out vec3 reflectionColor,
-              out vec3 hitPosition)
+              out vec3 hitPosition,
+              out float attenuationFactor)
 {
     const float kMaxRayMarchStep = 0.05;
     const int kMaxRayMarchIterations = 50;
@@ -286,7 +284,7 @@ bool RayMarch(vec3 worldReflectionVec,
         vec3 raySample = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec + screenSpacePos;
 
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-            reflectionColor = vec3(0.5, 0.5, 0.0);
+            attenuationFactor = 0.0;
             return false;
         }
 
@@ -319,15 +317,8 @@ bool RayMarch(vec3 worldReflectionVec,
             }
         }
 
-        reflectionColor = texture(uFrame, midraySample.xy).rgb;
-
-        uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, midraySample.xy).xyz;
-        vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-        reflectionColor = albedoRoughness.rgb;
-
         float backFaceAttenuationFactor = BackFaceAttenuation(midraySample, worldReflectionVec);
-        reflectionColor *= viewportAttenuationFactor * backFaceAttenuationFactor;
-
+        attenuationFactor = viewportAttenuationFactor * backFaceAttenuationFactor;
         hitPosition = midraySample;
     }
 
@@ -349,7 +340,7 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     float attenuationFactor;
     if (IsReflectedBackToCamera(reflectionWorldVec, -cameraToFrag, attenuationFactor)) {
-        return RayHit(false, vec3(0.0), vec3(0.0));
+        return RayHit(0.0, vec3(0.0));
     }
 
     // Compute second screen space point so that we can get the SS reflection vector
@@ -361,12 +352,12 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
     // Compute the sreen space reflection vector as the difference of the two screen space points
     vec3 screenSpaceReflectionVec = normalize(screenSpaceReflectionPoint.xyz - screenSpacePos.xyz);
 
-    vec3 outReflectionColor = vec3(0.0);
     vec3 outHitPosition = vec3(0.0);
+    float outAttenuationFactor = 0.0;
 
-    bool rayHitDetected = RayMarch(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outReflectionColor, outHitPosition);
+    bool rayHitDetected = RayMarch(reflectionWorldVec, screenSpaceReflectionVec.xyz, screenSpacePos.xyz, outHitPosition, outAttenuationFactor);
 
-    return RayHit(rayHitDetected, outReflectionColor * attenuationFactor, outHitPosition);
+    return RayHit(outAttenuationFactor, outHitPosition);
 }
 
 ////////////////////////////////////////////////////////////
@@ -384,6 +375,5 @@ void main() {
     vec3 N              = gBuffer.normal;
 
     RayHit SSR = ScreenSpaceReflection(N, worldPosition);
-    oOutputColor = vec4(SSR.texelColor, 1.0);
-    oRayHitInfo = vec4(SSR.ssHitPosition, SSR.hitDetected ? 1.0 : 0.0);
+    oRayHitInfo = vec4(SSR.ssHitPosition, SSR.attenuationFactor);
 }

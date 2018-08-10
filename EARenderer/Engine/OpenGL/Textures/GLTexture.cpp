@@ -7,8 +7,7 @@
 //
 
 #include "GLTexture.hpp"
-#include "GLTexture2D.hpp"
-#include "GLTexture2DArray.hpp"
+#include "GLPipelineState.hpp"
 
 #include <cmath>
 
@@ -164,6 +163,9 @@ namespace EARenderer {
 #pragma mark - Binding
     
     void GLTexture::bind() const {
+//        GLPipelineState::DefaultInstance().bindObjectIfNeeded(mBindingPoint, mName, [](GLPipelineState::BindingPoint bindingPoint, GLint name) {
+//            glBindTexture(bindingPoint, name);
+//        });
         glBindTexture(mBindingPoint, mName);
     }
     

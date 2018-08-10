@@ -287,19 +287,19 @@ namespace EARenderer {
 //        renderSkybox();
 
         auto ssrOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mPreviousFrame, mGBuffer, ssrOutputTexture, mPostprocessTexturePool);
+        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mPreviousFrame, ssrOutputTexture, mPostprocessTexturePool);
 
-        auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+//        auto bloomOutputTexture = mPostprocessTexturePool->claim();
+//        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+//
+//        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+//        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
-
-        renderFinalImage(*toneMappingOutputTexture);
+        renderFinalImage(*ssrOutputTexture);
 
         mPostprocessTexturePool->putBack(ssrOutputTexture);
-        mPostprocessTexturePool->putBack(bloomOutputTexture);
-        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+//        mPostprocessTexturePool->putBack(bloomOutputTexture);
+//        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
 
 }

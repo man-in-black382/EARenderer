@@ -80,6 +80,7 @@ namespace EARenderer {
     public:
         GLUInteger2BufferTexture() : GLBufferTexture<BufferDataType>(GL_RG32UI) { }
     };
+    
     template <typename BufferDataType>
     class GLUInteger3BufferTexture: public GLBufferTexture<BufferDataType> {
     public:

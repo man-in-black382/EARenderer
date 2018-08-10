@@ -12,12 +12,12 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLPipelineState& GLPipelineState::instance() {
+    GLPipelineState& GLPipelineState::DefaultInstance() {
         static GLPipelineState i;
         return i;
     }
 
-#pragma mark - Public interface
+#pragma mark - Private interface
 
     void GLPipelineState::registerBinding(GLPipelineState::BindingPoint bindingPoint, GLint glObjectName) {
         mBindings[bindingPoint] = glObjectName;
@@ -25,6 +25,17 @@ namespace EARenderer {
 
     bool GLPipelineState::isGLObjectBindingRegistered(GLPipelineState::BindingPoint bindingPoint, GLint glObjectName) {
         return mBindings[bindingPoint] == glObjectName;
+    }
+
+#pragma mark - Public interface
+
+    void GLPipelineState::bindObjectIfNeeded(BindingPoint bindingPoint, GLint glObjectName, BindingAction bindingAction) {
+        if (mBindings[bindingPoint] == glObjectName) {
+            return;
+        }
+
+        mBindings[bindingPoint] = glObjectName;
+        bindingAction(bindingPoint, glObjectName);
     }
 
 }

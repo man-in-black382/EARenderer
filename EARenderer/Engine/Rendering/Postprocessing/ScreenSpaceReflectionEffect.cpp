@@ -13,25 +13,22 @@ namespace EARenderer {
 #pragma mark - Pivate Helpers
 
     void ScreenSpaceReflectionEffect::traceReflections(const Camera& camera,
-                                                       std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                                                        std::shared_ptr<const SceneGBuffer> GBuffer,
-                                                       std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
                                                        std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo,
                                                        std::shared_ptr<PostprocessTexturePool> texturePool)
     {
         mSSRShader.bind();
         mSSRShader.ensureSamplerValidity([&]() {
             mSSRShader.setCamera(camera);
-            mSSRShader.setFrame(*lightBuffer);
             mSSRShader.setGBuffer(*GBuffer);
         });
 
-        texturePool->redirectRenderingToTexturesMip(0, mirrorReflections, rayHitInfo);
+        texturePool->redirectRenderingToTexturesMip(0, rayHitInfo);
 
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
-    void ScreenSpaceReflectionEffect::blurReflections(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
+    void ScreenSpaceReflectionEffect::blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
                                                       std::shared_ptr<PostprocessTexturePool> texturePool)
     {
         // Shape up the Gaussian curve to obtain [0.474, 0.233, 0.028, 0.001] weights
@@ -66,19 +63,17 @@ namespace EARenderer {
 #pragma mark - Public Interface
 
     void ScreenSpaceReflectionEffect::applyReflections(const Camera& camera,
-                                                       std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                                                        std::shared_ptr<const SceneGBuffer> GBuffer,
+                                                       std::shared_ptr<PostprocessTexturePool::PostprocessTexture> lightBuffer,
                                                        std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                                                        std::shared_ptr<PostprocessTexturePool> texturePool)
     {
-        auto mirrorReflections = texturePool->claim();
         auto rayTracingInfo = texturePool->claim();
 
-        traceReflections(camera, lightBuffer, GBuffer, mirrorReflections, rayTracingInfo, texturePool);
-        blurReflections(mirrorReflections, texturePool);
-        traceCones(mirrorReflections, rayTracingInfo, GBuffer, outputImage, texturePool);
+        traceReflections(camera, GBuffer, rayTracingInfo, texturePool);
+        blurProgressively(lightBuffer, texturePool);
+        traceCones(lightBuffer, rayTracingInfo, GBuffer, outputImage, texturePool);
 
-        texturePool->putBack(mirrorReflections);
         texturePool->putBack(rayTracingInfo);
     }
 
