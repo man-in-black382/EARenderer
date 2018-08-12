@@ -31,15 +31,10 @@ namespace EARenderer {
         TexturePointerSet mClaimedTextures;
 
         template<class TexturePtr>
-        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr texture) {
-            mFramebuffer.replaceMipLevel(*texture, mipLevel);
-        }
+        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr texture);
 
         template<class TexturePtr, class... TexturePtrs>
-        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr head, TexturePtrs... tail) {
-            mFramebuffer.replaceMipLevel(*head, mipLevel);
-            replaceMipLevelsInFramebuffer(mipLevel, tail...);
-        }
+        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr head, TexturePtrs... tail);
 
     public:
         PostprocessTexturePool(const Size2D& resolution);
@@ -49,24 +44,18 @@ namespace EARenderer {
         void putBack(std::shared_ptr<PostprocessTexture> texture);
 
         template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
-            mFramebuffer.detachAllColorAttachments();
-            mFramebuffer.attachTextures(mipLevel, *textures...);
-            mFramebuffer.activateDrawBuffers(*textures...);
-            GLViewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel)).apply();
-            mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-        }
+        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures);
 
         template<class... TexturePtrs>
-        void redirectRenderingToTextures(TexturePtrs... textures) {
-            mFramebuffer.detachAllColorAttachments();
-            mFramebuffer.attachTextures(0, *textures...);
-            mFramebuffer.activateDrawBuffers(*textures...);
-            mFramebuffer.viewport().apply();
-            mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-        }
+        void redirectRenderingToTextures(TexturePtrs... textures);
+
+        void useInternalDepthBuffer();
+
+        void useExternalDepthBuffer(std::shared_ptr<GLDepthTexture2D> depthBuffer);
     };
 
 }
+
+#include "PostprocessTexturePool.tpp"
 
 #endif /* TexturePool_hpp */

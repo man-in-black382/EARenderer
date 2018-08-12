@@ -19,12 +19,12 @@ namespace EARenderer {
     mDepthRenderbuffer(settings.resolution),
     mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
-        mFramebuffer.attachTexture(mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(mGBuffer->HiZBuffer, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+        mFramebuffer.attachTexture(*mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
+        mFramebuffer.attachTexture(*mGBuffer->HiZBuffer, GLFramebuffer::ColorAttachment::Attachment1);
+        mFramebuffer.attachTexture(*mGBuffer->depthBuffer);
 
         // Preallocate HiZ buffer mipmaps
-        mGBuffer->HiZBuffer.generateMipMaps();
+        mGBuffer->HiZBuffer->generateMipMaps();
     }
 
 #pragma mark - Getters
@@ -44,8 +44,8 @@ namespace EARenderer {
         mGBufferShader.setCamera(*(mScene->camera()));
 
         // Attach 0 mip again after HiZ buffer construction
-        mFramebuffer.replaceMipLevel(mGBuffer->HiZBuffer, 0);
-        mFramebuffer.activateDrawBuffers(mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
+        mFramebuffer.replaceMipLevel(*mGBuffer->HiZBuffer, 0);
+        mFramebuffer.activateDrawBuffers(*mGBuffer->albedoRoughnessMetalnessAONormal, *mGBuffer->HiZBuffer);
         mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
         for (ID instanceID : mScene->meshInstances()) {
@@ -72,20 +72,20 @@ namespace EARenderer {
 
         mHiZBufferShader.bind();
         mHiZBufferShader.ensureSamplerValidity([&]() {
-            mHiZBufferShader.setTexture(mGBuffer->HiZBuffer);
+            mHiZBufferShader.setTexture(*mGBuffer->HiZBuffer);
         });
 
-        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer.mipMapsCount();
+        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer->mipMapsCount();
 
         for (size_t mipLevel = 0; mipLevel < mGBuffer->HiZBufferMipCount; mipLevel++) {
             mHiZBufferShader.setMipLevel(mipLevel);
 
-            Size2D mipSize = mGBuffer->HiZBuffer.mipMapSize(mipLevel + 1);
+            Size2D mipSize = mGBuffer->HiZBuffer->mipMapSize(mipLevel + 1);
             GLViewport(mipSize).apply();
 
-            mFramebuffer.replaceMipLevel(mGBuffer->HiZBuffer, mipLevel + 1);
+            mFramebuffer.replaceMipLevel(*mGBuffer->HiZBuffer, mipLevel + 1);
             // Leave only linear depth attachment active so that other textures won't get corrupted
-            mFramebuffer.activateDrawBuffers(mGBuffer->HiZBuffer);
+            mFramebuffer.activateDrawBuffers(*mGBuffer->HiZBuffer);
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

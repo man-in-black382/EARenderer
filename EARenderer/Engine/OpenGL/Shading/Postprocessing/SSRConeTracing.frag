@@ -14,7 +14,6 @@ uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferHiZBuffer;
 uniform sampler2D uReflections;
 uniform sampler2D uRayHitInfo;
-uniform int uHiZBufferMipCount;
 uniform int uMipCount;
 
 uniform vec2 uCameraNearFarPlanes;
@@ -184,18 +183,16 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
 ////////////////////////////////////////////////////////////
 
 void main() {
-    int stub = uHiZBufferMipCount;
-
     GBuffer gBuffer     = DecodeGBuffer();
 
-    float roughness     = 0.5;//gBuffer.roughness;
+    float roughness     = gBuffer.roughness;
 
     // Explicitly reading from 0 LOD because texture comes from a postprocess texture pool
     // and is a subject to mipmapping
     vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
 
     if (rayHitInfo.a == 0) {
-        oOutputColor = vec4(1.0, 0.0, 0.0, 1.0);
+        oOutputColor = vec4(0.0, 0.0, 0.0, 1.0);
         return;
     }
 
@@ -226,7 +223,7 @@ void main() {
 
     int i;
     // Cone-tracing using an isosceles triangle to approximate a cone in screen space
-    for(i = 0; i < 14; ++i) {
+    for(i = 0; i < 7; ++i) {
         // intersection length is the adjacent side, get the opposite side using trig
         float oppositeLength = IsoscelesTriangleOpposite(adjacentLength, coneTheta);
 
@@ -262,6 +259,6 @@ void main() {
         glossMult *= gloss;
     }
 
-//    oOutputColor = vec4(textureLod(uReflections, vTexCoords, 3.5).rgb, 1.0);
+//    oOutputColor = vec4(textureLod(uReflections, vTexCoords, 5.2).rgb, 1.0);
     oOutputColor = vec4(totalColor.rgb, 1.0);
 }

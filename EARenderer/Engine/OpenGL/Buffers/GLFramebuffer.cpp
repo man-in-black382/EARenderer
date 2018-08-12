@@ -231,6 +231,8 @@ namespace EARenderer {
     }
 
     void GLFramebuffer::detachTexture(const GLTexture& texture) {
+        bind();
+
         auto attachmentIt = mTextureAttachmentMap.find(texture.name());
         if (attachmentIt == mTextureAttachmentMap.end()) {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot detach it.", texture.name()));
@@ -250,6 +252,8 @@ namespace EARenderer {
     }
 
     void GLFramebuffer::detachAllColorAttachments() {
+        bind();
+
         for (auto kvPair : mTextureAttachmentMap) {
             auto attachmentMetadata = kvPair.second;
 
@@ -262,10 +266,12 @@ namespace EARenderer {
             mRequestedAttachments.erase(attachmentMetadata.glColorAttachment);
             mAvailableAttachments.insert(attachmentMetadata.glColorAttachment);
         }
+
         mTextureAttachmentMap.clear();
     }
 
     void GLFramebuffer::activateAllDrawBuffers() {
+        bind();
         setRequestedDrawBuffers();
     }
 

@@ -4,7 +4,6 @@
 
 uniform samplerCube uCubeMapTexture;
 uniform sampler2D uEquirectangularMap;
-uniform bool uIsHDR;
 uniform bool uIsCube;
 
 // Input
@@ -47,12 +46,6 @@ vec3 CubeSampleCoords(vec3 sampleVector) {
     return vec3(0.5 * (tmpS / m + 1.0), 0.5 * (tmpT / m + 1.0), face);
 }
 
-vec3 ReinhardToneMapAndGammaCorrect(vec3 color) {
-    vec3 mappedColor = color / (color + vec3(1.0));
-    vec3 gammaCorrectedColor = pow(mappedColor, vec3(1.0 / 2.2));
-    return gammaCorrectedColor;
-}
-
 vec3 SampleSphericalMap(vec3 v) {
     const vec2 kInvAtan = vec2(0.1591, 0.3183);
     
@@ -68,8 +61,6 @@ void main() {
     } else {
         oFragmentColor = vec4(SampleSphericalMap(normalize(oEyeDirection.xyz)), 1.0); // Don't forget to normalize!
     }
-    
-    if (uIsHDR) {
-        oFragmentColor = vec4(ReinhardToneMapAndGammaCorrect(oFragmentColor.rgb), 1.0);
-    }
+
+//    oFragmentColor = vec4(1.0, 0.5, 1.0, 1.0);
 }

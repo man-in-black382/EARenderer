@@ -11,17 +11,21 @@
 
 #include "GLTexture2D.hpp"
 
+#include <memory>
+
 namespace EARenderer {
 
     struct SceneGBuffer {
-        GLIntegerTexture2D<GLTexture::Integer::RGB32UI> albedoRoughnessMetalnessAONormal;
-        GLFloatTexture2D<GLTexture::Float::R32F> HiZBuffer;
+        std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::RGB32UI>> albedoRoughnessMetalnessAONormal;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R32F>> HiZBuffer;
+        std::shared_ptr<GLDepthTexture2D> depthBuffer;
         int8_t HiZBufferMipCount;
 
         SceneGBuffer(const Size2D& resolution)
         :
-        albedoRoughnessMetalnessAONormal(resolution),
-        HiZBuffer(resolution),
+        albedoRoughnessMetalnessAONormal(std::make_shared<GLIntegerTexture2D<GLTexture::Integer::RGB32UI>>(resolution)),
+        HiZBuffer(std::make_shared<GLFloatTexture2D<GLTexture::Float::R32F>>(resolution)),
+        depthBuffer(std::make_shared<GLDepthTexture2D>(resolution)),
         HiZBufferMipCount(0)
         { }
     };

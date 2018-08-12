@@ -368,10 +368,6 @@ void main() {
     GBuffer gBuffer     = DecodeGBuffer();
 
     vec3 worldPosition  = ReconstructWorldPosition();
-    float roughness     = gBuffer.roughness;
-    float metallic      = gBuffer.metalness;
-    float ao            = gBuffer.AO;
-    vec3 albedo         = gBuffer.albedo;
     vec3 N              = gBuffer.normal;
 
     RayHit SSR = ScreenSpaceReflection(N, worldPosition);

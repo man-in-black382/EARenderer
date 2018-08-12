@@ -246,8 +246,6 @@ namespace EARenderer {
     }
 
     void DeferredSceneRenderer::renderSkybox() {
-        mPostprocessTexturePool->redirectRenderingToTextures(mFrame);
-
         mSkyboxShader.bind();
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
@@ -255,6 +253,9 @@ namespace EARenderer {
             mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
             // mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
         });
+
+        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame);
+
         mScene->skybox()->draw();
     }
 
@@ -277,29 +278,37 @@ namespace EARenderer {
     void DeferredSceneRenderer::render() {
         mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
 
-        swapFrames();
+//        swapFrames();
 
         renderShadowMaps();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();
-        renderMeshes();
-//        renderSkybox();
+
+        mPostprocessTexturePool->useInternalDepthBuffer();
+//        renderMeshes();
+
+//        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
+        renderSkybox();
+
+        mPostprocessTexturePool->useInternalDepthBuffer();
 
         auto ssrOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mPreviousFrame, ssrOutputTexture, mPostprocessTexturePool);
+        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
 
-//        auto bloomOutputTexture = mPostprocessTexturePool->claim();
-//        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
-//
-//        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-//        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+        auto bloomOutputTexture = mPostprocessTexturePool->claim();
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
 
-        renderFinalImage(*ssrOutputTexture);
+        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+
+//        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
+
+        renderFinalImage(*mFrame);
 
         mPostprocessTexturePool->putBack(ssrOutputTexture);
-//        mPostprocessTexturePool->putBack(bloomOutputTexture);
-//        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+        mPostprocessTexturePool->putBack(bloomOutputTexture);
+        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
     }
 
 }

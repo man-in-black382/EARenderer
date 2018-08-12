@@ -19,17 +19,6 @@ namespace EARenderer {
     mFramebuffer(resolution),
     mDepthRenderbuffer(resolution)
     {
-        for (size_t i = 0; i < mFramebuffer.maximumColorAttachmentsCount(); i++) {
-            auto texture = std::make_shared<PostprocessTexture>(resolution, nullptr, GLTexture::Filter::Trilinear);
-
-            // Preallocate mip map memory, because mips are gonna be needed in
-            // postprocessing algorithms
-            texture->generateMipMaps();
-
-            mFreeTextures.insert(texture);
-//            mFramebuffer.attachTexture(*texture);
-        }
-
         mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
     }
 
@@ -37,8 +26,12 @@ namespace EARenderer {
 
     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> PostprocessTexturePool::claim() {
         if (mFreeTextures.empty()) {
-            throw std::runtime_error("Texture pool is empty: all textures have been claimed");
+            auto texture = std::make_shared<PostprocessTexture>(mFramebuffer.size());
+            texture->generateMipMaps();
+            mClaimedTextures.insert(texture);
+            return texture;
         }
+
         auto textureIt = mFreeTextures.begin();
         auto texture = *textureIt;
         mFreeTextures.erase(textureIt);
@@ -53,6 +46,14 @@ namespace EARenderer {
         }
         mClaimedTextures.erase(textureIt);
         mFreeTextures.insert(texture);
+    }
+
+    void PostprocessTexturePool::useInternalDepthBuffer() {
+        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
+    }
+
+    void PostprocessTexturePool::useExternalDepthBuffer(std::shared_ptr<GLDepthTexture2D> depthBuffer) {
+        mFramebuffer.attachTexture(*depthBuffer);
     }
 
 }
