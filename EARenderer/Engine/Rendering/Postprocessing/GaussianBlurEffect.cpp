@@ -8,6 +8,7 @@
 
 #include "GaussianBlurEffect.hpp"
 #include "GaussianFunction.hpp"
+#include "Drawable.hpp"
 
 #include <stdexcept>
 
@@ -81,7 +82,7 @@ namespace EARenderer {
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
         texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
 
         // But, in the second pass, we read and write from and to the same
         // mip level of intermediate and output textures
@@ -93,7 +94,7 @@ namespace EARenderer {
         });
 
         texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
 
         texturePool->putBack(intermediateTexture);
     }

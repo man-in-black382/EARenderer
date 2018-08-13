@@ -68,6 +68,9 @@ namespace EARenderer {
     }
 
     void SceneGBufferRenderer::generateHiZBuffer() {
+        // Disable depth writes to not pollute depth buffer with HIZ buffer quads
+        glDepthMask(GL_FALSE);
+
         mFramebuffer.bind();
 
         mHiZBufferShader.bind();
@@ -88,8 +91,10 @@ namespace EARenderer {
             mFramebuffer.activateDrawBuffers(*mGBuffer->HiZBuffer);
             mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
 
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            TriangleStripQuad::Draw();
         }
+
+        glDepthMask(GL_TRUE);
     }
 
 #pragma mark - Public Interface

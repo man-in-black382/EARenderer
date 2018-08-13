@@ -310,7 +310,7 @@ namespace EARenderer {
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStrip::Draw();
     }
 
     void SceneRenderer::averageSurfelClusterLuminances() {
@@ -324,7 +324,7 @@ namespace EARenderer {
         });
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStrip::Draw();
     }
 
     void SceneRenderer::updateGridProbes() {
@@ -410,7 +410,7 @@ namespace EARenderer {
 //            mFSQuadShader.setTexture(*mToneMappingEffect.outputImage());
 //        });
 //
-//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        TriangleStrip::Draw();
 //        glEnable(GL_DEPTH_TEST);
     }
 
@@ -443,7 +443,7 @@ namespace EARenderer {
                 mFSQuadShader.setTexture(*mSurfelData->surfelsGBuffer(), i);
             });
 
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            TriangleStrip::Draw();
 
             if ((viewportRect.origin.x + 400) > defaultViewportWidth) {
                 viewportRect.origin.x = 0.0;
@@ -470,7 +470,7 @@ namespace EARenderer {
             mFSQuadShader.setTexture(mSurfelsLuminanceMap);
         });
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStrip::Draw();
         glEnable(GL_DEPTH_TEST);
     }
 
@@ -488,7 +488,7 @@ namespace EARenderer {
             mFSQuadShader.setTexture(mSurfelClustersLuminanceMap);
         });
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStrip::Draw();
         glEnable(GL_DEPTH_TEST);
     }
 

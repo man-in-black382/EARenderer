@@ -44,7 +44,7 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_TRUE);
     }
     
-    void GLSLSkybox::setEquirectangularMap(const GLHDRTexture2D& equireqMap) {
+    void GLSLSkybox::setEquirectangularMap(const GLFloatTexture2D<GLTexture::Float::RGB16F>& equireqMap) {
         setUniformTexture(ctcrc32("uEquirectangularMap"), equireqMap);
         glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_FALSE);
     }

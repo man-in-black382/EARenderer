@@ -14,7 +14,6 @@
 		AC1F6BDA20E2321200E81EB0 /* BloomEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */; };
 		AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */; };
 		AC3275B420D24FA800899697 /* GaussianFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3275B220D24FA800899697 /* GaussianFunction.cpp */; };
-		AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */; };
 		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
 		AC3C9EB420720F2300F35EB3 /* GridLightProbeRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EB320720F2300F35EB3 /* GridLightProbeRendering.vert */; };
 		AC3C9EB720720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3C9EB520720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp */; };
@@ -612,7 +611,6 @@
 		AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
 		AC3275B220D24FA800899697 /* GaussianFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianFunction.cpp; sourceTree = "<group>"; };
 		AC3275B320D24FA800899697 /* GaussianFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianFunction.hpp; sourceTree = "<group>"; };
-		AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelClusterProjection.cpp; sourceTree = "<group>"; };
 		AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelClusterProjection.hpp; sourceTree = "<group>"; };
 		AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbe.cpp; sourceTree = "<group>"; };
 		AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbe.hpp; sourceTree = "<group>"; };
@@ -2630,7 +2628,6 @@
 				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
 				AC62416B205657AD009B36DF /* SurfelCluster.cpp */,
 				AC62416C205657AD009B36DF /* SurfelCluster.hpp */,
-				AC348DE8205A795C00D03C48 /* SurfelClusterProjection.cpp */,
 				AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */,
 				AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */,
 				AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */,
@@ -3813,7 +3810,6 @@
 				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
 				CE7A013620B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp in Sources */,
-				AC348DEA205A795C00D03C48 /* SurfelClusterProjection.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,

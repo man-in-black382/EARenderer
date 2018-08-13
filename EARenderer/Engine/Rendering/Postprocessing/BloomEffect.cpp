@@ -7,6 +7,7 @@
 //
 
 #include "BloomEffect.hpp"
+#include "Drawable.hpp"
 
 namespace EARenderer {
 
@@ -38,7 +39,7 @@ namespace EARenderer {
         });
 
         texturePool->redirectRenderingToTexturesMip(0, outputImage);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
 
         texturePool->putBack(blurTexture);
     }

@@ -18,7 +18,7 @@ namespace EARenderer {
     Camera::Camera()
     :
     mPosition(glm::zero<glm::vec3>()),
-    mFieldOfView(75),
+    mFieldOfView(60),
     mNearClipPlane(0.1),
     mFarClipPlane(10),
     mViewportAspectRatio(16.f / 9.f),

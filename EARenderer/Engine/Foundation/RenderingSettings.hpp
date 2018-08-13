@@ -66,7 +66,7 @@ namespace EARenderer {
         bool skyboxRenderingEnabled = true;
         bool triangleRenderingEnabled = false;
 
-        Size2D resolution { 1920, 1080 };
+        Size2D resolution { 900, 600 };
     };
 
 }

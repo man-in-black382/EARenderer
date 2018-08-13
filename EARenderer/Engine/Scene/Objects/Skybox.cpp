@@ -7,6 +7,7 @@
 //
 
 #include "Skybox.hpp"
+#include "GLTextureFactory.hpp"
 
 #include <glm/vec3.hpp>
 
@@ -16,20 +17,20 @@ namespace EARenderer {
     
     Skybox::Skybox(const std::string& equirectangularImage)
     :
-    mEquirectangularMap(equirectangularImage)
+    mEquirectangularMap(GLTextureFactory::LoadHDRImage(equirectangularImage))
     { }
     
 #pragma mark - Getters
     
-    const GLHDRTexture2D& Skybox::equirectangularMap() const {
-        return mEquirectangularMap;
+    const GLFloatTexture2D<GLTexture::Float::RGB16F>* Skybox::equirectangularMap() const {
+        return mEquirectangularMap.get();
     }
     
 #pragma mark - Drawable
     
     void Skybox::draw() const {
         glDepthFunc(GL_LEQUAL);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
     
 }

@@ -20,12 +20,12 @@ namespace EARenderer {
                              const std::string& ambientOcclusionMapPath,
                              const std::string& displacementMapPath)
     :
-    mAlbedoMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RGBACompressed>(albedoMapPath)),
-    mNormalMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RGBCompressed>(normalMapPath)),
-    mMetallicMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(metallicMapPath)),
-    mRoughnessMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(roughnessMapPath)),
-    mAmbientOcclusionMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(ambientOcclusionMapPath)),
-    mDisplacementMap(GLTextureFactory::LoadImage<GLTexture::Normalized::RCompressed>(displacementMapPath))
+    mAlbedoMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RGBACompressed>(albedoMapPath)),
+    mNormalMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RGBCompressed>(normalMapPath)),
+    mMetallicMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RCompressed>(metallicMapPath)),
+    mRoughnessMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RCompressed>(roughnessMapPath)),
+    mAmbientOcclusionMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RCompressed>(ambientOcclusionMapPath)),
+    mDisplacementMap(GLTextureFactory::LoadLDRImage<GLTexture::Normalized::RCompressed>(displacementMapPath))
     {
         if (mAlbedoMap) mAlbedoMap->generateMipMaps();
         if (mNormalMap) mNormalMap->generateMipMaps();

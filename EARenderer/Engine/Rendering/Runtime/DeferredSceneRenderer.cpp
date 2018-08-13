@@ -60,12 +60,12 @@ namespace EARenderer {
     // Output frame
     mFrame(mPostprocessTexturePool->claim()),
     mPreviousFrame(mPostprocessTexturePool->claim()),
-    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())//,
-//    mOutputDepthRenderbuffer(mOutputFrame->size()),
-//    mOutputFramebuffer(mOutputFrame->size())
+    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
     {
         setupGLState();
         setupFramebuffers();
+
+        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
     }
 
 #pragma mark - Setters
@@ -190,7 +190,7 @@ namespace EARenderer {
             mSurfelLightingShader.setSettings(mSettings);
         });
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
 
     void DeferredSceneRenderer::averageSurfelClusterLuminances() {
@@ -204,7 +204,7 @@ namespace EARenderer {
             mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
         });
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
 
     void DeferredSceneRenderer::updateGridProbes() {
@@ -240,9 +240,7 @@ namespace EARenderer {
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
-
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
 
     void DeferredSceneRenderer::renderSkybox() {
@@ -250,11 +248,8 @@ namespace EARenderer {
         mSkyboxShader.ensureSamplerValidity([this]() {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
-            mSkyboxShader.setEquirectangularMap(mScene->skybox()->equirectangularMap());
-            // mSkyboxShader.setEquirectangularMap(*mBlurFilter.outputImage());
+            mSkyboxShader.setEquirectangularMap(*mScene->skybox()->equirectangularMap());
         });
-
-        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame);
 
         mScene->skybox()->draw();
     }
@@ -269,7 +264,7 @@ namespace EARenderer {
             mFSQuadShader.setTexture(image);
         });
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
         glEnable(GL_DEPTH_TEST);
     }
 
@@ -285,17 +280,24 @@ namespace EARenderer {
         averageSurfelClusterLuminances();
         updateGridProbes();
 
-        mPostprocessTexturePool->useInternalDepthBuffer();
-//        renderMeshes();
+        // We're using depth buffer rendered during gbuffer construction.
+        // Depth writes are disabled for the purpose of combining skybox
+        // and debugging entities with full screen deferred rendering:
+        // meshes are rendered as a full screen quad, then skybox is rendered
+        // where it should, using depth buffer filled by geometry.
+        // Then, full screen quad rendering (postprocessing) can be applied without
+        // polluting the depth buffer, which leaves us an ability to render 3D debug stuff,
+        // like light probe spheres, surfels etc.
+        glDepthMask(GL_FALSE);
 
-//        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
+        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+
+        renderMeshes();
         renderSkybox();
 
-        mPostprocessTexturePool->useInternalDepthBuffer();
-
-        auto ssrOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
-
+//        auto ssrOutputTexture = mPostprocessTexturePool->claim();
+////        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
+//
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
         mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
 
@@ -304,11 +306,13 @@ namespace EARenderer {
 
 //        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
 
-        renderFinalImage(*mFrame);
+        renderFinalImage(*toneMappingOutputTexture);
 
-        mPostprocessTexturePool->putBack(ssrOutputTexture);
+//        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);
         mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+
+        glDepthMask(GL_TRUE);
     }
 
 }

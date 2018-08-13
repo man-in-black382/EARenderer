@@ -13,18 +13,19 @@
 #include "Vertex1P4.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
+
+#include <memory>
 
 namespace EARenderer {
     
     class Skybox: public Drawable {
     private:
-        GLHDRTexture2D mEquirectangularMap;
+        std::unique_ptr<GLFloatTexture2D<GLTexture::Float::RGB16F>> mEquirectangularMap;
         
     public:
         Skybox(const std::string& equirectangularImage);
         
-        const GLHDRTexture2D& equirectangularMap() const;
+        const GLFloatTexture2D<GLTexture::Float::RGB16F>* equirectangularMap() const;
         
         void draw() const override;
     };

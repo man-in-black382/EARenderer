@@ -60,7 +60,7 @@ namespace EARenderer {
 #pragma mark -
 
     void SphericalHarmonics::normalize() {
-        float factor = 1.0 / (4.0 * M_PI); // Unit sphere has 4Pi steradians
+        float factor = 1.0 / (4.0 * M_PI); // Unit sphere's solid angle is 4Pi steradians
         mL00  *= factor;
         mL1_1 *= factor;
         mL10  *= factor;

@@ -12,7 +12,6 @@
 #include "GLProgram.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLHDRTextureCubemap.hpp"
-#include "GLHDRTexture2D.hpp"
 #include "GLLDRTextureCubemap.hpp"
 
 #include <glm/mat4x4.hpp>
@@ -30,7 +29,7 @@ namespace EARenderer {
         void setCubemap(const GLTextureCubemap& cubemap);
         void setCubemap(const GLDepthTextureCubemap& cubemap);
         void setCubemap(const GLHDRTextureCubemap& cubemap);
-        void setEquirectangularMap(const GLHDRTexture2D& equireqMap);
+        void setEquirectangularMap(const GLFloatTexture2D<GLTexture::Float::RGB16F>& equireqMap);
     };
     
 }

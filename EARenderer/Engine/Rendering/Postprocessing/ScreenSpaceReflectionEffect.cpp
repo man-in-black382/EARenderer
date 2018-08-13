@@ -7,6 +7,7 @@
 //
 
 #include "ScreenSpaceReflectionEffect.hpp"
+#include "Drawable.hpp"
 
 namespace EARenderer {
 
@@ -25,7 +26,7 @@ namespace EARenderer {
 
         texturePool->redirectRenderingToTexturesMip(0, rayHitInfo);
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
 
     void ScreenSpaceReflectionEffect::blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
@@ -57,7 +58,7 @@ namespace EARenderer {
 
         texturePool->redirectRenderingToTexturesMip(0, outputImage);
 
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        TriangleStripQuad::Draw();
     }
 
 #pragma mark - Public Interface

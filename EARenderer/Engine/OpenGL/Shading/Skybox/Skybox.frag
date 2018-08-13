@@ -61,6 +61,4 @@ void main() {
     } else {
         oFragmentColor = vec4(SampleSphericalMap(normalize(oEyeDirection.xyz)), 1.0); // Don't forget to normalize!
     }
-
-//    oFragmentColor = vec4(1.0, 0.5, 1.0, 1.0);
 }

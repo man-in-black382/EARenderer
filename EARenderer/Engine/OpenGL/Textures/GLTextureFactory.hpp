@@ -23,7 +23,8 @@ namespace EARenderer {
     public:
 
         template<GLTexture::Normalized Format>
-        static std::unique_ptr<GLNormalizedTexture2D<Format>> LoadImage(const std::string& imagePath) {
+        static std::unique_ptr<GLNormalizedTexture2D<Format>> LoadLDRImage(const std::string& imagePath) {
+
             int32_t width = 0;
             int32_t height = 0;
             int32_t components = 0;
@@ -36,6 +37,26 @@ namespace EARenderer {
 
             Size2D size(width, height);
             auto texture = std::make_unique<GLNormalizedTexture2D<Format>>(size, pixelData, GLTexture::Filter::Bilinear, GLTexture::WrapMode::Repeat);
+            stbi_image_free(pixelData);
+
+            return texture;
+        }
+
+        static std::unique_ptr<GLFloatTexture2D<GLTexture::Float::RGB16F>> LoadHDRImage(const std::string& imagePath) {
+
+            int32_t width = 0;
+            int32_t height = 0;
+            int32_t components = 0;
+
+            stbi_set_flip_vertically_on_load(true);
+            float *pixelData = stbi_loadf(imagePath.c_str(), &width, &height, &components, STBI_default);
+
+            if (!pixelData) {
+                return nullptr;
+            }
+
+            Size2D size(width, height);
+            auto texture = std::make_unique<GLFloatTexture2D<GLTexture::Float::RGB16F>>(size, pixelData, GLTexture::Filter::Bilinear, GLTexture::WrapMode::Repeat);
             stbi_image_free(pixelData);
 
             return texture;

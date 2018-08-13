@@ -14,6 +14,7 @@
 #include "GLBufferTexture.hpp"
 #include "SphericalHarmonics.hpp"
 #include "GLLDRTextureCubemap.hpp"
+#include "GLTexture2D.hpp"
 
 #include <vector>
 #include <memory>
@@ -32,7 +33,7 @@ namespace EARenderer {
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
-        std::shared_ptr<GLHDRTexture2D> mOcclusionMapAtlas;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGB32F>> mOcclusionMapAtlas;
         std::shared_ptr<GLUInteger2BufferTexture<glm::uvec2>> mOcclusionMapAtlasOffsetsBufferTexture;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mProbePositionsBufferTexture;
 
