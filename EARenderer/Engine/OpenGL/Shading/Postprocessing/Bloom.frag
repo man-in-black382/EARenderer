@@ -15,7 +15,8 @@ in vec2 vTexCoords;
 
 // Outputs
 
-out vec4 oFragColor;
+layout(location = 0) out vec4 oFragColor;
+layout(location = 1) out float oLuminanceOutput;
 
 // Functions
 
@@ -30,4 +31,8 @@ void main() {
                     smallBlurTexData * uSmallBlurWeight;
 
     oFragColor = vec4(combined + baseTexData, 1.0);
+
+    vec3 factors = vec3(0.2126, 0.7152, 0.0722);
+    float luminocity = dot(oFragColor, factors);
+    oLuminanceOutput = luminocity;
 }

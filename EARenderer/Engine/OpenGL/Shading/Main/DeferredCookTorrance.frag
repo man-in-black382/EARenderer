@@ -24,6 +24,7 @@ const float kC5 = 0.247708;
 
 layout(location = 0) out vec4 oBaseOutput;
 layout(location = 1) out vec4 oBrightOutput;
+layout(location = 2) out float oLuminanceOutput;
 
 // Input
 
@@ -767,4 +768,5 @@ void main() {
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+    oLuminanceOutput = luminocity;
 }

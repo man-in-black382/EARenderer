@@ -58,9 +58,10 @@ namespace EARenderer {
     mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
 
     // Output frame
-    mFrame(mPostprocessTexturePool->claim()),
-    mPreviousFrame(mPostprocessTexturePool->claim()),
-    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
+    mFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
+    mPreviousFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
+    mThresholdFilteredOutputFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
+    mFrameLuminance(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(settings.resolution))
     {
         setupGLState();
         setupFramebuffers();
@@ -290,7 +291,7 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
-        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame, mFrameLuminance);
 
         renderMeshes();
         renderSkybox();
@@ -299,10 +300,12 @@ namespace EARenderer {
 ////        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
 //
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame,
+                           bloomOutputTexture, mFrameLuminance,
+                           mPostprocessTexturePool, mSettings.bloomSettings);
 
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+        mToneMappingEffect.toneMap(bloomOutputTexture, mFrameLuminance, toneMappingOutputTexture, mPostprocessTexturePool);
 
 //        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
 

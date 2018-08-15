@@ -23,8 +23,11 @@ namespace EARenderer {
     private:
         GLSLToneMapping mToneMappingShader;
 
+        void computeAverageLuminance(std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> luminance);
+
     public:
         void toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
+                     std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> luminance,
                      std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                      std::shared_ptr<PostprocessTexturePool> texturePool);
     };

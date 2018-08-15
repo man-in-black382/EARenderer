@@ -107,6 +107,7 @@ namespace EARenderer {
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mPreviousFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mThresholdFilteredOutputFrame;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mFrameLuminance;
 
         void setupGLState();
         void setupFramebuffers();
