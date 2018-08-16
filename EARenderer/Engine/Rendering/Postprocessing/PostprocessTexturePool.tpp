@@ -23,21 +23,32 @@ namespace EARenderer {
     }
 
     template<class... TexturePtrs>
-    void PostprocessTexturePool::redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
+    void PostprocessTexturePool::redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures) {
         mFramebuffer.detachAllColorAttachments();
         mFramebuffer.attachTextures(mipLevel, *textures...);
         mFramebuffer.activateDrawBuffers(*textures...);
-        GLViewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel)).apply();
+        viewport.apply();
+        mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
+    }
+
+    template<class... TexturePtrs>
+    void PostprocessTexturePool::redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
+        GLViewport viewport(GLTexture::EstimatedMipSize(mFramebuffer.size(), mipLevel));
+        redirectRenderingToTexturesMip(viewport, mipLevel, textures...);
+    }
+
+    template<class... TexturePtrs>
+    void PostprocessTexturePool::redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures) {
+        mFramebuffer.detachAllColorAttachments();
+        mFramebuffer.attachTextures(0, *textures...);
+        mFramebuffer.activateDrawBuffers(*textures...);
+        viewport.apply();
         mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
     }
 
     template<class... TexturePtrs>
     void PostprocessTexturePool::redirectRenderingToTextures(TexturePtrs... textures) {
-        mFramebuffer.detachAllColorAttachments();
-        mFramebuffer.attachTextures(0, *textures...);
-        mFramebuffer.activateDrawBuffers(*textures...);
-        mFramebuffer.viewport().apply();
-        mFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
+        redirectRenderingToTextures(mFramebuffer.viewport(), textures...);
     }
 
 }

@@ -44,7 +44,13 @@ namespace EARenderer {
         void putBack(std::shared_ptr<PostprocessTexture> texture);
 
         template<class... TexturePtrs>
+        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures);
+
+        template<class... TexturePtrs>
         void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures);
+
+        template<class... TexturePtrs>
+        void redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures);
 
         template<class... TexturePtrs>
         void redirectRenderingToTextures(TexturePtrs... textures);

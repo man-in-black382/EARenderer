@@ -13,6 +13,7 @@
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLSLToneMapping.hpp"
+#include "GLSLLuminanceHistogram.hpp"
 #include "PostprocessTexturePool.hpp"
 
 #include <memory>
@@ -20,14 +21,19 @@
 namespace EARenderer {
 
     class ToneMappingEffect {
-    private:
+    public:
+        GLSLLuminanceHistogram mHistogramShader;
         GLSLToneMapping mToneMappingShader;
+        GLFloatTexture2D<GLTexture::Float::R32F> mHistogram;
+        GLFloatTexture2D<GLTexture::Float::R16F> mLuminance;
 
-        void computeAverageLuminance(std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> luminance);
+        void buildHistogram(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
+                            std::shared_ptr<PostprocessTexturePool> texturePool);
 
     public:
+        ToneMappingEffect();
+
         void toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                     std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> luminance,
                      std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                      std::shared_ptr<PostprocessTexturePool> texturePool);
     };

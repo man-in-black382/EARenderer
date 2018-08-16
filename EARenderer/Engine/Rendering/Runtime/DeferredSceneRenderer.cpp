@@ -60,8 +60,7 @@ namespace EARenderer {
     // Output frame
     mFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
     mPreviousFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
-    mThresholdFilteredOutputFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
-    mFrameLuminance(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(settings.resolution))
+    mThresholdFilteredOutputFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution))
     {
         setupGLState();
         setupFramebuffers();
@@ -291,7 +290,7 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
-        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame, mFrameLuminance);
+        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
 
         renderMeshes();
         renderSkybox();
@@ -300,16 +299,27 @@ namespace EARenderer {
 ////        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
 //
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame,
-                           bloomOutputTexture, mFrameLuminance,
-                           mPostprocessTexturePool, mSettings.bloomSettings);
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
 
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, mFrameLuminance, toneMappingOutputTexture, mPostprocessTexturePool);
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
 //        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
 
         renderFinalImage(*toneMappingOutputTexture);
+
+//        bindDefaultFramebuffer();
+//        GLViewport(Size2D(320, 30)).apply();
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//        mFSQuadShader.ensureSamplerValidity([&]() {
+//            mFSQuadShader.setTexture(mToneMappingEffect.mHistogram);
+//        });
+//
+//        TriangleStripQuad::Draw();
+//        glEnable(GL_DEPTH_TEST);
 
 //        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

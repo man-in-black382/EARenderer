@@ -20,7 +20,6 @@ namespace EARenderer {
 
     class TriangleStripQuad {
     public:
-
         static void Draw(size_t instanceCount = 1) {
             if (instanceCount > 1) {
                 glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)instanceCount);
@@ -28,7 +27,13 @@ namespace EARenderer {
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
             }
         }
+    };
 
+    class Point {
+    public:
+        static void Draw(size_t count = 1) {
+            glDrawArrays(GL_POINTS, 0, (GLsizei)count);
+        }
     };
     
 }

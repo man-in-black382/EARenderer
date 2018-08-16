@@ -16,7 +16,6 @@ namespace EARenderer {
     void BloomEffect::bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
                             std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
                             std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                            std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> outputLuminance,
                             std::shared_ptr<PostprocessTexturePool> texturePool,
                             const BloomSettings& settings)
     {
@@ -39,7 +38,7 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        texturePool->redirectRenderingToTexturesMip(0, outputImage, outputLuminance);
+        texturePool->redirectRenderingToTexturesMip(0, outputImage);
         TriangleStripQuad::Draw();
 
         texturePool->putBack(blurTexture);
