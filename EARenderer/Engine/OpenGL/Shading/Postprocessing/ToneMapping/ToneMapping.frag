@@ -3,8 +3,7 @@
 // Uniforms
 
 uniform sampler2D uImage;
-uniform sampler2D uLuminance;
-uniform int uHighestLuminanceLOD;
+uniform sampler2D uExposure;
 
 // Inputs
 
@@ -60,12 +59,10 @@ vec3 GammaCorrect(vec3 color) {
 }
 
 void main() {
-    // Since highest LOD is of 1x1 size, just fetch the luminance at [0, 0] location
-    float averageLuminance = texelFetch(uLuminance, ivec2(0), uHighestLuminanceLOD).r;
-    float exposure = 0.0001;//ExposureNominator / averageLuminance;
+    float exposure = texelFetch(uExposure, ivec2(0), 0).r;
 
     vec3 color = textureLod(uImage, vTexCoords, 0).rgb;
-    color *= exposure;  // Exposure Adjustment
+    color *= 0.001;//exposure;  // Exposure Adjustment
 
     bool tonemapOnLuminance = true;
 

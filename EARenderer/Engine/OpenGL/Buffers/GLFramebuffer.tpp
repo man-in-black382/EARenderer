@@ -6,8 +6,8 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#ifndef ghjk_hpp
-#define ghjk_hpp
+#ifndef GLFramebuffer_tpp
+#define GLFramebuffer_tpp
 
 namespace EARenderer {
 
@@ -71,4 +71,4 @@ namespace EARenderer {
 
 }
 
-#endif /* ghjk_hpp */
+#endif 

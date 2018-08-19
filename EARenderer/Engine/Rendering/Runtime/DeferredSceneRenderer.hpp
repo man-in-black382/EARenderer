@@ -63,7 +63,6 @@ namespace EARenderer {
 
     class DeferredSceneRenderer {
     private:
-        uint8_t mNumberOfCascades = 1;
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
 

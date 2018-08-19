@@ -23,9 +23,8 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 
-    void GLSLToneMapping::setLuminance(const GLFloatTexture2D<GLTexture::Float::R16F>& luminance) {
-        setUniformTexture(uint32_constant<ctcrc32("uLuminance")>, luminance);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uHighestLuminanceLOD")>).location(), luminance.mipMapsCount());
+    void GLSLToneMapping::setExposure(const GLFloatTexture2D<GLTexture::Float::R16F>& exposure) {
+        setUniformTexture(uint32_constant<ctcrc32("uExposure")>, exposure);
     }
 
 }

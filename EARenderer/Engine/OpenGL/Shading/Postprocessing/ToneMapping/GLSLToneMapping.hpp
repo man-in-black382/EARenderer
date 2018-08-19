@@ -1,13 +1,13 @@
 //
-//  GLSLLuminanceHistogram.hpp
+//  GLSLToneMapping.hpp
 //  EARenderer
 //
-//  Created by Pavel Muratov on 8/16/18.
+//  Created by Pavlo Muratov on 28.06.2018.
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#ifndef GLSLLuminanceHistogram_hpp
-#define GLSLLuminanceHistogram_hpp
+#ifndef GLSLToneMapping_hpp
+#define GLSLToneMapping_hpp
 
 #include "GLProgram.hpp"
 #include "GLTexture2D.hpp"
@@ -17,16 +17,16 @@
 
 namespace EARenderer {
 
-    class GLSLLuminanceHistogram: public GLProgram {
+    class GLSLToneMapping: public GLProgram {
     public:
         using GLProgram::GLProgram;
 
-        GLSLLuminanceHistogram();
+        GLSLToneMapping();
 
         void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
-        void setHistogramWidth(size_t width);
+        void setExposure(const GLFloatTexture2D<GLTexture::Float::R16F>& exposure);
     };
 
 }
 
-#endif /* GLSLLuminanceHistogram_hpp */
+#endif /* GLSLToneMapping_hpp */

@@ -235,7 +235,7 @@ namespace EARenderer {
 
             // Sample higher mip level to get rid of high frequency color information
             // It will be better to use low-frequency, blurred albedo texture since this algorithm is all about diffuse GI
-            int32_t mipLevel = material.albedoMap()->mipMapsCount() * 0.6;
+            int32_t mipLevel = material.albedoMap()->mipMapCount() * 0.6;
             GLTexture2DSampler sampler = material.albedoMap()->sampleTexels(mipLevel);
 
             // Actual algorithm that uniformly distributes surfels on geometry

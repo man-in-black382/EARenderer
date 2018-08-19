@@ -37,7 +37,7 @@ namespace EARenderer {
         size_t blurRadius = 3;
         float sigma = 0.84;
 
-        for (size_t mipLevel = 0; mipLevel < mirrorReflections->mipMapsCount(); mipLevel++) {
+        for (size_t mipLevel = 0; mipLevel < mirrorReflections->mipMapCount(); mipLevel++) {
             GaussianBlurSettings blurSettings { blurRadius, sigma, mipLevel, mipLevel + 1 };
             mBlurEffect.blur(mirrorReflections, mirrorReflections, texturePool, blurSettings);
         }

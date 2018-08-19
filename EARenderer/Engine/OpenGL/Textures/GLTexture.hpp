@@ -74,7 +74,7 @@ namespace EARenderer {
         static Size2D EstimatedMipSize(const Size2D& textureSize, uint8_t mipLevel);
 
         const Size2D& size() const;
-        uint16_t mipMapsCount() const;
+        uint16_t mipMapCount() const;
         
         void bind() const override;
         void generateMipMaps(size_t count = 1000);

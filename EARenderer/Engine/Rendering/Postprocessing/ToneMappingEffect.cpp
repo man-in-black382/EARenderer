@@ -13,23 +13,48 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ToneMappingEffect::ToneMappingEffect()
+    ToneMappingEffect::ToneMappingEffect(const Size2D& resolution)
     :
+    mLuminance(resolution),
     mHistogram(Size2D(64, 1)),
-    mLuminance(Size2D(1))
-    { }
-
-#pragma mark - Tone mapping
-
-    void ToneMappingEffect::buildHistogram(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
-                                           std::shared_ptr<PostprocessTexturePool> texturePool)
+    mExposure(Size2D(1))
     {
-        // Efficient Histogram Generation Using Scattering on GPUs
-        // https://developer.amd.com/wordpress/media/2012/10/GPUHistogramGeneration_preprint.pdf
+        // Luminance mip maps wiil be used to compute and store
+        // minimum and maximum luminances
+        mLuminance.generateMipMaps();
+    }
 
+#pragma mark - Private Interface
+
+    void ToneMappingEffect::measureLuminance(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
+                                             std::shared_ptr<PostprocessTexturePool> texturePool)
+    {
+        mLuminanceShader.bind();
+        mLuminanceShader.ensureSamplerValidity([&]() {
+            mLuminanceShader.setImage(*image);
+        });
+
+        texturePool->redirectRenderingToTextures(GLViewport(mLuminance.size()), &mLuminance);
+        TriangleStripQuad::Draw();
+    }
+
+    void ToneMappingEffect::computeLuminanceRange(std::shared_ptr<PostprocessTexturePool> texturePool) {
+        mLuminanceRangeShader.bind();
+        mLuminanceRangeShader.ensureSamplerValidity([&]() {
+            mLuminanceRangeShader.setLuminance(mLuminance);
+        });
+
+        for (size_t mipLevel = 0; mipLevel < mLuminance.mipMapCount(); mipLevel++) {
+            mLuminanceRangeShader.setMipLevel(mipLevel);
+            texturePool->redirectRenderingToTexturesMip(mipLevel + 1, &mLuminance);
+            TriangleStripQuad::Draw();
+        }
+    }
+
+    void ToneMappingEffect::buildHistogram(std::shared_ptr<PostprocessTexturePool> texturePool) {
         mHistogramShader.bind();
         mHistogramShader.ensureSamplerValidity([&]() {
-            mHistogramShader.setImage(*image);
+            mHistogramShader.setLuminance(mLuminance);
             mHistogramShader.setHistogramWidth(mHistogram.size().width);
         });
 
@@ -37,20 +62,35 @@ namespace EARenderer {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
-        Point::Draw(image->size().width * image->size().height);
+        Point::Draw(mLuminance.size().width * mLuminance.size().height);
         glDisable(GL_BLEND);
     }
-    
+
+    void ToneMappingEffect::computeExposure(std::shared_ptr<PostprocessTexturePool> texturePool) {
+        mExposureShader.bind();
+        mExposureShader.ensureSamplerValidity([&]() {
+            mExposureShader.setLuminanceHistogram(mHistogram);
+        });
+
+        texturePool->redirectRenderingToTextures(GLViewport(mExposure.size()), &mExposure);
+        TriangleStripQuad::Draw();
+    }
+
+#pragma mark - Public Interface
+
     void ToneMappingEffect::toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
                                     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
                                     std::shared_ptr<PostprocessTexturePool> texturePool)
     {
-        buildHistogram(inputImage, texturePool);
+//        measureLuminance(inputImage, texturePool);
+//        computeLuminanceRange(texturePool);
+//        buildHistogram(texturePool);
+//        computeExposure(texturePool);
 
         mToneMappingShader.bind();
         mToneMappingShader.ensureSamplerValidity([&]() {
             mToneMappingShader.setImage(*inputImage);
-//            mToneMappingShader.setLuminance(*luminance);
+            mToneMappingShader.setExposure(mExposure);
         });
 
         texturePool->redirectRenderingToTexturesMip(0, outputImage);

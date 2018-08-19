@@ -586,15 +586,14 @@ int ShadowCascadeIndex(vec3 worldPosition)
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
 
-    float fragDepth = projCoords.z;
+//    float locationOnSplitAxis = projCoords.z;
+    float locationOnSplitAxis = projCoords.x;
 
     for (int i = 0; i < kMaxCascades; ++i) {
-        if (fragDepth < uDepthSplits[i]) {
+        if (locationOnSplitAxis < uDepthSplits[i]) {
             return i;
         }
     }
-
-    return 0;
 }
 
 float ExponentialShadow(vec3 worldPosition) {
@@ -767,4 +766,12 @@ void main() {
 
     float luminocity = 0.2126 * specularAndDiffuse.r + 0.7152 * specularAndDiffuse.g + 0.0722 * specularAndDiffuse.b;
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+
+//    int cascade = ShadowCascadeIndex(worldPosition);
+//    switch (cascade) {
+//        case 0: oBaseOutput += vec4(0.5, 0.0, 0.0, 0.0); break;
+//        case 1: oBaseOutput += vec4(0.0, 0.5, 0.0, 0.0); break;
+//        case 2: oBaseOutput += vec4(0.0, 0.0, 0.5, 0.0); break;
+//        case 3: oBaseOutput += vec4(0.5, 0.5, 0.0, 0.0); break;
+//    }
 }

@@ -156,7 +156,7 @@ namespace EARenderer {
         return mSize;
     }
     
-    uint16_t GLTexture::mipMapsCount() const {
+    uint16_t GLTexture::mipMapCount() const {
         return mMipMapsCount;
     }
     

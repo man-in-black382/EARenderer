@@ -93,7 +93,7 @@ namespace EARenderer {
                 glm::vec4{ xf, -yf, far, 1.f }
             };
             
-            AxisAlignedBox3D box{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
+            AxisAlignedBox3D box = AxisAlignedBox3D::MaximumReversed();
 
             glm::mat4 scaleMat = glm::scale(scale);
 
@@ -120,36 +120,51 @@ namespace EARenderer {
         return cascades;
     }
     
-    FrustumCascades DirectionalLight::cascadesForWorldBoundingBox(const AxisAlignedBox3D& box, uint8_t numberOfCascades) const {
+    FrustumCascades DirectionalLight::cascadesForBoundingBox(const AxisAlignedBox3D& box, uint8_t numberOfCascades, bool rotationallyInvariant) const {
         FrustumCascades cascades;
         cascades.amount = numberOfCascades;
 
         glm::mat4 lightViewMat = viewMatrix();
-        AxisAlignedBox3D frustum{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
+        AxisAlignedBox3D frustum = AxisAlignedBox3D::MaximumReversed();
 
-        // Calculate rotationally invariant box to solve shimmering issues
-        glm::vec3 frustumCenter = box.center();
-        glm::vec3 diff = frustumCenter - box.min;
+        if (rotationallyInvariant) {
+            // Calculate rotationally invariant box to solve shimmering issues
+            glm::vec3 frustumCenter = box.center();
+            glm::vec3 diff = frustumCenter - box.min;
 
-        float describedSphereRadius = glm::length(diff);
+            float describedSphereRadius = glm::length(diff);
 
-        glm::vec4 lightSpaceFrustumCenter = lightViewMat * glm::vec4(frustumCenter, 1.0);
-        frustum.min = lightSpaceFrustumCenter - describedSphereRadius;
-        frustum.max = lightSpaceFrustumCenter + describedSphereRadius;
+            glm::vec4 lightSpaceFrustumCenter = lightViewMat * glm::vec4(frustumCenter, 1.0);
+            frustum.min = lightSpaceFrustumCenter - describedSphereRadius;
+            frustum.max = lightSpaceFrustumCenter + describedSphereRadius;
+        } else {
+            auto cornerPoints = box.cornerPoints();
+            for (auto& point : cornerPoints) {
+                glm::vec4 p = lightViewMat * point;
+                frustum.min = glm::min(frustum.min, glm::vec3{p});
+                frustum.max = glm::max(frustum.max, glm::vec3{p});
+            }
+        }
 
-        float zDelta = frustum.max.z - frustum.min.z;
-        float zStep = zDelta / numberOfCascades;
+//        float zDelta = frustum.max.z - frustum.min.z;
+//        float zStep = zDelta / numberOfCascades;
+        float xDelta = frustum.max.x - frustum.min.x;
+        float xStep = xDelta / numberOfCascades;
 
         // Split frustum
         for (int8_t i = 0; i < numberOfCascades; i++) {
-            glm::vec3 min(frustum.min.x, frustum.min.y, frustum.min.z + zStep * i);
-            glm::vec3 max(frustum.max.x, frustum.max.y, frustum.min.z + zStep * (i + 1));
+//            glm::vec3 min(frustum.min.x, frustum.min.y, frustum.min.z + zStep * i);
+//            glm::vec3 max(frustum.max.x, frustum.max.y, frustum.min.z + zStep * (i + 1));
+            glm::vec3 min(frustum.min.x + xStep * i, frustum.min.y, frustum.min.z);
+            glm::vec3 max(frustum.min.x + xStep * (i + 1), frustum.max.y, frustum.max.z);
             AxisAlignedBox3D cascade(min, max);
 
             cascades.lightSpaceCascades.emplace_back(cascade);
             cascades.lightViewProjections.emplace_back(cascade.asFrustum() * lightViewMat);
 
-            float split = zStep / zDelta * (i + 1);
+//            float split = zStep / zDelta * (i + 1);
+            float split = xStep / xDelta * (i + 1);
+
             // Transform to [-1; 1] range
             split = split * 2.0 - 1.0;
             // Account for OpenGL handedness by inverting split distance, which is located on the Z axis
@@ -162,5 +177,51 @@ namespace EARenderer {
         
         return cascades;
     }
-    
+
+//    FrustumCascades DirectionalLight::cascadesForWorldBoundingBox(const AxisAlignedBox3D& box, uint8_t numberOfCascades) const {
+//        FrustumCascades cascades;
+//        cascades.amount = numberOfCascades;
+//
+//        glm::mat4 lightViewMat = viewMatrix();
+//        AxisAlignedBox3D frustum{ glm::vec3{ std::numeric_limits<float>::max() }, glm::vec3{ std::numeric_limits<float>::lowest() } };
+//
+//        auto cornerPoints = box.cornerPoints();
+//        for (auto& point : cornerPoints) {
+//            glm::vec4 p = lightViewMat * point;
+//            frustum.min = glm::min(frustum.min, glm::vec3{p});
+//            frustum.max = glm::max(frustum.max, glm::vec3{p});
+//        }
+//
+//        float zDelta = frustum.max.z - frustum.min.z;
+//        float zStep = zDelta / numberOfCascades;
+//
+//        // Split frustum
+//        for (int8_t i = 0; i < numberOfCascades; i++) {
+//            glm::vec3 min(frustum.min.x, frustum.min.y, frustum.min.z + zStep * i);
+//            glm::vec3 max(frustum.max.x, frustum.max.y, frustum.min.z + zStep * (i + 1));
+//            AxisAlignedBox3D cascade(min, max);
+//
+//            cascades.lightViewProjections.emplace_back(cascade.asFrustum() * lightViewMat);
+//
+//            //            glm::vec4 split(0.0, 0.0, zStep * (i + 1), 1.0);
+//            //            split = cascade.asFrustum() * split;
+//            //            split /= split.w;
+//            //
+//            //            cascades.splits.push_back(split.z);
+//
+//            float split = zStep / zDelta * (i + 1);
+//            // Transform to [-1; 1] range
+//            split = split * 2.0 - 1.0;
+//
+//            cascades.splits.push_back(split);
+//        }
+//
+//        cascades.splitSpaceMatrix = frustum.asFrustum() * lightViewMat;
+//
+//        auto mn = cascades.splitSpaceMatrix * glm::vec4(box.min, 1.0);
+//        auto mx = cascades.splitSpaceMatrix * glm::vec4(box.max, 1.0);
+//
+//        return cascades;
+//    }
+
 }

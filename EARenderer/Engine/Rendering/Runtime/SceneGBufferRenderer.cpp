@@ -78,7 +78,7 @@ namespace EARenderer {
             mHiZBufferShader.setTexture(*mGBuffer->HiZBuffer);
         });
 
-        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer->mipMapsCount();
+        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer->mipMapCount();
 
         for (size_t mipLevel = 0; mipLevel < mGBuffer->HiZBufferMipCount; mipLevel++) {
             mHiZBufferShader.setMipLevel(mipLevel);

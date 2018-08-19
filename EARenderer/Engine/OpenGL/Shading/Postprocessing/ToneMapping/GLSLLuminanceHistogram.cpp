@@ -19,8 +19,9 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void GLSLLuminanceHistogram::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
-        setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
+    void GLSLLuminanceHistogram::setLuminance(const GLFloatTexture2D<GLTexture::Float::RG16F>& luminance) {
+        setUniformTexture(uint32_constant<ctcrc32("uLuminance")>, luminance);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLuminanceMaxLOD")>).location(), (GLint)luminance.mipMapCount());
     }
 
     void GLSLLuminanceHistogram::setHistogramWidth(size_t width) {

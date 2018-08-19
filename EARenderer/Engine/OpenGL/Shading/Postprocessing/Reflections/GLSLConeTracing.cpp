@@ -26,7 +26,7 @@ namespace EARenderer {
 
     void GLSLConeTracing::setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& reflections) {
         setUniformTexture(uint32_constant<ctcrc32("uReflections")>, reflections);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipCount")>).location(), int32_t(reflections.mipMapsCount()));
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipCount")>).location(), int32_t(reflections.mipMapCount()));
     }
 
     void GLSLConeTracing::setRayHitInfo(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& rayHitInfo) {

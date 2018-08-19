@@ -116,7 +116,7 @@ namespace EARenderer {
             throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
         }
 
-        if (mipLevel > texture.mipMapsCount()) {
+        if (mipLevel > texture.mipMapCount()) {
             throw std::invalid_argument(string_format("Texture %d doesn't have %d mip level, therefore cannot attach it to the FBO.", texture.name(), mipLevel));
         }
 

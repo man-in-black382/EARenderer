@@ -55,6 +55,7 @@ namespace EARenderer {
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Effects
+    mToneMappingEffect(settings.resolution),
     mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
 
     // Output frame
@@ -271,7 +272,7 @@ namespace EARenderer {
 #pragma mark - Public interface
 
     void DeferredSceneRenderer::render() {
-        mShadowCascades = mScene->directionalLight().cascadesForWorldBoundingBox(mScene->boundingBox());
+        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 2);
 
 //        swapFrames();
 
@@ -304,22 +305,21 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
 
-//        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
-
         renderFinalImage(*toneMappingOutputTexture);
 
-//        bindDefaultFramebuffer();
-//        GLViewport(Size2D(320, 30)).apply();
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//        mFSQuadShader.ensureSamplerValidity([&]() {
-//            mFSQuadShader.setTexture(mToneMappingEffect.mHistogram);
-//        });
-//
-//        TriangleStripQuad::Draw();
-//        glEnable(GL_DEPTH_TEST);
+        // debug
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
+
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(false);
+        mFSQuadShader.ensureSamplerValidity([&]() {
+            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
+        });
+
+        TriangleStripQuad::Draw();
+        glEnable(GL_DEPTH_TEST);
+        //
 
 //        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);
