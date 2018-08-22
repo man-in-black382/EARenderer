@@ -18,11 +18,16 @@
 namespace EARenderer {
     
     struct FrustumCascades {
+
+        enum class SplitAxis { X = 0, Y = 1, Z = 2 };
+
         std::vector<glm::mat4> lightViewProjections;
         std::vector<float> splits;
+        SplitAxis splitAxis;
         std::vector<AxisAlignedBox3D> lightSpaceCascades;
         glm::mat4 splitSpaceMatrix;
         uint8_t amount;
+
     };
     
 }

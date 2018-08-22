@@ -169,6 +169,7 @@ namespace EARenderer {
                 }
             }
 
+            // Prepare depth buffer for the next cascade rendering
             mDirectionalShadowFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
         }
 

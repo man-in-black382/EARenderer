@@ -88,6 +88,7 @@ uniform int uSHCompressionType;
 // Shadow mapping
 uniform mat4 uCSMSplitSpaceMat;
 uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform int uDepthSplitsAxis;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 
@@ -578,16 +579,15 @@ vec3 DirectionalLightRadiance() {
 ///////////////////////// Shadows //////////////////////////
 ////////////////////////////////////////////////////////////
 
-int ShadowCascadeIndex(vec3 worldPosition)
-{
+int ShadowCascadeIndex(vec3 worldPosition) {
+
     vec4 posInCSMSplitSpace = uCSMSplitSpaceMat * vec4(worldPosition, 1.0);
 
     vec3 projCoords = posInCSMSplitSpace.xyz / posInCSMSplitSpace.w;
     // No need to transform to [0,1] range,
     // because splits passed from client are in [-1; 1]
 
-//    float locationOnSplitAxis = projCoords.z;
-    float locationOnSplitAxis = projCoords.x;
+    float locationOnSplitAxis = projCoords[uDepthSplitsAxis];
 
     for (int i = 0; i < kMaxCascades; ++i) {
         if (locationOnSplitAxis < uDepthSplits[i]) {

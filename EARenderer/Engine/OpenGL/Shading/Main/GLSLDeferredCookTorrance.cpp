@@ -52,6 +52,8 @@ namespace EARenderer {
                            static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE,
                            reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
 
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplitsAxis")>).location(), static_cast<GLint>(cascades.splitAxis));
+
         glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
                      static_cast<GLsizei>(cascades.splits.size()),
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
