@@ -11,21 +11,31 @@
 
 namespace EARenderer {
 
-#pragma mark - 
+#pragma mark - Lifecycle
+
+    BloomEffect::BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer,
+                             std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+    :
+    EARenderer::PostprocessEffect(sharedFramebuffer, sharedTexturePool),
+    mSmallBlurEffect(sharedFramebuffer, sharedTexturePool),
+    mMediumBlurEffect(sharedFramebuffer, sharedTexturePool),
+    mLargeBlurEffect(sharedFramebuffer, sharedTexturePool)
+    { }
+
+#pragma mark - Bloom
 
     void BloomEffect::bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
                             std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
                             std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                            std::shared_ptr<PostprocessTexturePool> texturePool,
                             const BloomSettings& settings)
     {
         thresholdFilteredImage->generateMipMaps();
 
-        auto blurTexture = texturePool->claim();
+        auto blurTexture = mTexturePool->claim();
 
-        mSmallBlurEffect.blur(thresholdFilteredImage, blurTexture, texturePool, settings.smallBlurSettings);
-        mMediumBlurEffect.blur(thresholdFilteredImage, blurTexture, texturePool, settings.mediumBlurSettings);
-        mLargeBlurEffect.blur(thresholdFilteredImage, blurTexture, texturePool, settings.largeBlurSettings);
+        mSmallBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.smallBlurSettings);
+        mMediumBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.mediumBlurSettings);
+        mLargeBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.largeBlurSettings);
 
         float totalWeight = settings.smallBlurWeight + settings.mediumBlurWeight + settings.largeBlurWeight;
         float smallBlurWeightNorm = settings.smallBlurWeight / totalWeight * settings.bloomStrength;
@@ -38,10 +48,10 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        texturePool->redirectRenderingToTexturesMip(0, outputImage);
+        mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
         TriangleStripQuad::Draw();
 
-        texturePool->putBack(blurTexture);
+        mTexturePool->putBack(blurTexture);
     }
 
 }

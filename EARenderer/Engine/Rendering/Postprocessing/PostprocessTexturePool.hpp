@@ -25,43 +25,18 @@ namespace EARenderer {
     private:
         using TexturePointerSet = std::unordered_set<std::shared_ptr<PostprocessTexture>>;
 
-        GLFramebuffer mFramebuffer;
-        GLDepthRenderbuffer mDepthRenderbuffer;
         TexturePointerSet mFreeTextures;
         TexturePointerSet mClaimedTextures;
 
-        template<class TexturePtr>
-        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr texture);
-
-        template<class TexturePtr, class... TexturePtrs>
-        void replaceMipLevelsInFramebuffer(uint8_t mipLevel, TexturePtr head, TexturePtrs... tail);
+        Size2D mTextureResolution;
 
     public:
         PostprocessTexturePool(const Size2D& resolution);
 
         std::shared_ptr<PostprocessTexture> claim();
-
         void putBack(std::shared_ptr<PostprocessTexture> texture);
-
-        template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures);
-
-        template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures);
-
-        template<class... TexturePtrs>
-        void redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures);
-
-        template<class... TexturePtrs>
-        void redirectRenderingToTextures(TexturePtrs... textures);
-
-        void useInternalDepthBuffer();
-
-        void useExternalDepthBuffer(std::shared_ptr<GLDepthTexture2D> depthBuffer);
     };
 
 }
-
-#include "PostprocessTexturePool.tpp"
 
 #endif /* TexturePool_hpp */

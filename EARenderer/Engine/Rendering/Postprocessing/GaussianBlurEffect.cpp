@@ -14,13 +14,6 @@
 
 namespace EARenderer {
 
-#pragma mark - Lifecycle
-
-    GaussianBlurEffect::GaussianBlurEffect() { }
-
-#pragma mark - Getters
-
-
 #pragma mark - Blur
 
     void GaussianBlurEffect::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings) {
@@ -59,14 +52,13 @@ namespace EARenderer {
 
     void GaussianBlurEffect::blur(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
                                   std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                                  std::shared_ptr<PostprocessTexturePool> texturePool,
                                   const GaussianBlurSettings& settings)
     {
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         computeWeightsAndOffsetsIfNeeded(settings);
 
-        auto intermediateTexture = texturePool->claim();
+        auto intermediateTexture = mTexturePool->claim();
 
         mBlurShader.bind();
         mBlurShader.setRenderTargetSize(inputImage->mipMapSize(settings.outputImageMipLevel));
@@ -81,7 +73,7 @@ namespace EARenderer {
         //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
+        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
         TriangleStripQuad::Draw();
 
         // But, in the second pass, we read and write from and to the same
@@ -93,10 +85,10 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
-        texturePool->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
+        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
         TriangleStripQuad::Draw();
 
-        texturePool->putBack(intermediateTexture);
+        mTexturePool->putBack(intermediateTexture);
     }
 
 }

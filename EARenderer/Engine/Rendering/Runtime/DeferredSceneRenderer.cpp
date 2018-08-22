@@ -37,7 +37,10 @@ namespace EARenderer {
 
     // Shadow maps
     mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(2048))),
+    mDirectionalShadowFramebuffer(std::make_shared<GLFramebuffer>(Size2D(2048))),
     mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
+    mDirectionalShadowDepthRenderbuffer(mDirectionalShadowFramebuffer->size()),
+    mShadowBlurEffect(mDirectionalShadowFramebuffer, mDirectionalShadowTexturePool),
 
     // Surfels and surfel clusters
     mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
@@ -55,18 +58,19 @@ namespace EARenderer {
     mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Effects
-    mToneMappingEffect(settings.resolution),
+    mPostprocessFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
     mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
+    mBloomEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
+    mToneMappingEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
+    mSSREffect(mPostprocessFramebuffer, mPostprocessTexturePool),
 
     // Output frame
-    mFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
-    mPreviousFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution)),
-    mThresholdFilteredOutputFrame(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(settings.resolution))
+    mFrame(mPostprocessTexturePool->claim()),
+    mPreviousFrame(mPostprocessTexturePool->claim()),
+    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
     {
         setupGLState();
         setupFramebuffers();
-
-        mPostprocessTexturePool->useExternalDepthBuffer(mGBuffer->depthBuffer);
     }
 
 #pragma mark - Setters
@@ -101,6 +105,9 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
+
+        mDirectionalShadowFramebuffer->attachRenderbuffer(mDirectionalShadowDepthRenderbuffer);
+        mPostprocessFramebuffer->attachTexture(*mGBuffer->depthBuffer);
     }
 
 #pragma mark - Rendering
@@ -139,7 +146,7 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::renderShadowMaps() {
         auto renderTarget = mDirectionalShadowTexturePool->claim();
-        mDirectionalShadowTexturePool->redirectRenderingToTexturesMip(0, renderTarget);
+        mDirectionalShadowFramebuffer->redirectRenderingToTexturesMip(0, renderTarget);
 
         mDirectionalESMShader.bind();
         mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
@@ -161,12 +168,13 @@ namespace EARenderer {
                     subMesh.draw();
                 }
             }
+
+            mDirectionalShadowFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
         }
 
-        glColorMask(true, true, true, true);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-        mShadowBlurEffect.blur(renderTarget, mDirectionalExponentialShadowMap,
-                               mDirectionalShadowTexturePool, mSettings.meshSettings.shadowBlur);
+        mShadowBlurEffect.blur(renderTarget, mDirectionalExponentialShadowMap, mSettings.meshSettings.shadowBlur);
 
         mDirectionalShadowTexturePool->putBack(renderTarget);
     }
@@ -291,7 +299,7 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
-        mPostprocessTexturePool->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+        mPostprocessFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
 
         renderMeshes();
         renderSkybox();
@@ -300,26 +308,26 @@ namespace EARenderer {
 ////        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
 //
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mPostprocessTexturePool, mSettings.bloomSettings);
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
 
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture, mPostprocessTexturePool);
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
         renderFinalImage(*toneMappingOutputTexture);
 
-        // debug
-        bindDefaultFramebuffer();
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(false);
-        mFSQuadShader.ensureSamplerValidity([&]() {
-            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
-        });
-
-        TriangleStripQuad::Draw();
-        glEnable(GL_DEPTH_TEST);
-        //
+//        // debug
+//        bindDefaultFramebuffer();
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//        mFSQuadShader.ensureSamplerValidity([&]() {
+//            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
+//        });
+//
+//        TriangleStripQuad::Draw();
+//        glEnable(GL_DEPTH_TEST);
+//        //
 
 //        mPostprocessTexturePool->putBack(ssrOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

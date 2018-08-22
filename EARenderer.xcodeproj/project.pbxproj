@@ -639,6 +639,7 @@
 		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC6647C11FE7C10500732D7D /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
+		AC68DD58212D4F8B00EDACD6 /* PostprocessEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PostprocessEffect.hpp; sourceTree = "<group>"; };
 		AC6A3E2920ECC096008238E9 /* SceneGBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneGBuffer.hpp; sourceTree = "<group>"; };
 		AC6B0A4B20FC941800B49BB8 /* GLSLHiZBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLHiZBuffer.cpp; sourceTree = "<group>"; };
 		AC6B0A4C20FC941800B49BB8 /* GLSLHiZBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLHiZBuffer.hpp; sourceTree = "<group>"; };
@@ -1404,7 +1405,6 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
-		CEAC7ADB212035CE00CC8FC5 /* PostprocessTexturePool.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = PostprocessTexturePool.tpp; sourceTree = "<group>"; };
 		CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
@@ -1940,6 +1940,7 @@
 		AC71D95820D26FA6001524BC /* Postprocessing */ = {
 			isa = PBXGroup;
 			children = (
+				AC68DD58212D4F8B00EDACD6 /* PostprocessEffect.hpp */,
 				AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */,
 				AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */,
 				CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */,
@@ -1952,7 +1953,6 @@
 				CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp */,
 				CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */,
 				AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */,
-				CEAC7ADB212035CE00CC8FC5 /* PostprocessTexturePool.tpp */,
 				AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */,
 			);
 			path = Postprocessing;

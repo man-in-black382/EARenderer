@@ -9,6 +9,7 @@
 #ifndef BloomFilter_hpp
 #define BloomFilter_hpp
 
+#include "PostprocessEffect.hpp"
 #include "GLTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
@@ -19,7 +20,7 @@
 
 namespace EARenderer {
 
-    class BloomEffect {
+    class BloomEffect: public PostprocessEffect {
     private:
         GaussianBlurEffect mSmallBlurEffect;
         GaussianBlurEffect mMediumBlurEffect;
@@ -28,10 +29,11 @@ namespace EARenderer {
         GLSLBloom mBloomShader;
 
     public:
+        BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+
         void bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
                    std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
                    std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                   std::shared_ptr<PostprocessTexturePool> texturePool,
                    const BloomSettings& settings);
     };
 

@@ -76,6 +76,9 @@ namespace EARenderer {
         void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
 
     public:
+
+#pragma mark - Lifecycle
+
         GLFramebuffer(const Size2D& size);
 
         GLFramebuffer(GLFramebuffer&& that) = default;
@@ -83,7 +86,9 @@ namespace EARenderer {
         GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
 
         ~GLFramebuffer() override;
-        
+
+#pragma mark - Getters
+
         void bind() const override;
         
         const Size2D& size() const;
@@ -93,6 +98,8 @@ namespace EARenderer {
         bool isComplete() const;
 
         size_t maximumColorAttachmentsCount() const;
+
+#pragma mark - Attachments
 
         template <class Texture>
         void attachTextures(uint16_t mipLevel, const Texture& texture);
@@ -132,11 +139,55 @@ namespace EARenderer {
 
         void activateAllDrawBuffers();
 
-        void replaceMipLevel(const GLTexture& texture, uint16_t newMipLevel);
-
         void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
 
         void clear(UnderlyingBuffer bufferMask);
+
+#pragma mark - Convenience
+
+        /**
+         Replaces all currenlty attached textures with the passed ones and uses a specified mip map,
+         applies a specified non-standard viewport, activates draw buffers for all passed textures,
+         clears all necessary buffers
+
+         @param viewport non-standart viewport
+         @param mipLevel mip level to attach
+         @param textures textures to which rendering will be redirected
+         */
+        template<class... TexturePtrs>
+        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures);
+
+        /**
+         Replaces all currenlty attached textures with the passed ones and uses a specified mip map,
+         applies default viewport, activates draw buffers for all passed textures,
+         clears all necessary buffers
+
+         @param mipLevel mip level to attach
+         @param textures textures to which rendering will be redirected
+         */
+        template<class... TexturePtrs>
+        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures);
+
+        /**
+         Replaces all currenlty attached textures with the passed ones,
+         applies a specified non-standard viewport, activates draw buffers for all passed textures,
+         clears all necessary buffers
+
+         @param viewport non-standart viewport
+         @param textures textures to which rendering will be redirected
+         */
+        template<class... TexturePtrs>
+        void redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures);
+
+        /**
+         Replaces all currenlty attached textures with the passed ones,
+         applies default viewport, activates draw buffers for all passed textures,
+         clears all necessary buffers
+
+         @param textures textures to which rendering will be redirected
+         */
+        template<class... TexturePtrs>
+        void redirectRenderingToTextures(TexturePtrs... textures);
 
         // FIXME: Deprecated attachment functions
 

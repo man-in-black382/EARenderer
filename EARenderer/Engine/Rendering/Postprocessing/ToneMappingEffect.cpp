@@ -13,9 +13,10 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ToneMappingEffect::ToneMappingEffect(const Size2D& resolution)
+    ToneMappingEffect::ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
     :
-    mLuminance(resolution),
+    PostprocessEffect(sharedFramebuffer, sharedTexturePool),
+    mLuminance(sharedFramebuffer->size()),
     mHistogram(Size2D(64, 1)),
     mExposure(Size2D(1))
     {
@@ -34,7 +35,7 @@ namespace EARenderer {
             mLuminanceShader.setImage(*image);
         });
 
-        texturePool->redirectRenderingToTextures(GLViewport(mLuminance.size()), &mLuminance);
+        mFramebuffer->redirectRenderingToTextures(GLViewport(mLuminance.size()), &mLuminance);
         TriangleStripQuad::Draw();
     }
 
@@ -46,7 +47,7 @@ namespace EARenderer {
 
         for (size_t mipLevel = 0; mipLevel < mLuminance.mipMapCount(); mipLevel++) {
             mLuminanceRangeShader.setMipLevel(mipLevel);
-            texturePool->redirectRenderingToTexturesMip(mipLevel + 1, &mLuminance);
+            mFramebuffer->redirectRenderingToTexturesMip(mipLevel + 1, &mLuminance);
             TriangleStripQuad::Draw();
         }
     }
@@ -58,7 +59,7 @@ namespace EARenderer {
             mHistogramShader.setHistogramWidth(mHistogram.size().width);
         });
 
-        texturePool->redirectRenderingToTextures(GLViewport(mHistogram.size()), &mHistogram);
+        mFramebuffer->redirectRenderingToTextures(GLViewport(mHistogram.size()), &mHistogram);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
@@ -72,15 +73,14 @@ namespace EARenderer {
             mExposureShader.setLuminanceHistogram(mHistogram);
         });
 
-        texturePool->redirectRenderingToTextures(GLViewport(mExposure.size()), &mExposure);
+        mFramebuffer->redirectRenderingToTextures(GLViewport(mExposure.size()), &mExposure);
         TriangleStripQuad::Draw();
     }
 
 #pragma mark - Public Interface
 
     void ToneMappingEffect::toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                                    std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                                    std::shared_ptr<PostprocessTexturePool> texturePool)
+                                    std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage)
     {
 //        measureLuminance(inputImage, texturePool);
 //        computeLuminanceRange(texturePool);
@@ -93,7 +93,7 @@ namespace EARenderer {
             mToneMappingShader.setExposure(mExposure);
         });
 
-        texturePool->redirectRenderingToTexturesMip(0, outputImage);
+        mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
         TriangleStripQuad::Draw();
     }
 

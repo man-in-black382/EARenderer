@@ -275,15 +275,6 @@ namespace EARenderer {
         setRequestedDrawBuffers();
     }
 
-    void GLFramebuffer::replaceMipLevel(const GLTexture &texture, uint16_t newMipLevel) {
-        auto attachmentIt = mTextureAttachmentMap.find(texture.name());
-        if (attachmentIt == mTextureAttachmentMap.end()) {
-            throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot replace its mip level.", texture.name()));
-        }
-
-        attachTextureToColorAttachment(texture, attachmentIt->second.colorAttachment, newMipLevel);
-    }
-
     void GLFramebuffer::blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter) {
         auto fromAttachmentIt = mTextureAttachmentMap.find(fromTexture.name());
         if (fromAttachmentIt == mTextureAttachmentMap.end()) {

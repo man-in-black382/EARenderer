@@ -77,7 +77,9 @@ namespace EARenderer {
 
         FrustumCascades mShadowCascades;
         std::shared_ptr<PostprocessTexturePool> mDirectionalShadowTexturePool;
+        std::shared_ptr<GLFramebuffer> mDirectionalShadowFramebuffer;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mDirectionalExponentialShadowMap;
+        GLDepthRenderbuffer mDirectionalShadowDepthRenderbuffer;
         GaussianBlurEffect mShadowBlurEffect;
 
         GLSLDepthPrepass mDepthPrepassShader;
@@ -98,10 +100,11 @@ namespace EARenderer {
 
         GLSLFullScreenQuad mFSQuadShader;
 
+        std::shared_ptr<GLFramebuffer> mPostprocessFramebuffer;
+        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
         BloomEffect mBloomEffect;
         ToneMappingEffect mToneMappingEffect;
         ScreenSpaceReflectionEffect mSSREffect;
-        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
 
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mPreviousFrame;

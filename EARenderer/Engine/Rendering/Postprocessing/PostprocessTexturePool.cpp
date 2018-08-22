@@ -16,17 +16,14 @@ namespace EARenderer {
 
     PostprocessTexturePool::PostprocessTexturePool(const Size2D& resolution)
     :
-    mFramebuffer(resolution),
-    mDepthRenderbuffer(resolution)
-    {
-        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
-    }
+    mTextureResolution(resolution)
+    { }
 
 #pragma mark - Getters & Setters
 
     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> PostprocessTexturePool::claim() {
         if (mFreeTextures.empty()) {
-            auto texture = std::make_shared<PostprocessTexture>(mFramebuffer.size());
+            auto texture = std::make_shared<PostprocessTexture>(mTextureResolution);
             texture->generateMipMaps();
             mClaimedTextures.insert(texture);
             return texture;
@@ -46,14 +43,6 @@ namespace EARenderer {
         }
         mClaimedTextures.erase(textureIt);
         mFreeTextures.insert(texture);
-    }
-
-    void PostprocessTexturePool::useInternalDepthBuffer() {
-        mFramebuffer.attachRenderbuffer(mDepthRenderbuffer);
-    }
-
-    void PostprocessTexturePool::useExternalDepthBuffer(std::shared_ptr<GLDepthTexture2D> depthBuffer) {
-        mFramebuffer.attachTexture(*depthBuffer);
     }
 
 }

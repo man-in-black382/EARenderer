@@ -11,6 +11,32 @@
 
 namespace EARenderer {
 
+    template<class... TexturePtrs>
+    void GLFramebuffer::redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures) {
+        detachAllColorAttachments();
+        attachTextures(mipLevel, *textures...);
+        activateDrawBuffers(*textures...);
+        viewport.apply();
+        using type = std::underlying_type<UnderlyingBuffer>::type;
+        glClear(static_cast<type>(UnderlyingBuffer::Color) | static_cast<type>(UnderlyingBuffer::Depth));
+    }
+
+    template<class... TexturePtrs>
+    void GLFramebuffer::redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures) {
+        GLViewport viewport(GLTexture::EstimatedMipSize(size(), mipLevel));
+        redirectRenderingToTexturesMip(viewport, mipLevel, textures...);
+    }
+
+    template<class... TexturePtrs>
+    void GLFramebuffer::redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures) {
+        detachAllColorAttachments();
+        attachTextures(0, *textures...);
+        activateDrawBuffers(*textures...);
+        viewport.apply();
+        using type = std::underlying_type<UnderlyingBuffer>::type;
+        glClear(static_cast<type>(UnderlyingBuffer::Color) | static_cast<type>(UnderlyingBuffer::Depth));
+    }
+
     template <class Texture>
     void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture& texture) {
         attachTextureToColorAttachment(texture, ColorAttachment::Automatic, mipLevel);

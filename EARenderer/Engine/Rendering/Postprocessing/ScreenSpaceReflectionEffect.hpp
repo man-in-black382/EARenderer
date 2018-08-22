@@ -9,6 +9,7 @@
 #ifndef ScreenSpaceReflectionEffect_hpp
 #define ScreenSpaceReflectionEffect_hpp
 
+#include "PostprocessEffect.hpp"
 #include "GLSLScreenSpaceReflections.hpp"
 #include "GLSLConeTracing.hpp"
 #include "PostprocessTexturePool.hpp"
@@ -20,7 +21,7 @@
 
 namespace EARenderer {
 
-    class ScreenSpaceReflectionEffect {
+    class ScreenSpaceReflectionEffect: public PostprocessEffect {
     private:
         GLSLScreenSpaceReflections mSSRShader;
         GLSLConeTracing mConeTracingShader;
@@ -28,24 +29,22 @@ namespace EARenderer {
         
         void traceReflections(const Camera& camera,
                               std::shared_ptr<const SceneGBuffer> GBuffer,
-                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo,
-                              std::shared_ptr<PostprocessTexturePool> texturePool);
+                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo);
 
-        void blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections,
-                             std::shared_ptr<PostprocessTexturePool> texturePool);
+        void blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections);
 
         void traceCones(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
                         std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> rayHitInfo,
                         std::shared_ptr<const SceneGBuffer> GBuffer,
-                        std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                        std::shared_ptr<PostprocessTexturePool> texturePool);
+                        std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
 
     public:
+        ScreenSpaceReflectionEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+
         void applyReflections(const Camera& camera,
                               std::shared_ptr<const SceneGBuffer> GBuffer,
                               std::shared_ptr<PostprocessTexturePool::PostprocessTexture> lightBuffer,
-                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                              std::shared_ptr<PostprocessTexturePool> texturePool);
+                              std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
     };
 
 }

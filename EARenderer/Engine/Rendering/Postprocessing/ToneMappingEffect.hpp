@@ -9,6 +9,7 @@
 #ifndef ToneMappingEffect_hpp
 #define ToneMappingEffect_hpp
 
+#include "PostprocessEffect.hpp"
 #include "GLTexture2D.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "GLFramebuffer.hpp"
@@ -26,7 +27,7 @@ namespace EARenderer {
     // Efficient Histogram Generation Using Scattering on GPUs
     // https://developer.amd.com/wordpress/media/2012/10/GPUHistogramGeneration_preprint.pdf
 
-    class ToneMappingEffect {
+    class ToneMappingEffect: public PostprocessEffect {
     public:
         GLSLLuminance mLuminanceShader;
         GLSLLuminanceRange mLuminanceRangeShader;
@@ -47,11 +48,10 @@ namespace EARenderer {
         void computeExposure(std::shared_ptr<PostprocessTexturePool> texturePool);
 
     public:
-        ToneMappingEffect(const Size2D& resolution);
+        ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
         void toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                     std::shared_ptr<PostprocessTexturePool> texturePool);
+                     std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
     };
 
 }
