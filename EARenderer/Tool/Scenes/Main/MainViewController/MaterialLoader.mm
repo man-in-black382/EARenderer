@@ -30,6 +30,39 @@
     return std::string(path.UTF8String);
 }
 
++ (EARenderer::ID)load_marble01_MaterialToPool:(EARenderer::ResourcePool *)pool {
+    return pool->materials.insert({
+        [self pathForResource:@"Marble01_col.jpg"],
+        [self pathForResource:@"Marble01_nrm.jpg"],
+        [self pathForBlankBlackImage],
+        [self pathForResource:@"Marble01_rgh.jpg"],
+        [self pathForResource:@"Marble01_mask.jpg"],
+        [self pathForResource:@"Marble01_disp.jpg"]
+    });
+}
+
++ (EARenderer::ID)load_sandFloor_MaterialToPool:(EARenderer::ResourcePool *)pool {
+    return pool->materials.insert({
+        [self pathForResource:@"Ground05_col.jpg"],
+        [self pathForResource:@"Ground05_nrm.jpg"],
+        [self pathForBlankBlackImage],
+        [self pathForResource:@"Ground05_rgh.jpg"],
+        [self pathForResource:@"Ground05_AO.jpg"],
+        [self pathForResource:@"Ground05_disp.jpg"]
+    });
+}
+
++ (EARenderer::ID)load_marbleTiles_MaterialToPool:(EARenderer::ResourcePool *)pool {
+    return pool->materials.insert({
+        [self pathForResource:@"Tiles12_col.jpg"],
+        [self pathForResource:@"Tiles12_nrm.jpg"],
+        [self pathForBlankBlackImage],
+        [self pathForResource:@"Tiles12_rgh.jpg"],
+        [self pathForBlankWhiteImage],
+        [self pathForResource:@"Tiles12_disp.jpg"]
+    });
+}
+
 + (EARenderer::ID)load_testBricks_MaterialToPool:(EARenderer::ResourcePool *)pool {
     return pool->materials.insert({
         [self pathForResource:@"bricks2.jpg"],

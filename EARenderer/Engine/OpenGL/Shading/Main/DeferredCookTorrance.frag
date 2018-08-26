@@ -758,6 +758,10 @@ void main() {
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
 
+    // DEBUG
+    indirectRadiance = vec3(0.1);
+    //
+
     vec3 SSR = vec3(0.0);
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow, SSR);

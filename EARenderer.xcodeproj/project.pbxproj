@@ -11,7 +11,7 @@
 		AC10304920C7E0F300920690 /* DepthPrepass.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC10304720C7E0F200920690 /* DepthPrepass.frag */; };
 		AC10304A20C7E0F300920690 /* DepthPrepass.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC10304820C7E0F300920690 /* DepthPrepass.vert */; };
 		AC10304D20C7E0FF00920690 /* GLSLDepthPrepass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC10304B20C7E0FF00920690 /* GLSLDepthPrepass.cpp */; };
-		AC1F6BDA20E2321200E81EB0 /* BloomEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */; };
+		AC1F6BDA20E2321200E81EB0 /* BloomEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC1F6BD820E2321200E81EB0 /* BloomEffect.tpp */; };
 		AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */; };
 		AC3275B420D24FA800899697 /* GaussianFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3275B220D24FA800899697 /* GaussianFunction.cpp */; };
 		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
@@ -31,7 +31,7 @@
 		AC6CD81220D11838000E6A22 /* GLSLGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6CD81020D11838000E6A22 /* GLSLGaussianBlur.cpp */; };
 		AC6CD81620D11B9A000E6A22 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */; };
 		AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */; };
-		AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */; };
+		AC71D95720D26F9D001524BC /* GaussianBlurEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.tpp */; };
 		AC7230AA212562E600CB7654 /* GLSLLuminanceHistogram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC7230A8212562E600CB7654 /* GLSLLuminanceHistogram.cpp */; };
 		AC7230AC212562FA00CB7654 /* LuminanceHistogram.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC7230AB212562FA00CB7654 /* LuminanceHistogram.frag */; };
 		AC7230AE2125638C00CB7654 /* LuminanceHistogram.vert in Resources */ = {isa = PBXBuildFile; fileRef = AC7230AD2125638C00CB7654 /* LuminanceHistogram.vert */; };
@@ -73,6 +73,20 @@
 		CE2B60F520E5348200370844 /* GLSLToneMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */; };
 		CE2B60F720E534E100370844 /* ToneMapping.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE2B60F620E534E100370844 /* ToneMapping.frag */; };
 		CE2E3ADA2104AF95004D2068 /* GLTextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2E3AD82104AF95004D2068 /* GLTextureFactory.cpp */; };
+		CE34193D21315409001BA6FB /* Marble01_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34193821315409001BA6FB /* Marble01_col.jpg */; };
+		CE34193E21315409001BA6FB /* Marble01_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34193921315409001BA6FB /* Marble01_nrm.jpg */; };
+		CE34193F21315409001BA6FB /* Marble01_mask.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34193A21315409001BA6FB /* Marble01_mask.jpg */; };
+		CE34194021315409001BA6FB /* Marble01_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34193B21315409001BA6FB /* Marble01_rgh.jpg */; };
+		CE34194121315409001BA6FB /* Marble01_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34193C21315409001BA6FB /* Marble01_disp.jpg */; };
+		CE341947213156E5001BA6FB /* Tiles12_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE341943213156E5001BA6FB /* Tiles12_col.jpg */; };
+		CE341948213156E5001BA6FB /* Tiles12_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE341944213156E5001BA6FB /* Tiles12_nrm.jpg */; };
+		CE341949213156E5001BA6FB /* Tiles12_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE341945213156E5001BA6FB /* Tiles12_rgh.jpg */; };
+		CE34194A213156E5001BA6FB /* Tiles12_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE341946213156E5001BA6FB /* Tiles12_disp.jpg */; };
+		CE34195121315C94001BA6FB /* Ground05_nrm.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34194C21315C94001BA6FB /* Ground05_nrm.jpg */; };
+		CE34195221315C94001BA6FB /* Ground05_disp.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34194D21315C94001BA6FB /* Ground05_disp.jpg */; };
+		CE34195321315C94001BA6FB /* Ground05_col.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34194E21315C94001BA6FB /* Ground05_col.jpg */; };
+		CE34195421315C94001BA6FB /* Ground05_rgh.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34194F21315C94001BA6FB /* Ground05_rgh.jpg */; };
+		CE34195521315C94001BA6FB /* Ground05_AO.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE34195021315C94001BA6FB /* Ground05_AO.jpg */; };
 		CE3791841FA3669D0049BD1B /* Titanium-Scuffed_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791831FA366980049BD1B /* Titanium-Scuffed_basecolor.png */; };
 		CE3791851FA3669D0049BD1B /* Titanium-Scuffed_metallic.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */; };
 		CE3791861FA3669D0049BD1B /* Titanium-Scuffed_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */; };
@@ -614,7 +628,7 @@
 		AC11B4141FE9081400E41A9B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
 		AC1F6BD620E2301400E81EB0 /* ThreadPool.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadPool.hpp; sourceTree = "<group>"; };
 		AC1F6BD720E2301400E81EB0 /* ThreadSafeQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ThreadSafeQueue.hpp; sourceTree = "<group>"; };
-		AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BloomEffect.cpp; sourceTree = "<group>"; };
+		AC1F6BD820E2321200E81EB0 /* BloomEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = BloomEffect.tpp; sourceTree = "<group>"; };
 		AC1F6BD920E2321200E81EB0 /* BloomEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BloomEffect.hpp; sourceTree = "<group>"; };
 		AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeGenerator.cpp; sourceTree = "<group>"; };
 		AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
@@ -651,7 +665,7 @@
 		AC6CD81420D11B9A000E6A22 /* GaussianBlur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GaussianBlur.frag; sourceTree = "<group>"; };
 		AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PostprocessTexturePool.cpp; sourceTree = "<group>"; };
 		AC6D0C7120EB601D00A329E2 /* PostprocessTexturePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PostprocessTexturePool.hpp; sourceTree = "<group>"; };
-		AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianBlurEffect.cpp; sourceTree = "<group>"; };
+		AC71D95520D26F9D001524BC /* GaussianBlurEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = GaussianBlurEffect.tpp; sourceTree = "<group>"; };
 		AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurEffect.hpp; sourceTree = "<group>"; };
 		AC7230A8212562E600CB7654 /* GLSLLuminanceHistogram.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLuminanceHistogram.cpp; sourceTree = "<group>"; };
 		AC7230A9212562E600CB7654 /* GLSLLuminanceHistogram.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceHistogram.hpp; sourceTree = "<group>"; };
@@ -744,6 +758,20 @@
 		CE2B60F620E534E100370844 /* ToneMapping.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ToneMapping.frag; sourceTree = "<group>"; };
 		CE2E3AD82104AF95004D2068 /* GLTextureFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureFactory.cpp; sourceTree = "<group>"; };
 		CE2E3AD92104AF95004D2068 /* GLTextureFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFactory.hpp; sourceTree = "<group>"; };
+		CE34193821315409001BA6FB /* Marble01_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Marble01_col.jpg; sourceTree = "<group>"; };
+		CE34193921315409001BA6FB /* Marble01_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Marble01_nrm.jpg; sourceTree = "<group>"; };
+		CE34193A21315409001BA6FB /* Marble01_mask.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Marble01_mask.jpg; sourceTree = "<group>"; };
+		CE34193B21315409001BA6FB /* Marble01_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Marble01_rgh.jpg; sourceTree = "<group>"; };
+		CE34193C21315409001BA6FB /* Marble01_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Marble01_disp.jpg; sourceTree = "<group>"; };
+		CE341943213156E5001BA6FB /* Tiles12_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tiles12_col.jpg; sourceTree = "<group>"; };
+		CE341944213156E5001BA6FB /* Tiles12_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tiles12_nrm.jpg; sourceTree = "<group>"; };
+		CE341945213156E5001BA6FB /* Tiles12_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tiles12_rgh.jpg; sourceTree = "<group>"; };
+		CE341946213156E5001BA6FB /* Tiles12_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Tiles12_disp.jpg; sourceTree = "<group>"; };
+		CE34194C21315C94001BA6FB /* Ground05_nrm.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Ground05_nrm.jpg; sourceTree = "<group>"; };
+		CE34194D21315C94001BA6FB /* Ground05_disp.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Ground05_disp.jpg; sourceTree = "<group>"; };
+		CE34194E21315C94001BA6FB /* Ground05_col.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Ground05_col.jpg; sourceTree = "<group>"; };
+		CE34194F21315C94001BA6FB /* Ground05_rgh.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Ground05_rgh.jpg; sourceTree = "<group>"; };
+		CE34195021315C94001BA6FB /* Ground05_AO.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Ground05_AO.jpg; sourceTree = "<group>"; };
 		CE3791801FA366980049BD1B /* Titanium-Scuffed_roughness.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_roughness.png"; sourceTree = "<group>"; };
 		CE3791811FA366980049BD1B /* Titanium-Scuffed_metallic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_metallic.png"; sourceTree = "<group>"; };
 		CE3791821FA366980049BD1B /* Titanium-Scuffed_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Titanium-Scuffed_normal.png"; sourceTree = "<group>"; };
@@ -1941,10 +1969,10 @@
 			isa = PBXGroup;
 			children = (
 				AC68DD58212D4F8B00EDACD6 /* PostprocessEffect.hpp */,
-				AC71D95520D26F9D001524BC /* GaussianBlurEffect.cpp */,
+				AC71D95520D26F9D001524BC /* GaussianBlurEffect.tpp */,
 				AC71D95620D26F9D001524BC /* GaussianBlurEffect.hpp */,
 				CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */,
-				AC1F6BD820E2321200E81EB0 /* BloomEffect.cpp */,
+				AC1F6BD820E2321200E81EB0 /* BloomEffect.tpp */,
 				AC1F6BD920E2321200E81EB0 /* BloomEffect.hpp */,
 				CE79B26520E51F89004E28EF /* BloomSettings.hpp */,
 				AC40397C20E38A680079112E /* ToneMappingEffect.cpp */,
@@ -2171,6 +2199,41 @@
 				CE1C97532067B09E006A4A73 /* MakeUnique.hpp */,
 			);
 			path = detail;
+			sourceTree = "<group>";
+		};
+		CE34193721315409001BA6FB /* [4K]Marble01 */ = {
+			isa = PBXGroup;
+			children = (
+				CE34193821315409001BA6FB /* Marble01_col.jpg */,
+				CE34193921315409001BA6FB /* Marble01_nrm.jpg */,
+				CE34193A21315409001BA6FB /* Marble01_mask.jpg */,
+				CE34193B21315409001BA6FB /* Marble01_rgh.jpg */,
+				CE34193C21315409001BA6FB /* Marble01_disp.jpg */,
+			);
+			path = "[4K]Marble01";
+			sourceTree = "<group>";
+		};
+		CE341942213156E5001BA6FB /* [4K]Tiles12 */ = {
+			isa = PBXGroup;
+			children = (
+				CE341943213156E5001BA6FB /* Tiles12_col.jpg */,
+				CE341944213156E5001BA6FB /* Tiles12_nrm.jpg */,
+				CE341945213156E5001BA6FB /* Tiles12_rgh.jpg */,
+				CE341946213156E5001BA6FB /* Tiles12_disp.jpg */,
+			);
+			path = "[4K]Tiles12";
+			sourceTree = "<group>";
+		};
+		CE34194B21315C94001BA6FB /* [4K]Ground05 */ = {
+			isa = PBXGroup;
+			children = (
+				CE34194C21315C94001BA6FB /* Ground05_nrm.jpg */,
+				CE34194D21315C94001BA6FB /* Ground05_disp.jpg */,
+				CE34194E21315C94001BA6FB /* Ground05_col.jpg */,
+				CE34194F21315C94001BA6FB /* Ground05_rgh.jpg */,
+				CE34195021315C94001BA6FB /* Ground05_AO.jpg */,
+			);
+			path = "[4K]Ground05";
 			sourceTree = "<group>";
 		};
 		CE3791751FA366730049BD1B /* Scuffed Titanium */ = {
@@ -2430,6 +2493,9 @@
 		CE70F80E1F8F8EBD00AD9027 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				CE34194B21315C94001BA6FB /* [4K]Ground05 */,
+				CE341942213156E5001BA6FB /* [4K]Tiles12 */,
+				CE34193721315409001BA6FB /* [4K]Marble01 */,
 				CE4BF64820C28DA7001B0458 /* test_bricks */,
 				CEC2192D20C0744C00767342 /* [4K]Bricks08 */,
 				CEC2194B20C0744E00767342 /* [4K]Fabric05 */,
@@ -3592,10 +3658,13 @@
 				CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */,
 				CEC2195220C0744E00767342 /* Bricks08_nrm.jpg in Resources */,
 				CE70FA561F8F8F7400AD9027 /* CubemapRendering.vert in Resources */,
+				CE34194121315409001BA6FB /* Marble01_disp.jpg in Resources */,
 				CE70FA571F8F8F7400AD9027 /* EquirectangularMapConversion.frag in Resources */,
 				CE4DE2251FA60CFF0067729A /* Sponza_Curtain_Blue_diffuse.tga in Resources */,
 				CEC2196820C0744E00767342 /* Rocks01_rgh.jpg in Resources */,
+				CE34195221315C94001BA6FB /* Ground05_disp.jpg in Resources */,
 				CE4DE2511FA60CFF0067729A /* VaseRound_roughness.tga in Resources */,
+				CE34195321315C94001BA6FB /* Ground05_col.jpg in Resources */,
 				CEC2196A20C0744E00767342 /* Fabric05_rgh.jpg in Resources */,
 				CECD41DD20D67FDA00D40D32 /* sponza_lightweight.obj in Resources */,
 				CE70FA581F8F8F7400AD9027 /* CubemapRendering.geom in Resources */,
@@ -3620,6 +3689,7 @@
 				CE4DE20C1FA60CFE0067729A /* copyright.txt in Resources */,
 				CE70FA5D1F8F8F7400AD9027 /* OmnidirectionalBlinnPhong.vert in Resources */,
 				AC740EB8210F038A0029B99A /* SSRConeTracing.frag in Resources */,
+				CE341947213156E5001BA6FB /* Tiles12_col.jpg in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
 				AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */,
@@ -3643,11 +3713,14 @@
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
 				CE7A013B20B165850002D422 /* ProbeOcclusionRendering.geom in Resources */,
 				CE4DE2191FA60CFE0067729A /* Sponza_Ceiling_diffuse.tga in Resources */,
+				CE34195421315C94001BA6FB /* Ground05_rgh.jpg in Resources */,
+				CE34193E21315409001BA6FB /* Marble01_nrm.jpg in Resources */,
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
 				CE70FA601F8F8F7400AD9027 /* DirectionalDepth.frag in Resources */,
 				AC3C9EB420720F2300F35EB3 /* GridLightProbeRendering.vert in Resources */,
 				CE4DE23A1FA60CFF0067729A /* Sponza_FlagPole_normal.tga in Resources */,
 				CE4DE2141FA60CFE0067729A /* Sponza_Arch_normal.tga in Resources */,
+				CE34194021315409001BA6FB /* Marble01_rgh.jpg in Resources */,
 				CE70FA611F8F8F7400AD9027 /* DirectionalBlinnPhong.frag in Resources */,
 				CE4DE20F1FA60CFE0067729A /* Lion_Albedo.tga in Resources */,
 				CE4DE2151FA60CFE0067729A /* Sponza_Arch_roughness.tga in Resources */,
@@ -3656,6 +3729,7 @@
 				CE4DE2281FA60CFF0067729A /* Sponza_Curtain_Green_normal.tga in Resources */,
 				CE4DE22C1FA60CFF0067729A /* Sponza_Curtain_roughness.tga in Resources */,
 				CE53ADE7209E2BD600749A96 /* Fabric03_nrm.jpg in Resources */,
+				CE341948213156E5001BA6FB /* Tiles12_nrm.jpg in Resources */,
 				CE70FA631F8F8F7400AD9027 /* OmnidirectionalDepth.vert in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
 				ACC539322068F80100B150B5 /* GridLightProbesUpdate.geom in Resources */,
@@ -3665,6 +3739,7 @@
 				CEC2196E20C0744E00767342 /* Fabric05_mask.jpg in Resources */,
 				CE4DE2451FA60CFF0067729A /* sponzaPBR.mtl in Resources */,
 				CE4DE24B1FA60CFF0067729A /* VaseHanging_roughness.tga in Resources */,
+				CE34193F21315409001BA6FB /* Marble01_mask.jpg in Resources */,
 				CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */,
 				CEF0162120D41A9800E0F0AB /* DirectionalExponentialShadowMap.vert in Resources */,
 				CEC2195C20C0744E00767342 /* PavingStones09_AO.jpg in Resources */,
@@ -3694,6 +3769,7 @@
 				CE4DE2051FA60CFE0067729A /* Background_Albedo.tga in Resources */,
 				CEFB7A2A2051ADBA00364550 /* CubeEdgesRendering.geom in Resources */,
 				CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */,
+				CE34195521315C94001BA6FB /* Ground05_AO.jpg in Resources */,
 				CE4DE2131FA60CFE0067729A /* Sponza_Arch_diffuse.tga in Resources */,
 				CE4DE20D1FA60CFE0067729A /* Dielectric_metallic.tga in Resources */,
 				CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */,
@@ -3705,6 +3781,7 @@
 				CE4DE23D1FA60CFF0067729A /* Sponza_Floor_normal.tga in Resources */,
 				CE4DE24F1FA60CFF0067729A /* VaseRound_diffuse.tga in Resources */,
 				CE70FA9E1F8F91A200AD9027 /* Assets.xcassets in Resources */,
+				CE34195121315C94001BA6FB /* Ground05_nrm.jpg in Resources */,
 				CEA0B90F20E7743700257E37 /* GBuffer.frag in Resources */,
 				CE70FA741F8F8F7400AD9027 /* rustediron2_normal.png in Resources */,
 				CEC2195F20C0744E00767342 /* PavingStones09_disp.jpg in Resources */,
@@ -3731,6 +3808,7 @@
 				CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */,
 				CE4DE21A1FA60CFE0067729A /* Sponza_Ceiling_normal.tga in Resources */,
 				CE4DE21D1FA60CFE0067729A /* Sponza_Column_a_normal.tga in Resources */,
+				CE34193D21315409001BA6FB /* Marble01_col.jpg in Resources */,
 				CE4DE23E1FA60CFF0067729A /* Sponza_Floor_roughness.tga in Resources */,
 				CE7A013A20B165850002D422 /* ProbeOcclusionRendering.frag in Resources */,
 				CE3791871FA3669D0049BD1B /* Titanium-Scuffed_roughness.png in Resources */,
@@ -3765,11 +3843,13 @@
 				CE4DE22E1FA60CFF0067729A /* Sponza_Details_metallic.tga in Resources */,
 				CE4DE2321FA60CFF0067729A /* Sponza_Fabric_Blue_normal.tga in Resources */,
 				CE4BF64E20C28DA8001B0458 /* bricks2.jpg in Resources */,
+				CE341949213156E5001BA6FB /* Tiles12_rgh.jpg in Resources */,
 				CEC2196C20C0744E00767342 /* Fabric05_disp.jpg in Resources */,
 				CE82DAF520511ABB00329E2E /* CubeSidesRendering.geom in Resources */,
 				CE4DE2471FA60CFF0067729A /* Vase_normal.tga in Resources */,
 				ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */,
 				CE4DE2171FA60CFE0067729A /* Sponza_Bricks_a_Normal.tga in Resources */,
+				CE34194A213156E5001BA6FB /* Tiles12_disp.jpg in Resources */,
 				CE4DE23B1FA60CFF0067729A /* Sponza_FlagPole_roughness.tga in Resources */,
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
 				CEA0B91920E79D8F00257E37 /* DeferredCookTorrance.frag in Resources */,
@@ -3822,7 +3902,7 @@
 				CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */,
 				ACFF0D8E20402260005A9700 /* GLPipelineState.cpp in Sources */,
 				AC3C9EB720720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp in Sources */,
-				AC1F6BDA20E2321200E81EB0 /* BloomEffect.cpp in Sources */,
+				AC1F6BDA20E2321200E81EB0 /* BloomEffect.tpp in Sources */,
 				CE9617781FF83CCD00A5E9FC /* GLSLSurfelRendering.cpp in Sources */,
 				CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */,
 				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
@@ -3925,7 +4005,7 @@
 				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */,
 				CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */,
-				AC71D95720D26F9D001524BC /* GaussianBlurEffect.cpp in Sources */,
+				AC71D95720D26F9D001524BC /* GaussianBlurEffect.tpp in Sources */,
 				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
 				AC823D2420CA7F5900D25CB3 /* GLLDRTexture3D.cpp in Sources */,
 				CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */,

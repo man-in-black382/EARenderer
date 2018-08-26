@@ -12,6 +12,12 @@
 
 @interface MaterialLoader : NSObject
 
++ (EARenderer::ID)load_marble01_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
++ (EARenderer::ID)load_sandFloor_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
++ (EARenderer::ID)load_marbleTiles_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
 + (EARenderer::ID)load_testBricks_MaterialToPool:(EARenderer::ResourcePool *)pool;
 
 + (EARenderer::ID)load_bricks08_MaterialToPool:(EARenderer::ResourcePool *)pool;

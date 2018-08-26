@@ -20,23 +20,26 @@
 
 namespace EARenderer {
 
-    class BloomEffect: public PostprocessEffect {
+    template <GLTexture::Float TextureFormat>
+    class BloomEffect: public PostprocessEffect<TextureFormat> {
     private:
-        GaussianBlurEffect mSmallBlurEffect;
-        GaussianBlurEffect mMediumBlurEffect;
-        GaussianBlurEffect mLargeBlurEffect;
+        GaussianBlurEffect<TextureFormat> mSmallBlurEffect;
+        GaussianBlurEffect<TextureFormat> mMediumBlurEffect;
+        GaussianBlurEffect<TextureFormat> mLargeBlurEffect;
 
         GLSLBloom mBloomShader;
 
     public:
-        BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+        BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
 
-        void bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
-                   std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
-                   std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
+        void bloom(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseImage,
+                   std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> thresholdFilteredImage,
+                   std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
                    const BloomSettings& settings);
     };
 
 }
+
+#include "BloomEffect.tpp"
 
 #endif /* BloomFilter_hpp */
