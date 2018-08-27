@@ -14,7 +14,7 @@ namespace EARenderer {
 
     template <GLTexture::Float TextureFormat>
     BloomEffect<TextureFormat>::BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer,
-                             std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool)
+                                            std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool)
     :
     PostprocessEffect<TextureFormat>(sharedFramebuffer, sharedTexturePool),
     mSmallBlurEffect(sharedFramebuffer, sharedTexturePool),
@@ -26,13 +26,13 @@ namespace EARenderer {
 
     template <GLTexture::Float TextureFormat>
     void BloomEffect<TextureFormat>::bloom(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseImage,
-    std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> thresholdFilteredImage,
-    std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
-    const BloomSettings& settings);
+                                           std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> thresholdFilteredImage,
+                                           std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
+                                           const BloomSettings& settings)
     {
         thresholdFilteredImage->generateMipMaps();
 
-        auto blurTexture = mTexturePool->claim();
+        auto blurTexture = this->mTexturePool->claim();
 
         mSmallBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.smallBlurSettings);
         mMediumBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.mediumBlurSettings);
@@ -49,10 +49,10 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
         TriangleStripQuad::Draw();
 
-        mTexturePool->putBack(blurTexture);
+        this->mTexturePool->putBack(blurTexture);
     }
 
 }

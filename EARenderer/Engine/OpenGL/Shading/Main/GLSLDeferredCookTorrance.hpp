@@ -47,7 +47,7 @@ namespace EARenderer {
 
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& map);
+        void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map);
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);

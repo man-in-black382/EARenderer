@@ -52,7 +52,7 @@ namespace EARenderer {
                             int8_t specularIrradianceMapMaxLOD);
         
         void setFrustumCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLHDRTexture2D& map);
+//        void setExponentialShadowMap(const GLHDRTexture2D& map);
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);

@@ -61,7 +61,7 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCSMSplitSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
     }
 
-    void GLSLDeferredCookTorrance::setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& map) {
+    void GLSLDeferredCookTorrance::setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map) {
         setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
     }
 

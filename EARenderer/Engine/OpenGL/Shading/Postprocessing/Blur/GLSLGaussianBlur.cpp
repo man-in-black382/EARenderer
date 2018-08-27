@@ -30,11 +30,6 @@ namespace EARenderer {
         glUniform2fv(uniformByNameCRC32(uint32_constant<ctcrc32("uBlurDirection")>).location(), 1, glm::value_ptr(dir));
     }
 
-    void GLSLGaussianBlur::setTexture(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& texture, size_t mipLevel) {
-        setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipLevel")>).location(), GLint(mipLevel));
-    }
-
     void GLSLGaussianBlur::setKernelWeights(const std::vector<float>& weights) {
         glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uKernelWeights[0]")>).location(), (GLint)weights.size(), reinterpret_cast<const GLfloat *>(weights.data()));
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uKernelSize")>).location(), (GLint)weights.size());

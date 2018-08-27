@@ -36,7 +36,7 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDirectionalShadowTexturePool(std::make_shared<PostprocessTexturePool>(Size2D(2048))),
+    mDirectionalShadowTexturePool(std::make_shared<HighPrecisionTexturePool>(Size2D(2048))),
     mDirectionalShadowFramebuffer(std::make_shared<GLFramebuffer>(Size2D(2048))),
     mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
     mDirectionalShadowDepthRenderbuffer(mDirectionalShadowFramebuffer->size()),
@@ -59,7 +59,7 @@ namespace EARenderer {
 
     // Effects
     mPostprocessFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
-    mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.resolution)),
+    mPostprocessTexturePool(std::make_shared<HalfPrecisionTexturePool>(settings.resolution)),
     mBloomEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
     mToneMappingEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
     mSSREffect(mPostprocessFramebuffer, mPostprocessTexturePool),

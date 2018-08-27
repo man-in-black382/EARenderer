@@ -25,8 +25,13 @@ namespace EARenderer {
 
         GLSLGaussianBlur();
 
+        template <GLTexture::Float Format>
+        void setTexture(const GLFloatTexture2D<Format>& texture, size_t mipLevel) {
+            setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipLevel")>).location(), GLint(mipLevel));
+        }
+
         void setBlurDirection(BlurDirection direction);
-        void setTexture(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& texture, size_t mipLevel);
         void setKernelWeights(const std::vector<float>& weights);
         void setTextureOffsets(const std::vector<float>& offsets);
         void setRenderTargetSize(const Size2D& RTSize);

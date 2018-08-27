@@ -6,8 +6,12 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
+#ifndef GaussianBlurEffect_h
+#define GaussianBlurEffect_h
+
 #include "GaussianFunction.hpp"
 #include "Drawable.hpp"
+#include "GLTexture2D.hpp"
 
 #include <stdexcept>
 
@@ -59,7 +63,7 @@ namespace EARenderer {
 
         computeWeightsAndOffsetsIfNeeded(settings);
 
-        auto intermediateTexture = mTexturePool->claim();
+        auto intermediateTexture = this->mTexturePool->claim();
 
         mBlurShader.bind();
         mBlurShader.setRenderTargetSize(inputImage->mipMapSize(settings.outputImageMipLevel));
@@ -74,7 +78,7 @@ namespace EARenderer {
         //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
+        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
         TriangleStripQuad::Draw();
 
         // But, in the second pass, we read and write from and to the same
@@ -86,10 +90,12 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
-        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
+        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
         TriangleStripQuad::Draw();
 
-        mTexturePool->putBack(intermediateTexture);
+        this->mTexturePool->putBack(intermediateTexture);
     }
 
 }
+
+#endif

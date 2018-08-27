@@ -40,4 +40,6 @@ namespace EARenderer {
 
 }
 
+#include "PostprocessTexturePool.tpp"
+
 #endif /* TexturePool_hpp */

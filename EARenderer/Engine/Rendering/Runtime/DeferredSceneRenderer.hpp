@@ -63,6 +63,9 @@ namespace EARenderer {
 
     class DeferredSceneRenderer {
     private:
+        using HalfPrecisionTexturePool = PostprocessTexturePool<GLTexture::Float::RGBA16F>;
+        using HighPrecisionTexturePool = PostprocessTexturePool<GLTexture::Float::RGBA32F>;
+
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
 
@@ -76,11 +79,11 @@ namespace EARenderer {
         std::shared_ptr<const SceneGBuffer> mGBuffer;
 
         FrustumCascades mShadowCascades;
-        std::shared_ptr<PostprocessTexturePool<GLTexture::Float::RGBA32F>> mDirectionalShadowTexturePool;
+        std::shared_ptr<HighPrecisionTexturePool> mDirectionalShadowTexturePool;
         std::shared_ptr<GLFramebuffer> mDirectionalShadowFramebuffer;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> mDirectionalExponentialShadowMap;
         GLDepthRenderbuffer mDirectionalShadowDepthRenderbuffer;
-        GaussianBlurEffect mShadowBlurEffect;
+        GaussianBlurEffect<GLTexture::Float::RGBA32F> mShadowBlurEffect;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
@@ -101,10 +104,10 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
 
         std::shared_ptr<GLFramebuffer> mPostprocessFramebuffer;
-        std::shared_ptr<PostprocessTexturePool<GLTexture::Float::RGBA16F>> mPostprocessTexturePool;
-        BloomEffect mBloomEffect;
-        ToneMappingEffect mToneMappingEffect;
-        ScreenSpaceReflectionEffect mSSREffect;
+        std::shared_ptr<HalfPrecisionTexturePool> mPostprocessTexturePool;
+        BloomEffect<GLTexture::Float::RGBA16F> mBloomEffect;
+        ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
+        ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
 
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mPreviousFrame;

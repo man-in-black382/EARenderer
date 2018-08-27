@@ -81,9 +81,9 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCSMSplitSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
     }
     
-    void GLSLCookTorrance::setExponentialShadowMap(const GLHDRTexture2D& map) {
-        setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
-    }
+//    void GLSLCookTorrance::setExponentialShadowMap(const GLHDRTexture2D& map) {
+//        setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
+//    }
     
     void GLSLCookTorrance::setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
