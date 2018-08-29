@@ -48,7 +48,7 @@
 //#include "GLDepthTextureCubemap.hpp"
 //#include "GLHDRTexture2DArray.hpp"
 //#include "GLDepthTexture2DArray.hpp"
-//#include "GLHDRTexture2D.hpp"
+//
 //#include "GLHDRTextureCubemap.hpp"
 //#include "GLTexture2DArray.hpp"
 //#include "GLLDRTexture3D.hpp"

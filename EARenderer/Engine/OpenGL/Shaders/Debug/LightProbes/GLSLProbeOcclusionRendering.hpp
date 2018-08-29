@@ -11,7 +11,7 @@
 
 #include "GLProgram.hpp"
 #include "Camera.hpp"
-#include "GLHDRTexture2D.hpp"
+#include "GLTexture2D.hpp"
 
 #include <glm/vec3.hpp>
 
@@ -22,7 +22,7 @@ namespace EARenderer {
         GLSLProbeOcclusionRendering();
 
         void setCamera(const Camera& camera);
-        void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
+//        void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
         void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets);
         void setProbeIndex(size_t index);
     };

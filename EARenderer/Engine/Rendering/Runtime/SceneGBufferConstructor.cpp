@@ -6,13 +6,13 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "SceneGBufferRenderer.hpp"
+#include "SceneGBufferConstructor.hpp"
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SceneGBufferRenderer::SceneGBufferRenderer(const Scene* scene, const RenderingSettings& settings)
+    SceneGBufferConstructor::SceneGBufferConstructor(const Scene* scene, const RenderingSettings& settings)
     :
     mScene(scene),
     mFramebuffer(settings.resolution),
@@ -29,14 +29,14 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    std::shared_ptr<const SceneGBuffer> SceneGBufferRenderer::GBuffer() const {
+    std::shared_ptr<const SceneGBuffer> SceneGBufferConstructor::GBuffer() const {
         return mGBuffer;
     }
 
 #pragma mark - Rendering
 #pragma mark - Private Helpers
 
-    void SceneGBufferRenderer::generateGBuffer() {
+    void SceneGBufferConstructor::generateGBuffer() {
         mFramebuffer.bind();
         mFramebuffer.viewport().apply();
 
@@ -65,7 +65,7 @@ namespace EARenderer {
         }
     }
 
-    void SceneGBufferRenderer::generateHiZBuffer() {
+    void SceneGBufferConstructor::generateHiZBuffer() {
         // Disable depth writes to not pollute depth buffer with HIZ buffer quads
         glDepthMask(GL_FALSE);
 
@@ -95,7 +95,7 @@ namespace EARenderer {
 
 #pragma mark - Public Interface
 
-    void SceneGBufferRenderer::render() {
+    void SceneGBufferConstructor::render() {
         generateGBuffer();
         generateHiZBuffer();
     }

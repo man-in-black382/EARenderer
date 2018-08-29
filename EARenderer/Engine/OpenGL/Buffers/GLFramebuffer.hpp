@@ -14,7 +14,6 @@
 #include "GLViewport.hpp"
 
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTextureCubemap.hpp"

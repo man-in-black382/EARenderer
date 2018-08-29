@@ -11,7 +11,6 @@
 
 #include "GLProgram.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
 
 namespace EARenderer {
 

@@ -11,7 +11,6 @@
 
 #include "GLProgram.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLTexture3D.hpp"
 #include "GLDepthTexture2DArray.hpp"

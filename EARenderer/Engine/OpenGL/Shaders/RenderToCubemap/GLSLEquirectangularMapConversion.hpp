@@ -10,7 +10,6 @@
 #define GLSLEquirectangularMapConversion_hpp
 
 #include "GLSLCubemapRendering.hpp"
-#include "GLHDRTexture2D.hpp"
 
 namespace EARenderer {
     
@@ -18,7 +17,7 @@ namespace EARenderer {
     public:        
         GLSLEquirectangularMapConversion();
                 
-        void setEquirectangularEnvironmentMap(const GLHDRTexture2D& map);
+//        void setEquirectangularEnvironmentMap(const GLHDRTexture2D& map);
     };
     
 }

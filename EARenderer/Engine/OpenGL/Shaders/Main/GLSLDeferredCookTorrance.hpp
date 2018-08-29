@@ -13,7 +13,6 @@
 #include "PBRMaterial.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"

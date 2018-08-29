@@ -34,8 +34,6 @@
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLDeferredCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
-#include "GLSLDirectionalDepth.hpp"
-#include "GLSLOmnidirectionalDepth.hpp"
 #include "GLSLSkybox.hpp"
 #include "GLSLGenericGeometry.hpp"
 #include "GLSLEquirectangularMapConversion.hpp"
@@ -52,7 +50,7 @@
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLDepthTexture2DArray.hpp"
-#include "GLHDRTexture2D.hpp"
+
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLLDRTexture3D.hpp"

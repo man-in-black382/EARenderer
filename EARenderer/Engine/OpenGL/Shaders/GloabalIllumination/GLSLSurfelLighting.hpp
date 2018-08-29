@@ -15,7 +15,6 @@
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "GLBufferTexture.hpp"

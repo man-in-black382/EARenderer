@@ -13,7 +13,7 @@
 #include "PBRMaterial.hpp"
 #include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2D.hpp"
+
 #include "GLHDRTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
@@ -48,7 +48,7 @@ namespace EARenderer {
         
         void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
                             const GLHDRTextureCubemap& specularIrradianceMap,
-                            const GLHDRTexture2D& BRDFIntegrationMap,
+//                            const GLHDRTexture2D& BRDFIntegrationMap,
                             int8_t specularIrradianceMapMaxLOD);
         
         void setFrustumCascades(const FrustumCascades& cascades);

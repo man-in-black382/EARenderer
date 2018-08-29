@@ -22,7 +22,7 @@
 
 namespace EARenderer {
 
-    class SceneGBufferRenderer {
+    class SceneGBufferConstructor {
     private:
         const Scene *mScene;
 
@@ -37,7 +37,7 @@ namespace EARenderer {
         void generateHiZBuffer();
 
     public:
-        SceneGBufferRenderer(const Scene* scene, const RenderingSettings& settings);
+        SceneGBufferConstructor(const Scene* scene, const RenderingSettings& settings);
 
         std::shared_ptr<const SceneGBuffer> GBuffer() const;
 

@@ -21,7 +21,7 @@
 
 #import "Color.hpp"
 #import "Scene.hpp"
-#import "SceneGBufferRenderer.hpp"
+#import "SceneGBufferConstructor.hpp"
 #import "SceneRenderer.hpp"
 #import "DeferredSceneRenderer.hpp"
 #import "AxesRenderer.hpp"
@@ -51,7 +51,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 // C++ raw pointers
 @property (assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::Scene *scene;
-@property (assign, nonatomic) EARenderer::SceneGBufferRenderer *sceneGBufferRenderer;
+@property (assign, nonatomic) EARenderer::SceneGBufferConstructor *sceneGBufferRenderer;
 //@property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
 @property (assign, nonatomic) EARenderer::DeferredSceneRenderer *deferredSceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
@@ -137,7 +137,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    self.sceneGBufferRenderer = new EARenderer::SceneGBufferRenderer(self.scene, self.renderingSettings);
+    self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
 //    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings, surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);

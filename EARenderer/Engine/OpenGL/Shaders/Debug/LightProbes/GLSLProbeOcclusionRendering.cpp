@@ -23,9 +23,9 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
     }
 
-    void GLSLProbeOcclusionRendering::setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas) {
-        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapsAtlas")>, atlas);
-    }
+//    void GLSLProbeOcclusionRendering::setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas) {
+//        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapsAtlas")>, atlas);
+//    }
 
     void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets) {
         setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapAtlasOffsets")>, offsets);

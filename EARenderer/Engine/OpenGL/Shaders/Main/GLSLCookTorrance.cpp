@@ -55,12 +55,12 @@ namespace EARenderer {
     
     void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
                                           const GLHDRTextureCubemap& specularIrradianceMap,
-                                          const GLHDRTexture2D& BRDFIntegrationMap,
+//                                          const GLHDRTexture2D& BRDFIntegrationMap,
                                           int8_t specularIrradianceMapMaxLOD)
     {
         setUniformTexture(uint32_constant<ctcrc32("uDiffuseIrradianceMap")>, diffuseIrradianceMap);
         setUniformTexture(uint32_constant<ctcrc32("uSpecularIrradianceMap")>, specularIrradianceMap);
-        setUniformTexture(uint32_constant<ctcrc32("uBRDFIntegrationMap")>, BRDFIntegrationMap);
+//        setUniformTexture(uint32_constant<ctcrc32("uBRDFIntegrationMap")>, BRDFIntegrationMap);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uSpecularIrradianceMapLOD")>).location(), specularIrradianceMapMaxLOD);
     }
     
