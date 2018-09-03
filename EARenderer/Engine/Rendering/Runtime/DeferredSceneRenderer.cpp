@@ -36,11 +36,7 @@ namespace EARenderer {
     mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Shadow maps
-    mDirectionalShadowTexturePool(std::make_shared<HighPrecisionTexturePool>(Size2D(2048))),
-    mDirectionalShadowFramebuffer(std::make_shared<GLFramebuffer>(Size2D(2048))),
-    mDirectionalExponentialShadowMap(mDirectionalShadowTexturePool->claim()),
-    mDirectionalShadowDepthRenderbuffer(mDirectionalShadowFramebuffer->size()),
-    mShadowBlurEffect(mDirectionalShadowFramebuffer, mDirectionalShadowTexturePool),
+    mShadowMapper(scene),
 
     // Surfels and surfel clusters
     mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
@@ -66,7 +62,6 @@ namespace EARenderer {
 
     // Output frame
     mFrame(mPostprocessTexturePool->claim()),
-    mPreviousFrame(mPostprocessTexturePool->claim()),
     mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
     {
         setupGLState();
@@ -77,12 +72,7 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::setRenderingSettings(const RenderingSettings& settings) {
         mSettings = settings;
-    }
-
-#pragma mark - Getters
-
-    const FrustumCascades& DeferredSceneRenderer::shadowCascades() const {
-        return mShadowCascades;
+        mShadowMapper.setRenderingSettings(settings);
     }
 
 #pragma mark - Initial setup
@@ -106,7 +96,6 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
 
-        mDirectionalShadowFramebuffer->attachRenderbuffer(mDirectionalShadowDepthRenderbuffer);
         mPostprocessFramebuffer->attachTexture(*mGBuffer->depthBuffer);
     }
 
@@ -118,10 +107,6 @@ namespace EARenderer {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
         }
-    }
-
-    void DeferredSceneRenderer::swapFrames() {
-        std::swap(mFrame, mPreviousFrame);
     }
 
     void DeferredSceneRenderer::performDepthPrepass() {
@@ -144,42 +129,6 @@ namespace EARenderer {
         }
     }
 
-    void DeferredSceneRenderer::renderShadowMaps() {
-        auto renderTarget = mDirectionalShadowTexturePool->claim();
-        mDirectionalShadowFramebuffer->redirectRenderingToTexturesMip(0, renderTarget);
-
-        mDirectionalESMShader.bind();
-        mDirectionalESMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
-
-        for (size_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
-            // Ensure only one texture channel will be written to for each respective cascade
-            glColorMask(cascade == 0, cascade == 1, cascade == 2, cascade == 3);
-
-            mDirectionalESMShader.setLightMatrix(mShadowCascades.lightViewProjections[cascade]);
-
-            for (ID meshInstanceID : mScene->meshInstances()) {
-                auto& instance = mScene->meshInstances()[meshInstanceID];
-                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-
-                mDirectionalESMShader.setModelMatrix(instance.transformation().modelMatrix());
-
-                for (ID subMeshID : subMeshes) {
-                    auto& subMesh = subMeshes[subMeshID];
-                    subMesh.draw();
-                }
-            }
-
-            // Prepare depth buffer for the next cascade rendering
-            mDirectionalShadowFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
-        }
-
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-        mShadowBlurEffect.blur(renderTarget, mDirectionalExponentialShadowMap, mSettings.meshSettings.shadowBlur);
-
-        mDirectionalShadowTexturePool->putBack(renderTarget);
-    }
-
     void DeferredSceneRenderer::relightSurfels() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
 
@@ -191,8 +140,8 @@ namespace EARenderer {
         mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowCascades(mShadowCascades);
-            mSurfelLightingShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
+            mSurfelLightingShader.setShadowCascades(mShadowMapper.cascades());
+            mSurfelLightingShader.setExponentialShadowMap(*mShadowMapper.directionalShadowMap());
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
             mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
             mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
@@ -240,14 +189,11 @@ namespace EARenderer {
         mCookTorranceShader.setSettings(mSettings);
         mCookTorranceShader.setCamera(*(mScene->camera()));
         mCookTorranceShader.setLight(mScene->directionalLight());
-        mCookTorranceShader.setWorldBoundingBox(mScene->lightBakingVolume());
-        mCookTorranceShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
-        mCookTorranceShader.setFrustumCascades(mShadowCascades);
+        mCookTorranceShader.setFrustumCascades(mShadowMapper.cascades());
 
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setGBuffer(*mGBuffer);
-            mCookTorranceShader.setExponentialShadowMap(*mDirectionalExponentialShadowMap);
-            mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
+            mCookTorranceShader.setExponentialShadowMap(*mShadowMapper.directionalShadowMap());
         });
 
         TriangleStripQuad::Draw();
@@ -281,11 +227,9 @@ namespace EARenderer {
 #pragma mark - Public interface
 
     void DeferredSceneRenderer::render() {
-        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 2);
 
-//        swapFrames();
+        mShadowMapper.render();
 
-        renderShadowMaps();
         relightSurfels();
         averageSurfelClusterLuminances();
         updateGridProbes();

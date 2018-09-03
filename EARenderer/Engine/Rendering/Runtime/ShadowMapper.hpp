@@ -10,8 +10,12 @@
 #define ShadowMapper_hpp
 
 #include "Scene.hpp"
+#include "GLFramebuffer.hpp"
 #include "GLTexture2D.hpp"
 #include "GLTextureCubemapArray.hpp"
+#include "GaussianBlurEffect.hpp"
+#include "RenderingSettings.hpp"
+#include "SceneGBuffer.hpp"
 #include "GLSLDirectionalExponentialShadowMap.hpp"
 #include "GLSLOmnidirectionalExponentialShadowMap.hpp"
 
@@ -26,13 +30,33 @@ namespace EARenderer {
         GLSLDirectionalExponentialShadowMap mOmnidirectionalSMShader;
 
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> mDirectionalShadowMap;
-        std::unordered_map<ID, GLFloatTextureCubemapArray<GLTexture::Float::R32F>> mOmnidirectionalShadowMaps;
+        std::shared_ptr<GLFloatTextureCubemapArray<GLTexture::Float::R32F>> mOmnidirectionalShadowMaps;
+        std::unordered_map<ID, size_t> mPointLightIDToArrayIndexMap;
 
-        const Scene *scene = nullptr;
+        FrustumCascades mShadowCascades;
+        GLDepthRenderbuffer mDepthRenderbuffer;
+        std::shared_ptr<GLFramebuffer> mFramebuffer;
+        std::shared_ptr<PostprocessTexturePool<GLTexture::Float::RGBA32F>> mTexturePool;
+        GaussianBlurEffect<GLTexture::Float::RGBA32F> mBlurEffect;
+
+        RenderingSettings mSettings;
+
+        const Scene *mScene = nullptr;
+
+        void renderDirectionalShadowMaps();
+        void renderOmnidirectionalShadowMaps();
 
     public:
+        ShadowMapper(const Scene *scene);
+
+        void setRenderingSettings(const RenderingSettings& settings);
+
+        const FrustumCascades& cascades() const;
+        size_t shadowMapIndexForPointLight(ID pointLightID) const;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> directionalShadowMap();
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> omnidirectionalShadowMap(ID pointLightId);
+        std::shared_ptr<GLFloatTextureCubemapArray<GLTexture::Float::R32F>> omnidirectionalShadowMaps();
+
+        void render();
     };
 
 }

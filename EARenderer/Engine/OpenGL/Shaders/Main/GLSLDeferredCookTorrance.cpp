@@ -65,21 +65,6 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
     }
 
-    void GLSLDeferredCookTorrance::setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures) {
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
-        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
-        //        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
-        //        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
-    }
-
-    void GLSLDeferredCookTorrance::setWorldBoundingBox(const AxisAlignedBox3D& box) {
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uWorldBoudningBoxTransform")>).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
-    }
-
-    void GLSLDeferredCookTorrance::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
-        setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
-    }
-
     void GLSLDeferredCookTorrance::setSettings(const RenderingSettings& settings) {
         glUniform1ui(uniformByNameCRC32(uint32_constant<ctcrc32("uSettingsBitmask")>).location(), settings.meshSettings.booleanBitmask());
         //        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uParallaxMappingStrength")>).location(), settings.meshSettings.parallaxMappingStrength);

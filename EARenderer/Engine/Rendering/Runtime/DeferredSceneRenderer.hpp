@@ -24,6 +24,7 @@
 #include "FrustumCascades.hpp"
 #include "Ray3D.hpp"
 #include "SurfelData.hpp"
+#include "ShadowMapper.hpp"
 #include "DiffuseLightProbeData.hpp"
 #include "RenderingSettings.hpp"
 #include "GaussianBlurEffect.hpp"
@@ -76,15 +77,9 @@ namespace EARenderer {
         std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
 
-        FrustumCascades mShadowCascades;
-        std::shared_ptr<HighPrecisionTexturePool> mDirectionalShadowTexturePool;
-        std::shared_ptr<GLFramebuffer> mDirectionalShadowFramebuffer;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> mDirectionalExponentialShadowMap;
-        GLDepthRenderbuffer mDirectionalShadowDepthRenderbuffer;
-        GaussianBlurEffect<GLTexture::Float::RGBA32F> mShadowBlurEffect;
+        ShadowMapper mShadowMapper;
 
         GLSLDepthPrepass mDepthPrepassShader;
-        GLSLDirectionalExponentialShadowMap mDirectionalESMShader;
         GLSLSkybox mSkyboxShader;
         GLSLDeferredCookTorrance mCookTorranceShader;
         GLSLSurfelLighting mSurfelLightingShader;
@@ -108,16 +103,13 @@ namespace EARenderer {
         ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
 
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mPreviousFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mThresholdFilteredOutputFrame;
 
         void setupGLState();
         void setupFramebuffers();
 
         void bindDefaultFramebuffer();
-        void swapFrames();
         void performDepthPrepass();
-        void renderShadowMaps();
         void relightSurfels();
         void averageSurfelClusterLuminances();
         void updateGridProbes();

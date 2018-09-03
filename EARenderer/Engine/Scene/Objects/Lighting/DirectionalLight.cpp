@@ -58,8 +58,9 @@ namespace EARenderer {
     }
     
     FrustumCascades DirectionalLight::cascadesForCamera(const Camera& camera, uint8_t numberOfCascades, const glm::vec3& scale) const {
+        //
         // Cascaded shadow maps http://ogldev.atspace.co.uk/www/tutorial49/tutorial49.html
-        
+        //
         FrustumCascades cascades;
         cascades.amount = numberOfCascades;
         cascades.splitAxis = FrustumCascades::SplitAxis::Z;
