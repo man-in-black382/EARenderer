@@ -37,6 +37,11 @@ namespace EARenderer {
         glClear(static_cast<type>(UnderlyingBuffer::Color) | static_cast<type>(UnderlyingBuffer::Depth));
     }
 
+    template<class... TexturePtrs>
+    void GLFramebuffer::redirectRenderingToTextures(TexturePtrs... textures) {
+        redirectRenderingToTextures(mViewport, textures...);
+    }
+
     template <class Texture>
     void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture& texture) {
         attachTextureToColorAttachment(texture, ColorAttachment::Automatic, mipLevel);
@@ -48,27 +53,21 @@ namespace EARenderer {
         attachTextures(mipLevel, tail...);
     }
 
-    template <GLTexture::Normalized Format>
-    void GLFramebuffer::attachTexture(const GLNormalizedTexture2D<Format>& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    template <GLTexture::Float Format>
-    void GLFramebuffer::attachTexture(const GLFloatTexture2D<Format>& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    template<GLTexture::Integer Format>
-    void GLFramebuffer::attachTexture(const GLIntegerTexture2D<Format>& texture,
+    template<class Format, Format F>
+    void GLFramebuffer::attachTexture(const GLTexture2D<Format, F>& texture,
+                                      uint16_t mipLevel,
                                       ColorAttachment colorAttachment)
     {
-        attachTextureToColorAttachment(texture, colorAttachment, 0);
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
+    }
+
+    template<class Format, Format F>
+    void GLFramebuffer::attachTexture(const GLTextureCubemapArray<Format, F>& texture,
+                                      uint16_t mipLevel,
+                                      int16_t layer,
+                                      ColorAttachment colorAttachment)
+    {
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
     }
 
     template<class Texture>

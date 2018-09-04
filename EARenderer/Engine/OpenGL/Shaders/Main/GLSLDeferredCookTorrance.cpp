@@ -33,6 +33,7 @@ namespace EARenderer {
     void GLSLDeferredCookTorrance::setLight(const PointLight& light) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.position")>).location(), 1, glm::value_ptr(light.position()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.clipDistance")>).location(), light.clipDistance());
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 1);
     }
 
@@ -62,7 +63,15 @@ namespace EARenderer {
     }
 
     void GLSLDeferredCookTorrance::setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map) {
-        setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
+        setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMap")>, map);
+    }
+
+    void GLSLDeferredCookTorrance::setExponentialShadowMaps(const GLFloatTextureCubemapArray<GLTexture::Float::R32F>& maps) {
+        setUniformTexture(uint32_constant<ctcrc32("uOmnidirectionalShadowMaps")>, maps);
+    }
+
+    void GLSLDeferredCookTorrance::setShadowMapArrayIndex(size_t index) {
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uOmnidirectionalShadowMapIndex")>).location(), static_cast<GLint>(index));
     }
 
     void GLSLDeferredCookTorrance::setSettings(const RenderingSettings& settings) {

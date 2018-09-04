@@ -54,11 +54,11 @@ namespace EARenderer {
         return it->second;
     }
 
-    std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> ShadowMapper::directionalShadowMap() {
+    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA32F>> ShadowMapper::directionalShadowMap() const {
         return mDirectionalShadowMap;
     }
 
-    std::shared_ptr<GLFloatTextureCubemapArray<GLTexture::Float::R32F>> ShadowMapper::omnidirectionalShadowMaps() {
+    std::shared_ptr<const GLFloatTextureCubemapArray<GLTexture::Float::R32F>> ShadowMapper::omnidirectionalShadowMaps() const {
         return mOmnidirectionalShadowMaps;
     }
 

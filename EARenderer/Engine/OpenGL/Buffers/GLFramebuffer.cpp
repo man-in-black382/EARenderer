@@ -98,7 +98,7 @@ namespace EARenderer {
         bind();
         texture.bind();
         
-        if (layer == -1) {
+        if (layer == NotLayered) {
             glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
         } else {
             glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
@@ -130,7 +130,7 @@ namespace EARenderer {
             bool textureAlreadyAttached = attachmentIt != mTextureAttachmentMap.end();
 
             // If texture was already attached to the framebuffer
-            // reuse attachment info and reattach (possible) different mip level
+            // reuse attachment info and reattach (possibly) different mip level
             if (textureAlreadyAttached) {
 
                 if (attachmentIt->second.mipLevel == mipLevel) {
@@ -172,6 +172,14 @@ namespace EARenderer {
     }
     
 #pragma mark - Public
+
+    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel, int16_t layer) {
+        attachTextureToDepthAttachment(texture, mipLevel, layer);
+    }
+
+    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) {
+        attachTextureToDepthAttachment(texture, mipLevel);
+    }
 
     // FIXME: Remove deprecated attachment functions
 

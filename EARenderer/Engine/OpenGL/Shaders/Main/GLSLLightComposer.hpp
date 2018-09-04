@@ -14,6 +14,7 @@
 #include "SceneGBuffer.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "RenderingSettings.hpp"
+#include "GLTexture2D.hpp"
 
 namespace EARenderer {
 
@@ -26,6 +27,8 @@ namespace EARenderer {
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
+        void setLightBuffer(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& lightBuffer);
+        void setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& reflections);
         void setSettings(const RenderingSettings& settings);
     };
 

@@ -2,6 +2,7 @@
 
 // Constants
 
+const float kNormalizationFactor = 1000.0;
 const float PI = 3.1415926535897932384626433832795;
 const int kMaxCascades = 4;
 
@@ -38,6 +39,7 @@ struct DirectionalLight {
 struct PointLight {
     vec3 radiantFlux; // a.k.a color
     vec3 position;
+    float clipDistance;
 };
 
 struct Spotlight {
@@ -70,7 +72,9 @@ uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
 
 uniform float uESMFactor;
-uniform sampler2D uExponentialShadowMap;
+uniform sampler2D uDirectionalShadowMap;
+uniform samplerCubeArray uOmnidirectionalShadowMaps;
+uniform int uOmnidirectionalShadowMapIndex;
 
 // Functions
 
@@ -249,7 +253,7 @@ int ShadowCascadeIndex(vec3 worldPosition) {
     }
 }
 
-float ExponentialShadow(vec3 worldPosition) {
+float DirectionalExponentialShadow(vec3 worldPosition) {
     int cascade = ShadowCascadeIndex(worldPosition);
     mat4 relevantLightMatrix = uLightSpaceMatrices[cascade];
     vec4 positionInLightSpace = relevantLightMatrix * vec4(worldPosition, 1.0);
@@ -263,7 +267,7 @@ float ExponentialShadow(vec3 worldPosition) {
 
     // Explicitly reading from 0 LOD because shadow map comes from a postprocess texture pool
     // and is a subject to mipmapping
-    vec4 occluders = textureLod(uExponentialShadowMap, projCoords.xy, 0);
+    vec4 occluders = textureLod(uDirectionalShadowMap, projCoords.xy, 0);
 
     float occluder = occluders[cascade];
     float receiver = exp(-uESMFactor * linearZ);
@@ -272,6 +276,15 @@ float ExponentialShadow(vec3 worldPosition) {
     return visibility;
 }
 
+float OmnidirectionalExponentialShadow(vec3 worldPosition) {
+    vec3 lightToFrag = worldPosition - uPointLight.position;
+    float occluder = texture(uOmnidirectionalShadowMaps, lightToFrag, float(uOmnidirectionalShadowMapIndex));
+    float linearZ = length(lightToFrag) / uPointLight.clipDistance;
+    float receiver = exp(-uESMFactor * linearZ);
+    float visibility = clamp(occluder * receiver, 0.0, 1.0);
+
+    return visibility;
+}
 
 ////////////////////////////////////////////////////////////
 //////////////////////// G Buffer //////////////////////////
@@ -381,15 +394,15 @@ void main() {
     }
 
     // Analytical lighting
-    
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = ExponentialShadow(worldPosition);
+        shadow      = DirectionalExponentialShadow(worldPosition);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N, worldPosition);
         L           = normalize(uPointLight.position - worldPosition);
+        shadow      = OmnidirectionalExponentialShadow(worldPosition);
     }
     else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
@@ -398,6 +411,9 @@ void main() {
     vec3 H = normalize(L + V);
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
+
+    // Shrinking the output value so that it won't be clamped by additive blending
+    specularAndDiffuse /= kNormalizationFactor;
 
     oBaseOutput = vec4(specularAndDiffuse, 1.0);
 

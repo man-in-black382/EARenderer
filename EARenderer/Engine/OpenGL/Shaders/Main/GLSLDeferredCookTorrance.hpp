@@ -18,6 +18,7 @@
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "GLLDRTextureCubemap.hpp"
+#include "GLTextureCubemapArray.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
@@ -47,6 +48,8 @@ namespace EARenderer {
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
         void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map);
+        void setExponentialShadowMaps(const GLFloatTextureCubemapArray<GLTexture::Float::R32F>& maps);
+        void setShadowMapArrayIndex(size_t index);
         void setSettings(const RenderingSettings& settings);
     };
 

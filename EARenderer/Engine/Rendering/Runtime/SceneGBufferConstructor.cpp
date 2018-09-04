@@ -19,9 +19,9 @@ namespace EARenderer {
     mDepthRenderbuffer(settings.resolution),
     mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
     {
-        mFramebuffer.attachTexture(*mGBuffer->albedoRoughnessMetalnessAONormal, GLFramebuffer::ColorAttachment::Attachment0);
-        mFramebuffer.attachTexture(*mGBuffer->HiZBuffer, GLFramebuffer::ColorAttachment::Attachment1);
-        mFramebuffer.attachTexture(*mGBuffer->depthBuffer);
+        mFramebuffer.attachTexture(*mGBuffer->albedoRoughnessMetalnessAONormal);
+        mFramebuffer.attachTexture(*mGBuffer->HiZBuffer);
+        mFramebuffer.attachDepthTexture(*mGBuffer->depthBuffer);
 
         // Preallocate HiZ buffer mipmaps
         mGBuffer->HiZBuffer->generateMipMaps();

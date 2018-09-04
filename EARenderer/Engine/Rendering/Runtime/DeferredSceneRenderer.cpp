@@ -96,7 +96,7 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
         mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
 
-        mPostprocessFramebuffer->attachTexture(*mGBuffer->depthBuffer);
+        mPostprocessFramebuffer->attachDepthTexture(*mGBuffer->depthBuffer);
     }
 
 #pragma mark - Rendering
@@ -190,7 +190,7 @@ namespace EARenderer {
         mCookTorranceShader.setCamera(*(mScene->camera()));
         mCookTorranceShader.setLight(mScene->directionalLight());
         mCookTorranceShader.setFrustumCascades(mShadowMapper.cascades());
-
+    
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setGBuffer(*mGBuffer);
             mCookTorranceShader.setExponentialShadowMap(*mShadowMapper.directionalShadowMap());

@@ -35,8 +35,8 @@ namespace EARenderer {
     void GLSLLightComposer::setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures) {
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap0")>, textures[0]);
         setUniformTexture(uint32_constant<ctcrc32("uGridSHMap1")>, textures[1]);
-        //        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
-        //        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap2")>, textures[2]);
+        setUniformTexture(uint32_constant<ctcrc32("uGridSHMap3")>, textures[3]);
     }
 
     void GLSLLightComposer::setWorldBoundingBox(const AxisAlignedBox3D& box) {
@@ -45,6 +45,14 @@ namespace EARenderer {
 
     void GLSLLightComposer::setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions) {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
+    }
+
+    void GLSLLightComposer::setLightBuffer(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& lightBuffer) {
+        setUniformTexture(uint32_constant<ctcrc32("uLightBuffer")>, lightBuffer);
+    }
+
+    void GLSLLightComposer::setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& reflections) {
+        setUniformTexture(uint32_constant<ctcrc32("uReflections")>, reflections);
     }
 
     void GLSLLightComposer::setSettings(const RenderingSettings& settings) {

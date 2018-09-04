@@ -53,8 +53,8 @@ namespace EARenderer {
 
         const FrustumCascades& cascades() const;
         size_t shadowMapIndexForPointLight(ID pointLightID) const;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA32F>> directionalShadowMap();
-        std::shared_ptr<GLFloatTextureCubemapArray<GLTexture::Float::R32F>> omnidirectionalShadowMaps();
+        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA32F>> directionalShadowMap() const;
+        std::shared_ptr<const GLFloatTextureCubemapArray<GLTexture::Float::R32F>> omnidirectionalShadowMaps() const;
 
         void render();
     };

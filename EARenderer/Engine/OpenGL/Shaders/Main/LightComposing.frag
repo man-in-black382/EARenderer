@@ -2,6 +2,7 @@
 
 // Constants
 
+const float kDenormalizationFactor = 1000.0;
 const float PI = 3.1415926535897932384626433832795;
 
 const int kSHCompression333 = 0;
@@ -69,8 +70,7 @@ uniform usampler3D uGridSHMap3;
 
 uniform samplerBuffer uProbePositions;
 
-// Reflections
-
+uniform sampler2D uLightBuffer;
 uniform sampler2D uReflections;
 
 // Functions
@@ -526,8 +526,9 @@ void main() {
     GBuffer gBuffer     = DecodeGBuffer();
 
     vec3 worldPosition  = ReconstructWorldPosition();
-    
-    float metallic      = gBuffer.metalness;
+
+    float ao            = gBuffer.AO;
+    float metalness     = gBuffer.metalness;
     vec3 albedo         = gBuffer.albedo;
     vec3 N              = gBuffer.normal;
     vec3 V              = normalize(uCameraPosition - worldPosition);
@@ -537,18 +538,25 @@ void main() {
     // to-light vector is replaced by the fragment's normal
     vec3 H              = normalize(N + V);
 
+    vec3 Ks = FresnelSchlick(V, H, albedo, metalness); // Reflected portion
+    vec3 Kd = 1.0 - Ks; // Refracted portion
+
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N, worldPosition);
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
     indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
+    indirectRadiance *= Kd;
+
+    // Remember that color values in light buffer were normalized by a normalization factor
+    vec3 lightBufferColor = texture(uLightBuffer, vTexCoords).rgb * kDenormalizationFactor;
 
     vec3 SSR = texture(uReflections, vTexCoords).rgb;
+    SSR *= Ks;
 
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, ao, radiance, indirectRadiance, shadow, SSR);
-
-    oBaseOutput = vec4(specularAndDiffuse, 1.0);
+    vec3 fragmentColor = lightBufferColor + SSR + (indirectRadiance * albedo * ao);
 
     vec3 factors = vec3(0.2126, 0.7152, 0.0722);
-    float luminocity = dot(specularAndDiffuse, factors);
+    float luminocity = dot(fragmentColor, factors);
 
+    oBaseOutput = vec4(fragmentColor, 1.0);
     oBrightOutput = luminocity > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 }

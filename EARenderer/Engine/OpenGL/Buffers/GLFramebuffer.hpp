@@ -22,6 +22,7 @@
 #include "GLDepthRenderbuffer.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
+#include "GLTextureCubemapArray.hpp"
 
 #include "Size2D.hpp"
 #include "Range.hpp"
@@ -106,23 +107,20 @@ namespace EARenderer {
         template <class Texture, class... Textures>
         void attachTextures(uint16_t mipLevel, const Texture& head, const Textures&... tail);
 
-        template <GLTexture::Normalized Format>
-        void attachTexture(const GLNormalizedTexture2D<Format>& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
-
-        template <GLTexture::Float Format>
-        void attachTexture(const GLFloatTexture2D<Format>& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
-
-        template<GLTexture::Integer Format>
-        void attachTexture(const GLIntegerTexture2D<Format>& texture,
+        template<class Format, Format F>
+        void attachTexture(const GLTexture2D<Format, F>& texture,
+                           uint16_t mipLevel = 0,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
-        void attachTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0) {
-            attachTextureToDepthAttachment(texture, mipLevel);
-        }
+        template<class Format, Format F>
+        void attachTexture(const GLTextureCubemapArray<Format, F>& texture,
+                           uint16_t mipLevel = 0,
+                           int16_t layer = NotLayered,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
+
+        void attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel = 0, int16_t layer = NotLayered);
+
+        void attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
 
