@@ -28,6 +28,7 @@ namespace EARenderer {
         bool operator!=(const Size2D& rhs);
         
         Size2D transformedBy(const glm::vec2& vector) const;
+        Size2D makeUnion(const Size2D& size);
     };
     
 }

@@ -20,9 +20,9 @@
 
 namespace EARenderer {
 
-    class LightAccumulator {
+    class DirectLightAccumulator {
     private:
-        Scene *mScene = nullptr;
+        const Scene *mScene = nullptr;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mLightBuffer;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<const ShadowMapper> mShadowMapper;
@@ -34,14 +34,16 @@ namespace EARenderer {
         void renderPointLights();
 
     public:
-        LightAccumulator(Scene *scene,
-                         std::shared_ptr<const SceneGBuffer> gBuffer,
-                         std::shared_ptr<const ShadowMapper> shadowMapper,
-                         std::shared_ptr<GLFramebuffer> framebuffer);
+        DirectLightAccumulator(const Scene *scene,
+                               std::shared_ptr<const SceneGBuffer> gBuffer,
+                               std::shared_ptr<const ShadowMapper> shadowMapper,
+                               std::shared_ptr<GLFramebuffer> framebuffer);
 
-        void setSettings(const RenderingSettings& settings);
+        void setRenderingSettings(const RenderingSettings& settings);
+
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> lightBuffer();
         
-        void accumulateDirectLighting();
+        void render();
     };
 
 }

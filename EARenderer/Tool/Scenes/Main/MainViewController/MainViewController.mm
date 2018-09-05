@@ -138,7 +138,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
-//    self.sceneRenderer = new EARenderer::SceneRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings, surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 

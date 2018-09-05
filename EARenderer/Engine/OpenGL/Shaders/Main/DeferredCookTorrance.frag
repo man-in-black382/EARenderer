@@ -278,7 +278,7 @@ float DirectionalExponentialShadow(vec3 worldPosition) {
 
 float OmnidirectionalExponentialShadow(vec3 worldPosition) {
     vec3 lightToFrag = worldPosition - uPointLight.position;
-    float occluder = texture(uOmnidirectionalShadowMaps, lightToFrag, float(uOmnidirectionalShadowMapIndex));
+    float occluder = texture(uOmnidirectionalShadowMaps, vec4(lightToFrag, float(uOmnidirectionalShadowMapIndex))).r;
     float linearZ = length(lightToFrag) / uPointLight.clipDistance;
     float receiver = exp(-uESMFactor * linearZ);
     float visibility = clamp(occluder * receiver, 0.0, 1.0);

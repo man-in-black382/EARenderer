@@ -17,12 +17,12 @@
 		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
 		AC38E97F213D25FE00F6F2B1 /* GLSLLightComposer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC38E97D213D25FE00F6F2B1 /* GLSLLightComposer.cpp */; };
 		AC38E981213D2B6D00F6F2B1 /* LightComposing.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC38E980213D2B6D00F6F2B1 /* LightComposing.frag */; };
-		AC38E984213D47B500F6F2B1 /* LightAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC38E982213D47B500F6F2B1 /* LightAccumulator.cpp */; };
-		AC38E987213D47F300F6F2B1 /* LightCompositor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC38E985213D47F300F6F2B1 /* LightCompositor.cpp */; };
+		AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC38E982213D47B500F6F2B1 /* DirectLightAccumulator.cpp */; };
 		AC3C9EB720720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3C9EB520720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp */; };
 		AC3C9EB92072111500F35EB3 /* GridLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EB82072111500F35EB3 /* GridLightProbeRendering.frag */; };
 		AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC3C9EBD207219FF00F35EB3 /* GridLightProbeRendering.geom */; };
 		AC40397E20E38A680079112E /* ToneMappingEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC40397C20E38A680079112E /* ToneMappingEffect.tpp */; };
+		AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC58071D213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp */; };
 		AC59F28D207373C100698E55 /* GLSLLightProbeLinksRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */; };
 		AC59F2912073C6B500698E55 /* LightProbeLinksRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */; };
 		AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = AC59F28F2073C6B400698E55 /* LightProbeLinksRendering.geom */; };
@@ -637,10 +637,8 @@
 		AC38E97D213D25FE00F6F2B1 /* GLSLLightComposer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightComposer.cpp; sourceTree = "<group>"; };
 		AC38E97E213D25FE00F6F2B1 /* GLSLLightComposer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightComposer.hpp; sourceTree = "<group>"; };
 		AC38E980213D2B6D00F6F2B1 /* LightComposing.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightComposing.frag; sourceTree = "<group>"; };
-		AC38E982213D47B500F6F2B1 /* LightAccumulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightAccumulator.cpp; sourceTree = "<group>"; };
-		AC38E983213D47B500F6F2B1 /* LightAccumulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightAccumulator.hpp; sourceTree = "<group>"; };
-		AC38E985213D47F300F6F2B1 /* LightCompositor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightCompositor.cpp; sourceTree = "<group>"; };
-		AC38E986213D47F300F6F2B1 /* LightCompositor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightCompositor.hpp; sourceTree = "<group>"; };
+		AC38E982213D47B500F6F2B1 /* DirectLightAccumulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectLightAccumulator.cpp; sourceTree = "<group>"; };
+		AC38E983213D47B500F6F2B1 /* DirectLightAccumulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectLightAccumulator.hpp; sourceTree = "<group>"; };
 		AC3C9EB520720F5C00F35EB3 /* GLSLGridLightProbeRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGridLightProbeRendering.cpp; sourceTree = "<group>"; };
 		AC3C9EB620720F5C00F35EB3 /* GLSLGridLightProbeRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLGridLightProbeRendering.hpp; sourceTree = "<group>"; };
 		AC3C9EB82072111500F35EB3 /* GridLightProbeRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbeRendering.frag; sourceTree = "<group>"; };
@@ -648,6 +646,8 @@
 		AC40397C20E38A680079112E /* ToneMappingEffect.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = ToneMappingEffect.tpp; sourceTree = "<group>"; };
 		AC40397D20E38A680079112E /* ToneMappingEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ToneMappingEffect.hpp; sourceTree = "<group>"; };
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
+		AC58071D213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IndirectLightAccumulator.cpp; sourceTree = "<group>"; };
+		AC58071E213FC2AC00A5BE75 /* IndirectLightAccumulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IndirectLightAccumulator.hpp; sourceTree = "<group>"; };
 		AC59F28B207373C100698E55 /* GLSLLightProbeLinksRendering.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLightProbeLinksRendering.cpp; sourceTree = "<group>"; };
 		AC59F28C207373C100698E55 /* GLSLLightProbeLinksRendering.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeLinksRendering.hpp; sourceTree = "<group>"; };
 		AC59F28E2073C6B400698E55 /* LightProbeLinksRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.frag; sourceTree = "<group>"; };
@@ -2084,10 +2084,10 @@
 				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
 				CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */,
 				CE82DAF7205122FA00329E2E /* BoxRenderer.hpp */,
-				AC38E982213D47B500F6F2B1 /* LightAccumulator.cpp */,
-				AC38E983213D47B500F6F2B1 /* LightAccumulator.hpp */,
-				AC38E985213D47F300F6F2B1 /* LightCompositor.cpp */,
-				AC38E986213D47F300F6F2B1 /* LightCompositor.hpp */,
+				AC38E982213D47B500F6F2B1 /* DirectLightAccumulator.cpp */,
+				AC38E983213D47B500F6F2B1 /* DirectLightAccumulator.hpp */,
+				AC58071D213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp */,
+				AC58071E213FC2AC00A5BE75 /* IndirectLightAccumulator.hpp */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -3888,7 +3888,6 @@
 				CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */,
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
 				CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */,
-				AC38E987213D47F300F6F2B1 /* LightCompositor.cpp in Sources */,
 				CE70FA3A1F8F8EF600AD9027 /* GLDepthTexture2DArray.cpp in Sources */,
 				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
 				CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */,
@@ -3962,11 +3961,12 @@
 				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
 				AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */,
-				AC38E984213D47B500F6F2B1 /* LightAccumulator.cpp in Sources */,
+				AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */,
 				AC38E97F213D25FE00F6F2B1 /* GLSLLightComposer.cpp in Sources */,
 				CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */,
 				CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */,
 				CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */,
+				AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
 				CEA0B90C20E7741E00257E37 /* GLSLGBuffer.cpp in Sources */,
 				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,

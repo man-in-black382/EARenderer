@@ -31,6 +31,8 @@
 #include "BloomEffect.hpp"
 #include "ToneMappingEffect.hpp"
 #include "ScreenSpaceReflectionEffect.hpp"
+#include "DirectLightAccumulator.hpp"
+#include "IndirectLightAccumulator.hpp"
 
 #include "GLSLDepthPrepass.hpp"
 #include "GLSLDeferredCookTorrance.hpp"
@@ -73,47 +75,28 @@ namespace EARenderer {
 
         RenderingSettings mSettings;
 
-        std::shared_ptr<const SurfelData> mSurfelData;
-        std::shared_ptr<const DiffuseLightProbeData> mDiffuseProbeData;
-        std::shared_ptr<const SceneGBuffer> mGBuffer;
-
-        ShadowMapper mShadowMapper;
-
-        GLSLDepthPrepass mDepthPrepassShader;
-        GLSLSkybox mSkyboxShader;
-        GLSLDeferredCookTorrance mCookTorranceShader;
-        GLSLSurfelLighting mSurfelLightingShader;
-        GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
-        GLSLGridLightProbesUpdate mGridProbesUpdateShader;
-
-        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelsLuminanceMap;
-        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelClustersLuminanceMap;
-        GLFramebuffer mSurfelsLuminanceFramebuffer;
-        GLFramebuffer mSurfelClustersLuminanceFramebuffer;
-
-        std::array<GLLDRTexture3D, 4> mGridProbesSHMaps;
-        GLFramebuffer mGridProbesSHFramebuffer;
-
-        GLSLFullScreenQuad mFSQuadShader;
-
-        std::shared_ptr<GLFramebuffer> mPostprocessFramebuffer;
+        std::shared_ptr<GLFramebuffer> mFramebuffer;
         std::shared_ptr<HalfPrecisionTexturePool> mPostprocessTexturePool;
         BloomEffect<GLTexture::Float::RGBA16F> mBloomEffect;
         ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
         ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
 
+        std::shared_ptr<const SceneGBuffer> mGBuffer;
+        std::shared_ptr<ShadowMapper> mShadowMapper;
+        std::shared_ptr<DirectLightAccumulator> mDirectLightAccumulator;
+        std::shared_ptr<IndirectLightAccumulator> mIndirectLightAccumulator;
+
+        GLSLDepthPrepass mDepthPrepassShader;
+        GLSLSkybox mSkyboxShader;
+        GLSLDeferredCookTorrance mCookTorranceShader;
+
+        GLSLFullScreenQuad mFSQuadShader;
+
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mThresholdFilteredOutputFrame;
 
-        void setupGLState();
-        void setupFramebuffers();
-
         void bindDefaultFramebuffer();
         void performDepthPrepass();
-        void relightSurfels();
-        void averageSurfelClusterLuminances();
-        void updateGridProbes();
-        void renderMeshes();
         void renderSkybox();
         void renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
 
@@ -124,8 +107,6 @@ namespace EARenderer {
                               std::shared_ptr<const SurfelData> surfelData,
                               std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
                               std::shared_ptr<const SceneGBuffer> GBuffer);
-
-        const FrustumCascades& shadowCascades() const;
 
         void setRenderingSettings(const RenderingSettings& settings);
 

@@ -17,6 +17,7 @@ namespace EARenderer {
     mScene(scene),
     mDepthRenderbuffer(Size2D(2048)),
     mDirectionalShadowMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA32F>>(Size2D(2048))),
+    mOmnidirectionalShadowMaps(std::make_shared<GLFloatTextureCubemapArray<GLTexture::Float::R32F>>(Size2D(1024), 3)),
     mFramebuffer(std::make_shared<GLFramebuffer>(Size2D(2048))),
     mTexturePool(std::make_shared<PostprocessTexturePool<GLTexture::Float::RGBA32F>>(Size2D(2048))),
     mBlurEffect(mFramebuffer, mTexturePool)

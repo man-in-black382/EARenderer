@@ -6,16 +6,16 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "LightAccumulator.hpp"
+#include "DirectLightAccumulator.hpp"
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    LightAccumulator::LightAccumulator(Scene *scene,
-                                       std::shared_ptr<const SceneGBuffer> gBuffer,
-                                       std::shared_ptr<const ShadowMapper> shadowMapper,
-                                       std::shared_ptr<GLFramebuffer> framebuffer)
+    DirectLightAccumulator::DirectLightAccumulator(const Scene *scene,
+                                                   std::shared_ptr<const SceneGBuffer> gBuffer,
+                                                   std::shared_ptr<const ShadowMapper> shadowMapper,
+                                                   std::shared_ptr<GLFramebuffer> framebuffer)
     :
     mScene(scene),
     mGBuffer(gBuffer),
@@ -26,15 +26,15 @@ namespace EARenderer {
 
 #pragma mark -
 
-    void LightAccumulator::renderDirectionalLights() {
+    void DirectLightAccumulator::renderDirectionalLights() {
         mCookTorranceShader.setLight(mScene->directionalLight());
         TriangleStripQuad::Draw();
     }
 
-    void LightAccumulator::renderPointLights() {
+    void DirectLightAccumulator::renderPointLights() {
         for (ID lightId : mScene->pointLights()) {
 
-            PointLight& light = mScene->pointLights()[lightId];
+            const PointLight& light = mScene->pointLights()[lightId];
             size_t cubeArrayIndex = mShadowMapper->shadowMapIndexForPointLight(lightId);
 
             mCookTorranceShader.setLight(light);
@@ -44,11 +44,19 @@ namespace EARenderer {
         }
     }
 
-    void LightAccumulator::setSettings(const RenderingSettings& settings) {
+#pragma mark - Getters / Setters
+
+    void DirectLightAccumulator::setRenderingSettings(const RenderingSettings& settings) {
         mSettings = settings;
     }
 
-    void LightAccumulator::accumulateDirectLighting() {
+    std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> DirectLightAccumulator::lightBuffer() {
+        return mLightBuffer;
+    }
+
+#pragma mark - Public Interface
+
+    void DirectLightAccumulator::render() {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 

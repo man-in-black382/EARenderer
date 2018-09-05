@@ -97,7 +97,10 @@ namespace EARenderer {
         || mType == GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE
         || mType == GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY
         || mType == GL_UNSIGNED_INT_SAMPLER_BUFFER
-        || mType == GL_UNSIGNED_INT_SAMPLER_2D_RECT;
+        || mType == GL_UNSIGNED_INT_SAMPLER_2D_RECT
+        || mType == GL_SAMPLER_CUBE_MAP_ARRAY
+        || mType == GL_INT_SAMPLER_CUBE_MAP_ARRAY
+        || mType == GL_UNSIGNED_INT_SAMPLER_CUBE_MAP_ARRAY;
     }
     
 }

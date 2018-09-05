@@ -30,54 +30,25 @@ namespace EARenderer {
     mScene(scene),
     mDefaultRenderComponentsProvider(provider),
     mSettings(settings),
-    mSurfelData(surfelData),
-    mDiffuseProbeData(diffuseProbeData),
-    mGBuffer(GBuffer),
-    mProbeGridResolution(scene->preferredProbeGridResolution()),
-
-    // Shadow maps
-    mShadowMapper(scene),
-
-    // Surfels and surfel clusters
-    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None),
-    mSurfelsLuminanceFramebuffer(mSurfelsLuminanceMap.size()),
-    mSurfelClustersLuminanceFramebuffer(mSurfelClustersLuminanceMap.size()),
-
-    // Diffuse light probes
-    mGridProbesSHMaps {
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
-    },
-    mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
     // Effects
-    mPostprocessFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
+    mFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
     mPostprocessTexturePool(std::make_shared<HalfPrecisionTexturePool>(settings.resolution)),
-    mBloomEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
-    mToneMappingEffect(mPostprocessFramebuffer, mPostprocessTexturePool),
-    mSSREffect(mPostprocessFramebuffer, mPostprocessTexturePool),
+    mBloomEffect(mFramebuffer, mPostprocessTexturePool),
+    mToneMappingEffect(mFramebuffer, mPostprocessTexturePool),
+    mSSREffect(mFramebuffer, mPostprocessTexturePool),
+
+    // Helpers
+    mShadowMapper(std::make_shared<ShadowMapper>(scene)),
+    mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper, mFramebuffer)),
+    mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, surfelData, diffuseProbeData, mShadowMapper)),
+    mGBuffer(GBuffer),
+    mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Output frame
     mFrame(mPostprocessTexturePool->claim()),
     mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
     {
-        setupGLState();
-        setupFramebuffers();
-    }
-
-#pragma mark - Setters
-
-    void DeferredSceneRenderer::setRenderingSettings(const RenderingSettings& settings) {
-        mSettings = settings;
-        mShadowMapper.setRenderingSettings(settings);
-    }
-
-#pragma mark - Initial setup
-
-    void DeferredSceneRenderer::setupGLState() {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -85,18 +56,17 @@ namespace EARenderer {
         glClearColor(0.0, 0.0, 0.0, 1.0);
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
+        
+        mFramebuffer->attachDepthTexture(*mGBuffer->depthBuffer);
     }
 
-    void DeferredSceneRenderer::setupFramebuffers() {
-        mSurfelsLuminanceFramebuffer.attachTexture(mSurfelsLuminanceMap);
-        mSurfelClustersLuminanceFramebuffer.attachTexture(mSurfelClustersLuminanceMap);
+#pragma mark - Setters
 
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[0], GLFramebuffer::ColorAttachment::Attachment0);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[1], GLFramebuffer::ColorAttachment::Attachment1);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[2], GLFramebuffer::ColorAttachment::Attachment2);
-        mGridProbesSHFramebuffer.attachTexture(mGridProbesSHMaps[3], GLFramebuffer::ColorAttachment::Attachment3);
-
-        mPostprocessFramebuffer->attachDepthTexture(*mGBuffer->depthBuffer);
+    void DeferredSceneRenderer::setRenderingSettings(const RenderingSettings& settings) {
+        mSettings = settings;
+        mShadowMapper->setRenderingSettings(settings);
+        mDirectLightAccumulator->setRenderingSettings(settings);
+        mIndirectLightAccumulator->setRenderingSettings(settings);
     }
 
 #pragma mark - Rendering
@@ -128,77 +98,7 @@ namespace EARenderer {
             }
         }
     }
-
-    void DeferredSceneRenderer::relightSurfels() {
-        const DirectionalLight& directionalLight = mScene->directionalLight();
-
-        mSurfelsLuminanceFramebuffer.bind();
-        mSurfelsLuminanceFramebuffer.viewport().apply();
-        mSurfelsLuminanceFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-
-        mSurfelLightingShader.bind();
-        mSurfelLightingShader.setLight(directionalLight);
-        mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
-        mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowCascades(mShadowMapper.cascades());
-            mSurfelLightingShader.setExponentialShadowMap(*mShadowMapper.directionalShadowMap());
-            mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
-            mSurfelLightingShader.setGridProbesSHTextures(mGridProbesSHMaps);
-            mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-            mSurfelLightingShader.setProbePositions(*mDiffuseProbeData->probePositionsBufferTexture());
-            mSurfelLightingShader.setSettings(mSettings);
-        });
-
-        TriangleStripQuad::Draw();
-    }
-
-    void DeferredSceneRenderer::averageSurfelClusterLuminances() {
-        mSurfelClusterAveragingShader.bind();
-        mSurfelClustersLuminanceFramebuffer.bind();
-        mSurfelClustersLuminanceFramebuffer.viewport().apply();
-        mSurfelClustersLuminanceFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-
-        mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
-            mSurfelClusterAveragingShader.setSurfelClustersGBuffer(*mSurfelData->surfelClustersGBuffer());
-            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
-        });
-
-        TriangleStripQuad::Draw();
-    }
-
-    void DeferredSceneRenderer::updateGridProbes() {
-        mGridProbesSHFramebuffer.bind();
-        mGridProbesSHFramebuffer.viewport().apply();
-        mGridProbesSHFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth);
-
-        mGridProbesUpdateShader.bind();
-        mGridProbesUpdateShader.ensureSamplerValidity([&] {
-            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
-            mGridProbesUpdateShader.setProbeProjectionsMetadata(*mDiffuseProbeData->probeClusterProjectionsMetadataBufferTexture());
-            mGridProbesUpdateShader.setProjectionClusterIndices(*mDiffuseProbeData->projectionClusterIndicesBufferTexture());
-            mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(*mDiffuseProbeData->projectionClusterSHsBufferTexture());
-            mGridProbesUpdateShader.setProbesGridResolution(mProbeGridResolution);
-        });
-
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
-    }
-
-    void DeferredSceneRenderer::renderMeshes() {
-        mCookTorranceShader.bind();
-
-        mCookTorranceShader.setSettings(mSettings);
-        mCookTorranceShader.setCamera(*(mScene->camera()));
-        mCookTorranceShader.setLight(mScene->directionalLight());
-        mCookTorranceShader.setFrustumCascades(mShadowMapper.cascades());
     
-        mCookTorranceShader.ensureSamplerValidity([&]() {
-            mCookTorranceShader.setGBuffer(*mGBuffer);
-            mCookTorranceShader.setExponentialShadowMap(*mShadowMapper.directionalShadowMap());
-        });
-
-        TriangleStripQuad::Draw();
-    }
-
     void DeferredSceneRenderer::renderSkybox() {
         mSkyboxShader.bind();
         mSkyboxShader.ensureSamplerValidity([this]() {
@@ -228,11 +128,8 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::render() {
 
-        mShadowMapper.render();
-
-        relightSurfels();
-        averageSurfelClusterLuminances();
-        updateGridProbes();
+        mShadowMapper->render();
+        mIndirectLightAccumulator->render();
 
         // We're using depth buffer rendered during gbuffer construction.
         // Depth writes are disabled for the purpose of combining skybox
@@ -244,13 +141,16 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
-        mPostprocessFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
-
-        renderMeshes();
+        mDirectLightAccumulator->render();
         renderSkybox();
 
-//        auto ssrOutputTexture = mPostprocessTexturePool->claim();
-////        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, ssrOutputTexture, mPostprocessTexturePool);
+        auto reflectionsOutputTexture = mPostprocessTexturePool->claim();
+        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, reflectionsOutputTexture);
+
+        // TODO: Compose light buffers together
+//        mFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+
+
 //
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
         mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
@@ -258,7 +158,7 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
-        renderFinalImage(*toneMappingOutputTexture);
+        renderFinalImage(*mDirectLightAccumulator->lightBuffer());
 
 //        // debug
 //        bindDefaultFramebuffer();
@@ -274,7 +174,7 @@ namespace EARenderer {
 //        glEnable(GL_DEPTH_TEST);
 //        //
 
-//        mPostprocessTexturePool->putBack(ssrOutputTexture);
+        mPostprocessTexturePool->putBack(reflectionsOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);
         mPostprocessTexturePool->putBack(toneMappingOutputTexture);
 

@@ -7,6 +7,7 @@
 //
 
 #include "Size2D.hpp"
+#include <algorithm>
 
 namespace EARenderer {
     
@@ -48,6 +49,10 @@ namespace EARenderer {
     
     Size2D Size2D::transformedBy(const glm::vec2& vector) const {
         return Size2D(width * vector.x, height * vector.y);
+    }
+
+    Size2D Size2D::makeUnion(const Size2D& size) {
+        return { std::max(width, size.width), std::max(height, size.height) };
     }
     
 }
