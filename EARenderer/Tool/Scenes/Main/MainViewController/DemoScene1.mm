@@ -75,9 +75,9 @@
     EARenderer::ID _25_MaterialID = [self load_Material25_ToPool:resourcePool];
     EARenderer::ID roof_MaterialID = [self load_Roof_MaterialToPool:resourcePool];
 
-    EARenderer::ID marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
-
-    EARenderer::ID sandGround_MaterialID = [MaterialLoader load_sandFloor_MaterialToPool:resourcePool];
+//    EARenderer::ID marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
+//
+//    EARenderer::ID sandGround_MaterialID = [MaterialLoader load_sandFloor_MaterialToPool:resourcePool];
 
 //    EARenderer::ID marble01_MaterialID = [MaterialLoader load_marble01_MaterialToPool:resourcePool];
 
@@ -132,7 +132,7 @@
         } else if (subMesh.materialName() == "column_a") {
             sponzaInstance.setMaterialIDForSubMeshID(columnA_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "floor") {
-            sponzaInstance.setMaterialIDForSubMeshID(marbleTiled_MaterialID, subMeshID);
+            sponzaInstance.setMaterialIDForSubMeshID(ironMaterialID, subMeshID);
         } else if (subMesh.materialName() == "column_c") {
             sponzaInstance.setMaterialIDForSubMeshID(columnC_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "details") {

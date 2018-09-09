@@ -38,17 +38,7 @@
 #include "GLSLDeferredCookTorrance.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLSkybox.hpp"
-#include "GLSLGenericGeometry.hpp"
-#include "GLSLEquirectangularMapConversion.hpp"
-#include "GLSLRadianceConvolution.hpp"
-#include "GLSLBRDFIntegration.hpp"
-#include "GLSLSurfelLighting.hpp"
-#include "GLSLSurfelClusterAveraging.hpp"
-#include "GLSLGridLightProbesUpdate.hpp"
-#include "GLSLGridLightProbeRendering.hpp"
-#include "GLSLLightProbeLinksRendering.hpp"
-#include "GLSLProbeOcclusionRendering.hpp"
-#include "GLSLDirectionalExponentialShadowMap.hpp"
+#include "GLSLLightComposer.hpp"
 
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
@@ -81,6 +71,7 @@ namespace EARenderer {
         ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
         ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
 
+        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<ShadowMapper> mShadowMapper;
         std::shared_ptr<DirectLightAccumulator> mDirectLightAccumulator;
@@ -89,6 +80,7 @@ namespace EARenderer {
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLSkybox mSkyboxShader;
         GLSLDeferredCookTorrance mCookTorranceShader;
+        GLSLLightComposer mLightComposingShader;
 
         GLSLFullScreenQuad mFSQuadShader;
 
@@ -98,7 +90,8 @@ namespace EARenderer {
         void bindDefaultFramebuffer();
         void performDepthPrepass();
         void renderSkybox();
-        void renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
+        void composeLightBuffers(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> reflections);
+        void renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image);
 
     public:
         DeferredSceneRenderer(const Scene* scene,

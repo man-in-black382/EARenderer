@@ -39,6 +39,7 @@ namespace EARenderer {
     mSSREffect(mFramebuffer, mPostprocessTexturePool),
 
     // Helpers
+    mProbeData(diffuseProbeData),
     mShadowMapper(std::make_shared<ShadowMapper>(scene)),
     mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper, mFramebuffer)),
     mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, surfelData, diffuseProbeData, mShadowMapper)),
@@ -110,14 +111,29 @@ namespace EARenderer {
         mScene->skybox()->draw();
     }
 
-    void DeferredSceneRenderer::renderFinalImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
+    void DeferredSceneRenderer::composeLightBuffers(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> reflections) {
+        mLightComposingShader.bind();
+        mLightComposingShader.ensureSamplerValidity([&]() {
+            mLightComposingShader.setCamera(*mScene->camera());
+            mLightComposingShader.setGBuffer(*mGBuffer);
+            mLightComposingShader.setLightBuffer(*mDirectLightAccumulator->lightBuffer());
+            mLightComposingShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
+            mLightComposingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+            mLightComposingShader.setGridProbesSHTextures(*mIndirectLightAccumulator->gridProbesSphericalHarmonics());
+            mLightComposingShader.setReflections(*reflections);
+        });
+
+        TriangleStripQuad::Draw();
+    }
+
+    void DeferredSceneRenderer::renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
         mFSQuadShader.setApplyToneMapping(false);
         mFSQuadShader.ensureSamplerValidity([&]() {
-            mFSQuadShader.setTexture(image);
+            mFSQuadShader.setTexture(*image);
         });
 
         TriangleStripQuad::Draw();
@@ -145,34 +161,18 @@ namespace EARenderer {
         renderSkybox();
 
         auto reflectionsOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mFrame, reflectionsOutputTexture);
+        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mDirectLightAccumulator->lightBuffer(), reflectionsOutputTexture);
 
-        // TODO: Compose light buffers together
-//        mFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+        mFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
+        composeLightBuffers(reflectionsOutputTexture);
 
-
-//
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
         mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
 
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
-        renderFinalImage(*mDirectLightAccumulator->lightBuffer());
-
-//        // debug
-//        bindDefaultFramebuffer();
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//        mFSQuadShader.ensureSamplerValidity([&]() {
-//            mFSQuadShader.setTexture(*mDirectionalExponentialShadowMap);
-//        });
-//
-//        TriangleStripQuad::Draw();
-//        glEnable(GL_DEPTH_TEST);
-//        //
+        renderFinalImage(toneMappingOutputTexture);
 
         mPostprocessTexturePool->putBack(reflectionsOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

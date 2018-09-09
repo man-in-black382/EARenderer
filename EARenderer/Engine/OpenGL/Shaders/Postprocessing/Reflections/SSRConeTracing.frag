@@ -1,5 +1,8 @@
 #version 400 core
 
+// Constants
+const float kDenormalizationFactor = 1000.0;
+
 // Output
 
 layout(location = 0) out vec4 oOutputColor;
@@ -170,6 +173,7 @@ float IsoscelesTriangleInscribedCircleRadius(float a, float h) {
 
 vec4 ConeSampleWeightedColor(vec2 samplePos, float mipChannel, float gloss) {
     vec3 sampleColor = textureLod(uReflections, samplePos, mipChannel).rgb;
+    sampleColor *= kDenormalizationFactor;
     return vec4(sampleColor * gloss, gloss);
 }
 
@@ -221,9 +225,8 @@ void main() {
 
     vec2 texSize = vec2(textureSize(uReflections, 0));
 
-    int i;
     // Cone-tracing using an isosceles triangle to approximate a cone in screen space
-    for(i = 0; i < 7; ++i) {
+    for(int i = 0; i < 7; ++i) {
         // intersection length is the adjacent side, get the opposite side using trig
         float oppositeLength = IsoscelesTriangleOpposite(adjacentLength, coneTheta);
 
@@ -259,6 +262,5 @@ void main() {
         glossMult *= gloss;
     }
 
-//    oOutputColor = vec4(textureLod(uReflections, vTexCoords, 5.2).rgb, 1.0);
     oOutputColor = vec4(totalColor.rgb, 1.0);
 }

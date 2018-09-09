@@ -267,8 +267,8 @@ bool RayMarch(vec3 worldReflectionVec,
               out vec3 hitPosition,
               out float attenuationFactor)
 {
-    const float kMaxRayMarchStep = 0.04;
-    const int kMaxRayMarchIterations = 25;
+    const float kMaxRayMarchStep = 0.01;
+    const int kMaxRayMarchIterations = 50;
     const int kMaxBinarySearchSamples = 5;
 
     int stub = uHiZBufferMipCount;

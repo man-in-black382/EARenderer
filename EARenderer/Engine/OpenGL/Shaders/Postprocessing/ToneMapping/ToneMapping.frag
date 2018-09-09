@@ -64,21 +64,13 @@ void main() {
     vec3 color = textureLod(uImage, vTexCoords, 0).rgb;
     color *= 0.001;//exposure;  // Exposure Adjustment
 
-    bool tonemapOnLuminance = true;
-
-    // Do tonemapping on RGB or Luminance
-    if(!tonemapOnLuminance) {
-        color = Uncharted2Tonemap(ExposureBias * color);
-    } else {
-        float lum = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-        vec3 newLum = Uncharted2Tonemap(vec3(ExposureBias * lum));
-        vec3 lumScale = newLum / lum;
-        color *= lumScale;
-    }
+    float lum = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+    vec3 newLum = Uncharted2Tonemap(vec3(ExposureBias * lum));
+    vec3 lumScale = newLum / lum;
+    color *= lumScale;
 
     vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3(LinearWhitePoint));
     color *= whiteScale;
-
     color = GammaCorrect(color);
 
     oFragColor = vec4(color, 1.0);

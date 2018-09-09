@@ -29,7 +29,6 @@ namespace EARenderer {
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setLightBuffer(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& lightBuffer);
         void setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& reflections);
-        void setSettings(const RenderingSettings& settings);
     };
 
 }

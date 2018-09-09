@@ -1472,7 +1472,7 @@
 		CECB156821032641002508CB /* GLTextureDataInterpreter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureDataInterpreter.hpp; sourceTree = "<group>"; };
 		CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
-		CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */ = {isa = PBXFileReference; lastKnownFileType = text; path = ScreenSpaceReflectionEffect.tpp; sourceTree = "<group>"; };
+		CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.tpp; sourceTree = "<group>"; };
 		CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.hpp; sourceTree = "<group>"; };
 		CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLScreenSpaceReflections.cpp; sourceTree = "<group>"; };
 		CEEE4CE120FB874D00CCBBF5 /* GLSLScreenSpaceReflections.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLScreenSpaceReflections.hpp; sourceTree = "<group>"; };
