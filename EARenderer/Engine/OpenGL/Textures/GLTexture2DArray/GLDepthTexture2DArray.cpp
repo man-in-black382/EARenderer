@@ -7,7 +7,7 @@
 //
 
 #include "GLDepthTexture2DArray.hpp"
-#include "Macros.h"
+ 
 
 #include <OpenGL/gl3ext.h>
 

@@ -7,7 +7,7 @@
 //
 
 #include "GLFramebuffer.hpp"
-#include "Macros.h"
+ 
 #include "StringUtils.hpp"
 
 #include <OpenGL/gl3.h>
@@ -24,8 +24,9 @@ namespace EARenderer {
     mSize(size),
     mViewport(Rect2D(size))
     {
-        ASSERT(size.width > 0, "Framebuffer width should be greater than 0");
-        ASSERT(size.height > 0, "Framebuffer height should be greater than 0");
+        if (size.width <= 0 || size.height <= 0) {
+            throw std::invalid_argument("Framebuffer's size must be greater than zero");
+        }
         
         glGenFramebuffers(1, &mName);
         obtainHardwareLimits();

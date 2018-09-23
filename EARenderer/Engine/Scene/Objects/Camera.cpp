@@ -7,7 +7,6 @@
 //
 
 #include "Camera.hpp"
-#include "Macros.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

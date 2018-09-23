@@ -9,8 +9,7 @@
 #include "MeshInstance.hpp"
 #include "ResourcePool.hpp"
 #include "Scene.hpp"
-
-#include "Macros.h"
+#include "StringUtils.hpp"
 
 namespace EARenderer {
     
@@ -89,7 +88,9 @@ namespace EARenderer {
     }
     
     void MeshInstance::setMaterialIDForSubMeshID(ID materialID, ID subMeshID) {
-        ASSERT(mSubMeshMaterialMap.find(subMeshID) != mSubMeshMaterialMap.end(), "Mesh (ID :" << mMeshID << ") doesn't contain submesh with ID " << subMeshID << " . Therefore cannot set a material for it.");
+        if (mSubMeshMaterialMap.find(subMeshID) == mSubMeshMaterialMap.end()) {
+            throw std::invalid_argument(string_format("Mesh (ID: %d) doesn't contain submesh with ID %d. Therefore, cannot set a material for it.", mMeshID, subMeshID));
+        }
         mSubMeshMaterialMap[subMeshID] = materialID;
     }
     
@@ -101,7 +102,9 @@ namespace EARenderer {
     }
 
     void MeshInstance::setDedicatedSHTextureIndexForSubMeshID(Index textureIndex, ID subMeshID) {
-        ASSERT(mSubMeshSHTextureIndexMap.find(subMeshID) != mSubMeshSHTextureIndexMap.end(), "Mesh (ID :" << mMeshID << ") doesn't contain submesh with ID " << subMeshID << " .");
+        if (mSubMeshSHTextureIndexMap.find(subMeshID) == mSubMeshSHTextureIndexMap.end()) {
+            throw std::invalid_argument(string_format("Mesh (ID: %d) doesn't contain submesh with ID %d.", mMeshID, subMeshID));
+        }
         mSubMeshSHTextureIndexMap[subMeshID] = textureIndex;
     }
     

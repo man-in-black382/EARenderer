@@ -16,7 +16,7 @@
 #include <type_traits>
 #include <chrono>
 
-#include "Event.inl"
+#include "Event.hpp"
 
 namespace EARenderer {
     

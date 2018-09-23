@@ -18,7 +18,7 @@
 #include "Scene.hpp"
 #include "Input.hpp"
 #include "GLViewport.hpp"
-#include "Event.inl"
+#include "Event.hpp"
 
 namespace EARenderer {
     

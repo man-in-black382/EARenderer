@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "BitwiseEnum.hpp"
+
 namespace EARenderer {
     
 #pragma mark - Event

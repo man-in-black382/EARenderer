@@ -60,5 +60,6 @@ void main() {
         oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 0);
     } else {
         oFragmentColor = vec4(SampleSphericalMap(normalize(oEyeDirection.xyz)), 1.0); // Don't forget to normalize!
+        oFragmentColor.rgb /= 1000.0;
     }
 }

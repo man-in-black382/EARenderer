@@ -153,7 +153,7 @@ namespace EARenderer {
         // meshes are rendered as a full screen quad, then skybox is rendered
         // where it should, using depth buffer filled by geometry.
         // Then, full screen quad rendering (postprocessing) can be applied without
-        // polluting the depth buffer, which leaves us an ability to render 3D debug stuff,
+        // polluting the depth buffer, which leaves us an ability to render 3D debug entities,
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 

@@ -170,13 +170,13 @@
         }
     }
     
-    EARenderer::MeshInstance sphereInstance(sphereMeshID);
-    sphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
+//    EARenderer::MeshInstance sphereInstance(sphereMeshID);
+//    sphereInstance.setMaterialIDForAllSubmeshes(ironMaterialID);
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
 
-    _sphereMeshInstanceID = scene->meshInstances().insert(sphereInstance);
-    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
+//    _sphereMeshInstanceID = scene->meshInstances().insert(sphereInstance);
+//    scene->addMeshInstanceWithIDAsDynamic(_sphereMeshInstanceID);
 
     // Skybox
 

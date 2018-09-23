@@ -7,7 +7,6 @@
 //
 
 #include "GLDepthTextureCubemap.hpp"
-#include "Macros.h"
 
 namespace EARenderer {
     

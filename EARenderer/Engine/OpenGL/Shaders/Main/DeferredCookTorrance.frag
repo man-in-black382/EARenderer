@@ -192,7 +192,7 @@ vec3 CookTorranceBRDF(vec3 N, vec3 V, vec3 H, vec3 L, float roughness, vec3 albe
     vec3 shadowedRadiance = radiance * shadow * NdotL;
 
     // Lambertian diffuse component with indirect light applied
-    vec3 diffuse    = Kd * (albedo /*/ PI*/) * shadowedRadiance;
+    vec3 diffuse    = Kd * (albedo / PI) * shadowedRadiance;
 
     specular        *= shadowedRadiance;
 
@@ -412,9 +412,6 @@ void main() {
 
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
 
-    // Shrinking the output value so that it won't be clamped by additive blending
-    specularAndDiffuse /= kNormalizationFactor;
-
     oBaseOutput = vec4(specularAndDiffuse, 1.0);
 
 //    int cascade = ShadowCascadeIndex(worldPosition);
@@ -424,4 +421,7 @@ void main() {
 //        case 2: oBaseOutput += vec4(0.0, 0.0, 0.5, 0.0); break;
 //        case 3: oBaseOutput += vec4(0.5, 0.5, 0.0, 0.0); break;
 //    }
+
+    // Shrinking the output value so that it won't be clamped by additive blending
+    oBaseOutput.rgb /= kNormalizationFactor;
 }

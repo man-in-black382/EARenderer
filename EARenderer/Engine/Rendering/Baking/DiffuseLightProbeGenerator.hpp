@@ -51,7 +51,9 @@ namespace EARenderer {
         std::vector<uint32_t> probeProjectionsMetadata() const;
 
     public:
-        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData, const Size2D& occlusionMapResolution);
+        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene,
+                                                              std::shared_ptr<const SurfelData> surfelData,
+                                                              const Size2D& occlusionMapResolution);
     };
 
 }

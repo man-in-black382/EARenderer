@@ -108,7 +108,7 @@ namespace EARenderer {
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
-        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 1);
+        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 4);
         renderDirectionalShadowMaps();
         renderOmnidirectionalShadowMaps();
     }

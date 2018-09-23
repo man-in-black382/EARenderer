@@ -233,7 +233,6 @@
 		CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */; };
 		CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */; };
 		CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */; };
-		CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8A01F8F8EBD00AD9027 /* tiny_obj_loader.cpp */; };
 		CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8F31F8F8EBD00AD9027 /* glm.cpp */; };
 		CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */; };
 		CE70FA381F8F8EF600AD9027 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B91F8F8EBD00AD9027 /* GLTexture.cpp */; };
@@ -329,6 +328,7 @@
 		CEA0B91320E799DC00257E37 /* DeferredSceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B91120E799DC00257E37 /* DeferredSceneRenderer.cpp */; };
 		CEA0B91620E79D1300257E37 /* GLSLDeferredCookTorrance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B91420E79D1300257E37 /* GLSLDeferredCookTorrance.cpp */; };
 		CEA0B91920E79D8F00257E37 /* DeferredCookTorrance.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEA0B91720E79D8F00257E37 /* DeferredCookTorrance.frag */; };
+		CEA7D2BC21563B27003DF25A /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA7D2BA21563B27003DF25A /* Serializer.cpp */; };
 		CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A431FCAF0090090F1EE /* Collision.cpp */; };
 		CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A4C1FCB02920090F1EE /* Interval.cpp */; };
 		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
@@ -371,6 +371,7 @@
 		CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2197020C076B000767342 /* MaterialLoader.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CECD41DD20D67FDA00D40D32 /* sponza_lightweight.obj in Resources */ = {isa = PBXBuildFile; fileRef = CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */; };
+		CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */; };
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */; };
 		CEEE4CE220FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */; };
 		CEEE4CE420FB877700CCBBF5 /* SSR.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEEE4CE320FB877700CCBBF5 /* SSR.frag */; };
@@ -878,7 +879,6 @@
 		CE70F8411F8F8EBD00AD9027 /* Input.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Input.hpp; sourceTree = "<group>"; };
 		CE70F8431F8F8EBD00AD9027 /* Range.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Range.cpp; sourceTree = "<group>"; };
 		CE70F8441F8F8EBD00AD9027 /* Color.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
-		CE70F8451F8F8EBD00AD9027 /* Macros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Macros.h; sourceTree = "<group>"; };
 		CE70F8461F8F8EBD00AD9027 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Color.hpp; sourceTree = "<group>"; };
 		CE70F8471F8F8EBD00AD9027 /* Range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Range.hpp; sourceTree = "<group>"; };
 		CE70F8481F8F8EBD00AD9027 /* BitwiseEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BitwiseEnum.hpp; sourceTree = "<group>"; };
@@ -944,13 +944,11 @@
 		CE70F8941F8F8EBD00AD9027 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
 		CE70F8951F8F8EBD00AD9027 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		CE70F8961F8F8EBD00AD9027 /* Scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
-		CE70F8981F8F8EBD00AD9027 /* Event.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Event.inl; sourceTree = "<group>"; };
+		CE70F8981F8F8EBD00AD9027 /* Event.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Event.hpp; sourceTree = "<group>"; };
 		CE70F89B1F8F8EBD00AD9027 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		CE70F89D1F8F8EBD00AD9027 /* ltalloc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ltalloc.hpp; sourceTree = "<group>"; };
 		CE70F89E1F8F8EBD00AD9027 /* ltalloc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ltalloc.cc; sourceTree = "<group>"; };
 		CE70F89F1F8F8EBD00AD9027 /* ltalloc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ltalloc.h; sourceTree = "<group>"; };
-		CE70F8A01F8F8EBD00AD9027 /* tiny_obj_loader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tiny_obj_loader.cpp; sourceTree = "<group>"; };
-		CE70F8A11F8F8EBD00AD9027 /* tiny_obj_loader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tiny_obj_loader.h; sourceTree = "<group>"; };
 		CE70F8A31F8F8EBD00AD9027 /* vec4.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vec4.hpp; sourceTree = "<group>"; };
 		CE70F8A41F8F8EBD00AD9027 /* integer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = integer.hpp; sourceTree = "<group>"; };
 		CE70F8A51F8F8EBD00AD9027 /* vector_relational.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = vector_relational.hpp; sourceTree = "<group>"; };
@@ -1421,6 +1419,8 @@
 		CEA0B91420E79D1300257E37 /* GLSLDeferredCookTorrance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDeferredCookTorrance.cpp; sourceTree = "<group>"; };
 		CEA0B91520E79D1300257E37 /* GLSLDeferredCookTorrance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDeferredCookTorrance.hpp; sourceTree = "<group>"; };
 		CEA0B91720E79D8F00257E37 /* DeferredCookTorrance.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DeferredCookTorrance.frag; sourceTree = "<group>"; };
+		CEA7D2BA21563B27003DF25A /* Serializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
+		CEA7D2BB21563B27003DF25A /* Serializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializer.hpp; sourceTree = "<group>"; };
 		CEA95A431FCAF0090090F1EE /* Collision.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Collision.cpp; sourceTree = "<group>"; };
 		CEA95A441FCAF0090090F1EE /* Collision.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Collision.hpp; sourceTree = "<group>"; };
 		CEA95A471FCAFF6A0090F1EE /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Interval.hpp; sourceTree = "<group>"; };
@@ -1472,6 +1472,11 @@
 		CECB156821032641002508CB /* GLTextureDataInterpreter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureDataInterpreter.hpp; sourceTree = "<group>"; };
 		CECD41DC20D67FDA00D40D32 /* sponza_lightweight.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
+		CEE826392157C3A40019D2F8 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
+		CEE8263A2157C3A40019D2F8 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
+		CEE8263B2157C3A40019D2F8 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tiny_obj_loader.cpp; sourceTree = "<group>"; };
+		CEE826C72157D1210019D2F8 /* tiny_obj_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tiny_obj_loader.h; sourceTree = "<group>"; };
 		CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.tpp; sourceTree = "<group>"; };
 		CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.hpp; sourceTree = "<group>"; };
 		CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLScreenSpaceReflections.cpp; sourceTree = "<group>"; };
@@ -2596,6 +2601,7 @@
 		CE70F83E1F8F8EBD00AD9027 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				CEA7D2B921563B0B003DF25A /* Serialization */,
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
 				AC1F6BD520E2301400E81EB0 /* Threading */,
 				CE70F8521F8F8EBD00AD9027 /* Rendering */,
@@ -2612,13 +2618,12 @@
 		CE70F8421F8F8EBD00AD9027 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F8981F8F8EBD00AD9027 /* Event.inl */,
+				CE70F8981F8F8EBD00AD9027 /* Event.hpp */,
 				CE70F8401F8F8EBD00AD9027 /* Input.cpp */,
 				CE70F8411F8F8EBD00AD9027 /* Input.hpp */,
 				CE70F8481F8F8EBD00AD9027 /* BitwiseEnum.hpp */,
 				CE70F8441F8F8EBD00AD9027 /* Color.cpp */,
 				CE70F8461F8F8EBD00AD9027 /* Color.hpp */,
-				CE70F8451F8F8EBD00AD9027 /* Macros.h */,
 				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
 				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
 				CE058FFF1FA73C7A00822524 /* crc.hpp */,
@@ -2806,9 +2811,9 @@
 				AC0ADF1D2080B5EB0026FD48 /* autodesk */,
 				CE1C973D2067B09E006A4A73 /* choreograph */,
 				CE1C972B2067AA88006A4A73 /* embree */,
-				CE70F89A1F8F8EBD00AD9027 /* stb */,
-				CE70F89C1F8F8EBD00AD9027 /* obj_loader */,
 				CE70F8A21F8F8EBD00AD9027 /* glm */,
+				CE70F89C1F8F8EBD00AD9027 /* obj_loader */,
+				CE70F89A1F8F8EBD00AD9027 /* stb */,
 			);
 			path = ThirdParty;
 			sourceTree = "<group>";
@@ -2824,11 +2829,11 @@
 		CE70F89C1F8F8EBD00AD9027 /* obj_loader */ = {
 			isa = PBXGroup;
 			children = (
+				CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */,
+				CEE826C72157D1210019D2F8 /* tiny_obj_loader.h */,
 				CE70F89D1F8F8EBD00AD9027 /* ltalloc.hpp */,
 				CE70F89E1F8F8EBD00AD9027 /* ltalloc.cc */,
 				CE70F89F1F8F8EBD00AD9027 /* ltalloc.h */,
-				CE70F8A01F8F8EBD00AD9027 /* tiny_obj_loader.cpp */,
-				CE70F8A11F8F8EBD00AD9027 /* tiny_obj_loader.h */,
 			);
 			path = obj_loader;
 			sourceTree = "<group>";
@@ -3360,6 +3365,9 @@
 		CE891BB4205C54C800D2B09D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CEE826392157C3A40019D2F8 /* libc++.1.tbd */,
+				CEE8263B2157C3A40019D2F8 /* libc++.tbd */,
+				CEE8263A2157C3A40019D2F8 /* libc++abi.tbd */,
 				CE7A016A20B1BF1F0002D422 /* libtbb.dylib */,
 				CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */,
 			);
@@ -3502,6 +3510,15 @@
 				CE9775051FA5D73700F5699C /* VaseRound_roughness.tga */,
 			);
 			path = "Sponza PRB Texture Set";
+			sourceTree = "<group>";
+		};
+		CEA7D2B921563B0B003DF25A /* Serialization */ = {
+			isa = PBXGroup;
+			children = (
+				CEA7D2BA21563B27003DF25A /* Serializer.cpp */,
+				CEA7D2BB21563B27003DF25A /* Serializer.hpp */,
+			);
+			path = Serialization;
 			sourceTree = "<group>";
 		};
 		CEAAA3971F97C0C40029099D /* Floor */ = {
@@ -3911,6 +3928,7 @@
 				CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
+				CEA7D2BC21563B27003DF25A /* Serializer.cpp in Sources */,
 				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
@@ -3932,12 +3950,12 @@
 				CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */,
 				AC6CD81220D11838000E6A22 /* GLSLGaussianBlur.cpp in Sources */,
 				CE70FA951F8F913100AD9027 /* OutlineView.m in Sources */,
-				CE70FA341F8F8EF600AD9027 /* tiny_obj_loader.cpp in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
 				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
 				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
 				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
+				CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */,
 				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
 				AC40397E20E38A680079112E /* ToneMappingEffect.tpp in Sources */,
 				CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */,
@@ -4154,6 +4172,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -4161,18 +4180,10 @@
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/**",
-					/opt/local/include/embree3,
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/**",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4185,6 +4196,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_ENTITLEMENTS = EARenderer/EARenderer.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -4192,18 +4204,10 @@
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = (
-					"$(SRCROOT)/**",
-					/opt/local/include/embree3,
-				);
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/**",
-					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/embree",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";

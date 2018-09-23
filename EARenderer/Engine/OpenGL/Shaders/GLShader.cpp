@@ -7,10 +7,11 @@
 //
 
 #include "GLShader.hpp"
+#include "StringUtils.hpp"
 
 #include <fstream>
 #include <vector>
-#include "Macros.h"
+ 
 
 namespace EARenderer {
     
@@ -18,9 +19,10 @@ namespace EARenderer {
     
     GLShader::GLShader(const std::string& sourcePath, GLenum type) {
         std::ifstream stream(sourcePath);
-        ASSERT(stream.is_open(), "Cannot load shader (" << sourcePath << ")");
+        if (!stream.is_open()) {
+            throw std::invalid_argument(string_format("Can't load a shader at path: %s", sourcePath.c_str()));
+        }
         mName = glCreateShader(type);
-        
         compile(std::string((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>()));
     }
     
@@ -46,10 +48,10 @@ namespace EARenderer {
                 std::vector<char> infoChars(infoLength);
                 glGetShaderInfoLog(mName, infoLength, nullptr, infoChars.data());
                 std::string infoLog(infoChars.begin(), infoChars.end());
-                ASSERT(isCompiled, "Falied to compile shader: " << infoLog);
+                throw std::runtime_error(string_format("Failed to compile shader: %s", infoLog.c_str()));
             }
             
-            ASSERT(isCompiled, "Falied to compile shader");
+            throw std::runtime_error("Failed to compile shader");
         }
     }
     

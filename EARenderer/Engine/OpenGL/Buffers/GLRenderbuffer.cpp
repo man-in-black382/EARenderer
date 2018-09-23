@@ -7,8 +7,7 @@
 //
 
 #include "GLRenderbuffer.hpp"
-
-#include "Macros.h"
+#include "StringUtils.hpp"
 
 namespace EARenderer {
     
@@ -18,8 +17,9 @@ namespace EARenderer {
     :
     mSize(size)
     {
-        ASSERT(size.width > 0, "Renderbuffer width should be greater than 0");
-        ASSERT(size.height > 0, "Renderbuffer height should be greater than 0");
+        if (size.width <= 0 || size.height <= 0) {
+            throw std::invalid_argument("Renderbuffer's size must be greater than zero");
+        }
         
         glGenRenderbuffers(1, &mName);
         bind();

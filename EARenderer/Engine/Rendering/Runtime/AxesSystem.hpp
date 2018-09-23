@@ -9,8 +9,6 @@
 #ifndef AxesSystem_hpp
 #define AxesSystem_hpp
 
-#include "Macros.h"
-
 #include "Vertex1P3.hpp"
 #include "GLVertexArray.hpp"
 
@@ -18,6 +16,7 @@
 #include "Parallelogram3D.hpp"
 #include "Transformation.hpp"
 #include "Camera.hpp"
+#include "BitwiseEnum.hpp"
 
 #include <array>
 #include <glm/mat4x4.hpp>

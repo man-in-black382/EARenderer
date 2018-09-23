@@ -8,7 +8,7 @@
 
 #include "SceneInteractor.hpp"
 
-#include "Event.inl"
+#include "Event.hpp"
 
 #include <glm/geometric.hpp>
 

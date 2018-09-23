@@ -7,7 +7,7 @@
 //
 
 #include "GLNamedObject.hpp"
-#include "Macros.h"
+ 
 
 namespace EARenderer {
     
