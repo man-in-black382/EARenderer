@@ -8,7 +8,7 @@
 
 #include "SphericalHarmonics.hpp"
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/epsilon.hpp>
 
 namespace EARenderer {

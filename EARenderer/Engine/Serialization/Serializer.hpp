@@ -9,12 +9,12 @@
 #ifndef Serializer_hpp
 #define Serializer_hpp
 
-//#include "cereal/archives/binary.hpp"
+#include <bitsery/bitsery.h>
 
 namespace EARenderer {
 
     class Serializer {
-        
+
     };
 
 }

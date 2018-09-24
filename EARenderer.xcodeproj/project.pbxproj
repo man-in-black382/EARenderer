@@ -79,6 +79,7 @@
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
 		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
 		CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */; };
+		CE2B3B192159261A007FA3DF /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */; };
 		CE2B60F520E5348200370844 /* GLSLToneMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */; };
 		CE2B60F720E534E100370844 /* ToneMapping.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE2B60F620E534E100370844 /* ToneMapping.frag */; };
 		CE2E3ADA2104AF95004D2068 /* GLTextureFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2E3AD82104AF95004D2068 /* GLTextureFactory.cpp */; };
@@ -765,6 +766,7 @@
 		CE2221F91FC0B06D009B6804 /* LightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbe.hpp; sourceTree = "<group>"; };
 		CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
 		CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRCubemapSampler.hpp; sourceTree = "<group>"; };
+		CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libembree3.3.0.0.dylib; path = ../../../../opt/local/lib/libembree3.3.0.0.dylib; sourceTree = "<group>"; };
 		CE2B60F120E524CC00370844 /* ToneMappingSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ToneMappingSettings.hpp; sourceTree = "<group>"; };
 		CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLToneMapping.cpp; sourceTree = "<group>"; };
 		CE2B60F420E5348200370844 /* GLSLToneMapping.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLToneMapping.hpp; sourceTree = "<group>"; };
@@ -822,6 +824,56 @@
 		CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_lux.obj; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
+		CE680A8D2159333800149774 /* bitsery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitsery.h; sourceTree = "<group>"; };
+		CE680A902159333800149774 /* traits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = traits.h; sourceTree = "<group>"; };
+		CE680A912159333800149774 /* std_defaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_defaults.h; sourceTree = "<group>"; };
+		CE680A922159333800149774 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		CE680A932159333800149774 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
+		CE680A942159333800149774 /* forward_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forward_list.h; sourceTree = "<group>"; };
+		CE680A952159333800149774 /* deque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deque.h; sourceTree = "<group>"; };
+		CE680A962159333800149774 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		CE680A972159333800149774 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
+		CE680A982159333800149774 /* adapter_writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adapter_writer.h; sourceTree = "<group>"; };
+		CE680A9A2159333800149774 /* inheritance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inheritance.h; sourceTree = "<group>"; };
+		CE680A9B2159333800149774 /* value_range.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = value_range.h; sourceTree = "<group>"; };
+		CE680A9C2159333800149774 /* std_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_queue.h; sourceTree = "<group>"; };
+		CE680A9D2159333800149774 /* std_set.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_set.h; sourceTree = "<group>"; };
+		CE680A9E2159333800149774 /* std_stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_stack.h; sourceTree = "<group>"; };
+		CE680AA02159333800149774 /* rtti_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rtti_utils.h; sourceTree = "<group>"; };
+		CE680AA12159333800149774 /* polymorphism_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = polymorphism_utils.h; sourceTree = "<group>"; };
+		CE680AA22159333800149774 /* pointer_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pointer_utils.h; sourceTree = "<group>"; };
+		CE680AA32159333800149774 /* entropy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entropy.h; sourceTree = "<group>"; };
+		CE680AA42159333800149774 /* std_optional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_optional.h; sourceTree = "<group>"; };
+		CE680AA52159333800149774 /* std_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_map.h; sourceTree = "<group>"; };
+		CE680AA62159333800149774 /* growable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = growable.h; sourceTree = "<group>"; };
+		CE680AA72159333800149774 /* std_smart_ptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_smart_ptr.h; sourceTree = "<group>"; };
+		CE680AA82159333800149774 /* pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pointer.h; sourceTree = "<group>"; };
+		CE680AA92159333800149774 /* deserializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deserializer.h; sourceTree = "<group>"; };
+		CE680AAB2159333800149774 /* adapter_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adapter_utils.h; sourceTree = "<group>"; };
+		CE680AAC2159333800149774 /* not_defined_type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = not_defined_type.h; sourceTree = "<group>"; };
+		CE680AAD2159333800149774 /* sessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sessions.h; sourceTree = "<group>"; };
+		CE680AAE2159333800149774 /* adapter_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adapter_common.h; sourceTree = "<group>"; };
+		CE680AAF2159333800149774 /* flexible_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flexible_common.h; sourceTree = "<group>"; };
+		CE680AB02159333800149774 /* serialization_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialization_common.h; sourceTree = "<group>"; };
+		CE680AB22159333800149774 /* stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stream.h; sourceTree = "<group>"; };
+		CE680AB32159333800149774 /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buffer.h; sourceTree = "<group>"; };
+		CE680AB52159333800149774 /* unordered_map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unordered_map.h; sourceTree = "<group>"; };
+		CE680AB62159333800149774 /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
+		CE680AB72159333800149774 /* list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = list.h; sourceTree = "<group>"; };
+		CE680AB82159333800149774 /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
+		CE680AB92159333800149774 /* forward_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = forward_list.h; sourceTree = "<group>"; };
+		CE680ABA2159333800149774 /* deque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deque.h; sourceTree = "<group>"; };
+		CE680ABB2159333800149774 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		CE680ABC2159333800149774 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
+		CE680ABD2159333800149774 /* unordered_set.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unordered_set.h; sourceTree = "<group>"; };
+		CE680ABE2159333800149774 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = "<group>"; };
+		CE680ABF2159333800149774 /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<group>"; };
+		CE680AC02159333800149774 /* set.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = set.h; sourceTree = "<group>"; };
+		CE680AC12159333800149774 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = string.h; sourceTree = "<group>"; };
+		CE680AC22159333800149774 /* serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serializer.h; sourceTree = "<group>"; };
+		CE680AC32159333800149774 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		CE680AC42159333800149774 /* flexible.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flexible.h; sourceTree = "<group>"; };
+		CE680AC52159333800149774 /* adapter_reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adapter_reader.h; sourceTree = "<group>"; };
 		CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTexture2DArray.cpp; sourceTree = "<group>"; };
 		CE6DD45D20601D2700F8E3FA /* GLHDRTexture2DArray.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTexture2DArray.hpp; sourceTree = "<group>"; };
 		CE70F7C51F8F8E5A00AD9027 /* EARenderer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EARenderer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1287,7 +1339,6 @@
 		CE7A013720B165850002D422 /* ProbeOcclusionRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.frag; sourceTree = "<group>"; };
 		CE7A013820B165850002D422 /* ProbeOcclusionRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.geom; sourceTree = "<group>"; };
 		CE7A013920B165850002D422 /* ProbeOcclusionRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.vert; sourceTree = "<group>"; };
-		CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libembree3.3.2.0.dylib; path = ../../../../opt/local/lib/libembree3.3.2.0.dylib; sourceTree = "<group>"; };
 		CE7A016A20B1BF1F0002D422 /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtbb.dylib; path = ../../../../opt/local/lib/libtbb.dylib; sourceTree = "<group>"; };
 		CE7A018320B1CA610002D422 /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libembree3.3.0.0.dylib; sourceTree = "<group>"; };
 		CE81CB151FA24ED000535020 /* blank_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_black.png; sourceTree = "<group>"; };
@@ -1504,8 +1555,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC0ADF1F2080B5F50026FD48 /* libfbxsdk.a in Frameworks */,
 				CE7A018420B1CA610002D422 /* libembree3.3.0.0.dylib in Frameworks */,
+				AC0ADF1F2080B5F50026FD48 /* libfbxsdk.a in Frameworks */,
+				CE2B3B192159261A007FA3DF /* libembree3.3.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2301,6 +2353,119 @@
 			path = RedFabric;
 			sourceTree = "<group>";
 		};
+		CE680A8C2159333800149774 /* bitsery */ = {
+			isa = PBXGroup;
+			children = (
+				CE680A8D2159333800149774 /* bitsery.h */,
+				CE680A8E2159333800149774 /* traits */,
+				CE680A982159333800149774 /* adapter_writer.h */,
+				CE680A992159333800149774 /* ext */,
+				CE680AA92159333800149774 /* deserializer.h */,
+				CE680AAA2159333800149774 /* details */,
+				CE680AB12159333800149774 /* adapter */,
+				CE680AB42159333800149774 /* flexible */,
+				CE680AC22159333800149774 /* serializer.h */,
+				CE680AC32159333800149774 /* common.h */,
+				CE680AC42159333800149774 /* flexible.h */,
+				CE680AC52159333800149774 /* adapter_reader.h */,
+			);
+			path = bitsery;
+			sourceTree = "<group>";
+		};
+		CE680A8E2159333800149774 /* traits */ = {
+			isa = PBXGroup;
+			children = (
+				CE680A8F2159333800149774 /* core */,
+				CE680A922159333800149774 /* list.h */,
+				CE680A932159333800149774 /* array.h */,
+				CE680A942159333800149774 /* forward_list.h */,
+				CE680A952159333800149774 /* deque.h */,
+				CE680A962159333800149774 /* vector.h */,
+				CE680A972159333800149774 /* string.h */,
+			);
+			path = traits;
+			sourceTree = "<group>";
+		};
+		CE680A8F2159333800149774 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				CE680A902159333800149774 /* traits.h */,
+				CE680A912159333800149774 /* std_defaults.h */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		CE680A992159333800149774 /* ext */ = {
+			isa = PBXGroup;
+			children = (
+				CE680A9A2159333800149774 /* inheritance.h */,
+				CE680A9B2159333800149774 /* value_range.h */,
+				CE680A9C2159333800149774 /* std_queue.h */,
+				CE680A9D2159333800149774 /* std_set.h */,
+				CE680A9E2159333800149774 /* std_stack.h */,
+				CE680A9F2159333800149774 /* utils */,
+				CE680AA32159333800149774 /* entropy.h */,
+				CE680AA42159333800149774 /* std_optional.h */,
+				CE680AA52159333800149774 /* std_map.h */,
+				CE680AA62159333800149774 /* growable.h */,
+				CE680AA72159333800149774 /* std_smart_ptr.h */,
+				CE680AA82159333800149774 /* pointer.h */,
+			);
+			path = ext;
+			sourceTree = "<group>";
+		};
+		CE680A9F2159333800149774 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				CE680AA02159333800149774 /* rtti_utils.h */,
+				CE680AA12159333800149774 /* polymorphism_utils.h */,
+				CE680AA22159333800149774 /* pointer_utils.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		CE680AAA2159333800149774 /* details */ = {
+			isa = PBXGroup;
+			children = (
+				CE680AAB2159333800149774 /* adapter_utils.h */,
+				CE680AAC2159333800149774 /* not_defined_type.h */,
+				CE680AAD2159333800149774 /* sessions.h */,
+				CE680AAE2159333800149774 /* adapter_common.h */,
+				CE680AAF2159333800149774 /* flexible_common.h */,
+				CE680AB02159333800149774 /* serialization_common.h */,
+			);
+			path = details;
+			sourceTree = "<group>";
+		};
+		CE680AB12159333800149774 /* adapter */ = {
+			isa = PBXGroup;
+			children = (
+				CE680AB22159333800149774 /* stream.h */,
+				CE680AB32159333800149774 /* buffer.h */,
+			);
+			path = adapter;
+			sourceTree = "<group>";
+		};
+		CE680AB42159333800149774 /* flexible */ = {
+			isa = PBXGroup;
+			children = (
+				CE680AB52159333800149774 /* unordered_map.h */,
+				CE680AB62159333800149774 /* map.h */,
+				CE680AB72159333800149774 /* list.h */,
+				CE680AB82159333800149774 /* array.h */,
+				CE680AB92159333800149774 /* forward_list.h */,
+				CE680ABA2159333800149774 /* deque.h */,
+				CE680ABB2159333800149774 /* stack.h */,
+				CE680ABC2159333800149774 /* memory.h */,
+				CE680ABD2159333800149774 /* unordered_set.h */,
+				CE680ABE2159333800149774 /* vector.h */,
+				CE680ABF2159333800149774 /* queue.h */,
+				CE680AC02159333800149774 /* set.h */,
+				CE680AC12159333800149774 /* string.h */,
+			);
+			path = flexible;
+			sourceTree = "<group>";
+		};
 		CE70F7BC1F8F8E5A00AD9027 = {
 			isa = PBXGroup;
 			children = (
@@ -2808,6 +2973,7 @@
 		CE70F8991F8F8EBD00AD9027 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				CE680A8C2159333800149774 /* bitsery */,
 				AC0ADF1D2080B5EB0026FD48 /* autodesk */,
 				CE1C973D2067B09E006A4A73 /* choreograph */,
 				CE1C972B2067AA88006A4A73 /* embree */,
@@ -3367,9 +3533,9 @@
 			children = (
 				CEE826392157C3A40019D2F8 /* libc++.1.tbd */,
 				CEE8263B2157C3A40019D2F8 /* libc++.tbd */,
+				CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */,
 				CEE8263A2157C3A40019D2F8 /* libc++abi.tbd */,
 				CE7A016A20B1BF1F0002D422 /* libtbb.dylib */,
-				CE7A015A20B1AF6B0002D422 /* libembree3.3.2.0.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -4178,12 +4344,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = /opt/local/lib/;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/EARenderer/Engine/ThirdParty",
+					/opt/local/include/embree3,
+					"$(SRCROOT)/EARenderer/Engine/ThirdParty/autodesk",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/autodesk",
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -4202,12 +4375,19 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 73P7R6XXDH;
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = /opt/local/lib/;
 				GCC_OPTIMIZATION_LEVEL = s;
-				HEADER_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/EARenderer/Engine/ThirdParty",
+					/opt/local/include/embree3,
+					"$(SRCROOT)/EARenderer/Engine/ThirdParty/autodesk",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/EARenderer/Engine/ThirdParty/autodesk",
+					/opt/local/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = MPO.EARenderer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
