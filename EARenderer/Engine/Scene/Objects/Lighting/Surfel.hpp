@@ -11,19 +11,30 @@
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <bitsery/bitsery.h>
+#include "Serializers.h"
+#include "Color.hpp"
 
 namespace EARenderer {
     
     struct Surfel {
         glm::vec3 position;
         glm::vec3 normal;
-        glm::vec3 albedo;
-        glm::vec2 lightmapUV;
-        float area;
-        
-        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& albedo, const glm::vec2& lightmapUV, float area);
-        Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& lightmapUV);
+        Color albedo;
+        float area = 0;
+
+        Surfel() = default;
+        Surfel(const glm::vec3& position, const glm::vec3& normal, const Color& albedo, float area);
+        Surfel(const glm::vec3& position, const glm::vec3& normal);
     };
+
+    template <typename S>
+    void serialize(S& s, Surfel& surfel) {
+        s.object(surfel.position);
+        s.object(surfel.normal);
+        s.object(surfel.albedo);
+        s.value4b(surfel.area);
+    }
     
 }
 

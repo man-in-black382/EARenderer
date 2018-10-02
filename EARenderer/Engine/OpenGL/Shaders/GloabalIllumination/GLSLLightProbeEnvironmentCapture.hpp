@@ -14,7 +14,6 @@
 #include "PBRMaterial.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
-#include "LightProbe.hpp"
 
 namespace EARenderer {
     
@@ -23,7 +22,7 @@ namespace EARenderer {
         GLSLLightProbeEnvironmentCapture();
 
         void setModelMatrix(const glm::mat4 &modelMatrix);
-        void setLightProbe(const LightProbe& probe);
+//        void setLightProbe(const LightProbe& probe);
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
         void setMaterial(const PBRMaterial& material);

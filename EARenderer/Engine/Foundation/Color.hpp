@@ -15,10 +15,10 @@
 namespace EARenderer {
     
     struct Color {
-        float r;
-        float g;
-        float b;
-        float a;
+        float r = 0.0;
+        float g = 0.0;
+        float b = 0.0;
+        float a = 1.0;
         
         static const Color& white();
         static const Color& black();
@@ -26,14 +26,15 @@ namespace EARenderer {
         static const Color& red();
         static const Color& blue();
         static const Color& green();
-        
+
+        Color() = default;
         Color(float red, float green, float blue, float alpha);
         Color(float red, float green, float blue);
         Color(float white, float alpha);
         
         glm::vec3 rgb() const;
         glm::vec4 rgba() const;
-        glm::vec3 YCoCg() const;
+        Color YCoCg() const;
 
         /**
          Assumes that current color is a sRGB color and linearizes it
@@ -42,6 +43,14 @@ namespace EARenderer {
          */
         Color linear() const;
     };
+
+    template <typename S>
+    void serialize(S& s, Color& c) {
+        s.value4b(c.r);
+        s.value4b(c.g);
+        s.value4b(c.b);
+        s.value4b(c.a);
+    }
     
 }
 

@@ -11,12 +11,20 @@
 
 #include "SphericalHarmonics.hpp"
 
+#include <bitsery/bitsery.h>
+
 namespace EARenderer {
 
     struct SurfelClusterProjection {
-        size_t surfelClusterIndex = 0;
+        uint32_t surfelClusterIndex = 0;
         SphericalHarmonics sphericalHarmonics;
     };
+
+    template <typename S>
+    void serialize(S& s, SurfelClusterProjection& projection) {
+        s.value4b(projection.surfelClusterIndex);
+        s.object(projection.sphericalHarmonics);
+    }
 
 }
 

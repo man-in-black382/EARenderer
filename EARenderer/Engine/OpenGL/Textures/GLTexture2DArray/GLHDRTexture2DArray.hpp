@@ -21,7 +21,7 @@ namespace EARenderer {
     class GLHDRTexture2DArray: public GLTexture2DArray {
     public:
         GLHDRTexture2DArray(const Size2D& size, GLsizei layers, Filter filter = Filter::Bilinear);
-        GLHDRTexture2DArray(std::vector<std::vector<glm::vec3>> data);
+        GLHDRTexture2DArray(const std::vector<std::vector<glm::vec3>>& data);
         ~GLHDRTexture2DArray() = default;
     };
 

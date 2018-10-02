@@ -452,7 +452,6 @@ void main() {
     float split = uDepthSplits[0];  // Stub to prevent from failing to compile on cpu side
 
     vec3 position  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
-    vec3 albedo    = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexAlbedo)).rgb;
     vec3 N         = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
     vec3 L         = vec3(0.0);
     vec3 radiance  = vec3(0.0);

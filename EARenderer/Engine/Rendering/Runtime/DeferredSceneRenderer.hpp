@@ -12,6 +12,7 @@
 #include <unordered_set>
 #include <array>
 #include <memory>
+#include <functional>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -71,6 +72,7 @@ namespace EARenderer {
         ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
         ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
 
+        std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<ShadowMapper> mShadowMapper;
@@ -94,6 +96,8 @@ namespace EARenderer {
         void renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image);
 
     public:
+        using DebugOpportunity = std::function<void()>;
+
         DeferredSceneRenderer(const Scene* scene,
                               const DefaultRenderComponentsProviding *provider,
                               const RenderingSettings& settings,
@@ -103,7 +107,13 @@ namespace EARenderer {
 
         void setRenderingSettings(const RenderingSettings& settings);
 
-        void render();
+        /**
+         Renders the scene
+
+         @param debugClosure render any debug information needed inside this closure
+         before the final frame is displayed
+         */
+        void render(const DebugOpportunity& debugClosure = [](){});
     };
 
 }

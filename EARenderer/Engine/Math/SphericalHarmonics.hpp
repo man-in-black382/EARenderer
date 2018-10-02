@@ -14,6 +14,8 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/constants.hpp>
 #include <cmath>
+#include <bitsery/bitsery.h>
+#include <bitsery/adapter/stream.h>
 
 namespace EARenderer {
     
@@ -77,7 +79,22 @@ namespace EARenderer {
         void scale(const glm::vec3& scaleFactors);
 
         glm::vec3 evaluate(const glm::vec3& direction) const;
+
+        template <typename S>
+        void serialize(S& s) {
+            s.object(mL00);
+            s.object(mL11);
+            s.object(mL10);
+            s.object(mL1_1);
+            s.object(mL21);
+            s.object(mL2_1);
+            s.object(mL2_2);
+            s.object(mL20);
+            s.object(mL22);
+        }
     };
+
+
     
 }
 

@@ -12,18 +12,17 @@ namespace EARenderer {
     
 #pragma mark - Lifecycle
     
-    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& albedo, const glm::vec2& lightmapUV, float area)
+    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal, const Color& albedo, float area)
     :
     position(position),
     normal(normal),
     albedo(albedo),
-    lightmapUV(lightmapUV),
     area(area)
     { }
     
-    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal, const glm::vec2& lightmapUV)
+    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal)
     :
-    Surfel(position, normal, glm::vec3(0.0), lightmapUV, 0.0)
+    Surfel(position, normal, Color(1.0, 1.0), 0.0)
     { }
     
 }

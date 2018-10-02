@@ -39,12 +39,12 @@ namespace EARenderer {
     mSSREffect(mFramebuffer, mPostprocessTexturePool),
 
     // Helpers
+    mSurfelData(surfelData),
     mProbeData(diffuseProbeData),
     mShadowMapper(std::make_shared<ShadowMapper>(scene)),
     mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper, mFramebuffer)),
     mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, surfelData, diffuseProbeData, mShadowMapper)),
     mGBuffer(GBuffer),
-    mProbeGridResolution(scene->preferredProbeGridResolution()),
 
     // Output frame
     mFrame(mPostprocessTexturePool->claim()),
@@ -142,7 +142,7 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    void DeferredSceneRenderer::render() {
+    void DeferredSceneRenderer::render(const DebugOpportunity& debugClosure) {
 
         mShadowMapper->render();
         mIndirectLightAccumulator->render();
@@ -172,13 +172,15 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
+        glDepthMask(GL_TRUE);
+
+        debugClosure();
+
         renderFinalImage(toneMappingOutputTexture);
 
         mPostprocessTexturePool->putBack(reflectionsOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);
         mPostprocessTexturePool->putBack(toneMappingOutputTexture);
-
-        glDepthMask(GL_TRUE);
     }
 
 }

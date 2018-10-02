@@ -66,6 +66,7 @@
 		ACFF6DAA21369F0300D21C48 /* ShadowMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF6DA821369F0300D21C48 /* ShadowMapper.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
+		CE152E04215E4A66009ACAC3 /* DiffuseLightProbeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE152E03215E4A66009ACAC3 /* DiffuseLightProbeData.cpp */; };
 		CE1A567B21281B770082BE3A /* Exposure.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1A567A21281B770082BE3A /* Exposure.frag */; };
 		CE1A567E21281C320082BE3A /* GLSLExposure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1A567C21281C320082BE3A /* GLSLExposure.cpp */; };
 		CE1A568521283F7C0082BE3A /* GLSLLuminanceRange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1A568321283F7C0082BE3A /* GLSLLuminanceRange.cpp */; };
@@ -77,7 +78,6 @@
 		CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1C97502067B09E006A4A73 /* TimelineItem.cpp */; };
 		CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE1C975B206A396A006A4A73 /* GridLightProbesUpdate.vert */; };
 		CE2221F71FC05465009B6804 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */; };
-		CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221F81FC0B06D009B6804 /* LightProbe.cpp */; };
 		CE2222001FC0C451009B6804 /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */; };
 		CE2B3B192159261A007FA3DF /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */; };
 		CE2B60F520E5348200370844 /* GLSLToneMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE2B60F320E5348200370844 /* GLSLToneMapping.cpp */; };
@@ -202,6 +202,7 @@
 		CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5683E32099AC5F00C827F5 /* DemoScene2.mm */; };
 		CE5683EC2099F9E300C827F5 /* cornell_box_lux.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */; };
 		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
+		CE658430216281140059677C /* DiffuseLightProbeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE65842E216281140059677C /* DiffuseLightProbeRenderer.cpp */; };
 		CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE6DD45C20601D2700F8E3FA /* GLHDRTexture2DArray.cpp */; };
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
 		CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8431F8F8EBD00AD9027 /* Range.cpp */; };
@@ -329,13 +330,13 @@
 		CEA0B91320E799DC00257E37 /* DeferredSceneRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B91120E799DC00257E37 /* DeferredSceneRenderer.cpp */; };
 		CEA0B91620E79D1300257E37 /* GLSLDeferredCookTorrance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA0B91420E79D1300257E37 /* GLSLDeferredCookTorrance.cpp */; };
 		CEA0B91920E79D8F00257E37 /* DeferredCookTorrance.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEA0B91720E79D8F00257E37 /* DeferredCookTorrance.frag */; };
-		CEA7D2BC21563B27003DF25A /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA7D2BA21563B27003DF25A /* Serializer.cpp */; };
 		CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A431FCAF0090090F1EE /* Collision.cpp */; };
 		CEA95A4D1FCB02920090F1EE /* Interval.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEA95A4C1FCB02920090F1EE /* Interval.cpp */; };
 		CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */; };
 		CEAAA39D1F97C13B0029099D /* mahogfloor_basecolor.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */; };
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
+		CEB2D973215F630500F5E4A0 /* SurfelData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB2D972215F630500F5E4A0 /* SurfelData.cpp */; };
 		CEC101A71FDD801600C56F26 /* GLRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */; };
 		CEC101AA1FDD98B900C56F26 /* GLDepthRenderbuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */; };
 		CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2192820BF249100767342 /* SettingsTabViewItem.mm */; };
@@ -726,6 +727,7 @@
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
+		CE152E03215E4A66009ACAC3 /* DiffuseLightProbeData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeData.cpp; sourceTree = "<group>"; };
 		CE1A567A21281B770082BE3A /* Exposure.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Exposure.frag; sourceTree = "<group>"; };
 		CE1A567C21281C320082BE3A /* GLSLExposure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLExposure.cpp; sourceTree = "<group>"; };
 		CE1A567D21281C320082BE3A /* GLSLExposure.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLExposure.hpp; sourceTree = "<group>"; };
@@ -762,8 +764,6 @@
 		CE2221F11FC04980009B6804 /* GLCubemapFace.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapFace.hpp; sourceTree = "<group>"; };
 		CE2221F41FC05263009B6804 /* GLCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapSampler.hpp; sourceTree = "<group>"; };
 		CE2221F61FC05465009B6804 /* GLCubemapSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapSampler.cpp; sourceTree = "<group>"; };
-		CE2221F81FC0B06D009B6804 /* LightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LightProbe.cpp; sourceTree = "<group>"; };
-		CE2221F91FC0B06D009B6804 /* LightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LightProbe.hpp; sourceTree = "<group>"; };
 		CE2221FE1FC0C451009B6804 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
 		CE2221FF1FC0C451009B6804 /* GLHDRCubemapSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLHDRCubemapSampler.hpp; sourceTree = "<group>"; };
 		CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libembree3.3.0.0.dylib; path = ../../../../opt/local/lib/libembree3.3.0.0.dylib; sourceTree = "<group>"; };
@@ -824,6 +824,8 @@
 		CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_lux.obj; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
+		CE65842E216281140059677C /* DiffuseLightProbeRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeRenderer.cpp; sourceTree = "<group>"; };
+		CE65842F216281140059677C /* DiffuseLightProbeRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeRenderer.hpp; sourceTree = "<group>"; };
 		CE680A8D2159333800149774 /* bitsery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitsery.h; sourceTree = "<group>"; };
 		CE680A902159333800149774 /* traits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = traits.h; sourceTree = "<group>"; };
 		CE680A912159333800149774 /* std_defaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = std_defaults.h; sourceTree = "<group>"; };
@@ -1470,8 +1472,6 @@
 		CEA0B91420E79D1300257E37 /* GLSLDeferredCookTorrance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDeferredCookTorrance.cpp; sourceTree = "<group>"; };
 		CEA0B91520E79D1300257E37 /* GLSLDeferredCookTorrance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDeferredCookTorrance.hpp; sourceTree = "<group>"; };
 		CEA0B91720E79D8F00257E37 /* DeferredCookTorrance.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DeferredCookTorrance.frag; sourceTree = "<group>"; };
-		CEA7D2BA21563B27003DF25A /* Serializer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
-		CEA7D2BB21563B27003DF25A /* Serializer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializer.hpp; sourceTree = "<group>"; };
 		CEA95A431FCAF0090090F1EE /* Collision.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Collision.cpp; sourceTree = "<group>"; };
 		CEA95A441FCAF0090090F1EE /* Collision.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Collision.hpp; sourceTree = "<group>"; };
 		CEA95A471FCAFF6A0090F1EE /* Interval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Interval.hpp; sourceTree = "<group>"; };
@@ -1481,6 +1481,8 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
+		CEB2D971215F598E00F5E4A0 /* Serializers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serializers.h; sourceTree = "<group>"; };
+		CEB2D972215F630500F5E4A0 /* SurfelData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelData.cpp; sourceTree = "<group>"; };
 		CEC101A51FDD801600C56F26 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		CEC101A61FDD801600C56F26 /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
 		CEC101A81FDD98B900C56F26 /* GLDepthRenderbuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLDepthRenderbuffer.cpp; sourceTree = "<group>"; };
@@ -2108,8 +2110,10 @@
 				AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */,
 				AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */,
 				AC92B97B20A4535700FEAB2E /* SurfelData.hpp */,
+				CEB2D972215F630500F5E4A0 /* SurfelData.cpp */,
 				AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */,
 				AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */,
+				CE152E03215E4A66009ACAC3 /* DiffuseLightProbeData.cpp */,
 				AC92B97E20A4567C00FEAB2E /* DiffuseLightProbeData.hpp */,
 			);
 			path = Baking;
@@ -2137,6 +2141,8 @@
 				CE70F85D1F8F8EBD00AD9027 /* AxesSystem.hpp */,
 				CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */,
 				CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */,
+				CE65842E216281140059677C /* DiffuseLightProbeRenderer.cpp */,
+				CE65842F216281140059677C /* DiffuseLightProbeRenderer.hpp */,
 				CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */,
 				CE96176D1FF8261600A5E9FC /* TriangleRenderer.hpp */,
 				CE82DAF6205122FA00329E2E /* BoxRenderer.cpp */,
@@ -2771,7 +2777,7 @@
 				AC1F6BD520E2301400E81EB0 /* Threading */,
 				CE70F8521F8F8EBD00AD9027 /* Rendering */,
 				CE70F85F1F8F8EBD00AD9027 /* Containers */,
-				CE70F8611F8F8EBD00AD9027 /* Geometry */,
+				CE70F8611F8F8EBD00AD9027 /* Math */,
 				CE70F8751F8F8EBD00AD9027 /* Scene */,
 				CE70F8991F8F8EBD00AD9027 /* ThirdParty */,
 				CE70F9AF1F8F8EBD00AD9027 /* Resource Management */,
@@ -2837,7 +2843,7 @@
 			path = Containers;
 			sourceTree = "<group>";
 		};
-		CE70F8611F8F8EBD00AD9027 /* Geometry */ = {
+		CE70F8611F8F8EBD00AD9027 /* Math */ = {
 			isa = PBXGroup;
 			children = (
 				CEFB7A2E205578E400364550 /* Plane.cpp */,
@@ -2867,7 +2873,7 @@
 				CEA95A441FCAF0090090F1EE /* Collision.hpp */,
 				CE70F8651F8F8EBD00AD9027 /* Vertices */,
 			);
-			path = Geometry;
+			path = Math;
 			sourceTree = "<group>";
 		};
 		CE70F8651F8F8EBD00AD9027 /* Vertices */ = {
@@ -2942,8 +2948,6 @@
 				CE70F88A1F8F8EBD00AD9027 /* Light.hpp */,
 				CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */,
 				CE70F88D1F8F8EBD00AD9027 /* PointLight.hpp */,
-				CE2221F81FC0B06D009B6804 /* LightProbe.cpp */,
-				CE2221F91FC0B06D009B6804 /* LightProbe.hpp */,
 				ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */,
 				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
 				AC62416B205657AD009B36DF /* SurfelCluster.cpp */,
@@ -3681,8 +3685,7 @@
 		CEA7D2B921563B0B003DF25A /* Serialization */ = {
 			isa = PBXGroup;
 			children = (
-				CEA7D2BA21563B27003DF25A /* Serializer.cpp */,
-				CEA7D2BB21563B27003DF25A /* Serializer.hpp */,
+				CEB2D971215F598E00F5E4A0 /* Serializers.h */,
 			);
 			path = Serialization;
 			sourceTree = "<group>";
@@ -4094,7 +4097,6 @@
 				CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */,
 				CE70FA9C1F8F913100AD9027 /* NSNumberFormatter+CustomFormatters.m in Sources */,
 				CE70FA961F8F913100AD9027 /* FlippedClipView.m in Sources */,
-				CEA7D2BC21563B27003DF25A /* Serializer.cpp in Sources */,
 				CEFB7A30205578E400364550 /* Plane.cpp in Sources */,
 				CE4BED0D2039FD5100978231 /* GLVertexAttribute.cpp in Sources */,
 				CE9617731FF8287A00A5E9FC /* GLSLTriangleRendering.cpp in Sources */,
@@ -4139,6 +4141,7 @@
 				CE70FA3E1F8F8EF600AD9027 /* GLTextureCubemap.cpp in Sources */,
 				CE7A013620B1654B0002D422 /* GLSLProbeOcclusionRendering.cpp in Sources */,
 				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
+				CE658430216281140059677C /* DiffuseLightProbeRenderer.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,
 				CE70FA481F8F8EF600AD9027 /* GLSLFullScreenQuad.cpp in Sources */,
@@ -4146,9 +4149,9 @@
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
 				AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */,
 				AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */,
+				CEB2D973215F630500F5E4A0 /* SurfelData.cpp in Sources */,
 				AC38E97F213D25FE00F6F2B1 /* GLSLLightComposer.cpp in Sources */,
 				CE70FA431F8F8EF600AD9027 /* GLFramebuffer.cpp in Sources */,
-				CE2221FA1FC0B06D009B6804 /* LightProbe.cpp in Sources */,
 				CE6DD45E20601D2700F8E3FA /* GLHDRTexture2DArray.cpp in Sources */,
 				AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
@@ -4156,6 +4159,7 @@
 				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,
 				AC6B0A4D20FC941800B49BB8 /* GLSLHiZBuffer.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
+				CE152E04215E4A66009ACAC3 /* DiffuseLightProbeData.cpp in Sources */,
 				CE1C972A206665B1006A4A73 /* GLSLSurfelClusterAveraging.cpp in Sources */,
 				CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */,
 				CE70FA231F8F8EF600AD9027 /* Vertex1P1N2UV.cpp in Sources */,

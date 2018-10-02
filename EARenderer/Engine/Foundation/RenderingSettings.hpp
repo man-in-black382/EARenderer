@@ -32,7 +32,7 @@ namespace EARenderer {
             float parallaxMappingStrength = 0.05;
 
             uint32_t shadowCascadesCount = 4;
-            float ESMFactor = 20.0;
+            float ESMFactor = 80.0;
             GaussianBlurSettings shadowBlur { 8, 8 };
 
             uint32_t booleanBitmask() const {

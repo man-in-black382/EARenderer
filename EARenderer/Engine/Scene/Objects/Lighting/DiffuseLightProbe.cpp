@@ -17,10 +17,4 @@ namespace EARenderer {
     position(position)
     { }
 
-    DiffuseLightProbe::DiffuseLightProbe(const glm::vec3& position, const glm::vec3& normal)
-    :
-    position(position),
-    normal(normal)
-    { }
-
 }

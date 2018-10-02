@@ -253,7 +253,7 @@ SH UnpackSH(vec3 texCoords) {
 //        case kSHCompression311: return UnpackSH_311(texCoords);
 //        default: return UnpackSH_333(texCoords);
 //    }
-    return UnpackSH_322(texCoords);
+    return UnpackSH_333(texCoords);
 }
 
 float ProbeOcclusionFactor(vec3 probeGridPos, ivec3 gridSize, vec3 fragNorm, vec3 fragWorldPos) {
@@ -543,7 +543,7 @@ void main() {
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N, worldPosition);
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
-    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
+//    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
     indirectRadiance *= Kd;
 
     // Remember that color values in light buffer were normalized by a normalization factor

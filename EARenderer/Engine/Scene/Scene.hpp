@@ -17,7 +17,6 @@
 #include "PointLight.hpp"
 #include "PBRMaterial.hpp"
 #include "Skybox.hpp"
-#include "LightProbe.hpp"
 #include "DiffuseLightProbe.hpp"
 #include "ResourcePool.hpp"
 #include "GLBufferTexture.hpp"
@@ -44,16 +43,14 @@ namespace EARenderer {
 #pragma mark - Member variables
 
         size_t mOctreeDepth = 5;
-        float mGridProbesDistance = 1.2;
+        float mDiffuseProbesSpacing = 1.0;
+        float mSurfelSpacing = 1.0;
         float mStaticGeometryArea = 0.0;
+        std::string mName;
 
         DirectionalLight mDirectionalLight;
         PackedLookupTable<PointLight> mPointLights;
-
         PackedLookupTable<MeshInstance> mMeshInstances;
-        PackedLookupTable<LightProbe> mLightProbes;
-
-        std::vector<SubMeshInstancePair> mSortedStaticSubMeshes;
 
         std::vector<Surfel> mSurfels;
         std::vector<SurfelCluster> mSurfelClusters;
@@ -101,8 +98,9 @@ namespace EARenderer {
         const std::list<ID>& staticMeshInstanceIDs() const;
         const std::list<ID>& dynamicMeshInstanceIDs() const;
 
-        glm::ivec3 preferredProbeGridResolution() const;
-
+        const std::string& name() const;
+        float difuseProbesSpacing() const;
+        float surfelSpacing() const;
         const AxisAlignedBox3D& boundingBox() const;
         const AxisAlignedBox3D& lightBakingVolume() const;
         float staticGeometryArea() const;
@@ -112,9 +110,10 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
+        void setName(const std::string& name);
+        void setDiffuseProbeSpacing(float spacing);
+        void setSurfelSpacing(float spacing);
         void setLightBakingVolume(const AxisAlignedBox3D& volume);
-        void setDiffuseProbeLightmapIndices(const std::vector<uint32_t>& indices);
-        void setDedicatedDiffuseProbeIndices(const std::vector<uint32_t>& indices);
         void setCamera(Camera* camera);
         void setSkybox(Skybox* skybox);
 
@@ -126,7 +125,6 @@ namespace EARenderer {
         void calculateGeometricProperties();
         void buildStaticGeometryOctree();
         void buildStaticGeometryRaytracer();
-        void sortStaticSubMeshes();
 
         /**
          Destroy helper objects that take up a lot of memory, but can be recreated at any time (ray tracers, etc.)

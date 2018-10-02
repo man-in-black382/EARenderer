@@ -23,7 +23,6 @@
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
 #include "FrustumCascades.hpp"
-#include "LightProbe.hpp"
 #include "AxisAlignedBox3D.hpp"
 #include "RenderingSettings.hpp"
 #include "SceneGBuffer.hpp"

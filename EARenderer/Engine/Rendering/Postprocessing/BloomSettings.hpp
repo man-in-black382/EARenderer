@@ -22,7 +22,7 @@ namespace EARenderer {
         size_t mediumBlurWeight = 1;
         size_t largeBlurWeight = 1;
 
-        float bloomStrength = 0.25;
+        float bloomStrength = 0.12;
     };
 
 }

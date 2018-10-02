@@ -18,29 +18,29 @@ namespace EARenderer {
                                                        std::shared_ptr<const ShadowMapper> shadowMapper)
     :
     mScene(scene),
-    mGridProbesResolution(scene->preferredProbeGridResolution()),
     mSurfelData(surfelData),
     mProbeData(probeData),
     mShadowMapper(shadowMapper),
     mFramebuffer(framebufferResolution()),
     mGridProbeSHMaps(gridProbeSHMaps()),
-    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size()),
-    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size())
+    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
+    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None)
     { }
 
     Size2D IndirectLightAccumulator::framebufferResolution() {
-        Size2D probeGridResolution(mScene->preferredProbeGridResolution().x, mScene->preferredProbeGridResolution().y);
+        Size2D probeGridResolution(mProbeData->gridResolution().x, mProbeData->gridResolution().y);
         Size2D surfelLuminanceMapResolution(mSurfelData->surfelsGBuffer()->size());
         Size2D clusterLuminanceMapResolution(mSurfelData->surfelClustersGBuffer()->size());
         return probeGridResolution.makeUnion(surfelLuminanceMapResolution).makeUnion(clusterLuminanceMapResolution);
     }
 
     std::shared_ptr<std::array<GLLDRTexture3D, 4>> IndirectLightAccumulator::gridProbeSHMaps() {
+        auto resolution = mProbeData->gridResolution();
         return std::shared_ptr<std::array<GLLDRTexture3D, 4>>(new std::array<GLLDRTexture3D, 4> {
-            GLLDRTexture3D(Size2D(mGridProbesResolution.x, mGridProbesResolution.y), mGridProbesResolution.z),
-            GLLDRTexture3D(Size2D(mGridProbesResolution.x, mGridProbesResolution.y), mGridProbesResolution.z),
-            GLLDRTexture3D(Size2D(mGridProbesResolution.x, mGridProbesResolution.y), mGridProbesResolution.z),
-            GLLDRTexture3D(Size2D(mGridProbesResolution.x, mGridProbesResolution.y), mGridProbesResolution.z)
+            GLLDRTexture3D(Size2D(resolution.x, resolution.y), resolution.z),
+            GLLDRTexture3D(Size2D(resolution.x, resolution.y), resolution.z),
+            GLLDRTexture3D(Size2D(resolution.x, resolution.y), resolution.z),
+            GLLDRTexture3D(Size2D(resolution.x, resolution.y), resolution.z)
         });
     }
 
@@ -91,7 +91,7 @@ namespace EARenderer {
     }
 
     void IndirectLightAccumulator::updateGridProbes() {
-        GLViewport viewport(Size2D(mGridProbesResolution.x, mGridProbesResolution.y));
+        GLViewport viewport(Size2D(mProbeData->gridResolution().x, mProbeData->gridResolution().y));
         mFramebuffer.redirectRenderingToTextures(viewport, &(*mGridProbeSHMaps)[0], &(*mGridProbeSHMaps)[1], &(*mGridProbeSHMaps)[2], &(*mGridProbeSHMaps)[3]);
 
         mGridProbesUpdateShader.bind();
@@ -100,10 +100,10 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProbeProjectionsMetadata(*mProbeData->probeClusterProjectionsMetadataBufferTexture());
             mGridProbesUpdateShader.setProjectionClusterIndices(*mProbeData->projectionClusterIndicesBufferTexture());
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(*mProbeData->projectionClusterSHsBufferTexture());
-            mGridProbesUpdateShader.setProbesGridResolution(mGridProbesResolution);
+            mGridProbesUpdateShader.setProbesGridResolution(mProbeData->gridResolution());
         });
 
-        TriangleStripQuad::Draw(mGridProbesResolution.z);
+        TriangleStripQuad::Draw(mProbeData->gridResolution().z);
     }
 
 #pragma mark - Public Interface

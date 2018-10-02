@@ -58,7 +58,7 @@ namespace EARenderer {
         
 #pragma mark - Member variables
         
-        float mMinimumSurfelDistance = 1.2;
+        float mSurfelSpacing;
         size_t mMaximumSurfelClusterSize = 256;
         
         std::mt19937 mEngine;
@@ -162,32 +162,9 @@ namespace EARenderer {
          Gathers similar surfels into clusters
          */
         void formClusters();
-
-        /**
-         Data to be fetched to a surfel G buffer texture
-
-         @return nested array of surfel attributes (positions, normals, albedo and uv)
-         */
-        std::vector<std::vector<glm::vec3>> surfelsGBufferData() const;
-
-        /**
-         Data to be fetched to a surfel clusters G buffer texture
-
-         @return array of surfel offset - count pairs
-         */
-        std::vector<uint32_t> surfelClustersGBufferData() const;
-
-        /**
-         Returns an array of surfel cluster centers
-
-         @return array of surfel cluster centers
-         */
-        std::vector<glm::vec3> surfelClusterCenters() const;
         
     public:
         SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene);
-
-        float minimumDistanceBetweenSurfels() const;
 
         std::shared_ptr<SurfelData> generateStaticGeometrySurfels();
     };

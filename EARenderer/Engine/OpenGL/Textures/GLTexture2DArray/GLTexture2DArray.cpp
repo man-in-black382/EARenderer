@@ -45,15 +45,14 @@ namespace EARenderer {
         setWrapMode(wrapMode);
     }
 
-    void GLTexture2DArray::initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type, const std::vector<void *> pixelData) {
+    void GLTexture2DArray::initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type, const std::vector<const void *>& pixelData) {
 
         initialize(size, pixelData.size(), filter, wrapMode, internalFormat);
 
         for (size_t i = 0; i < pixelData.size(); i++) {
-            void *pixels = pixelData[i];
             glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, (GLint)i,
                             size.width, size.height, 1,
-                            format, type, pixels);
+                            format, type, pixelData[i]);
         }
     }
 

@@ -27,9 +27,6 @@ void main()
     } else {
         vec3 color = textureLod(uTexture, vTexCoords, 0).rgb;
         oFragColor = vec4(vec3(color), 1.0);
-//        color *= pow(2.0, 30.0);
-//        color /= (512.0 * 512.0);
-//        oFragColor = vec4(vec3(color.r, 0.0, 0.0), 1.0);
     }
 
     if (uShouldApplyToneMapping) {

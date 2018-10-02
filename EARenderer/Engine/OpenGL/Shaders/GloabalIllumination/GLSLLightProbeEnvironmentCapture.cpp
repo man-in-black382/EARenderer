@@ -26,10 +26,10 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uNormalMat")>).location(), 1, GL_FALSE, glm::value_ptr(glm::transpose(glm::inverse(modelMatrix))));
     }
     
-    void GLSLLightProbeEnvironmentCapture::setLightProbe(const LightProbe& probe) {
-        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(probe.position));
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewProjectionMatrices[0]")>).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(probe.viewProjectionMatrices().data()));
-    }
+//    void GLSLLightProbeEnvironmentCapture::setLightProbe(const LightProbe& probe) {
+//        glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraPosition")>).location(), 1, glm::value_ptr(probe.position));
+//        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewProjectionMatrices[0]")>).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(probe.viewProjectionMatrices().data()));
+//    }
     
     void GLSLLightProbeEnvironmentCapture::setLight(const PointLight& light) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.position")>).location(), 1, glm::value_ptr(light.position()));

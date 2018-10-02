@@ -24,10 +24,10 @@
 namespace EARenderer {
 
     class IndirectLightAccumulator {
-    private:
+    public:
         const Scene *mScene = nullptr;
         RenderingSettings mSettings;
-        glm::ivec3 mGridProbesResolution;
+        
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const ShadowMapper> mShadowMapper;

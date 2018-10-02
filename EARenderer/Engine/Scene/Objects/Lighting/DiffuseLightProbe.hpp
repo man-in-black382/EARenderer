@@ -13,21 +13,28 @@
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+#include <bitsery/bitsery.h>
+#include "Serializers.h"
 
 namespace EARenderer {
 
     struct DiffuseLightProbe {
         glm::vec3 position;
-        glm::vec3 normal;
-        glm::vec2 lightmapUV;
-        size_t surfelClusterProjectionGroupOffset = 0;
-        size_t surfelClusterProjectionGroupCount = 0;
+        uint32_t surfelClusterProjectionGroupOffset = 0;
+        uint32_t surfelClusterProjectionGroupSize = 0;
         SphericalHarmonics skySphericalHarmonics;
 
         DiffuseLightProbe() = default;
         DiffuseLightProbe(const glm::vec3& position);
-        DiffuseLightProbe(const glm::vec3& position, const glm::vec3& normal);
     };
+
+    template <typename S>
+    void serialize(S& s, DiffuseLightProbe& probe) {
+        s.object(probe.position);
+        s.value4b(probe.surfelClusterProjectionGroupOffset);
+        s.value4b(probe.surfelClusterProjectionGroupSize);
+        s.object(probe.skySphericalHarmonics);
+    }
 
 }
 

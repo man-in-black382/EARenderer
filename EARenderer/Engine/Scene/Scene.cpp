@@ -22,8 +22,7 @@ namespace EARenderer {
     :
     mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
     mPointLights(10),
-    mMeshInstances(1000),
-    mLightProbes(10000)
+    mMeshInstances(1000)
     { }
     
 #pragma mark - Getters
@@ -67,7 +66,19 @@ namespace EARenderer {
     Skybox* Scene::skybox() const {
         return mSkybox;
     }
-    
+
+    const std::string& Scene::name() const {
+        return mName;
+    }
+
+    float Scene::difuseProbesSpacing() const {
+        return mDiffuseProbesSpacing;
+    }
+
+    float Scene::surfelSpacing() const {
+        return mSurfelSpacing;
+    }
+
     const AxisAlignedBox3D& Scene::boundingBox() const {
         return mBoundingBox;
     }
@@ -88,13 +99,6 @@ namespace EARenderer {
         return mStaticGeometryArea;
     }
 
-    const std::vector<Scene::SubMeshInstancePair>& Scene::sortedStaticSubMeshes() {
-        if (mSortedStaticSubMeshes.empty()) {
-            sortStaticSubMeshes();
-        }
-        return mSortedStaticSubMeshes;
-    }
-
 #pragma mark - Setters
     
     void Scene::setCamera(Camera* camera) {
@@ -103,6 +107,18 @@ namespace EARenderer {
 
     void Scene::setSkybox(Skybox* skybox) {
         mSkybox = skybox;
+    }
+
+    void Scene::setName(const std::string& name) {
+        mName = name;
+    }
+
+    void Scene::setDiffuseProbeSpacing(float spacing) {
+        mDiffuseProbesSpacing = spacing;
+    }
+
+    void Scene::setSurfelSpacing(float spacing) {
+        mSurfelSpacing = spacing;
     }
 
     void Scene::setLightBakingVolume(const AxisAlignedBox3D& volume) {
@@ -188,38 +204,9 @@ namespace EARenderer {
         mRaytracer = std::make_shared<EmbreeRayTracer>(triangles);
     }
 
-    void Scene::sortStaticSubMeshes() {
-        mSortedStaticSubMeshes.clear();
-
-        for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-            auto& meshInstance = mMeshInstances[meshInstanceID];
-            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
-            for (ID subMeshID : mesh.subMeshes()) {
-                mSortedStaticSubMeshes.push_back(std::make_pair(subMeshID, meshInstanceID));
-            }
-        }
-
-        std::sort(mSortedStaticSubMeshes.begin(), mSortedStaticSubMeshes.end(), [&](const auto& lhs, const auto& rhs) {
-            auto& meshInstance1 = mMeshInstances[lhs.second];
-            auto& mesh1 = ResourcePool::shared().meshes[meshInstance1.meshID()];
-            auto& subMesh1 = mesh1.subMeshes()[lhs.first];
-
-            auto& meshInstance2 = mMeshInstances[rhs.second];
-            auto& mesh2 = ResourcePool::shared().meshes[meshInstance2.meshID()];
-            auto& subMesh2 = mesh2.subMeshes()[rhs.first];
-
-            return subMesh1.surfaceArea() > subMesh2.surfaceArea();
-        });
-    }
-
     void Scene::destroyAuxiliaryData() {
         mRaytracer = nullptr;
         mOctree = nullptr;
-    }
-
-    glm::ivec3 Scene::preferredProbeGridResolution() const {
-        glm::vec3 bbLengths = mLightBakingVolume.max - mLightBakingVolume.min;
-        return bbLengths / mGridProbesDistance;
     }
     
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {

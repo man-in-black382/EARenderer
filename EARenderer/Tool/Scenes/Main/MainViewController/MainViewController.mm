@@ -126,19 +126,18 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
-    self.scene->sortStaticSubMeshes();
-
     self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
     auto surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
-    EARenderer::Size2D occlusionMapResolution(10);
-    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData, occlusionMapResolution);
+    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
 
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
-    self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings, surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
+
+    self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings,
+                                                                       surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
@@ -159,30 +158,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 {
     self.cameraman->updateCamera();
 
-//    self.sceneRenderer->prepareFrame();
+    self.sceneGBufferRenderer->render();
 
-    if (self.renderingSettings.meshSettings.meshRenderingEnabled) {
-        EARenderer::Measurement::ExecutionTime("GBuffer generation took" , [&]() {
-            self.sceneGBufferRenderer->render();
-            glFinish();
-        });
-        EARenderer::Measurement::ExecutionTime("Mesh rendering took" , [&]() {
-            self.deferredSceneRenderer->render();
-            glFinish();
-        });
-    }
+    self.deferredSceneRenderer->render([&]() {
 
-    if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
-//        self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
-    }
+        if (self.renderingSettings.surfelSettings.renderingEnabled) {
+            self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode, self.scene->surfelSpacing() / 2.0);
+        }
 
-    if (self.renderingSettings.skyboxRenderingEnabled) {
-//        self.deferredSceneRenderer->renderSkybox();
-    }
+//        if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
+//            self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
+//        }
 
-    if (self.renderingSettings.surfelSettings.renderingEnabled) {
-        self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode, self.surfelGenerator->minimumDistanceBetweenSurfels() / 2.0);
-    }
+    });
 
     if (self.renderingSettings.triangleRenderingEnabled) {
         self.triangleRenderer->render();

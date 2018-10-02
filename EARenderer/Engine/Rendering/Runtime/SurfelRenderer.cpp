@@ -60,7 +60,7 @@ namespace EARenderer {
 
         if (probeIndex != -1) {
             const DiffuseLightProbe& probe = mProbeData->probes()[probeIndex];
-            size_t projectionGroupCount = probe.surfelClusterProjectionGroupCount;
+            size_t projectionGroupCount = probe.surfelClusterProjectionGroupSize;
             size_t projectionGroupOffset = probe.surfelClusterProjectionGroupOffset;
 
             for (size_t i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupCount; i++) {

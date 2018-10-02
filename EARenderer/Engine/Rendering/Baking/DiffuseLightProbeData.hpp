@@ -29,30 +29,33 @@ namespace EARenderer {
 
         std::vector<DiffuseLightProbe> mProbes;
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
+        glm::ivec3 mGridResolution;
 
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGB32F>> mOcclusionMapAtlas;
-        std::shared_ptr<GLUInteger2BufferTexture<glm::uvec2>> mOcclusionMapAtlasOffsetsBufferTexture;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mProbePositionsBufferTexture;
 
     public:
-        const auto& probes() const { return mProbes; }
+        void initializeBuffers();
+        
+        void serialize(const std::string& filePath);
 
-        const auto& surfelClusterProjections() const { return mSurfelClusterProjections; }
+        bool deserialize(const std::string& filePath);
 
-        auto projectionClusterSHsBufferTexture() const { return mProjectionClusterSHsBufferTexture; }
+        const std::vector<DiffuseLightProbe>& probes() const;
 
-        auto projectionClusterIndicesBufferTexture() const { return mProjectionClusterIndicesBufferTexture; };
+        const std::vector<SurfelClusterProjection>& surfelClusterProjections() const;
 
-        auto probeClusterProjectionsMetadataBufferTexture() const { return mProbeClusterProjectionsMetadataBufferTexture; }
+        const glm::ivec3& gridResolution() const;
 
-        auto occlusionMapAtlas() const { return mOcclusionMapAtlas; }
+        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> projectionClusterSHsBufferTexture() const;
 
-        auto occlusionMapAtlasOffsetsBufferTexture() const { return mOcclusionMapAtlasOffsetsBufferTexture; }
+        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> projectionClusterIndicesBufferTexture() const;
 
-        auto probePositionsBufferTexture() const { return mProbePositionsBufferTexture; }
+        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> probeClusterProjectionsMetadataBufferTexture() const;
+
+        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> probePositionsBufferTexture() const;
     };
 
 }

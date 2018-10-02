@@ -47,7 +47,8 @@ namespace EARenderer {
     mResourcePool(resourcePool),
     mScene(scene),
     mSurfelSpatialHash(AxisAlignedBox3D::Zero(), 1),
-    mSurfelFlatStorage(10000)
+    mSurfelFlatStorage(10000),
+    mSurfelSpacing(scene->surfelSpacing())
     { }
     
 #pragma mark - Private helpers
@@ -66,7 +67,7 @@ namespace EARenderer {
     }
 
     float SurfelGenerator::optimalMinimumSubdivisionArea() const {
-        return M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance / 4.0;
+        return M_PI * mSurfelSpacing * mSurfelSpacing / 4.0;
     }
 
     glm::vec3 SurfelGenerator::randomBarycentricCoordinates() {
@@ -84,7 +85,7 @@ namespace EARenderer {
     }
 
     uint32_t SurfelGenerator::spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D& workingVolume) const {
-        float surfelsPerUnitLength = 1.0f / mMinimumSurfelDistance;
+        float surfelsPerUnitLength = 1.0f / mSurfelSpacing;
         float surfelsPerLongestBBDimension = workingVolume.largestDimensionLength() * surfelsPerUnitLength;
         uint32_t spaceDivisionResolution = surfelsPerLongestBBDimension / surfelCountPerCellDimension;
         return std::max(spaceDivisionResolution, (uint32_t)1);
@@ -154,7 +155,7 @@ namespace EARenderer {
     bool SurfelGenerator::triangleCompletelyCovered(Triangle3D& triangle) {
         bool triangleCoveredCompletely = false;
         for (auto& surfel : mSurfelSpatialHash.neighbours(triangle.p2)) {
-            Sphere enclosingSphere(surfel.position, mMinimumSurfelDistance);
+            Sphere enclosingSphere(surfel.position, mSurfelSpacing);
             if (enclosingSphere.contains(triangle)) {
                 triangleCoveredCompletely = true;
                 break;
@@ -173,7 +174,7 @@ namespace EARenderer {
             }
 
             float length2 = glm::length2(surfel.position - candidate.position);
-            float minimumDistance2 = mMinimumSurfelDistance * mMinimumSurfelDistance;
+            float minimumDistance2 = mSurfelSpacing * mSurfelSpacing;
 
             if (length2 < minimumDistance2) {
                 minimumDistanceRequirementMet = false;
@@ -219,9 +220,9 @@ namespace EARenderer {
         auto texel = albedoMapSampler.sample(uv);
         Color albedoLinear = Color(texel.r, texel.g, texel.b).linear();
 
-        float singleSurfelArea = M_PI * mMinimumSurfelDistance * mMinimumSurfelDistance;
+        float singleSurfelArea = M_PI * mSurfelSpacing * mSurfelSpacing;
         
-        return Surfel(surfelCandidate.position, surfelCandidate.normal, albedoLinear.YCoCg(), uv, singleSurfelArea);
+        return Surfel(surfelCandidate.position, surfelCandidate.normal, albedoLinear, singleSurfelArea);
     }
     
     void SurfelGenerator::generateSurflesOnMeshInstance(const MeshInstance& instance) {
@@ -360,48 +361,8 @@ namespace EARenderer {
             // Then repear until all surfels are asigned to clusters
         }
     }
-
-    std::vector<std::vector<glm::vec3>> SurfelGenerator::surfelsGBufferData() const {
-        std::vector<std::vector<glm::vec3>> bufferData;
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-        bufferData.emplace_back();
-
-        for (auto& surfel : mSurfelDataContainer->mSurfels) {
-            bufferData[0].emplace_back(surfel.position);
-            bufferData[1].emplace_back(surfel.normal);
-            bufferData[2].emplace_back(surfel.albedo);
-            bufferData[3].emplace_back(surfel.lightmapUV.x, surfel.lightmapUV.y, 0.0);
-        }
-
-        return bufferData;
-    }
-
-    std::vector<uint32_t> SurfelGenerator::surfelClustersGBufferData() const {
-        std::vector<uint32_t> data;
-        for (auto& cluster : mSurfelDataContainer->mSurfelClusters) {
-            uint32_t encoded = 0;
-            encoded |= cluster.surfelOffset << 8;
-            encoded |= cluster.surfelCount & 0xFF;
-            data.push_back(encoded);
-        }
-        return data;
-    }
-
-    std::vector<glm::vec3> SurfelGenerator::surfelClusterCenters() const {
-        std::vector<glm::vec3> centers;
-        for (auto& cluster : mSurfelDataContainer->mSurfelClusters) {
-            centers.push_back(cluster.center);
-        }
-        return centers;
-    }
     
 #pragma mark - Public interface
-
-    float SurfelGenerator::minimumDistanceBetweenSurfels() const {
-        return mMinimumSurfelDistance;
-    }
 
     std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
         mSurfelDataContainer = std::make_shared<SurfelData>();
@@ -424,14 +385,7 @@ namespace EARenderer {
             formClusters();
         });
 
-        mSurfelDataContainer->mSurfelsGBuffer = std::make_shared<GLHDRTexture2DArray>(surfelsGBufferData());
-
-        auto clustersGBuffer = surfelClustersGBufferData();
-        auto clusterGBufferSize = GLTexture::EstimatedSize(clustersGBuffer.size());
-        mSurfelDataContainer->mSurfelClustersGBuffer = std::make_shared<GLIntegerTexture2D<GLTexture::Integer::R32UI>>(clusterGBufferSize, clustersGBuffer.data());
-
-        mSurfelDataContainer->mSurfelClusterCentersBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
-        mSurfelDataContainer->mSurfelClusterCentersBufferTexture->buffer().initialize(surfelClusterCenters());
+        mSurfelDataContainer->initializeBuffers();
 
         printf("Generated %lu clusters\n\n", mSurfelDataContainer->mSurfelClusters.size());
 

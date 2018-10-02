@@ -18,9 +18,9 @@ namespace EARenderer {
         initialize(size, layers, filter, WrapMode::ClampToEdge, GL_RGBA32F);
     }
 
-    GLHDRTexture2DArray::GLHDRTexture2DArray(std::vector<std::vector<glm::vec3>> data) {
+    GLHDRTexture2DArray::GLHDRTexture2DArray(const std::vector<std::vector<glm::vec3>>& data) {
         Size2D estimation;
-        std::vector<void *> pixelData;
+        std::vector<const void *> pixelData;
 
         for (auto& layerData : data) {
             Size2D size = EstimatedSize(layerData.size());

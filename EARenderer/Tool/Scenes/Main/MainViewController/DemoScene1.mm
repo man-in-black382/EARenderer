@@ -195,6 +195,10 @@
         scene->buildStaticGeometryRaytracer();
     });
 
+    scene->setName("sponza");
+    scene->setDiffuseProbeSpacing(0.7);
+    scene->setSurfelSpacing(0.05);
+
     [self setupAnimations];
 }
 
