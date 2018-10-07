@@ -29,11 +29,11 @@ namespace EARenderer {
                                                                        triangles.size() * 3);
 
         glm::uvec3* indexBuffer = (glm::uvec3 *)rtcSetNewGeometryBuffer(geometry,
-                                                                    RTC_BUFFER_TYPE_INDEX,
-                                                                    0,
-                                                                    RTC_FORMAT_UINT3,
-                                                                    sizeof(glm::uvec3),
-                                                                    triangles.size());
+                                                                        RTC_BUFFER_TYPE_INDEX,
+                                                                        0,
+                                                                        RTC_FORMAT_UINT3,
+                                                                        sizeof(glm::uvec3),
+                                                                        triangles.size());
 
         if (vertexBuffer && indexBuffer) {
             for (uint32_t i = 0; i < triangles.size(); ++i) {

@@ -4,11 +4,15 @@
 const float PI = 3.1415926535897932384626433832795;
 
 // Spherical harmonics
-const float kC1 = 0.429043;
-const float kC2 = 0.511664;
-const float kC3 = 0.743125;
-const float kC4 = 0.886227;
-const float kC5 = 0.247708;
+const float Y00 = 0.28209479177387814347; // 1 / (2*sqrt(pi))
+const float Y11 = -0.48860251190291992159; // sqrt(3 /(4pi))
+const float Y10 = 0.48860251190291992159;
+const float Y1_1 = -0.48860251190291992159;
+const float Y21 = -1.09254843059207907054; // 1 / (2*sqrt(pi))
+const float Y2_1 = -1.09254843059207907054;
+const float Y2_2 = 1.09254843059207907054;
+const float Y20 = 0.31539156525252000603; // 1/4 * sqrt(5/pi)
+const float Y22 = 0.54627421529603953527; // 1/4 * sqrt(15/pi)
 
 // Input
 
@@ -131,30 +135,23 @@ SH UnpackSH_333_HalfPacked() {
     uvec4 shMap2Data = texelFetch(uGridSHMap2, iTexCoords, 0);
     uvec4 shMap3Data = texelFetch(uGridSHMap3, iTexCoords, 0);
 
-    float range = uintBitsToFloat(shMap3Data.a);
+    float range = uintBitsToFloat(shMap0Data.r);
 
-    vec2 pair0 = UnpackSnorm2x16(shMap0Data.r, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.g, range);
-    vec2 pair2 = UnpackSnorm2x16(shMap0Data.b, range);  vec2 pair3 = UnpackSnorm2x16(shMap0Data.a, range);
-    vec2 pair4 = UnpackSnorm2x16(shMap1Data.r, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.g, range);
-    vec2 pair6 = UnpackSnorm2x16(shMap1Data.b, range);  vec2 pair7 = UnpackSnorm2x16(shMap1Data.a, range);
-    vec2 pair8 = UnpackSnorm2x16(shMap2Data.r, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.g, range);
-    vec2 pair10 = UnpackSnorm2x16(shMap2Data.b, range); vec2 pair11 = UnpackSnorm2x16(shMap2Data.a, range);
-    vec2 pair12 = UnpackSnorm2x16(shMap3Data.r, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.g, range);
+    vec2 pair0 = UnpackSnorm2x16(shMap0Data.g, range);  vec2 pair1 = UnpackSnorm2x16(shMap0Data.b, range);
+    vec2 pair2 = UnpackSnorm2x16(shMap0Data.a, range);  vec2 pair3 = UnpackSnorm2x16(shMap1Data.r, range);
+    vec2 pair4 = UnpackSnorm2x16(shMap1Data.g, range);  vec2 pair5 = UnpackSnorm2x16(shMap1Data.b, range);
+    vec2 pair6 = UnpackSnorm2x16(shMap1Data.a, range);  vec2 pair7 = UnpackSnorm2x16(shMap2Data.r, range);
+    vec2 pair8 = UnpackSnorm2x16(shMap2Data.g, range);  vec2 pair9 = UnpackSnorm2x16(shMap2Data.b, range);
+    vec2 pair10 = UnpackSnorm2x16(shMap2Data.a, range); vec2 pair11 = UnpackSnorm2x16(shMap3Data.r, range);
+    vec2 pair12 = UnpackSnorm2x16(shMap3Data.g, range); vec2 pair13 = UnpackSnorm2x16(shMap3Data.b, range);
 
-    // Y | R
-    sh.L00.r  = pair0.x;  sh.L11.r  = pair0.y;  sh.L10.r  = pair1.x;
-    sh.L1_1.r = pair1.y;  sh.L21.r  = pair2.x;  sh.L2_1.r = pair2.y;
-    sh.L2_2.r = pair3.x;  sh.L20.r  = pair3.y;  sh.L22.r  = pair4.x;
-
-    // Co | G
-    sh.L00.g  = pair4.y;  sh.L11.g  = pair5.x;  sh.L10.g  = pair5.y;
-    sh.L1_1.g = pair6.x;  sh.L21.g  = pair6.y;  sh.L2_1.g = pair7.x;
-    sh.L2_2.g = pair7.y;  sh.L20.g  = pair8.x;  sh.L22.g  = pair8.y;
-
-    // Cg | B
-    sh.L00.b  = pair9.x;  sh.L11.b  = pair9.y;  sh.L10.b  = pair10.x;
-    sh.L1_1.b = pair10.y;  sh.L21.b  = pair11.x;  sh.L2_1.b = pair11.y;
-    sh.L2_2.b = pair12.x;  sh.L20.b  = pair12.y;  sh.L22.b  = pair13.x;
+    sh.L00.r = pair0.x;   sh.L11.r = pair0.y;   sh.L10.r = pair1.x;   sh.L1_1.r = pair1.y;
+    sh.L21.r = pair2.x;   sh.L2_1.r = pair2.y;  sh.L2_2.r = pair3.x;  sh.L20.r = pair3.y;
+    sh.L22.r = pair4.x;   sh.L00.g = pair4.y;   sh.L00.b = pair5.x;   sh.L11.g = pair5.y;
+    sh.L10.g = pair6.x,   sh.L1_1.g = pair6.y;  sh.L11.b = pair7.x;   sh.L10.b = pair7.y;
+    sh.L1_1.b = pair8.x;  sh.L21.g = pair8.y;   sh.L2_1.g = pair9.x;  sh.L2_2.g = pair9.y;
+    sh.L20.g = pair10.x,  sh.L22.g = pair10.y;  sh.L21.b = pair11.x,  sh.L2_1.b = pair11.y;
+    sh.L2_2.b = pair12.x; sh.L20.b = pair12.y;  sh.L22.b = pair13.x;
 
     /////////
 //    sh.L00  = vec3(5.56832886, 11.1366577, 5.56832886);
@@ -175,18 +172,7 @@ SH UnpackSH_333_HalfPacked() {
 
 float SHRadiance(SH sh, vec3 direction, int component) {
     int c = component;
-
     float result = 0.0;
-
-    float Y00 = 0.28209479177387814347f; // 1 / (2*sqrt(pi))
-    float Y11 = -0.48860251190291992159f; // sqrt(3 /(4pi))
-    float Y10 = 0.48860251190291992159f;
-    float Y1_1 = -0.48860251190291992159f;
-    float Y21 = -1.09254843059207907054f; // 1 / (2*sqrt(pi))
-    float Y2_1 = -1.09254843059207907054f;
-    float Y2_2 = 1.09254843059207907054f;
-    float Y20 = 0.31539156525252000603f; // 1/4 * sqrt(5/pi)
-    float Y22 = 0.54627421529603953527f; // 1/4 * sqrt(15/pi)
 
     result += sh.L00[c] * Y00;
 
@@ -201,13 +187,6 @@ float SHRadiance(SH sh, vec3 direction, int component) {
     result += sh.L22[c] * Y22 * (direction.x * direction.x - direction.y * direction.y);
 
     return result;
-
-//    return  kC1 * sh.L22[c] * (direction.x * direction.x - direction.y * direction.y) +
-//            kC3 * sh.L20[c] * (direction.z * direction.z) +
-//            kC4 * sh.L00[c] -
-//            kC5 * sh.L20[c] +
-//            2.0 * kC1 * (sh.L2_2[c] * direction.x * direction.y + sh.L21[c] * direction.x * direction.z + sh.L2_1[c] * direction.y * direction.z) +
-//            2.0 * kC2 * (sh.L11[c] * direction.x + sh.L1_1[c] * direction.y + sh.L10[c] * direction.z);
 }
 
 vec3 EvaluateSphericalHarmonics(vec3 direction) {
@@ -224,7 +203,6 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     float g = YCoCg.x + YCoCg.z;
     float b = t - YCoCg.y;
     float r = t + YCoCg.y;
-
     return vec3(r, g, b);
 }
 
@@ -250,15 +228,8 @@ void main() {
 
     vec3 color = EvaluateSphericalHarmonics(normal);
     color = max(vec3(0.0), color);
-
-    float maxComponent = max(max(color.r, color.g), color.b);
-    float minComponent = min(min(color.r, color.g), color.b);
-    float diff = maxComponent - minComponent;
-    color /= diff;
-
 //    color = RGB_From_YCoCg(color);
-
-    color = ReinhardToneMap(color);
+//    color = ReinhardToneMap(color);
 
     oFragColor = vec4(color, 1.0);
 }

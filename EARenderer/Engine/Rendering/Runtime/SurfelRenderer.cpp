@@ -35,8 +35,7 @@ namespace EARenderer {
             mSurfelClusterVAOs.back().initialize(surfelData->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(Color), 4),
                 GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
             });
 

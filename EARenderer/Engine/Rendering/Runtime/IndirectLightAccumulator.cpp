@@ -29,6 +29,7 @@ namespace EARenderer {
 
     Size2D IndirectLightAccumulator::framebufferResolution() {
         Size2D probeGridResolution(mProbeData->gridResolution().x, mProbeData->gridResolution().y);
+//        return probeGridResolution;
         Size2D surfelLuminanceMapResolution(mSurfelData->surfelsGBuffer()->size());
         Size2D clusterLuminanceMapResolution(mSurfelData->surfelClustersGBuffer()->size());
         return probeGridResolution.makeUnion(surfelLuminanceMapResolution).makeUnion(clusterLuminanceMapResolution);
@@ -79,7 +80,6 @@ namespace EARenderer {
 
     void IndirectLightAccumulator::averageSurfelClusterLuminances() {
         mSurfelClusterAveragingShader.bind();
-
         mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelClustersLuminanceMap.size()), &mSurfelClustersLuminanceMap);
 
         mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {

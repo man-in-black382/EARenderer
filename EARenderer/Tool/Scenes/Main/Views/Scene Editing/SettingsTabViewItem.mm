@@ -183,7 +183,7 @@
 }
 
 - (IBAction)surfelProbeIndexChanged:(NSTextField *)sender {
-
+    mSettings.surfelSettings.POVProbeIndex = sender.intValue;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 

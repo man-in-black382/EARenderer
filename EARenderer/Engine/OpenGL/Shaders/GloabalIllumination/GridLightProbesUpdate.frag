@@ -141,7 +141,6 @@ vec3 YCoCg_From_RGB(vec3 rgb) {
     float t = rgb.b + Co;
     float Cg = (rgb.g - t) / 2.0;
     float Y = t + Cg;
-
     return vec3(Y, Co, Cg);
 }
 
@@ -205,19 +204,13 @@ void PackSHToRenderTargets(SH sh) {
     oFragData3 = uvec4(pair11, pair12, pair13, 0);
 }
 
-// Transform normalized texture corrdinates into a 1-dimensional integer index
+// Transform texture corrdinates into a 1-dimensional integer index
 int FlattenTexCoords() {
-    // Texture coordinate interpolation gives us values at texel centers, not edges
-    // and so we're accounting for that by adding half a texel size to x and y
-    vec3 halfTexel = 1.0 / vec3(uProbesGridResolution) / 2.0;
-    vec3 resolution = vec3(uProbesGridResolution - 1);
-    float x = (vTexCoords.x + halfTexel.x) * resolution.x;
-    float y = (vTexCoords.y + halfTexel.y) * resolution.y;
-    // vLayer is not normalized, therefore we're using it as-is
+    ivec3 resolution = uProbesGridResolution;
+    float x = gl_FragCoord.x;
+    float y = gl_FragCoord.y;
     float z = vLayer;
-
-    int index = uProbesGridResolution.y * uProbesGridResolution.x * int(z) + uProbesGridResolution.x * int(y) + int(x);
-    return index;
+    return resolution.y * resolution.x * int(z) + resolution.x * int(y) + int(x);
 }
 
 // Schematically, the update of a single light probe on the GPU works like this:

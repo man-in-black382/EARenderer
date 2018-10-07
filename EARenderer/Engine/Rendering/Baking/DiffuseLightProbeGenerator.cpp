@@ -42,9 +42,32 @@ namespace EARenderer {
 
             if (solidAngle > 0.0) {
                 // Accumulating in YCoCg space to enable compression possibilities
-                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo.YCoCg(), solidAngle);
+                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo/*.YCoCg()*/, solidAngle);
             }
         }
+
+//        // FIXME: DEBUG
+//        if (mProbeData->mSurfelClusterProjections.size() == 0) {
+//            SphericalHarmonics debugSH;
+//            debugSH.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 2 * M_PI);
+//            debugSH.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(1.0, 0.0, 0.0), 2 * M_PI);
+//             projection.sphericalHarmonics = debugSH;
+//        } else if (mProbeData->mSurfelClusterProjections.size() == 1) {
+//            SphericalHarmonics debugSH;
+//            debugSH.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 2 * M_PI);
+//            debugSH.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), 2 * M_PI);
+//            projection.sphericalHarmonics = debugSH;
+//        } else if (mProbeData->mSurfelClusterProjections.size() == 2) {
+//            SphericalHarmonics debugSH;
+//            debugSH.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 0.0), 2 * M_PI);
+//            debugSH.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(1.0, 1.0, 0.0), 2 * M_PI);
+//            projection.sphericalHarmonics = debugSH;
+//        } else {
+//            SphericalHarmonics debugSH;
+//            debugSH.contribute(glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 0.0), 2 * M_PI);
+//            debugSH.contribute(glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, 0.0, 1.0), 2 * M_PI);
+//            projection.sphericalHarmonics = debugSH;
+//        }
 
         projection.sphericalHarmonics.convolve();
         projection.sphericalHarmonics.normalize();
@@ -55,12 +78,19 @@ namespace EARenderer {
     void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe& probe) {
         probe.surfelClusterProjectionGroupOffset = (uint32_t)mProbeData->mSurfelClusterProjections.size();
 
+        // FIXME: DEBUG
+//        const SurfelCluster &cluster = mSurfelData->surfelClusters()[0];
+//        SurfelClusterProjection projection = projectSurfelCluster(cluster, probe);
+//        projection.surfelClusterIndex = (uint32_t)0;
+//        mProbeData->mSurfelClusterProjections.push_back(projection);
+//        probe.surfelClusterProjectionGroupSize++;
+
         for (size_t i = 0; i < mSurfelData->surfelClusters().size(); i++) {
             const SurfelCluster &cluster = mSurfelData->surfelClusters()[i];
             SurfelClusterProjection projection = projectSurfelCluster(cluster, probe);
 
             // Only accept projections with non-zero SH
-            if (projection.sphericalHarmonics.magnitude2() > 10e-09) {
+            if (projection.sphericalHarmonics.magnitude2() > 0.0) {
                 projection.surfelClusterIndex = (uint32_t)i;
                 mProbeData->mSurfelClusterProjections.push_back(projection);
                 probe.surfelClusterProjectionGroupSize++;
@@ -77,14 +107,14 @@ namespace EARenderer {
 
         AxisAlignedBox3D bb = scene->lightBakingVolume();
         glm::vec3 bbLengths = bb.max - bb.min;
-        glm::vec3 resolution = bbLengths / scene->difuseProbesSpacing();
+        glm::vec3 resolution = glm::round(bbLengths / scene->difuseProbesSpacing());
         glm::vec3 step = bbLengths / (resolution - 1.0f);
 
         printf("Building grid probes...\n");
         Measurement::ExecutionTime("Grid probes placement took", [&]() {
-            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
+            for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
+                for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
+                    for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(probe);
                         mProbeData->mProbes.push_back(probe);

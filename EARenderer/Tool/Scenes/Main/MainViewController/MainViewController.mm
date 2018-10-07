@@ -36,6 +36,7 @@
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
 #import "DiffuseLightProbeGenerator.hpp"
+#import "DiffuseLightProbeRenderer.hpp"
 
 #import "Choreograph.h"
 
@@ -60,6 +61,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::FrameMeter *frameMeter;
 @property (assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
 @property (assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
+@property (assign, nonatomic) EARenderer::DiffuseLightProbeRenderer *probeRenderer;
 @property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
 @property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
 @property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
@@ -122,7 +124,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -132,12 +134,13 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
     auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
 
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
-
     self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings,
                                                                        surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
+
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
+    self.probeRenderer = new EARenderer::DiffuseLightProbeRenderer(self.scene, diffuseLightProbeData, self.deferredSceneRenderer->gridProbesSphericalHarmonics());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 
     self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
@@ -161,32 +164,20 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.sceneGBufferRenderer->render();
 
     self.deferredSceneRenderer->render([&]() {
-
         if (self.renderingSettings.surfelSettings.renderingEnabled) {
-            self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode, self.scene->surfelSpacing() / 2.0);
+            self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode,
+                                        self.scene->surfelSpacing() / 2.0,
+                                        self.renderingSettings.surfelSettings.POVProbeIndex);
         }
 
-//        if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
-//            self.sceneRenderer->renderDiffuseGridProbes(self.renderingSettings.probeSettings.sphereRadius);
-//        }
-
+        if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
+            self.probeRenderer->render();
+        }
     });
 
     if (self.renderingSettings.triangleRenderingEnabled) {
         self.triangleRenderer->render();
     }
-
-    if (self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex >= 0) {
-//        self.sceneRenderer->renderLinksForDiffuseProbe(self.renderingSettings.probeSettings.clusterLinksRenderingProbeIndex);
-    }
-
-//    self.sceneRenderer->renderSurfelLuminances();
-//    self.sceneRenderer->renderSurfelClusterLuminances();
-//    self.sceneRenderer->renderSurfelsGBuffer();
-
-//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
-//    glm::mat4 inverseLightViewMatrix = glm::transpose(self.scene->directionalLight().viewMatrix());
-//    self.boxRenderer->render(EARenderer::BoxRenderer::Mode::Edges, inverseLightViewMatrix);
 
     self.axesRenderer->render();
 
@@ -234,6 +225,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.renderingSettings = settings;
     // FIXME: Fix rendering settings
     self.deferredSceneRenderer->setRenderingSettings(settings);
+    self.probeRenderer->setRenderingSettings(settings);
 }
 
 #pragma mark - Helper methods

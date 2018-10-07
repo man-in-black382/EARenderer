@@ -11,8 +11,6 @@
 
 #include <stdlib.h>
 
- 
-
 namespace EARenderer {
     
     template<typename DataType>

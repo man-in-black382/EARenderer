@@ -130,7 +130,6 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     float g = YCoCg.x + YCoCg.z;
     float b = t - YCoCg.y;
     float r = t + YCoCg.y;
-
     return vec3(r, g, b);
 }
 
@@ -542,7 +541,7 @@ void main() {
     vec3 Kd = 1.0 - Ks; // Refracted portion
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N, worldPosition);
-    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
+//    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
 //    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
     indirectRadiance *= Kd;
 

@@ -70,6 +70,12 @@ namespace EARenderer {
         mIndirectLightAccumulator->setRenderingSettings(settings);
     }
 
+#pragma mark - Getters
+
+    std::shared_ptr<const std::array<GLLDRTexture3D, 4>> DeferredSceneRenderer::gridProbesSphericalHarmonics() const {
+        return mIndirectLightAccumulator->gridProbesSphericalHarmonics();
+    }
+
 #pragma mark - Rendering
 #pragma mark - Runtime
 

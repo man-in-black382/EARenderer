@@ -105,7 +105,11 @@ namespace EARenderer {
                               std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
                               std::shared_ptr<const SceneGBuffer> GBuffer);
 
+        // Setters
         void setRenderingSettings(const RenderingSettings& settings);
+
+        // Getters
+        std::shared_ptr<const std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
 
         /**
          Renders the scene
