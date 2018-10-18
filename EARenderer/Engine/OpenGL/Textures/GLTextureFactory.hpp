@@ -36,7 +36,7 @@ namespace EARenderer {
             }
 
             Size2D size(width, height);
-            auto texture = std::make_unique<GLNormalizedTexture2D<Format>>(size, pixelData, GLTexture::Filter::Bilinear, GLTexture::WrapMode::Repeat);
+            auto texture = std::make_unique<GLNormalizedTexture2D<Format>>(size, pixelData, GLTexture::Filter::Anisotropic, GLTexture::WrapMode::Repeat);
             stbi_image_free(pixelData);
 
             return texture;

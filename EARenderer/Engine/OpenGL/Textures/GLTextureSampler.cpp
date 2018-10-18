@@ -31,10 +31,14 @@ namespace EARenderer {
 
     GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Normalized format) {
         switch (format) {
-            case GLTexture::Normalized::RCompressed:     return { GL_RGBA, GL_UNSIGNED_BYTE };
-            case GLTexture::Normalized::RGCompressed:    return { GL_RGBA, GL_UNSIGNED_BYTE };
-            case GLTexture::Normalized::RGBCompressed:   return { GL_RGBA, GL_UNSIGNED_BYTE };
-            case GLTexture::Normalized::RGBACompressed:  return { GL_RGBA, GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RCompressedRGBAInput:     return { GL_RED,  GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGCompressedRGBAInput:    return { GL_RG,   GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGBCompressedRGBAInput:   return { GL_RGB,  GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGBACompressedRGBAInput:  return { GL_RGBA, GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::R:                        return { GL_RED,  GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RG:                       return { GL_RG,   GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGB:                      return { GL_RGB,  GL_UNSIGNED_BYTE };
+            case GLTexture::Normalized::RGBA:                     return { GL_RGBA, GL_UNSIGNED_BYTE };
         }
     }
 

@@ -20,12 +20,12 @@ namespace EARenderer {
     
     class PBRMaterial {
     public:
-        using AlbedoMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBACompressed>;
-        using NormalMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBCompressed>;
-        using MetallnessMap         = GLNormalizedTexture2D<GLTexture::Normalized::RCompressed>;
-        using RoughnessMap          = GLNormalizedTexture2D<GLTexture::Normalized::RCompressed>;
-        using AmbientOcclusionMap   = GLNormalizedTexture2D<GLTexture::Normalized::RCompressed>;
-        using DisplacementMap       = GLNormalizedTexture2D<GLTexture::Normalized::RCompressed>;
+        using AlbedoMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBACompressedRGBAInput>;
+        using NormalMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBCompressedRGBAInput>;
+        using MetallnessMap         = GLNormalizedTexture2D<GLTexture::Normalized::RCompressedRGBAInput>;
+        using RoughnessMap          = GLNormalizedTexture2D<GLTexture::Normalized::RCompressedRGBAInput>;
+        using AmbientOcclusionMap   = GLNormalizedTexture2D<GLTexture::Normalized::RCompressedRGBAInput>;
+        using DisplacementMap       = GLNormalizedTexture2D<GLTexture::Normalized::RCompressedRGBAInput>;
 
     private:
         std::unique_ptr<AlbedoMap> mAlbedoMap;

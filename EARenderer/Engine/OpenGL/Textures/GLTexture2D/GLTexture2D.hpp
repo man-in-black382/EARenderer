@@ -50,7 +50,7 @@ namespace EARenderer {
     class GLNormalizedTexture2D: public GLTexture2D<GLTexture::Normalized, Format> {
     public:
         GLNormalizedTexture2D(const Size2D& size,
-                              void *data = nullptr,
+                              const void *data = nullptr,
                               GLTexture::Filter filter = GLTexture::Filter::Bilinear,
                               GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
         {
@@ -64,7 +64,7 @@ namespace EARenderer {
     template<GLTexture::Integer Format>
     class GLIntegerTexture2D: public GLTexture2D<GLTexture::Integer, Format> {
     public:
-        GLIntegerTexture2D(const Size2D& size, void *data = nullptr) {
+        GLIntegerTexture2D(const Size2D& size, const void *data = nullptr) {
             this->initialize(size, GLTexture::Filter::None, GLTexture::WrapMode::ClampToEdge, data);
         }
 
@@ -76,7 +76,7 @@ namespace EARenderer {
     class GLFloatTexture2D: public GLTexture2D<GLTexture::Float, Format> {
     public:
         GLFloatTexture2D(const Size2D& size,
-                         void *data = nullptr,
+                         const void *data = nullptr,
                          GLTexture::Filter filter = GLTexture::Filter::Bilinear,
                          GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
         {

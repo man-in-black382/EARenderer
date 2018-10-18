@@ -37,6 +37,7 @@ namespace EARenderer {
     mBloomEffect(mFramebuffer, mPostprocessTexturePool),
     mToneMappingEffect(mFramebuffer, mPostprocessTexturePool),
     mSSREffect(mFramebuffer, mPostprocessTexturePool),
+    mSMAAEffect(mFramebuffer, mPostprocessTexturePool),
 
     // Helpers
     mSurfelData(surfelData),

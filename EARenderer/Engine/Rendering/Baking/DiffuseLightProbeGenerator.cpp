@@ -42,7 +42,7 @@ namespace EARenderer {
 
             if (solidAngle > 0.0) {
                 // Accumulating in YCoCg space to enable compression possibilities
-                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo/*.YCoCg()*/, solidAngle);
+                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo.YCoCg(), solidAngle);
             }
         }
 
@@ -112,9 +112,9 @@ namespace EARenderer {
 
         printf("Building grid probes...\n");
         Measurement::ExecutionTime("Grid probes placement took", [&]() {
-            for (float z = bb.min.z; z <= bb.max.z; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x; x += step.x) {
+            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
                         DiffuseLightProbe probe({ x, y, z });
                         projectSurfelClustersOnProbe(probe);
                         mProbeData->mProbes.push_back(probe);

@@ -541,7 +541,7 @@ void main() {
     vec3 Kd = 1.0 - Ks; // Refracted portion
 
     vec3 indirectRadiance = EvaluateSphericalHarmonics(N, worldPosition);
-//    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
+    indirectRadiance = RGB_From_YCoCg(indirectRadiance);
 //    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
     indirectRadiance *= Kd;
 

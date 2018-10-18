@@ -10,6 +10,7 @@
 #include "GLPipelineState.hpp"
 
 #include <cmath>
+#include <OpenGL/glext.h>
 
 namespace EARenderer {
     
@@ -40,9 +41,18 @@ namespace EARenderer {
         GLint glMagFilter = 0;
 
         switch (filter) {
-            case Filter::None: glMinFilter = glMagFilter = GL_NEAREST; break;
-            case Filter::Bilinear: glMinFilter = glMagFilter = GL_LINEAR; break;
-            case Filter::Trilinear: glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR; break;
+            case Filter::None:
+                glMinFilter = glMagFilter = GL_NEAREST; break;
+            case Filter::Bilinear:
+                glMinFilter = glMagFilter = GL_LINEAR; break;
+            case Filter::Trilinear:
+                glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR; break;
+            case Filter::Anisotropic:
+                glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR;
+                float aniso = 0.0f;
+                glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 8.0f));
+                break;
         }
 
         glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, glMinFilter);
@@ -65,10 +75,14 @@ namespace EARenderer {
 
     GLTextureFormat GLTexture::glFormat(Normalized format) {
         switch (format) {
-            case Normalized::RCompressed:     return { GL_COMPRESSED_RED,  GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGCompressed:    return { GL_COMPRESSED_RG,   GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGBCompressed:   return { GL_COMPRESSED_RGB,  GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGBACompressed:  return { GL_COMPRESSED_RGBA, GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::RCompressedRGBAInput:     return { GL_COMPRESSED_RED,  GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::RGCompressedRGBAInput:    return { GL_COMPRESSED_RG,   GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::RGBCompressedRGBAInput:   return { GL_COMPRESSED_RGB,  GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::RGBACompressedRGBAInput:  return { GL_COMPRESSED_RGBA, GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::R:                        return { GL_RED,             GL_RED,  GL_UNSIGNED_BYTE };
+            case Normalized::RG:                       return { GL_RG,              GL_RG,   GL_UNSIGNED_BYTE };
+            case Normalized::RGB:                      return { GL_RGB,             GL_RGB,  GL_UNSIGNED_BYTE };
+            case Normalized::RGBA:                     return { GL_RGBA,            GL_RGBA, GL_UNSIGNED_BYTE };
         }
     }
 

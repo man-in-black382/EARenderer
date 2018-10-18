@@ -22,11 +22,12 @@ namespace EARenderer {
     
     class GLTexture: public GLNamedObject, public GLBindable {
     public:
-        enum class Filter { None, Bilinear, Trilinear };
+        enum class Filter { None, Bilinear, Trilinear, Anisotropic };
         enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
 
         enum class Normalized {
-            RCompressed, RGCompressed, RGBCompressed, RGBACompressed
+            R, RG, RGB, RGBA,
+            RCompressedRGBAInput, RGCompressedRGBAInput, RGBCompressedRGBAInput, RGBACompressedRGBAInput
         };
 
         enum class Integer {

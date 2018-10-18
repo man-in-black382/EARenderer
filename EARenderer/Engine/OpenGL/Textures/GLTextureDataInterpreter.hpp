@@ -22,7 +22,7 @@ namespace EARenderer {
     class GLTextureDataInterpreter { };
 
     template<>
-    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RCompressed> {
+    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
         static float DecodeData(void *texData, size_t offset) {
@@ -31,7 +31,7 @@ namespace EARenderer {
     };
 
     template<>
-    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGCompressed> {
+    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
         static glm::vec2 DecodeData(void *texData, size_t offset) {
@@ -43,7 +43,7 @@ namespace EARenderer {
     };
 
     template<>
-    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBCompressed> {
+    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
         static glm::vec3 DecodeData(void *texData, size_t offset) {
@@ -56,7 +56,7 @@ namespace EARenderer {
     };
 
     template<>
-    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBACompressed> {
+    class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBACompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
         static glm::vec4 DecodeData(void *texData, size_t offset) {

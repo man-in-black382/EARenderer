@@ -80,7 +80,7 @@
     });
 
     scene->setName("cornell");
-    scene->setDiffuseProbeSpacing(0.08);
+    scene->setDiffuseProbeSpacing(0.2);
     scene->setSurfelSpacing(0.02);
 
     [self setupAnimations];

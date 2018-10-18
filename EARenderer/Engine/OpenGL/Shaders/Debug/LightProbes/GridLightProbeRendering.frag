@@ -228,8 +228,7 @@ void main() {
 
     vec3 color = EvaluateSphericalHarmonics(normal);
     color = max(vec3(0.0), color);
-//    color = RGB_From_YCoCg(color);
-//    color = ReinhardToneMap(color);
+    color = RGB_From_YCoCg(color);
 
     oFragColor = vec4(color, 1.0);
 }

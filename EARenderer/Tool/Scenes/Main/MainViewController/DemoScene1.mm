@@ -33,7 +33,7 @@
     // Meshes
  
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
-    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_lightweight" ofType:@"obj"];
+    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_lightweight_3" ofType:@"obj"];
 //    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
 
@@ -132,6 +132,8 @@
         } else if (subMesh.materialName() == "column_a") {
             sponzaInstance.setMaterialIDForSubMeshID(columnA_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "floor") {
+            sponzaInstance.setMaterialIDForSubMeshID(floor_MaterialID, subMeshID);
+        } else if (subMesh.materialName() == "floor.001") {
             sponzaInstance.setMaterialIDForSubMeshID(ironMaterialID, subMeshID);
         } else if (subMesh.materialName() == "column_c") {
             sponzaInstance.setMaterialIDForSubMeshID(columnC_MaterialID, subMeshID);

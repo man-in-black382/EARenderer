@@ -11,6 +11,7 @@
 #include "StringUtils.hpp"
 
 #include <sstream>
+#include <regex>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -41,7 +42,7 @@ namespace EARenderer {
     }
     
 #pragma mark - Private helper methods
-    
+
     void GLProgram::link() {
         glAttachShader(mName, mVertexShader->name());
         glAttachShader(mName, mFragmentShader->name());

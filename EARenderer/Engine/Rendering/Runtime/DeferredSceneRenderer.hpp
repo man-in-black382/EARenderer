@@ -32,6 +32,7 @@
 #include "BloomEffect.hpp"
 #include "ToneMappingEffect.hpp"
 #include "ScreenSpaceReflectionEffect.hpp"
+#include "SMAAEffect.hpp"
 #include "DirectLightAccumulator.hpp"
 #include "IndirectLightAccumulator.hpp"
 
@@ -71,6 +72,7 @@ namespace EARenderer {
         BloomEffect<GLTexture::Float::RGBA16F> mBloomEffect;
         ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
         ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
+        SMAAEffect<GLTexture::Float::RGBA16F> mSMAAEffect;
 
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;

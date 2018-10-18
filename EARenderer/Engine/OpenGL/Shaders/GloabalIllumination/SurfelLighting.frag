@@ -150,7 +150,6 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     float g = YCoCg.x + YCoCg.z;
     float b = t - YCoCg.y;
     float r = t + YCoCg.y;
-
     return vec3(r, g, b);
 }
 

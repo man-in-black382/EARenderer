@@ -173,11 +173,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
         if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
             self.probeRenderer->render();
         }
-    });
 
-    if (self.renderingSettings.triangleRenderingEnabled) {
-        self.triangleRenderer->render();
-    }
+        if (self.renderingSettings.triangleRenderingEnabled) {
+            self.triangleRenderer->render();
+        }
+    });
 
     self.axesRenderer->render();
 

@@ -55,7 +55,7 @@ namespace EARenderer {
         GLint mAvailableTextureUnits = 0;
         
         bool isModifyingUniforms = false;
-        
+
         void link();
         void obtainVertexAttributes();
         void obtainUniforms();
