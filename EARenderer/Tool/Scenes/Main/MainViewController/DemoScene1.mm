@@ -198,7 +198,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.7);
+    scene->setDiffuseProbeSpacing(0.9);
     scene->setSurfelSpacing(0.05);
 
     [self setupAnimations];

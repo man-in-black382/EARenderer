@@ -67,6 +67,9 @@
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE152E04215E4A66009ACAC3 /* DiffuseLightProbeData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE152E03215E4A66009ACAC3 /* DiffuseLightProbeData.cpp */; };
+		CE161310217C871C00CC9248 /* SMAABlendingWeightCalculation.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE16130E217C871C00CC9248 /* SMAABlendingWeightCalculation.frag */; };
+		CE161311217C871C00CC9248 /* SMAABlendingWeightCalculation.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE16130F217C871C00CC9248 /* SMAABlendingWeightCalculation.vert */; };
+		CE161314217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE161312217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.cpp */; };
 		CE1A567B21281B770082BE3A /* Exposure.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE1A567A21281B770082BE3A /* Exposure.frag */; };
 		CE1A567E21281C320082BE3A /* GLSLExposure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1A567C21281C320082BE3A /* GLSLExposure.cpp */; };
 		CE1A568521283F7C0082BE3A /* GLSLLuminanceRange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE1A568321283F7C0082BE3A /* GLSLLuminanceRange.cpp */; };
@@ -377,6 +380,9 @@
 		CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */ = {isa = PBXBuildFile; fileRef = CEC2197020C076B000767342 /* MaterialLoader.mm */; };
 		CEC7B0411FA649B70097CFDE /* sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = CEC7B0401FA649880097CFDE /* sky.hdr */; };
 		CEC8992A216B868D00076F84 /* SMAA.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CEC89929216B868D00076F84 /* SMAA.glsl */; };
+		CED1CEC9217DE30900291560 /* SMAANeighborhoodBlending.frag in Resources */ = {isa = PBXBuildFile; fileRef = CED1CEC7217DE30900291560 /* SMAANeighborhoodBlending.frag */; };
+		CED1CECA217DE30900291560 /* SMAANeighborhoodBlending.vert in Resources */ = {isa = PBXBuildFile; fileRef = CED1CEC8217DE30900291560 /* SMAANeighborhoodBlending.vert */; };
+		CED1CECD217DE31600291560 /* GLSLSMAANeighborhoodBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED1CECB217DE31500291560 /* GLSLSMAANeighborhoodBlending.cpp */; };
 		CED2EE692173887B0066E5A0 /* sponza_lightweight_3.obj in Resources */ = {isa = PBXBuildFile; fileRef = CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */; };
 		CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */; };
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */; };
@@ -733,6 +739,10 @@
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		CE152E03215E4A66009ACAC3 /* DiffuseLightProbeData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbeData.cpp; sourceTree = "<group>"; };
+		CE16130E217C871C00CC9248 /* SMAABlendingWeightCalculation.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAABlendingWeightCalculation.frag; sourceTree = "<group>"; };
+		CE16130F217C871C00CC9248 /* SMAABlendingWeightCalculation.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAABlendingWeightCalculation.vert; sourceTree = "<group>"; };
+		CE161312217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAABlendingWeightCalculation.cpp; sourceTree = "<group>"; };
+		CE161313217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAABlendingWeightCalculation.hpp; sourceTree = "<group>"; };
 		CE1A567A21281B770082BE3A /* Exposure.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Exposure.frag; sourceTree = "<group>"; };
 		CE1A567C21281C320082BE3A /* GLSLExposure.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLExposure.cpp; sourceTree = "<group>"; };
 		CE1A567D21281C320082BE3A /* GLSLExposure.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLExposure.hpp; sourceTree = "<group>"; };
@@ -1540,6 +1550,10 @@
 		CEC7B0401FA649880097CFDE /* sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file; path = sky.hdr; sourceTree = "<group>"; };
 		CEC89929216B868D00076F84 /* SMAA.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SMAA.glsl; sourceTree = "<group>"; };
 		CECB156821032641002508CB /* GLTextureDataInterpreter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureDataInterpreter.hpp; sourceTree = "<group>"; };
+		CED1CEC7217DE30900291560 /* SMAANeighborhoodBlending.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAANeighborhoodBlending.frag; sourceTree = "<group>"; };
+		CED1CEC8217DE30900291560 /* SMAANeighborhoodBlending.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAANeighborhoodBlending.vert; sourceTree = "<group>"; };
+		CED1CECB217DE31500291560 /* GLSLSMAANeighborhoodBlending.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAANeighborhoodBlending.cpp; sourceTree = "<group>"; };
+		CED1CECC217DE31600291560 /* GLSLSMAANeighborhoodBlending.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAANeighborhoodBlending.hpp; sourceTree = "<group>"; };
 		CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight_3.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
 		CEE826392157C3A40019D2F8 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
@@ -3853,6 +3867,14 @@
 				CEB6052A2176397B00C60F9E /* SMAAEdgeDetection.vert */,
 				CEB605302176410F00C60F9E /* GLSLSMAAEdgeDetection.cpp */,
 				CEB605312176410F00C60F9E /* GLSLSMAAEdgeDetection.hpp */,
+				CE16130E217C871C00CC9248 /* SMAABlendingWeightCalculation.frag */,
+				CE16130F217C871C00CC9248 /* SMAABlendingWeightCalculation.vert */,
+				CE161312217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.cpp */,
+				CE161313217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.hpp */,
+				CED1CEC7217DE30900291560 /* SMAANeighborhoodBlending.frag */,
+				CED1CEC8217DE30900291560 /* SMAANeighborhoodBlending.vert */,
+				CED1CECB217DE31500291560 /* GLSLSMAANeighborhoodBlending.cpp */,
+				CED1CECC217DE31600291560 /* GLSLSMAANeighborhoodBlending.hpp */,
 			);
 			path = SMAA;
 			sourceTree = "<group>";
@@ -3923,6 +3945,7 @@
 				CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */,
 				AC7230AE2125638C00CB7654 /* LuminanceHistogram.vert in Resources */,
 				CEC2196B20C0744E00767342 /* Fabric05_col.jpg in Resources */,
+				CED1CECA217DE30900291560 /* SMAANeighborhoodBlending.vert in Resources */,
 				CE53ADDD209E2BC300749A96 /* fabric02_col.jpg in Resources */,
 				CEC2195220C0744E00767342 /* Bricks08_nrm.jpg in Resources */,
 				CE70FA561F8F8F7400AD9027 /* CubemapRendering.vert in Resources */,
@@ -3957,6 +3980,7 @@
 				CE341947213156E5001BA6FB /* Tiles12_col.jpg in Resources */,
 				CE4DE21B1FA60CFE0067729A /* Sponza_Ceiling_roughness.tga in Resources */,
 				CE4DE20E1FA60CFE0067729A /* gi_flag.tga in Resources */,
+				CE161310217C871C00CC9248 /* SMAABlendingWeightCalculation.frag in Resources */,
 				AC3C9EBE207219FF00F35EB3 /* GridLightProbeRendering.geom in Resources */,
 				CE2B60F720E534E100370844 /* ToneMapping.frag in Resources */,
 				CEC2195E20C0744E00767342 /* PavingStones09_nrm.jpg in Resources */,
@@ -3982,6 +4006,7 @@
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
 				CE4DE23A1FA60CFF0067729A /* Sponza_FlagPole_normal.tga in Resources */,
 				CE4DE2141FA60CFE0067729A /* Sponza_Arch_normal.tga in Resources */,
+				CE161311217C871C00CC9248 /* SMAABlendingWeightCalculation.vert in Resources */,
 				CE34194021315409001BA6FB /* Marble01_rgh.jpg in Resources */,
 				CE4DE20F1FA60CFE0067729A /* Lion_Albedo.tga in Resources */,
 				CE4DE2151FA60CFE0067729A /* Sponza_Arch_roughness.tga in Resources */,
@@ -4088,6 +4113,7 @@
 				CEF0162020D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag in Resources */,
 				CEA0B91020E7743700257E37 /* GBuffer.vert in Resources */,
 				CEC2196720C0744E00767342 /* Rocks01_AO.jpg in Resources */,
+				CED1CEC9217DE30900291560 /* SMAANeighborhoodBlending.frag in Resources */,
 				CE4DE2391FA60CFF0067729A /* Sponza_FlagPole_diffuse.tga in Resources */,
 				CE4DE24C1FA60CFF0067729A /* VasePlant_diffuse.tga in Resources */,
 				CE4DE2111FA60CFE0067729A /* Lion_Roughness.tga in Resources */,
@@ -4208,6 +4234,7 @@
 				CE70FA951F8F913100AD9027 /* OutlineView.m in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
+				CE161314217C9A8500CC9248 /* GLSLSMAABlendingWeightCalculation.cpp in Sources */,
 				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
 				CEB605322176410F00C60F9E /* GLSLSMAAEdgeDetection.cpp in Sources */,
 				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
@@ -4296,6 +4323,7 @@
 				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N2UV1T1BT.cpp in Sources */,
 				AC7230AA212562E600CB7654 /* GLSLLuminanceHistogram.cpp in Sources */,
+				CED1CECD217DE31600291560 /* GLSLSMAANeighborhoodBlending.cpp in Sources */,
 				CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */,
 				CE1A568521283F7C0082BE3A /* GLSLLuminanceRange.cpp in Sources */,
 				CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */,

@@ -17,6 +17,8 @@ namespace EARenderer {
     class GLSLSMAAEdgeDetection: public GLProgram {
     public:
         GLSLSMAAEdgeDetection();
+
+        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
     };
     
 }

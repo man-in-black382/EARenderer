@@ -12,17 +12,33 @@
 #include "PostprocessEffect.hpp"
 #include "GLTexture2D.hpp"
 #include "GLSLSMAAEdgeDetection.hpp"
+#include "GLSLSMAABlendingWeightCalculation.hpp"
+#include "GLSLSMAANeighborhoodBlending.hpp"
+
+#include "SMAAAreaTex.h"
+#include "SMAASearchTex.h"
 
 namespace EARenderer {
 
     template <GLTexture::Float TextureFormat>
     class SMAAEffect: public PostprocessEffect<TextureFormat> {
-    private:
+    public:
         GLNormalizedTexture2D<GLTexture::Normalized::RG> mAreaTexture;
         GLNormalizedTexture2D<GLTexture::Normalized::R> mSearchTexture;
         GLFloatTexture2D<GLTexture::Float::RG16F> mEdgesTexture;
         GLFloatTexture2D<GLTexture::Float::RGBA16F> mBlendTexture;
+
         GLSLSMAAEdgeDetection mEdgeDetectionShader;
+        GLSLSMAABlendingWeightCalculation mBlendingWeightCalculationShader;
+        GLSLSMAANeighborhoodBlending mNeighborhoodBlendingShader;
+
+        std::array<unsigned char, AREATEX_SIZE> areaTextureFlipped() const;
+        std::array<unsigned char, SEARCHTEX_SIZE> searchTextureFlipped() const;
+
+        void detectEdges(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image);
+        void calculateBlendingWeights();
+        void blendNeighbors(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image,
+                            std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
 
     public:
         SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
