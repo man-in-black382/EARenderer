@@ -146,7 +146,7 @@ void main() {
 
         SH luminanceSH = ScaleSH(surfelClusterPrecomputedSH, vec3(luma));
 
-        resultingSH = AddTwoSH(resultingSH, luminanceSH);
+        resultingSH = Sum2SH(resultingSH, luminanceSH);
     }
 
     PackSHToRenderTargets(resultingSH);

@@ -153,7 +153,7 @@ SH ScaleSH(SH sh, vec3 scale) {
     return result;
 }
 
-SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
+SH Sum8SH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
     SH result;
     result.L00  = first.L00 + second.L00 + third.L00 + fourth.L00 + fifth.L00 + sixth.L00 + seventh.L00 + eighth.L00;
     result.L1_1 = first.L1_1 + second.L1_1 + third.L1_1 + fourth.L1_1 + fifth.L1_1 + sixth.L1_1 + seventh.L1_1 + eighth.L1_1;
@@ -419,7 +419,7 @@ SH TriLerpSurroundingProbes(vec3 fragNormal) {
     sh4 = ScaleSH(sh4, vec3(weights.value4)); sh5 = ScaleSH(sh5, vec3(weights.value5));
     sh6 = ScaleSH(sh6, vec3(weights.value6)); sh7 = ScaleSH(sh7, vec3(weights.value7));
 
-    SH result = SumSH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
+    SH result = Sum8SH(sh0, sh1, sh2, sh3, sh4, sh5, sh6, sh7);
 
     return result;
 }
