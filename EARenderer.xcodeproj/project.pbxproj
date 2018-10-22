@@ -383,6 +383,10 @@
 		CED1CEC9217DE30900291560 /* SMAANeighborhoodBlending.frag in Resources */ = {isa = PBXBuildFile; fileRef = CED1CEC7217DE30900291560 /* SMAANeighborhoodBlending.frag */; };
 		CED1CECA217DE30900291560 /* SMAANeighborhoodBlending.vert in Resources */ = {isa = PBXBuildFile; fileRef = CED1CEC8217DE30900291560 /* SMAANeighborhoodBlending.vert */; };
 		CED1CECD217DE31600291560 /* GLSLSMAANeighborhoodBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED1CECB217DE31500291560 /* GLSLSMAANeighborhoodBlending.cpp */; };
+		CED1CED0217DF3FA00291560 /* Packing.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CECF217DF3FA00291560 /* Packing.glsl */; };
+		CED1CED2217DF4DA00291560 /* SphericalHarmonics.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CED1217DF4DA00291560 /* SphericalHarmonics.glsl */; };
+		CED1CED4217DF69500291560 /* GBuffer.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CED3217DF69500291560 /* GBuffer.glsl */; };
+		CED1CED6217E039700291560 /* ColorSpace.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CED5217E039700291560 /* ColorSpace.glsl */; };
 		CED2EE692173887B0066E5A0 /* sponza_lightweight_3.obj in Resources */ = {isa = PBXBuildFile; fileRef = CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */; };
 		CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */; };
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */; };
@@ -1554,6 +1558,10 @@
 		CED1CEC8217DE30900291560 /* SMAANeighborhoodBlending.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAANeighborhoodBlending.vert; sourceTree = "<group>"; };
 		CED1CECB217DE31500291560 /* GLSLSMAANeighborhoodBlending.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAANeighborhoodBlending.cpp; sourceTree = "<group>"; };
 		CED1CECC217DE31600291560 /* GLSLSMAANeighborhoodBlending.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAANeighborhoodBlending.hpp; sourceTree = "<group>"; };
+		CED1CECF217DF3FA00291560 /* Packing.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Packing.glsl; sourceTree = "<group>"; };
+		CED1CED1217DF4DA00291560 /* SphericalHarmonics.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = SphericalHarmonics.glsl; sourceTree = "<group>"; };
+		CED1CED3217DF69500291560 /* GBuffer.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = GBuffer.glsl; sourceTree = "<group>"; };
+		CED1CED5217E039700291560 /* ColorSpace.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = ColorSpace.glsl; sourceTree = "<group>"; };
 		CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight_3.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
 		CEE826392157C3A40019D2F8 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
@@ -3423,6 +3431,7 @@
 				CE70F9B51F8F8EBD00AD9027 /* GLViewport.hpp */,
 				CE70F9E81F8F8EBD00AD9027 /* GLUniform.cpp */,
 				CE70F9EA1F8F8EBD00AD9027 /* GLUniform.hpp */,
+				CED1CECE217DF3D300291560 /* Common */,
 				AC6CD80720D1144A000E6A22 /* IBL */,
 				AC6CD80620D113E6000E6A22 /* GloabalIllumination */,
 				AC6CD80520D113C4000E6A22 /* Main */,
@@ -3879,6 +3888,17 @@
 			path = SMAA;
 			sourceTree = "<group>";
 		};
+		CED1CECE217DF3D300291560 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				CED1CECF217DF3FA00291560 /* Packing.glsl */,
+				CED1CED1217DF4DA00291560 /* SphericalHarmonics.glsl */,
+				CED1CED3217DF69500291560 /* GBuffer.glsl */,
+				CED1CED5217E039700291560 /* ColorSpace.glsl */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4112,6 +4132,7 @@
 				CE70FA781F8F8F7400AD9027 /* suzanne.obj in Resources */,
 				CEF0162020D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag in Resources */,
 				CEA0B91020E7743700257E37 /* GBuffer.vert in Resources */,
+				CED1CED0217DF3FA00291560 /* Packing.glsl in Resources */,
 				CEC2196720C0744E00767342 /* Rocks01_AO.jpg in Resources */,
 				CED1CEC9217DE30900291560 /* SMAANeighborhoodBlending.frag in Resources */,
 				CE4DE2391FA60CFF0067729A /* Sponza_FlagPole_diffuse.tga in Resources */,
@@ -4120,6 +4141,7 @@
 				CEC2195420C0744E00767342 /* Bricks08_rgh.jpg in Resources */,
 				CEC2196320C0744E00767342 /* Fabric06_rgh.jpg in Resources */,
 				CE4DE23F1FA60CFF0067729A /* Sponza_Roof_diffuse.tga in Resources */,
+				CED1CED2217DF4DA00291560 /* SphericalHarmonics.glsl in Resources */,
 				CE4DE20B1FA60CFE0067729A /* ChainTexture_Roughness.tga in Resources */,
 				CE4DE21F1FA60CFE0067729A /* Sponza_Column_b_diffuse.tga in Resources */,
 				AC10304920C7E0F300920690 /* DepthPrepass.frag in Resources */,
@@ -4140,6 +4162,7 @@
 				CEB6052F21763A6A00C60F9E /* SMAADefines.glsl in Resources */,
 				ACCCC1E1203C802500905557 /* SurfelRendering.geom in Resources */,
 				CE4DE2171FA60CFE0067729A /* Sponza_Bricks_a_Normal.tga in Resources */,
+				CED1CED4217DF69500291560 /* GBuffer.glsl in Resources */,
 				CE34194A213156E5001BA6FB /* Tiles12_disp.jpg in Resources */,
 				CE4DE23B1FA60CFF0067729A /* Sponza_FlagPole_roughness.tga in Resources */,
 				CE4DE2331FA60CFF0067729A /* Sponza_Fabric_Green_diffuse.tga in Resources */,
@@ -4156,6 +4179,7 @@
 				CE4DE24A1FA60CFF0067729A /* VaseHanging_normal.tga in Resources */,
 				CE4DE2091FA60CFE0067729A /* ChainTexture_Metallic.tga in Resources */,
 				CE4DE2161FA60CFE0067729A /* Sponza_Bricks_a_Albedo.tga in Resources */,
+				CED1CED6217E039700291560 /* ColorSpace.glsl in Resources */,
 				CE4DE2261FA60CFF0067729A /* Sponza_Curtain_Blue_normal.tga in Resources */,
 				CEC2196520C0744E00767342 /* Rocks01_col.jpg in Resources */,
 			);

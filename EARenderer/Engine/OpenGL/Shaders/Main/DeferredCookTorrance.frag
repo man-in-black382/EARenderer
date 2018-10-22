@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "Packing.glsl"
+
 // Constants
 
 const float kNormalizationFactor = 1000.0;
@@ -13,13 +15,6 @@ const int kLightTypeSpot        = 2;
 const int kSHCompression333 = 0;
 const int kSHCompression322 = 1;
 const int kSHCompression311 = 2;
-
-// Spherical harmonics
-const float kC1 = 0.429043;
-const float kC2 = 0.511664;
-const float kC3 = 0.743125;
-const float kC4 = 0.886227;
-const float kC5 = 0.247708;
 
 // Output
 
@@ -84,32 +79,6 @@ bool isGlobalIlluminationEnabled()  { return bool((uSettingsBitmask >> 3u) & 1u)
 bool isLightMultibounceEnabled()    { return bool((uSettingsBitmask >> 2u) & 1u); }
 bool isMeshRenderingEnabled()       { return bool((uSettingsBitmask >> 1u) & 1u); }
 bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u); }
-
-vec2 UnpackSnorm2x16(uint package, float range) {
-    const float base = 32767.0;
-
-    // Unpack encoded floats into individual variables
-    uint uFirst = package >> 16;
-    uint uSecond = package & 0x0000FFFFu;
-
-    // Extract sign bits
-    uint firstSignMask = uFirst & (1u << 15);
-    uint secondSignMask = uSecond & (1u << 15);
-
-    // If sign bit indicates negativity, fill MS 16 bits with 1s
-    uFirst |= firstSignMask != 0 ? 0xFFFF0000u : 0x0u;
-    uSecond |= secondSignMask != 0 ? 0xFFFF0000u : 0x0u;
-
-    // Now get signed integer representation
-    int iFirst = int(uFirst);
-    int iSecond = int(uSecond);
-
-    // At last, convert integers back to floats using range and base
-    float fFirst = (float(iFirst) / base) * range;
-    float fSecond = (float(iSecond) / base) * range;
-
-    return vec2(fFirst, fSecond);
-}
 
 ////////////////////////////////////////////////////////////
 //////////////////// Lighting equation /////////////////////

@@ -1,5 +1,9 @@
 #version 410 core
 
+#include "Packing.glsl"
+#include "SphericalHarmonics.glsl"
+#include "ColorSpace.glsl"
+
 // Output
 
 layout(location = 0) out uvec4 oFragData0;
@@ -22,81 +26,7 @@ uniform usamplerBuffer uProbeProjectionsMetadata;
 
 uniform sampler2D uSurfelClustersLuminanceMap;
 
-// Types
-
-struct SH {
-    vec3 L00;
-    vec3 L11;
-    vec3 L10;
-    vec3 L1_1;
-    vec3 L21;
-    vec3 L2_1;
-    vec3 L2_2;
-    vec3 L20;
-    vec3 L22;
-};
-
 // Functions
-
-SH ZeroSH() {
-    SH result;
-
-    result.L00  = vec3(0.0);
-
-    result.L1_1 = vec3(0.0);
-    result.L10  = vec3(0.0);
-    result.L11  = vec3(0.0);
-
-    result.L2_2 = vec3(0.0);
-    result.L2_1 = vec3(0.0);
-    result.L21  = vec3(0.0);
-    
-    result.L20  = vec3(0.0);
-
-    result.L22  = vec3(0.0);
-
-    return result;
-}
-
-SH ScaleSH(SH sh, vec3 color) {
-    SH result;
-
-    result.L00  = color * sh.L00;
-
-    result.L1_1 = color * sh.L1_1;
-    result.L10  = color * sh.L10;
-    result.L11  = color * sh.L11;
-
-    result.L2_2 = color * sh.L2_2;
-    result.L2_1 = color * sh.L2_1;
-    result.L21  = color * sh.L21;
-
-    result.L20  = color * sh.L20;
-
-    result.L22  = color * sh.L22;
-
-    return result;
-}
-
-SH AddTwoSH(SH first, SH second) {
-    SH result;
-
-    result.L00  = first.L00  + second.L00;
-
-    result.L1_1 = first.L1_1 + second.L1_1;
-    result.L10  = first.L10  + second.L10;
-    result.L11  = first.L11  + second.L11;
-
-    result.L2_2 = first.L2_2 + second.L2_2;
-    result.L2_1 = first.L2_1 + second.L2_1;
-    result.L21  = first.L21  + second.L21;
-
-    result.L20  = first.L20  + second.L20;
-
-    result.L22  = first.L22  + second.L22;
-
-    return result;
-}
 
 float MaxSHCoefficient(SH sh) {
     float maximum = 0.0;
@@ -134,38 +64,6 @@ SH UnpackSH(int surfelClusterIndex) {
     sh.L22  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 8).rgb);
 
     return sh;
-}
-
-vec3 YCoCg_From_RGB(vec3 rgb) {
-    float Co = (rgb.r - rgb.b) / 2.0;
-    float t = rgb.b + Co;
-    float Cg = (rgb.g - t) / 2.0;
-    float Y = t + Cg;
-    return vec3(Y, Co, Cg);
-}
-
-uint PackSnorm2x16(float first, float second, float range) {
-    const float base = 32767.0;
-
-    uint packed = 0;
-    uint iFirst = uint(int(first / range * base));
-    uint iSecond = uint(int(second / range * base));
-
-    uint firstSignMask = iFirst & (1u << 31); // Leave only sign bit
-
-    uint secondSignMask = iSecond & (1u << 31); // Leave only sign bit
-    secondSignMask >>= 16; // Move sign mask by 16 since second value will be stored in LSB of the final uint
-
-    // Move uFirst into MS bits
-    packed |= iFirst;
-    packed <<= 16;
-    packed |= firstSignMask; // Set sign bit
-
-    // Move uSecond into LS bits
-    packed |= iSecond & 0x0000FFFFu;
-    packed |= secondSignMask; // Set sign bit
-
-    return packed;
 }
 
 // Packing scheme:
@@ -242,7 +140,7 @@ void main() {
 
         vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
 
-        float luma = 5.0;//0.2126 * surfelClusterLuminance.r + 0.7152 * surfelClusterLuminance.g + 0.0722 * surfelClusterLuminance.b;
+        float luma = 0.2126 * surfelClusterLuminance.r + 0.7152 * surfelClusterLuminance.g + 0.0722 * surfelClusterLuminance.b;
 
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
 

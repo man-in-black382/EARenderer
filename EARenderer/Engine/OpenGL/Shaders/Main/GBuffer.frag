@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "Packing.glsl"
+
 // Constants
 
 const float PI = 3.1415926535897932384626433832795;
@@ -70,30 +72,6 @@ uint Encode8888(vec4 vector) {
                 (uint(vector.z * 255.0) << 8) |
                  uint(vector.w * 255.0);
     return rgba;
-}
-
-uint PackSnorm2x16(float first, float second, float range) {
-    const float base = 32767.0;
-
-    uint packed = 0;
-    uint iFirst = uint(int(first / range * base));
-    uint iSecond = uint(int(second / range * base));
-
-    uint firstSignMask = iFirst & (1u << 31); // Leave only sign bit
-
-    uint secondSignMask = iSecond & (1u << 31); // Leave only sign bit
-    secondSignMask >>= 16; // Move sign mask by 16 since second value will be stored in LSB of the final uint
-
-    // Move uFirst into MS bits
-    packed |= iFirst;
-    packed <<= 16;
-    packed |= firstSignMask; // Set sign bit
-
-    // Move uSecond into LS bits
-    packed |= iSecond & 0x0000FFFFu;
-    packed |= secondSignMask; // Set sign bit
-
-    return packed;
 }
 
 ////////////////////////////////////////////////////////////

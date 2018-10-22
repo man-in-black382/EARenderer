@@ -1,5 +1,9 @@
 #version 400 core
 
+#include "Packing.glsl"
+#include "SphericalHarmonics.glsl"
+#include "ColorSpace.glsl"
+
 // Constants
 
 const float PI = 3.1415926535897932384626433832795;
@@ -13,13 +17,6 @@ const int kGBufferIndexPosition = 0;
 const int kGBufferIndexNormal   = 1;
 const int kGBufferIndexAlbedo   = 2;
 const int kGBufferIndexUV       = 3;
-
-// Spherical harmonics
-const float kC1 = 0.429043;
-const float kC2 = 0.511664;
-const float kC3 = 0.743125;
-const float kC4 = 0.886227;
-const float kC5 = 0.247708;
 
 // Output
 
@@ -76,50 +73,10 @@ uniform mat4 uWorldBoudningBoxTransform;
 /////////////////// Spherical harmonics ////////////////////
 ////////////////////////////////////////////////////////////
 
-struct SH {
-    vec3 L00;
-    vec3 L11;
-    vec3 L10;
-    vec3 L1_1;
-    vec3 L21;
-    vec3 L2_1;
-    vec3 L2_2;
-    vec3 L20;
-    vec3 L22;
-};
-
 struct vec8 {
     float value0; float value1; float value2; float value3;
     float value4; float value5; float value6; float value7;
 };
-
-SH ZeroSH() {
-    SH result;
-    result.L00  = vec3(0.0); result.L1_1 = vec3(0.0); result.L10  = vec3(0.0);
-    result.L11  = vec3(0.0); result.L2_2 = vec3(0.0); result.L2_1 = vec3(0.0);
-    result.L21  = vec3(0.0); result.L20  = vec3(0.0); result.L22  = vec3(0.0);
-    return result;
-}
-
-SH ScaleSH(SH sh, vec3 scale) {
-    SH result;
-
-    result.L00  = scale * sh.L00;
-
-    result.L1_1 = scale * sh.L1_1;
-    result.L10  = scale * sh.L10;
-    result.L11  = scale * sh.L11;
-
-    result.L2_2 = scale * sh.L2_2;
-    result.L2_1 = scale * sh.L2_1;
-    result.L21  = scale * sh.L21;
-
-    result.L20  = scale * sh.L20;
-
-    result.L22  = scale * sh.L22;
-
-    return result;
-}
 
 SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seventh, SH eighth) {
     SH result;
@@ -143,40 +100,6 @@ SH SumSH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH sevent
     result.L22  = first.L22 + second.L22 + third.L22 + fourth.L22 + fifth.L22 + sixth.L22 + seventh.L22 + eighth.L22;
 
     return result;
-}
-
-vec3 RGB_From_YCoCg(vec3 YCoCg) {
-    float t = YCoCg.x - YCoCg.z;
-    float g = YCoCg.x + YCoCg.z;
-    float b = t - YCoCg.y;
-    float r = t + YCoCg.y;
-    return vec3(r, g, b);
-}
-
-vec2 UnpackSnorm2x16(uint package, float range) {
-    const float base = 32767.0;
-
-    // Unpack encoded floats into individual variables
-    uint uFirst = package >> 16;
-    uint uSecond = package & 0x0000FFFFu;
-
-    // Extract sign bits
-    uint firstSignMask = uFirst & (1u << 15);
-    uint secondSignMask = uSecond & (1u << 15);
-
-    // If sign bit indicates negativity, fill MS 16 bits with 1s
-    uFirst |= firstSignMask != 0 ? 0xFFFF0000u : 0x0u;
-    uSecond |= secondSignMask != 0 ? 0xFFFF0000u : 0x0u;
-
-    // Now get signed integer representation
-    int iFirst = int(uFirst);
-    int iSecond = int(uSecond);
-
-    // At last, convert integers back to floats using range and base
-    float fFirst = (float(iFirst) / base) * range;
-    float fSecond = (float(iSecond) / base) * range;
-
-    return vec2(fFirst, fSecond);
 }
 
 // Packing scheme:

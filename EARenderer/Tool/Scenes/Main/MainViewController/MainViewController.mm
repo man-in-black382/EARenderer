@@ -88,8 +88,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)dealloc
 {
     delete self.scene;
-    // FIXME: Fix dealloc
-//    delete self.sceneRenderer;
     delete self.axesRenderer;
     delete self.defaultRenderComponentsProvider;
     delete self.sceneInteractor;
