@@ -77,6 +77,14 @@ namespace EARenderer {
         return mIndirectLightAccumulator->gridProbesSphericalHarmonics();
     }
 
+    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> DeferredSceneRenderer::surfelsLuminanceMap() const {
+        return mIndirectLightAccumulator->surfelsLuminanceMap();
+    }
+
+    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> DeferredSceneRenderer::surfelClustersLuminanceMap() const {
+        return mIndirectLightAccumulator->surfelClustersLuminanceMap();
+    }
+
 #pragma mark - Rendering
 #pragma mark - Runtime
 
@@ -180,33 +188,32 @@ namespace EARenderer {
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
         mBloomEffect.bloom(smaaOutputTexture, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
 
-        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
-        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
-
         glDepthMask(GL_TRUE);
 
         debugClosure();
 
+        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+        mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
+
         renderFinalImage(toneMappingOutputTexture);
 
+        // DEBUG
+        bindDefaultFramebuffer();
+        glDisable(GL_DEPTH_TEST);
 
-//        // DEBUG
-//        bindDefaultFramebuffer();
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(true);
-//
-//        Rect2D viewportRect(Size2D(900, 600));
-//        GLViewport(viewportRect).apply();
-//
-//        mFSQuadShader.ensureSamplerValidity([&]() {
-//            mFSQuadShader.setTexture(*smaaOutputTexture);
-//        });
-//
-//        TriangleStripQuad::Draw();
-//        glEnable(GL_DEPTH_TEST);
-//        // DEBUG END
+        mFSQuadShader.bind();
+        mFSQuadShader.setApplyToneMapping(true);
+
+        Rect2D viewportRect(Size2D(400, 400));
+        GLViewport(viewportRect).apply();
+
+        mFSQuadShader.ensureSamplerValidity([&]() {
+            mFSQuadShader.setTexture(*mIndirectLightAccumulator->surfelsLuminanceMap());
+        });
+
+        TriangleStripQuad::Draw();
+        glEnable(GL_DEPTH_TEST);
+        // DEBUG END
 
         mPostprocessTexturePool->putBack(reflectionsOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);

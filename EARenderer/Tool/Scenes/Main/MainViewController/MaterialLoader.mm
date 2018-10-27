@@ -30,17 +30,6 @@
     return std::string(path.UTF8String);
 }
 
-+ (EARenderer::ID)load_marble01_MaterialToPool:(EARenderer::ResourcePool *)pool {
-    return pool->materials.insert({
-        [self pathForResource:@"Marble01_col.jpg"],
-        [self pathForResource:@"Marble01_nrm.jpg"],
-        [self pathForBlankBlackImage],
-        [self pathForResource:@"Marble01_rgh.jpg"],
-        [self pathForResource:@"Marble01_mask.jpg"],
-        [self pathForResource:@"Marble01_disp.jpg"]
-    });
-}
-
 + (EARenderer::ID)load_sandFloor_MaterialToPool:(EARenderer::ResourcePool *)pool {
     return pool->materials.insert({
         [self pathForResource:@"Ground05_col.jpg"],
@@ -54,12 +43,12 @@
 
 + (EARenderer::ID)load_marbleTiles_MaterialToPool:(EARenderer::ResourcePool *)pool {
     return pool->materials.insert({
-        [self pathForResource:@"Tiles12_col.jpg"],
-        [self pathForResource:@"Tiles12_nrm.jpg"],
+        [self pathForResource:@"Marble_tiles_02_4K_Base_Color.png"],
+        [self pathForResource:@"Marble_tiles_02_4K_Normal.png"],
         [self pathForBlankBlackImage],
-        [self pathForResource:@"Tiles12_rgh.jpg"],
+        [self pathForResource:@"Marble_tiles_02_4K_Roughness.png"],
         [self pathForBlankWhiteImage],
-        [self pathForResource:@"Tiles12_disp.jpg"]
+        [self pathForResource:@"Marble_tiles_02_4K_Height.png"]
     });
 }
 

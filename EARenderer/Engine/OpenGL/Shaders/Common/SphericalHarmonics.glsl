@@ -40,6 +40,20 @@ SH ZeroSH() {
     return result;
 }
 
+SH DebugSH() {
+    SH sh;
+    sh.L00  = vec3(5.56832886, 11.1366577, 5.56832886);
+    sh.L11  = vec3(-6.42975139, 0.0, -6.42975139);
+    sh.L10  = vec3(0.0);
+    sh.L1_1 = vec3(0.0);
+    sh.L21  = vec3(0.0);
+    sh.L2_1 = vec3(0.0);
+    sh.L2_2 = vec3(0.0);
+    sh.L20  = vec3(-1.55639505, -3.11279011, -1.55639505);
+    sh.L22  = vec3(2.69575548, 5.39151096, 2.69575548);
+    return sh;
+}
+
 SH ScaleSH(SH sh, vec3 color) {
     SH result;
 

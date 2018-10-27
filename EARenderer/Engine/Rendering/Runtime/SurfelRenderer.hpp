@@ -13,6 +13,7 @@
 #include "GLSLSurfelRendering.hpp"
 #include "SurfelData.hpp"
 #include "DiffuseLightProbeData.hpp"
+#include "GLTexture2D.hpp"
 
 #include <vector>
 
@@ -23,6 +24,7 @@ namespace EARenderer {
         const Scene *mScene = nullptr;
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;
+        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelLuminances;
         
         std::vector<GLVertexArray<Surfel>> mSurfelClusterVAOs;
         std::vector<Color> mSurfelClusterColors;
@@ -31,7 +33,10 @@ namespace EARenderer {
     public:
         enum class Mode { Default, Clusters };
 
-        SurfelRenderer(const Scene *scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> probeData);
+        SurfelRenderer(const Scene *scene,
+                       std::shared_ptr<const SurfelData> surfelData,
+                       std::shared_ptr<const DiffuseLightProbeData> probeData,
+                       std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelLuminances);
         
         void render(Mode renderingMode, float surfelRadius, size_t probeIndex = -1);
     };

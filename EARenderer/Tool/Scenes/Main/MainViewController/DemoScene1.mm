@@ -75,7 +75,7 @@
     EARenderer::ID _25_MaterialID = [self load_Material25_ToPool:resourcePool];
     EARenderer::ID roof_MaterialID = [self load_Roof_MaterialToPool:resourcePool];
 
-//    EARenderer::ID marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
+    EARenderer::ID marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
 //
 //    EARenderer::ID sandGround_MaterialID = [MaterialLoader load_sandFloor_MaterialToPool:resourcePool];
 
@@ -134,7 +134,7 @@
         } else if (subMesh.materialName() == "floor") {
             sponzaInstance.setMaterialIDForSubMeshID(floor_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "floor.001") {
-            sponzaInstance.setMaterialIDForSubMeshID(ironMaterialID, subMeshID);
+            sponzaInstance.setMaterialIDForSubMeshID(marbleTiled_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "column_c") {
             sponzaInstance.setMaterialIDForSubMeshID(columnC_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "details") {
@@ -185,7 +185,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(5.0, 5.0, 5.0));
+    scene->directionalLight().setColor(EARenderer::Color(2.4, 2.0, 2.0));
 
     scene->calculateGeometricProperties();
 
@@ -198,7 +198,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.9);
+    scene->setDiffuseProbeSpacing(0.7);
     scene->setSurfelSpacing(0.05);
 
     [self setupAnimations];

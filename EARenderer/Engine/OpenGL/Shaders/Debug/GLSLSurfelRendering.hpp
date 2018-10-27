@@ -11,6 +11,7 @@
 
 #include "GLSLGenericGeometry.hpp"
 #include "Color.hpp"
+#include "GLHDRTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -22,6 +23,9 @@ namespace EARenderer {
         void setSurfelRadius(float radius);
         void setShouldUseExternalColor(bool useExternalColor);
         void setExternalColor(const Color& externalColor);
+        void setSurfelGroupOffset(int32_t surfelGroupOffset);
+        void setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F>& surfelLuminances);
+        void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
     };
     
 }

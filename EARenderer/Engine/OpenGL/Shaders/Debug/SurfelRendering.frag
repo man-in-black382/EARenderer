@@ -2,16 +2,16 @@
 
 in vec4 vCurrentPosition;
 in vec3 vAlbedo;
+in vec3 vNormal;
+flat in int vSurfelIndex;
 
 uniform float uRadius;
 uniform bool uUseExternalColor;
 uniform vec4 uExternalColor;
+uniform sampler2D uSurfelLuminances;
+uniform sampler2DArray uSurfelsGBuffer;
 
 out vec4 oFragColor;
-
-vec3 GammaCorrect(vec3 color) {
-    return pow(color, vec3(1.0 / 2.2));
-}
 
 void main() {
     // Draw a circle
@@ -20,5 +20,17 @@ void main() {
         discard;
     }
 
-    oFragColor = uUseExternalColor ? uExternalColor : vec4(vAlbedo, 1.0);
+    if (uUseExternalColor) {
+        oFragColor = uExternalColor;
+    } else {
+        ivec2 luminanceMapSize = textureSize(uSurfelLuminances, 0);
+        int luminanceMapWidth = luminanceMapSize.x;
+
+        ivec2 luminanceUV = ivec2(vSurfelIndex % luminanceMapWidth,
+                                  vSurfelIndex / luminanceMapWidth);
+
+        float luminance = texelFetch(uSurfelLuminances, luminanceUV, 0).r;
+
+        oFragColor = vec4(vAlbedo * luminance, 1.0);
+    }
 }

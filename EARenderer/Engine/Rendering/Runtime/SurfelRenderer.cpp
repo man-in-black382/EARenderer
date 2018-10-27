@@ -20,19 +20,22 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SurfelRenderer::SurfelRenderer(const Scene *scene, std::shared_ptr<const SurfelData> surfelData, std::shared_ptr<const DiffuseLightProbeData> probeData)
+    SurfelRenderer::SurfelRenderer(const Scene *scene,
+                                   std::shared_ptr<const SurfelData> surfelData,
+                                   std::shared_ptr<const DiffuseLightProbeData> probeData,
+                                   std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelLuminances)
     :
     mScene(scene),
     mSurfelData(surfelData),
-    mProbeData(probeData)
+    mProbeData(probeData),
+    mSurfelLuminances(surfelLuminances)
     {
         std::random_device device;
         std::mt19937 engine(device());
         std::uniform_real_distribution<float> distribution(0.3, 1.0);
 
         for (auto& cluster : surfelData->surfelClusters()) {
-            mSurfelClusterVAOs.emplace_back();
-            mSurfelClusterVAOs.back().initialize(surfelData->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
+            mSurfelClusterVAOs.emplace_back().initialize(surfelData->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(Color), 4),
@@ -56,6 +59,10 @@ namespace EARenderer {
         auto vp = mScene->camera()->viewProjectionMatrix();
         mSurfelRenderingShader.setViewProjectionMatrix(vp);
         mSurfelRenderingShader.setSurfelRadius(surfelRadius);
+        mSurfelRenderingShader.ensureSamplerValidity([this]() {
+            mSurfelRenderingShader.setSurfelLuminances(*mSurfelLuminances);
+//            mSurfelRenderingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
+        });
 
         if (probeIndex != -1) {
             const DiffuseLightProbe& probe = mProbeData->probes()[probeIndex];
@@ -67,14 +74,15 @@ namespace EARenderer {
                 mSurfelClusterVAOs[projection.surfelClusterIndex].bind();
                 mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[projection.surfelClusterIndex]);
                 const SurfelCluster& cluster = mSurfelData->surfelClusters()[projection.surfelClusterIndex];
-                glDrawArrays(GL_POINTS, 0, static_cast<GLint>(cluster.surfelCount));
+                Point::Draw(cluster.surfelCount);
             }
         } else {
             for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
                 mSurfelClusterVAOs[i].bind();
                 mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
                 const SurfelCluster& cluster = mSurfelData->surfelClusters()[i];
-                glDrawArrays(GL_POINTS, 0, static_cast<GLint>(cluster.surfelCount));
+                mSurfelRenderingShader.setSurfelGroupOffset(cluster.surfelOffset);
+                Point::Draw(cluster.surfelCount);
             }
         }
     }

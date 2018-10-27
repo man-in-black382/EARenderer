@@ -65,7 +65,6 @@ uniform mat4 uLightSpaceMatrices[kMaxCascades];
 uniform int uDepthSplitsAxis;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
-
 uniform float uESMFactor;
 uniform sampler2D uDirectionalShadowMap;
 uniform samplerCubeArray uOmnidirectionalShadowMaps;

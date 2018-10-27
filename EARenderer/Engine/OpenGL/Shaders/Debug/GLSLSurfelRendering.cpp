@@ -34,5 +34,17 @@ namespace EARenderer {
     void GLSLSurfelRendering::setExternalColor(const Color& externalColor) {
         glUniform4fv(uniformByNameCRC32(ctcrc32("uExternalColor")).location(), 1, reinterpret_cast<const float *>(&externalColor));
     }
-    
+
+    void GLSLSurfelRendering::setSurfelGroupOffset(int32_t surfelGroupOffset) {
+        glUniform1i(uniformByNameCRC32(ctcrc32("uSurfelGroupOffset")).location(), surfelGroupOffset);
+    }
+
+    void GLSLSurfelRendering::setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F>& surfelLuminances) {
+        setUniformTexture(uint32_constant<ctcrc32("uSurfelLuminances")>, surfelLuminances);
+    }
+
+    void GLSLSurfelRendering::setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer) {
+        setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
+    }
+
 }

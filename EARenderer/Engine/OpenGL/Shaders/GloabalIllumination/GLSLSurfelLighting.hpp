@@ -32,7 +32,6 @@ namespace EARenderer {
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
-        void setMultibounceEnabled(bool multibounceEnabled);
         void setShadowCascades(const FrustumCascades& cascades);
         void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map);
         void setSettings(const RenderingSettings& settings);

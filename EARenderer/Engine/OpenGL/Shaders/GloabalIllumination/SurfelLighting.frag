@@ -16,11 +16,10 @@ const int kLightTypeSpot        = 2;
 const int kGBufferIndexPosition = 0;
 const int kGBufferIndexNormal   = 1;
 const int kGBufferIndexAlbedo   = 2;
-const int kGBufferIndexUV       = 3;
 
 // Output
 
-out vec4 oFragColor;
+out float oLuminance;
 
 // Input
 
@@ -54,11 +53,15 @@ uniform int uLightType;
 uniform bool uEnableMultibounce;
 
 // Shadow mapping
-uniform sampler2D uExponentialShadowMap;
-uniform float uESMFactor;
+uniform mat4 uCSMSplitSpaceMat;
+uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform int uDepthSplitsAxis;
 uniform float uDepthSplits[kMaxCascades];
 uniform int uNumberOfCascades;
-uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform float uESMFactor;
+uniform sampler2D uDirectionalShadowMap;
+uniform samplerCubeArray uOmnidirectionalShadowMaps;
+uniform int uOmnidirectionalShadowMapIndex;
 
 // Spherical harmonics
 uniform usampler3D uGridSHMap0;
@@ -272,38 +275,40 @@ vec3 DirectionalLightRadiance() {
 ///////////////////////// Shadows //////////////////////////
 ////////////////////////////////////////////////////////////
 
-int shadowCascadeIndex()
-{
-//    vec3 projCoords = vPosInCameraSpace.xyz / vPosInCameraSpace.w;
-//    // No need to transform to [0,1] range,
-//    // because splits passed from client are in [-1; 1]
-//
-//    float fragDepth = projCoords.z;
-//
-//    for (int i = 0; i < uNumberOfCascades; ++i) {
-//        if (fragDepth < uDepthSplits[i]) {
-//            return i;
-//        }
-//    }
+int ShadowCascadeIndex(vec3 worldPosition) {
 
-    return 0;
+    vec4 posInCSMSplitSpace = uCSMSplitSpaceMat * vec4(worldPosition, 1.0);
+
+    vec3 projCoords = posInCSMSplitSpace.xyz / posInCSMSplitSpace.w;
+    // No need to transform to [0,1] range,
+    // because splits passed from client are in [-1; 1]
+
+    float locationOnSplitAxis = projCoords[uDepthSplitsAxis];
+
+    for (int i = 0; i < kMaxCascades; ++i) {
+        if (locationOnSplitAxis < uDepthSplits[i]) {
+            return i;
+        }
+    }
 }
 
-float ExponentialShadow(vec3 surfelPosition) {
-    int shadowCascadeIndex = shadowCascadeIndex();
+float DirectionalExponentialShadow(vec3 worldPosition) {
+    int cascade = ShadowCascadeIndex(worldPosition);
+    mat4 relevantLightMatrix = uLightSpaceMatrices[cascade];
+    vec4 positionInLightSpace = relevantLightMatrix * vec4(worldPosition, 1.0);
 
-    vec4 lightSpacePosition = uLightSpaceMatrices[shadowCascadeIndex] * vec4(surfelPosition, 1.0);
-    // perform perspective division
-    vec3 projCoords = lightSpacePosition.xyz / lightSpacePosition.w;
-
-    // Transformation to [0,1] range
+    vec3 projCoords = positionInLightSpace.xyz / positionInLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
 
     // Linear Z a.k.a disntance from light
     // Distance to the fragment from a near clip plane of directional light's frustum
-    float linearZ = lightSpacePosition.z;
+    float linearZ = positionInLightSpace.z * 0.5 + 0.5; // Transform to [0; 1] range
 
-    float occluder = texture(uExponentialShadowMap, projCoords.xy).r;
+    // Explicitly reading from 0 LOD because shadow map comes from a postprocess texture pool
+    // and is a subject to mipmapping
+    vec4 occluders = textureLod(uDirectionalShadowMap, projCoords.xy, 0);
+
+    float occluder = occluders[cascade];
     float receiver = exp(-uESMFactor * linearZ);
     float visibility = clamp(occluder * receiver, 0.0, 1.0);
 
@@ -318,8 +323,10 @@ void main() {
     int shadowMapsCount = uNumberOfCascades; // Stub to prevent from failing to compile on cpu side
     float split = uDepthSplits[0];  // Stub to prevent from failing to compile on cpu side
 
-    vec3 position  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
-    vec3 N         = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
+    vec3 position  = texelFetch(uSurfelsGBuffer, ivec3(ivec2(gl_FragCoord.xy), int(kGBufferIndexPosition)), 0).rgb;
+    vec3 N         = texelFetch(uSurfelsGBuffer, ivec3(ivec2(gl_FragCoord.xy), int(kGBufferIndexNormal)), 0).rgb;
+//    vec3 position  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
+//    vec3 N         = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
     vec3 L         = vec3(0.0);
     vec3 radiance  = vec3(0.0);
     float shadow   = 0.0;
@@ -329,7 +336,7 @@ void main() {
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance();
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = ExponentialShadow(position);
+        shadow      = DirectionalExponentialShadow(position);
     } else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(N, position);
         L           = normalize(uPointLight.position - position);
@@ -350,7 +357,14 @@ void main() {
     // Apply shadow factor
     diffuseRadiance *= shadow;
 
-    vec3 finalColor = diffuseRadiance + indirectRadiance;
+    vec3 finalColor = diffuseRadiance;// + indirectRadiance;
 
-    oFragColor = vec4(finalColor, 1.0);
+    oLuminance = LuminanceFromRGB(finalColor);
+
+//    // DEBUG
+//    if (position.x > 0.97 && position.y > 0.5) {
+//        oLuminance = 1.0;
+//    } else {
+//        oLuminance = 0.0;
+//    }
 }

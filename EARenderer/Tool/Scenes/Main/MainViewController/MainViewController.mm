@@ -122,7 +122,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [self.sceneObjectsTabView buildTabsWithScene:self.scene];
     self.sceneEditorTabView.scene = self.scene;
     
-    id<DemoSceneComposing> demoScene = [[DemoScene2 alloc] init];
+    id<DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
@@ -137,7 +137,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings,
                                                                        surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
 
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData);
+    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData, self.deferredSceneRenderer->surfelsLuminanceMap());
     self.probeRenderer = new EARenderer::DiffuseLightProbeRenderer(self.scene, diffuseLightProbeData, self.deferredSceneRenderer->gridProbesSphericalHarmonics());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
 

@@ -24,6 +24,6 @@ out vec2 oOutput;
 
 void main() {
     float4 offsets[3] = float4[3]( vOffset0, vOffset1, vOffset2 );
-    oOutput = SMAALumaEdgeDetectionPS(vTexCoords, offsets, uImage);
-//    oOutput = SMAAColorEdgeDetectionPS(vTexCoords, offsets, uImage);
+//    oOutput = SMAALumaEdgeDetectionPS(vTexCoords, offsets, uImage);
+    oOutput = SMAAColorEdgeDetectionPS(vTexCoords, offsets, uImage);
 }

@@ -23,8 +23,8 @@ namespace EARenderer {
     mShadowMapper(shadowMapper),
     mFramebuffer(framebufferResolution()),
     mGridProbeSHMaps(gridProbeSHMaps()),
-    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None)
+    mSurfelsLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None)),
+    mSurfelClustersLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None))
     { }
 
     Size2D IndirectLightAccumulator::framebufferResolution() {
@@ -51,8 +51,16 @@ namespace EARenderer {
         mSettings = settings;
     }
 
-    std::shared_ptr<std::array<GLLDRTexture3D, 4>> IndirectLightAccumulator::gridProbesSphericalHarmonics() {
+    std::shared_ptr<std::array<GLLDRTexture3D, 4>> IndirectLightAccumulator::gridProbesSphericalHarmonics() const {
         return mGridProbeSHMaps;
+    }
+
+    std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> IndirectLightAccumulator::surfelsLuminanceMap() const {
+        return mSurfelsLuminanceMap;
+    }
+
+    std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> IndirectLightAccumulator::surfelClustersLuminanceMap() const {
+        return mSurfelClustersLuminanceMap;
     }
 
 #pragma mark - Private Helpers
@@ -60,19 +68,19 @@ namespace EARenderer {
     void IndirectLightAccumulator::relightSurfels() {
         const DirectionalLight& directionalLight = mScene->directionalLight();
 
-        mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelsLuminanceMap.size()), &mSurfelsLuminanceMap);
+        mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelsLuminanceMap->size()), mSurfelsLuminanceMap);
 
         mSurfelLightingShader.bind();
         mSurfelLightingShader.setLight(directionalLight);
-        mSurfelLightingShader.setMultibounceEnabled(mSettings.meshSettings.lightMultibounceEnabled);
+        mSurfelLightingShader.setSettings(mSettings);
+        mSurfelLightingShader.setShadowCascades(mShadowMapper->cascades());
+        mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setShadowCascades(mShadowMapper->cascades());
             mSurfelLightingShader.setExponentialShadowMap(*mShadowMapper->directionalShadowMap());
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
             mSurfelLightingShader.setGridProbesSHTextures(*mGridProbeSHMaps);
-            mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
             mSurfelLightingShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
-            mSurfelLightingShader.setSettings(mSettings);
         });
 
         TriangleStripQuad::Draw();
@@ -80,11 +88,11 @@ namespace EARenderer {
 
     void IndirectLightAccumulator::averageSurfelClusterLuminances() {
         mSurfelClusterAveragingShader.bind();
-        mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelClustersLuminanceMap.size()), &mSurfelClustersLuminanceMap);
+        mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelClustersLuminanceMap->size()), mSurfelClustersLuminanceMap);
 
         mSurfelClusterAveragingShader.ensureSamplerValidity([&]() {
             mSurfelClusterAveragingShader.setSurfelClustersGBuffer(*mSurfelData->surfelClustersGBuffer());
-            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(mSurfelsLuminanceMap);
+            mSurfelClusterAveragingShader.setSurfelsLuminaceMap(*mSurfelsLuminanceMap);
         });
 
         TriangleStripQuad::Draw();
@@ -96,10 +104,10 @@ namespace EARenderer {
 
         mGridProbesUpdateShader.bind();
         mGridProbesUpdateShader.ensureSamplerValidity([&] {
-            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(mSurfelClustersLuminanceMap);
             mGridProbesUpdateShader.setProbeProjectionsMetadata(*mProbeData->probeClusterProjectionsMetadataBufferTexture());
             mGridProbesUpdateShader.setProjectionClusterIndices(*mProbeData->projectionClusterIndicesBufferTexture());
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(*mProbeData->projectionClusterSHsBufferTexture());
+            mGridProbesUpdateShader.setSurfelClustersLuminaceMap(*mSurfelClustersLuminanceMap);
             mGridProbesUpdateShader.setProbesGridResolution(mProbeData->gridResolution());
         });
 

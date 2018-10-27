@@ -128,23 +128,28 @@ void main() {
 
     ivec2 luminanceMapSize = textureSize(uSurfelClustersLuminanceMap, 0);
     int luminanceMapWidth = luminanceMapSize.x;
-    int luminanceMapHeight = luminanceMapSize.y;
 
     SH resultingSH = ZeroSH();
 
     for (uint i = projectionGroupOffset; i < projectionGroupOffset + projectionGroupSize; ++i) {
         uint surfelClusterIndex = texelFetch(uProjectionClusterIndices, int(i)).r;
 
-        vec2 luminanceUV = vec2(float(surfelClusterIndex % luminanceMapWidth) / float(luminanceMapWidth),
-                                float(surfelClusterIndex / luminanceMapWidth) / float(luminanceMapHeight));
+        ivec2 luminanceUV = ivec2(surfelClusterIndex % luminanceMapWidth,
+                                  surfelClusterIndex / luminanceMapWidth);
 
-        vec3 surfelClusterLuminance = texture(uSurfelClustersLuminanceMap, luminanceUV).rgb;
+        float surfelClusterLuminance = texelFetch(uSurfelClustersLuminanceMap, luminanceUV, 0).r;
 
-        float luma = 0.2126 * surfelClusterLuminance.r + 0.7152 * surfelClusterLuminance.g + 0.0722 * surfelClusterLuminance.b;
+        // DEBUG
+//        if (surfelClusterLuminance < 0.001) {
+//            PackSHToRenderTargets(DebugSH());
+//            return;
+//        } else {
+//            surfelClusterLuminance = 0.0;
+//        }
+        // DEBUG END
 
         SH surfelClusterPrecomputedSH = UnpackSH(int(i));
-
-        SH luminanceSH = ScaleSH(surfelClusterPrecomputedSH, vec3(luma));
+        SH luminanceSH = ScaleSH(surfelClusterPrecomputedSH, vec3(surfelClusterLuminance));
 
         resultingSH = Sum2SH(resultingSH, luminanceSH);
     }

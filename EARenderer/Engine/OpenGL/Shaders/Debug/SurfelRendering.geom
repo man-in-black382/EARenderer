@@ -10,6 +10,7 @@ layout (triangle_strip, max_vertices = 4) out;
 in vec3 gNormal[];
 in vec3 gAlbedo[];
 in float gArea[];
+flat in int gSurfelIndex[];
 
 // Uniforms
 
@@ -19,6 +20,8 @@ uniform float uRadius;
 // Outputs
 out vec4 vCurrentPosition;
 out vec3 vAlbedo;
+out vec3 vNormal;
+flat out int vSurfelIndex;
 
 // Rotation matrix used to orient surfel disk around surfel's normal
 mat4 RotationMatrix() {
@@ -38,46 +41,30 @@ mat4 RotationMatrix() {
                 vec4(0.0, 0.0, 0.0, 1.0));
 }
 
+void EmitBillboardVertex(vec2 cornerPoint, mat4 rotationMatrix) {
+    vec4 surfelPosition = gl_in[0].gl_Position;
+    vec4 localCornerPoint = vec4(cornerPoint, 0.0, 0.0);
+
+    vCurrentPosition = localCornerPoint;
+    vAlbedo = gAlbedo[0];
+    vSurfelIndex = gSurfelIndex[0];
+    vNormal = gNormal[0];
+
+    localCornerPoint = rotationMatrix * localCornerPoint;
+    localCornerPoint = localCornerPoint + surfelPosition + vec4(vec3(vNormal * 0.02), 0.0);
+    localCornerPoint = uViewProjectionMatrix * localCornerPoint;
+
+    gl_Position = localCornerPoint;
+    EmitVertex();
+}
+
 void main() {
     mat4 rotationMatrix = RotationMatrix();
-    vec4 surfelPosition = gl_in[0].gl_Position;
-    float zDisplacement = -uRadius / 10.0;
 
-    vec4 a = vec4(-uRadius, -uRadius, zDisplacement, 0.0);
-    vCurrentPosition = a;
-    vAlbedo = gAlbedo[0];
-    a = rotationMatrix * a;
-    a = a + surfelPosition;
-    a = uViewProjectionMatrix * a;
-    gl_Position = a;
-    EmitVertex();
-
-    vec4 b = vec4(-uRadius, uRadius, zDisplacement, 0.0);
-    vCurrentPosition = b;
-    vAlbedo = gAlbedo[0];
-    b = rotationMatrix * b;
-    b = b + surfelPosition;
-    b = uViewProjectionMatrix * b;
-    gl_Position = b;
-    EmitVertex();
-
-    vec4 c = vec4(uRadius, -uRadius, zDisplacement, 0.0);
-    vCurrentPosition = c;
-    vAlbedo = gAlbedo[0];
-    c = rotationMatrix * c;
-    c = c + surfelPosition;
-    c = uViewProjectionMatrix * c;
-    gl_Position = c;
-    EmitVertex();
-
-    vec4 d = vec4(uRadius, uRadius, zDisplacement, 0.0);
-    vCurrentPosition = d;
-    vAlbedo = gAlbedo[0];
-    d = rotationMatrix * d;
-    d = d + surfelPosition;
-    d = uViewProjectionMatrix * d;
-    gl_Position = d;
-    EmitVertex();
+    EmitBillboardVertex(vec2(-uRadius, -uRadius), rotationMatrix);
+    EmitBillboardVertex(vec2(-uRadius, uRadius), rotationMatrix);
+    EmitBillboardVertex(vec2(uRadius, -uRadius), rotationMatrix);
+    EmitBillboardVertex(vec2(uRadius, uRadius), rotationMatrix);
 
     EndPrimitive();
 }

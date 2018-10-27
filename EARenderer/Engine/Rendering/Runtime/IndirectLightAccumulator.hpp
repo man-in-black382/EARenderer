@@ -24,7 +24,7 @@
 namespace EARenderer {
 
     class IndirectLightAccumulator {
-    public:
+    private:
         const Scene *mScene = nullptr;
         RenderingSettings mSettings;
         
@@ -38,8 +38,8 @@ namespace EARenderer {
 
         GLFramebuffer mFramebuffer;
         std::shared_ptr<std::array<GLLDRTexture3D, 4>> mGridProbeSHMaps;
-        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelsLuminanceMap;
-        GLFloatTexture2D<GLTexture::Float::RGBA16F> mSurfelClustersLuminanceMap;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelsLuminanceMap;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelClustersLuminanceMap;
 
         Size2D framebufferResolution();
         std::shared_ptr<std::array<GLLDRTexture3D, 4>> gridProbeSHMaps();
@@ -56,7 +56,9 @@ namespace EARenderer {
 
         void setRenderingSettings(const RenderingSettings& settings);
 
-        std::shared_ptr<std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics();
+        std::shared_ptr<std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
+        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
 
         void render();
     };

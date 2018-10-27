@@ -20,19 +20,21 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLSurfelLighting::setShadowCascades(const FrustumCascades& cascades) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uNumberOfCascades")>).location(), cascades.amount);
-
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMatrices[0]")>).location(),
                            static_cast<GLsizei>(cascades.lightViewProjections.size()), GL_FALSE,
                            reinterpret_cast<const GLfloat *>(cascades.lightViewProjections.data()));
 
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplitsAxis")>).location(), static_cast<GLint>(cascades.splitAxis));
+
         glUniform1fv(uniformByNameCRC32(uint32_constant<ctcrc32("uDepthSplits[0]")>).location(),
                      static_cast<GLsizei>(cascades.splits.size()),
                      reinterpret_cast<const GLfloat *>(cascades.splits.data()));
+
+        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCSMSplitSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
     }
 
     void GLSLSurfelLighting::setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map) {
-        setUniformTexture(uint32_constant<ctcrc32("uExponentialShadowMap")>, map);
+        setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMap")>, map);
     }
 
     void GLSLSurfelLighting::setLight(const DirectionalLight& light) {
@@ -66,12 +68,9 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
     }
 
-    void GLSLSurfelLighting::setMultibounceEnabled(bool multibounceEnabled) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uEnableMultibounce")>).location(), multibounceEnabled);
-    }
-
     void GLSLSurfelLighting::setSettings(const RenderingSettings& settings) {
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uEnableMultibounce")>).location(), settings.meshSettings.lightMultibounceEnabled);
     }
 
 }

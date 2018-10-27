@@ -112,6 +112,8 @@ namespace EARenderer {
 
         // Getters
         std::shared_ptr<const std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
+        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
+        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
 
         /**
          Renders the scene

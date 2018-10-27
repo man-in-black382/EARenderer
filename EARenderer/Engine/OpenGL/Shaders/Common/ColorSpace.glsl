@@ -13,3 +13,8 @@ vec3 RGB_From_YCoCg(vec3 YCoCg) {
     float r = t + YCoCg.y;
     return vec3(r, g, b);
 }
+
+float LuminanceFromRGB(vec3 rgb) {
+    vec3 factors = vec3(0.2126, 0.7152, 0.0722);
+    return dot(rgb, factors);
+}

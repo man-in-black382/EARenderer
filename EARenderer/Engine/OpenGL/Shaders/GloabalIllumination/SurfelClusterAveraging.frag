@@ -2,7 +2,7 @@
 
 // Output
 
-out vec4 oFragColor;
+out float oAverageLuminance;
 
 // Input
 
@@ -26,7 +26,7 @@ uint UnpackSurfelCount(uint encoded) {
 }
 
 void main() {
-    vec3 averagedClusterLuminance = vec3(0.0);
+    float averagedClusterLuminance = 0.0;
 
     ivec2 luminanceMapSize = textureSize(uSurfelsLuminanceMap, 0);
     int luminanceMapWidth = luminanceMapSize.x;
@@ -38,13 +38,11 @@ void main() {
     uint surfelCount = UnpackSurfelCount(clusterMetadata);
 
     for (uint i = surfelOffset; i < surfelOffset + surfelCount; ++i) {
-        vec2 uv = vec2(float(i % luminanceMapWidth) / luminanceMapWidth,
-                       float(i / luminanceMapWidth) / luminanceMapHeight);
+        ivec2 uv = ivec2(i % luminanceMapWidth,
+                         i / luminanceMapWidth);
 
-        averagedClusterLuminance += texture(uSurfelsLuminanceMap, uv).rgb;
+        averagedClusterLuminance += texelFetch(uSurfelsLuminanceMap, uv, 0).r;
     }
 
-    averagedClusterLuminance /= surfelCount;
-
-    oFragColor = vec4(averagedClusterLuminance, 1.0);
+    oAverageLuminance = averagedClusterLuminance / surfelCount;
 }

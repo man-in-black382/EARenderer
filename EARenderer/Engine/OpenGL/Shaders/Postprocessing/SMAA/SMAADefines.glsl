@@ -1,3 +1,3 @@
 #define SMAA_RT_METRICS float4(1.0 / 1920.0, 1.0 / 1080.0, 1920.0, 1080.0)
 #define SMAA_GLSL_4
-#define SMAA_PRESET_HIGH
+#define SMAA_PRESET_ULTRA
