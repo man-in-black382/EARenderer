@@ -185,7 +185,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(2.4, 2.0, 2.0));
+    scene->directionalLight().setColor(EARenderer::Color(1.0, 1.0, 1.0));
 
     scene->calculateGeometricProperties();
 
@@ -198,7 +198,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.7);
+    scene->setDiffuseProbeSpacing(0.35);
     scene->setSurfelSpacing(0.05);
 
     [self setupAnimations];

@@ -53,7 +53,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
 @property (assign, nonatomic) EARenderer::Scene *scene;
 @property (assign, nonatomic) EARenderer::SceneGBufferConstructor *sceneGBufferRenderer;
-//@property (assign, nonatomic) EARenderer::SceneRenderer *sceneRenderer;
 @property (assign, nonatomic) EARenderer::DeferredSceneRenderer *deferredSceneRenderer;
 @property (assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
 @property (assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
@@ -64,7 +63,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property (assign, nonatomic) EARenderer::DiffuseLightProbeRenderer *probeRenderer;
 @property (assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
 @property (assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
-@property (assign, nonatomic) EARenderer::SurfelGenerator *surfelGenerator;
 
 @property (assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
 
@@ -126,11 +124,23 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
     self.demoScene = demoScene;
 
-    self.surfelGenerator = new EARenderer::SurfelGenerator(resourcePool, self.scene);
-    auto surfelData = self.surfelGenerator->generateStaticGeometrySurfels();
+    EARenderer::SurfelGenerator surfelGenerator(resourcePool, self.scene);
+    std::shared_ptr<EARenderer::SurfelData> surfelData = std::make_shared<EARenderer::SurfelData>();
+    std::string surfelStorageFileName = "surfels_" + self.scene->name();
+
+    if (!surfelData->deserialize(surfelStorageFileName)) {
+        surfelData = surfelGenerator.generateStaticGeometrySurfels();
+        surfelData->serialize(surfelStorageFileName);
+    }
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
-    auto diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
+    std::shared_ptr<EARenderer::DiffuseLightProbeData> diffuseLightProbeData = std::make_shared<EARenderer::DiffuseLightProbeData>();
+    std::string probeStorageFileName = "diffuse_light_probes_" + self.scene->name();
+
+    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
+        diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
+        diffuseLightProbeData->serialize(probeStorageFileName);
+    }
 
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);

@@ -8,6 +8,7 @@
 
 #include "DiffuseLightProbeData.hpp"
 #include "StringUtils.hpp"
+#include "Serializers.hpp"
 
 #include <bitsery/bitsery.h>
 #include <bitsery/traits/vector.h>
@@ -62,6 +63,7 @@ namespace EARenderer {
         bitsery::Serializer<bitsery::OutputBufferedStreamAdapter> serializer(stream);
         serializer.container(mProbes, mProbes.size());
         serializer.container(mSurfelClusterProjections, mSurfelClusterProjections.size());
+        serializer.object(mGridResolution);
         bitsery::AdapterAccess::getWriter(serializer).flush();
     }
 
@@ -74,8 +76,14 @@ namespace EARenderer {
         bitsery::Deserializer<bitsery::InputStreamAdapter> deserializer(stream);
         deserializer.container(mProbes, std::numeric_limits<uint32_t>::max());
         deserializer.container(mSurfelClusterProjections, std::numeric_limits<uint32_t>::max());
+        deserializer.object(mGridResolution);
 
         auto& reader = bitsery::AdapterAccess::getReader(deserializer);
+
+        if (reader.isCompletedSuccessfully()) {
+            initializeBuffers();
+        }
+
         return reader.isCompletedSuccessfully();
     }
 

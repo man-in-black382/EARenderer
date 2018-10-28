@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "GLNamedObject.hpp"
 #include "Range.hpp"
@@ -26,6 +27,7 @@ namespace EARenderer {
         GLenum mType;
         int32_t mNumberOfLines = 0;
         std::unordered_map<IncludePath, std::vector<IndexPair>> mIncludeLineIndices;
+        std::unordered_set<std::string> mProcessedIncludes;
 
         /**
          Parses #include tree and composes a single source file.

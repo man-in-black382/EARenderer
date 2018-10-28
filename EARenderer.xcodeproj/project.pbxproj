@@ -193,6 +193,7 @@
 		CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE54EC431F939CF100C9EDE3 /* BRDFIntegration.frag */; };
 		CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5683E32099AC5F00C827F5 /* DemoScene2.mm */; };
 		CE5683EC2099F9E300C827F5 /* cornell_box_lux.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */; };
+		CE5892142185A95400BDFF6F /* Types.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CE5892132185A95400BDFF6F /* Types.glsl */; };
 		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
 		CE658430216281140059677C /* DiffuseLightProbeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE65842E216281140059677C /* DiffuseLightProbeRenderer.cpp */; };
 		CE65E18A217127A400BA36F1 /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */; };
@@ -824,6 +825,7 @@
 		CE5683E22099AC5E00C827F5 /* DemoScene2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoScene2.h; sourceTree = "<group>"; };
 		CE5683E32099AC5F00C827F5 /* DemoScene2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene2.mm; sourceTree = "<group>"; };
 		CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_lux.obj; sourceTree = "<group>"; };
+		CE5892132185A95400BDFF6F /* Types.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Types.glsl; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
 		CE62A8C7216F357500D09E20 /* SMAAAreaTex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMAAAreaTex.h; sourceTree = "<group>"; };
@@ -1486,7 +1488,7 @@
 		CEAAA3991F97C1370029099D /* mahogfloor_basecolor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_basecolor.png; sourceTree = "<group>"; };
 		CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_normal.png; sourceTree = "<group>"; };
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
-		CEB2D971215F598E00F5E4A0 /* Serializers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serializers.h; sourceTree = "<group>"; };
+		CEB2D971215F598E00F5E4A0 /* Serializers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializers.hpp; sourceTree = "<group>"; };
 		CEB2D972215F630500F5E4A0 /* SurfelData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelData.cpp; sourceTree = "<group>"; };
 		CEB6052A2176397B00C60F9E /* SMAAEdgeDetection.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAAEdgeDetection.vert; sourceTree = "<group>"; };
 		CEB6052B2176397C00C60F9E /* SMAAEdgeDetection.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAAEdgeDetection.frag; sourceTree = "<group>"; };
@@ -3725,7 +3727,7 @@
 		CEA7D2B921563B0B003DF25A /* Serialization */ = {
 			isa = PBXGroup;
 			children = (
-				CEB2D971215F598E00F5E4A0 /* Serializers.h */,
+				CEB2D971215F598E00F5E4A0 /* Serializers.hpp */,
 			);
 			path = Serialization;
 			sourceTree = "<group>";
@@ -3845,6 +3847,7 @@
 		CED1CECE217DF3D300291560 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CE5892132185A95400BDFF6F /* Types.glsl */,
 				CED1CECF217DF3FA00291560 /* Packing.glsl */,
 				CED1CED1217DF4DA00291560 /* SphericalHarmonics.glsl */,
 				CED1CED3217DF69500291560 /* GBuffer.glsl */,
@@ -3990,6 +3993,7 @@
 				CE53ADDE209E2BC300749A96 /* fabric02_disp.jpg in Resources */,
 				CEC2196E20C0744E00767342 /* Fabric05_mask.jpg in Resources */,
 				CE4DE2451FA60CFF0067729A /* sponzaPBR.mtl in Resources */,
+				CE5892142185A95400BDFF6F /* Types.glsl in Resources */,
 				CE4DE24B1FA60CFF0067729A /* VaseHanging_roughness.tga in Resources */,
 				CE54EC441F939CF100C9EDE3 /* BRDFIntegration.frag in Resources */,
 				CEF0162120D41A9800E0F0AB /* DirectionalExponentialShadowMap.vert in Resources */,

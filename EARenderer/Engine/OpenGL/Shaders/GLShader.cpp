@@ -86,6 +86,13 @@ namespace EARenderer {
                 throw std::runtime_error(string_format("glsl #include directive (%s) does not reference a real file", line.c_str()));
             }
 
+            // Skip duplicated includes
+            if (mProcessedIncludes.find(includePath.filename()) != mProcessedIncludes.end()) {
+                continue;
+            }
+
+            mProcessedIncludes.insert(includePath.filename());
+
             // Remember the end of the current source chunk before including the next one
             currentChunkIndices->second = mNumberOfLines - 1;
 

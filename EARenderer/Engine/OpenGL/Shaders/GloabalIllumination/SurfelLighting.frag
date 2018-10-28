@@ -320,13 +320,8 @@ float DirectionalExponentialShadow(vec3 worldPosition) {
 ////////////////////////////////////////////////////////////
 
 void main() {
-    int shadowMapsCount = uNumberOfCascades; // Stub to prevent from failing to compile on cpu side
-    float split = uDepthSplits[0];  // Stub to prevent from failing to compile on cpu side
-
     vec3 position  = texelFetch(uSurfelsGBuffer, ivec3(ivec2(gl_FragCoord.xy), int(kGBufferIndexPosition)), 0).rgb;
     vec3 N         = texelFetch(uSurfelsGBuffer, ivec3(ivec2(gl_FragCoord.xy), int(kGBufferIndexNormal)), 0).rgb;
-//    vec3 position  = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexPosition)).rgb;
-//    vec3 N         = texture(uSurfelsGBuffer, vec3(vTexCoords, kGBufferIndexNormal)).rgb;
     vec3 L         = vec3(0.0);
     vec3 radiance  = vec3(0.0);
     float shadow   = 0.0;
@@ -360,11 +355,4 @@ void main() {
     vec3 finalColor = diffuseRadiance;// + indirectRadiance;
 
     oLuminance = LuminanceFromRGB(finalColor);
-
-//    // DEBUG
-//    if (position.x > 0.97 && position.y > 0.5) {
-//        oLuminance = 1.0;
-//    } else {
-//        oLuminance = 0.0;
-//    }
 }

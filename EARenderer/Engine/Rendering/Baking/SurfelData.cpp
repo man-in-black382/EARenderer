@@ -73,6 +73,11 @@ namespace EARenderer {
         deserializer.container(mSurfelClusters, std::numeric_limits<uint32_t>::max());
 
         auto& reader = bitsery::AdapterAccess::getReader(deserializer);
+
+        if (reader.isCompletedSuccessfully()) {
+            initializeBuffers();
+        }
+
         return reader.isCompletedSuccessfully();
     }
 

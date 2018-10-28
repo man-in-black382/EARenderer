@@ -14,7 +14,7 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <bitsery/bitsery.h>
-#include "Serializers.h"
+#include "Serializers.hpp"
 
 namespace EARenderer {
 

@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <glm/vec3.hpp>
 #include <bitsery/bitsery.h>
-#include "Serializers.h"
+#include "Serializers.hpp"
 
 namespace EARenderer {
 

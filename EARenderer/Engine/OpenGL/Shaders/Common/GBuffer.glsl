@@ -6,16 +6,6 @@ struct GBuffer {
     float AO;
 };
 
-vec4 Decode8888(uint encoded) {
-    vec4 decoded;
-    decoded.x = (0xFF000000u & encoded) >> 24;
-    decoded.y = (0x00FF0000u & encoded) >> 16;
-    decoded.z = (0x0000FF00u & encoded) >> 8;
-    decoded.w = (0x000000FFu & encoded);
-    decoded /= 255.0;
-    return decoded;
-}
-
 // GBuffer packing scheme
 //
 // | Albedo R | Albedo G | Albedo B | Roughness | Metalness |    AO    |        Normal Z      |

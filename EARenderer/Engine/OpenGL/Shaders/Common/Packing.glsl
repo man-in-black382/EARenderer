@@ -47,3 +47,21 @@ vec2 UnpackSnorm2x16(uint package, float range) {
 
     return vec2(fFirst, fSecond);
 }
+
+vec4 Decode8888(uint encoded) {
+    vec4 decoded;
+    decoded.x = (0xFF000000u & encoded) >> 24;
+    decoded.y = (0x00FF0000u & encoded) >> 16;
+    decoded.z = (0x0000FF00u & encoded) >> 8;
+    decoded.w = (0x000000FFu & encoded);
+    decoded /= 255.0;
+    return decoded;
+}
+
+uint Encode8888(vec4 vector) {
+    uint rgba = (uint(vector.x * 255.0) << 24) |
+    (uint(vector.y * 255.0) << 16) |
+    (uint(vector.z * 255.0) << 8) |
+    uint(vector.w * 255.0);
+    return rgba;
+}

@@ -62,7 +62,7 @@
     }
     
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(cornellBoxInstance));
-    scene->directionalLight().setColor(EARenderer::Color(2.0, 2.0, 2.0));
+    scene->directionalLight().setColor(EARenderer::Color(0.8, 0.8, 0.8));
     scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
@@ -80,7 +80,7 @@
     });
 
     scene->setName("cornell");
-    scene->setDiffuseProbeSpacing(0.2);
+    scene->setDiffuseProbeSpacing(0.15);
     scene->setSurfelSpacing(0.02);
 
     [self setupAnimations];

@@ -66,14 +66,6 @@ float FetchDisplacementMap() {
     return texture(uMaterial.displacementMap, vTexCoords.st).r;
 }
 
-uint Encode8888(vec4 vector) {
-    uint rgba = (uint(vector.x * 255.0) << 24) |
-                (uint(vector.y * 255.0) << 16) |
-                (uint(vector.z * 255.0) << 8) |
-                 uint(vector.w * 255.0);
-    return rgba;
-}
-
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////

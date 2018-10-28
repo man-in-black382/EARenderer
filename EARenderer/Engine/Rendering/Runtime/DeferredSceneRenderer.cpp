@@ -182,11 +182,8 @@ namespace EARenderer {
         composeLightBuffers(reflectionsOutputTexture);
 
         // Postprocessing
-        auto smaaOutputTexture = reflectionsOutputTexture;
-        mSMAAEffect.antialise(mFrame, smaaOutputTexture);
-
         auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(smaaOutputTexture, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
+        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
 
         glDepthMask(GL_TRUE);
 
@@ -195,25 +192,10 @@ namespace EARenderer {
         auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
-        renderFinalImage(toneMappingOutputTexture);
+        auto smaaOutputTexture = bloomOutputTexture;
+        mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
 
-        // DEBUG
-        bindDefaultFramebuffer();
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(true);
-
-        Rect2D viewportRect(Size2D(400, 400));
-        GLViewport(viewportRect).apply();
-
-        mFSQuadShader.ensureSamplerValidity([&]() {
-            mFSQuadShader.setTexture(*mIndirectLightAccumulator->surfelsLuminanceMap());
-        });
-
-        TriangleStripQuad::Draw();
-        glEnable(GL_DEPTH_TEST);
-        // DEBUG END
+        renderFinalImage(smaaOutputTexture);
 
         mPostprocessTexturePool->putBack(reflectionsOutputTexture);
         mPostprocessTexturePool->putBack(bloomOutputTexture);
