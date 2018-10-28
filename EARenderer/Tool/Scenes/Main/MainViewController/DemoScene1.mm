@@ -201,6 +201,9 @@
     scene->setDiffuseProbeSpacing(0.35);
     scene->setSurfelSpacing(0.05);
 
+    scene->camera()->moveTo(glm::vec3(0.0, -0.5, 0.0));
+    scene->camera()->lookAt(glm::vec3(1, 0, 0));
+
     [self setupAnimations];
 }
 

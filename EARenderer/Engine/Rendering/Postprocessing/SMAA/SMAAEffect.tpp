@@ -20,70 +20,12 @@ namespace EARenderer {
     SMAAEffect<TextureFormat>::SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool)
     :
     PostprocessEffect<TextureFormat>(sharedFramebuffer, sharedTexturePool),
-//    mAreaTexture(Size2D(AREATEX_WIDTH, AREATEX_HEIGHT), areaTextureFlipped().data()),
-//    mSearchTexture(Size2D(SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT), searchTextureFlipped().data()),
     mAreaTexture(Size2D(AREATEX_WIDTH, AREATEX_HEIGHT), areaTexBytes),
     mSearchTexture(Size2D(SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT), searchTexBytes),
 
     mEdgesTexture(sharedFramebuffer->size()),
     mBlendTexture(sharedFramebuffer->size())
     { }
-
-#pragma mark - Helpers
-
-    template <GLTexture::Float TextureFormat>
-    std::array<unsigned char, AREATEX_SIZE> SMAAEffect<TextureFormat>::areaTextureFlipped() const {
-        std::array<unsigned char, AREATEX_SIZE> texels;
-        std::array<unsigned char, AREATEX_PITCH> tempBuffer;
-
-        std::copy(std::begin(areaTexBytes), std::end(areaTexBytes), std::begin(texels));
-        
-        for (size_t i = 0; i < AREATEX_HEIGHT; i++) {
-            // Copy a line to temporary buffer
-            std::copy(std::begin(texels) + (i * AREATEX_PITCH),
-                      std::begin(texels) + ((i + 1) * AREATEX_PITCH),
-                      std::begin(tempBuffer));
-
-            // Swap last line with first line
-            std::copy(std::begin(texels) + ((AREATEX_HEIGHT - i - 2) * AREATEX_PITCH),
-                      std::begin(texels) + ((AREATEX_HEIGHT - i - 1) * AREATEX_PITCH),
-                      std::begin(texels) + (i * AREATEX_PITCH));
-
-            // Swap temporary line with last line
-            std::copy(std::begin(tempBuffer),
-                      std::end(tempBuffer),
-                      std::begin(texels) + ((AREATEX_HEIGHT - i - 1) * AREATEX_PITCH));
-        }
-
-        return texels;
-    }
-
-    template <GLTexture::Float TextureFormat>
-    std::array<unsigned char, SEARCHTEX_SIZE> SMAAEffect<TextureFormat>::searchTextureFlipped() const {
-        std::array<unsigned char, SEARCHTEX_SIZE> texels;
-        std::array<unsigned char, SEARCHTEX_PITCH> tempBuffer;
-
-        std::copy(std::begin(searchTexBytes), std::end(searchTexBytes), std::begin(texels));
-
-        for (size_t i = 0; i < SEARCHTEX_HEIGHT; i++) {
-            // Copy a line to temporary buffer
-            std::copy(std::begin(texels) + (i * SEARCHTEX_PITCH),
-                      std::begin(texels) + ((i + 1) * SEARCHTEX_PITCH),
-                      std::begin(tempBuffer));
-
-            // Swap last line with first line
-            std::copy(std::begin(texels) + ((SEARCHTEX_HEIGHT - i - 2) * SEARCHTEX_PITCH),
-                      std::begin(texels) + ((SEARCHTEX_HEIGHT - i - 1) * SEARCHTEX_PITCH),
-                      std::begin(texels) + (i * SEARCHTEX_PITCH));
-
-            // Swap temporary line with last line
-            std::copy(std::begin(tempBuffer),
-                      std::end(tempBuffer),
-                      std::begin(texels) + ((SEARCHTEX_HEIGHT - i - 1) * SEARCHTEX_PITCH));
-        }
-
-        return texels;
-    }
 
 #pragma mark - Antialiasing
 

@@ -194,6 +194,7 @@
 		CE5683E42099AC5F00C827F5 /* DemoScene2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE5683E32099AC5F00C827F5 /* DemoScene2.mm */; };
 		CE5683EC2099F9E300C827F5 /* cornell_box_lux.obj in Resources */ = {isa = PBXBuildFile; fileRef = CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */; };
 		CE5892142185A95400BDFF6F /* Types.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CE5892132185A95400BDFF6F /* Types.glsl */; };
+		CE5892162185D1D400BDFF6F /* DiffuseLightProbes.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CE5892152185D1D400BDFF6F /* DiffuseLightProbes.glsl */; };
 		CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE5C5E242000CA04004D2B4E /* Measurement.cpp */; };
 		CE658430216281140059677C /* DiffuseLightProbeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE65842E216281140059677C /* DiffuseLightProbeRenderer.cpp */; };
 		CE65E18A217127A400BA36F1 /* libembree3.3.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = CE2B3B182159261A007FA3DF /* libembree3.3.0.0.dylib */; };
@@ -826,6 +827,7 @@
 		CE5683E32099AC5F00C827F5 /* DemoScene2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene2.mm; sourceTree = "<group>"; };
 		CE5683EB2099F9E300C827F5 /* cornell_box_lux.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cornell_box_lux.obj; sourceTree = "<group>"; };
 		CE5892132185A95400BDFF6F /* Types.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Types.glsl; sourceTree = "<group>"; };
+		CE5892152185D1D400BDFF6F /* DiffuseLightProbes.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = DiffuseLightProbes.glsl; sourceTree = "<group>"; };
 		CE5C5E242000CA04004D2B4E /* Measurement.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Measurement.cpp; sourceTree = "<group>"; };
 		CE5C5E252000CA04004D2B4E /* Measurement.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Measurement.hpp; sourceTree = "<group>"; };
 		CE62A8C7216F357500D09E20 /* SMAAAreaTex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMAAAreaTex.h; sourceTree = "<group>"; };
@@ -3850,6 +3852,7 @@
 				CE5892132185A95400BDFF6F /* Types.glsl */,
 				CED1CECF217DF3FA00291560 /* Packing.glsl */,
 				CED1CED1217DF4DA00291560 /* SphericalHarmonics.glsl */,
+				CE5892152185D1D400BDFF6F /* DiffuseLightProbes.glsl */,
 				CED1CED3217DF69500291560 /* GBuffer.glsl */,
 				CED1CED5217E039700291560 /* ColorSpace.glsl */,
 			);
@@ -4011,6 +4014,7 @@
 				CE4DE2181FA60CFE0067729A /* Sponza_Bricks_a_Roughness.tga in Resources */,
 				AC859C2C1FD6A3D900227038 /* LightProbeEnvironmentCapture.vert in Resources */,
 				CE4DE2201FA60CFE0067729A /* Sponza_Column_b_normal.tga in Resources */,
+				CE5892162185D1D400BDFF6F /* DiffuseLightProbes.glsl in Resources */,
 				CE53ADE0209E2BC300749A96 /* fabric02_rgh.jpg in Resources */,
 				CE4DE2371FA60CFF0067729A /* Sponza_Fabric_Red_normal.tga in Resources */,
 				CE70FA681F8F8F7400AD9027 /* CookTorrance.frag in Resources */,

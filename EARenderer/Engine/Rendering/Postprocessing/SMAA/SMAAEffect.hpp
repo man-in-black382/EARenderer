@@ -15,9 +15,6 @@
 #include "GLSLSMAABlendingWeightCalculation.hpp"
 #include "GLSLSMAANeighborhoodBlending.hpp"
 
-#include "SMAAAreaTex.h"
-#include "SMAASearchTex.h"
-
 namespace EARenderer {
 
     template <GLTexture::Float TextureFormat>
@@ -31,9 +28,6 @@ namespace EARenderer {
         GLSLSMAAEdgeDetection mEdgeDetectionShader;
         GLSLSMAABlendingWeightCalculation mBlendingWeightCalculationShader;
         GLSLSMAANeighborhoodBlending mNeighborhoodBlendingShader;
-
-        std::array<unsigned char, AREATEX_SIZE> areaTextureFlipped() const;
-        std::array<unsigned char, SEARCHTEX_SIZE> searchTextureFlipped() const;
 
         void detectEdges(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image);
         void calculateBlendingWeights();

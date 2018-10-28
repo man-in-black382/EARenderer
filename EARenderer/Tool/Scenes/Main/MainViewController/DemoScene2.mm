@@ -83,6 +83,9 @@
     scene->setDiffuseProbeSpacing(0.15);
     scene->setSurfelSpacing(0.02);
 
+    scene->camera()->moveTo(glm::vec3(0.5, 0.5, 1.5));
+    scene->camera()->lookAt(glm::vec3(0, 0, 0));
+
     [self setupAnimations];
 }
 
@@ -107,7 +110,7 @@
     self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
 
     glm::vec3 lightStart(-1.0, -0.2, -1);
-    glm::vec3 lightEnd(1.0, -0.2, -1);
+    glm::vec3 lightEnd(1.0, -0.2, -0.2);
 
     choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);
 

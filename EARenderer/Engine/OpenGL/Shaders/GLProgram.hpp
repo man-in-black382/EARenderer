@@ -51,6 +51,7 @@ namespace EARenderer {
 
         std::unordered_map<VertexAttributeName, GLVertexAttribute> mVertexAttributes;
         std::unordered_map<CRC32, GLUniform> mUniforms;
+        std::unordered_set<CRC32> mReportedMissingUniforms;
         
         GLint mAvailableTextureUnits = 0;
         
