@@ -1,6 +1,6 @@
 #version 400 core
 
-#include "Packing.glsl"
+#include "GBuffer.glsl"
 
 // Constants
 
@@ -255,80 +255,13 @@ float OmnidirectionalExponentialShadow(vec3 worldPosition) {
 }
 
 ////////////////////////////////////////////////////////////
-//////////////////////// G Buffer //////////////////////////
-////////////////////////////////////////////////////////////
-
-struct GBuffer {
-    vec3 albedo;
-    vec3 normal;
-    float roughness;
-    float metalness;
-    float AO;
-};
-
-// GBuffer packing scheme
-//
-// | Albedo R | Albedo G | Albedo B | Roughness | Metalness |    AO    |        Normal Z      |
-// |          |          |          |           |           |          |                      |
-// |  1 Byte  |  1 Byte  |  1 Byte  |   1 Byte  |  1 Byte   |  1 Byte  |        2 Bytes       |
-// |__________|__________|__________|___________|___________|__________|______________________|
-// |______First component of output UVEC3_______|_______Second component of output UVEC3______|
-//
-//
-// |        Normal X      |        Normal Y      |
-// |                      |                      |
-// |        2 Bytes       |        2 Bytes       |
-// |______________________|______________________|
-// |________Third component of output UVEC3______|
-
-GBuffer DecodeGBuffer() {
-    GBuffer gBuffer;
-
-    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords.st).xyz;
-    vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-    uint metalnessAONormalZ = albedoRoughnessMetalnessAONormal.y;
-    vec2 metalnessAO = Decode8888(metalnessAONormalZ).xy;
-    float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
-    vec2 normalXY = UnpackSnorm2x16(albedoRoughnessMetalnessAONormal.z, 1.0);
-
-    gBuffer.albedo    = albedoRoughness.rgb;
-    gBuffer.normal    = vec3(normalXY, normalZ);
-    gBuffer.roughness = albedoRoughness.a;
-    gBuffer.metalness = metalnessAO.r;
-    gBuffer.AO        = metalnessAO.g;
-
-    return gBuffer;
-}
-
-vec3 ReconstructWorldPosition() {
-    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
-
-    // Depth range in NDC is [-1; 1]
-    // Default value for glDepthRange is [-1; 1]
-    // OpenGL uses values from glDepthRange to transform depth to [0; 1] range during viewport transformation
-    // To reconstruct world position using inverse camera matrices we need depth in [-1; 1] range again
-    float z = depth * 2.0 - 1.0;
-    vec2 xy = vTexCoords * 2.0 - 1.0;
-
-    vec4 clipSpacePosition = vec4(xy, z, 1.0);
-    vec4 viewSpacePosition = uCameraProjectionInverse * clipSpacePosition;
-
-    // Perspective division
-    viewSpacePosition /= viewSpacePosition.w;
-
-    vec4 worldSpacePosition = uCameraViewInverse * viewSpacePosition;
-
-    return worldSpacePosition.xyz;
-}
-
-////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
 void main() {
-    GBuffer gBuffer     = DecodeGBuffer();
+    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
 
-    vec3 worldPosition  = ReconstructWorldPosition();
+    vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     float roughness     = gBuffer.roughness;
     
     // Based on observations by Disney and adopted by Epic Games

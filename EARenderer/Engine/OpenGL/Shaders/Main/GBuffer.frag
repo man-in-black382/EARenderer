@@ -16,7 +16,6 @@ layout(location = 1) out float oDepth;
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
-in vec3 vDebugNormal;
 
 // Uniforms
 
@@ -91,8 +90,6 @@ void main() {
     float ao        = FetchAOMap(vTexCoords.st);
     vec3 albedo     = FetchAlbedoMap(vTexCoords.st);
     vec3 N          = FetchNormalMap(vTexCoords.st);
-
-//    N = vDebugNormal;
 
     uint albedoRoughness = Encode8888(vec4(albedo, roughness));
     uint metalnessAO     = Encode8888(vec4(metallic, ao, 0.0, 0.0)); // Metalness and AO are packed to MSB

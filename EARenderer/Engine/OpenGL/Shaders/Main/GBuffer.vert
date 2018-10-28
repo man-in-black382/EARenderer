@@ -26,7 +26,6 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInCSMSplitSpace;
-out vec3 vDebugNormal;
 
 // Functions
 
@@ -52,7 +51,6 @@ void main() {
 
     mat3 TBN = TBN();
 
-    vDebugNormal = iNormal;
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;

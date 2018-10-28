@@ -1,6 +1,6 @@
 #version 400 core
 
-#include "Packing.glsl"
+#include "GBuffer.glsl"
 
 // Constants
 const float kDenormalizationFactor = 1000.0;
@@ -27,77 +27,6 @@ uniform mat4 uCameraViewMat;
 uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
-
-struct GBuffer {
-    vec3 albedo;
-    vec3 normal;
-    float roughness;
-    float metalness;
-    float AO;
-};
-
-// GBuffer packing scheme
-//
-// | Albedo R | Albedo G | Albedo B | Roughness | Metalness |    AO    |        Normal Z      |
-// |          |          |          |           |           |          |                      |
-// |  1 Byte  |  1 Byte  |  1 Byte  |   1 Byte  |  1 Byte   |  1 Byte  |        2 Bytes       |
-// |__________|__________|__________|___________|___________|__________|______________________|
-// |______First component of output UVEC3_______|_______Second component of output UVEC3______|
-//
-//
-// |        Normal X      |        Normal Y      |
-// |                      |                      |
-// |        2 Bytes       |        2 Bytes       |
-// |______________________|______________________|
-// |________Third component of output UVEC3______|
-
-
-vec3 DecodeGBufferNormal(uvec3 gBuffer) {
-    uint metalnessAONormalZ = gBuffer.y;
-    float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
-    vec2 normalXY = UnpackSnorm2x16(gBuffer.z, 1.0);
-    return vec3(normalXY, normalZ);
-}
-
-GBuffer DecodeGBuffer() {
-    GBuffer gBuffer;
-
-    uvec3 albedoRoughnessMetalnessAONormal = texture(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords.st).xyz;
-    vec4 albedoRoughness = Decode8888(albedoRoughnessMetalnessAONormal.x);
-    uint metalnessAONormalZ = albedoRoughnessMetalnessAONormal.y;
-    vec2 metalnessAO = Decode8888(metalnessAONormalZ).xy;
-    float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
-    vec2 normalXY = UnpackSnorm2x16(albedoRoughnessMetalnessAONormal.z, 1.0);
-
-    gBuffer.albedo    = albedoRoughness.rgb;
-    gBuffer.normal    = vec3(normalXY, normalZ);
-    gBuffer.roughness = albedoRoughness.a;
-    gBuffer.metalness = metalnessAO.r;
-    gBuffer.AO        = metalnessAO.g;
-
-    return gBuffer;
-}
-
-vec3 ReconstructWorldPosition() {
-    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
-
-    // Depth range in NDC is [-1; 1]
-    // Default value for glDepthRange is [-1; 1]
-    // OpenGL uses values from glDepthRange to transform depth to [0; 1] range during viewport transformation
-    // To reconstruct world position using inverse camera matrices we need depth in [-1; 1] range again
-    float z = depth * 2.0 - 1.0;
-    vec2 xy = vTexCoords * 2.0 - 1.0;
-
-    vec4 clipSpacePosition = vec4(xy, z, 1.0);
-    vec4 viewSpacePosition = uCameraProjectionInverse * clipSpacePosition;
-
-    // Perspective division
-    viewSpacePosition /= viewSpacePosition.w;
-
-    vec4 worldSpacePosition = uCameraViewInverse * viewSpacePosition;
-
-    return worldSpacePosition.xyz;
-}
 
 ////////////////////////////////////////////////////////////
 ////////////////////// Cone Tracing ////////////////////////
@@ -153,7 +82,7 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
 ////////////////////////////////////////////////////////////
 
 void main() {
-    GBuffer gBuffer     = DecodeGBuffer();
+    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
 
     float roughness     = gBuffer.roughness;
 
@@ -171,7 +100,7 @@ void main() {
     vec3 raySS = rayHitInfo.xyz;
     vec3 positionSS = vec3(vTexCoords, depth);
 
-    // get specular power from roughness
+    // Get specular power from roughness
     float gloss = 1.0f - roughness;
     float specularPower = RoughnessToSpecularPower(roughness);
 
@@ -193,16 +122,16 @@ void main() {
 
     // Cone-tracing using an isosceles triangle to approximate a cone in screen space
     for(int i = 0; i < 7; ++i) {
-        // intersection length is the adjacent side, get the opposite side using trig
+        // Intersection length is the adjacent side, get the opposite side using trig
         float oppositeLength = IsoscelesTriangleOpposite(adjacentLength, coneTheta);
 
-        // calculate in-radius of the isosceles triangle
+        // Calculate in-radius of the isosceles triangle
         float incircleSize = IsoscelesTriangleInscribedCircleRadius(oppositeLength, adjacentLength);
 
-        // get the sample position in screen space
+        // Get the sample position in screen space
         vec2 samplePos = positionSS.xy + adjacentUnit * (adjacentLength - incircleSize);
 
-        // convert the in-radius into screen size then check what power N to raise 2 to reach it - that power N becomes mip level to sample from
+        // Convert the in-radius into screen size then check what power N to raise 2 to reach it - that power N becomes mip level to sample from
         float mipChannel = clamp(log2(incircleSize * max(texSize.x, texSize.y)), 0.0, maxMipLevel);
 
         /*
