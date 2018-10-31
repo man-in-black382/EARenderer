@@ -12,6 +12,7 @@
 #include <OpenGL/gl3.h>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 
 #include "GLNamedObject.hpp"
 #include "GLBindable.hpp"

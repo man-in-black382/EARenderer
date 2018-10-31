@@ -26,29 +26,27 @@ namespace EARenderer {
         std::string mName;
         std::string mMaterialName;
         std::vector<Vertex1P1N2UV1T1BT> mVertices;
-        AxisAlignedBox3D mBoundingBox;
-        float mArea;
-        GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
-        
+        AxisAlignedBox3D mBoundingBox = AxisAlignedBox3D::MaximumReversed();
+        float mArea = 0.0;
+        int32_t mVBOOffset = 0;
+        int32_t mVertexCount = 0;
+
     public:
-        SubMesh();
-        SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices);
-        
+        SubMesh() = default;
+
         const std::string& name() const;
         const std::string& materialName() const;
         const std::vector<Vertex1P1N2UV1T1BT>& vertices() const;
         const AxisAlignedBox3D& boundingBox() const;
-        const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
+        std::vector<Vertex1P1N2UV1T1BT>& vertices();
         float surfaceArea() const;
 
-        std::vector<Vertex1P1N2UV1T1BT>& vertices();
-        GLVertexArray<Vertex1P1N2UV1T1BT>& VAO();
-        
         void setName(const std::string& name);
         void setMaterialName(const std::string& name);
+        void setVBOOffset(int32_t offset);
+        void setVertexCount(int32_t count);
         void addVertex(const Vertex1P1N2UV1T1BT& vertex);
-        void finalizeVertexBuffer();
-        
+
         void draw() const override;
         void drawInstanced(size_t instanceCount);
     };

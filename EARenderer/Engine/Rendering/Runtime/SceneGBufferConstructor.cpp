@@ -46,6 +46,8 @@ namespace EARenderer {
         // Attach 0 mip again after HiZ buffer construction
         mFramebuffer.redirectRenderingToTexturesMip(0, mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
 
+        ResourcePool::shared().VAO().bind();
+
         for (ID instanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[instanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();

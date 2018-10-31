@@ -314,5 +314,5 @@ void main() {
 //    }
 
     // Shrinking the output value so that it won't be clamped by additive blending
-    oBaseOutput.rgb /= kNormalizationFactor;
+//    oBaseOutput.rgb /= kNormalizationFactor;
 }

@@ -112,8 +112,6 @@
     auto& sponzaMesh = resourcePool->meshes[sponzaMeshID];
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto& subMesh = sponzaMesh.subMeshes()[subMeshID];
-        
-//        printf("Material %s\n", subMesh.materialName().c_str());
 
         if (subMesh.materialName() == "leaf") {
             sponzaInstance.setMaterialIDForSubMeshID(leaf_MaterialID, subMeshID);
@@ -205,6 +203,8 @@
     scene->camera()->lookAt(glm::vec3(1, 0, 0));
 
     [self setupAnimations];
+
+    resourcePool->transferMeshesToGPU();
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene

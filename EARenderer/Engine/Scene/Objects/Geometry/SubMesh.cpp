@@ -10,24 +10,17 @@
 #include "Triangle3D.hpp"
 
 namespace EARenderer {
-
-    SubMesh::SubMesh()
-    :
-    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
-    mArea(0.0),
-    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
-    { }
     
-    SubMesh::SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices)
-    :
-    mVertices(vertices),
-    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
-    mArea(0.0),
-    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
-    {
-        finalizeVertexBuffer();
-    }
-    
+//    SubMesh::SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices)
+//    :
+////    mVertices(vertices),
+//    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
+//    mArea(0.0),
+////    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
+//    {
+//        finalizeVertexBuffer();
+//    }
+//    
 #pragma mark - Getters
     
     const std::string& SubMesh::name() const {
@@ -41,21 +34,13 @@ namespace EARenderer {
     const std::vector<Vertex1P1N2UV1T1BT>& SubMesh::vertices() const {
         return mVertices;
     }
-    
+
     const AxisAlignedBox3D& SubMesh::boundingBox() const {
         return mBoundingBox;
-    }
-    
-    const GLVertexArray<Vertex1P1N2UV1T1BT>& SubMesh::VAO() const {
-        return mVAO;
     }
 
     std::vector<Vertex1P1N2UV1T1BT>& SubMesh::vertices() {
         return mVertices;
-    }
-
-    GLVertexArray<Vertex1P1N2UV1T1BT>& SubMesh::VAO() {
-        return mVAO;
     }
 
     float SubMesh::surfaceArea() const {
@@ -72,6 +57,13 @@ namespace EARenderer {
         mMaterialName = name;
     }
 
+    void SubMesh::setVBOOffset(int32_t offset) {
+        mVBOOffset = offset;
+    }
+
+    void SubMesh::setVertexCount(int32_t count) {
+        mVertexCount = count;
+    }
     
 #pragma mark - Other methods
     
@@ -90,26 +82,13 @@ namespace EARenderer {
             mArea += triangle.area();
         }
     }
-    
-    void SubMesh::finalizeVertexBuffer() {
-        mVAO.initialize(mVertices, {
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec4), glm::vec4::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
-        });
-    }
-    
+
     void SubMesh::draw() const {
-        mVAO.bind();
-        glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(mVertices.size()));
+        glDrawArrays(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount));
     }
 
     void SubMesh::drawInstanced(size_t instanceCount) {
-        mVAO.bind();
-        glDrawArraysInstanced(GL_TRIANGLES, 0, static_cast<GLsizei>(mVertices.size()), static_cast<GLsizei>(instanceCount));
+        glDrawArraysInstanced(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount), static_cast<GLsizei>(instanceCount));
     }
 
 }

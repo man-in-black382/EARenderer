@@ -87,6 +87,8 @@
     scene->camera()->lookAt(glm::vec3(0, 0, 0));
 
     [self setupAnimations];
+
+    resourcePool->transferMeshesToGPU();
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene

@@ -7,6 +7,7 @@
 //
 
 #include "ShadowMapper.hpp"
+#include "ResourcePool.hpp"
 
 namespace EARenderer {
 
@@ -108,6 +109,7 @@ namespace EARenderer {
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
+        ResourcePool::shared().VAO().bind();
         mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 1);
         renderDirectionalShadowMaps();
         renderOmnidirectionalShadowMaps();

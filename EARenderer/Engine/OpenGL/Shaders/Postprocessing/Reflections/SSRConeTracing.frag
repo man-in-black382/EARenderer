@@ -2,9 +2,6 @@
 
 #include "GBuffer.glsl"
 
-// Constants
-const float kDenormalizationFactor = 1000.0;
-
 // Output
 
 layout(location = 0) out vec4 oOutputColor;
@@ -68,7 +65,6 @@ float IsoscelesTriangleInscribedCircleRadius(float a, float h) {
 
 vec4 ConeSampleWeightedColor(vec2 samplePos, float mipChannel, float gloss) {
     vec3 sampleColor = textureLod(uReflections, samplePos, mipChannel).rgb;
-    sampleColor *= kDenormalizationFactor;
     return vec4(sampleColor * gloss, gloss);
 }
 

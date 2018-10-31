@@ -85,13 +85,6 @@ namespace EARenderer {
         const PackedLookupTable<PointLight>& pointLights() const;
         const PackedLookupTable<MeshInstance>& meshInstances() const;
 
-        /**
-         All scene's sub meshes sorted by descending triangle area values
-
-         @return sorted vector of submesh - instance id pairs
-         */
-        const std::vector<SubMeshInstancePair>& sortedStaticSubMeshes();
-
         std::shared_ptr<SparseOctree<MeshTriangleRef>> octree() const;
         std::shared_ptr<EmbreeRayTracer> rayTracer() const;
         

@@ -1,5 +1,7 @@
 #version 400 core
 
+#define PROBE_SH_COMPRESSION_322
+
 #include "GBuffer.glsl"
 #include "ColorSpace.glsl"
 #include "DiffuseLightProbes.glsl"
@@ -123,7 +125,7 @@ void main() {
     indirectRadiance *= Kd;
 
     // Remember that color values in light buffer were normalized by a normalization factor
-    vec3 lightBufferColor = texture(uLightBuffer, vTexCoords).rgb * kDenormalizationFactor;
+    vec3 lightBufferColor = texture(uLightBuffer, vTexCoords).rgb;// * kDenormalizationFactor;
 
     vec3 SSR = texture(uReflections, vTexCoords).rgb;
     SSR *= Ks;

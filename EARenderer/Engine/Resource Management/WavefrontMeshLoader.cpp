@@ -207,7 +207,6 @@ namespace EARenderer {
             }
             mManualNormals.clear();
         }
-        subMesh.finalizeVertexBuffer();
     }
     
 #pragma mark - Lifecycle

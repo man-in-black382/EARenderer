@@ -117,8 +117,6 @@ namespace EARenderer {
 
         mBoundingBox->min = glm::min(subMesh.boundingBox().min, mBoundingBox->min);
         mBoundingBox->max = glm::max(subMesh.boundingBox().max, mBoundingBox->max);
-
-        subMesh.finalizeVertexBuffer();
     }
 
     void AutodeskMeshLoader::extractUVs(FbxMesh* mesh, size_t vertexId) {

@@ -13,10 +13,14 @@
 #include "Mesh.hpp"
 #include "SubMesh.hpp"
 #include "PBRMaterial.hpp"
+#include "GLVertexArray.hpp"
 
 namespace EARenderer {
     
     class ResourcePool {
+    private:
+        GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
+
     public:
         PackedLookupTable<Mesh> meshes;
         PackedLookupTable<PBRMaterial> materials;
@@ -24,6 +28,14 @@ namespace EARenderer {
         static ResourcePool& shared();
         
         ResourcePool();
+
+        const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
+
+        /**
+         Updates VAO's underlying buffer with all of the scene's geometry.
+         Updates VBO offsets and vertex counts in sub meshes.
+         */
+        void transferMeshesToGPU();
     };
     
 }
