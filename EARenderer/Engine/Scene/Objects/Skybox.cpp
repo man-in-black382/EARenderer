@@ -8,6 +8,7 @@
 
 #include "Skybox.hpp"
 #include "GLTextureFactory.hpp"
+#include "Drawable.hpp"
 
 #include <glm/vec3.hpp>
 
@@ -30,7 +31,7 @@ namespace EARenderer {
     
     void Skybox::draw() const {
         glDepthFunc(GL_LEQUAL);
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
     
 }

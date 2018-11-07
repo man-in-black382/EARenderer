@@ -149,10 +149,11 @@ namespace EARenderer {
 
          @param viewport non-standart viewport
          @param mipLevel mip level to attach
+         @param buffersToClear mask to specify which buffers (depth, color and/or stencil) to clear
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, TexturePtrs... textures);
+        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         /**
          Replaces all currenlty attached textures with the passed ones and uses a specified mip map,
@@ -160,10 +161,11 @@ namespace EARenderer {
          clears all necessary buffers
 
          @param mipLevel mip level to attach
+         @param buffersToClear mask to specify which buffers (depth, color and/or stencil) to clear
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(uint8_t mipLevel, TexturePtrs... textures);
+        void redirectRenderingToTexturesMip(uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         /**
          Replaces all currenlty attached textures with the passed ones,
@@ -171,20 +173,22 @@ namespace EARenderer {
          clears all necessary buffers
 
          @param viewport non-standart viewport
+         @param buffersToClear mask to specify which buffers (depth, color and/or stencil) to clear
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTextures(const GLViewport& viewport, TexturePtrs... textures);
+        void redirectRenderingToTextures(const GLViewport& viewport, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         /**
          Replaces all currenlty attached textures with the passed ones,
          applies default viewport, activates draw buffers for all passed textures,
          clears all necessary buffers
 
+         @param buffersToClear mask to specify which buffers (depth, color and/or stencil) to clear
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTextures(TexturePtrs... textures);
+        void redirectRenderingToTextures(UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         // FIXME: Deprecated attachment functions
 

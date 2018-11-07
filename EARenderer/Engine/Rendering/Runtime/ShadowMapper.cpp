@@ -68,7 +68,7 @@ namespace EARenderer {
 
     void ShadowMapper::renderDirectionalShadowMaps() {
         auto renderTarget = mTexturePool->claim();
-        mFramebuffer->redirectRenderingToTexturesMip(0, renderTarget);
+        mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, renderTarget);
 
         mDirectionalSMShader.bind();
         mDirectionalSMShader.setESMFactor(mSettings.meshSettings.ESMFactor);

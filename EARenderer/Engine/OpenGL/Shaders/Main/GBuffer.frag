@@ -16,6 +16,8 @@ layout(location = 1) out float oDepth;
 in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
+in vec3 vPosInTangentSpace;
+in vec3 vCameraPosInTangentSpace;
 
 // Uniforms
 
@@ -65,6 +67,53 @@ float FetchDisplacementMap() {
     return texture(uMaterial.displacementMap, vTexCoords.st).r;
 }
 
+vec2 DisplacedTextureCoords() {
+
+    float uParallaxMappingStrength = 0.015;
+
+    vec2 texCoords = vTexCoords.st;
+    vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
+
+    // Number of depth layers
+    const float minLayers = 8;
+    const float maxLayers = 32;
+    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+    // Calculate the size of each layer
+    float layerDepth = 1.0 / numLayers;
+    // Depth of current layer
+    float currentLayerDepth = 0.0;
+    // The amount to shift the texture coordinates per layer (from vector P)
+    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
+
+    vec2 deltaTexCoords = P / numLayers;
+
+    // Get initial values
+    vec2  currentTexCoords     = texCoords;
+    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+
+    while(currentLayerDepth < currentDepthMapValue) {
+        // Shift texture coordinates along direction of P
+        currentTexCoords -= deltaTexCoords;
+        // Get depthmap value at current texture coordinates
+        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+        // Get depth of next layer
+        currentLayerDepth += layerDepth;
+    }
+
+    // Get texture coordinates before collision (reverse operations)
+    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+
+    // Get depth after and before collision for linear interpolation
+    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+
+    // Interpolation of texture coordinates
+    float weight = afterDepth / (afterDepth - beforeDepth);
+    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+
+    return finalTexCoords;
+}
+
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -85,11 +134,13 @@ void main() {
     // |______________________|______________________|
     // |________Third component of output UVEC3______|
 
-    float roughness = FetchRoughnessMap(vTexCoords.st);
-    float metallic  = FetchMetallicMap(vTexCoords.st);
-    float ao        = FetchAOMap(vTexCoords.st);
-    vec3 albedo     = FetchAlbedoMap(vTexCoords.st);
-    vec3 N          = FetchNormalMap(vTexCoords.st);
+    vec2 texCoords = vTexCoords.st; //DisplacedTextureCoords();
+
+    float roughness = FetchRoughnessMap(texCoords);
+    float metallic  = FetchMetallicMap(texCoords);
+    float ao        = FetchAOMap(texCoords);
+    vec3 albedo     = FetchAlbedoMap(texCoords);
+    vec3 N          = FetchNormalMap(texCoords);
 
     uint albedoRoughness = Encode8888(vec4(albedo, roughness));
     uint metalnessAO     = Encode8888(vec4(metallic, ao, 0.0, 0.0)); // Metalness and AO are packed to MSB

@@ -7,6 +7,7 @@
 //
 
 #include "SceneGBufferConstructor.hpp"
+#include "Drawable.hpp"
 
 namespace EARenderer {
 
@@ -44,7 +45,8 @@ namespace EARenderer {
         mGBufferShader.setCamera(*(mScene->camera()));
 
         // Attach 0 mip again after HiZ buffer construction
-        mFramebuffer.redirectRenderingToTexturesMip(0, mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
+        mFramebuffer.redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
+                                                    mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
 
         ResourcePool::shared().VAO().bind();
 
@@ -87,9 +89,9 @@ namespace EARenderer {
             GLViewport(mipSize).apply();
 
             // Leave only linear depth attachment active so that other textures won't get corrupted
-            mFramebuffer.redirectRenderingToTexturesMip(mipLevel + 1, mGBuffer->HiZBuffer);
+            mFramebuffer.redirectRenderingToTexturesMip(mipLevel + 1, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, mGBuffer->HiZBuffer);
 
-            TriangleStripQuad::Draw();
+            Drawable::TriangleStripQuad::Draw();
         }
 
         glDepthMask(GL_TRUE);

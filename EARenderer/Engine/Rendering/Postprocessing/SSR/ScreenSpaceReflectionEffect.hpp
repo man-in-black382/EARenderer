@@ -34,10 +34,12 @@ namespace EARenderer {
 
         void blurProgressively(std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> mirrorReflections);
 
-        void traceCones(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> lightBuffer,
+        void traceCones(const Camera& camera,
+                        std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> lightBuffer,
                         std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> rayHitInfo,
                         std::shared_ptr<const SceneGBuffer> GBuffer,
-                        std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+                        std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseOutputImage,
+                        std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> brightOutputImage);
 
     public:
         ScreenSpaceReflectionEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer,
@@ -46,7 +48,8 @@ namespace EARenderer {
         void applyReflections(const Camera& camera,
                               std::shared_ptr<const SceneGBuffer> GBuffer,
                               std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> lightBuffer,
-                              std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+                              std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseOutputImage,
+                              std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> brightOutputImage);
     };
 
 }

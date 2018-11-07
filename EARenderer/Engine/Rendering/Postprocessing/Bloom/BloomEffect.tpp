@@ -49,8 +49,8 @@ namespace EARenderer {
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, outputImage);
+        Drawable::TriangleStripQuad::Draw();
 
         this->mTexturePool->putBack(blurTexture);
     }

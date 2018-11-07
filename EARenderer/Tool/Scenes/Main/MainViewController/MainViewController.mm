@@ -110,7 +110,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.frameMeter = new EARenderer::FrameMeter();
     self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
 
-    EARenderer::Camera *camera = new EARenderer::Camera(75.f, 0.05f, 25.f);
+    EARenderer::Camera *camera = new EARenderer::Camera(110.f, 0.05f, 25.f);
     
     self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
     self.scene->setCamera(camera);

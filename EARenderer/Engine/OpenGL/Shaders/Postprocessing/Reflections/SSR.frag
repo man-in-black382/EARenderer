@@ -161,9 +161,9 @@ bool RayMarch(vec3 worldReflectionVec,
               out vec3 hitPosition,
               out float attenuationFactor)
 {
-    const float kMaxRayMarchStep = 0.02;
-    const int kMaxRayMarchIterations = 50;
-    const int kMaxBinarySearchSamples = 5;
+    const float kMaxRayMarchStep = 0.08;
+    const int kMaxRayMarchIterations = 12;
+    const int kMaxBinarySearchSamples = 8;
 
     int stub = uHiZBufferMipCount;
     bool bFoundIntersection = false;

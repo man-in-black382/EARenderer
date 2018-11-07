@@ -20,6 +20,7 @@ namespace EARenderer {
     class ResourcePool {
     private:
         GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
+        int32_t mTotalVertexCount = 0;
 
     public:
         PackedLookupTable<Mesh> meshes;
@@ -30,6 +31,7 @@ namespace EARenderer {
         ResourcePool();
 
         const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
+        int32_t totalVertexCount() const;
 
         /**
          Updates VAO's underlying buffer with all of the scene's geometry.

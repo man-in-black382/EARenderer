@@ -36,8 +36,8 @@ namespace EARenderer {
             mEdgeDetectionShader.setImage(*image);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, &mEdgesTexture);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, &mEdgesTexture);
+        Drawable::TriangleStripQuad::Draw();
     }
 
     template <GLTexture::Float TextureFormat>
@@ -49,8 +49,8 @@ namespace EARenderer {
             mBlendingWeightCalculationShader.setSearchTexture(mSearchTexture);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, &mBlendTexture);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, &mBlendTexture);
+        Drawable::TriangleStripQuad::Draw();
     }
 
     template <GLTexture::Float TextureFormat>
@@ -62,8 +62,8 @@ namespace EARenderer {
             mNeighborhoodBlendingShader.setBlendingWeights(mBlendTexture);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, outputImage);
+        Drawable::TriangleStripQuad::Draw();
     }
 
     template <GLTexture::Float TextureFormat>

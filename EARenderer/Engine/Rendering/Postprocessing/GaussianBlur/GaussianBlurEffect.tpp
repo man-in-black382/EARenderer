@@ -78,8 +78,10 @@ namespace EARenderer {
         //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, intermediateTexture);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel,
+                                                           GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
+                                                           intermediateTexture);
+        Drawable::TriangleStripQuad::Draw();
 
         // But, in the second pass, we read and write from and to the same
         // mip level of intermediate and output textures
@@ -90,8 +92,10 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, outputImage);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel,
+                                                           GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
+                                                           outputImage);
+        Drawable::TriangleStripQuad::Draw();
 
         this->mTexturePool->putBack(intermediateTexture);
     }

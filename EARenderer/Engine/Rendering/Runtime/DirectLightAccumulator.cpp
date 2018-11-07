@@ -14,21 +14,18 @@ namespace EARenderer {
 
     DirectLightAccumulator::DirectLightAccumulator(const Scene *scene,
                                                    std::shared_ptr<const SceneGBuffer> gBuffer,
-                                                   std::shared_ptr<const ShadowMapper> shadowMapper,
-                                                   std::shared_ptr<GLFramebuffer> framebuffer)
+                                                   std::shared_ptr<const ShadowMapper> shadowMapper)
     :
     mScene(scene),
     mGBuffer(gBuffer),
-    mShadowMapper(shadowMapper),
-    mFramebuffer(framebuffer),
-    mLightBuffer(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA16F>>(framebuffer->size()))
+    mShadowMapper(shadowMapper)
     { }
 
 #pragma mark -
 
     void DirectLightAccumulator::renderDirectionalLights() {
         mCookTorranceShader.setLight(mScene->directionalLight());
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
 
     void DirectLightAccumulator::renderPointLights() {
@@ -40,7 +37,7 @@ namespace EARenderer {
             mCookTorranceShader.setLight(light);
             mCookTorranceShader.setShadowMapArrayIndex(cubeArrayIndex);
 
-            TriangleStripQuad::Draw();
+            Drawable::TriangleStripQuad::Draw();
         }
     }
 
@@ -50,18 +47,10 @@ namespace EARenderer {
         mSettings = settings;
     }
 
-    std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> DirectLightAccumulator::lightBuffer() {
-        return mLightBuffer;
-    }
-
 #pragma mark - Public Interface
 
-    void DirectLightAccumulator::render() {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
-
-        mFramebuffer->redirectRenderingToTextures(mLightBuffer);
-
+    void DirectLightAccumulator::render()
+    {
         mCookTorranceShader.bind();
         mCookTorranceShader.setSettings(mSettings);
         mCookTorranceShader.setCamera(*(mScene->camera()));
@@ -74,8 +63,6 @@ namespace EARenderer {
 
         renderDirectionalLights();
         renderPointLights();
-
-        glDisable(GL_BLEND);
     }
 
 }

@@ -76,6 +76,7 @@
     EARenderer::ID roof_MaterialID = [self load_Roof_MaterialToPool:resourcePool];
 
     EARenderer::ID marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
+    EARenderer::ID wetStones_MaterialID = [MaterialLoader load_WetStones_MaterialToPool:resourcePool];
 //
 //    EARenderer::ID sandGround_MaterialID = [MaterialLoader load_sandFloor_MaterialToPool:resourcePool];
 
@@ -94,7 +95,7 @@
 //    EARenderer::ID rocks01_MaterialID = [MaterialLoader load_rocks01_MaterialToPool:resourcePool];
 
 //    EARenderer::ID pavingStone09_MaterialID = [MaterialLoader load_pavingStones09_MaterialToPool:resourcePool];
-//
+
 //    EARenderer::ID pavingStone10_MaterialID = [MaterialLoader load_pavingStones10_MaterialToPool:resourcePool];
 //
 //    EARenderer::ID testBricks_MaterialID = [MaterialLoader load_testBricks_MaterialToPool:resourcePool];
@@ -142,17 +143,17 @@
         } else if (subMesh.materialName() == "flagpole") {
             sponzaInstance.setMaterialIDForSubMeshID(flagpole_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "fabric_e") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricA_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_d") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricC_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_a") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricD_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_g") {
             sponzaInstance.setMaterialIDForSubMeshID(fabricE_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_c") {
-            sponzaInstance.setMaterialIDForSubMeshID(fabricF_MaterialID, subMeshID);
-        } else if (subMesh.materialName() == "fabric_f") {
+        } else if (subMesh.materialName() == "fabric_d") {
+            sponzaInstance.setMaterialIDForSubMeshID(fabricD_MaterialID, subMeshID);
+        } else if (subMesh.materialName() == "fabric_a") {
+            sponzaInstance.setMaterialIDForSubMeshID(fabricA_MaterialID, subMeshID);
+        } else if (subMesh.materialName() == "fabric_g") {
             sponzaInstance.setMaterialIDForSubMeshID(fabricG_MaterialID, subMeshID);
+        } else if (subMesh.materialName() == "fabric_c") {
+            sponzaInstance.setMaterialIDForSubMeshID(fabricC_MaterialID, subMeshID);
+        } else if (subMesh.materialName() == "fabric_f") {
+            sponzaInstance.setMaterialIDForSubMeshID(fabricF_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "chain") {
             sponzaInstance.setMaterialIDForSubMeshID(chain_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "vase_hanging") {
@@ -183,7 +184,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(1.0, 1.0, 1.0));
+    scene->directionalLight().setColor(EARenderer::Color(2.0, 2.0, 2.0));
 
     scene->calculateGeometricProperties();
 
@@ -196,11 +197,11 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.35);
+    scene->setDiffuseProbeSpacing(0.33);
     scene->setSurfelSpacing(0.05);
 
     scene->camera()->moveTo(glm::vec3(0.0, -0.5, 0.0));
-    scene->camera()->lookAt(glm::vec3(1, 0, 0));
+    scene->camera()->lookAt(glm::vec3(1, -0.2, 0));
 
     [self setupAnimations];
 
@@ -234,9 +235,9 @@
     self.animationTimeline = new choreograph::Timeline();
 
     glm::vec3 lightStart(-0.3, -1.0, 0.45);
-    glm::vec3 lightEnd(-0.3, -1.0, -0.45);
+    glm::vec3 lightEnd(0.5, 0.0, -0.45);
 
-    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);
+    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 30.0);
 
     self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
@@ -316,6 +317,7 @@
         [self pathForResource:@"Sponza_Thorn_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Thorn_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -327,6 +329,7 @@
         [self pathForResource:@"VaseRound_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"VaseRound_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -338,6 +341,7 @@
         [self pathForResource:@"VasePlant_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"VasePlant_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -349,6 +353,7 @@
         [self pathForResource:@"Background_Normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Background_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -360,6 +365,7 @@
         [self pathForResource:@"Sponza_Bricks_a_Normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Bricks_a_Roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -371,6 +377,7 @@
         [self pathForResource:@"Sponza_Arch_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Arch_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -382,6 +389,7 @@
         [self pathForResource:@"Sponza_Ceiling_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Ceiling_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -393,6 +401,7 @@
         [self pathForResource:@"Sponza_Column_a_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Column_a_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -404,6 +413,7 @@
         [self pathForResource:@"Sponza_Floor_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Floor_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -415,6 +425,7 @@
         [self pathForResource:@"Sponza_Column_c_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Column_c_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -426,6 +437,7 @@
         [self pathForResource:@"Sponza_Details_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Details_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -437,6 +449,7 @@
         [self pathForResource:@"Sponza_Column_b_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Column_b_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -448,6 +461,7 @@
         [self pathForResource:@"Sponza_FlagPole_normal.tga"],
         [self pathForResource:@"Metallic_metallic.tga"],
         [self pathForResource:@"Sponza_FlagPole_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -459,6 +473,7 @@
         [self pathForResource:@"Sponza_Fabric_Green_normal.tga"],
         [self pathForResource:@"Sponza_Fabric_metallic.tga"],
         [self pathForResource:@"Sponza_Fabric_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -470,6 +485,7 @@
         [self pathForResource:@"Sponza_Fabric_Blue_normal.tga"],
         [self pathForResource:@"Sponza_Fabric_metallic.tga"],
         [self pathForResource:@"Sponza_Fabric_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -481,6 +497,7 @@
         [self pathForResource:@"Sponza_Fabric_Red_normal.tga"],
         [self pathForResource:@"Sponza_Fabric_metallic.tga"],
         [self pathForResource:@"Sponza_Fabric_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -492,6 +509,7 @@
         [self pathForResource:@"Sponza_Curtain_Blue_normal.tga"],
         [self pathForResource:@"Sponza_Curtain_metallic.tga"],
         [self pathForResource:@"Sponza_Curtain_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -503,6 +521,7 @@
         [self pathForResource:@"Sponza_Curtain_Red_normal.tga"],
         [self pathForResource:@"Sponza_Curtain_metallic.tga"],
         [self pathForResource:@"Sponza_Curtain_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -514,6 +533,7 @@
         [self pathForResource:@"Sponza_Curtain_Green_normal.tga"],
         [self pathForResource:@"Sponza_Curtain_metallic.tga"],
         [self pathForResource:@"Sponza_Curtain_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -525,6 +545,7 @@
         [self pathForResource:@"ChainTexture_Normal.tga"],
         [self pathForResource:@"ChainTexture_Metallic.tga"],
         [self pathForResource:@"ChainTexture_Roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -536,6 +557,7 @@
         [self pathForResource:@"VaseHanging_normal.tga"],
         [self pathForResource:@"Metallic_metallic.tga"],
         [self pathForResource:@"VaseHanging_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -547,6 +569,7 @@
         [self pathForResource:@"Vase_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Vase_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -558,6 +581,7 @@
         [self pathForResource:@"Lion_Normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Lion_Roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }
@@ -569,6 +593,7 @@
         [self pathForResource:@"Sponza_Roof_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
         [self pathForResource:@"Sponza_Roof_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
 }

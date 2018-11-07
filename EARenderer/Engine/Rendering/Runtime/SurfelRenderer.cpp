@@ -11,6 +11,7 @@
 #include "WavefrontMeshLoader.hpp"
 #include "FileManager.hpp"
 #include "GLVertexAttribute.hpp"
+#include "Drawable.hpp"
 
 #include <glm/gtx/transform.hpp>
 
@@ -74,7 +75,7 @@ namespace EARenderer {
                 mSurfelClusterVAOs[projection.surfelClusterIndex].bind();
                 mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[projection.surfelClusterIndex]);
                 const SurfelCluster& cluster = mSurfelData->surfelClusters()[projection.surfelClusterIndex];
-                Point::Draw(cluster.surfelCount);
+                Drawable::Point::Draw(cluster.surfelCount);
             }
         } else {
             for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
@@ -82,7 +83,7 @@ namespace EARenderer {
                 mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
                 const SurfelCluster& cluster = mSurfelData->surfelClusters()[i];
                 mSurfelRenderingShader.setSurfelGroupOffset(cluster.surfelOffset);
-                Point::Draw(cluster.surfelCount);
+                Drawable::Point::Draw(cluster.surfelCount);
             }
         }
     }

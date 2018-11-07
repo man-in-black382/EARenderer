@@ -13,7 +13,6 @@
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexArray.hpp"
-#include "Drawable.hpp"
 #include "PackedLookupTable.hpp"
 #include "AxisAlignedBox3D.hpp"
 
@@ -21,7 +20,7 @@
 
 namespace EARenderer {
 
-    class SubMesh: public Drawable {
+    class SubMesh {
     private:
         std::string mName;
         std::string mMaterialName;
@@ -47,7 +46,7 @@ namespace EARenderer {
         void setVertexCount(int32_t count);
         void addVertex(const Vertex1P1N2UV1T1BT& vertex);
 
-        void draw() const override;
+        void draw() const;
         void drawInstanced(size_t instanceCount);
     };
     

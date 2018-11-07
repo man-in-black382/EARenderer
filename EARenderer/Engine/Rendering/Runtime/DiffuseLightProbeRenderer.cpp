@@ -45,7 +45,7 @@ namespace EARenderer {
             mGridProbeRenderingShader.setGridProbesSHTextures(*mSphericalHarmonics);
         });
 
-        Point::Draw(mProbeData->probes().size());
+        Drawable::Point::Draw(mProbeData->probes().size());
     }
 
 }

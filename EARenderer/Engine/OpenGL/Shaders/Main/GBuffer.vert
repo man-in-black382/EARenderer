@@ -19,6 +19,7 @@ uniform mat4 uNormalMat;
 uniform mat4 uCameraViewMat;
 uniform mat4 uCameraProjectionMat;
 uniform mat4 uCSMSplitSpaceMat;
+uniform vec3 uCameraPosition;
 
 // Output
 
@@ -26,6 +27,8 @@ out vec3 vTexCoords;
 out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInCSMSplitSpace;
+out vec3 vPosInTangentSpace;
+out vec3 vCameraPosInTangentSpace;
 
 // Functions
 
@@ -55,6 +58,10 @@ void main() {
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;
     vPosInCSMSplitSpace = uCSMSplitSpaceMat * worldPosition;
+
+    mat3 inverseTBN = transpose(TBN);
+    vPosInTangentSpace = inverseTBN * worldPosition.xyz;
+    vCameraPosInTangentSpace = inverseTBN * uCameraPosition;
 
     vec4 viewSpacePosition = uCameraViewMat * worldPosition;
 

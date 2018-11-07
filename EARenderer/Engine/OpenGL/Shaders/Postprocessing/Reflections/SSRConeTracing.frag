@@ -1,10 +1,14 @@
 #version 400 core
 
 #include "GBuffer.glsl"
+#include "Constants.glsl"
+#include "CookTorrance.glsl"
+#include "ColorSpace.glsl"
 
 // Output
 
-layout(location = 0) out vec4 oOutputColor;
+layout(location = 0) out vec4 oBaseOutput;
+layout(location = 1) out vec4 oBrightOutput;
 
 // Input
 
@@ -14,14 +18,11 @@ in vec2 vTexCoords;
 
 uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
 uniform sampler2D uGBufferHiZBuffer;
-uniform sampler2D uReflections;
+uniform sampler2D uReflections; // Source image
 uniform sampler2D uRayHitInfo;
 uniform int uMipCount;
 
-uniform vec2 uCameraNearFarPlanes;
 uniform vec3 uCameraPosition;
-uniform mat4 uCameraViewMat;
-uniform mat4 uCameraProjectionMat;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 
@@ -77,19 +78,13 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
-void main() {
-    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
-
-    float roughness     = gBuffer.roughness;
-
-    // Explicitly reading from 0 LOD because texture comes from a postprocess texture pool
-    // and is a subject to mipmapping
-    vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
+vec3 TraceCones(GBuffer gBuffer, vec4 rayHitInfo) {
 
     if (rayHitInfo.a == 0) {
-        oOutputColor = vec4(0.0, 0.0, 0.0, 1.0);
-        return;
+        return vec3(0.0);
     }
+
+    float roughness = gBuffer.roughness;
 
     float depth = textureLod(uGBufferHiZBuffer, vTexCoords, 0).r;
 
@@ -109,7 +104,7 @@ void main() {
     float adjacentLength = length(deltaP);
     vec2 adjacentUnit = normalize(deltaP);
 
-    vec4 totalColor = vec4(0.0);
+    vec4 totalReflectedColor = vec4(0.0);
     float remainingAlpha = 1.0f;
     float maxMipLevel = float(uMipCount) - 1.0f;
     float glossMult = gloss;
@@ -143,9 +138,9 @@ void main() {
             newColor.rgb *= (1.0f - abs(remainingAlpha));
         }
 
-        totalColor += newColor;
+        totalReflectedColor += newColor;
 
-        if(totalColor.a >= 1.0f) {
+        if(totalReflectedColor.a >= 1.0f) {
             break;
         }
 
@@ -153,5 +148,31 @@ void main() {
         glossMult *= gloss;
     }
 
-    oOutputColor = vec4(totalColor.rgb, 1.0);
+    return totalReflectedColor.rgb;
+}
+
+void main() {
+    vec4 rayHitInfo    = textureLod(uRayHitInfo, vTexCoords, 0);
+    GBuffer gBuffer    = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
+    vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
+    vec3 reflectedPointWorldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, rayHitInfo.xy, uCameraViewInverse, uCameraProjectionInverse);
+
+    // For analytical lights we compute Half-vector used in Fresnel calculations
+    // using to-light and to-viewer vectors, but for specular reflections
+    // to-light vector is replaced by the fragment's normal.
+    //
+    // !!! (This could probably be improved by storing and using reflected point's normal alongside reflection buffer) !!!
+    //
+    vec3 N = gBuffer.normal;
+    vec3 V = normalize(uCameraPosition - worldPosition);
+    vec3 L = normalize(reflectedPointWorldPosition - worldPosition);
+    vec3 H = normalize(L + V);
+    vec3 Ks = FresnelSchlick(V, H, gBuffer.albedo, gBuffer.metalness); // Reflected portion
+
+    vec3 sourceColor = textureLod(uReflections, vTexCoords, 0).rgb;
+    vec3 reflectedColor = TraceCones(gBuffer, rayHitInfo);
+    vec3 finalColor = (sourceColor + reflectedColor * Ks) * HDRNormalizationFactor; // Do not forget that input image was normalized by [1.0 / HDRNormalizationFactor]
+
+    oBaseOutput = vec4(finalColor, 1.0);
+    oBrightOutput = LuminanceFromRGB(finalColor) > 0.1 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 }

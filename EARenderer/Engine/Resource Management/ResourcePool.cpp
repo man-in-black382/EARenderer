@@ -29,6 +29,10 @@ namespace EARenderer {
         return mVAO;
     }
 
+    int32_t ResourcePool::totalVertexCount() const {
+        return mTotalVertexCount;
+    }
+
 #pragma mark -
 
     void ResourcePool::transferMeshesToGPU() {

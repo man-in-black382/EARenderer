@@ -33,9 +33,9 @@ namespace EARenderer {
             mSSRShader.setGBuffer(*GBuffer);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, rayHitInfo);
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, rayHitInfo);
 
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
 
     template <GLTexture::Float TextureFormat>
@@ -54,21 +54,25 @@ namespace EARenderer {
     }
 
     template <GLTexture::Float TextureFormat>
-    void ScreenSpaceReflectionEffect<TextureFormat>::traceCones(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> reflections,
+    void ScreenSpaceReflectionEffect<TextureFormat>::traceCones(const Camera& camera,
+                                                                std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> reflections,
                                                                 std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> rayHitInfo,
                                                                 std::shared_ptr<const SceneGBuffer> GBuffer,
-                                                                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage)
+                                                                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseOutputImage,
+                                                                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> brightOutputImage)
     {
         mConeTracingShader.bind();
+        mConeTracingShader.setCamera(camera);
         mConeTracingShader.ensureSamplerValidity([&]() {
             mConeTracingShader.setGBuffer(*GBuffer);
             mConeTracingShader.setRayHitInfo(*rayHitInfo);
             mConeTracingShader.setReflections(*reflections);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
+                                                           baseOutputImage, brightOutputImage);
 
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
 
 #pragma mark - Public Interface
@@ -77,13 +81,14 @@ namespace EARenderer {
     void ScreenSpaceReflectionEffect<TextureFormat>::applyReflections(const Camera& camera,
                                                                       std::shared_ptr<const SceneGBuffer> GBuffer,
                                                                       std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> lightBuffer,
-                                                                      std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage)
+                                                                      std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseOutputImage,
+                                                                      std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> brightOutputImage)
     {
         auto rayTracingInfo = this->mTexturePool->claim();
 
         traceReflections(camera, GBuffer, rayTracingInfo);
         blurProgressively(lightBuffer);
-        traceCones(lightBuffer, rayTracingInfo, GBuffer, outputImage);
+        traceCones(camera, lightBuffer, rayTracingInfo, GBuffer, baseOutputImage, brightOutputImage);
 
         this->mTexturePool->putBack(rayTracingInfo);
     }

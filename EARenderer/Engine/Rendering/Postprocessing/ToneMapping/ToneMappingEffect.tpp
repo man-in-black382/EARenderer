@@ -37,7 +37,7 @@ namespace EARenderer {
         });
         
         this->mFramebuffer->redirectRenderingToTextures(GLViewport(mLuminance.size()), &mLuminance);
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
     
     template <GLTexture::Float TextureFormat>
@@ -50,7 +50,7 @@ namespace EARenderer {
         for (size_t mipLevel = 0; mipLevel < mLuminance.mipMapCount(); mipLevel++) {
             mLuminanceRangeShader.setMipLevel(mipLevel);
             this->mFramebuffer->redirectRenderingToTexturesMip(mipLevel + 1, &mLuminance);
-            TriangleStripQuad::Draw();
+            Drawable::TriangleStripQuad::Draw();
         }
     }
     
@@ -66,7 +66,7 @@ namespace EARenderer {
         
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
-        Point::Draw(mLuminance.size().width * mLuminance.size().height);
+        Drawable::Point::Draw(mLuminance.size().width * mLuminance.size().height);
         glDisable(GL_BLEND);
     }
     
@@ -78,7 +78,7 @@ namespace EARenderer {
         });
         
         this->mFramebuffer->redirectRenderingToTextures(GLViewport(mExposure.size()), &mExposure);
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
     }
     
 #pragma mark - Public Interface
@@ -98,8 +98,8 @@ namespace EARenderer {
             mToneMappingShader.setExposure(mExposure);
         });
         
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, outputImage);
-        TriangleStripQuad::Draw();
+        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, outputImage);
+        Drawable::TriangleStripQuad::Draw();
     }
     
 }

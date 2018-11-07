@@ -9,7 +9,6 @@
 #ifndef Skybox_hpp
 #define Skybox_hpp
 
-#include "Drawable.hpp"
 #include "Vertex1P4.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLTexture2D.hpp"
@@ -18,7 +17,7 @@
 
 namespace EARenderer {
     
-    class Skybox: public Drawable {
+    class Skybox {
     private:
         std::unique_ptr<GLFloatTexture2D<GLTexture::Float::RGB16F>> mEquirectangularMap;
         
@@ -27,7 +26,7 @@ namespace EARenderer {
         
         const GLFloatTexture2D<GLTexture::Float::RGB16F>* equirectangularMap() const;
         
-        void draw() const override;
+        void draw() const;
     };
     
 }

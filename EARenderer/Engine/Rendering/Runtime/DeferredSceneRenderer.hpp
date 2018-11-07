@@ -37,10 +37,9 @@
 #include "IndirectLightAccumulator.hpp"
 
 #include "GLSLDepthPrepass.hpp"
-#include "GLSLDeferredCookTorrance.hpp"
+#include "GLSLDirectLightEvaluation.hpp"
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLSkybox.hpp"
-#include "GLSLLightComposer.hpp"
 
 #include "GLDepthTextureCubemap.hpp"
 #include "GLHDRTexture2DArray.hpp"
@@ -83,18 +82,13 @@ namespace EARenderer {
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLSkybox mSkyboxShader;
-        GLSLDeferredCookTorrance mCookTorranceShader;
-        GLSLLightComposer mLightComposingShader;
+        GLSLDirectLightEvaluation mCookTorranceShader;
 
         GLSLFullScreenQuad mFSQuadShader;
-
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mFrame;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mThresholdFilteredOutputFrame;
 
         void bindDefaultFramebuffer();
         void performDepthPrepass();
         void renderSkybox();
-        void composeLightBuffers(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> reflections);
         void renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image);
 
     public:
@@ -121,7 +115,7 @@ namespace EARenderer {
          @param debugClosure render any debug information needed inside this closure
          before the final frame is displayed
          */
-        void render(const DebugOpportunity& debugClosure = [](){});
+        void render(const DebugOpportunity& debugClosure = []{});
     };
 
 }

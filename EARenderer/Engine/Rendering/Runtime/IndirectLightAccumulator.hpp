@@ -14,12 +14,14 @@
 #include "DiffuseLightProbeData.hpp"
 #include "ShadowMapper.hpp"
 #include "RenderingSettings.hpp"
+#include "SceneGBuffer.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLTexture2D.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "GLSLSurfelLighting.hpp"
 #include "GLSLSurfelClusterAveraging.hpp"
 #include "GLSLGridLightProbesUpdate.hpp"
+#include "GLSLIndirectLightEvaluation.hpp"
 
 namespace EARenderer {
 
@@ -27,7 +29,8 @@ namespace EARenderer {
     private:
         const Scene *mScene = nullptr;
         RenderingSettings mSettings;
-        
+
+        std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;
         std::shared_ptr<const ShadowMapper> mShadowMapper;
@@ -35,6 +38,7 @@ namespace EARenderer {
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
         GLSLGridLightProbesUpdate mGridProbesUpdateShader;
+        GLSLIndirectLightEvaluation mLightEvaluationShader;
 
         GLFramebuffer mFramebuffer;
         std::shared_ptr<std::array<GLLDRTexture3D, 4>> mGridProbeSHMaps;
@@ -50,6 +54,7 @@ namespace EARenderer {
 
     public:
         IndirectLightAccumulator(const Scene *scene,
+                                 std::shared_ptr<const SceneGBuffer> gBuffer,
                                  std::shared_ptr<const SurfelData> surfelData,
                                  std::shared_ptr<const DiffuseLightProbeData> probeData,
                                  std::shared_ptr<const ShadowMapper> shadowMapper);
@@ -60,6 +65,7 @@ namespace EARenderer {
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
         std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
 
+        void updateProbes();
         void render();
     };
 

@@ -34,4 +34,6 @@
 
 + (EARenderer::ID)load_pavingStones10_MaterialToPool:(EARenderer::ResourcePool *)pool;
 
++ (EARenderer::ID)load_WetStones_MaterialToPool:(EARenderer::ResourcePool *)pool;
+
 @end

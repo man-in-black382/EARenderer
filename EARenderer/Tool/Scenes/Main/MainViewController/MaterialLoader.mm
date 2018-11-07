@@ -159,4 +159,16 @@
     });
 }
 
++ (EARenderer::ID)load_WetStones_MaterialToPool:(EARenderer::ResourcePool *)pool
+{
+    return pool->materials.insert({
+        [self pathForResource:@"T_stoneFloorA_wet_AL.tga"],
+        [self pathForResource:@"T_stoneFloorA_wet_NM.tga"],
+        [self pathForBlankBlackImage],
+        [self pathForResource:@"T_stoneFloorA_wet_RF.tga"],
+        [self pathForResource:@"T_stoneFloorA_wet_AO.tga"],
+        [self pathForResource:@"T_stoneFloorA_wet_DS.tif"]
+    });
+}
+
 @end

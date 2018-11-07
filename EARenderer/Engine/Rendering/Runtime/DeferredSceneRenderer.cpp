@@ -43,13 +43,9 @@ namespace EARenderer {
     mSurfelData(surfelData),
     mProbeData(diffuseProbeData),
     mShadowMapper(std::make_shared<ShadowMapper>(scene)),
-    mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper, mFramebuffer)),
-    mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, surfelData, diffuseProbeData, mShadowMapper)),
-    mGBuffer(GBuffer),
-
-    // Output frame
-    mFrame(mPostprocessTexturePool->claim()),
-    mThresholdFilteredOutputFrame(mPostprocessTexturePool->claim())
+    mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper)),
+    mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, GBuffer, surfelData, diffuseProbeData, mShadowMapper)),
+    mGBuffer(GBuffer)
     {
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -126,21 +122,6 @@ namespace EARenderer {
         mScene->skybox()->draw();
     }
 
-    void DeferredSceneRenderer::composeLightBuffers(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> reflections) {
-        mLightComposingShader.bind();
-        mLightComposingShader.ensureSamplerValidity([&]() {
-            mLightComposingShader.setCamera(*mScene->camera());
-            mLightComposingShader.setGBuffer(*mGBuffer);
-            mLightComposingShader.setLightBuffer(*mDirectLightAccumulator->lightBuffer());
-            mLightComposingShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
-            mLightComposingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-            mLightComposingShader.setGridProbesSHTextures(*mIndirectLightAccumulator->gridProbesSphericalHarmonics());
-            mLightComposingShader.setReflections(*reflections);
-        });
-
-        TriangleStripQuad::Draw();
-    }
-
     void DeferredSceneRenderer::renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
@@ -151,7 +132,7 @@ namespace EARenderer {
             mFSQuadShader.setTexture(*image);
         });
 
-        TriangleStripQuad::Draw();
+        Drawable::TriangleStripQuad::Draw();
         glEnable(GL_DEPTH_TEST);
     }
 
@@ -160,7 +141,7 @@ namespace EARenderer {
     void DeferredSceneRenderer::render(const DebugOpportunity& debugClosure) {
 
         mShadowMapper->render();
-        mIndirectLightAccumulator->render();
+        mIndirectLightAccumulator->updateProbes();
 
         // We're using depth buffer rendered during gbuffer construction.
         // Depth writes are disabled for the purpose of combining skybox
@@ -172,34 +153,48 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
+        auto lightAccumulationTarget = mPostprocessTexturePool->claim();
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, lightAccumulationTarget);
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+        glDisable(GL_DEPTH_TEST);
+
         mDirectLightAccumulator->render();
+        mIndirectLightAccumulator->render();
+
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+
         renderSkybox();
 
-        auto reflectionsOutputTexture = mPostprocessTexturePool->claim();
-        mSSREffect.applyReflections(*mScene->camera(), mGBuffer, mDirectLightAccumulator->lightBuffer(), reflectionsOutputTexture);
+        auto ssrBaseOutputTexture = mPostprocessTexturePool->claim(); // Frame with reflections applied
+        auto ssrBrightOutputTexture = mPostprocessTexturePool->claim(); // Frame filtered by luminocity threshold and suitable for bloom effect
 
-        mFramebuffer->redirectRenderingToTexturesMip(0, mFrame, mThresholdFilteredOutputFrame);
-        composeLightBuffers(reflectionsOutputTexture);
+        mSSREffect.applyReflections(*mScene->camera(),
+                                    mGBuffer,
+                                    lightAccumulationTarget,
+                                    ssrBaseOutputTexture,
+                                    ssrBrightOutputTexture);
 
-        // Postprocessing
-        auto bloomOutputTexture = mPostprocessTexturePool->claim();
-        mBloomEffect.bloom(mFrame, mThresholdFilteredOutputFrame, bloomOutputTexture, mSettings.bloomSettings);
+        auto bloomOutputTexture = lightAccumulationTarget;
+        mBloomEffect.bloom(ssrBaseOutputTexture, ssrBrightOutputTexture, bloomOutputTexture, mSettings.bloomSettings);
 
         glDepthMask(GL_TRUE);
 
         debugClosure();
 
-        auto toneMappingOutputTexture = mPostprocessTexturePool->claim();
+        auto toneMappingOutputTexture = ssrBaseOutputTexture;
         mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
 
-        auto smaaOutputTexture = bloomOutputTexture;
+        auto smaaOutputTexture = ssrBrightOutputTexture;
         mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
 
         renderFinalImage(smaaOutputTexture);
 
-        mPostprocessTexturePool->putBack(reflectionsOutputTexture);
-        mPostprocessTexturePool->putBack(bloomOutputTexture);
-        mPostprocessTexturePool->putBack(toneMappingOutputTexture);
+        mPostprocessTexturePool->putBack(lightAccumulationTarget);
+        mPostprocessTexturePool->putBack(ssrBaseOutputTexture);
+        mPostprocessTexturePool->putBack(ssrBrightOutputTexture);
     }
 
 }

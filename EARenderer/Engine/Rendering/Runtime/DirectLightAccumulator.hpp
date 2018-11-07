@@ -14,7 +14,7 @@
 #include "Scene.hpp"
 #include "ShadowMapper.hpp"
 #include "GLFramebuffer.hpp"
-#include "GLSLDeferredCookTorrance.hpp"
+#include "GLSLDirectLightEvaluation.hpp"
 
 #include <memory>
 
@@ -23,11 +23,9 @@ namespace EARenderer {
     class DirectLightAccumulator {
     private:
         const Scene *mScene = nullptr;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> mLightBuffer;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<const ShadowMapper> mShadowMapper;
-        std::shared_ptr<GLFramebuffer> mFramebuffer;
-        GLSLDeferredCookTorrance mCookTorranceShader;
+        GLSLDirectLightEvaluation mCookTorranceShader;
         RenderingSettings mSettings;
 
         void renderDirectionalLights();
@@ -36,13 +34,10 @@ namespace EARenderer {
     public:
         DirectLightAccumulator(const Scene *scene,
                                std::shared_ptr<const SceneGBuffer> gBuffer,
-                               std::shared_ptr<const ShadowMapper> shadowMapper,
-                               std::shared_ptr<GLFramebuffer> framebuffer);
+                               std::shared_ptr<const ShadowMapper> shadowMapper);
 
         void setRenderingSettings(const RenderingSettings& settings);
 
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::RGBA16F>> lightBuffer();
-        
         void render();
     };
 

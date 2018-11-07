@@ -22,6 +22,7 @@ namespace EARenderer {
 
         GLSLConeTracing();
 
+        void setCamera(const Camera& camera);
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& reflections);
         void setRayHitInfo(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& rayHitInfo);
