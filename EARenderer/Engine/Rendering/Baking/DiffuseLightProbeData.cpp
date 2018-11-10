@@ -33,16 +33,22 @@ namespace EARenderer {
         }
 
         // Transfer surfel cluster projection group offsets, sizes and probe positions to the GPU via buffer texture
+        std::vector<SphericalHarmonics> skySHs;
         std::vector<uint32_t> metadata;
         std::vector<glm::vec3> positions;
+
         for (auto& probe : mProbes) {
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
             metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupSize);
             positions.push_back(probe.position);
+            skySHs.push_back(probe.skySphericalHarmonics);
         }
 
         mProjectionClusterSHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
         mProjectionClusterSHsBufferTexture->buffer().initialize(shs);
+
+        mSkySHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
+        mSkySHsBufferTexture->buffer().initialize(skySHs);
 
         mProjectionClusterIndicesBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
         mProjectionClusterIndicesBufferTexture->buffer().initialize(indices);
@@ -103,6 +109,10 @@ namespace EARenderer {
 
     std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> DiffuseLightProbeData::projectionClusterSHsBufferTexture() const {
         return mProjectionClusterSHsBufferTexture;
+    }
+
+    std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> DiffuseLightProbeData::skySHsBufferTexture() const {
+        return mSkySHsBufferTexture;
     }
 
     std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> DiffuseLightProbeData::projectionClusterIndicesBufferTexture() const {

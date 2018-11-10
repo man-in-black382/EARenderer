@@ -50,16 +50,8 @@ vec3 Uncharted2Tonemap(vec3 x)
             / (x * (ShoulderStrength * x + LinearStrength) + ToeStrength * ToeDenominator)) - ToeNumerator / ToeDenominator;
 }
 
-vec3 ReinhardToneMap(vec3 color) {
-    return color / (color + vec3(1.0));
-}
-
-vec3 GammaCorrect(vec3 color) {
-    return pow(color, vec3(1.0 / 2.2));
-}
-
 void main() {
-    float exposure = texelFetch(uExposure, ivec2(0), 0).r;
+//    float exposure = texelFetch(uExposure, ivec2(0), 0).r;
 
     vec3 color = textureLod(uImage, vTexCoords, 0).rgb;
     color *= 0.004;//exposure;  // Exposure Adjustment
@@ -71,7 +63,6 @@ void main() {
 
     vec3 whiteScale = 1.0f / Uncharted2Tonemap(vec3(LinearWhitePoint));
     color *= whiteScale;
-    color = GammaCorrect(color);
 
     oFragColor = vec4(color, 1.0);
 }

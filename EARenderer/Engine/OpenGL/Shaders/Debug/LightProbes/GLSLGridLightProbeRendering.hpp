@@ -12,6 +12,7 @@
 #include "GLProgram.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "Camera.hpp"
+#include "SphericalHarmonics.hpp"
 
 namespace EARenderer {
 

@@ -35,6 +35,8 @@ namespace EARenderer {
 
         void projectSurfelClustersOnProbe(DiffuseLightProbe& probe);
 
+        void projectSkyOnProbe(DiffuseLightProbe& probe);
+
     public:
         std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData);
     };

@@ -23,8 +23,10 @@ namespace EARenderer {
         void setProbesGridResolution(const glm::ivec3& resolution);
         void setSurfelClustersLuminaceMap(const GLFloatTexture2D<GLTexture::Float::R16F>& luminanceMap);
         void setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH);
+        void setSkySphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics>& SH);
         void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
         void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);
+        void setSkyColorSphericalHarmonics(const SphericalHarmonics& skyColorSH);
     };
 
 }

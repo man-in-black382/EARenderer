@@ -104,6 +104,14 @@ namespace EARenderer {
     }
 
     void IndirectLightAccumulator::updateGridProbes() {
+        float weight = 2.0 * M_PI;
+        Color color = mSettings.meshSettings.skyColor.YCoCg();
+        
+        SphericalHarmonics sh;
+        sh.contribute(glm::vec3(1.0, 0.0, 0.0), color, weight);
+        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), color, weight);
+        sh.convolve();
+        
         GLViewport viewport(Size2D(mProbeData->gridResolution().x, mProbeData->gridResolution().y));
         mFramebuffer.redirectRenderingToTextures(viewport,
                                                  GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
@@ -115,7 +123,9 @@ namespace EARenderer {
             mGridProbesUpdateShader.setProjectionClusterIndices(*mProbeData->projectionClusterIndicesBufferTexture());
             mGridProbesUpdateShader.setProjectionClusterSphericalHarmonics(*mProbeData->projectionClusterSHsBufferTexture());
             mGridProbesUpdateShader.setSurfelClustersLuminaceMap(*mSurfelClustersLuminanceMap);
+            mGridProbesUpdateShader.setSkySphericalHarmonics(*mProbeData->skySHsBufferTexture());
             mGridProbesUpdateShader.setProbesGridResolution(mProbeData->gridResolution());
+            mGridProbesUpdateShader.setSkyColorSphericalHarmonics(sh);
         });
 
         Drawable::TriangleStripQuad::Draw(mProbeData->gridResolution().z);

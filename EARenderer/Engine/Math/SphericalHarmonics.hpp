@@ -69,8 +69,7 @@ namespace EARenderer {
         const glm::vec3& L22() const;
 
         void convolve();
-        void normalize();
-
+        
         float magnitude() const;
         float magnitude2() const;
 

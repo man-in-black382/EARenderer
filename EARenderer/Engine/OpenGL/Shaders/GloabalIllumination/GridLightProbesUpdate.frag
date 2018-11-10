@@ -3,6 +3,7 @@
 #include "Packing.glsl"
 #include "SphericalHarmonics.glsl"
 #include "ColorSpace.glsl"
+#include "Constants.glsl"
 
 // Output
 
@@ -21,10 +22,11 @@ in float vLayer;
 uniform ivec3 uProbesGridResolution;
 
 uniform samplerBuffer uProjectionClusterSphericalHarmonics;
+uniform samplerBuffer uSkySphericalHarmonics;
 uniform usamplerBuffer uProjectionClusterIndices;
 uniform usamplerBuffer uProbeProjectionsMetadata;
-
 uniform sampler2D uSurfelClustersLuminanceMap;
+uniform SH uSkyColorSphericalHarmonics;
 
 // Functions
 
@@ -48,20 +50,20 @@ float MaxSHCoefficient(SH sh) {
 // Unpacks spherical harmonics coefficients
 // from the corresponding sample buffer
 //
-SH UnpackSH(int surfelClusterIndex) {
+SH UnpackSH(samplerBuffer buffer, int index) {
     SH sh;
 
-    surfelClusterIndex *= 9;
+    index *= 9;
 
-    sh.L00  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 0).rgb);
-    sh.L11  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 1).rgb);
-    sh.L10  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 2).rgb);
-    sh.L1_1 = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 3).rgb);
-    sh.L21  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 4).rgb);
-    sh.L2_1 = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 5).rgb);
-    sh.L2_2 = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 6).rgb);
-    sh.L20  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 7).rgb);
-    sh.L22  = vec3(texelFetch(uProjectionClusterSphericalHarmonics, surfelClusterIndex + 8).rgb);
+    sh.L00  = vec3(texelFetch(buffer, index + 0).rgb);
+    sh.L11  = vec3(texelFetch(buffer, index + 1).rgb);
+    sh.L10  = vec3(texelFetch(buffer, index + 2).rgb);
+    sh.L1_1 = vec3(texelFetch(buffer, index + 3).rgb);
+    sh.L21  = vec3(texelFetch(buffer, index + 4).rgb);
+    sh.L2_1 = vec3(texelFetch(buffer, index + 5).rgb);
+    sh.L2_2 = vec3(texelFetch(buffer, index + 6).rgb);
+    sh.L20  = vec3(texelFetch(buffer, index + 7).rgb);
+    sh.L22  = vec3(texelFetch(buffer, index + 8).rgb);
 
     return sh;
 }
@@ -121,7 +123,8 @@ int FlattenTexCoords() {
 // – Add the product of the SH and the luminance to the result SHs.
 //
 void main() {
-    int metadataIndex = FlattenTexCoords() * 2; // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
+    int probeIndex = FlattenTexCoords();
+    int metadataIndex = probeIndex * 2; // Data in uProbeProjectionsMetadata is represented by sequence of offset-length pairs
 
     uint projectionGroupOffset = texelFetch(uProbeProjectionsMetadata, metadataIndex).r;
     uint projectionGroupSize = texelFetch(uProbeProjectionsMetadata, metadataIndex + 1).r;
@@ -139,20 +142,17 @@ void main() {
 
         float surfelClusterLuminance = texelFetch(uSurfelClustersLuminanceMap, luminanceUV, 0).r;
 
-        // DEBUG
-//        if (surfelClusterLuminance < 0.001) {
-//            PackSHToRenderTargets(DebugSH());
-//            return;
-//        } else {
-//            surfelClusterLuminance = 0.0;
-//        }
-        // DEBUG END
-
-        SH surfelClusterPrecomputedSH = UnpackSH(int(i));
+        SH surfelClusterPrecomputedSH = UnpackSH(uProjectionClusterSphericalHarmonics, int(i));
         SH luminanceSH = ScaleSH(surfelClusterPrecomputedSH, vec3(surfelClusterLuminance));
 
         resultingSH = Sum2SH(resultingSH, luminanceSH);
     }
+
+    // Update and add sky light
+    SH skySH = UnpackSH(uSkySphericalHarmonics, probeIndex);
+    skySH = SHProduct(skySH, uSkyColorSphericalHarmonics);
+
+    resultingSH = Sum2SH(resultingSH, skySH);
 
     PackSHToRenderTargets(resultingSH);
 }

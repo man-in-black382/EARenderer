@@ -197,7 +197,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.33);
+    scene->setDiffuseProbeSpacing(0.30);
     scene->setSurfelSpacing(0.05);
 
     scene->camera()->moveTo(glm::vec3(0.0, -0.5, 0.0));

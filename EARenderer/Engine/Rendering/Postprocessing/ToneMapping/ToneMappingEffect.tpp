@@ -95,7 +95,7 @@ namespace EARenderer {
         mToneMappingShader.bind();
         mToneMappingShader.ensureSamplerValidity([&]() {
             mToneMappingShader.setImage(*inputImage);
-            mToneMappingShader.setExposure(mExposure);
+//            mToneMappingShader.setExposure(mExposure);
         });
         
         this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, outputImage);

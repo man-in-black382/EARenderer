@@ -13,27 +13,26 @@
 #include "GaussianBlurSettings.hpp"
 #include "BloomSettings.hpp"
 #include "Size2D.hpp"
+#include "Color.hpp"
 
 namespace EARenderer {
 
     struct RenderingSettings {
 
         struct Mesh {
-            enum class SphericalHarmonicsCompression { Uncompressed, Compressed322, Compressed311 };
-
             bool materialsEnabled = true;
             bool globalIlluminationEnabled = true;
             bool lightMultibounceEnabled = true;
             bool meshRenderingEnabled = true;
             bool parallaxMappingEnabled = true;
 
-            SphericalHarmonicsCompression SHCompression = SphericalHarmonicsCompression::Compressed311;
-
             float parallaxMappingStrength = 0.05;
 
             uint32_t shadowCascadesCount = 4;
             float ESMFactor = 80.0;
             GaussianBlurSettings shadowBlur { 8, 8 };
+            
+            Color skyColor = Color(0.0, 0.0623, 0.1);
 
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;

@@ -32,6 +32,7 @@ namespace EARenderer {
         glm::ivec3 mGridResolution;
 
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
+        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mSkySHsBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mProbePositionsBufferTexture;
@@ -50,6 +51,8 @@ namespace EARenderer {
         const glm::ivec3& gridResolution() const;
 
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> projectionClusterSHsBufferTexture() const;
+
+        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> skySHsBufferTexture() const;
 
         std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> projectionClusterIndicesBufferTexture() const;
 

@@ -18,3 +18,7 @@ float LuminanceFromRGB(vec3 rgb) {
     vec3 factors = vec3(0.2126, 0.7152, 0.0722);
     return dot(rgb, factors);
 }
+
+vec3 SRGB_From_RGB(vec3 rgb) {
+    return pow(rgb, vec3(1.0 / 2.2));
+}

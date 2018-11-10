@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "ColorSpace.glsl"
+
 uniform sampler2D uTexture;
 uniform sampler2DArray uTextureArray;
 uniform sampler3D uTexture3D;
@@ -32,4 +34,6 @@ void main()
     if (uShouldApplyToneMapping) {
         oFragColor = vec4(ReinhardToneMap(oFragColor.rgb), oFragColor.a);
     }
+
+    oFragColor = vec4(SRGB_From_RGB(oFragColor.rgb), 1.0);
 }
