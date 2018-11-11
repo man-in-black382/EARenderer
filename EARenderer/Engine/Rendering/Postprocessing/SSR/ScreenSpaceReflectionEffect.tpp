@@ -33,7 +33,7 @@ namespace EARenderer {
             mSSRShader.setGBuffer(*GBuffer);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, rayHitInfo);
+        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, rayHitInfo);
 
         Drawable::TriangleStripQuad::Draw();
     }
@@ -68,9 +68,8 @@ namespace EARenderer {
             mConeTracingShader.setRayHitInfo(*rayHitInfo);
             mConeTracingShader.setReflections(*reflections);
         });
-
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
-                                                           baseOutputImage, brightOutputImage);
+        
+        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, baseOutputImage, brightOutputImage);
 
         Drawable::TriangleStripQuad::Draw();
     }

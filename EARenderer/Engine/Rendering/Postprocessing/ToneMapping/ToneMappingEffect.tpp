@@ -98,7 +98,7 @@ namespace EARenderer {
 //            mToneMappingShader.setExposure(mExposure);
         });
         
-        this->mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, outputImage);
+        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, outputImage);
         Drawable::TriangleStripQuad::Draw();
     }
     
