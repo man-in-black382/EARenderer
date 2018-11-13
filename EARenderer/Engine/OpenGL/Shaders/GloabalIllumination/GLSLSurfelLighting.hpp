@@ -11,7 +11,7 @@
 
 #include "GLProgram.hpp"
 #include "GLDepthTexture2DArray.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
 #include "GLTexture2D.hpp"
@@ -28,7 +28,7 @@ namespace EARenderer {
 
         void setLight(const PointLight& light);
         void setLight(const DirectionalLight& light);
-        void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
+        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer);
         void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);

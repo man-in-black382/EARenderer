@@ -12,7 +12,7 @@
 #include "Scene.hpp"
 #include "GLFramebuffer.hpp"
 #include "GLDepthRenderbuffer.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "GLSLGBuffer.hpp"
 #include "GLSLHiZBuffer.hpp"
 #include "RenderingSettings.hpp"

@@ -43,7 +43,7 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelLuminances")>, surfelLuminances);
     }
 
-    void GLSLSurfelRendering::setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer) {
+    void GLSLSurfelRendering::setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
     }
 

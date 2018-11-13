@@ -12,7 +12,7 @@
 #include "Surfel.hpp"
 #include "SurfelCluster.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "GLBufferTexture.hpp"
 
 #include <vector>
@@ -29,7 +29,7 @@ namespace EARenderer {
         std::vector<Surfel> mSurfels;
         std::vector<SurfelCluster> mSurfelClusters;
 
-        std::shared_ptr<GLHDRTexture2DArray> mSurfelsGBuffer;
+        std::shared_ptr<GLFloatTexture2DArray<GLTexture::Float::RGB32F>> mSurfelsGBuffer;
         std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::R32UI>> mSurfelClustersGBuffer;
         std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mSurfelClusterCentersBufferTexture;
 
@@ -44,7 +44,7 @@ namespace EARenderer {
 
         const std::vector<SurfelCluster>& surfelClusters() const;
 
-        std::shared_ptr<GLHDRTexture2DArray> surfelsGBuffer() const;
+        std::shared_ptr<GLFloatTexture2DArray<GLTexture::Float::RGB32F>> surfelsGBuffer() const;
 
         std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::R32UI>> surfelClustersGBuffer() const;
 

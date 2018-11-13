@@ -11,7 +11,7 @@
 
 #include "GLSLGenericGeometry.hpp"
 #include "Color.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -25,7 +25,7 @@ namespace EARenderer {
         void setExternalColor(const Color& externalColor);
         void setSurfelGroupOffset(int32_t surfelGroupOffset);
         void setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F>& surfelLuminances);
-        void setSurfelsGBuffer(const GLHDRTexture2DArray& gBuffer);
+        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer);
     };
     
 }

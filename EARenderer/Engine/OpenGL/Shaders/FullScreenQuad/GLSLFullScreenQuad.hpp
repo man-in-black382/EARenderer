@@ -30,7 +30,6 @@ namespace EARenderer {
             glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSample3DTexture")>).location(), GL_FALSE);
         }
         
-        void setTexture(const GLTexture2DArray& texture, uint8_t index);
         void setTexture(const GLTexture3D& texture, float depth);
         void setApplyToneMapping(bool toneMap);
     };

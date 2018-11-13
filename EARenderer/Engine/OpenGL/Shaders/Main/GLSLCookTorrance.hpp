@@ -15,7 +15,7 @@
 #include "GLTexture2D.hpp"
 
 #include "GLHDRTextureCubemap.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "GLLDRTextureCubemap.hpp"

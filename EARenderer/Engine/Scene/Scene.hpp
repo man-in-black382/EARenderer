@@ -26,7 +26,7 @@
 #include "MeshTriangleRef.hpp"
 #include "SurfelClusterProjection.hpp"
 #include "EmbreeRayTracer.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 
 #include <vector>
 #include <list>

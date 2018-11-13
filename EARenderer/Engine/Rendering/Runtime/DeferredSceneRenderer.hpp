@@ -42,7 +42,7 @@
 #include "GLSLSkybox.hpp"
 
 #include "GLDepthTextureCubemap.hpp"
-#include "GLHDRTexture2DArray.hpp"
+#include "GLTexture2DArray.hpp"
 #include "GLDepthTexture2DArray.hpp"
 
 #include "GLHDRTextureCubemap.hpp"
