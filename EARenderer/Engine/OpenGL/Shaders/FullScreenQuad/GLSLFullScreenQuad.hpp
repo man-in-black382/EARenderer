@@ -13,7 +13,6 @@
 #include "GLTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLTexture3D.hpp"
-#include "GLDepthTexture2DArray.hpp"
 
 namespace EARenderer {
     
@@ -27,6 +26,14 @@ namespace EARenderer {
         void setTexture(const GLTexture2D<TextureFormat, Format>& texture) {
             setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
             glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_FALSE);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSample3DTexture")>).location(), GL_FALSE);
+        }
+        
+        template<class TextureFormat, TextureFormat Format>
+        void setTexture(const GLTexture2DArray<TextureFormat, Format>& texture, size_t layer) {
+            setUniformTexture(uint32_constant<ctcrc32("uTextureArray")>, texture);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uIndex")>).location(), (GLint)layer);
+            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSampleArray")>).location(), GL_TRUE);
             glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uShouldSample3DTexture")>).location(), GL_FALSE);
         }
         

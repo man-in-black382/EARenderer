@@ -17,8 +17,11 @@ namespace EARenderer {
         attachTextures(mipLevel, *textures...);
         activateDrawBuffers(*textures...);
         viewport.apply();
-        using type = std::underlying_type<UnderlyingBuffer>::type;
-        glClear(static_cast<type>(UnderlyingBuffer::Color) | static_cast<type>(UnderlyingBuffer::Depth));
+        
+        if (buffersToClear != UnderlyingBuffer::None) {
+            using type = std::underlying_type<UnderlyingBuffer>::type;
+            glClear(static_cast<type>(buffersToClear));
+        }
     }
 
     template<class... TexturePtrs>
@@ -66,6 +69,15 @@ namespace EARenderer {
 
     template<class Format, Format F>
     void GLFramebuffer::attachTexture(const GLTextureCubemapArray<Format, F>& texture,
+                                      uint16_t mipLevel,
+                                      int16_t layer,
+                                      ColorAttachment colorAttachment)
+    {
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
+    }
+    
+    template<class Format, Format F>
+    void GLFramebuffer::attachTexture(const GLTexture2DArray<Format, F>& texture,
                                       uint16_t mipLevel,
                                       int16_t layer,
                                       ColorAttachment colorAttachment)

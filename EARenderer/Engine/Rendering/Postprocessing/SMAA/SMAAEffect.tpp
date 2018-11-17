@@ -36,7 +36,7 @@ namespace EARenderer {
             mEdgeDetectionShader.setImage(*image);
         });
 
-        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &mEdgesTexture);
+        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, &mEdgesTexture);
         Drawable::TriangleStripQuad::Draw();
     }
 
@@ -49,7 +49,7 @@ namespace EARenderer {
             mBlendingWeightCalculationShader.setSearchTexture(mSearchTexture);
         });
 
-        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &mBlendTexture);
+        this->mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, &mBlendTexture);
         Drawable::TriangleStripQuad::Draw();
     }
 

@@ -22,7 +22,7 @@ namespace EARenderer {
         void initialize(const Size2D& size, size_t depth, Filter filter, WrapMode wrapMode, GLint internalFormat);
         void initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
                         const std::vector<void *> pixelData);
-
+    
     public:
         GLTexture3D();
         virtual ~GLTexture3D() = 0;

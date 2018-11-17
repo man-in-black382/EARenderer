@@ -13,22 +13,21 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ShadowMapper::ShadowMapper(const Scene *scene)
+    ShadowMapper::ShadowMapper(const Scene *scene, uint8_t cascadeCount)
     :
     mScene(scene),
-    mDepthRenderbuffer(Size2D(2048)),
-    mDirectionalShadowMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::RGBA32F>>(Size2D(2048))),
-    mOmnidirectionalShadowMaps(std::make_shared<GLFloatTextureCubemapArray<GLTexture::Float::R32F>>(Size2D(1024), 3)),
-    mFramebuffer(std::make_shared<GLFramebuffer>(Size2D(2048))),
-    mTexturePool(std::make_shared<PostprocessTexturePool<GLTexture::Float::RGBA32F>>(Size2D(2048))),
-    mBlurEffect(mFramebuffer, mTexturePool)
+    mCascadeCount(cascadeCount),
+    mFramebuffer(std::make_shared<GLFramebuffer>(Size2D(3072))),
+    mDirectionalShadowMapArray(std::make_shared<GLDepthTexture2DArray>(mFramebuffer->size(),
+                                                                       std::min(cascadeCount, MaximumCascadeCount),
+                                                                       GLTexture::ComparisonMode::ReferenceToTexture))
     {
-        if (scene->pointLights().size() > 0) {
-            mOmnidirectionalShadowMaps = std::make_shared<GLFloatTextureCubemapArray<GLTexture::Float::R32F>>(Size2D(512), scene->pointLights().size());
-        }
-
-        mFramebuffer->attachRenderbuffer(mDepthRenderbuffer);
-
+//        if (scene->pointLights().size() > 0) {
+//            mOmnidirectionalShadowMaps = std::make_shared<GLFloatTextureCubemapArray<GLTexture::Float::R32F>>(Size2D(512), scene->pointLights().size());
+//        }
+        
+        mFramebuffer->attachDepthTexture(*mDirectionalShadowMapArray);
+        
         size_t index = 0;
         for (ID pointLightID : scene->pointLights()) {
             mPointLightIDToArrayIndexMap[pointLightID] = index;
@@ -55,64 +54,44 @@ namespace EARenderer {
         }
         return it->second;
     }
-
-    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::RGBA32F>> ShadowMapper::directionalShadowMap() const {
-        return mDirectionalShadowMap;
-    }
-
-    std::shared_ptr<const GLFloatTextureCubemapArray<GLTexture::Float::R32F>> ShadowMapper::omnidirectionalShadowMaps() const {
-        return mOmnidirectionalShadowMaps;
+    
+    std::shared_ptr<const GLDepthTexture2DArray> ShadowMapper::directionalShadowMapArray() const {
+        return mDirectionalShadowMapArray;
     }
 
 #pragma mark - Private Helpers
 
     void ShadowMapper::renderDirectionalShadowMaps() {
-        auto renderTarget = mTexturePool->claim();
-        mFramebuffer->redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, renderTarget);
-
-        mDirectionalSMShader.bind();
-        mDirectionalSMShader.setESMFactor(mSettings.meshSettings.ESMFactor);
-
-        for (size_t cascade = 0; cascade < mShadowCascades.amount; cascade++) {
-            // Ensure only one texture channel will be written to for each respective cascade
-            glColorMask(cascade == 0, cascade == 1, cascade == 2, cascade == 3);
-
-            mDirectionalSMShader.setLightMatrix(mShadowCascades.lightViewProjections[cascade]);
-
-            for (ID meshInstanceID : mScene->meshInstances()) {
-                auto& instance = mScene->meshInstances()[meshInstanceID];
-                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
-
-                mDirectionalSMShader.setModelMatrix(instance.transformation().modelMatrix());
-
-                for (ID subMeshID : subMeshes) {
-                    auto& subMesh = subMeshes[subMeshID];
-                    subMesh.draw();
-                }
+        mDirectionalShadowMapShader.bind();
+        mDirectionalShadowMapShader.setCascades(mShadowCascades);
+        
+        mFramebuffer->bind();
+        mFramebuffer->viewport().apply();
+        mFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
+        
+        for (ID meshInstanceID : mScene->meshInstances()) {
+            auto& instance = mScene->meshInstances()[meshInstanceID];
+            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            
+            mDirectionalShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
+            
+            for (ID subMeshID : subMeshes) {
+                auto& subMesh = subMeshes[subMeshID];
+                subMesh.drawInstanced(mShadowCascades.amount);
             }
-
-            // Prepare depth buffer for the next cascade rendering
-            mFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
         }
-
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-
-        mBlurEffect.blur(renderTarget, mDirectionalShadowMap, mSettings.meshSettings.shadowBlur);
-
-        mTexturePool->putBack(renderTarget);
     }
-
+    
     void ShadowMapper::renderOmnidirectionalShadowMaps() {
-
+        
     }
 
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
         ResourcePool::shared().VAO().bind();
-        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), 1);
+        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
         renderDirectionalShadowMaps();
-        renderOmnidirectionalShadowMaps();
     }
 
 }

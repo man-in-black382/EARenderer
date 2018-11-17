@@ -23,7 +23,11 @@ namespace EARenderer {
     class GLTexture: public GLNamedObject, public GLBindable {
     public:
         enum class Filter { None, Bilinear, Trilinear, Anisotropic };
+        
         enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
+        
+        // https://www.khronos.org/opengl/wiki/Sampler_Object#Comparison_mode
+        enum class ComparisonMode { None, ReferenceToTexture };
 
         enum class Normalized {
             R, RG, RGB, RGBA,
@@ -55,6 +59,7 @@ namespace EARenderer {
 
         void setFilter(Filter filter);
         void setWrapMode(WrapMode wrapMode);
+        void setComparisonMode(ComparisonMode comparisonMode);
 
         GLTextureFormat glFormat(Normalized format);
         GLTextureFormat glFormat(Integer format);

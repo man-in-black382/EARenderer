@@ -43,7 +43,7 @@ namespace EARenderer {
     // Helpers
     mSurfelData(surfelData),
     mProbeData(diffuseProbeData),
-    mShadowMapper(std::make_shared<ShadowMapper>(scene)),
+    mShadowMapper(std::make_shared<ShadowMapper>(scene, 1)),
     mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper)),
     mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, GBuffer, surfelData, diffuseProbeData, mShadowMapper)),
     mGBuffer(GBuffer)
@@ -141,7 +141,12 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::render(const DebugOpportunity& debugClosure) {
 
-        mShadowMapper->render();
+        glFinish();
+        Measurement::ExecutionTime("Shadow mapping took", [&]{
+            mShadowMapper->render();
+            glFinish();
+        });
+        
         mIndirectLightAccumulator->updateProbes();
 
         // We're using depth buffer rendered during gbuffer construction.
@@ -190,9 +195,22 @@ namespace EARenderer {
 
         auto smaaOutputTexture = ssrBrightOutputTexture;
         mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
+        
+//        // DEBUG
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//        mFSQuadShader.ensureSamplerValidity([&]() {
+//            mFSQuadShader.setTexture(mSMAAEffect.mEdgesTexture);
+//        });
+//
+//        Drawable::TriangleStripQuad::Draw();
+//        glEnable(GL_DEPTH_TEST);
+//        // DEBUG
 
         renderFinalImage(smaaOutputTexture);
-
+        
         mPostprocessTexturePool->putBack(lightAccumulationTarget);
         mPostprocessTexturePool->putBack(ssrBaseOutputTexture);
         mPostprocessTexturePool->putBack(ssrBrightOutputTexture);

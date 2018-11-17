@@ -109,11 +109,12 @@ namespace EARenderer {
     
     class GLDepthTexture2DArray: public GLTexture2DArray<GLTexture::Depth, GLTexture::Depth::Default> {
     public:
-        GLDepthTexture2DArray(const Size2D& size, size_t count) {
+        GLDepthTexture2DArray(const Size2D& size, size_t count, ComparisonMode comparisonMode = ComparisonMode::None) {
             initialize(size, count, { }, Filter::Bilinear, WrapMode::ClampToBorder);
             // Prevent oversampling by supplying 1.0 depth values when texture is sampled beyond [0.0; 1.0] range
             GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
             glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+            setComparisonMode(comparisonMode);
         }
         
         ~GLDepthTexture2DArray() = default;

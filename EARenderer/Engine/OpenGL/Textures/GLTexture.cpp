@@ -54,7 +54,7 @@ namespace EARenderer {
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 8.0f));
                 break;
         }
-
+        
         glTexParameteri(mBindingPoint, GL_TEXTURE_MIN_FILTER, glMinFilter);
         glTexParameteri(mBindingPoint, GL_TEXTURE_MAG_FILTER, glMagFilter);
     }
@@ -67,10 +67,22 @@ namespace EARenderer {
             case WrapMode::ClampToEdge: wrap = GL_CLAMP_TO_EDGE; break;
             case WrapMode::ClampToBorder: wrap = GL_CLAMP_TO_BORDER; break;
         }
-
+        
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_S, wrap);
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_T, wrap);
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
+    }
+    
+    void GLTexture::setComparisonMode(ComparisonMode comparisonMode) {
+        switch (comparisonMode) {
+            case ComparisonMode::None:
+                glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+                break;
+            case ComparisonMode::ReferenceToTexture:
+                glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+                glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+                break;
+        }
     }
 
     GLTextureFormat GLTexture::glFormat(Normalized format) {
@@ -79,10 +91,10 @@ namespace EARenderer {
             case Normalized::RGCompressedRGBAInput:    return { GL_COMPRESSED_RG,   GL_RGBA, GL_UNSIGNED_BYTE };
             case Normalized::RGBCompressedRGBAInput:   return { GL_COMPRESSED_RGB,  GL_RGBA, GL_UNSIGNED_BYTE };
             case Normalized::RGBACompressedRGBAInput:  return { GL_COMPRESSED_RGBA, GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::R:                        return { GL_RED,             GL_RED,  GL_UNSIGNED_BYTE };
-            case Normalized::RG:                       return { GL_RG,              GL_RG,   GL_UNSIGNED_BYTE };
-            case Normalized::RGB:                      return { GL_RGB,             GL_RGB,  GL_UNSIGNED_BYTE };
-            case Normalized::RGBA:                     return { GL_RGBA,            GL_RGBA, GL_UNSIGNED_BYTE };
+            case Normalized::R:                        return { GL_R8,              GL_RED,  GL_UNSIGNED_BYTE };
+            case Normalized::RG:                       return { GL_RG8,             GL_RG,   GL_UNSIGNED_BYTE };
+            case Normalized::RGB:                      return { GL_RGB8,            GL_RGB,  GL_UNSIGNED_BYTE };
+            case Normalized::RGBA:                     return { GL_RGBA8,           GL_RGBA, GL_UNSIGNED_BYTE };
         }
     }
 
@@ -110,7 +122,7 @@ namespace EARenderer {
 
     GLTextureFormat GLTexture::glFormat(Depth format) {
         switch (format) {
-            case Depth::Default: return { GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT };
+            case Depth::Default: return { GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT };
         }
     }
 

@@ -10,7 +10,6 @@
 #define GLSLSurfelLighting_hpp
 
 #include "GLProgram.hpp"
-#include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2DArray.hpp"
 #include "DirectionalLight.hpp"
 #include "PointLight.hpp"
@@ -33,7 +32,7 @@ namespace EARenderer {
         void setWorldBoundingBox(const AxisAlignedBox3D& box);
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setShadowCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map);
+        void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
         void setSettings(const RenderingSettings& settings);
     };
 

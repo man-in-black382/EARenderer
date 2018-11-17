@@ -161,8 +161,6 @@ void main() {
     // using to-light and to-viewer vectors, but for specular reflections
     // to-light vector is replaced by the fragment's normal.
     //
-    // !!! (This could probably be improved by storing and using reflected point's normal alongside reflection buffer) !!!
-    //
     vec3 N = gBuffer.normal;
     vec3 V = normalize(uCameraPosition - worldPosition);
     vec3 L = normalize(reflectedPointWorldPosition - worldPosition);
@@ -174,5 +172,7 @@ void main() {
     vec3 finalColor = (sourceColor + reflectedColor * Ks) * HDRNormalizationFactor; // Do not forget that input image was normalized by [1.0 / HDRNormalizationFactor]
 
     oBaseOutput = vec4(finalColor, 1.0);
-    oBrightOutput = LuminanceFromRGB(finalColor) > 0.1 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+    oBrightOutput = LuminanceFromRGB(finalColor) > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+    
+//    oBaseOutput = vec4(reflectedColor * specular * HDRNormalizationFactor, 1.0);
 }

@@ -28,12 +28,12 @@ void main()
         oFragColor = vec4(texture(uTexture3D, vec3(vTexCoords, uDepth)).rgb, 1.0);
     } else {
         vec3 color = textureLod(uTexture, vTexCoords, 0).rgb;
-        oFragColor = vec4(vec3(color), 1.0);
+        oFragColor = vec4(color, 1.0);
     }
 
     if (uShouldApplyToneMapping) {
         oFragColor = vec4(ReinhardToneMap(oFragColor.rgb), oFragColor.a);
     }
-
+    
     oFragColor = vec4(SRGB_From_RGB(oFragColor.rgb), 1.0);
 }

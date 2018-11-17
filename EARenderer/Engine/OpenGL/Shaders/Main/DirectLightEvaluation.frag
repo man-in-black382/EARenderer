@@ -4,10 +4,9 @@
 #include "Lights.glsl"
 #include "CookTorrance.glsl"
 #include "Constants.glsl"
+#include "Shadows.glsl"
 
 // Constants
-
-const int kMaxCascades = 4;
 
 const int kLightTypeDirectional = 0;
 const int kLightTypePoint       = 1;
@@ -40,13 +39,13 @@ uniform float uParallaxMappingStrength;
 
 // Shadow mapping
 uniform mat4 uCSMSplitSpaceMat;
-uniform mat4 uLightSpaceMatrices[kMaxCascades];
+uniform mat4 uLightSpaceMatrices[MaximumShadowCascadesCount];
 uniform int uDepthSplitsAxis;
-uniform float uDepthSplits[kMaxCascades];
+uniform float uDepthSplits[MaximumShadowCascadesCount];
 uniform int uNumberOfCascades;
 uniform float uESMFactor;
-uniform sampler2D uDirectionalShadowMap;
-uniform samplerCubeArray uOmnidirectionalShadowMaps;
+uniform sampler2DArrayShadow uDirectionalShadowMapArray;
+uniform samplerCubeArrayShadow uOmnidirectionalShadowMaps;
 uniform int uOmnidirectionalShadowMapIndex;
 
 // Functions
@@ -78,60 +77,6 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 //
 //    return diffuse + specular;
 //}
-
-////////////////////////////////////////////////////////////
-///////////////////////// Shadows //////////////////////////
-////////////////////////////////////////////////////////////
-
-int ShadowCascadeIndex(vec3 worldPosition) {
-
-    vec4 posInCSMSplitSpace = uCSMSplitSpaceMat * vec4(worldPosition, 1.0);
-
-    vec3 projCoords = posInCSMSplitSpace.xyz / posInCSMSplitSpace.w;
-    // No need to transform to [0,1] range,
-    // because splits passed from client are in [-1; 1]
-
-    float locationOnSplitAxis = projCoords[uDepthSplitsAxis];
-
-    for (int i = 0; i < kMaxCascades; ++i) {
-        if (locationOnSplitAxis < uDepthSplits[i]) {
-            return i;
-        }
-    }
-}
-
-float DirectionalExponentialShadow(vec3 worldPosition) {
-    int cascade = ShadowCascadeIndex(worldPosition);
-    mat4 relevantLightMatrix = uLightSpaceMatrices[cascade];
-    vec4 positionInLightSpace = relevantLightMatrix * vec4(worldPosition, 1.0);
-
-    vec3 projCoords = positionInLightSpace.xyz / positionInLightSpace.w;
-    projCoords = projCoords * 0.5 + 0.5;
-
-    // Linear Z a.k.a disntance from light
-    // Distance to the fragment from a near clip plane of directional light's frustum
-    float linearZ = positionInLightSpace.z * 0.5 + 0.5; // Transform to [0; 1] range
-
-    // Explicitly reading from 0 LOD because shadow map comes from a postprocess texture pool
-    // and is a subject to mipmapping
-    vec4 occluders = textureLod(uDirectionalShadowMap, projCoords.xy, 0);
-
-    float occluder = occluders[cascade];
-    float receiver = exp(-uESMFactor * linearZ);
-    float visibility = clamp(occluder * receiver, 0.0, 1.0);
-
-    return visibility;
-}
-
-float OmnidirectionalExponentialShadow(vec3 worldPosition) {
-    vec3 lightToFrag = worldPosition - uPointLight.position;
-    float occluder = texture(uOmnidirectionalShadowMaps, vec4(lightToFrag, float(uOmnidirectionalShadowMapIndex))).r;
-    float linearZ = length(lightToFrag) / uPointLight.clipDistance;
-    float receiver = exp(-uESMFactor * linearZ);
-    float visibility = clamp(occluder * receiver, 0.0, 1.0);
-
-    return visibility;
-}
 
 ////////////////////////////////////////////////////////////
 ////////////////////////// Main ////////////////////////////
@@ -167,12 +112,13 @@ void main() {
     if (uLightType == kLightTypeDirectional) {
         radiance    = DirectionalLightRadiance(uDirectionalLight);
         L           = -normalize(uDirectionalLight.direction);
-        shadow      = DirectionalExponentialShadow(worldPosition);
+        int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
+        shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(uPointLight, worldPosition);
         L           = normalize(uPointLight.position - worldPosition);
-        shadow      = OmnidirectionalExponentialShadow(worldPosition);
+//        shadow      = OmnidirectionalExponentialShadow(worldPosition);
     }
     else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet

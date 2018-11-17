@@ -64,6 +64,7 @@
 		ACFF6DAA21369F0300D21C48 /* ShadowMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF6DA821369F0300D21C48 /* ShadowMapper.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
 		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
+		CE0D217F219C89B6003B6950 /* DirectionalShadowMap.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE0D217E219C89B6003B6950 /* DirectionalShadowMap.frag */; };
 		CE151388217FA6DA004273EE /* Marble_tiles_02_4K_Height.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151383217FA6D9004273EE /* Marble_tiles_02_4K_Height.png */; };
 		CE151389217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151384217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png */; };
 		CE15138A217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151385217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png */; };
@@ -317,6 +318,9 @@
 		CE83E568212849120071AE4E /* Luminance.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE83E567212849120071AE4E /* Luminance.frag */; };
 		CE83F10C205EC0EA00274A3A /* GLLDRTextureCubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE83F10A205EC0EA00274A3A /* GLLDRTextureCubemap.cpp */; };
 		CE83F10F205EC84900274A3A /* GLTextureSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE83F10D205EC84900274A3A /* GLTextureSampler.cpp */; };
+		CE847B20219B47C500CFC699 /* DirectionalShadowMap.vert in Resources */ = {isa = PBXBuildFile; fileRef = CE847B1F219B47C500CFC699 /* DirectionalShadowMap.vert */; };
+		CE847B22219B47F200CFC699 /* DirectionalShadowMap.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE847B21219B47F200CFC699 /* DirectionalShadowMap.geom */; };
+		CE847B25219B480000CFC699 /* GLSLDirectionalShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE847B23219B480000CFC699 /* GLSLDirectionalShadowMap.cpp */; };
 		CE86CE71216E62210094FE86 /* SMAAEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CE86CE6F216E62210094FE86 /* SMAAEffect.tpp */; };
 		CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE96176C1FF8261600A5E9FC /* TriangleRenderer.cpp */; };
 		CE9617701FF8271A00A5E9FC /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = CE96176F1FF8271A00A5E9FC /* TriangleRendering.geom */; };
@@ -337,6 +341,7 @@
 		CEAAA39E1F97C13B0029099D /* mahogfloor_normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA39A1F97C1380029099D /* mahogfloor_normal.png */; };
 		CEAAA39F1F97C13B0029099D /* mahogfloor_roughness.png in Resources */ = {isa = PBXBuildFile; fileRef = CEAAA3981F97C1370029099D /* mahogfloor_roughness.png */; };
 		CEB2D973215F630500F5E4A0 /* SurfelData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEB2D972215F630500F5E4A0 /* SurfelData.cpp */; };
+		CEB598A4219F4C04005D898A /* Penumbra.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEB598A3219F4C04005D898A /* Penumbra.frag */; };
 		CEB6052C2176397C00C60F9E /* SMAAEdgeDetection.vert in Resources */ = {isa = PBXBuildFile; fileRef = CEB6052A2176397B00C60F9E /* SMAAEdgeDetection.vert */; };
 		CEB6052D2176397C00C60F9E /* SMAAEdgeDetection.frag in Resources */ = {isa = PBXBuildFile; fileRef = CEB6052B2176397C00C60F9E /* SMAAEdgeDetection.frag */; };
 		CEB6052F21763A6A00C60F9E /* SMAADefines.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CEB6052E21763A6A00C60F9E /* SMAADefines.glsl */; };
@@ -385,6 +390,7 @@
 		CED1CED4217DF69500291560 /* GBuffer.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CED3217DF69500291560 /* GBuffer.glsl */; };
 		CED1CED6217E039700291560 /* ColorSpace.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CED1CED5217E039700291560 /* ColorSpace.glsl */; };
 		CED2EE692173887B0066E5A0 /* sponza_lightweight_3.obj in Resources */ = {isa = PBXBuildFile; fileRef = CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */; };
+		CEDFB21A219DC68700DA04D4 /* Shadows.glsl in Resources */ = {isa = PBXBuildFile; fileRef = CEDFB219219DC68700DA04D4 /* Shadows.glsl */; };
 		CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */; };
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */; };
 		CEEE4CE220FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CE020FB874D00CCBBF5 /* GLSLScreenSpaceReflections.cpp */; };
@@ -736,6 +742,7 @@
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
 		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
+		CE0D217E219C89B6003B6950 /* DirectionalShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalShadowMap.frag; sourceTree = "<group>"; };
 		CE151383217FA6D9004273EE /* Marble_tiles_02_4K_Height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Height.png; sourceTree = "<group>"; };
 		CE151384217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Base_Color.png; sourceTree = "<group>"; };
 		CE151385217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Normal.png; sourceTree = "<group>"; };
@@ -1376,6 +1383,10 @@
 		CE83F10B205EC0EA00274A3A /* GLLDRTextureCubemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLLDRTextureCubemap.hpp; sourceTree = "<group>"; };
 		CE83F10D205EC84900274A3A /* GLTextureSampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureSampler.cpp; sourceTree = "<group>"; };
 		CE83F10E205EC84900274A3A /* GLTextureSampler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLTextureSampler.hpp; sourceTree = "<group>"; };
+		CE847B1F219B47C500CFC699 /* DirectionalShadowMap.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = DirectionalShadowMap.vert; sourceTree = "<group>"; };
+		CE847B21219B47F200CFC699 /* DirectionalShadowMap.geom */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = DirectionalShadowMap.geom; sourceTree = "<group>"; };
+		CE847B23219B480000CFC699 /* GLSLDirectionalShadowMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDirectionalShadowMap.cpp; sourceTree = "<group>"; };
+		CE847B24219B480000CFC699 /* GLSLDirectionalShadowMap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectionalShadowMap.hpp; sourceTree = "<group>"; };
 		CE86CE6F216E62210094FE86 /* SMAAEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = SMAAEffect.tpp; sourceTree = "<group>"; };
 		CE86CE70216E62210094FE86 /* SMAAEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SMAAEffect.hpp; sourceTree = "<group>"; };
 		CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EmbreeRayTracer.cpp; sourceTree = "<group>"; };
@@ -1500,6 +1511,7 @@
 		CEAAA39B1F97C1380029099D /* mahogfloor_AO.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mahogfloor_AO.png; sourceTree = "<group>"; };
 		CEB2D971215F598E00F5E4A0 /* Serializers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Serializers.hpp; sourceTree = "<group>"; };
 		CEB2D972215F630500F5E4A0 /* SurfelData.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelData.cpp; sourceTree = "<group>"; };
+		CEB598A3219F4C04005D898A /* Penumbra.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Penumbra.frag; sourceTree = "<group>"; };
 		CEB6052A2176397B00C60F9E /* SMAAEdgeDetection.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAAEdgeDetection.vert; sourceTree = "<group>"; };
 		CEB6052B2176397C00C60F9E /* SMAAEdgeDetection.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAAEdgeDetection.frag; sourceTree = "<group>"; };
 		CEB6052E21763A6A00C60F9E /* SMAADefines.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = SMAADefines.glsl; sourceTree = "<group>"; };
@@ -1556,6 +1568,7 @@
 		CED1CED5217E039700291560 /* ColorSpace.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = ColorSpace.glsl; sourceTree = "<group>"; };
 		CED2EE682173887A0066E5A0 /* sponza_lightweight_3.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sponza_lightweight_3.obj; sourceTree = "<group>"; };
 		CED8710020E52186007B57E3 /* GaussianBlurSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianBlurSettings.hpp; sourceTree = "<group>"; };
+		CEDFB219219DC68700DA04D4 /* Shadows.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = Shadows.glsl; sourceTree = "<group>"; };
 		CEE826392157C3A40019D2F8 /* libc++.1.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.1.tbd"; path = "usr/lib/libc++.1.tbd"; sourceTree = SDKROOT; };
 		CEE8263A2157C3A40019D2F8 /* libc++abi.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++abi.tbd"; path = "usr/lib/libc++abi.tbd"; sourceTree = SDKROOT; };
 		CEE8263B2157C3A40019D2F8 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -1979,11 +1992,17 @@
 				AC6CD80920D114B0000E6A22 /* GLSLDirectionalExponentialShadowMap.hpp */,
 				CEF0161E20D41A9700E0F0AB /* DirectionalExponentialShadowMap.frag */,
 				CEF0161F20D41A9700E0F0AB /* DirectionalExponentialShadowMap.vert */,
+				CE847B23219B480000CFC699 /* GLSLDirectionalShadowMap.cpp */,
+				CE847B24219B480000CFC699 /* GLSLDirectionalShadowMap.hpp */,
+				CE847B1F219B47C500CFC699 /* DirectionalShadowMap.vert */,
+				CE847B21219B47F200CFC699 /* DirectionalShadowMap.geom */,
+				CE0D217E219C89B6003B6950 /* DirectionalShadowMap.frag */,
 				ACFF6D9921368BA300D21C48 /* GLSLOmnidirectionalExponentialShadowMap.cpp */,
 				ACFF6D9A21368BA300D21C48 /* GLSLOmnidirectionalExponentialShadowMap.hpp */,
 				ACFF6D9E21368C0B00D21C48 /* OmnidirectionalExponentialShadowMap.frag */,
 				ACFF6D9C21368C0B00D21C48 /* OmnidirectionalExponentialShadowMap.geom */,
 				ACFF6D9D21368C0B00D21C48 /* OmnidirectionalExponentialShadowMap.vert */,
+				CEB598A3219F4C04005D898A /* Penumbra.frag */,
 			);
 			path = Shadows;
 			sourceTree = "<group>";
@@ -2083,14 +2102,6 @@
 				CE83F109205EBE5F00274A3A /* Samplers */,
 			);
 			path = GLTextureCubemap;
-			sourceTree = "<group>";
-		};
-		ACB0AA4B1FF4ECD400CD6A11 /* GLBufferTexture */ = {
-			isa = PBXGroup;
-			children = (
-				AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */,
-			);
-			path = GLBufferTexture;
 			sourceTree = "<group>";
 		};
 		ACC539252068EAA600B150B5 /* GLTexture3D */ = {
@@ -3342,9 +3353,9 @@
 				ACB0AA4D1FF4ED5B00CD6A11 /* GLTexture2DSampler.hpp */,
 				ACFF6DA62136973600D21C48 /* GLTextureCubemapArray.hpp */,
 				CE70F9C11F8F8EBD00AD9027 /* GLTexture2DArray.hpp */,
+				AC0E00791FE8174E00F1D09C /* GLBufferTexture.hpp */,
 				ACC539252068EAA600B150B5 /* GLTexture3D */,
 				ACB0AA461FF4EC6500CD6A11 /* GLTextureCubemap */,
-				ACB0AA4B1FF4ECD400CD6A11 /* GLBufferTexture */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -3850,6 +3861,7 @@
 				CE7A80EE218F5E940097512A /* CookTorrance.glsl */,
 				CE7A80F0218F602C0097512A /* Lights.glsl */,
 				CE7A80F4218F62A70097512A /* Constants.glsl */,
+				CEDFB219219DC68700DA04D4 /* Shadows.glsl */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -3917,6 +3929,7 @@
 				CE1A567B21281B770082BE3A /* Exposure.frag in Resources */,
 				ACFF6DA021368C0C00D21C48 /* OmnidirectionalExponentialShadowMap.vert in Resources */,
 				AC59F2922073C6B500698E55 /* LightProbeLinksRendering.geom in Resources */,
+				CEDFB21A219DC68700DA04D4 /* Shadows.glsl in Resources */,
 				CE1C975C206A396A006A4A73 /* GridLightProbesUpdate.vert in Resources */,
 				AC7230AE2125638C00CB7654 /* LuminanceHistogram.vert in Resources */,
 				CEC2196B20C0744E00767342 /* Fabric05_col.jpg in Resources */,
@@ -3976,6 +3989,7 @@
 				CE4DE2241FA60CFF0067729A /* Sponza_Column_c_roughness.tga in Resources */,
 				ACFF6DA121368C0C00D21C48 /* OmnidirectionalExponentialShadowMap.frag in Resources */,
 				CE7A013B20B165850002D422 /* ProbeOcclusionRendering.geom in Resources */,
+				CE847B20219B47C500CFC699 /* DirectionalShadowMap.vert in Resources */,
 				CE4DE2191FA60CFE0067729A /* Sponza_Ceiling_diffuse.tga in Resources */,
 				CE4DE2121FA60CFE0067729A /* Metallic_metallic.tga in Resources */,
 				CE4DE23A1FA60CFF0067729A /* Sponza_FlagPole_normal.tga in Resources */,
@@ -3988,6 +4002,7 @@
 				CE4DE22C1FA60CFF0067729A /* Sponza_Curtain_roughness.tga in Resources */,
 				CE53ADE7209E2BD600749A96 /* Fabric03_nrm.jpg in Resources */,
 				CE4DE2501FA60CFF0067729A /* VaseRound_normal.tga in Resources */,
+				CE847B22219B47F200CFC699 /* DirectionalShadowMap.geom in Resources */,
 				CEC8992A216B868D00076F84 /* SMAA.glsl in Resources */,
 				ACC539322068F80100B150B5 /* GridLightProbesUpdate.geom in Resources */,
 				CE4DE21E1FA60CFE0067729A /* Sponza_Column_a_roughness.tga in Resources */,
@@ -4007,6 +4022,7 @@
 				CE4DE2311FA60CFF0067729A /* Sponza_Fabric_Blue_diffuse.tga in Resources */,
 				CE151389217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png in Resources */,
 				CE70FA651F8F8F7400AD9027 /* Skybox.vert in Resources */,
+				CEB598A4219F4C04005D898A /* Penumbra.frag in Resources */,
 				CE4DE2401FA60CFF0067729A /* Sponza_Roof_normal.tga in Resources */,
 				CE70FA661F8F8F7400AD9027 /* GenericGeometry.vert in Resources */,
 				CE15138B217FA6DA004273EE /* Marble_tiles_02_4K_Roughness.png in Resources */,
@@ -4122,6 +4138,7 @@
 				CEA0B91920E79D8F00257E37 /* DirectLightEvaluation.frag in Resources */,
 				CE53ADDF209E2BC300749A96 /* fabric02_nrm.jpg in Resources */,
 				CE7A013C20B165850002D422 /* ProbeOcclusionRendering.vert in Resources */,
+				CE0D217F219C89B6003B6950 /* DirectionalShadowMap.frag in Resources */,
 				CEC2195520C0744E00767342 /* Bricks08_AO.jpg in Resources */,
 				CEB6052C2176397C00C60F9E /* SMAAEdgeDetection.vert in Resources */,
 				CEAAA39C1F97C13B0029099D /* mahogfloor_AO.png in Resources */,
@@ -4299,6 +4316,7 @@
 				ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */,
 				CE82DAF8205122FA00329E2E /* BoxRenderer.cpp in Sources */,
 				CE70FA201F8F8EF600AD9027 /* Vertex1P1N2UV1T1BT.cpp in Sources */,
+				CE847B25219B480000CFC699 /* GLSLDirectionalShadowMap.cpp in Sources */,
 				AC7230AA212562E600CB7654 /* GLSLLuminanceHistogram.cpp in Sources */,
 				CED1CECD217DE31600291560 /* GLSLSMAANeighborhoodBlending.cpp in Sources */,
 				CEF4DBF32062D43400A68C09 /* GLSLSurfelLighting.cpp in Sources */,
@@ -4448,6 +4466,7 @@
 					"$(SRCROOT)/EARenderer/Engine/ThirdParty",
 					/opt/local/include/embree3,
 					"$(SRCROOT)/EARenderer/Engine/ThirdParty/autodesk",
+					"Applications/Xcode.app/Contents/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -4481,6 +4500,7 @@
 					"$(SRCROOT)/EARenderer/Engine/ThirdParty",
 					/opt/local/include/embree3,
 					"$(SRCROOT)/EARenderer/Engine/ThirdParty/autodesk",
+					"Applications/Xcode.app/Contents/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/EARenderer/Tool/Other/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

@@ -45,8 +45,8 @@ namespace EARenderer {
 
     void GLProgram::link() {
         glAttachShader(mName, mVertexShader->name());
-        glAttachShader(mName, mFragmentShader->name());
         
+        if (mFragmentShader) { glAttachShader(mName, mFragmentShader->name()); }
         if (mGeometryShader) { glAttachShader(mName, mGeometryShader->name()); }
         
         glLinkProgram(mName);

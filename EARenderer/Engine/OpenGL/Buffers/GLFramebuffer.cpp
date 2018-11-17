@@ -52,7 +52,8 @@ namespace EARenderer {
     }
     
     bool GLFramebuffer::isComplete() const {
-        return glCheckFramebufferStatus(mBindingPoint) == GL_FRAMEBUFFER_COMPLETE;
+        auto status = glCheckFramebufferStatus(mBindingPoint);
+        return status == GL_FRAMEBUFFER_COMPLETE;
     }
     
     const GLViewport& GLFramebuffer::viewport() const {
@@ -181,6 +182,10 @@ namespace EARenderer {
     void GLFramebuffer::attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) {
         attachTextureToDepthAttachment(texture, mipLevel);
     }
+    
+    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel, int16_t layer) {
+        attachTextureToDepthAttachment(texture, mipLevel, layer);
+    }
 
     // FIXME: Remove deprecated attachment functions
 
@@ -216,21 +221,6 @@ namespace EARenderer {
                                       uint16_t mipLevel)
     {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    void GLFramebuffer::attachTextureLayer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& textures,
-                                           uint16_t layer,
-                                           ColorAttachment colorAttachment,
-                                           uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(textures, colorAttachment, mipLevel, layer);
-    }
-
-    void GLFramebuffer::attachTextureLayer(const GLDepthTexture2DArray& textures,
-                                           uint16_t layer,
-                                           uint16_t mipLevel)
-    {
-        attachTextureToDepthAttachment(textures, mipLevel, layer);
     }
     
     void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {

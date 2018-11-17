@@ -75,7 +75,7 @@ namespace EARenderer {
         float near = -camera.nearClipPlane();
         
         for (int8_t i = 0; i < numberOfCascades; i++) {
-            // -, cuz we're going in the negative direction (Z)
+            // -, because we're going in the negative direction (Z)
             float far = -split(i + 1, numberOfCascades, camera.nearClipPlane(), camera.farClipPlane(), 0.9);
             
             float xn = near * tanFOVH;

@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "ColorSpace.glsl"
+
 // Uniforms
 
 uniform sampler2D uImage;
@@ -65,4 +67,5 @@ void main() {
     color *= whiteScale;
 
     oFragColor = vec4(color, 1.0);
+//    oFragColor = vec4(SRGB_From_RGB(color), 1.0);
 }

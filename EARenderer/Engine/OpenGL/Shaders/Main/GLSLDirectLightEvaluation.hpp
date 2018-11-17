@@ -11,7 +11,6 @@
 
 #include "GLProgram.hpp"
 #include "PBRMaterial.hpp"
-#include "GLDepthTexture2DArray.hpp"
 #include "GLTexture2D.hpp"
 #include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
@@ -46,8 +45,7 @@ namespace EARenderer {
 
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
-        void setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map);
-        void setExponentialShadowMaps(const GLFloatTextureCubemapArray<GLTexture::Float::R32F>& maps);
+        void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
         void setShadowMapArrayIndex(size_t index);
         void setSettings(const RenderingSettings& settings);
     };

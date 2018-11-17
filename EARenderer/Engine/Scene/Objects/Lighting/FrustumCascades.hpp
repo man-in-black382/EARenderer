@@ -12,7 +12,6 @@
 #include "AxisAlignedBox3D.hpp"
 
 #include <vector>
-
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {

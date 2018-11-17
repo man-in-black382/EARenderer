@@ -184,7 +184,7 @@
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->directionalLight().setColor(EARenderer::Color(2.0, 2.0, 2.0));
+    scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
 
     scene->calculateGeometricProperties();
 
@@ -200,8 +200,8 @@
     scene->setDiffuseProbeSpacing(0.37);
     scene->setSurfelSpacing(0.05);
 
-    scene->camera()->moveTo(glm::vec3(0.0, -0.5, 0.0));
-    scene->camera()->lookAt(glm::vec3(1, -0.2, 0));
+    scene->camera()->moveTo(glm::vec3(0.0, -0.7, 0.0));
+    scene->camera()->lookAt(glm::vec3(1, -0.5, 0));
 
     [self setupAnimations];
 
@@ -364,7 +364,8 @@
         [self pathForResource:@"Sponza_Bricks_a_Albedo.tga"],
         [self pathForResource:@"Sponza_Bricks_a_Normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
-        [self pathForResource:@"Sponza_Bricks_a_Roughness.tga"],
+//        [self pathForResource:@"Sponza_Bricks_a_Roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
@@ -376,7 +377,8 @@
         [self pathForResource:@"Sponza_Arch_diffuse.tga"],
         [self pathForResource:@"Sponza_Arch_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
-        [self pathForResource:@"Sponza_Arch_roughness.tga"],
+//        [self pathForResource:@"Sponza_Arch_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
@@ -400,7 +402,8 @@
         [self pathForResource:@"Sponza_Column_a_diffuse.tga"],
         [self pathForResource:@"Sponza_Column_a_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
-        [self pathForResource:@"Sponza_Column_a_roughness.tga"],
+//        [self pathForResource:@"Sponza_Column_a_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
@@ -424,7 +427,8 @@
         [self pathForResource:@"Sponza_Column_c_diffuse.tga"],
         [self pathForResource:@"Sponza_Column_c_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
-        [self pathForResource:@"Sponza_Column_c_roughness.tga"],
+//        [self pathForResource:@"Sponza_Column_c_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
@@ -448,7 +452,8 @@
         [self pathForResource:@"Sponza_Column_b_diffuse.tga"],
         [self pathForResource:@"Sponza_Column_b_normal.tga"],
         [self pathForResource:@"Dielectric_metallic.tga"],
-        [self pathForResource:@"Sponza_Column_b_roughness.tga"],
+//        [self pathForResource:@"Sponza_Column_b_roughness.tga"],
+        [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"],
         [self pathForResource:@"blank_white.jpg"]
     });
