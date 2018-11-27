@@ -32,5 +32,5 @@ void main() {
         float luminance = texelFetch(uSurfelLuminances, luminanceUV, 0).r;
 
         oFragColor = vec4(vAlbedo * luminance, 1.0);
-    }
+    }    
 }

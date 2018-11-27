@@ -25,8 +25,8 @@ namespace EARenderer {
     mShadowMapper(shadowMapper),
     mFramebuffer(framebufferResolution()),
     mGridProbeSHMaps(gridProbeSHMaps()),
-    mSurfelsLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelsGBuffer()->size(), nullptr, GLTexture::Filter::None)),
-    mSurfelClustersLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelClustersGBuffer()->size(), nullptr, GLTexture::Filter::None))
+    mSurfelsLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelsGBuffer()->size(), nullptr, Sampling::Filter::None)),
+    mSurfelClustersLuminanceMap(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(surfelData->surfelClustersGBuffer()->size(), nullptr, Sampling::Filter::None))
     { }
 
     Size2D IndirectLightAccumulator::framebufferResolution() {

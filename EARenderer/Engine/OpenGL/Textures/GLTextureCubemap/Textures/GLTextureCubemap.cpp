@@ -22,7 +22,7 @@ namespace EARenderer {
 
     GLTextureCubemap::~GLTextureCubemap() { };
 
-    void GLTextureCubemap::initialize(const Size2D& size, Filter filter, WrapMode wrapMode,
+    void GLTextureCubemap::initialize(const Size2D& size, Sampling::Filter filter, Sampling::WrapMode wrapMode,
                                       GLint internalFormat, GLenum format, GLenum type,
                                       std::array<const void *, 6>& pixelData)
     {

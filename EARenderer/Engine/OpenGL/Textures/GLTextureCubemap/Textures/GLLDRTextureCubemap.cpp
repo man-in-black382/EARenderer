@@ -16,10 +16,10 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLLDRTextureCubemap::GLLDRTextureCubemap(const Size2D& size, Filter filter) {
+    GLLDRTextureCubemap::GLLDRTextureCubemap(const Size2D& size, Sampling::Filter filter) {
         std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
-        initialize(size, filter, WrapMode::ClampToEdge, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, nullptrs);
+        initialize(size, filter, Sampling::WrapMode::ClampToEdge, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, nullptrs);
     }
 
     GLLDRTextureCubemap::GLLDRTextureCubemap(const std::array<std::vector<glm::uvec3>, 6>& pixels) {
@@ -34,7 +34,7 @@ namespace EARenderer {
             pixelData[i] = pixels[i].data();
         }
 
-        initialize(estimation, Filter::None, WrapMode::ClampToEdge, GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT, pixelData);
+        initialize(estimation, Sampling::Filter::None, Sampling::WrapMode::ClampToEdge, GL_RGB32UI, GL_RGB_INTEGER, GL_UNSIGNED_INT, pixelData);
     }
     
     GLLDRTextureCubemap::GLLDRTextureCubemap(const std::string& rightImagePath,
@@ -77,7 +77,7 @@ namespace EARenderer {
             default: texComponents = GL_RGBA; break;
         }
 
-        initialize(Size2D(width, height), Filter::Trilinear, WrapMode::Repeat, texComponents, GL_RGBA, GL_UNSIGNED_BYTE, constPixelDataArray);
+        initialize(Size2D(width, height), Sampling::Filter::Trilinear, Sampling::WrapMode::Repeat, texComponents, GL_RGBA, GL_UNSIGNED_BYTE, constPixelDataArray);
 
         for (auto buffer : pixelDataArray) {
             stbi_image_free(buffer);

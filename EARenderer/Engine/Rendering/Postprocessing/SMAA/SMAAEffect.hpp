@@ -19,7 +19,7 @@ namespace EARenderer {
 
     template <GLTexture::Float TextureFormat>
     class SMAAEffect: public PostprocessEffect<TextureFormat> {
-    public:
+    private:
         GLNormalizedTexture2D<GLTexture::Normalized::RG> mAreaTexture;
         GLNormalizedTexture2D<GLTexture::Normalized::R> mSearchTexture;
         GLFloatTexture2D<GLTexture::Float::RG16F> mEdgesTexture;

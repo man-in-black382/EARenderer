@@ -19,7 +19,7 @@ namespace EARenderer {
 
     class GLLDRTextureCubemap: public GLTextureCubemap {
     public:
-        GLLDRTextureCubemap(const Size2D& size, Filter filter = Filter::Trilinear);
+        GLLDRTextureCubemap(const Size2D& size, Sampling::Filter filter = Sampling::Filter::Trilinear);
         GLLDRTextureCubemap(const std::array<std::vector<glm::uvec3>, 6>& pixels);
         
         GLLDRTextureCubemap(const std::string& rightImagePath,

@@ -20,8 +20,8 @@ namespace EARenderer {
     
     class GLHDRTextureCubemap: public GLTextureCubemap {
     public:
-        GLHDRTextureCubemap(const Size2D& size, Filter filter = Filter::Trilinear);
-        GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Filter filter = Filter::Trilinear);
+        GLHDRTextureCubemap(const Size2D& size, Sampling::Filter filter = Sampling::Filter::Trilinear);
+        GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Sampling::Filter filter = Sampling::Filter::Trilinear);
 
         ~GLHDRTextureCubemap() = default;
 

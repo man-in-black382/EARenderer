@@ -6,7 +6,8 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#include "GLTextureSampler.hpp"
+#include "GLTextureFetcher.hpp"
+#include "GLTextureUnitManager.hpp"
 
 #include <cmath>
 
@@ -14,8 +15,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLTextureSampler::GLTextureSampler(const GLTexture& texture, int32_t mipLevel) {
-        texture.bind();
+    GLTextureFetcher::GLTextureFetcher(const GLTexture& texture, int32_t mipLevel) {
+        GLTextureUnitManager::Shared().bindTextureToActiveUnit(texture);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         GLint w = 0;
         GLint h = 0;
@@ -25,11 +26,11 @@ namespace EARenderer {
         mMipSize.height = h;
     }
 
-    GLTextureSampler::~GLTextureSampler() { }
+    GLTextureFetcher::~GLTextureFetcher() { }
 
 #pragma mark - Formats
 
-    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Normalized format) {
+    GLTextureFetcher::UnpackFormat GLTextureFetcher::glUnpackFormat(GLTexture::Normalized format) {
         switch (format) {
             case GLTexture::Normalized::RCompressedRGBAInput:     return { GL_RED,  GL_UNSIGNED_BYTE };
             case GLTexture::Normalized::RGCompressedRGBAInput:    return { GL_RG,   GL_UNSIGNED_BYTE };
@@ -42,7 +43,7 @@ namespace EARenderer {
         }
     }
 
-    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Float format) {
+    GLTextureFetcher::UnpackFormat GLTextureFetcher::glUnpackFormat(GLTexture::Float format) {
         switch (format) {
             case GLTexture::Float::R16F:     return { GL_RED,  GL_HALF_FLOAT };
             case GLTexture::Float::RG16F:    return { GL_RG,   GL_HALF_FLOAT };
@@ -55,7 +56,7 @@ namespace EARenderer {
         }
     }
 
-    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Integer format) {
+    GLTextureFetcher::UnpackFormat GLTextureFetcher::glUnpackFormat(GLTexture::Integer format) {
         switch (format) {
             case GLTexture::Integer::R32UI:      return { GL_RED_INTEGER,  GL_UNSIGNED_INT };
             case GLTexture::Integer::RG32UI:     return { GL_RG_INTEGER,   GL_UNSIGNED_INT };
@@ -64,7 +65,7 @@ namespace EARenderer {
         }
     }
 
-    GLTextureSampler::UnpackFormat GLTextureSampler::glUnpackFormat(GLTexture::Depth format) {
+    GLTextureFetcher::UnpackFormat GLTextureFetcher::glUnpackFormat(GLTexture::Depth format) {
         switch (format) {
             case GLTexture::Depth::Default: return { GL_DEPTH_COMPONENT, GL_FLOAT };
         }

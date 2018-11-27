@@ -10,7 +10,7 @@
 #define GLFramebuffer_hpp
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
+ 
 #include "GLViewport.hpp"
 
 #include "GLTexture2D.hpp"
@@ -35,7 +35,7 @@
 
 namespace EARenderer {
 
-    class GLFramebuffer: public GLNamedObject, public GLBindable {
+    class GLFramebuffer: public GLNamedObject {
     public:
         enum class ColorAttachment {
             Automatic = 0,
@@ -88,7 +88,7 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-        void bind() const override;
+        void bind() const;
         
         const Size2D& size() const;
 

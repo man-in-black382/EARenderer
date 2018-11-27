@@ -9,7 +9,7 @@
 #ifndef CubemapSampler_hpp
 #define CubemapSampler_hpp
 
-#include "GLTextureSampler.hpp"
+#include "GLTextureFetcher.hpp"
 #include "Color.hpp"
 #include "GLCubemapFace.hpp"
 
@@ -18,9 +18,9 @@
 
 namespace EARenderer {
     
-    class GLCubemapSampler: public GLTextureSampler {
+    class GLCubemapSampler: public GLTextureFetcher {
     protected:
-        using GLTextureSampler::GLTextureSampler;
+        using GLTextureFetcher::GLTextureFetcher;
 
     public:
         static void ComputeTexCoords(const glm::vec3& sampleVector, GLCubemapFace& face, glm::vec2& texCoords);

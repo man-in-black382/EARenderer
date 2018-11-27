@@ -28,11 +28,10 @@ namespace EARenderer {
 
             float parallaxMappingStrength = 0.05;
 
-            uint32_t shadowCascadesCount = 4;
-            float ESMFactor = 80.0;
+            uint32_t shadowCascadesCount = 1;
             GaussianBlurSettings shadowBlur { 8, 8 };
             
-            Color skyColor = Color(0.0, 0.0623, 0.1);
+            Color skyColor = Color(0.059, 0.071, 0.087);
 
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;
@@ -65,7 +64,9 @@ namespace EARenderer {
         bool skyboxRenderingEnabled = true;
         bool triangleRenderingEnabled = false;
 
-        Size2D resolution { 1920, 1080 };
+        Size2D displayedFrameResolution { 1920, 1080 };
+        Size2D directionalShadowMapResolution { 4096 };
+        Size2D omnidirectionalShadowMapResolution { 1024 };
     };
 
 }

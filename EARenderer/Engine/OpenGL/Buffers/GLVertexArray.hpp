@@ -15,7 +15,6 @@
 #include <memory>
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
 #include "GLVertexArrayBuffer.hpp"
 #include "GLElementArrayBuffer.hpp"
 #include "GLVertexAttribute.hpp"
@@ -23,7 +22,7 @@
 namespace EARenderer {
     
     template <typename Vertex>
-    class GLVertexArray: public GLNamedObject, public GLBindable {
+    class GLVertexArray: public GLNamedObject {
     private:
         GLVertexArrayBuffer<Vertex> mVertexBuffer;
         GLElementArrayBuffer mIndexBuffer;
@@ -45,7 +44,7 @@ namespace EARenderer {
 
 #pragma mark - Binbable
 
-        void bind() const override {
+        void bind() const {
             glBindVertexArray(mName);
         }
 

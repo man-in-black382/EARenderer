@@ -21,7 +21,7 @@ namespace EARenderer {
 
         size_t mCount;
 
-        void initialize(const Size2D& size, size_t count, Filter filter, WrapMode wrapMode) {
+        void initialize(const Size2D& size, size_t count, Sampling::Filter filter, Sampling::WrapMode wrapMode) {
 
             if (size.width <= 0.0 || size.height <= 0.0) {
                 throw std::invalid_argument("Texture size must not be zero");
@@ -62,8 +62,8 @@ namespace EARenderer {
     public:
         GLNormalizedTextureCubemapArray(const Size2D& size,
                                         size_t count,
-                                        GLTexture::Filter filter = GLTexture::Filter::Bilinear,
-                                        GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
+                                        Sampling::Filter filter = Sampling::Filter::Bilinear,
+                                        Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
         {
             this->initialize(size, count, filter, wrapMode);
         }
@@ -76,7 +76,7 @@ namespace EARenderer {
     class GLIntegerTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Integer, Format> {
     public:
         GLIntegerTextureCubemapArray(const Size2D& size, size_t count) {
-            this->initialize(size, count, GLTexture::Filter::None, GLTexture::WrapMode::ClampToEdge);
+            this->initialize(size, count, Sampling::Filter::None, Sampling::WrapMode::ClampToEdge);
         }
 
         ~GLIntegerTextureCubemapArray() = default;
@@ -88,8 +88,8 @@ namespace EARenderer {
     public:
         GLFloatTextureCubemapArray(const Size2D& size,
                                    size_t count,
-                                   GLTexture::Filter filter = GLTexture::Filter::Bilinear,
-                                   GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
+                                   Sampling::Filter filter = Sampling::Filter::Bilinear,
+                                   Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
         {
             this->initialize(size, count, filter, wrapMode);
         }
@@ -100,11 +100,8 @@ namespace EARenderer {
 
     class GLDepthTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Depth, GLTexture::Depth::Default> {
     public:
-        GLDepthTextureCubemapArray(const Size2D& size, size_t count, ComparisonMode comparisonMode = ComparisonMode::None) {
-            initialize(size, count, Filter::Bilinear, WrapMode::ClampToBorder);
-            // Prevent oversampling by supplying 1.0 depth values when texture is sampled beyond [0.0; 1.0] range
-            GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+        GLDepthTextureCubemapArray(const Size2D& size, size_t count, Sampling::ComparisonMode comparisonMode = Sampling::ComparisonMode::None) {
+            initialize(size, count, Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge);
             setComparisonMode(comparisonMode);
         }
 

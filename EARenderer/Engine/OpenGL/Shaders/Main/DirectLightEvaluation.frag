@@ -43,8 +43,8 @@ uniform mat4 uLightSpaceMatrices[MaximumShadowCascadesCount];
 uniform int uDepthSplitsAxis;
 uniform float uDepthSplits[MaximumShadowCascadesCount];
 uniform int uNumberOfCascades;
-uniform float uESMFactor;
-uniform sampler2DArrayShadow uDirectionalShadowMapArray;
+uniform sampler2DArrayShadow uDirectionalShadowMapsComparisonSampler;
+uniform sampler2D uPenumbra;
 uniform samplerCubeArrayShadow uOmnidirectionalShadowMaps;
 uniform int uOmnidirectionalShadowMapIndex;
 
@@ -113,7 +113,8 @@ void main() {
         radiance    = DirectionalLightRadiance(uDirectionalLight);
         L           = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-        shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray);
+        float penumbra = texture(uPenumbra, vTexCoords).r;
+        shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(uPointLight, worldPosition);

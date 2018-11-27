@@ -1,6 +1,6 @@
 #version 400 core
 
-#define PROBE_SH_COMPRESSION_322
+//#define PROBE_SH_COMPRESSION_322
 
 #include "GBuffer.glsl"
 #include "ColorSpace.glsl"
@@ -23,7 +23,6 @@ uniform sampler2D uGBufferHiZBuffer;
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
-uniform vec2 uCameraNearFarPlanes;
 uniform mat4 uWorldBoudningBoxTransform;
 
 uniform uint uSettingsBitmask;
@@ -76,7 +75,7 @@ void main() {
     //
     // !!! (This could probably be improved by storing and using reflected point's normal alongside reflection buffer) !!!
     //
-    vec3 H              = normalize(N + V);
+    vec3 H = normalize(N + V);
 
     vec3 Ks = FresnelSchlick(V, H, albedo, metalness); // Reflected portion
     vec3 Kd = 1.0 - Ks; // Refracted portion
@@ -91,7 +90,7 @@ void main() {
                                                        uWorldBoudningBoxTransform);
 
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
-
+    
     // Filter out negative values which can occur from time to time when dealing with spherical harmonics
     indirectRadiance = max(indirectRadiance, vec3(0.0));
 

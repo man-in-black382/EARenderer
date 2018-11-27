@@ -16,7 +16,7 @@
 
 namespace EARenderer {
 
-    class GLTextureSampler {
+    class GLTextureFetcher {
     protected:
         struct UnpackFormat {
             GLenum pixelFormat;
@@ -25,7 +25,7 @@ namespace EARenderer {
 
         Size2D mMipSize;
 
-        GLTextureSampler(const GLTexture& texture, int32_t mipLevel);
+        GLTextureFetcher(const GLTexture& texture, int32_t mipLevel);
 
         UnpackFormat glUnpackFormat(GLTexture::Normalized format);
         UnpackFormat glUnpackFormat(GLTexture::Float format);
@@ -33,7 +33,7 @@ namespace EARenderer {
         UnpackFormat glUnpackFormat(GLTexture::Depth format);
 
     public:
-        virtual ~GLTextureSampler() = 0;
+        virtual ~GLTextureFetcher() = 0;
     };
 
 }

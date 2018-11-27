@@ -10,6 +10,7 @@
 #define LightAccumulator_hpp
 
 #include "GLTexture2D.hpp"
+#include "GLSampler.hpp"
 #include "SceneGBuffer.hpp"
 #include "Scene.hpp"
 #include "ShadowMapper.hpp"

@@ -16,9 +16,9 @@ namespace EARenderer {
     SceneGBufferConstructor::SceneGBufferConstructor(const Scene* scene, const RenderingSettings& settings)
     :
     mScene(scene),
-    mFramebuffer(settings.resolution),
-    mDepthRenderbuffer(settings.resolution),
-    mGBuffer(std::make_shared<SceneGBuffer>(settings.resolution))
+    mFramebuffer(settings.displayedFrameResolution),
+    mDepthRenderbuffer(settings.displayedFrameResolution),
+    mGBuffer(std::make_shared<SceneGBuffer>(settings.displayedFrameResolution))
     {
         mFramebuffer.attachTexture(*mGBuffer->albedoRoughnessMetalnessAONormal);
         mFramebuffer.attachTexture(*mGBuffer->HiZBuffer);

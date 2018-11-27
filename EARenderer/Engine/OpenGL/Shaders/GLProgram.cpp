@@ -9,6 +9,7 @@
 #include "GLProgram.hpp"
 #include "FileManager.hpp"
 #include "StringUtils.hpp"
+#include "GLTextureUnitManager.hpp"
 
 #include <sstream>
 #include <regex>
@@ -28,7 +29,6 @@ namespace EARenderer {
     {
         link();
         bind();
-        obtainAvailableTextureUnits();
         obtainVertexAttributes();
         obtainUniforms();
     }
@@ -104,7 +104,7 @@ namespace EARenderer {
             GLUniform uniform = GLUniform(location, size, type, name);
             
             if (uniform.isSampler()) {
-                if (textureUnit >= mAvailableTextureUnits) {
+                if (textureUnit >= GLTextureUnitManager::Shared().maximumTextureUnits()) {
                     throw std::runtime_error(string_format("Exceeded the number of available texture units (%d)", mAvailableTextureUnits));
                 }
                 glUniform1i(uniform.location(), textureUnit);
@@ -116,10 +116,6 @@ namespace EARenderer {
             uint32_t crc = crc32(name.c_str(), name.length());
             mUniforms.insert(std::make_pair(crc, uniform));
         }
-    }
-    
-    void GLProgram::obtainAvailableTextureUnits() {
-        glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &mAvailableTextureUnits);
     }
     
 #pragma mark - Swap
@@ -144,19 +140,22 @@ namespace EARenderer {
     
 #pragma mark - Protected
     
-    void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture) {
-        GLUniform sampler = uniformByNameCRC32(uniformNameCRC32);
+    void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture, const GLSampler* sampler) {
+        GLUniform uniform = uniformByNameCRC32(uniformNameCRC32);
 
-        if (!sampler.isSampler()) {
-            throw std::runtime_error(string_format("Uniform %s is not a sampler", sampler.name().c_str()));
+        if (!uniform.isSampler()) {
+            throw std::runtime_error(string_format("Uniform %s is not a texture", uniform.name().c_str()));
         }
 
         if (!isModifyingUniforms) {
-            throw std::logic_error("You must set texture/sampler uniforms inside a designated closure provided by 'modifyUniforms' member fuction");
+            throw std::logic_error("You must set texture/sampler uniforms inside a designated closure provided by 'ensureSamplerValidity' member fuction");
         }
 
-        glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
-        texture.bind();
+        GLTextureUnitManager::Shared().bindTextureToUnit(texture, uniform.textureUnit());
+        
+        if (sampler) {
+            GLTextureUnitManager::Shared().bindSamplerToUnit(*sampler, uniform.textureUnit());
+        }
     }
     
 #pragma mark - Public
@@ -179,11 +178,12 @@ namespace EARenderer {
 
     void GLProgram::ensureSamplerValidity(UniformModifierClosure closure) {
         isModifyingUniforms = true;
+        GLTextureUnitManager::Shared().unbindAllSamplers();
         closure();
 
         // For some reason this is sometimes necessary to make GLSL sampler not to return black
         // (in a case of radiance convolution shader sampling cubemap gives black color without following line)
-        glActiveTexture(GL_TEXTURE0 + mAvailableTextureUnits - 1);
+        GLTextureUnitManager::Shared().activateUnit(GLTextureUnitManager::Shared().maximumTextureUnits() - 1);
         isModifyingUniforms = false;
     }
     

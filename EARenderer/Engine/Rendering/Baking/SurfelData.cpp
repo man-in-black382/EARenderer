@@ -45,7 +45,7 @@ namespace EARenderer {
         
         auto surfelGBufferSize = GLTexture::EstimatedSize(surfelGBufferData.back().size());
         std::vector<const void *> surfelGbufferPointers{ surfelGBufferData[0].data(), surfelGBufferData[1].data(), surfelGBufferData[2].data() };
-        mSurfelsGBuffer = std::make_shared<GLFloatTexture2DArray<GLTexture::Float::RGB32F>>(surfelGBufferSize, 3, surfelGbufferPointers, GLTexture::Filter::None);
+        mSurfelsGBuffer = std::make_shared<GLFloatTexture2DArray<GLTexture::Float::RGB32F>>(surfelGBufferSize, 3, surfelGbufferPointers, Sampling::Filter::None);
         
         auto clusterGBufferSize = GLTexture::EstimatedSize(surfelClusterGBufferData.size());
         mSurfelClustersGBuffer = std::make_shared<GLIntegerTexture2D<GLTexture::Integer::R32UI>>(clusterGBufferSize, surfelClusterGBufferData.data());

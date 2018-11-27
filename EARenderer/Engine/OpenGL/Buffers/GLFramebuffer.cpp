@@ -98,7 +98,6 @@ namespace EARenderer {
         }
         
         bind();
-        texture.bind();
         
         if (layer == NotLayered) {
             glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
@@ -123,7 +122,6 @@ namespace EARenderer {
         }
 
         bind();
-        texture.bind();
 
         GLenum glAttachment;
 

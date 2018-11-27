@@ -50,6 +50,7 @@ namespace EARenderer {
 
         rtcSetGeometryUserData(geometry, this);
         rtcSetGeometryIntersectFilterFunction(geometry, intersectionFilter);
+        rtcSetGeometryOccludedFilterFunction(geometry, intersectionFilter);
 
         rtcCommitGeometry(geometry);
         rtcAttachGeometry(mScene, geometry);
@@ -120,9 +121,11 @@ namespace EARenderer {
 
 #pragma mark - Occlusion
 
-    bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1) {
+    bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1, FaceFilter faceFilter) {
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
+        
+        mFaceFilter = faceFilter;
 
         glm::vec3 direction = (p1 - p0);
 
@@ -133,8 +136,8 @@ namespace EARenderer {
         ray.dir_x = direction.x;
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
-        ray.tnear = 0.01f;
-        ray.tfar = 0.99;
+        ray.tnear = 0.00;
+        ray.tfar = 1.0;
         ray.flags = 0;
 
         rtcOccluded1(mScene, &context, &ray);

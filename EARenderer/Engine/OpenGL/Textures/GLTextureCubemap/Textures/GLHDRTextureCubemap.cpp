@@ -8,19 +8,20 @@
 
 #include "GLHDRTextureCubemap.hpp"
 #include "GLHDRCubemapSampler.hpp"
+#include "GLTextureUnitManager.hpp"
 #include "stb_image.h"
 
 namespace EARenderer {
     
 #pragma mark - Lifecycle
 
-    GLHDRTextureCubemap::GLHDRTextureCubemap(const Size2D& size, Filter filter) {
+    GLHDRTextureCubemap::GLHDRTextureCubemap(const Size2D& size, Sampling::Filter filter) {
         std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
-        initialize(size, filter, WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, nullptrs);
+        initialize(size, filter, Sampling::WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, nullptrs);
     }
 
-    GLHDRTextureCubemap::GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Filter filter) {
+    GLHDRTextureCubemap::GLHDRTextureCubemap(const std::array<std::vector<glm::vec3>, 6>& pixels, Sampling::Filter filter) {
         Size2D estimation;
         std::array<const void *, 6> pixelData;
 
@@ -32,13 +33,13 @@ namespace EARenderer {
             pixelData[i] = pixels[i].data();
         }
 
-        initialize(estimation, filter, WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
+        initialize(estimation, filter, Sampling::WrapMode::ClampToEdge, GL_RGB32F, GL_RGB, GL_FLOAT, pixelData);
     }
     
 #pragma mark - Public interface
 
     GLHDRCubemapSampler GLHDRTextureCubemap::sampleTexels(int32_t mipLevel) const {
-        bind();
+//        bind();
         return GLHDRCubemapSampler(*this, mipLevel);
     }
 

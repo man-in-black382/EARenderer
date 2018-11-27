@@ -54,7 +54,6 @@
     [super awakeFromNib];
 
     self.parallaxMappingStrengthTextField.floatValue = mSettings.meshSettings.parallaxMappingStrength;
-    self.ESMFactorTextField.floatValue = mSettings.meshSettings.ESMFactor;
     self.shadowBlurRadiusTextField.integerValue = mSettings.meshSettings.shadowBlur.radius;
     self.surfelProbeIndexTextField.intValue = mSettings.surfelSettings.POVProbeIndex;
 
@@ -65,6 +64,60 @@
     self.bloomSmallBlurWeightTextField.integerValue = mSettings.bloomSettings.smallBlurWeight;
     self.bloomMediumBlurWeightTextField.integerValue = mSettings.bloomSettings.mediumBlurWeight;
     self.bloomLargeBlurWeightTextField.integerValue = mSettings.bloomSettings.largeBlurWeight;
+}
+
+#pragma mark - Lights
+
+- (IBAction)skyColorChanged:(NSColorWell *)sender {
+    NSLog(@"Sky color changed to: %@", sender.color);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)skyBrightnessChanged:(NSSlider *)sender {
+    NSLog(@"Sky brightness changed to: %f", sender.floatValue);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)sunColorChanged:(NSColorWell *)sender {
+    NSLog(@"Sun color changed to: %@", sender.color);
+//    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+//    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)sunBrightnessChanged:(NSSlider *)sender {
+    NSLog(@"Sun brightness changed to: %f", sender.floatValue);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)sunXDirectionChanged:(NSSlider *)sender {
+    NSLog(@"Sun x direction changed to: %f", sender.floatValue);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)sunYDirectionChanged:(NSSlider *)sender {
+    NSLog(@"Sun y direction changed to: %f", sender.floatValue);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)sunZDirectionChanged:(NSSlider *)sender {
+    NSLog(@"Sun z direction changed to: %f", sender.floatValue);
+    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
+    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)expositionChanged:(NSTextField *)sender {
+//    mSettings.meshSettings.parallaxMappingStrength = sender.floatValue;
+//    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+}
+
+- (IBAction)bloomThresholdChanged:(NSTextField *)sender {
+//    mSettings.meshSettings.parallaxMappingStrength = sender.floatValue;
+//    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
 #pragma mark - Actions
@@ -111,19 +164,6 @@
 
 - (IBAction)frameMeasurementToggled:(NSButton *)sender {
 //    mSettings. = sender.state == NSControlStateValueOn;
-    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
-}
-
-#pragma mark - Shadows
-
-- (IBAction)ESMFactorChanged:(NSTextField *)sender {
-    mSettings.meshSettings.ESMFactor = sender.floatValue;
-    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
-}
-
-- (IBAction)shadowBlurRadiusChanged:(NSTextField *)sender {
-    mSettings.meshSettings.shadowBlur.radius = sender.intValue;
-    mSettings.meshSettings.shadowBlur.sigma = sender.intValue;
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 

@@ -24,7 +24,7 @@
 #include "GLVertexAttribute.hpp"
 #include "GLUniform.hpp"
 #include "GLShader.hpp"
-#include "GLBindable.hpp"
+#include "GLSampler.hpp"
 #include "GLTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLTexture2D.hpp"
@@ -38,7 +38,7 @@ namespace EARenderer {
     template<uint32_t expr>
     std::integral_constant<uint32_t, expr> uint32_constant{};
     
-    class GLProgram: public GLNamedObject, public GLBindable {
+    class GLProgram: public GLNamedObject {
     protected:
         using VertexAttributeName = std::string;
         using CRC32 = uint32_t;
@@ -59,12 +59,11 @@ namespace EARenderer {
         void link();
         void obtainVertexAttributes();
         void obtainUniforms();
-        void obtainAvailableTextureUnits();
         
     protected:
         GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
-
-        void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture);
+        
+        void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture, const GLSampler* sampler = nullptr);
         
         template <typename BufferDataType>
         void setUniformTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
@@ -87,7 +86,7 @@ namespace EARenderer {
         virtual ~GLProgram() = 0;
         void swap(GLProgram&);
         
-        void bind() const override;
+        void bind() const;
         bool validateState() const;
 
         const GLVertexAttribute& vertexAttributeByName(const std::string& name);

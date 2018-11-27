@@ -33,8 +33,8 @@ namespace EARenderer {
     mSettings(settings),
 
     // Effects
-    mFramebuffer(std::make_shared<GLFramebuffer>(settings.resolution)),
-    mPostprocessTexturePool(std::make_shared<HalfPrecisionTexturePool>(settings.resolution)),
+    mFramebuffer(std::make_shared<GLFramebuffer>(settings.displayedFrameResolution)),
+    mPostprocessTexturePool(std::make_shared<HalfPrecisionTexturePool>(settings.displayedFrameResolution)),
     mBloomEffect(mFramebuffer, mPostprocessTexturePool),
     mToneMappingEffect(mFramebuffer, mPostprocessTexturePool),
     mSSREffect(mFramebuffer, mPostprocessTexturePool),
@@ -43,7 +43,7 @@ namespace EARenderer {
     // Helpers
     mSurfelData(surfelData),
     mProbeData(diffuseProbeData),
-    mShadowMapper(std::make_shared<ShadowMapper>(scene, 1)),
+    mShadowMapper(std::make_shared<ShadowMapper>(scene, GBuffer, settings.meshSettings.shadowCascadesCount)),
     mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper)),
     mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, GBuffer, surfelData, diffuseProbeData, mShadowMapper)),
     mGBuffer(GBuffer)
@@ -141,13 +141,18 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::render(const DebugOpportunity& debugClosure) {
 
-        glFinish();
-        Measurement::ExecutionTime("Shadow mapping took", [&]{
+//        glFinish();
+//        Measurement::ExecutionTime("Shadow mapping took", [&]{
             mShadowMapper->render();
-            glFinish();
-        });
+//            glFinish();
+//        });
         
-        mIndirectLightAccumulator->updateProbes();
+//        glFinish();
+//        Measurement::ExecutionTime("Probe update took", [&]{
+            mIndirectLightAccumulator->updateProbes();
+//            glFinish();
+//        });
+        
 
         // We're using depth buffer rendered during gbuffer construction.
         // Depth writes are disabled for the purpose of combining skybox
@@ -196,18 +201,18 @@ namespace EARenderer {
         auto smaaOutputTexture = ssrBrightOutputTexture;
         mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
         
-//        // DEBUG
+        // DEBUG
 //        glDisable(GL_DEPTH_TEST);
 //
 //        mFSQuadShader.bind();
 //        mFSQuadShader.setApplyToneMapping(false);
 //        mFSQuadShader.ensureSamplerValidity([&]() {
-//            mFSQuadShader.setTexture(mSMAAEffect.mEdgesTexture);
+//            mFSQuadShader.setTexture(*mShadowMapper->directionalShadowMapArray(), 0);
 //        });
 //
 //        Drawable::TriangleStripQuad::Draw();
 //        glEnable(GL_DEPTH_TEST);
-//        // DEBUG
+        // DEBUG
 
         renderFinalImage(smaaOutputTexture);
         

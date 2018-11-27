@@ -58,8 +58,7 @@ namespace EARenderer {
         mCookTorranceShader.ensureSamplerValidity([&]() {
             mCookTorranceShader.setGBuffer(*mGBuffer);
             mCookTorranceShader.setDirectionalShadowMapArray(*mShadowMapper->directionalShadowMapArray());
-//            mCookTorranceShader.setExponentialShadowMaps(*mShadowMapper->omnidirectionalShadowMaps());
-//            mCookTorranceShader.setExponentialShadowMap(*mShadowMapper->directionalShadowMap());
+            mCookTorranceShader.setPenumbra(*mShadowMapper->directionalPenumbra());
         });
 
         renderDirectionalLights();

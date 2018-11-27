@@ -80,9 +80,9 @@ namespace EARenderer {
         } else {
             for (size_t i = 0; i < mSurfelClusterVAOs.size(); i++) {
                 mSurfelClusterVAOs[i].bind();
-                mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
                 const SurfelCluster& cluster = mSurfelData->surfelClusters()[i];
                 mSurfelRenderingShader.setSurfelGroupOffset(cluster.surfelOffset);
+                mSurfelRenderingShader.setExternalColor(mSurfelClusterColors[i]);
                 Drawable::Point::Draw(cluster.surfelCount);
             }
         }

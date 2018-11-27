@@ -10,13 +10,12 @@
 #define GLBufferTexture_hpp
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
 #include "GLTextureBuffer.hpp"
 
 namespace EARenderer {
     
     template <typename BufferDataType>
-    class GLBufferTexture: public GLNamedObject, public GLBindable {
+    class GLBufferTexture: public GLNamedObject {
     private:
         GLTextureBuffer<BufferDataType> mBuffer;
         
@@ -30,7 +29,7 @@ namespace EARenderer {
         
         virtual ~GLBufferTexture() = 0;
         
-        void bind() const override {
+        void bind() const {
             glBindTexture(GL_TEXTURE_BUFFER, mName);
             mBuffer.bind();
         }

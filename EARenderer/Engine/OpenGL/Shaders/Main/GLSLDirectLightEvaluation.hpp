@@ -46,6 +46,7 @@ namespace EARenderer {
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
         void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
+        void setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F>& penumbra);
         void setShadowMapArrayIndex(size_t index);
         void setSettings(const RenderingSettings& settings);
     };

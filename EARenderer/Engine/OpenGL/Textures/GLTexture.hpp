@@ -10,25 +10,18 @@
 #define GLTexture_hpp
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
 #include "Size2D.hpp"
 #include "Color.hpp"
 #include "GLTextureFormat.hpp"
+#include "Sampling.hpp"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
     
-    class GLTexture: public GLNamedObject, public GLBindable {
+    class GLTexture: public GLNamedObject {
     public:
-        enum class Filter { None, Bilinear, Trilinear, Anisotropic };
-        
-        enum class WrapMode { Repeat, ClampToEdge, ClampToBorder };
-        
-        // https://www.khronos.org/opengl/wiki/Sampler_Object#Comparison_mode
-        enum class ComparisonMode { None, ReferenceToTexture };
-
         enum class Normalized {
             R, RG, RGB, RGBA,
             RCompressedRGBAInput, RGCompressedRGBAInput, RGBCompressedRGBAInput, RGBACompressedRGBAInput
@@ -57,9 +50,9 @@ namespace EARenderer {
         GLTexture(GLenum bindingPoint);
         GLTexture(const Size2D& size, GLenum bindingPoint);
 
-        void setFilter(Filter filter);
-        void setWrapMode(WrapMode wrapMode);
-        void setComparisonMode(ComparisonMode comparisonMode);
+        void setFilter(Sampling::Filter filter);
+        void setWrapMode(Sampling::WrapMode wrapMode);
+        void setComparisonMode(Sampling::ComparisonMode comparisonMode);
 
         GLTextureFormat glFormat(Normalized format);
         GLTextureFormat glFormat(Integer format);
@@ -81,8 +74,8 @@ namespace EARenderer {
 
         const Size2D& size() const;
         uint16_t mipMapCount() const;
+        GLenum bindingPoint() const;
         
-        void bind() const override;
         void generateMipMaps(size_t count = 1000);
         Size2D mipMapSize(size_t mipLevel) const;
     };

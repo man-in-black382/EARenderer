@@ -9,7 +9,7 @@
 #ifndef GLTexture2DSampler_hpp
 #define GLTexture2DSampler_hpp
 
-#include "GLTextureSampler.hpp"
+#include "GLTextureFetcher.hpp"
 #include "GLTextureDataInterpreter.hpp"
 
 namespace EARenderer {
@@ -18,7 +18,7 @@ namespace EARenderer {
     class GLTexture2D;
 
     template <class TextureFormat, TextureFormat Format>
-    class GLTexture2DSampler: public GLTextureSampler {
+    class GLTexture2DSampler: public GLTextureFetcher {
     private:
         friend GLTexture2D<TextureFormat, Format>;
 
@@ -26,7 +26,7 @@ namespace EARenderer {
 
         GLTexture2DSampler(const GLTexture2D<TextureFormat, Format>& texture, uint8_t mipLevel)
         :
-        GLTextureSampler(texture, mipLevel),
+        GLTextureFetcher(texture, mipLevel),
         mPixelBuffer(new GLubyte[mMipSize.width * mMipSize.height * 4 * GLTextureDataInterpreter<TextureFormat, Format>::BytesPerChannel])
         {
             auto format = glUnpackFormat(Format);

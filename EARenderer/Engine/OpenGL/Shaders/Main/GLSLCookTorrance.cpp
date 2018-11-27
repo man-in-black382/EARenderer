@@ -103,7 +103,6 @@ namespace EARenderer {
     void GLSLCookTorrance::setSettings(const RenderingSettings& settings) {
         glUniform1ui(uniformByNameCRC32(uint32_constant<ctcrc32("uSettingsBitmask")>).location(), settings.meshSettings.booleanBitmask());
 //        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uParallaxMappingStrength")>).location(), settings.meshSettings.parallaxMappingStrength);
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
 
 //        int32_t compression = 0;
 //        switch (settings.meshSettings.SHCompression) {

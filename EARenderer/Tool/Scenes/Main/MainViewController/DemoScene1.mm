@@ -185,6 +185,7 @@
     scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
+    scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
 
     scene->calculateGeometricProperties();
 
@@ -197,7 +198,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.37);
+    scene->setDiffuseProbeSpacing(0.37); // 363
     scene->setSurfelSpacing(0.05);
 
     scene->camera()->moveTo(glm::vec3(0.0, -0.7, 0.0));
@@ -234,10 +235,10 @@
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(-0.3, -1.0, 0.45);
-    glm::vec3 lightEnd(0.5, 0.0, -0.45);
+    glm::vec3 lightStart(-0.3, -0.5, 0.45);
+    glm::vec3 lightEnd(0.5, -0.5, -0.45);
 
-    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 30.0);
+    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 20.0);
 
     self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);

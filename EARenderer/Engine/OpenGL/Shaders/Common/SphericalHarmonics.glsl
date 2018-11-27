@@ -82,54 +82,6 @@ SH ScaleSH(SH sh, vec3 color) {
 //
 SH SHProduct(SH first, SH second) {
 
-//    const in float4 a[9], const in float4 b[9], out float4 r[9]
-
-//    float3    XYZ = float3( -_Direction.z, -_Direction.x, _Direction.y );
-//    float    EvalSH0 = f0;
-//    float4    EvalSH1234, EvalSH5678;
-//    EvalSH1234.x =  f1 * XYZ.y;
-//    EvalSH1234.y =  f1 * XYZ.z;
-//    EvalSH1234.z =  f1 * XYZ.x;
-//    EvalSH1234.w =  f2 * XYZ.x * XYZ.y;
-//    EvalSH5678.x =  f2 * XYZ.y * XYZ.z;
-//    EvalSH5678.y =  f2 * 0.28867513459481288225457439025097 * (3.0 * XYZ.z*XYZ.z - 1.0);
-//    EvalSH5678.z =  f2 * XYZ.x * XYZ.z;
-//    EvalSH5678.w =  f2 * 0.5 * (XYZ.x*XYZ.x - XYZ.y*XYZ.y);
-
-//    // Dot the SH together
-//    return max( 0.0,
-//               EvalSH0        * _SH[0]
-//               + EvalSH1234.x * _SH[1]
-//               + EvalSH1234.y * _SH[2]
-//               + EvalSH1234.z * _SH[3]
-//               + EvalSH1234.w * _SH[4]
-//               + EvalSH5678.x * _SH[5]
-//               + EvalSH5678.y * _SH[6]
-//               + EvalSH5678.z * _SH[7]
-//               + EvalSH5678.w * _SH[8] );
-
-//    mL00 += value * Y00 * weight;
-//
-//    // l, m = 1, -1
-//    mL1_1 += value * Y1_1 * direction.y * weight;
-//    // l, m = 1, 0
-//    mL10 += value * Y10 * direction.z * weight;
-//    // l, m = 1, 1
-//    mL11 += value * Y11 * direction.x * weight;
-//
-//    // l, m = 2, -2
-//    mL2_2 += value * Y2_2 * (direction.x * direction.y) * weight;
-//    // l, m = 2, -1
-//    mL2_1 += value * Y2_1 * (direction.y * direction.z) * weight;
-//    // l, m = 2, 1
-//    mL21 += value * Y21 * (direction.x * direction.z) * weight;
-//
-//    // l, m = 2, 0
-//    mL20 += value * Y20 * (3.0f * direction.z * direction.z - 1.0f) * weight;
-//
-//    // l, m = 2, 2
-//    mL22 += value * Y22 * (direction.x * direction.x - direction.y * direction.y) * weight;
-
     vec3 a[9], b[9], r[9];
 
     // First

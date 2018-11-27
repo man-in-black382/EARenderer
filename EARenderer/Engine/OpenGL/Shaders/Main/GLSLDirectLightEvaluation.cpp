@@ -63,16 +63,12 @@ namespace EARenderer {
     }
 
     void GLSLDirectLightEvaluation::setDirectionalShadowMapArray(const GLDepthTexture2DArray& array) {
-        setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMapArray")>, array);
+        setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMapsComparisonSampler")>, array);
     }
     
-//    void GLSLDirectLightEvaluation::setExponentialShadowMap(const GLFloatTexture2D<GLTexture::Float::RGBA32F>& map) {
-//        setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMap")>, map);
-//    }
-//
-//    void GLSLDirectLightEvaluation::setExponentialShadowMaps(const GLFloatTextureCubemapArray<GLTexture::Float::R32F>& maps) {
-//        setUniformTexture(uint32_constant<ctcrc32("uOmnidirectionalShadowMaps")>, maps);
-//    }
+    void GLSLDirectLightEvaluation::setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F>& penumbra) {
+        setUniformTexture(uint32_constant<ctcrc32("uPenumbra")>, penumbra);
+    }
 
     void GLSLDirectLightEvaluation::setShadowMapArrayIndex(size_t index) {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uOmnidirectionalShadowMapIndex")>).location(), static_cast<GLint>(index));
@@ -81,15 +77,6 @@ namespace EARenderer {
     void GLSLDirectLightEvaluation::setSettings(const RenderingSettings& settings) {
         glUniform1ui(uniformByNameCRC32(uint32_constant<ctcrc32("uSettingsBitmask")>).location(), settings.meshSettings.booleanBitmask());
         //        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uParallaxMappingStrength")>).location(), settings.meshSettings.parallaxMappingStrength);
-//        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
-
-        //        int32_t compression = 0;
-        //        switch (settings.meshSettings.SHCompression) {
-        //            case RenderingSettings::MeshSettings::SphericalHarmonicsCompression::Uncompressed: compression = 0; break;
-        //            case RenderingSettings::MeshSettings::SphericalHarmonicsCompression::Compressed322: compression = 1; break;
-        //            case RenderingSettings::MeshSettings::SphericalHarmonicsCompression::Compressed311: compression = 2; break;
-        //        }
-        //        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uSHCompressionType")>).location(), compression);
     }
 
 }

@@ -7,7 +7,7 @@
 //
 
 #include "GLTexture.hpp"
-#include "GLPipelineState.hpp"
+#include "GLTextureUnitManager.hpp"
 
 #include <cmath>
 #include <OpenGL/glext.h>
@@ -27,7 +27,7 @@ namespace EARenderer {
     mBindingPoint(bindingPoint)
     {
         glGenTextures(1, &mName);
-        bind();
+        GLTextureUnitManager::Shared().bindTextureToActiveUnit(*this);
     }
 
     GLTexture::~GLTexture() {
@@ -36,18 +36,18 @@ namespace EARenderer {
 
 #pragma mark - Protected helpers
 
-    void GLTexture::setFilter(Filter filter) {
+    void GLTexture::setFilter(Sampling::Filter filter) {
         GLint glMinFilter = 0;
         GLint glMagFilter = 0;
 
         switch (filter) {
-            case Filter::None:
+            case Sampling::Filter::None:
                 glMinFilter = glMagFilter = GL_NEAREST; break;
-            case Filter::Bilinear:
+            case Sampling::Filter::Bilinear:
                 glMinFilter = glMagFilter = GL_LINEAR; break;
-            case Filter::Trilinear:
+            case Sampling::Filter::Trilinear:
                 glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR; break;
-            case Filter::Anisotropic:
+            case Sampling::Filter::Anisotropic:
                 glMinFilter = GL_LINEAR_MIPMAP_LINEAR; glMagFilter = GL_LINEAR;
                 float aniso = 0.0f;
                 glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
@@ -59,13 +59,13 @@ namespace EARenderer {
         glTexParameteri(mBindingPoint, GL_TEXTURE_MAG_FILTER, glMagFilter);
     }
 
-    void GLTexture::setWrapMode(WrapMode wrapMode) {
+    void GLTexture::setWrapMode(Sampling::WrapMode wrapMode) {
         GLint wrap = 0;
 
         switch (wrapMode) {
-            case WrapMode::Repeat: wrap = GL_REPEAT; break;
-            case WrapMode::ClampToEdge: wrap = GL_CLAMP_TO_EDGE; break;
-            case WrapMode::ClampToBorder: wrap = GL_CLAMP_TO_BORDER; break;
+            case Sampling::WrapMode::Repeat: wrap = GL_REPEAT; break;
+            case Sampling::WrapMode::ClampToEdge: wrap = GL_CLAMP_TO_EDGE; break;
+            case Sampling::WrapMode::ClampToBorder: wrap = GL_CLAMP_TO_BORDER; break;
         }
         
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_S, wrap);
@@ -73,12 +73,12 @@ namespace EARenderer {
         glTexParameteri(mBindingPoint, GL_TEXTURE_WRAP_R, wrap);
     }
     
-    void GLTexture::setComparisonMode(ComparisonMode comparisonMode) {
+    void GLTexture::setComparisonMode(Sampling::ComparisonMode comparisonMode) {
         switch (comparisonMode) {
-            case ComparisonMode::None:
+            case Sampling::ComparisonMode::None:
                 glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_MODE, GL_NONE);
                 break;
-            case ComparisonMode::ReferenceToTexture:
+            case Sampling::ComparisonMode::ReferenceToTexture:
                 glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
                 glTexParameteri(mBindingPoint, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
                 break;
@@ -186,19 +186,16 @@ namespace EARenderer {
         return mMipMapsCount;
     }
     
-#pragma mark - Binding
-    
-    void GLTexture::bind() const {
-//        GLPipelineState::DefaultInstance().bindObjectIfNeeded(mBindingPoint, mName, [](GLPipelineState::BindingPoint bindingPoint, GLint name) {
-//            glBindTexture(bindingPoint, name);
-//        });
-        glBindTexture(mBindingPoint, mName);
+    GLenum GLTexture::bindingPoint() const {
+        return mBindingPoint;
     }
     
+#pragma mark - Mip Maps
+    
     void GLTexture::generateMipMaps(size_t count) {
-        bind();
+        GLTextureUnitManager::Shared().bindTextureToActiveUnit(*this);
         glTexParameteri(mBindingPoint, GL_TEXTURE_MAX_LEVEL, GLint(count));
-        setFilter(Filter::Trilinear);
+        setFilter(Sampling::Filter::Trilinear);
         glGenerateMipmap(mBindingPoint);
 
         mMipMapsCount = floor(std::log2(std::max(mSize.width, mSize.height)));
@@ -206,7 +203,7 @@ namespace EARenderer {
     }
 
     Size2D GLTexture::mipMapSize(size_t mipLevel) const {
-        bind();
+        GLTextureUnitManager::Shared().bindTextureToActiveUnit(*this);
         GLint w = 0;
         GLint h = 0;
         glGetTexLevelParameteriv(mBindingPoint, GLint(mipLevel), GL_TEXTURE_WIDTH, &w);

@@ -15,7 +15,7 @@ namespace EARenderer {
     GLDepthTextureCubemap::GLDepthTextureCubemap(const Size2D& size) {
         std::array<const void *, 6> nullptrs;
         nullptrs.fill(nullptr);
-        initialize(size, Filter::Bilinear, WrapMode::ClampToBorder, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, nullptrs);
+        initialize(size, Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToBorder, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, nullptrs);
     }
     
 }

@@ -19,8 +19,8 @@ namespace EARenderer {
     protected:
         size_t mDepth = 0;
 
-        void initialize(const Size2D& size, size_t depth, Filter filter, WrapMode wrapMode, GLint internalFormat);
-        void initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
+        void initialize(const Size2D& size, size_t depth, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat);
+        void initialize(const Size2D& size, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
                         const std::vector<void *> pixelData);
     
     public:

@@ -22,7 +22,7 @@ namespace EARenderer {
 
     GLTexture3D::~GLTexture3D() { }
 
-    void GLTexture3D::initialize(const Size2D& size, size_t depth, Filter filter, WrapMode wrapMode, GLint internalFormat) {
+    void GLTexture3D::initialize(const Size2D& size, size_t depth, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat) {
         if (size.width <= 0.0 || size.height <= 0.0) {
             throw std::invalid_argument("3D texture size must not be zero");
         }
@@ -45,7 +45,7 @@ namespace EARenderer {
         setWrapMode(wrapMode);
     }
     
-    void GLTexture3D::initialize(const Size2D& size, Filter filter, WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
+    void GLTexture3D::initialize(const Size2D& size, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
                                  const std::vector<void *> pixelData) {
         initialize(size, pixelData.size(), filter, wrapMode, internalFormat);
 

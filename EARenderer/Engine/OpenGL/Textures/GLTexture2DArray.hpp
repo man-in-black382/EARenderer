@@ -22,7 +22,7 @@ namespace EARenderer {
         
         size_t mCount;
         
-        void initialize(const Size2D& size, size_t count, const std::vector<const void*>& pixelData, Filter filter, WrapMode wrapMode) {
+        void initialize(const Size2D& size, size_t count, const std::vector<const void*>& pixelData, Sampling::Filter filter, Sampling::WrapMode wrapMode) {
             
             if (size.width <= 0.0 || size.height <= 0.0) {
                 throw std::invalid_argument("Texture size must not be zero");
@@ -70,8 +70,8 @@ namespace EARenderer {
         GLNormalizedTexture2DArray(const Size2D& size,
                                    size_t count,
                                    const std::vector<const void*>& pixelData = { },
-                                   GLTexture::Filter filter = GLTexture::Filter::Bilinear,
-                                   GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
+                                   Sampling::Filter filter = Sampling::Filter::Bilinear,
+                                   Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
         {
             this->initialize(size, count, pixelData, filter, wrapMode);
         }
@@ -84,7 +84,7 @@ namespace EARenderer {
     class GLIntegerTexture2DArray: public GLTexture2DArray<GLTexture::Integer, Format> {
     public:
         GLIntegerTexture2DArray(const Size2D& size, size_t count, const std::vector<const void*>& pixelData = { }) {
-            this->initialize(size, count, pixelData, GLTexture::Filter::None, GLTexture::WrapMode::ClampToEdge);
+            this->initialize(size, count, pixelData, Sampling::Filter::None, Sampling::WrapMode::ClampToEdge);
         }
         
         ~GLIntegerTexture2DArray() = default;
@@ -97,8 +97,8 @@ namespace EARenderer {
         GLFloatTexture2DArray(const Size2D& size,
                               size_t count,
                               const std::vector<const void*>& pixelData = { },
-                              GLTexture::Filter filter = GLTexture::Filter::Bilinear,
-                              GLTexture::WrapMode wrapMode = GLTexture::WrapMode::ClampToEdge)
+                              Sampling::Filter filter = Sampling::Filter::Bilinear,
+                              Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
         {
             this->initialize(size, count, pixelData, filter, wrapMode);
         }
@@ -109,11 +109,8 @@ namespace EARenderer {
     
     class GLDepthTexture2DArray: public GLTexture2DArray<GLTexture::Depth, GLTexture::Depth::Default> {
     public:
-        GLDepthTexture2DArray(const Size2D& size, size_t count, ComparisonMode comparisonMode = ComparisonMode::None) {
-            initialize(size, count, { }, Filter::Bilinear, WrapMode::ClampToBorder);
-            // Prevent oversampling by supplying 1.0 depth values when texture is sampled beyond [0.0; 1.0] range
-            GLfloat borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-            glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+        GLDepthTexture2DArray(const Size2D& size, size_t count, Sampling::ComparisonMode comparisonMode = Sampling::ComparisonMode::None) {
+            initialize(size, count, { }, Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge);
             setComparisonMode(comparisonMode);
         }
         

@@ -12,13 +12,12 @@
 #include <vector>
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
 #include "GLBufferWriter.hpp"
 
 namespace EARenderer {
     
     template <typename DataType>
-    class GLBuffer: public GLNamedObject, public GLBindable {
+    class GLBuffer: public GLNamedObject {
     private:
         GLint mBindingPoint;
         GLenum mUsageMode;
@@ -55,7 +54,7 @@ namespace EARenderer {
         
 #pragma mark - Binding
         
-        void bind() const override {
+        virtual void bind() const {
             glBindBuffer(mBindingPoint, mName);
         }
         

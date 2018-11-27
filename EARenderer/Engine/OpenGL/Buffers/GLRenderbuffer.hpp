@@ -10,12 +10,11 @@
 #define GLRenderbuffer_hpp
 
 #include "GLNamedObject.hpp"
-#include "GLBindable.hpp"
 #include "Size2D.hpp"
 
 namespace EARenderer {
     
-    class GLRenderbuffer: public GLNamedObject, public GLBindable {
+    class GLRenderbuffer: public GLNamedObject {
     private:
         Size2D mSize;
         
@@ -27,7 +26,7 @@ namespace EARenderer {
         GLRenderbuffer& operator=(GLRenderbuffer&& rhs) = default;
         ~GLRenderbuffer() = 0;
         
-        void bind() const override;
+        void bind() const;
         
         const Size2D& size() const;
     };

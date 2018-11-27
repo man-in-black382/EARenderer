@@ -8,6 +8,7 @@
 
 #include "GLHDRCubemapSampler.hpp"
 #include "GLHDRTextureCubemap.hpp"
+#include "GLTextureUnitManager.hpp"
 
 #include <glm/gtc/packing.hpp>
 
@@ -25,7 +26,7 @@ namespace EARenderer {
     mPositiveZPixelBuffer(new GLhalf[mMipSize.width * mMipSize.height * 4]),
     mNegativeZPixelBuffer(new GLhalf[mMipSize.width * mMipSize.height * 4])
     {
-        texture.bind();
+//        texture.bind();
 
         // Despite the fact that texture is being 3-component we treat it as 4-component as stated in the OpenGL docs:
         //
