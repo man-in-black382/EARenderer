@@ -44,9 +44,8 @@ uniform int uDepthSplitsAxis;
 uniform float uDepthSplits[MaximumShadowCascadesCount];
 uniform int uNumberOfCascades;
 uniform sampler2DArrayShadow uDirectionalShadowMapsComparisonSampler;
+uniform samplerCubeShadow uOmnidirectionalShadowMapComparisonSampler;
 uniform sampler2D uPenumbra;
-uniform samplerCubeArrayShadow uOmnidirectionalShadowMaps;
-uniform int uOmnidirectionalShadowMapIndex;
 
 // Functions
 
@@ -84,7 +83,6 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 
 void main() {
     GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
-
     vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     float roughness     = gBuffer.roughness;
     
@@ -110,16 +108,17 @@ void main() {
 
     // Analytical lighting
     if (uLightType == kLightTypeDirectional) {
-        radiance    = DirectionalLightRadiance(uDirectionalLight);
-        L           = -normalize(uDirectionalLight.direction);
+        radiance = DirectionalLightRadiance(uDirectionalLight);
+        L  = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
         float penumbra = texture(uPenumbra, vTexCoords).r;
         shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
-        radiance    = PointLightRadiance(uPointLight, worldPosition);
-        L           = normalize(uPointLight.position - worldPosition);
-//        shadow      = OmnidirectionalExponentialShadow(worldPosition);
+        radiance = PointLightRadiance(uPointLight, worldPosition);
+        L = normalize(uPointLight.position - worldPosition);
+        float penumbra = texture(uPenumbra, vTexCoords).r;
+        shadow = OmnidirectionalShadow(worldPosition, N, uPointLight, uOmnidirectionalShadowMapComparisonSampler, penumbra);
     }
     else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
@@ -139,7 +138,4 @@ void main() {
 //        case 2: oBaseOutput += vec4(0.0, 0.0, 0.5, 0.0); break;
 //        case 3: oBaseOutput += vec4(0.5, 0.5, 0.0, 0.0); break;
 //    }
-
-
-//    oBaseOutput.rgb /= kNormalizationFactor;
 }

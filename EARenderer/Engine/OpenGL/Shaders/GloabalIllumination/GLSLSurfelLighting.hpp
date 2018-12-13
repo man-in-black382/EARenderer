@@ -33,6 +33,7 @@ namespace EARenderer {
         void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
         void setShadowCascades(const FrustumCascades& cascades);
         void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
+        void setOmnidirectionalShadowMap(const GLDepthTextureCubemap& shadowMap);
         void setSettings(const RenderingSettings& settings);
     };
 

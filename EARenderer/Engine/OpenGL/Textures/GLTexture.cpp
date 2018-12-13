@@ -85,46 +85,7 @@ namespace EARenderer {
         }
     }
 
-    GLTextureFormat GLTexture::glFormat(Normalized format) {
-        switch (format) {
-            case Normalized::RCompressedRGBAInput:     return { GL_COMPRESSED_RED,  GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGCompressedRGBAInput:    return { GL_COMPRESSED_RG,   GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGBCompressedRGBAInput:   return { GL_COMPRESSED_RGB,  GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::RGBACompressedRGBAInput:  return { GL_COMPRESSED_RGBA, GL_RGBA, GL_UNSIGNED_BYTE };
-            case Normalized::R:                        return { GL_R8,              GL_RED,  GL_UNSIGNED_BYTE };
-            case Normalized::RG:                       return { GL_RG8,             GL_RG,   GL_UNSIGNED_BYTE };
-            case Normalized::RGB:                      return { GL_RGB8,            GL_RGB,  GL_UNSIGNED_BYTE };
-            case Normalized::RGBA:                     return { GL_RGBA8,           GL_RGBA, GL_UNSIGNED_BYTE };
-        }
-    }
-
-    GLTextureFormat GLTexture::glFormat(Integer format){
-        switch (format) {
-            case Integer::R32UI:      return { GL_R32UI,    GL_RED_INTEGER,  GL_UNSIGNED_INT };
-            case Integer::RG32UI:     return { GL_RG32UI,   GL_RG_INTEGER,   GL_UNSIGNED_INT };
-            case Integer::RGB32UI:    return { GL_RGB32UI,  GL_RGB_INTEGER,  GL_UNSIGNED_INT };
-            case Integer::RGBA32UI:   return { GL_RGBA32UI, GL_RGBA_INTEGER, GL_UNSIGNED_INT };
-        }
-    }
-
-    GLTextureFormat GLTexture::glFormat(Float format) {
-        switch (format) {
-            case Float::R16F:     return { GL_R16F,     GL_RED,  GL_FLOAT };
-            case Float::RG16F:    return { GL_RG16F,    GL_RG,   GL_FLOAT };
-            case Float::RGB16F:   return { GL_RGB16F,   GL_RGB,  GL_FLOAT };
-            case Float::RGBA16F:  return { GL_RGBA16F,  GL_RGBA, GL_FLOAT };
-            case Float::R32F:     return { GL_R32F,     GL_RED,  GL_FLOAT };
-            case Float::RG32F:    return { GL_RG32F,    GL_RG,   GL_FLOAT };
-            case Float::RGB32F:   return { GL_RGB32F,   GL_RGB,  GL_FLOAT };
-            case Float::RGBA32F:  return { GL_RGBA32F,  GL_RGBA, GL_FLOAT };
-        }
-    }
-
-    GLTextureFormat GLTexture::glFormat(Depth format) {
-        switch (format) {
-            case Depth::Default: return { GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT };
-        }
-    }
+    
 
 #pragma mark - Static
 

@@ -14,12 +14,6 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
     
-    Light::Light()
-    :
-    mPosition(glm::zero<glm::vec3>()),
-    mColor(Color::white())
-    { }
-    
     Light::Light(const glm::vec3& position, const Color& color)
     :
     mPosition(position),
@@ -35,6 +29,10 @@ namespace EARenderer {
     const Color& Light::color() const {
         return mColor;
     }
+
+    bool Light::isEnabled() const {
+        return mIsEnabled;
+    }
     
 #pragma mark - Setters
     
@@ -45,17 +43,19 @@ namespace EARenderer {
     void Light::setColor(const Color& color) {
         mColor = color;
     }
+
+    void Light::setIsEnabled(bool enabled) {
+        mIsEnabled = enabled;
+    }
     
 #pragma mark - Protected
     
     float Light::split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda) const {
-        
         // Formula https://habrahabr.ru/post/226421/
-        
         float f = (float)cascadeIndex / (float)cascadesCount;
         float l = nearPlane * powf(farPlane / nearPlane, f);
         float u = nearPlane + (farPlane - nearPlane) * f;
         return l * lambda + u * (1.0f - lambda);
     }
-    
+
 }

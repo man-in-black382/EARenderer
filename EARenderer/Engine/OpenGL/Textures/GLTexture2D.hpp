@@ -24,7 +24,7 @@ namespace EARenderer {
             }
 
             mSize = size;
-            GLTextureFormat f = glFormat(Format);
+            constexpr GLTextureFormat f = glFormat(Format);
 
             glTexImage2D(GL_TEXTURE_2D, 0, f.internalFormat, size.width, size.height, 0, f.inputPixelFormat, f.inputPixelType, pixelData);
 

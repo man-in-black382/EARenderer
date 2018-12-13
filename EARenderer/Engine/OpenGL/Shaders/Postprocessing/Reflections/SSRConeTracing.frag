@@ -173,6 +173,4 @@ void main() {
 
     oBaseOutput = vec4(finalColor, 1.0);
     oBrightOutput = LuminanceFromRGB(finalColor) > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
-    
-//    oBaseOutput = vec4(reflectedColor * specular * HDRNormalizationFactor, 1.0);
 }

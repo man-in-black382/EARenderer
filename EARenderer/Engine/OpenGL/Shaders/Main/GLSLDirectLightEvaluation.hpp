@@ -12,11 +12,9 @@
 #include "GLProgram.hpp"
 #include "PBRMaterial.hpp"
 #include "GLTexture2D.hpp"
-#include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
-#include "GLLDRTextureCubemap.hpp"
 #include "GLTextureCubemapArray.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
@@ -46,7 +44,8 @@ namespace EARenderer {
         void setGBuffer(const SceneGBuffer& GBuffer);
         void setFrustumCascades(const FrustumCascades& cascades);
         void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
-        void setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F>& penumbra);
+        void setOmnidirectionalShadowCubemap(const GLDepthTextureCubemap& cubemap);
+        void setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R>& penumbra);
         void setShadowMapArrayIndex(size_t index);
         void setSettings(const RenderingSettings& settings);
     };

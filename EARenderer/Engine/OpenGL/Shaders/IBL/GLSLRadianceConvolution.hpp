@@ -10,7 +10,6 @@
 #define GLSLRadianceConvolution_hpp
 
 #include "GLSLCubemapRendering.hpp"
-#include "GLHDRTextureCubemap.hpp"
 
 namespace EARenderer {
     
@@ -20,7 +19,7 @@ namespace EARenderer {
         
         GLSLRadianceConvolution();
         
-        void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
+//        void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
         void setRoughness(float roughness);
         void setAlgorithm(Algorithm algorithm);
     };

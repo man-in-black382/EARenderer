@@ -13,11 +13,9 @@
 #include "PBRMaterial.hpp"
 #include "GLTexture2D.hpp"
 
-#include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
 #include "GLLDRTexture3D.hpp"
-#include "GLLDRTextureCubemap.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 #include "Camera.hpp"
@@ -44,10 +42,10 @@ namespace EARenderer {
         void setLight(const DirectionalLight& light);
         void setMaterial(const PBRMaterial& material);
         
-        void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
-                            const GLHDRTextureCubemap& specularIrradianceMap,
-//                            const GLHDRTexture2D& BRDFIntegrationMap,
-                            int8_t specularIrradianceMapMaxLOD);
+//        void setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
+//                            const GLHDRTextureCubemap& specularIrradianceMap,
+////                            const GLHDRTexture2D& BRDFIntegrationMap,
+//                            int8_t specularIrradianceMapMaxLOD);
         
         void setFrustumCascades(const FrustumCascades& cascades);
 //        void setExponentialShadowMap(const GLHDRTexture2D& map);

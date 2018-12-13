@@ -6,7 +6,8 @@ struct DirectionalLight {
 struct PointLight {
     vec3 radiantFlux; // a.k.a color
     vec3 position;
-    float clipDistance;
+    float nearPlane;
+    float farPlane;
 };
 
 struct Spotlight {
@@ -17,9 +18,11 @@ struct Spotlight {
 };
 
 vec3 PointLightRadiance(PointLight light, vec3 surfaceWorldPosition) {
-    vec3 Wi                 = normalize(light.position - surfaceWorldPosition);   // To light vector
-    float distance          = length(Wi);                                         // Distance from fragment to light
-    float attenuation       = 1.0 / (distance * distance);                        // How much enegry has light lost at current distance
+    float surfaceToLightDistance = distance(light.position, surfaceWorldPosition);
+
+    // https://gamedev.stackexchange.com/a/56934
+    float attenuation = clamp(1.0 - surfaceToLightDistance * surfaceToLightDistance / (light.farPlane * light.farPlane), 0.0, 1.0);
+    attenuation *= attenuation;
 
     return light.radiantFlux * attenuation;
 }

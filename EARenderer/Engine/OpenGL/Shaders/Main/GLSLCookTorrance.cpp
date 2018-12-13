@@ -53,16 +53,16 @@ namespace EARenderer {
         if (material.displacementMap()) { setUniformTexture(uint32_constant<ctcrc32("uMaterial.displacementMap")>, *material.displacementMap()); }
     }
     
-    void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
-                                          const GLHDRTextureCubemap& specularIrradianceMap,
-//                                          const GLHDRTexture2D& BRDFIntegrationMap,
-                                          int8_t specularIrradianceMapMaxLOD)
-    {
-        setUniformTexture(uint32_constant<ctcrc32("uDiffuseIrradianceMap")>, diffuseIrradianceMap);
-        setUniformTexture(uint32_constant<ctcrc32("uSpecularIrradianceMap")>, specularIrradianceMap);
-//        setUniformTexture(uint32_constant<ctcrc32("uBRDFIntegrationMap")>, BRDFIntegrationMap);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uSpecularIrradianceMapLOD")>).location(), specularIrradianceMapMaxLOD);
-    }
+//    void GLSLCookTorrance::setIBLUniforms(const GLHDRTextureCubemap& diffuseIrradianceMap,
+//                                          const GLHDRTextureCubemap& specularIrradianceMap,
+////                                          const GLHDRTexture2D& BRDFIntegrationMap,
+//                                          int8_t specularIrradianceMapMaxLOD)
+//    {
+//        setUniformTexture(uint32_constant<ctcrc32("uDiffuseIrradianceMap")>, diffuseIrradianceMap);
+//        setUniformTexture(uint32_constant<ctcrc32("uSpecularIrradianceMap")>, specularIrradianceMap);
+////        setUniformTexture(uint32_constant<ctcrc32("uBRDFIntegrationMap")>, BRDFIntegrationMap);
+//        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uSpecularIrradianceMapLOD")>).location(), specularIrradianceMapMaxLOD);
+//    }
     
     void GLSLCookTorrance::setFrustumCascades(const FrustumCascades& cascades) {
 //        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uLightSpaceMat")>).location(), 1, GL_FALSE,

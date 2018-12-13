@@ -11,6 +11,7 @@
 
 #include "Light.hpp"
 #include "Color.hpp"
+#include "AxisAlignedBox3D.hpp"
 
 #include <array>
 
@@ -19,15 +20,21 @@
 namespace EARenderer {
     
     class PointLight: public Light {
-    protected:
-        float mClipDistance = 20.f;
+    private:
+        float mRadius = 1.0;
+        float mNearPlane = 1.0;
         
     public:
-        using Light::Light;
-        PointLight(const glm::vec3& position, const Color& color, float clipDistance);
+        PointLight(float radius, float nearClipPlane);
+        
+        float nearClipPlane() const;
+        float farClipPlane() const;
+        float radius() const;
+        
+        void setRadius(float radius);
+        void setNearClipPlane(float nearPlane);
         
         std::array<glm::mat4, 6> viewProjectionMatrices() const;
-        float clipDistance() const;
     };
     
 }

@@ -33,7 +33,8 @@ namespace EARenderer {
     void GLSLDirectLightEvaluation::setLight(const PointLight& light) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.position")>).location(), 1, glm::value_ptr(light.position()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.clipDistance")>).location(), light.clipDistance());
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.nearPlane")>).location(), light.nearClipPlane());
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.farPlane")>).location(), light.farClipPlane());
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 1);
     }
 
@@ -66,7 +67,11 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uDirectionalShadowMapsComparisonSampler")>, array);
     }
     
-    void GLSLDirectLightEvaluation::setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F>& penumbra) {
+    void GLSLDirectLightEvaluation::setOmnidirectionalShadowCubemap(const GLDepthTextureCubemap& cubemap) {
+        setUniformTexture(uint32_constant<ctcrc32("uOmnidirectionalShadowMapComparisonSampler")>, cubemap);
+    }
+    
+    void GLSLDirectLightEvaluation::setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R>& penumbra) {
         setUniformTexture(uint32_constant<ctcrc32("uPenumbra")>, penumbra);
     }
 

@@ -2976,7 +2976,7 @@
                                                         <rect key="frame" x="1" y="457" width="248" height="16"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
-                                                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.016260162601625994" horizontal="NO" id="B4j-ND-A6c">
+                                                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="0.99674796747967476" horizontal="NO" id="B4j-ND-A6c">
                                                         <rect key="frame" x="233" y="1" width="16" height="472"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
@@ -3011,10 +3011,10 @@
                                 <rect key="frame" x="2" y="0.0" width="1050" height="474"/>
                             </openGLView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="dAA-ol-bed" userLabel="FPS View" customClass="FPSView">
-                                <rect key="frame" x="2" y="414" width="150" height="60"/>
+                                <rect key="frame" x="2" y="372" width="150" height="102"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="h5x-cL-Esw" userLabel="Frames Label">
-                                        <rect key="frame" x="13" y="24" width="139" height="36"/>
+                                        <rect key="frame" x="13" y="66" width="139" height="36"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="60" id="ywv-Q3-bSW">
                                             <font key="font" metaFont="system" size="30"/>
                                             <color key="textColor" red="1" green="0.34414661768010202" blue="0.22862274116145354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3022,10 +3022,18 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c69-ME-75j" userLabel="Time Label">
-                                        <rect key="frame" x="13" y="0.0" width="139" height="24"/>
+                                        <rect key="frame" x="13" y="42" width="139" height="24"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="33 ms" id="94v-Q1-dYw">
                                             <font key="font" metaFont="system" size="20"/>
                                             <color key="textColor" red="0.59873392353908639" green="1" blue="0.38061242002964812" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sVr-o1-AI6" userLabel="Resolution Label">
+                                        <rect key="frame" x="13" y="10" width="131" height="24"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="1920x1080" id="ZuO-Fs-NC0">
+                                            <font key="font" metaFont="system" size="20"/>
+                                            <color key="textColor" red="0.59873392349999999" green="1" blue="0.38061242000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
@@ -3033,15 +3041,19 @@
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="c69-ME-75j" secondAttribute="trailing" id="C8C-vg-WT6"/>
                                     <constraint firstItem="h5x-cL-Esw" firstAttribute="leading" secondItem="dAA-ol-bed" secondAttribute="leading" constant="15" id="E0u-L9-Edj"/>
-                                    <constraint firstAttribute="bottom" secondItem="c69-ME-75j" secondAttribute="bottom" id="dSc-OE-cjM"/>
+                                    <constraint firstAttribute="bottom" secondItem="sVr-o1-AI6" secondAttribute="bottom" constant="10" id="Jiv-uR-sa9"/>
+                                    <constraint firstItem="sVr-o1-AI6" firstAttribute="top" secondItem="c69-ME-75j" secondAttribute="bottom" constant="8" id="f88-b6-aX2"/>
                                     <constraint firstItem="c69-ME-75j" firstAttribute="leading" secondItem="dAA-ol-bed" secondAttribute="leading" constant="15" id="ijE-2N-r8T"/>
+                                    <constraint firstAttribute="trailing" secondItem="sVr-o1-AI6" secondAttribute="trailing" constant="8" id="kH0-oj-cVp"/>
                                     <constraint firstAttribute="trailing" secondItem="h5x-cL-Esw" secondAttribute="trailing" id="klr-Ru-1p4"/>
                                     <constraint firstAttribute="width" constant="150" id="m7B-GW-l3y"/>
+                                    <constraint firstItem="sVr-o1-AI6" firstAttribute="leading" secondItem="dAA-ol-bed" secondAttribute="leading" constant="15" id="ofG-Sh-dTz"/>
                                     <constraint firstItem="c69-ME-75j" firstAttribute="top" secondItem="h5x-cL-Esw" secondAttribute="bottom" id="qiX-yQ-i2M"/>
                                     <constraint firstItem="h5x-cL-Esw" firstAttribute="top" secondItem="dAA-ol-bed" secondAttribute="top" id="tUH-eN-9hM"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="framesTextField" destination="h5x-cL-Esw" id="i57-0v-2bZ"/>
+                                    <outlet property="resolutionField" destination="sVr-o1-AI6" id="QUt-8e-ihc"/>
                                     <outlet property="timeTextField" destination="c69-ME-75j" id="eEF-yr-XRI"/>
                                 </connections>
                             </customView>

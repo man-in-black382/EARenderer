@@ -22,3 +22,8 @@ float LuminanceFromRGB(vec3 rgb) {
 vec3 SRGB_From_RGB(vec3 rgb) {
     return pow(rgb, vec3(1.0 / 2.2));
 }
+
+float LinearDepth(float hyperbolicDepth, float nearPlane, float farPlane) {
+    float depth = hyperbolicDepth;// * 2.0 - 1.0;
+    return nearPlane * farPlane / (farPlane + depth * (nearPlane - farPlane));
+}

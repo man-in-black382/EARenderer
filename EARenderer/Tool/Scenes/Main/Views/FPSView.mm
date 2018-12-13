@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet NSTextField *framesTextField;
 @property (weak, nonatomic) IBOutlet NSTextField *timeTextField;
+@property (weak, nonatomic) IBOutlet NSTextField *resolutionField;
 
 @end
 
@@ -41,6 +42,12 @@
     
     self.framesTextField.stringValue = fpsString;
     self.timeTextField.stringValue = timeString;
+}
+
+- (void)setViewportResolution:(CGSize)viewportResolution
+{
+    _viewportResolution = viewportResolution;
+    self.resolutionField.stringValue = [NSString stringWithFormat:@"%dx%d", (NSInteger)viewportResolution.width, (NSInteger)viewportResolution.height];
 }
 
 @end

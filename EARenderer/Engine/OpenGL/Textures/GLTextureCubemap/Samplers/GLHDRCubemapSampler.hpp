@@ -13,28 +13,28 @@
 
 #include <memory>
 
-namespace EARenderer {
-
-    class GLHDRTextureCubemap;
-
-    class GLHDRCubemapSampler: public GLCubemapSampler {
-    private:
-        friend GLHDRTextureCubemap;
-
-        std::unique_ptr<GLhalf> mPositiveXPixelBuffer;
-        std::unique_ptr<GLhalf> mNegativeXPixelBuffer;
-        std::unique_ptr<GLhalf> mPositiveYPixelBuffer;
-        std::unique_ptr<GLhalf> mNegativeYPixelBuffer;
-        std::unique_ptr<GLhalf> mPositiveZPixelBuffer;
-        std::unique_ptr<GLhalf> mNegativeZPixelBuffer;
-        
-        GLHDRCubemapSampler(const GLHDRTextureCubemap& texture, uint8_t mipLevel);
-        
-    public:        
-        Color sample(const glm::vec3& direction) const override;
-        Color sample(GLCubemapFace face, int32_t x, int32_t y) const override;
-    };
-    
-}
+//namespace EARenderer {
+//
+//    class GLHDRTextureCubemap;
+//
+//    class GLHDRCubemapSampler: public GLCubemapSampler {
+//    private:
+//        friend GLHDRTextureCubemap;
+//
+//        std::unique_ptr<GLhalf> mPositiveXPixelBuffer;
+//        std::unique_ptr<GLhalf> mNegativeXPixelBuffer;
+//        std::unique_ptr<GLhalf> mPositiveYPixelBuffer;
+//        std::unique_ptr<GLhalf> mNegativeYPixelBuffer;
+//        std::unique_ptr<GLhalf> mPositiveZPixelBuffer;
+//        std::unique_ptr<GLhalf> mNegativeZPixelBuffer;
+//        
+//        GLHDRCubemapSampler(const GLHDRTextureCubemap& texture, uint8_t mipLevel);
+//        
+//    public:        
+//        Color sample(const glm::vec3& direction) const override;
+//        Color sample(GLCubemapFace face, int32_t x, int32_t y) const override;
+//    };
+//    
+//}
 
 #endif /* GLHDRCubemapSampler_hpp */

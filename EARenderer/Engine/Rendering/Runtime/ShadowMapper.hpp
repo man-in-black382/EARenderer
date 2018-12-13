@@ -18,8 +18,9 @@
 #include "GaussianBlurEffect.hpp"
 #include "RenderingSettings.hpp"
 #include "SceneGBuffer.hpp"
-#include "GLSLDirectionalShadowMap.hpp"
-#include "GLSLPenumbra.hpp"
+#include "GLSLShadowMap.hpp"
+#include "GLSLDirectionalPenumbra.hpp"
+#include "GLSLOmnidirectionalPenumbra.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -37,19 +38,23 @@ namespace EARenderer {
         FrustumCascades mShadowCascades;
         RenderingSettings mSettings;
     
-        GLSLDirectionalShadowMap mDirectionalShadowMapShader;
-        GLSLPenumbra mPenumbraGenerationShader;
+        GLSLShadowMap mShadowMapShader;
+        GLSLDirectionalPenumbra mDirectionalPenumbraGenerationShader;
+        GLSLOmnidirectionalPenumbra mOmnidirectionalPenumbraGenerationShader;
         
-        std::shared_ptr<GLFramebuffer> mShadowFramebuffer;
-        std::shared_ptr<GLFramebuffer> mPenumbraFramebuffer;
-        std::shared_ptr<GLDepthTexture2DArray> mDirectionalShadowMapArray;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mDirectionalPenumbra;
+        GLFramebuffer mShadowFramebuffer;
+        GLFramebuffer mOmnidirectionalShadowFramebuffer;
+        GLFramebuffer mPenumbraFramebuffer;
+        
+        GLDepthTexture2DArray mDirectionalShadowMapArray;
+        GLNormalizedTexture2D<GLTexture::Normalized::R> mDirectionalPenumbra;
+        std::unordered_map<ID, GLDepthTextureCubemap> mOmnidirectionalShadowMaps;
+        std::unordered_map<ID, GLNormalizedTexture2D<GLTexture::Normalized::R>> mOmnidirectionalPenumbras;
         
         GLSampler mBilinearSampler;
-        
-        std::unordered_map<ID, size_t> mPointLightIDToArrayIndexMap;
-
+                
         void renderDirectionalPenumbra();
+        void renderOmnidirectionalPenumbras();
         void renderDirectionalShadowMaps();
         void renderOmnidirectionalShadowMaps();
 
@@ -58,13 +63,13 @@ namespace EARenderer {
 
         void setRenderingSettings(const RenderingSettings& settings);
         
-        std::shared_ptr<const GLDepthTexture2DArray> directionalShadowMapArray() const;
-        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> directionalPenumbra() const;
+        const GLDepthTexture2DArray& directionalShadowMapArray() const;
+        const GLNormalizedTexture2D<GLTexture::Normalized::R>& directionalPenumbra() const;
+        const GLDepthTextureCubemap& shadowMapForPointLight(ID pointLightID) const;
+        const GLNormalizedTexture2D<GLTexture::Normalized::R>& penumbraForPointLight(ID pointLightID) const;
         
         const FrustumCascades& cascades() const;
         
-        size_t shadowMapIndexForPointLight(ID pointLightID) const;
-
         void render();
     };
 

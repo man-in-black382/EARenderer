@@ -20,8 +20,11 @@ namespace EARenderer {
     class Light {
     protected:
         glm::vec3 mPosition;
-        Color mColor;
-        
+        Color mColor = Color::white();
+        bool mIsEnabled = true;
+
+    protected:
+
         /**
          Calculates split distance using method from “Practical Split Scheme” provided in the GPU Gems 3 – Chapters 10 “Parallel Split Shadow Maps on Programmable GPUs” article.
 
@@ -35,7 +38,7 @@ namespace EARenderer {
         float split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda) const;
         
     public:
-        Light();
+        Light() = default;
         Light(const glm::vec3& position, const Color& color);
         
         const glm::vec3& position() const;
@@ -43,6 +46,8 @@ namespace EARenderer {
         
         void setPosition(const glm::vec3& position);
         void setColor(const Color& color);
+        void setIsEnabled(bool enabled);
+        bool isEnabled() const;
     };
     
 }

@@ -67,6 +67,9 @@ namespace EARenderer {
 #pragma mark - Private Helpers
 
     void IndirectLightAccumulator::relightSurfels() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+
         const DirectionalLight& directionalLight = mScene->directionalLight();
 
         mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelsLuminanceMap->size()),
@@ -80,13 +83,26 @@ namespace EARenderer {
         mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
 
         mSurfelLightingShader.ensureSamplerValidity([&]() {
-            mSurfelLightingShader.setDirectionalShadowMapArray(*mShadowMapper->directionalShadowMapArray());
+            mSurfelLightingShader.setDirectionalShadowMapArray(mShadowMapper->directionalShadowMapArray());
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
             mSurfelLightingShader.setGridProbesSHTextures(*mGridProbeSHMaps);
             mSurfelLightingShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
         });
 
         Drawable::TriangleStripQuad::Draw();
+
+        for (ID lightID : mScene->pointLights()) {
+            const PointLight& light = mScene->pointLights()[lightID];
+
+            mSurfelLightingShader.setLight(light);
+            mSurfelLightingShader.ensureSamplerValidity([&]() {
+                mSurfelLightingShader.setOmnidirectionalShadowMap(mShadowMapper->shadowMapForPointLight(lightID));
+            });
+
+            Drawable::TriangleStripQuad::Draw();
+        }
+
+        glDisable(GL_BLEND);
     }
 
     void IndirectLightAccumulator::averageSurfelClusterLuminances() {
@@ -107,10 +123,10 @@ namespace EARenderer {
         float weight = 2.0 * M_PI;
         Color color = mSettings.meshSettings.skyColor.YCoCg();
         
-        SphericalHarmonics sh;
-        sh.contribute(glm::vec3(1.0, 0.0, 0.0), color, weight);
-        sh.contribute(glm::vec3(-1.0, 0.0, 0.0), color, weight);
-        sh.convolve();
+        SphericalHarmonics skySH;
+        skySH.contribute(glm::vec3(1.0, 0.0, 0.0), color, weight);
+        skySH.contribute(glm::vec3(-1.0, 0.0, 0.0), color, weight);
+        skySH.convolve();
         
         GLViewport viewport(Size2D(mProbeData->gridResolution().x, mProbeData->gridResolution().y));
         mFramebuffer.redirectRenderingToTextures(viewport,
@@ -125,7 +141,7 @@ namespace EARenderer {
             mGridProbesUpdateShader.setSurfelClustersLuminaceMap(*mSurfelClustersLuminanceMap);
             mGridProbesUpdateShader.setSkySphericalHarmonics(*mProbeData->skySHsBufferTexture());
             mGridProbesUpdateShader.setProbesGridResolution(mProbeData->gridResolution());
-            mGridProbesUpdateShader.setSkyColorSphericalHarmonics(sh);
+            mGridProbesUpdateShader.setSkyColorSphericalHarmonics(skySH);
         });
 
         Drawable::TriangleStripQuad::Draw(mProbeData->gridResolution().z);
@@ -139,8 +155,7 @@ namespace EARenderer {
         updateGridProbes();
     }
 
-    void IndirectLightAccumulator::render()
-    {
+    void IndirectLightAccumulator::render() {
         mLightEvaluationShader.bind();
         mLightEvaluationShader.setCamera(*(mScene->camera()));
         mLightEvaluationShader.setWorldBoundingBox(mScene->lightBakingVolume());

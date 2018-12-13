@@ -20,11 +20,9 @@ namespace EARenderer {
     class DirectionalLight: public Light {
     protected:
         glm::vec3 mDirection;
-        float mFrustumSize = 10.f;
         
     public:
         DirectionalLight(const Color& color, const glm::vec3& direction);
-        DirectionalLight(const Color& color, const glm::vec3& direction, float frustumSize);
         
         glm::mat4 viewMatrix() const;
         FrustumCascades cascadesForCamera(const Camera& camera, uint8_t numberOfCascades, const glm::vec3& scale = glm::vec3(1.0)) const;

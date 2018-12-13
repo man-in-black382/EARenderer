@@ -11,25 +11,24 @@
 
 #include "GLProgram.hpp"
 #include "GLTextureCubemap.hpp"
-#include "GLHDRTextureCubemap.hpp"
-#include "GLLDRTextureCubemap.hpp"
 
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
     
     class GLSLSkybox: public GLProgram {
-    public:
-        using GLProgram::GLProgram;
-        
+    public:        
         GLSLSkybox();
         
         void setViewMatrix(const glm::mat4& matrix);
         void setProjectionMatrix(const glm::mat4& matrix);
-        void setCubemap(const GLTextureCubemap& cubemap);
-        void setCubemap(const GLDepthTextureCubemap& cubemap);
-        void setCubemap(const GLHDRTextureCubemap& cubemap);
         void setEquirectangularMap(const GLFloatTexture2D<GLTexture::Float::RGB16F>& equireqMap);
+        
+        template<class TextureFormat, TextureFormat Format>
+        void setCubemap(const GLTextureCubemap<TextureFormat, Format>& cubemap) {
+            setUniformTexture(ctcrc32("uCubeMapTexture"), cubemap);
+            glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_TRUE);
+        }
     };
     
 }

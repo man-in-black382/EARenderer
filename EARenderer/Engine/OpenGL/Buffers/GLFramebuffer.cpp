@@ -99,7 +99,7 @@ namespace EARenderer {
         
         bind();
         
-        if (layer == NotLayered) {
+        if (layer == AllLayers) {
             glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
         } else {
             glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
@@ -159,7 +159,7 @@ namespace EARenderer {
         AttachmentMetadata attachmentMetadata { colorAttachment, glAttachment, mipLevel, layer };
         mTextureAttachmentMap[texture.name()] = attachmentMetadata;
 
-        if (layer == NotLayered) {
+        if (layer == AllLayers) {
             glFramebufferTexture(mBindingPoint, glAttachment, texture.name(), mipLevel);
         } else {
             glFramebufferTextureLayer(mBindingPoint, glAttachment, texture.name(), mipLevel, layer);
@@ -181,31 +181,15 @@ namespace EARenderer {
         attachTextureToDepthAttachment(texture, mipLevel);
     }
     
+    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel) {
+        attachTextureToDepthAttachment(texture, mipLevel);
+    }
+    
     void GLFramebuffer::attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel, int16_t layer) {
         attachTextureToDepthAttachment(texture, mipLevel, layer);
     }
 
     // FIXME: Remove deprecated attachment functions
-
-    void GLFramebuffer::attachTexture(const GLTextureCubemap& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    void GLFramebuffer::attachTexture(const GLHDRTextureCubemap& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
-    }
-
-    void GLFramebuffer::attachTexture(const GLDepthTextureCubemap& texture,
-                                      uint16_t mipLevel)
-    {
-        attachTextureToDepthAttachment(texture, mipLevel);
-    }
 
     void GLFramebuffer::attachTexture(const GLHDRTexture3D& texture,
                                       ColorAttachment colorAttachment,
@@ -237,7 +221,7 @@ namespace EARenderer {
 
         AttachmentMetadata metadata = attachmentIt->second;
 
-        if (metadata.layer == NotLayered) {
+        if (metadata.layer == AllLayers) {
             glFramebufferTexture(mBindingPoint, metadata.glColorAttachment, 0, 0);
         } else {
             glFramebufferTextureLayer(mBindingPoint, metadata.glColorAttachment, 0, 0, 0);
@@ -254,7 +238,7 @@ namespace EARenderer {
         for (auto kvPair : mTextureAttachmentMap) {
             auto attachmentMetadata = kvPair.second;
 
-            if (attachmentMetadata.layer == NotLayered) {
+            if (attachmentMetadata.layer == AllLayers) {
                 glFramebufferTexture(mBindingPoint, attachmentMetadata.glColorAttachment, 0, 0);
             } else {
                 glFramebufferTextureLayer(mBindingPoint, attachmentMetadata.glColorAttachment, 0, 0, 0);

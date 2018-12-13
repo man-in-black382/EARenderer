@@ -41,10 +41,7 @@
 #include "GLSLFullScreenQuad.hpp"
 #include "GLSLSkybox.hpp"
 
-#include "GLDepthTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
-
-#include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLLDRTexture3D.hpp"
 #include "GLHDRTexture3D.hpp"

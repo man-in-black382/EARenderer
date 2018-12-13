@@ -22,6 +22,7 @@ namespace EARenderer {
         static void logConsole(const glm::vec3& v, const std::string& prefix = "");
         static void logConsole(const glm::vec4& v, const std::string& prefix = "");
         static void logConsole(const AxisAlignedBox3D& b, const std::string& prefix = "");
+        static void logGLError();
     };
     
 }

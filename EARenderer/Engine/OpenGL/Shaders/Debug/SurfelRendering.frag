@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "Constants.glsl"
+
 in vec4 vCurrentPosition;
 in vec3 vAlbedo;
 in vec3 vNormal;
@@ -31,6 +33,6 @@ void main() {
 
         float luminance = texelFetch(uSurfelLuminances, luminanceUV, 0).r;
 
-        oFragColor = vec4(vAlbedo * luminance, 1.0);
+        oFragColor = vec4(vAlbedo * luminance * HDRNormalizationFactor, 1.0);
     }    
 }

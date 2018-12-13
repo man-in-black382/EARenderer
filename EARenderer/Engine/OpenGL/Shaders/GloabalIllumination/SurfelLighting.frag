@@ -1,5 +1,7 @@
 #version 400 core
 
+#define SHADOW_NO_PCF
+
 #include "Packing.glsl"
 #include "DiffuseLightProbes.glsl"
 #include "ColorSpace.glsl"
@@ -42,7 +44,7 @@ uniform float uDepthSplits[MaximumShadowCascadesCount];
 uniform int uNumberOfCascades;
 uniform float uESMFactor;
 uniform sampler2DArrayShadow uDirectionalShadowMapArray;
-uniform samplerCubeArrayShadow uOmnidirectionalShadowMaps;
+uniform samplerCubeShadow uOmnidirectionalShadowMap;
 uniform int uOmnidirectionalShadowMapIndex;
 
 // Spherical harmonics
@@ -71,13 +73,14 @@ void main() {
         radiance    = DirectionalLightRadiance(uDirectionalLight);
         L           = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-        float penumbra = 1.0;
+        float penumbra = 0.0;
         shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(uPointLight, worldPosition);
         L           = normalize(uPointLight.position - worldPosition);
-        //        shadow      = OmnidirectionalExponentialShadow(worldPosition);
+        float penumbra = 0.0;
+        shadow = OmnidirectionalShadow(worldPosition, N, uPointLight, uOmnidirectionalShadowMap, penumbra);
     }
     else if (uLightType == kLightTypeSpot) {
         // Nothing to do here... yet
@@ -110,5 +113,5 @@ void main() {
         finalColor += indirectRadiance;
     }
 
-    oLuminance = LuminanceFromRGB(finalColor);
+    oLuminance = LuminanceFromRGB(finalColor) / HDRNormalizationFactor; // Shrink the value so it wouldn't be clamped by additive blending. Restore in a later rendering stage.
 }

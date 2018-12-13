@@ -34,7 +34,7 @@ namespace EARenderer {
             mCount = count;
             mSize = size;
 
-            GLTextureFormat f = glFormat(Format);
+            constexpr GLTextureFormat f = glFormat(Format);
 
             glTexStorage3D(GL_TEXTURE_3D,
                            1, // No mipmaps (1 means that there is only one base image level)

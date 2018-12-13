@@ -8,6 +8,7 @@
 
 #include "ShadowMapper.hpp"
 #include "ResourcePool.hpp"
+#include "Log.hpp"
 
 namespace EARenderer {
     
@@ -18,28 +19,25 @@ namespace EARenderer {
     mScene(scene),
     mGBuffer(gBuffer),
     mCascadeCount(cascadeCount),
-    mShadowFramebuffer(std::make_shared<GLFramebuffer>(mSettings.directionalShadowMapResolution)),
-    mPenumbraFramebuffer(std::make_shared<GLFramebuffer>(mSettings.displayedFrameResolution)),
-    mDirectionalPenumbra(std::make_shared<GLFloatTexture2D<GLTexture::Float::R16F>>(mPenumbraFramebuffer->size())),
-    mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None),
-    mDirectionalShadowMapArray(std::make_shared<GLDepthTexture2DArray>(mShadowFramebuffer->size(),
-                                                                       std::min(cascadeCount, MaximumCascadeCount),
-                                                                       Sampling::ComparisonMode::ReferenceToTexture))
+    mShadowFramebuffer(mSettings.directionalShadowMapResolution),
+    mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
+    mPenumbraFramebuffer(mSettings.penumbraResolution),
+    mDirectionalPenumbra(mSettings.penumbraResolution),
+    mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
+    mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None)
     {
-        //        if (scene->pointLights().size() > 0) {
-        //            mOmnidirectionalShadowMaps = std::make_shared<GLFloatTextureCubemapArray<GLTexture::Float::R32F>>(Size2D(512), scene->pointLights().size());
-        //        }
-        
-        mPenumbraFramebuffer->attachTexture(*mDirectionalPenumbra);
-        mShadowFramebuffer->attachDepthTexture(*mDirectionalShadowMapArray);
-        
-        size_t index = 0;
+        mShadowFramebuffer.attachDepthTexture(mDirectionalShadowMapArray);
+
         for (ID pointLightID : scene->pointLights()) {
-            mPointLightIDToArrayIndexMap[pointLightID] = index;
-            index++;
+            mOmnidirectionalPenumbras.emplace(pointLightID, mSettings.penumbraResolution);
+            mOmnidirectionalShadowMaps.emplace(
+                    std::piecewise_construct,
+                    std::forward_as_tuple(pointLightID),
+                    std::forward_as_tuple(mSettings.omnidirectionalShadowMapResolution, Sampling::ComparisonMode::ReferenceToTexture)
+            );
         }
     }
-    
+
 #pragma mark - Setters
     
     void ShadowMapper::setRenderingSettings(const RenderingSettings& settings) {
@@ -52,53 +50,94 @@ namespace EARenderer {
         return mShadowCascades;
     }
     
-    size_t ShadowMapper::shadowMapIndexForPointLight(ID pointLightID) const {
-        auto it = mPointLightIDToArrayIndexMap.find(pointLightID);
-        if (it == mPointLightIDToArrayIndexMap.end()) {
-            return -1;
+    const GLDepthTextureCubemap& ShadowMapper::shadowMapForPointLight(ID pointLightID) const {
+        auto it = mOmnidirectionalShadowMaps.find(pointLightID);
+        if (it == mOmnidirectionalShadowMaps.end()) {
+            throw std::invalid_argument("Shadow map not found");
         }
         return it->second;
     }
     
-    std::shared_ptr<const GLDepthTexture2DArray> ShadowMapper::directionalShadowMapArray() const {
+    const GLNormalizedTexture2D<GLTexture::Normalized::R>& ShadowMapper::penumbraForPointLight(ID pointLightID) const {
+        auto it = mOmnidirectionalPenumbras.find(pointLightID);
+        if (it == mOmnidirectionalPenumbras.end()) {
+            throw std::invalid_argument("Penumbra not found");
+        }
+        return it->second;
+    }
+    
+    const GLDepthTexture2DArray& ShadowMapper::directionalShadowMapArray() const {
         return mDirectionalShadowMapArray;
     }
     
-    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> ShadowMapper::directionalPenumbra() const {
+    const GLNormalizedTexture2D<GLTexture::Normalized::R>& ShadowMapper::directionalPenumbra() const {
         return mDirectionalPenumbra;
     }
     
 #pragma mark - Private Helpers
     
     void ShadowMapper::renderDirectionalPenumbra() {
-        mPenumbraFramebuffer->bind();
-        mPenumbraFramebuffer->viewport().apply();
+        if (!mScene->directionalLight().isEnabled()) {
+            return;
+        }
+
+        mPenumbraFramebuffer.redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &mDirectionalPenumbra);
         
-        mPenumbraGenerationShader.bind();
-        mPenumbraGenerationShader.setCamera(*mScene->camera());
-        mPenumbraGenerationShader.ensureSamplerValidity([&]{
-            mPenumbraGenerationShader.setGBuffer(*mGBuffer);
-            mPenumbraGenerationShader.setFrustumCascades(mShadowCascades);
-            mPenumbraGenerationShader.setDirectionalShadowMapArray(*mDirectionalShadowMapArray, mBilinearSampler);
+        mDirectionalPenumbraGenerationShader.bind();
+        mDirectionalPenumbraGenerationShader.setCamera(*mScene->camera());
+        mDirectionalPenumbraGenerationShader.ensureSamplerValidity([&] {
+            mDirectionalPenumbraGenerationShader.setGBuffer(*mGBuffer);
+            mDirectionalPenumbraGenerationShader.setFrustumCascades(mShadowCascades);
+            mDirectionalPenumbraGenerationShader.setDirectionalShadowMapArray(mDirectionalShadowMapArray, mBilinearSampler);
         });
         
         Drawable::TriangleStripQuad::Draw();
     }
-    
-    
+
+    void ShadowMapper::renderOmnidirectionalPenumbras() {
+        mOmnidirectionalPenumbraGenerationShader.bind();
+        mOmnidirectionalPenumbraGenerationShader.setCamera(*mScene->camera());
+
+        for (ID lightID : mScene->pointLights()) {
+            const PointLight& light = mScene->pointLights()[lightID];
+
+            if (!light.isEnabled()) {
+                continue;
+            }
+
+            auto& penumbra = penumbraForPointLight(lightID);
+            auto& shadowMap = shadowMapForPointLight(lightID);
+
+            mPenumbraFramebuffer.redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &penumbra);
+
+            mOmnidirectionalPenumbraGenerationShader.setLight(light);
+            mOmnidirectionalPenumbraGenerationShader.ensureSamplerValidity([&] {
+                mOmnidirectionalPenumbraGenerationShader.setGBuffer(*mGBuffer);
+                mOmnidirectionalPenumbraGenerationShader.setShadowMap(shadowMap, mBilinearSampler);
+            });
+
+            Drawable::TriangleStripQuad::Draw();
+        }
+    }
+
     void ShadowMapper::renderDirectionalShadowMaps() {
-        mDirectionalShadowMapShader.bind();
-        mDirectionalShadowMapShader.setCascades(mShadowCascades);
+        if (!mScene->directionalLight().isEnabled()) {
+            return;
+        }
+
+        mShadowMapShader.bind();
+        mShadowMapShader.setViewProjectionMatrices(mShadowCascades.lightViewProjections);
         
-        mShadowFramebuffer->bind();
-        mShadowFramebuffer->viewport().apply();
-        mShadowFramebuffer->clear(GLFramebuffer::UnderlyingBuffer::Depth);
+        mShadowFramebuffer.bind();
+        mShadowFramebuffer.attachDepthTexture(mDirectionalShadowMapArray);
+        GLViewport(mSettings.directionalShadowMapResolution).apply();
+        mShadowFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Depth);
         
         for (ID meshInstanceID : mScene->meshInstances()) {
             auto& instance = mScene->meshInstances()[meshInstanceID];
             auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
             
-            mDirectionalShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
+            mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
             
             for (ID subMeshID : subMeshes) {
                 auto& subMesh = subMeshes[subMeshID];
@@ -108,7 +147,37 @@ namespace EARenderer {
     }
     
     void ShadowMapper::renderOmnidirectionalShadowMaps() {
+        mShadowMapShader.bind();
+                
+        mShadowFramebuffer.bind();
+        GLViewport(mSettings.omnidirectionalShadowMapResolution).apply();
         
+        for (ID pointLightID : mScene->pointLights()) {
+            // Setup 6 view-projection matrices to capture geometry from 6 perspectives
+            const PointLight& light = mScene->pointLights()[pointLightID];
+
+            if (!light.isEnabled()) {
+                continue;
+            }
+
+            mShadowFramebuffer.attachDepthTexture(shadowMapForPointLight(pointLightID));
+            mShadowFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Depth);
+
+            auto matrices = light.viewProjectionMatrices();
+            mShadowMapShader.setViewProjectionMatrices({ matrices.begin(), matrices.end() });
+                        
+            for (ID meshInstanceID : mScene->meshInstances()) {
+                auto& instance = mScene->meshInstances()[meshInstanceID];
+                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+                
+                mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
+                
+                for (ID subMeshID : subMeshes) {
+                    auto& subMesh = subMeshes[subMeshID];
+                    subMesh.drawInstanced(6); // 6 for 6 cubemap faces
+                }
+            }
+        }
     }
     
 #pragma mark - Rendering
@@ -116,8 +185,11 @@ namespace EARenderer {
     void ShadowMapper::render() {
         ResourcePool::shared().VAO().bind();
         mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
+
+        renderOmnidirectionalShadowMaps();
         renderDirectionalShadowMaps();
         renderDirectionalPenumbra();
+        renderOmnidirectionalPenumbras();
     }
-    
+
 }

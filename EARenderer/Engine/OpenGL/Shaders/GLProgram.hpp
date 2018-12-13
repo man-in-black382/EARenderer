@@ -28,7 +28,6 @@
 #include "GLTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
 #include "GLTexture2D.hpp"
-#include "GLDepthTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLBufferTexture.hpp"
 #include "crc.hpp"

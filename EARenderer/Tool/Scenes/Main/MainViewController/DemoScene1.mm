@@ -22,7 +22,9 @@
 
 @property (assign, nonatomic) choreograph::Timeline *animationTimeline;
 @property (assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
+@property (assign, nonatomic) choreograph::Output<glm::vec3> *lightPositionOutput;
 @property (assign, nonatomic) choreograph::Output<glm::vec3> *objectPositionOutput;
+@property (assign, nonatomic) EARenderer::ID lightID;
 
 @end
 
@@ -187,6 +189,11 @@
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
 
+    scene->directionalLight().setIsEnabled(false);
+    
+    EARenderer::PointLight pointLight(8.0, 0.1);
+    self.lightID = scene->pointLights().insert(pointLight);
+
     scene->calculateGeometricProperties();
 
     glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
@@ -215,6 +222,9 @@
     self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
     scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 
+    EARenderer::PointLight& light = scene->pointLights()[self.lightID];
+    light.setPosition(self.lightPositionOutput->value());
+
 //    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
 //    auto transformation = sphereInstance.transformation();
 //    transformation.translation = self.objectPositionOutput->value();
@@ -233,14 +243,25 @@
 {
     self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
+    self.lightPositionOutput = new choreograph::Output<glm::vec3>();
     self.animationTimeline = new choreograph::Timeline();
 
-    glm::vec3 lightStart(-0.3, -0.5, 0.45);
-    glm::vec3 lightEnd(0.5, -0.5, -0.45);
+    glm::vec3 sunDirectionStart(-0.3, -0.5, 0.45);
+    glm::vec3 sunDirectionEnd(0.5, -0.5, -0.45);
 
-    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 20.0);
+    choreograph::PhraseRef<glm::vec3> sunDirectionPhrase = choreograph::makeRamp(sunDirectionStart, sunDirectionEnd, 20.0);
 
-    self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+    self.animationTimeline->apply(self.sunDirectionOutput, sunDirectionPhrase).finishFn( [&m = *self.sunDirectionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
+    glm::vec3 lightPositionStart(-2.0, 0.0, 0.45);
+    glm::vec3 lightPositionEnd(2.0, 0.0, -0.45);
+
+    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(lightPositionStart, lightPositionEnd, 10.0);
+
+    self.animationTimeline->apply(self.lightPositionOutput, lightPositionPhrase).finishFn( [&m = *self.lightPositionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });

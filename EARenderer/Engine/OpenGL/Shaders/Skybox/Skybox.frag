@@ -1,5 +1,8 @@
 #version 400 core
 
+#include "Constants.glsl"
+#include "ColorSpace.glsl"
+
 // Uniforms
 
 uniform samplerCube uCubeMapTexture;
@@ -57,9 +60,10 @@ vec3 SampleSphericalMap(vec3 v) {
 
 void main() {
     if (uIsCube) {
-        oFragmentColor = textureLod(uCubeMapTexture, oEyeDirection, 0);
+        vec3 color = textureLod(uCubeMapTexture, oEyeDirection, 0).rgb;
+        oFragmentColor = vec4(color, 1.0);
     } else {
         oFragmentColor = vec4(SampleSphericalMap(normalize(oEyeDirection.xyz)), 1.0); // Don't forget to normalize!
-        oFragmentColor.rgb /= 1000.0;
+        oFragmentColor.rgb /= HDRNormalizationFactor;
     }
 }

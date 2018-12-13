@@ -84,6 +84,15 @@ namespace EARenderer {
     {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
     }
+    
+    template<class Format, Format F>
+    void GLFramebuffer::attachTexture(const GLTextureCubemap<Format, F>& texture,
+                                      uint16_t mipLevel,
+                                      int16_t layer,
+                                      ColorAttachment colorAttachment)
+    {
+        attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
+    }
 
     template<class Texture>
     void GLFramebuffer::activateDrawBuffers(const Texture& texture) {

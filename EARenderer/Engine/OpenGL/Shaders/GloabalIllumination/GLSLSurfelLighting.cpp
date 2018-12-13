@@ -46,6 +46,8 @@ namespace EARenderer {
     void GLSLSurfelLighting::setLight(const PointLight& light) {
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.position")>).location(), 1, glm::value_ptr(light.position()));
         glUniform3fv(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.radiantFlux")>).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.nearPlane")>).location(), light.nearClipPlane());
+        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uPointLight.farPlane")>).location(), light.farClipPlane());
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLightType")>).location(), 1);
     }
 
@@ -68,8 +70,11 @@ namespace EARenderer {
         setUniformTexture(uint32_constant<ctcrc32("uProbePositions")>, positions);
     }
 
+    void GLSLSurfelLighting::setOmnidirectionalShadowMap(const GLDepthTextureCubemap &shadowMap) {
+        setUniformTexture(uint32_constant<ctcrc32("uOmnidirectionalShadowMap")>, shadowMap);
+    }
+
     void GLSLSurfelLighting::setSettings(const RenderingSettings& settings) {
-//        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uESMFactor")>).location(), settings.meshSettings.ESMFactor);
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uEnableMultibounce")>).location(), settings.meshSettings.lightMultibounceEnabled);
     }
 

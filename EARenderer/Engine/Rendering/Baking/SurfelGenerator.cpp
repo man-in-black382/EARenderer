@@ -220,17 +220,6 @@ namespace EARenderer {
         auto texel = albedoMapSampler.sample(uv);
         Color albedoLinear = Color(texel.r, texel.g, texel.b).linear();
 
-        // FIXME: DEBUG
-//        if (surfelCandidate.position.x > 0.0) {
-//            albedoLinear = Color(1.0, 0.0, 0.0, 1.0);
-//        } else {
-//            albedoLinear = Color(0.0, 0.0, 1.0, 1.0);
-//        }
-//
-//        if (surfelCandidate.position.y > 0.5) {
-//            albedoLinear = Color(0.0, 1.0, 0.0, 1.0);
-//        }
-
         float singleSurfelArea = M_PI * mSurfelSpacing * mSurfelSpacing;
         
         return Surfel(surfelCandidate.position, surfelCandidate.normal, albedoLinear, singleSurfelArea);

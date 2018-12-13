@@ -23,10 +23,10 @@ namespace EARenderer {
     
 #pragma mark - Setters
     
-    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLHDRTextureCubemap& map) {
-        setUniformTexture(uint32_constant<ctcrc32("uEnvironmentMap")>, map);
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uEnvironmentResolution")>).location(), map.size().width);
-    }
+//    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLHDRTextureCubemap& map) {
+//        setUniformTexture(uint32_constant<ctcrc32("uEnvironmentMap")>, map);
+//        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uEnvironmentResolution")>).location(), map.size().width);
+//    }
     
     void GLSLRadianceConvolution::setRoughness(float roughness) {
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uRoughness")>).location(), roughness);

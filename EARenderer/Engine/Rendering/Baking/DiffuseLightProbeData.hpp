@@ -13,7 +13,6 @@
 #include "SurfelClusterProjection.hpp"
 #include "GLBufferTexture.hpp"
 #include "SphericalHarmonics.hpp"
-#include "GLLDRTextureCubemap.hpp"
 #include "GLTexture2D.hpp"
 
 #include <vector>

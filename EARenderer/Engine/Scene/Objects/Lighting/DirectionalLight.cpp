@@ -26,15 +26,6 @@ namespace EARenderer {
     mDirection(direction)
     { }
     
-    DirectionalLight::DirectionalLight(const Color& color,
-                                       const glm::vec3& direction,
-                                       float frustumSize)
-    :
-    Light(glm::zero<glm::vec3>(), color),
-    mDirection(direction),
-    mFrustumSize(frustumSize)
-    { }
-    
 #pragma mark - Getters
     
     const glm::vec3& DirectionalLight::direction() const {

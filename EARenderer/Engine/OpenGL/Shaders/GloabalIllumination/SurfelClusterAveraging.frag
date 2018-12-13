@@ -1,5 +1,7 @@
 #version 400 core
 
+#include "Constants.glsl"
+
 // Output
 
 out float oAverageLuminance;
@@ -44,5 +46,5 @@ void main() {
         averagedClusterLuminance += texelFetch(uSurfelsLuminanceMap, uv, 0).r;
     }
 
-    oAverageLuminance = averagedClusterLuminance / surfelCount;
+    oAverageLuminance = averagedClusterLuminance * HDRNormalizationFactor / surfelCount;
 }

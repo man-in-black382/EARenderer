@@ -10,7 +10,6 @@
 #define GLSLBRDFIntegration_hpp
 
 #include "GLProgram.hpp"
-#include "GLHDRTextureCubemap.hpp"
 
 namespace EARenderer {
     

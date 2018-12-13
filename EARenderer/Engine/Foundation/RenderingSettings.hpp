@@ -66,7 +66,8 @@ namespace EARenderer {
 
         Size2D displayedFrameResolution { 1920, 1080 };
         Size2D directionalShadowMapResolution { 4096 };
-        Size2D omnidirectionalShadowMapResolution { 1024 };
+        Size2D omnidirectionalShadowMapResolution { 2048 };
+        Size2D penumbraResolution { displayedFrameResolution.transformedBy(glm::vec2(1.0 / 1.0)) };
     };
 
 }

@@ -1,13 +1,13 @@
 //
-//  GLSLPenumbra.hpp
+//  GLSLDirectionalPenumbra.hpp
 //  EARenderer
 //
 //  Created by Pavlo Muratov on 23.11.2018.
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
-#ifndef GLSLPenumbra_hpp
-#define GLSLPenumbra_hpp
+#ifndef GLSLDirectionalPenumbra_hpp
+#define GLSLDirectionalPenumbra_hpp
 
 #include "GLProgram.hpp"
 #include "FrustumCascades.hpp"
@@ -16,9 +16,9 @@
 
 namespace EARenderer {
     
-    class GLSLPenumbra: public GLProgram {
+    class GLSLDirectionalPenumbra: public GLProgram {
     public:
-        GLSLPenumbra();
+        GLSLDirectionalPenumbra();
         
         void setCamera(const Camera& camera);
         void setGBuffer(const SceneGBuffer& GBuffer);

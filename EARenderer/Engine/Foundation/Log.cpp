@@ -9,6 +9,7 @@
 #include "Log.hpp"
 
 #include <cstdio>
+#include <OpenGL/gl.h>
 
 namespace EARenderer {
     
@@ -28,6 +29,10 @@ namespace EARenderer {
         printf("%s\n", prefix.c_str());
         Log::logConsole(b.min, "Min: ");
         Log::logConsole(b.max, "Max: ");
+    }
+    
+    void Log::logGLError() {
+        printf("GL Error: %d \n", glGetError());
     }
     
 }

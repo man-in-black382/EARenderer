@@ -189,6 +189,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     auto frameCharacteristics = self.frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;
+    self.fpsView.viewportResolution = view.bounds.size;
 
     [self.demoScene updateAnimatedObjectsInScene:self.scene frameCharacteristics:frameCharacteristics];
 }

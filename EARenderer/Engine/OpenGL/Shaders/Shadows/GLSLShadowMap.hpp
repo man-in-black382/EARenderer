@@ -12,17 +12,18 @@
 #include "GLProgram.hpp"
 #include "FrustumCascades.hpp"
 #include "Camera.hpp"
+#include "PointLight.hpp"
 
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
     
-    class GLSLDirectionalShadowMap: public GLProgram {
+    class GLSLShadowMap: public GLProgram {
     public:        
-        GLSLDirectionalShadowMap();
+        GLSLShadowMap();
         
         void setModelMatrix(const glm::mat4& modelMatrix);
-        void setCascades(const FrustumCascades& cascades);
+        void setViewProjectionMatrices(const std::vector<glm::mat4>& matrices);
     };
     
 }

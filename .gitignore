@@ -111,3 +111,11 @@ iOSInjectionProject/
 ## Other
 
 # End of https://www.gitignore.io/api/xcode,c++,objective-c
+.idea/EARenderer.iml
+.idea/encodings.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+.idea/xcode.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/dictionaries/user.xml

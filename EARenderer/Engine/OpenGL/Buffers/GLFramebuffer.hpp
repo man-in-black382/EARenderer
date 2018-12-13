@@ -15,8 +15,6 @@
 
 #include "GLTexture2D.hpp"
 #include "GLTextureCubemap.hpp"
-#include "GLDepthTextureCubemap.hpp"
-#include "GLHDRTextureCubemap.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLDepthRenderbuffer.hpp"
 #include "GLHDRTexture3D.hpp"
@@ -50,13 +48,13 @@ namespace EARenderer {
         };
 
     private:
-        constexpr static int16_t NotLayered = -1;
+        constexpr static int16_t AllLayers = -1;
 
         struct AttachmentMetadata {
             ColorAttachment colorAttachment = ColorAttachment::Automatic;
             GLenum glColorAttachment = GL_COLOR_ATTACHMENT0;
             uint16_t mipLevel = 0;
-            int16_t layer = NotLayered;
+            int16_t layer = AllLayers;
         };
 
         GLint mBindingPoint;
@@ -114,20 +112,28 @@ namespace EARenderer {
         template<class Format, Format F>
         void attachTexture(const GLTextureCubemapArray<Format, F>& texture,
                            uint16_t mipLevel = 0,
-                           int16_t layer = NotLayered,
+                           int16_t layer = AllLayers,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic);
         
         template<class Format, Format F>
         void attachTexture(const GLTexture2DArray<Format, F>& texture,
                            uint16_t mipLevel = 0,
-                           int16_t layer = NotLayered,
+                           int16_t layer = AllLayers,
+                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
+        
+        template<class Format, Format F>
+        void attachTexture(const GLTextureCubemap<Format, F>& texture,
+                           uint16_t mipLevel = 0,
+                           int16_t layer = AllLayers,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
-        void attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel = 0, int16_t layer = NotLayered);
+        void attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
         
         void attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
         
-        void attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel = 0, int16_t layer = NotLayered);
+        void attachDepthTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel = 0);
+        
+        void attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
 
         void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
 
@@ -198,18 +204,6 @@ namespace EARenderer {
         void redirectRenderingToTextures(UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         // FIXME: Deprecated attachment functions
-
-        void attachTexture(const GLTextureCubemap& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
-
-        void attachTexture(const GLDepthTextureCubemap& texture,
-                           uint16_t mipLevel = 0);
-
-        void attachTexture(const GLHDRTextureCubemap& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
-
         void attachTexture(const GLHDRTexture3D& texture,
                            ColorAttachment colorAttachment = ColorAttachment::Automatic,
                            uint16_t mipLevel = 0);
