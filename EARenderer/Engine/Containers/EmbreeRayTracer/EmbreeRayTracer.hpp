@@ -20,7 +20,9 @@ namespace EARenderer {
 
     class EmbreeRayTracer {
     public:
-        enum class FaceFilter { None, CullFront, CullBack };
+        enum class FaceFilter {
+            None, CullFront, CullBack
+        };
 
     private:
         RTCDevice mDevice = nullptr;
@@ -28,24 +30,31 @@ namespace EARenderer {
 
         FaceFilter mFaceFilter;
 
-        static void deviceErrorCallback(void* userPtr, enum RTCError code, const char* str);
-        static void intersectionFilter(const struct RTCFilterFunctionNArguments* args);
-        static void occlusionFilter(const struct RTCFilterFunctionNArguments* args);
+        static void deviceErrorCallback(void *userPtr, enum RTCError code, const char *str);
+
+        static void intersectionFilter(const struct RTCFilterFunctionNArguments *args);
+
+        static void occlusionFilter(const struct RTCFilterFunctionNArguments *args);
 
     public:
-        EmbreeRayTracer(const std::vector<Triangle3D>& triangles);
-        EmbreeRayTracer(const EmbreeRayTracer& that) = delete;
-        EmbreeRayTracer(EmbreeRayTracer&& that);
-        EmbreeRayTracer& operator=(EmbreeRayTracer rhs);
+        EmbreeRayTracer(const std::vector<Triangle3D> &triangles);
+
+        EmbreeRayTracer(const EmbreeRayTracer &that) = delete;
+
+        EmbreeRayTracer(EmbreeRayTracer &&that);
+
+        EmbreeRayTracer &operator=(EmbreeRayTracer rhs);
+
         ~EmbreeRayTracer();
 
-        void swap(EmbreeRayTracer& that);
+        void swap(EmbreeRayTracer &that);
 
-        bool lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1, FaceFilter faceFilter = FaceFilter::None);
-        bool rayHit(const Ray3D& ray, float& distance, FaceFilter faceFilter = FaceFilter::None);
+        bool lineSegmentOccluded(const glm::vec3 &p0, const glm::vec3 &p1, FaceFilter faceFilter = FaceFilter::None);
+
+        bool rayHit(const Ray3D &ray, float &distance, FaceFilter faceFilter = FaceFilter::None);
     };
 
-    void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs);
+    void swap(EmbreeRayTracer &lhs, EmbreeRayTracer &rhs);
 }
 
 #endif /* EmbreeRayTracer_hpp */

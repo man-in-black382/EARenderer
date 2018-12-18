@@ -30,8 +30,6 @@ out vec3 vWorldPosition;
 out mat3 vTBN;
 out vec4 vPosInLightSpace;
 out vec4 vPosInCSMSplitSpace;
-//out vec3 vPosInTangentSpace;
-//out vec3 vCameraPosInTangentSpace;
 
 // Functions
 
@@ -56,14 +54,11 @@ void main() {
     vec4 worldPosition = uModelMat * iPosition;
 
     mat3 TBN = TBN();
-//    mat3 inverseTBN = transpose(TBN);
 
     vTexCoords = vec3(iTexCoords.s, iTexCoords.t, iTexCoords.r);
     vWorldPosition = worldPosition.xyz;
     vTBN = TBN;
     vPosInCSMSplitSpace = uCSMSplitSpaceMat * worldPosition;
-//    vPosInTangentSpace = inverseTBN * worldPosition.xyz;
-//    vCameraPosInTangentSpace = inverseTBN * uCameraPosition;
 
     gl_Position = uCameraSpaceMat * worldPosition;
 }

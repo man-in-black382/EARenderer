@@ -20,8 +20,8 @@ namespace EARenderer {
         SphericalHarmonics sphericalHarmonics;
     };
 
-    template <typename S>
-    void serialize(S& s, SurfelClusterProjection& projection) {
+    template<typename S>
+    void serialize(S &s, SurfelClusterProjection &projection) {
         s.value4b(projection.surfelClusterIndex);
         s.object(projection.sphericalHarmonics);
     }

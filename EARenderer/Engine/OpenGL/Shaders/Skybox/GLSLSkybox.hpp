@@ -15,22 +15,24 @@
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
-    
-    class GLSLSkybox: public GLProgram {
-    public:        
+
+    class GLSLSkybox : public GLProgram {
+    public:
         GLSLSkybox();
-        
-        void setViewMatrix(const glm::mat4& matrix);
-        void setProjectionMatrix(const glm::mat4& matrix);
-        void setEquirectangularMap(const GLFloatTexture2D<GLTexture::Float::RGB16F>& equireqMap);
-        
+
+        void setViewMatrix(const glm::mat4 &matrix);
+
+        void setProjectionMatrix(const glm::mat4 &matrix);
+
+        void setEquirectangularMap(const GLFloatTexture2D<GLTexture::Float::RGB16F> &equireqMap);
+
         template<class TextureFormat, TextureFormat Format>
-        void setCubemap(const GLTextureCubemap<TextureFormat, Format>& cubemap) {
+        void setCubemap(const GLTextureCubemap<TextureFormat, Format> &cubemap) {
             setUniformTexture(ctcrc32("uCubeMapTexture"), cubemap);
             glUniform1i(uniformByNameCRC32(ctcrc32("uIsCube")).location(), GL_TRUE);
         }
     };
-    
+
 }
 
 #endif /* GLSkyboxProgram_hpp */

@@ -14,7 +14,7 @@ const int kLightTypeSpot        = 2;
 
 // Output
 
-layout(location = 0) out vec4 oBaseOutput;
+layout(location = 0) out vec4 oColor;
 
 // Input
 
@@ -22,7 +22,7 @@ in vec2 vTexCoords;
 
 // Uniforms
 
-uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
+uniform usampler2D uMaterialData;
 uniform sampler2D uGBufferHiZBuffer;
 
 uniform vec3 uCameraPosition;
@@ -81,16 +81,16 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
-void main() {
-    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
-    vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
+vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
+    GBufferCookTorrance gBuffer = DecodeGBufferCookTorrance(materialData);
+
     float roughness     = gBuffer.roughness;
-    
+
     // Based on observations by Disney and adopted by Epic Games
     // the lighting looks more correct squaring the roughness
     // in both the geometry and normal distribution function.
     float roughness2    = roughness * roughness;
-    
+
     float metallic      = gBuffer.metalness;
     vec3 albedo         = gBuffer.albedo;
     vec3 N              = gBuffer.normal;
@@ -125,17 +125,33 @@ void main() {
     }
 
     vec3 H = normalize(L + V);
-
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
 
+    return vec4(specularAndDiffuse, 1.0);
+}
+
+vec4 ProcessEmissiveMaterial(uvec4 materialData) {
+    GBufferEmissive gBuffer = DecodeGBufferEmissive(materialData);
+    return vec4(gBuffer.emission, 1.0);
+}
+
+void main() {
+    uvec4 materialData = texture(uMaterialData, vTexCoords);
+    vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
+
+    switch (DecodeGBufferMaterialType(materialData)) {
+        case MaterialTypeCookTorrance: oColor = ProcessCookTorranceMaterial(materialData, worldPosition); break;
+        case MaterialTypeEmissive: oColor = ProcessEmissiveMaterial(materialData); break;
+    }
+
     // Shrinking the output value so that it won't be clamped by additive blending
-    oBaseOutput = vec4(specularAndDiffuse / HDRNormalizationFactor, 1.0);
+    oColor.rgb /= HDRNormalizationFactor;
 
 //    int cascade = ShadowCascadeIndex(worldPosition);
 //    switch (cascade) {
-//        case 0: oBaseOutput += vec4(0.5, 0.0, 0.0, 0.0); break;
-//        case 1: oBaseOutput += vec4(0.0, 0.5, 0.0, 0.0); break;
-//        case 2: oBaseOutput += vec4(0.0, 0.0, 0.5, 0.0); break;
-//        case 3: oBaseOutput += vec4(0.5, 0.5, 0.0, 0.0); break;
+//        case 0: oColor += vec4(0.5, 0.0, 0.0, 0.0); break;
+//        case 1: oColor += vec4(0.0, 0.5, 0.0, 0.0); break;
+//        case 2: oColor += vec4(0.0, 0.0, 0.5, 0.0); break;
+//        case 3: oColor += vec4(0.5, 0.5, 0.0, 0.0); break;
 //    }
 }

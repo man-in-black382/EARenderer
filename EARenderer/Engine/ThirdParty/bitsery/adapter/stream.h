@@ -31,22 +31,23 @@
 
 namespace bitsery {
 
-    template <typename TChar, typename CharTraits>
+    template<typename TChar, typename CharTraits>
     class BasicInputStreamAdapter {
     public:
         using TValue = TChar;
         using TIterator = void;//TIterator is used with sessions, but streams cannot be used with sessions
 
-        BasicInputStreamAdapter(std::basic_ios<TChar, CharTraits>& istream)
-                :_ios{std::addressof(istream)} {}
-
-        template <typename T>
-        void read(T& data) {
-            read(reinterpret_cast<TValue*>(&data), sizeof(T));
+        BasicInputStreamAdapter(std::basic_ios<TChar, CharTraits> &istream)
+                : _ios{std::addressof(istream)} {
         }
 
-        void read(TValue* data, size_t size) {
-            if (static_cast<size_t>(_ios->rdbuf()->sgetn( data , size )) != size) {
+        template<typename T>
+        void read(T &data) {
+            read(reinterpret_cast<TValue *>(&data), sizeof(T));
+        }
+
+        void read(TValue *data, size_t size) {
+            if (static_cast<size_t>(_ios->rdbuf()->sgetn(data, size)) != size) {
                 *data = {};
                 //check state, if not set by stream, set it manually
                 if (_ios->good())
@@ -59,44 +60,47 @@ namespace bitsery {
             if (_ios->good())
                 return ReaderError::NoError;
             return _ios->eof()
-                   ? ReaderError::DataOverflow
-                   : ReaderError::ReadingError;
+                    ? ReaderError::DataOverflow
+                    : ReaderError::ReadingError;
         }
+
         bool isCompletedSuccessfully() const {
             if (error() == ReaderError::NoError) {
                 return _ios->rdbuf()->sgetc() == CharTraits::eof();
             }
             return false;
         }
-        void setError(ReaderError ) {
+
+        void setError(ReaderError) {
             //has no effect when using
         }
 
     private:
-        std::basic_ios<TChar, CharTraits>* _ios;
+        std::basic_ios<TChar, CharTraits> *_ios;
     };
 
-    template <typename TChar, typename CharTraits>
+    template<typename TChar, typename CharTraits>
     class BasicOutputStreamAdapter {
     public:
         using TValue = TChar;
         using TIterator = void;//TIterator is used with sessions, but streams cannot be used with sessions
 
-        BasicOutputStreamAdapter(std::basic_ios<TChar, CharTraits>& ostream)
-                :_ios{std::addressof(ostream)} {}
-
-        template <typename T>
-        void write(const T& data) {
-            write(reinterpret_cast<const TValue*>(&data), sizeof(T));
+        BasicOutputStreamAdapter(std::basic_ios<TChar, CharTraits> &ostream)
+                : _ios{std::addressof(ostream)} {
         }
 
-        void write(const TValue* data, size_t size) {
+        template<typename T>
+        void write(const T &data) {
+            write(reinterpret_cast<const TValue *>(&data), sizeof(T));
+        }
+
+        void write(const TValue *data, size_t size) {
             //for optimization
-            _ios->rdbuf()->sputn( data , size );
+            _ios->rdbuf()->sputn(data, size);
         }
 
         void flush() {
-            if (auto ostream = dynamic_cast<std::basic_ostream<TChar, CharTraits>*>(_ios))
+            if (auto ostream = dynamic_cast<std::basic_ostream<TChar, CharTraits> *>(_ios))
                 ostream->flush();
         }
 
@@ -112,10 +116,10 @@ namespace bitsery {
         }
 
     private:
-        std::basic_ios<TChar, CharTraits>* _ios;
+        std::basic_ios<TChar, CharTraits> *_ios;
     };
 
-    template <typename TChar, typename CharTraits, typename TBuffer = std::array<TChar, 256>>
+    template<typename TChar, typename CharTraits, typename TBuffer = std::array<TChar, 256>>
     class BasicBufferedOutputStreamAdapter {
     public:
         using Buffer = TBuffer;
@@ -126,29 +130,28 @@ namespace bitsery {
         using TIterator = void;//TIterator is used with sessions, but streams cannot be used with sessions
 
         //bufferSize is used when buffer is dynamically allocated
-        BasicBufferedOutputStreamAdapter(std::basic_ios<TChar, CharTraits>& ostream, size_t bufferSize = 256)
-                :_adapter(ostream),
-                 _buf{},
-                 _outIt{}
-        {
+        BasicBufferedOutputStreamAdapter(std::basic_ios<TChar, CharTraits> &ostream, size_t bufferSize = 256)
+                : _adapter(ostream),
+                  _buf{},
+                  _outIt{} {
             init(bufferSize, TResizable{});
         }
 
         //we need to explicitly declare move logic, in case buffer is static, because after move it will be invalidated
-        BasicBufferedOutputStreamAdapter(const BasicBufferedOutputStreamAdapter&) = delete;
-        BasicBufferedOutputStreamAdapter& operator = (const BasicBufferedOutputStreamAdapter&) = delete;
+        BasicBufferedOutputStreamAdapter(const BasicBufferedOutputStreamAdapter &) = delete;
 
-        BasicBufferedOutputStreamAdapter(BasicBufferedOutputStreamAdapter&& rhs)
+        BasicBufferedOutputStreamAdapter &operator=(const BasicBufferedOutputStreamAdapter &) = delete;
+
+        BasicBufferedOutputStreamAdapter(BasicBufferedOutputStreamAdapter &&rhs)
                 : _adapter{std::move(rhs._adapter)},
                   _buf{},
-                  _outIt{}
-        {
+                  _outIt{} {
             auto size = std::distance(std::begin(rhs._buf), rhs._outIt);
             _buf = std::move(rhs._buf);
             _outIt = std::next(std::begin(_buf), size);
         };
 
-        BasicBufferedOutputStreamAdapter& operator = (BasicBufferedOutputStreamAdapter&& rhs) {
+        BasicBufferedOutputStreamAdapter &operator=(BasicBufferedOutputStreamAdapter &&rhs) {
             _adapter = std::move(rhs._adapter);
             //get current written size, before move
             auto size = std::distance(std::begin(rhs._buf), rhs._outIt);
@@ -159,8 +162,8 @@ namespace bitsery {
 
         ~BasicBufferedOutputStreamAdapter() = default;
 
-        template <typename T>
-        void write(const T& data) {
+        template<typename T>
+        void write(const T &data) {
             auto tmp = _outIt;
 
 #if defined(_MSC_VER) && (_ITERATOR_DEBUG_LEVEL > 0)
@@ -170,18 +173,18 @@ namespace bitsery {
                 _outIt += sizeof(T);
 #else
             _outIt += sizeof(T);
-            if (std::distance(_outIt , std::end(_buf)) >= 0) {
-                *reinterpret_cast<T*>(std::addressof(*tmp)) = data;
+            if (std::distance(_outIt, std::end(_buf)) >= 0) {
+                *reinterpret_cast<T *>(std::addressof(*tmp)) = data;
 #endif
             } else {
                 //when buffer is full write out to stream
                 _outIt = std::begin(_buf);
                 _adapter.write(std::addressof(*_outIt), static_cast<size_t>(std::distance(_outIt, tmp)));
-                _adapter.write(reinterpret_cast<const TValue*>(&data), sizeof(T));
+                _adapter.write(reinterpret_cast<const TValue *>(&data), sizeof(T));
             }
         }
 
-        void write(const TValue* data, size_t size) {
+        void write(const TValue *data, size_t size) {
             auto tmp = _outIt;
 
 #if defined(_MSC_VER) && (_ITERATOR_DEBUG_LEVEL > 0)
@@ -191,7 +194,7 @@ namespace bitsery {
                 _outIt += size;
 #else
             _outIt += size;
-            if (std::distance(_outIt , std::end(_buf)) >= 0) {
+            if (std::distance(_outIt, std::end(_buf)) >= 0) {
                 std::memcpy(std::addressof(*tmp), data, size);
 #endif
             } else {
@@ -221,11 +224,12 @@ namespace bitsery {
     private:
         using TResizable = std::integral_constant<bool, traits::ContainerTraits<TBuffer>::isResizable>;
 
-        void init (size_t bufferSize, std::true_type) {
+        void init(size_t bufferSize, std::true_type) {
             _buf.resize(bufferSize);
             _outIt = std::begin(_buf);
         }
-        void init (size_t, std::false_type) {
+
+        void init(size_t, std::false_type) {
             _outIt = std::begin(_buf);
         }
 
@@ -234,16 +238,17 @@ namespace bitsery {
         BufferIt _outIt;
     };
 
-    template <typename TChar, typename CharTraits>
-    class BasicIOStreamAdapter:public BasicInputStreamAdapter<TChar, CharTraits>, public BasicOutputStreamAdapter<TChar, CharTraits> {
+    template<typename TChar, typename CharTraits>
+    class BasicIOStreamAdapter
+            : public BasicInputStreamAdapter<TChar, CharTraits>, public BasicOutputStreamAdapter<TChar, CharTraits> {
     public:
         using TValue = TChar;
         using TIterator = void;//TIterator is used with sessions, but streams cannot be used with sessions
 
         //both bases contain reference to same iostream, so no need to do anything
-        BasicIOStreamAdapter(std::basic_ios<TChar, CharTraits>& iostream)
-                :BasicInputStreamAdapter<TChar, CharTraits>{iostream},
-                 BasicOutputStreamAdapter<TChar, CharTraits>{iostream} {
+        BasicIOStreamAdapter(std::basic_ios<TChar, CharTraits> &iostream)
+                : BasicInputStreamAdapter<TChar, CharTraits>{iostream},
+                  BasicOutputStreamAdapter<TChar, CharTraits>{iostream} {
 
         }
     };

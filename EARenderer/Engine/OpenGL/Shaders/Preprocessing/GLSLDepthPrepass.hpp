@@ -16,14 +16,15 @@
 
 namespace EARenderer {
 
-    class GLSLDepthPrepass: public GLProgram {
+    class GLSLDepthPrepass : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLDepthPrepass();
 
-        void setCamera(const Camera& camera);
-        void setModelMatrix(const glm::mat4& matrix);
+        void setCamera(const Camera &camera);
+
+        void setModelMatrix(const glm::mat4 &matrix);
 
     };
 

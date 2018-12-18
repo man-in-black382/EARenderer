@@ -17,19 +17,18 @@
 
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
-class FbxNode; 
+class FbxNode;
 
 /** Utility class for constraints
   *\nosubgrouping
   */
-class FBXSDK_DLL FbxConstraintUtils
-{
+class FBXSDK_DLL FbxConstraintUtils {
 public:
-	/** Test if the given node is Single Chain IK Effector.
-	  * \param pNode         The given node
-	  * \return             \c true if it is, \c false otherwise.
-	  */
-	static bool IsNodeSingleChainIKEffector(FbxNode* pNode);
+    /** Test if the given node is Single Chain IK Effector.
+      * \param pNode         The given node
+      * \return             \c true if it is, \c false otherwise.
+      */
+    static bool IsNodeSingleChainIKEffector(FbxNode *pNode);
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

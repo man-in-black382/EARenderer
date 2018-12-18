@@ -21,7 +21,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    DeferredSceneRenderer::DeferredSceneRenderer(const Scene *scene,
+    DeferredSceneRenderer::DeferredSceneRenderer(
+            const Scene *scene,
             const DefaultRenderComponentsProviding *provider,
             const RenderingSettings &settings,
             std::shared_ptr<const SurfelData> surfelData,
@@ -47,6 +48,7 @@ namespace EARenderer {
             mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper)),
             mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, GBuffer, surfelData, diffuseProbeData, mShadowMapper)),
             mGBuffer(GBuffer) {
+
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
@@ -153,7 +155,7 @@ namespace EARenderer {
             glFinish();
         });
 
-        // We're using depth buffer rendered during gbuffer construction.
+        // We're using depth buffer rendered during GBufferCookTorrance construction.
         // Depth writes are disabled for the purpose of combining skybox
         // and debugging entities with full screen deferred rendering:
         // meshes are rendered as a full screen quad, then skybox is rendered
@@ -219,16 +221,16 @@ namespace EARenderer {
         });
 
 //        // DEBUG
-        glDisable(GL_DEPTH_TEST);
-
-        mFSQuadShader.bind();
-        mFSQuadShader.setApplyToneMapping(false);
-        mFSQuadShader.ensureSamplerValidity([&]() {
-            mFSQuadShader.setTexture(mShadowMapper->penumbraForPointLight(*mScene->pointLights().begin()));
-        });
+//        glDisable(GL_DEPTH_TEST);
+//
+//        mFSQuadShader.bind();
+//        mFSQuadShader.setApplyToneMapping(false);
+//        mFSQuadShader.ensureSamplerValidity([&]() {
+//            mFSQuadShader.setTexture(mShadowMapper->penumbraForPointLight(*mScene->pointLights().begin()));
+//        });
 
 //        Drawable::TriangleStripQuad::Draw();
-        glEnable(GL_DEPTH_TEST);
+//        glEnable(GL_DEPTH_TEST);
 //        // DEBUG
 
         renderFinalImage(smaaOutputTexture);

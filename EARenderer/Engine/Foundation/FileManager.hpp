@@ -12,26 +12,28 @@
 #include <string>
 
 namespace EARenderer {
-    
+
     class FileManager {
     private:
         std::string mResourceRootPath;
         std::string mShaderSourceFolderPath;
-        
-        FileManager() = default;
-        ~FileManager() = default;
-        
-        FileManager(const FileManager& that) = delete;
-        FileManager& operator=(const FileManager& rhs) = delete;
-        
-    public:
-        static FileManager& shared();
 
-        const std::string& resourceRootPath() const;
-        
-        void setResourceRootPath(const std::string& path);
+        FileManager() = default;
+
+        ~FileManager() = default;
+
+        FileManager(const FileManager &that) = delete;
+
+        FileManager &operator=(const FileManager &rhs) = delete;
+
+    public:
+        static FileManager &shared();
+
+        const std::string &resourceRootPath() const;
+
+        void setResourceRootPath(const std::string &path);
     };
-    
+
 }
 
 #endif /* FileSystem_hpp */

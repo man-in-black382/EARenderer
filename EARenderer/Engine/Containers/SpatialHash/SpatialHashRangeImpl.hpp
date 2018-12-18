@@ -11,22 +11,21 @@
 
 namespace EARenderer {
 
-    template <typename T>
-    SpatialHash<T>::Range::Range(const std::array<CellBeginEndPair, 27>& cellBeginEndPairs, size_t pairsCount)
-    :
-    mBegin(cellBeginEndPairs, pairsCount),
-    mEnd(cellBeginEndPairs, pairsCount)
-    {
+    template<typename T>
+    SpatialHash<T>::Range::Range(const std::array<CellBeginEndPair, 27> &cellBeginEndPairs, size_t pairsCount)
+            :
+            mBegin(cellBeginEndPairs, pairsCount),
+            mEnd(cellBeginEndPairs, pairsCount) {
         mEnd.moveToEnd();
     }
 
-    template <typename T>
+    template<typename T>
     typename SpatialHash<T>::Range::Iterator
     SpatialHash<T>::Range::begin() {
         return mBegin;
     }
 
-    template <typename T>
+    template<typename T>
     typename SpatialHash<T>::Range::Iterator
     SpatialHash<T>::Range::end() {
         return mEnd;

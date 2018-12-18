@@ -25,8 +25,11 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxIO;
+
 class FbxIOFileHeaderInfo;
+
 class FbxThread;
+
 class FbxWriter;
 
 struct FbxExportThreadArg;
@@ -86,217 +89,227 @@ struct FbxExportThreadArg;
   *          Supported files formats: FBX 5/6/7 Binary & ASCII, Collada, DXF, OBJ, 3DS
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxExporter : public FbxIOBase
-{
-	FBXSDK_OBJECT_DECLARE(FbxExporter, FbxIOBase);
+class FBXSDK_DLL FbxExporter : public FbxIOBase {
+FBXSDK_OBJECT_DECLARE(FbxExporter, FbxIOBase);
 
 public:
-	/** 
-	  * \name Export Functions
-	  */
-	//@{
-		/** Initialize object.
-		  *	\param pFileName     Name of file to access.
-		  * \param pFileFormat   file format identifier User does not need to specify it by default.
-								 if not specified, plugin will detect the file format according to file suffix automatically.
-		  * \param pIOSettings   client IOSettings, if not specified, a default IOSettings will be created
-		  *	\return              \c true on success, \c false otherwise.
-		  * \remarks             To identify the error that occurred, inspect the status object accessed 
-          *                      using the GetStatus() function.
-		  */
-		virtual bool Initialize(const char* pFileName, int pFileFormat = -1, FbxIOSettings* pIOSettings = NULL);
+    /**
+      * \name Export Functions
+      */
+    //@{
+    /** Initialize object.
+      *	\param pFileName     Name of file to access.
+      * \param pFileFormat   file format identifier User does not need to specify it by default.
+                             if not specified, plugin will detect the file format according to file suffix automatically.
+      * \param pIOSettings   client IOSettings, if not specified, a default IOSettings will be created
+      *	\return              \c true on success, \c false otherwise.
+      * \remarks             To identify the error that occurred, inspect the status object accessed
+      *                      using the GetStatus() function.
+      */
+    virtual bool Initialize(const char *pFileName, int pFileFormat = -1, FbxIOSettings *pIOSettings = NULL);
 
-	    /** Initialize object.
-	    * \param pStream       stream to access.
-	    * \param pStreamData   user-defined stream data.
-        * \param pFileFormat   file format identifier User does not need to specify it by default.
-                               if not specified, plugin will request the file format from the stream.
-	    * \param pIOSettings   client IOSettings, if not specified, a default IOSettings will be created
-        * \return              \c true on success, \c false otherwise.
-	    * \remarks             To identify the error that occurred, inspect the status object accessed 
-        *                      using the GetStatus() function.
-	    */
-        virtual bool Initialize(FbxStream* pStream, void* pStreamData=NULL, int pFileFormat = -1, FbxIOSettings * pIOSettings = NULL);
+    /** Initialize object.
+    * \param pStream       stream to access.
+    * \param pStreamData   user-defined stream data.
+    * \param pFileFormat   file format identifier User does not need to specify it by default.
+                           if not specified, plugin will request the file format from the stream.
+    * \param pIOSettings   client IOSettings, if not specified, a default IOSettings will be created
+    * \return              \c true on success, \c false otherwise.
+    * \remarks             To identify the error that occurred, inspect the status object accessed
+    *                      using the GetStatus() function.
+    */
+    virtual bool Initialize(FbxStream *pStream, void *pStreamData = NULL, int pFileFormat = -1, FbxIOSettings *pIOSettings = NULL);
 
-		/** Setup file export options settings.
-		  *	\return \c true on success, \c false otherwise.
-		  */	
-		bool GetExportOptions();
+    /** Setup file export options settings.
+      *	\return \c true on success, \c false otherwise.
+      */
+    bool GetExportOptions();
 
-        /** Access to a IOSettings object.
-		  * \return The pointer to IOSettings or \c NULL \c if the object has not been allocated.
-		  */
-		FbxIOSettings* GetIOSettings();
+    /** Access to a IOSettings object.
+      * \return The pointer to IOSettings or \c NULL \c if the object has not been allocated.
+      */
+    FbxIOSettings *GetIOSettings();
 
-		/** Set the IOSettings pointer
-		  * \param pIOSettings  Pointer on a FbxIOSettings object.  
-		  */
-		void SetIOSettings(FbxIOSettings* pIOSettings);
+    /** Set the IOSettings pointer
+      * \param pIOSettings  Pointer on a FbxIOSettings object.
+      */
+    void SetIOSettings(FbxIOSettings *pIOSettings);
 
 
-		/** Export the document to the currently created file.
-		  * \param pDocument          Document to export.
-		  * \param pNonBlocking       If true, the export process will be executed in a new thread, allowing it to be non-blocking.
-									  To determine if the export finished, refer to the function IsExporting().
-		  *	\return                   \c true on success, \c false otherwise.
-	      * \remarks                  To identify the error that occurred, inspect the status object accessed 
-          *                           using the GetStatus() function.
-		  */
-		bool Export(FbxDocument* pDocument, bool pNonBlocking=false);
+    /** Export the document to the currently created file.
+      * \param pDocument          Document to export.
+      * \param pNonBlocking       If true, the export process will be executed in a new thread, allowing it to be non-blocking.
+                                  To determine if the export finished, refer to the function IsExporting().
+      *	\return                   \c true on success, \c false otherwise.
+      * \remarks                  To identify the error that occurred, inspect the status object accessed
+      *                           using the GetStatus() function.
+      */
+    bool Export(FbxDocument *pDocument, bool pNonBlocking = false);
 
-	#ifndef FBXSDK_ENV_WINSTORE
-		/** Check if the exporter is currently exporting.
-		  * \param pExportResult  This parameter, after the export finished, will contain the result of the export success or failure.
-		  * \return               Return true if the exporter is currently exporting.
-		  * \remarks              This function will always return false if Export() was called with pNonBlocking set to false.
-		  *                       This function should be used only in the context of pNonBlocking set to true.
-		  *                       It is very important to periodically check if the export finished using this function,
-		  *                       since it will also free up the thread's allocations when its done.
-		  */
-		bool IsExporting(bool& pExportResult);
-	#endif /* !FBXSDK_ENV_WINSTORE */
+#ifndef FBXSDK_ENV_WINSTORE
 
-		/** Get the progress status in non-blocking mode.
-		  *	\param pStatus Optional current status string.
-		  *	\return Percentage of the finished workload.
-		  */
-		float GetProgress(FbxString* pStatus=NULL);
+    /** Check if the exporter is currently exporting.
+      * \param pExportResult  This parameter, after the export finished, will contain the result of the export success or failure.
+      * \return               Return true if the exporter is currently exporting.
+      * \remarks              This function will always return false if Export() was called with pNonBlocking set to false.
+      *                       This function should be used only in the context of pNonBlocking set to true.
+      *                       It is very important to periodically check if the export finished using this function,
+      *                       since it will also free up the thread's allocations when its done.
+      */
+    bool IsExporting(bool &pExportResult);
 
-		/** Register a callback function for progress reporting in single thread mode.
-		  *	\param pCallback Pointer of the callback function.
-		  * \param pArgs Pointer to the arguments passed to the callback function.
-		  */
-		void SetProgressCallback(FbxProgressCallback pCallback, void* pArgs=NULL);
-	//@}
+#endif /* !FBXSDK_ENV_WINSTORE */
 
-	/** 
-	  * \name File Format
-	  */
-	//@{
-		/** Get the format of the exported file.
-		  *	\return     File format identifier.
-		  */
-		int GetFileFormat();
+    /** Get the progress status in non-blocking mode.
+      *	\param pStatus Optional current status string.
+      *	\return Percentage of the finished workload.
+      */
+    float GetProgress(FbxString *pStatus = NULL);
 
-		/** Return \c true if the file format is a recognized FBX format.
-		  */
-		bool IsFBX();
+    /** Register a callback function for progress reporting in single thread mode.
+      *	\param pCallback Pointer of the callback function.
+      * \param pArgs Pointer to the arguments passed to the callback function.
+      */
+    void SetProgressCallback(FbxProgressCallback pCallback, void *pArgs = NULL);
+    //@}
 
-		/** Get the list of writable versions for the current file format.
-		  * \return \c NULL or a null terminated array of strings.
-		  * \remarks the strings returned match the writers registered for the current format. 
-          * The array items can be retrieved with the following code:
-          * \code
-          *   char const* const* lWV = lExporter->GetCurrentWritableVersions();
-          *   if (lWV)
-          *   {
-          *       int i = 0;
-          *       while (lWV[i] != NULL)
-          *       {
-          *           printf("fmt = %s\n", lWV[i]);
-          *           i++;
-          *       }
-          *   }
-          * \endcode
-		  * 
-		  */
-		char const* const* GetCurrentWritableVersions();
+    /**
+      * \name File Format
+      */
+    //@{
+    /** Get the format of the exported file.
+      *	\return     File format identifier.
+      */
+    int GetFileFormat();
 
-		/** Set file version for a given file format.
-		  * \param pVersion String description of the file format.
-		  * \param pRenamingMode Renaming mode.
-		  * \return \c true if mode is set correctly
-		  */
-		bool SetFileExportVersion(FbxString pVersion, FbxSceneRenamer::ERenamingMode pRenamingMode);
+    /** Return \c true if the file format is a recognized FBX format.
+      */
+    bool IsFBX();
 
-		/** Set the resampling rate (only used when exporting to FBX 5.3 and lower)
-		  * \param pResamplingRate resampling rate
-		  */
-		inline void SetResamplingRate(double pResamplingRate){ mResamplingRate = pResamplingRate; }
+    /** Get the list of writable versions for the current file format.
+      * \return \c NULL or a null terminated array of strings.
+      * \remarks the strings returned match the writers registered for the current format.
+      * The array items can be retrieved with the following code:
+      * \code
+      *   char const* const* lWV = lExporter->GetCurrentWritableVersions();
+      *   if (lWV)
+      *   {
+      *       int i = 0;
+      *       while (lWV[i] != NULL)
+      *       {
+      *           printf("fmt = %s\n", lWV[i]);
+      *           i++;
+      *       }
+      *   }
+      * \endcode
+      *
+      */
+    char const *const *GetCurrentWritableVersions();
 
-		/** Set the default rendering resolution.
-		  * \param pCamName            name of the camera.
-		  * \param pResolutionMode     resolution mode.
-		  * \param pW                  width.
-		  * \param pH                  height.
-          * \remark These values are ignored when exporting to FBX 7.x and higher. With FBX version 6.x and lower, 
-          *         the HeaderInfo is still accessible for legacy reasons and any other custom writers. For FBX filles,
-          *         these values are used by the FBX QuickTime plug-in (obsolete now) to help it get the window size 
-          *         without loading the whole file. The information contained in the FbxIOFileHeaderInfo is a duplicate
-          *         of AspectRatioMode, AspectWidth and AspectHeight properties defined in the FbxCamera class. 
-          *         Retrieveing the FileHeaderInfo starting from FBX 7.x will always return the uninitialized structure.
-		  */
-		void SetDefaultRenderResolution(FbxString pCamName, FbxString pResolutionMode, double pW, double pH);
+    /** Set file version for a given file format.
+      * \param pVersion String description of the file format.
+      * \param pRenamingMode Renaming mode.
+      * \return \c true if mode is set correctly
+      */
+    bool SetFileExportVersion(FbxString pVersion, FbxSceneRenamer::ERenamingMode pRenamingMode);
 
-		/**	Get the complete file header information.
-		* \return		valid pointer to the complete header information
-		*/
-		FbxIOFileHeaderInfo* GetFileHeaderInfo();
-	//@}
+    /** Set the resampling rate (only used when exporting to FBX 5.3 and lower)
+      * \param pResamplingRate resampling rate
+      */
+    inline void SetResamplingRate(double pResamplingRate) {
+        mResamplingRate = pResamplingRate;
+    }
+
+    /** Set the default rendering resolution.
+      * \param pCamName            name of the camera.
+      * \param pResolutionMode     resolution mode.
+      * \param pW                  width.
+      * \param pH                  height.
+      * \remark These values are ignored when exporting to FBX 7.x and higher. With FBX version 6.x and lower,
+      *         the HeaderInfo is still accessible for legacy reasons and any other custom writers. For FBX filles,
+      *         these values are used by the FBX QuickTime plug-in (obsolete now) to help it get the window size
+      *         without loading the whole file. The information contained in the FbxIOFileHeaderInfo is a duplicate
+      *         of AspectRatioMode, AspectWidth and AspectHeight properties defined in the FbxCamera class.
+      *         Retrieveing the FileHeaderInfo starting from FBX 7.x will always return the uninitialized structure.
+      */
+    void SetDefaultRenderResolution(FbxString pCamName, FbxString pResolutionMode, double pW, double pH);
+
+    /**	Get the complete file header information.
+    * \return		valid pointer to the complete header information
+    */
+    FbxIOFileHeaderInfo *GetFileHeaderInfo();
+    //@}
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	bool GetExportOptions(FbxIO* pFbxObject);
-	bool Export(FbxDocument* pDocument, FbxIO* pFbxObject);
+
+    bool GetExportOptions(FbxIO *pFbxObject);
+
+    bool Export(FbxDocument *pDocument, FbxIO *pFbxObject);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void Destruct(bool pRecursive);
-	virtual void SetOrCreateIOSettings(FbxIOSettings* pIOSettings, bool pAllowNULL);
+    virtual void Construct(const FbxObject *pFrom);
 
-	void Reset();
-	bool FileCreate();
-	void FileClose();
+    virtual void Destruct(bool pRecursive);
+
+    virtual void SetOrCreateIOSettings(FbxIOSettings *pIOSettings, bool pAllowNULL);
+
+    void Reset();
+
+    bool FileCreate();
+
+    void FileClose();
 
 private:
-	bool ExportProcess(FbxDocument* pDocument);
+    bool ExportProcess(FbxDocument *pDocument);
 
-	int								mFileFormat;
-	FbxWriter*						mWriter;
+    int mFileFormat;
+    FbxWriter *mWriter;
 #ifndef FBXSDK_ENV_WINSTORE
-    FbxThread*						mExportThread;
-    FbxExportThreadArg*				mExportThreadArg;
-    bool							mExportThreadResult;
-    bool							mIsThreadExporting;
+    FbxThread *mExportThread;
+    FbxExportThreadArg *mExportThreadArg;
+    bool mExportThreadResult;
+    bool mIsThreadExporting;
 #endif /* !FBXSDK_ENV_WINSTORE */
-    FbxProgress						mProgress;
-	FbxStream*                      mStream;
-	void*                           mStreamData;
-	FbxString						mStrFileVersion;
-	double							mResamplingRate;
-	FbxSceneRenamer::ERenamingMode	mRenamingMode;
-	FbxIOFileHeaderInfo*			mHeaderInfo;
-	FbxIOSettings*					mIOSettings;
-	bool							mClientIOSettings;
+    FbxProgress mProgress;
+    FbxStream *mStream;
+    void *mStreamData;
+    FbxString mStrFileVersion;
+    double mResamplingRate;
+    FbxSceneRenamer::ERenamingMode mRenamingMode;
+    FbxIOFileHeaderInfo *mHeaderInfo;
+    FbxIOSettings *mIOSettings;
+    bool mClientIOSettings;
 
-	friend void ExportThread(void*);
+    friend void ExportThread(void *);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 //! Event that is emitted to plugins before a file is exported to the FBX format.
-class FBXSDK_DLL FbxEventPreExport : public FbxEvent<FbxEventPreExport>
-{
-	FBXSDK_EVENT_DECLARE(FbxEventPreExport);
+class FBXSDK_DLL FbxEventPreExport : public FbxEvent<FbxEventPreExport> {
+FBXSDK_EVENT_DECLARE(FbxEventPreExport);
 
 public:
-	FbxEventPreExport(FbxDocument* pDocument) : mDocument(pDocument) {};
+    FbxEventPreExport(FbxDocument *pDocument) : mDocument(pDocument) {
+    };
 
-	//! The document to be exported
-	FbxDocument* mDocument;
+    //! The document to be exported
+    FbxDocument *mDocument;
 };
 
 //! Event that is emitted to plugins after a file is exported to the FBX format.
-class FBXSDK_DLL FbxEventPostExport : public FbxEvent<FbxEventPostExport>
-{
-	FBXSDK_EVENT_DECLARE(FbxEventPostExport);
+class FBXSDK_DLL FbxEventPostExport : public FbxEvent<FbxEventPostExport> {
+FBXSDK_EVENT_DECLARE(FbxEventPostExport);
 
 public:
-	FbxEventPostExport(FbxDocument* pDocument) : mDocument(pDocument) {};
+    FbxEventPostExport(FbxDocument *pDocument) : mDocument(pDocument) {
+    };
 
-	//! The document to be exported
-	FbxDocument* mDocument;
+    //! The document to be exported
+    FbxDocument *mDocument;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

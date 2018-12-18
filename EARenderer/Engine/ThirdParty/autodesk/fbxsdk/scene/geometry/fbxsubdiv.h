@@ -27,43 +27,39 @@ class FbxMesh;
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-class FBXSDK_DLL FbxSubDiv : public FbxGeometry
-{
-    FBXSDK_OBJECT_DECLARE(FbxSubDiv, FbxGeometry);
+class FBXSDK_DLL FbxSubDiv : public FbxGeometry {
+FBXSDK_OBJECT_DECLARE(FbxSubDiv, FbxGeometry);
 
 public:
-    enum EScheme
-    {
+    enum EScheme {
         eCatmullClark,  //Catmull CClark subdivision surface
         eDooCSabin,      //Doo CSabin subdivision surface
         eLoop,           //Loop subdivision surface
         eLinear,         //Linear subdivision surface 
     };
 
-    enum ETesselationPattern
-    {
+    enum ETesselationPattern {
         eOddFractional,
         eEvenFractional,
         eInteger,
         ePower2,      //Max, Maya use this one
     };
 
-	enum EDisplaySmoothness
-	{
-		eHull,
-		eRough,
-		eMedium,
-		eFine,
-	};
+    enum EDisplaySmoothness {
+        eHull,
+        eRough,
+        eMedium,
+        eFine,
+    };
 
     /** InitSubdivLevel Initialize the subdiv
       * \param pLevelCount  number of levels
       * \param pScheme      subdivision scheme
       * \param pPattern     Tessellation pattern
       */
-    void InitSubdivLevel(int pLevelCount, 
-        EScheme pScheme = eCatmullClark, 
-        ETesselationPattern pPattern = ePower2);
+    void InitSubdivLevel(int pLevelCount,
+            EScheme pScheme = eCatmullClark,
+            ETesselationPattern pPattern = ePower2);
 
     virtual FbxNodeAttribute::EType GetAttributeType() const;
 
@@ -72,37 +68,39 @@ public:
     static const int MAX_SUBDIV_LEVEL = 16;
 
     //subdiv levels in subdivision, including the base mesh and each subdiv levels
-    FbxArray<FbxMesh*> mSubDivLevel;
+    FbxArray<FbxMesh *> mSubDivLevel;
 
     //Get the base mesh
-    FbxMesh* GetBaseMesh() const; 
+    FbxMesh *GetBaseMesh() const;
 
     //Get the mesh from finest level
-    FbxMesh* GetFinestMesh() const;
+    FbxMesh *GetFinestMesh() const;
 
     //Set the finest mesh
-    bool SetFinestMesh(FbxMesh* pMesh);
+    bool SetFinestMesh(FbxMesh *pMesh);
 
     //Set the finest mesh
-    bool SetBaseMesh(FbxMesh* pMesh);
+    bool SetBaseMesh(FbxMesh *pMesh);
 
     //Get the mesh from specific level
-    FbxMesh* GetMesh(int pLevel) const;
+    FbxMesh *GetMesh(int pLevel) const;
 
     /** SetSubdivLevelMesh Set certain subdivision mesh
       * \param pLevel   working level
       * \param pMesh    new level mesh. pLevel = 0 means base mesh, 
       pLevel = MaxLevel -1 means finest mesh
       */
-    void SetSubdivLevelMesh(int pLevel, FbxMesh* pMesh);
+    void SetSubdivLevelMesh(int pLevel, FbxMesh *pMesh);
 
     int GetLevelCount() const;
+
     void SetLevelCount(int pLevelCount);
 
     int GetCurrentLevel() const;
+
     void SetCurrentLevel(int pCurrentLevel);
 
-	FbxMesh* GetCurrentMesh() const;
+    FbxMesh *GetCurrentMesh() const;
 
     FbxSubDiv::EScheme GetSubdivScheme() const;
 
@@ -112,17 +110,17 @@ public:
 
     void SetTessPattern(FbxSubDiv::ETesselationPattern pPattern);
 
-	FbxSubDiv::EDisplaySmoothness GetDisplaySmoothness() const;
+    FbxSubDiv::EDisplaySmoothness GetDisplaySmoothness() const;
 
-	void SetDisplaySmoothness(FbxSubDiv::EDisplaySmoothness pSmoothness);
+    void SetDisplaySmoothness(FbxSubDiv::EDisplaySmoothness pSmoothness);
 
 private:
 
     //base geometry mesh for subdivision
-    FbxMesh* mBaseMesh;
+    FbxMesh *mBaseMesh;
 
     //finest geometry mesh for subdivision
-    FbxMesh* mFinestMesh;
+    FbxMesh *mFinestMesh;
 
     //current operating subdivision level
     int mCurrLevel;
@@ -136,8 +134,8 @@ private:
     //pattern of subdiv
     ETesselationPattern mPattern;
 
-	//display smoothness of subdiv
-	EDisplaySmoothness mSmoothness;
+    //display smoothness of subdiv
+    EDisplaySmoothness mSmoothness;
 };
 
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/

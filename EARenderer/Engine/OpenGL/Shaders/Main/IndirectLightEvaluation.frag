@@ -17,7 +17,7 @@ layout(location = 0) out vec4 oOutputColor;
 in vec2 vTexCoords;
 
 // Uniforms
-uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
+uniform usampler2D uMaterialData;
 uniform sampler2D uGBufferHiZBuffer;
 
 uniform vec3 uCameraPosition;
@@ -59,7 +59,8 @@ bool isParallaxMappingEnabled()     { return bool((uSettingsBitmask >> 0u) & 1u)
 ////////////////////////////////////////////////////////////
 
 void main() {
-    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
+    uvec4 materialData = texture(uMaterialData, vTexCoords);
+    GBufferCookTorrance gBuffer = DecodeGBufferCookTorrance(materialData);
 
     vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
 

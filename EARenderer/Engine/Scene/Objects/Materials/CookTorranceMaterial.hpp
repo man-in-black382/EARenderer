@@ -1,5 +1,5 @@
 //
-//  PBRMaterial.hpp
+//  CookTorranceMaterial.hpp
 //  EARenderer
 //
 //  Created by Pavlo Muratov on 07.10.2017.
@@ -17,8 +17,8 @@
 #include "GLTexture2D.hpp"
 
 namespace EARenderer {
-    
-    class PBRMaterial {
+
+    class CookTorranceMaterial {
     public:
         using AlbedoMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBACompressedRGBAInput>;
         using NormalMap             = GLNormalizedTexture2D<GLTexture::Normalized::RGBCompressedRGBAInput>;
@@ -34,23 +34,30 @@ namespace EARenderer {
         std::unique_ptr<RoughnessMap> mRoughnessMap;
         std::unique_ptr<AmbientOcclusionMap> mAmbientOcclusionMap;
         std::unique_ptr<DisplacementMap> mDisplacementMap;
-        
+
     public:
-        PBRMaterial(const std::string& albedoMapPath = "",
-                    const std::string& normalMapPath = "",
-                    const std::string& metallicMapPath = "",
-                    const std::string& roughnessMapPath = "",
-                    const std::string& ambientOcclusionMapPath = "",
-                    const std::string& displacementMapPath = "");
- 
-        const AlbedoMap* albedoMap() const;
-        const NormalMap* normalMap() const;
-        const MetallnessMap* metallicMap() const;
-        const RoughnessMap* roughnessMap() const;
-        const AmbientOcclusionMap* ambientOcclusionMap() const;
-        const DisplacementMap* displacementMap() const;
+        CookTorranceMaterial(
+                const std::string &albedoMapPath = "",
+                const std::string &normalMapPath = "",
+                const std::string &metallicMapPath = "",
+                const std::string &roughnessMapPath = "",
+                const std::string &ambientOcclusionMapPath = "",
+                const std::string &displacementMapPath = ""
+        );
+
+        const AlbedoMap *albedoMap() const;
+
+        const NormalMap *normalMap() const;
+
+        const MetallnessMap *metallicMap() const;
+
+        const RoughnessMap *roughnessMap() const;
+
+        const AmbientOcclusionMap *ambientOcclusionMap() const;
+
+        const DisplacementMap *displacementMap() const;
     };
-    
+
 }
 
 #endif /* PBRMaterial_hpp */

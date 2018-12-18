@@ -13,25 +13,25 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <typename T>
+    template<typename T>
     LogarithmicBin<T>::Iterator::Iterator(BinsIterator i, BinsIterator endIterator, BinObjectsIterator binObjectsIterator)
-    :
-    mBinsIterator(i),
-    mBinsEndIterator(endIterator),
-    mBinObjectsIterator(binObjectsIterator)
-    { }
+            :
+            mBinsIterator(i),
+            mBinsEndIterator(endIterator),
+            mBinObjectsIterator(binObjectsIterator) {
+    }
 
-    template <typename T>
+    template<typename T>
     LogarithmicBin<T>::Iterator::Iterator(BinsIterator endIterator)
-    :
-    mBinsIterator(endIterator),
-    mBinsEndIterator(endIterator)
-    { }
+            :
+            mBinsIterator(endIterator),
+            mBinsEndIterator(endIterator) {
+    }
 
 #pragma mark - Operators
 
-    template <typename T>
-    typename LogarithmicBin<T>::Iterator&
+    template<typename T>
+    typename LogarithmicBin<T>::Iterator &
     LogarithmicBin<T>::Iterator::operator++() {
         if (mBinsIterator == mBinsEndIterator) {
             throw std::out_of_range("Incrementing an iterator which had reached the end already");
@@ -49,45 +49,45 @@ namespace EARenderer {
         return *this;
     }
 
-    template <typename T>
-    T&
+    template<typename T>
+    T &
     LogarithmicBin<T>::Iterator::operator*() {
         ID id = *mBinObjectsIterator;
-        Bin& bin = mBinsIterator->second;
-        BinObject& binObject = bin.objects[id];
+        Bin &bin = mBinsIterator->second;
+        BinObject &binObject = bin.objects[id];
         return binObject.object;
     }
 
-    template <typename T>
-    T*
+    template<typename T>
+    T *
     LogarithmicBin<T>::Iterator::operator->() {
         ID id = *mBinObjectsIterator;
-        Bin& bin = mBinsIterator->second;
-        BinObject& binObject = bin.objects[id];
+        Bin &bin = mBinsIterator->second;
+        BinObject &binObject = bin.objects[id];
         return &(binObject.object);
     }
 
-    template <typename T>
-    const T&
+    template<typename T>
+    const T &
     LogarithmicBin<T>::Iterator::operator*() const {
         ID id = *mBinObjectsIterator;
-        Bin& bin = mBinsIterator->second;
-        BinObject& binObject = bin.objects[id];
+        Bin &bin = mBinsIterator->second;
+        BinObject &binObject = bin.objects[id];
         return binObject.object;
     }
 
-    template <typename T>
-    const T*
+    template<typename T>
+    const T *
     LogarithmicBin<T>::Iterator::operator->() const {
         ID id = *mBinObjectsIterator;
-        Bin& bin = mBinsIterator->second;
-        BinObject& binObject = bin.objects[id];
+        Bin &bin = mBinsIterator->second;
+        BinObject &binObject = bin.objects[id];
         return &(binObject.object);
     }
 
-    template <typename T>
+    template<typename T>
     bool
-    LogarithmicBin<T>::Iterator::operator!=(const Iterator& other) const {
+    LogarithmicBin<T>::Iterator::operator!=(const Iterator &other) const {
         // Don't touch vector's iterator if we're at the end of unordered_map
         if (mBinsIterator == mBinsEndIterator) {
             return mBinsIterator != other.mBinsIterator;

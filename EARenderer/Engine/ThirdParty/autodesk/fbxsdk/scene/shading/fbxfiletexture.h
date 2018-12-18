@@ -31,62 +31,60 @@
   * in the ExportScene03 of FBX SDK examples.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxFileTexture : public FbxTexture
-{
-	FBXSDK_OBJECT_DECLARE(FbxFileTexture, FbxTexture);
+class FBXSDK_DLL FbxFileTexture : public FbxTexture {
+FBXSDK_OBJECT_DECLARE(FbxFileTexture, FbxTexture);
 
 public:
-	/**
-	  * \name Texture Properties
-	  */
-	//@{
-        /** This property handles the material use.
-          * Default value is false.
-          */
-		FbxPropertyT<FbxBool>				UseMaterial;
+    /**
+      * \name Texture Properties
+      */
+    //@{
+    /** This property handles the material use.
+      * Default value is false.
+      */
+    FbxPropertyT<FbxBool> UseMaterial;
 
-        /** This property handles the Mipmap use.
-          * Default value is false.
-          */
-		FbxPropertyT<FbxBool>				UseMipMap;
+    /** This property handles the Mipmap use.
+      * Default value is false.
+      */
+    FbxPropertyT<FbxBool> UseMipMap;
 
-	/** Resets the default texture values.
-	  * \remarks            The texture file name is not reset.
-	  */
-	void Reset();
+    /** Resets the default texture values.
+      * \remarks            The texture file name is not reset.
+      */
+    void Reset();
 
     /** Sets the associated texture file. 
       * \param pName        The absolute path of the texture file.   
       * \return             \c True if successful, returns \c false otherwise.
 	  *	\remarks            The texture file name must be valid, you cannot leave the name empty.
       */
-    bool SetFileName(const char* pName);
+    bool SetFileName(const char *pName);
 
     /** Sets the associated texture file. 
       * \param pName        The relative path of the texture file.   
       * \return             \c True if successful, returns \c false otherwise.
 	  *	\remarks            The texture file name must be valid.
       */
-    bool SetRelativeFileName(const char* pName);
+    bool SetRelativeFileName(const char *pName);
 
     /** Returns the absolute texture file path.
 	  * \return             The absolute texture file path.
 	  * \remarks            An empty string is returned if FbxFileTexture::SetFileName() has not been called before.
 	  */
-    const char* GetFileName () const;
+    const char *GetFileName() const;
 
     /** Returns the relative texture file path.
 	  * \return             The relative texture file path.
 	  * \remarks            An empty string is returned if FbxFileTexture::SetRelativeFileName() has not been called before.
 	  */
-    const char* GetRelativeFileName() const;
+    const char *GetRelativeFileName() const;
 
-	/** \enum EMaterialUse      Specify if texture uses model material.
-	  */
-    enum EMaterialUse
-    {
-        eModelMaterial,		//! Texture uses model material.
-        eDefaultMaterial	//! Texture does not use model material.
+    /** \enum EMaterialUse      Specify if texture uses model material.
+      */
+    enum EMaterialUse {
+        eModelMaterial,        //! Texture uses model material.
+        eDefaultMaterial    //! Texture does not use model material.
     };
 
     /** Sets the material use.
@@ -100,31 +98,36 @@ public:
     EMaterialUse GetMaterialUse() const;
 
 
-	//@}
+    //@}
 
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	virtual FbxObject& Copy(const FbxObject& pObject);
 
-	bool operator==(FbxFileTexture const& pTexture) const;
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
-	FbxString& GetMediaName();
-	void SetMediaName(const char* pMediaName);
+    bool operator==(FbxFileTexture const &pTexture) const;
+
+    FbxString &GetMediaName();
+
+    void SetMediaName(const char *pMediaName);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void ConstructProperties(bool pForceSet);
+    virtual void Construct(const FbxObject *pFrom);
 
-	void Init();
-	void SyncVideoFileName(const char* pFileName);
-	void SyncVideoRelativeFileName(const char* pFileName);
+    virtual void ConstructProperties(bool pForceSet);
 
-	FbxString mFileName;
-	FbxString mRelativeFileName;
-	FbxString mMediaName; // not a prop
+    void Init();
+
+    void SyncVideoFileName(const char *pFileName);
+
+    void SyncVideoRelativeFileName(const char *pFileName);
+
+    FbxString mFileName;
+    FbxString mRelativeFileName;
+    FbxString mMediaName; // not a prop
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

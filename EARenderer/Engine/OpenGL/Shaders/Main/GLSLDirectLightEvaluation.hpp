@@ -10,7 +10,7 @@
 #define GLSLDirectLightEvaluation_hpp
 
 #include "GLProgram.hpp"
-#include "PBRMaterial.hpp"
+#include "CookTorranceMaterial.hpp"
 #include "GLTexture2D.hpp"
 #include "GLTexture2DArray.hpp"
 #include "GLHDRTexture3D.hpp"
@@ -31,23 +31,29 @@
 
 namespace EARenderer {
 
-    class GLSLDirectLightEvaluation: public GLProgram {
+    class GLSLDirectLightEvaluation : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLDirectLightEvaluation();
 
-        void setCamera(const Camera& camera);
-        void setLight(const PointLight& light);
-        void setLight(const DirectionalLight& light);
+        void setCamera(const Camera &camera);
 
-        void setGBuffer(const SceneGBuffer& GBuffer);
-        void setFrustumCascades(const FrustumCascades& cascades);
-        void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
-        void setOmnidirectionalShadowCubemap(const GLDepthTextureCubemap& cubemap);
-        void setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R>& penumbra);
-        void setShadowMapArrayIndex(size_t index);
-        void setSettings(const RenderingSettings& settings);
+        void setLight(const PointLight &light);
+
+        void setLight(const DirectionalLight &light);
+
+        void setGBuffer(const SceneGBuffer &GBuffer);
+
+        void setFrustumCascades(const FrustumCascades &cascades);
+
+        void setDirectionalShadowMapArray(const GLDepthTexture2DArray &array);
+
+        void setOmnidirectionalShadowCubemap(const GLDepthTextureCubemap &cubemap);
+
+        void setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R> &penumbra);
+
+        void setSettings(const RenderingSettings &settings);
     };
 
 }

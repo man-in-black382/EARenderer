@@ -24,16 +24,17 @@
   * and cloud map parameters.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxEnvironment : public FbxObject
-{
-	FBXSDK_OBJECT_DECLARE(FbxEnvironment, FbxObject);
+class FBXSDK_DLL FbxEnvironment : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxEnvironment, FbxObject);
 
 public:
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	bool ProvidesLighting() const;
+
+    bool ProvidesLighting() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

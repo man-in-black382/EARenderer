@@ -23,20 +23,20 @@
   * \nosubgrouping
   * Mainly used for optical motion capture systems.
   */
-class FBXSDK_DLL FbxOpticalReference : public FbxNodeAttribute
-{
-	FBXSDK_OBJECT_DECLARE(FbxOpticalReference,FbxNodeAttribute);
+class FBXSDK_DLL FbxOpticalReference : public FbxNodeAttribute {
+FBXSDK_OBJECT_DECLARE(FbxOpticalReference, FbxNodeAttribute);
 
 public:
-	//! Return the type of node attribute which is FbxNodeAttribute::EType::eOpticalReference.
-	virtual FbxNodeAttribute::EType GetAttributeType() const;
+    //! Return the type of node attribute which is FbxNodeAttribute::EType::eOpticalReference.
+    virtual FbxNodeAttribute::EType GetAttributeType() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual FbxStringList	GetTypeFlags() const;
+    virtual FbxStringList GetTypeFlags() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

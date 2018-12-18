@@ -12,7 +12,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLLDRTexture3D::GLLDRTexture3D(const Size2D& size, size_t depth) {
+    GLLDRTexture3D::GLLDRTexture3D(const Size2D &size, size_t depth) {
         initialize(size, depth, Sampling::Filter::None, Sampling::WrapMode::ClampToEdge, GL_RGBA32UI);
     }
 

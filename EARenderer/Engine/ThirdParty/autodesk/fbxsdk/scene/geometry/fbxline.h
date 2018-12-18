@@ -31,9 +31,8 @@
 * To get control point count, please use FbxLine::GetControlPointsCount().
 * To get a control point, please use FbxLine::GetControlPointAt(int pIndex). The pIndex could be returned by GetPointIndexAt(i).
 */
-class FBXSDK_DLL FbxLine : public FbxGeometry
-{
-    FBXSDK_OBJECT_DECLARE(FbxLine, FbxGeometry);
+class FBXSDK_DLL FbxLine : public FbxGeometry {
+FBXSDK_OBJECT_DECLARE(FbxLine, FbxGeometry);
 
 public:
     /** Return the type of node attribute.
@@ -59,7 +58,9 @@ public:
     /** Get the pointer to the index array.
     * \return the pointer to the index array(mPointArray).
     */
-    inline FbxArray<int>* GetIndexArray() { return &mPointArray;}
+    inline FbxArray<int> *GetIndexArray() {
+        return &mPointArray;
+    }
 
     /** Sets index array(mPointArray) at a specified index.
     * \param pValue     An index to a control point. Its range is from 0 to count of control point.
@@ -85,7 +86,9 @@ public:
     /** Get the pointer to the end point array.
     * \return the pointer to the end points array(mEndPointArray).
     */
-    inline FbxArray<int>* GetEndPointArray() { return &mEndPointArray;}
+    inline FbxArray<int> *GetEndPointArray() {
+        return &mEndPointArray;
+    }
 
     /** Adds a point index to the end point array (mEndPointArray).
     *   To mark it as end point, its index to mPointArray will be added to mEndPointArray.
@@ -138,11 +141,14 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void ConstructProperties(bool pForceSet);
+
     virtual void Destruct(bool pRecursive);
 
 private:

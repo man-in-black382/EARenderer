@@ -14,12 +14,13 @@
 
 namespace EARenderer {
 
-    class GLSLSMAANeighborhoodBlending: public GLProgram {
+    class GLSLSMAANeighborhoodBlending : public GLProgram {
     public:
         GLSLSMAANeighborhoodBlending();
 
-        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
-        void setBlendingWeights(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& weightsTexture);
+        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image);
+
+        void setBlendingWeights(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &weightsTexture);
     };
 
 }

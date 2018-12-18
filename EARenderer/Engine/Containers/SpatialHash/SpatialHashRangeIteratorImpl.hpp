@@ -13,14 +13,14 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <typename T>
-    SpatialHash<T>::Range::Iterator::Iterator(const std::array<CellBeginEndPair, 27>& vectorIteratorPairs, size_t pairsCount)
-    :
-    mCellBeginEndPairs(vectorIteratorPairs),
-    mPairsCount(pairsCount)
-    { }
+    template<typename T>
+    SpatialHash<T>::Range::Iterator::Iterator(const std::array<CellBeginEndPair, 27> &vectorIteratorPairs, size_t pairsCount)
+            :
+            mCellBeginEndPairs(vectorIteratorPairs),
+            mPairsCount(pairsCount) {
+    }
 
-    template <typename T>
+    template<typename T>
     void
     SpatialHash<T>::Range::Iterator::moveToEnd() {
         if (mPairsCount == 0) {
@@ -33,12 +33,12 @@ namespace EARenderer {
 
 #pragma mark - Operators
 
-    template <typename T>
-    typename SpatialHash<T>::Range::Iterator&
+    template<typename T>
+    typename SpatialHash<T>::Range::Iterator &
     SpatialHash<T>::Range::Iterator::operator++() {
-        auto& pair = mCellBeginEndPairs[mCurrentPairIndex];
-        auto& current = pair.first;
-        auto& end = pair.second;
+        auto &pair = mCellBeginEndPairs[mCurrentPairIndex];
+        auto &current = pair.first;
+        auto &end = pair.second;
 
         if (current == end && mCurrentPairIndex == mCellBeginEndPairs.size() - 1) {
             throw std::out_of_range("Incrementing an iterator which had reached the end already");
@@ -55,33 +55,33 @@ namespace EARenderer {
         return *this;
     }
 
-    template <typename T>
-    T&
+    template<typename T>
+    T &
     SpatialHash<T>::Range::Iterator::operator*() {
         return *(mCellBeginEndPairs[mCurrentPairIndex].first);
     }
 
-    template <typename T>
-    T*
+    template<typename T>
+    T *
     SpatialHash<T>::Range::Iterator::operator->() {
         return &(*(mCellBeginEndPairs[mCurrentPairIndex].first));
     }
 
-    template <typename T>
-    const T&
+    template<typename T>
+    const T &
     SpatialHash<T>::Range::Iterator::operator*() const {
         return *mCellBeginEndPairs[mCurrentPairIndex].first;
     }
 
-    template <typename T>
-    const T*
+    template<typename T>
+    const T *
     SpatialHash<T>::Range::Iterator::operator->() const {
         return &(*mCellBeginEndPairs[mCurrentPairIndex].first);
     }
 
-    template <typename T>
+    template<typename T>
     bool
-    SpatialHash<T>::Range::Iterator::operator!=(const Iterator& other) const {
+    SpatialHash<T>::Range::Iterator::operator!=(const Iterator &other) const {
         bool indexNotEqual = mCurrentPairIndex != other.mCurrentPairIndex;
 
         if (mPairsCount == 0) {

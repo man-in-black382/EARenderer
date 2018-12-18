@@ -22,9 +22,8 @@
 /** \brief This constraint class contains methods for custom constraint.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxConstraintCustom : public FbxConstraint
-{
-    FBXSDK_OBJECT_DECLARE(FbxConstraintCustom, FbxConstraint);
+class FBXSDK_DLL FbxConstraintCustom : public FbxConstraint {
+FBXSDK_OBJECT_DECLARE(FbxConstraintCustom, FbxConstraint);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -32,6 +31,7 @@ class FBXSDK_DLL FbxConstraintCustom : public FbxConstraint
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual EType GetConstraintType() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -17,7 +17,7 @@
 
 namespace EARenderer {
 
-    template <class T>
+    template<class T>
     class ThreadSafeQueue {
     private:
         std::atomic_bool mValid = true;
@@ -37,9 +37,9 @@ namespace EARenderer {
          * Attempt to get the first value in the queue.
          * Returns true if a value was successfully written to the out parameter, false otherwise.
          */
-        bool tryPop(T& out) {
+        bool tryPop(T &out) {
             std::lock_guard<std::mutex> lock(mMutex);
-            if(mQueue.empty() || !mValid) {
+            if (mQueue.empty() || !mValid) {
                 return false;
             }
             out = std::move(mQueue.front());
@@ -52,7 +52,7 @@ namespace EARenderer {
          * Will block until a value is available unless clear is called or the instance is destructed.
          * Returns true if a value was successfully written to the out parameter, false otherwise.
          */
-        bool waitPop(T& out) {
+        bool waitPop(T &out) {
             std::unique_lock<std::mutex> lock(mMutex);
             mCondition.wait(lock, [this]() {
                 return !mQueue.empty() || !mValid;
@@ -61,7 +61,7 @@ namespace EARenderer {
              * Using the condition in the predicate ensures that spurious wakeups with a valid
              * but empty queue will not proceed, so only need to check for validity before proceeding.
              */
-            if(!mValid) {
+            if (!mValid) {
                 return false;
             }
             out = std::move(mQueue.front());
@@ -91,7 +91,7 @@ namespace EARenderer {
          */
         void clear(void) {
             std::lock_guard<std::mutex> lock(mMutex);
-            while(!mQueue.empty()) {
+            while (!mQueue.empty()) {
                 mQueue.pop();
             }
             mCondition.notify_all();

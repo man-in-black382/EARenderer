@@ -19,8 +19,8 @@ namespace EARenderer {
 
 #pragma mark - Blur
 
-    template <GLTexture::Float TextureFormat>
-    void GaussianBlurEffect<TextureFormat>::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings) {
+    template<GLTexture::Float TextureFormat>
+    void GaussianBlurEffect<TextureFormat>::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings &settings) {
         if (settings == mSettings && !mWeights.empty()) {
             return;
         }
@@ -54,11 +54,10 @@ namespace EARenderer {
         }
     }
 
-    template <GLTexture::Float TextureFormat>
+    template<GLTexture::Float TextureFormat>
     void GaussianBlurEffect<TextureFormat>::blur(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-                                                 std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
-                                                 const GaussianBlurSettings& settings)
-    {
+            std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
+            const GaussianBlurSettings &settings) {
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         computeWeightsAndOffsetsIfNeeded(settings);
@@ -91,7 +90,7 @@ namespace EARenderer {
         });
 
         this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, outputImage);
-        
+
         Drawable::TriangleStripQuad::Draw();
 
         this->mTexturePool->putBack(intermediateTexture);

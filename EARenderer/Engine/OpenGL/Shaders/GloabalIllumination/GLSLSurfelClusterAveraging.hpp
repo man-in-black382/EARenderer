@@ -14,12 +14,13 @@
 
 namespace EARenderer {
 
-    class GLSLSurfelClusterAveraging: public GLProgram {
+    class GLSLSurfelClusterAveraging : public GLProgram {
     public:
         GLSLSurfelClusterAveraging();
 
-        void setSurfelClustersGBuffer(const GLIntegerTexture2D<GLTexture::Integer::R32UI>& gBuffer);
-        void setSurfelsLuminaceMap(const GLFloatTexture2D<GLTexture::Float::R16F>& map);
+        void setSurfelClustersGBuffer(const GLIntegerTexture2D<GLTexture::Integer::R32UI> &gBuffer);
+
+        void setSurfelsLuminaceMap(const GLFloatTexture2D<GLTexture::Float::R16F> &map);
     };
 
 }

@@ -80,7 +80,7 @@
 //        GLSLDirectionalDepth mDirectionalDepthShader;
 //        GLSLOmnidirectionalDepth mOmnidirectionalDepthShader;
 //        GLSLSkybox mSkyboxShader;
-//        GLSLCookTorrance mCookTorranceShader;
+//        GLSLCookTorrance mLightEvaluationShader;
 //        GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
 //        GLSLRadianceConvolution mRadianceConvolutionShader;
 //        GLSLBRDFIntegration mBRDFIntegrationShader;

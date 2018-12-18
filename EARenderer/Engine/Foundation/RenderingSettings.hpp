@@ -29,16 +29,20 @@ namespace EARenderer {
             float parallaxMappingStrength = 0.05;
 
             uint32_t shadowCascadesCount = 1;
-            GaussianBlurSettings shadowBlur { 8, 8 };
-            
+            GaussianBlurSettings shadowBlur{8, 8};
+
             Color skyColor = Color(0.059, 0.071, 0.087);
 
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;
-                bitmask |= materialsEnabled; bitmask <<= 1;
-                bitmask |= globalIlluminationEnabled; bitmask <<= 1;
-                bitmask |= lightMultibounceEnabled; bitmask <<= 1;
-                bitmask |= meshRenderingEnabled; bitmask <<= 1;
+                bitmask |= materialsEnabled;
+                bitmask <<= 1;
+                bitmask |= globalIlluminationEnabled;
+                bitmask <<= 1;
+                bitmask |= lightMultibounceEnabled;
+                bitmask <<= 1;
+                bitmask |= meshRenderingEnabled;
+                bitmask <<= 1;
                 bitmask |= parallaxMappingEnabled;
                 return bitmask;
             }
@@ -64,10 +68,10 @@ namespace EARenderer {
         bool skyboxRenderingEnabled = true;
         bool triangleRenderingEnabled = false;
 
-        Size2D displayedFrameResolution { 1920, 1080 };
-        Size2D directionalShadowMapResolution { 4096 };
-        Size2D omnidirectionalShadowMapResolution { 2048 };
-        Size2D penumbraResolution { displayedFrameResolution.transformedBy(glm::vec2(1.0 / 1.0)) };
+        Size2D displayedFrameResolution{1920, 1080};
+        Size2D directionalShadowMapResolution{4096};
+        Size2D omnidirectionalShadowMapResolution{2048};
+        Size2D penumbraResolution{displayedFrameResolution.transformedBy(glm::vec2(1.0 / 1.0))};
     };
 
 }

@@ -62,10 +62,10 @@ namespace bitsery {
 
                 static constexpr PointerOwnershipType getOwnership() {
                     return std::is_same<std::unique_ptr<TElement>, T>::value
-                           ? PointerOwnershipType::Owner
-                           : std::is_same<std::shared_ptr<TElement>, T>::value
-                             ? PointerOwnershipType::SharedOwner
-                             : PointerOwnershipType::SharedObserver;
+                            ? PointerOwnershipType::Owner
+                            : std::is_same<std::shared_ptr<TElement>, T>::value
+                                    ? PointerOwnershipType::SharedOwner
+                                    : PointerOwnershipType::SharedObserver;
                 }
 
                 static void clear(T &obj) {

@@ -17,24 +17,23 @@
 #include <filesystem/path.h>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    GLShader::GLShader(const std::string& sourcePath, GLenum type)
-    :
-    mType(type)
-    {
+
+    GLShader::GLShader(const std::string &sourcePath, GLenum type)
+            :
+            mType(type) {
         mName = glCreateShader(type);
         compile(assembleSource(sourcePath));
     }
-    
+
     GLShader::~GLShader() {
         glDeleteShader(mName);
     }
 
 #pragma mark - Private helper methods
 
-    std::string GLShader::assembleSource(const std::string& filePath) {
+    std::string GLShader::assembleSource(const std::string &filePath) {
         std::ifstream stream(filePath);
         if (!stream.is_open()) {
             throw std::invalid_argument(string_format("Can't read shader file: %s", filePath.c_str()));
@@ -43,8 +42,8 @@ namespace EARenderer {
         filesystem::path sourcePath(filePath);
 
         // Allocate a new pair of indices for the new source code piece that will be read from 'filePath'
-        std::vector<IndexPair>& sourceChunkIndicesArray = mIncludeLineIndices[sourcePath.filename()];
-        IndexPair* currentChunkIndices = &sourceChunkIndicesArray.emplace_back();
+        std::vector<IndexPair> &sourceChunkIndicesArray = mIncludeLineIndices[sourcePath.filename()];
+        IndexPair *currentChunkIndices = &sourceChunkIndicesArray.emplace_back();
         // Remember the staring line of the current source code chunk
         currentChunkIndices->first = mNumberOfLines;
 
@@ -115,7 +114,7 @@ namespace EARenderer {
         return source;
     }
 
-    int32_t GLShader::errorLine(const std::string& infoLog) {
+    int32_t GLShader::errorLine(const std::string &infoLog) {
         std::regex regex("\\d+:\\d+");
         std::smatch match;
         if (!std::regex_search(infoLog, match, regex)) {
@@ -134,14 +133,14 @@ namespace EARenderer {
 
     std::string GLShader::errorHeader(int32_t errorLine) {
         // Iterate over arrays of chunks where each array belongs to 1 source file
-        for (const auto& it : mIncludeLineIndices) {
-            const auto& fileName = it.first;
-            const auto& indexPairArray = it.second;
+        for (const auto &it : mIncludeLineIndices) {
+            const auto &fileName = it.first;
+            const auto &indexPairArray = it.second;
 
             // Iterate over chunks of 1 particular source file
             int32_t linesInSourceFile = 0;
 
-            for (const IndexPair& sourceChunkIndices : indexPairArray) {
+            for (const IndexPair &sourceChunkIndices : indexPairArray) {
                 // Check to see whether error line is located in the current chunk,
                 // if not, move to the next one
                 if (errorLine >= sourceChunkIndices.first && errorLine <= sourceChunkIndices.second) {
@@ -160,14 +159,14 @@ namespace EARenderer {
         return "Unknown shader compilation error\n";
     }
 
-    void GLShader::compile(const std::string& source) {
-        const char* cStr = source.c_str();
+    void GLShader::compile(const std::string &source) {
+        const char *cStr = source.c_str();
         glShaderSource(mName, 1, &cStr, nullptr);
         glCompileShader(mName);
-        
+
         GLint isCompiled = 0;
         glGetShaderiv(mName, GL_COMPILE_STATUS, &isCompiled);
-        
+
         if (!isCompiled) {
             GLint infoLength = 0;
             glGetShaderiv(mName, GL_INFO_LOG_LENGTH, &infoLength);
@@ -175,15 +174,21 @@ namespace EARenderer {
             std::string shaderTypeName;
 
             switch (mType) {
-                case GL_VERTEX_SHADER: shaderTypeName = "vertex"; break;
-                case GL_FRAGMENT_SHADER: shaderTypeName = "fragment"; break;
-                case GL_GEOMETRY_SHADER: shaderTypeName = "geometry"; break;
+                case GL_VERTEX_SHADER:
+                    shaderTypeName = "vertex";
+                    break;
+                case GL_FRAGMENT_SHADER:
+                    shaderTypeName = "fragment";
+                    break;
+                case GL_GEOMETRY_SHADER:
+                    shaderTypeName = "geometry";
+                    break;
             }
 
             if (infoLength == 0) {
                 throw std::runtime_error(string_format("Failed to compile %s shader", shaderTypeName.c_str()));
             }
-            
+
             std::vector<char> infoChars(infoLength);
             glGetShaderInfoLog(mName, infoLength, nullptr, infoChars.data());
             std::string infoLog(infoChars.begin(), infoChars.end());
@@ -192,14 +197,14 @@ namespace EARenderer {
             throw std::runtime_error(string_format("%s: \n%s", header.c_str(), infoLog.c_str()));
         }
     }
-    
+
 #pragma mark - Swap
-    
-    void GLShader::swap(GLShader& that) {
+
+    void GLShader::swap(GLShader &that) {
         GLNamedObject::swap(that);
     }
-    
-    void swap(GLShader& lhs, GLShader &rhs) {
+
+    void swap(GLShader &lhs, GLShader &rhs) {
         lhs.swap(rhs);
     }
 

@@ -14,14 +14,17 @@
 
 namespace EARenderer {
 
-    class GLSLOmnidirectionalPenumbra: public GLProgram {
+    class GLSLOmnidirectionalPenumbra : public GLProgram {
     public:
         GLSLOmnidirectionalPenumbra();
 
-        void setCamera(const Camera& camera);
-        void setGBuffer(const SceneGBuffer& GBuffer);
-        void setShadowMap(const GLDepthTextureCubemap& shadowMap, const GLSampler& bilinearSampler);
-        void setLight(const PointLight& light);
+        void setCamera(const Camera &camera);
+
+        void setGBuffer(const SceneGBuffer &GBuffer);
+
+        void setShadowMap(const GLDepthTextureCubemap &shadowMap, const GLSampler &bilinearSampler);
+
+        void setLight(const PointLight &light);
     };
 
 }

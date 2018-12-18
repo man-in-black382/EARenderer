@@ -26,18 +26,19 @@ namespace EARenderer {
         const Scene *mScene = nullptr;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
         std::shared_ptr<const ShadowMapper> mShadowMapper;
-        GLSLDirectLightEvaluation mCookTorranceShader;
+        GLSLDirectLightEvaluation mLightEvaluationShader;
         RenderingSettings mSettings;
 
         void renderDirectionalLights();
+
         void renderPointLights();
 
     public:
         DirectLightAccumulator(const Scene *scene,
-                               std::shared_ptr<const SceneGBuffer> gBuffer,
-                               std::shared_ptr<const ShadowMapper> shadowMapper);
+                std::shared_ptr<const SceneGBuffer> gBuffer,
+                std::shared_ptr<const ShadowMapper> shadowMapper);
 
-        void setRenderingSettings(const RenderingSettings& settings);
+        void setRenderingSettings(const RenderingSettings &settings);
 
         void render();
     };

@@ -36,31 +36,28 @@ namespace bitsery {
         class StdQueue {
         private:
             //inherit from queue so we could take underlying container
-            template <typename T, typename C>
-            struct QueueCnt : public std::queue<T, C>
-            {
-                static const C& getContainer(const std::queue<T, C>& s )
-                {
+            template<typename T, typename C>
+            struct QueueCnt : public std::queue<T, C> {
+                static const C &getContainer(const std::queue<T, C> &s) {
                     //get address of underlying container
                     return s.*(&QueueCnt::c);
                 }
-                static C& getContainer(std::queue<T, C>& s )
-                {
+
+                static C &getContainer(std::queue<T, C> &s) {
                     //get address of underlying container
                     return s.*(&QueueCnt::c);
                 }
             };
+
             //inherit from queue so we could take underlying container
-            template <typename T, typename C>
-            struct PriorityQueueCnt : public std::priority_queue<T, C>
-            {
-                static const C& getContainer(const std::priority_queue<T, C>& s )
-                {
+            template<typename T, typename C>
+            struct PriorityQueueCnt : public std::priority_queue<T, C> {
+                static const C &getContainer(const std::priority_queue<T, C> &s) {
                     //get address of underlying container
                     return s.*(&PriorityQueueCnt::c);
                 }
-                static C& getContainer(std::priority_queue<T, C>& s )
-                {
+
+                static C &getContainer(std::priority_queue<T, C> &s) {
                     //get address of underlying container
                     return s.*(&PriorityQueueCnt::c);
                 }
@@ -68,28 +65,29 @@ namespace bitsery {
 
             size_t _maxSize;
         public:
-            explicit StdQueue(size_t maxSize):_maxSize{maxSize} {};
+            explicit StdQueue(size_t maxSize) : _maxSize{maxSize} {
+            };
 
             //for queue
             template<typename Ser, typename Writer, typename T, typename C, typename Fnc>
-            void serialize(Ser &ser, Writer &, const std::queue<T,C> &obj, Fnc &&fnc) const {
-                ser.container(QueueCnt<T,C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
+            void serialize(Ser &ser, Writer &, const std::queue<T, C> &obj, Fnc &&fnc) const {
+                ser.container(QueueCnt<T, C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
             }
 
             template<typename Des, typename Reader, typename T, typename C, typename Fnc>
-            void deserialize(Des &des, Reader &, std::queue<T,C> &obj, Fnc &&fnc) const {
-                des.container(QueueCnt<T,C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
+            void deserialize(Des &des, Reader &, std::queue<T, C> &obj, Fnc &&fnc) const {
+                des.container(QueueCnt<T, C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
             }
 
             //for priority_queue
             template<typename Ser, typename Writer, typename T, typename C, typename Fnc>
-            void serialize(Ser &ser, Writer &, const std::priority_queue<T,C> &obj, Fnc &&fnc) const {
-                ser.container(PriorityQueueCnt<T,C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
+            void serialize(Ser &ser, Writer &, const std::priority_queue<T, C> &obj, Fnc &&fnc) const {
+                ser.container(PriorityQueueCnt<T, C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
             }
 
             template<typename Des, typename Reader, typename T, typename C, typename Fnc>
-            void deserialize(Des &des, Reader &, std::priority_queue<T,C> &obj, Fnc &&fnc) const {
-                des.container(PriorityQueueCnt<T,C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
+            void deserialize(Des &des, Reader &, std::priority_queue<T, C> &obj, Fnc &&fnc) const {
+                des.container(PriorityQueueCnt<T, C>::getContainer(obj), _maxSize, std::forward<Fnc>(fnc));
             }
 
         };

@@ -15,39 +15,38 @@
 #include "Measurement.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     Scene::Scene()
-    :
-    mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
-    mPointLights(10),
-    mMeshInstances(1000)
-    { }
-    
+            : mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0), 1.0),
+              mPointLights(10),
+              mMeshInstances(1000) {
+    }
+
 #pragma mark - Getters
-    
-    DirectionalLight& Scene::directionalLight() {
+
+    DirectionalLight &Scene::directionalLight() {
         return mDirectionalLight;
     }
-    
-    PackedLookupTable<PointLight>& Scene::pointLights() {
+
+    PackedLookupTable<PointLight> &Scene::pointLights() {
         return mPointLights;
     }
-    
-    PackedLookupTable<MeshInstance>& Scene::meshInstances() {
+
+    PackedLookupTable<MeshInstance> &Scene::meshInstances() {
         return mMeshInstances;
     }
 
-    const DirectionalLight& Scene::directionalLight() const {
+    const DirectionalLight &Scene::directionalLight() const {
         return mDirectionalLight;
     }
 
-    const PackedLookupTable<PointLight>& Scene::pointLights() const {
+    const PackedLookupTable<PointLight> &Scene::pointLights() const {
         return mPointLights;
     }
 
-    const PackedLookupTable<MeshInstance>& Scene::meshInstances() const {
+    const PackedLookupTable<MeshInstance> &Scene::meshInstances() const {
         return mMeshInstances;
     }
 
@@ -58,16 +57,16 @@ namespace EARenderer {
     std::shared_ptr<EmbreeRayTracer> Scene::rayTracer() const {
         return mRaytracer;
     }
-    
-    Camera* Scene::camera() const {
+
+    Camera *Scene::camera() const {
         return mCamera;
     }
-    
-    Skybox* Scene::skybox() const {
+
+    Skybox *Scene::skybox() const {
         return mSkybox;
     }
 
-    const std::string& Scene::name() const {
+    const std::string &Scene::name() const {
         return mName;
     }
 
@@ -79,19 +78,19 @@ namespace EARenderer {
         return mSurfelSpacing;
     }
 
-    const AxisAlignedBox3D& Scene::boundingBox() const {
+    const AxisAlignedBox3D &Scene::boundingBox() const {
         return mBoundingBox;
     }
 
-    const AxisAlignedBox3D& Scene::lightBakingVolume() const {
+    const AxisAlignedBox3D &Scene::lightBakingVolume() const {
         return mLightBakingVolume;
     }
-    
-    const std::list<ID>& Scene::staticMeshInstanceIDs() const {
+
+    const std::list<ID> &Scene::staticMeshInstanceIDs() const {
         return mStaticMeshInstanceIDs;
     }
-    
-    const std::list<ID>& Scene::dynamicMeshInstanceIDs() const {
+
+    const std::list<ID> &Scene::dynamicMeshInstanceIDs() const {
         return mDynamicMeshInstanceIDs;
     }
 
@@ -100,16 +99,16 @@ namespace EARenderer {
     }
 
 #pragma mark - Setters
-    
-    void Scene::setCamera(Camera* camera) {
+
+    void Scene::setCamera(Camera *camera) {
         mCamera = camera;
     }
 
-    void Scene::setSkybox(Skybox* skybox) {
+    void Scene::setSkybox(Skybox *skybox) {
         mSkybox = skybox;
     }
 
-    void Scene::setName(const std::string& name) {
+    void Scene::setName(const std::string &name) {
         mName = name;
     }
 
@@ -121,22 +120,22 @@ namespace EARenderer {
         mSurfelSpacing = spacing;
     }
 
-    void Scene::setLightBakingVolume(const AxisAlignedBox3D& volume) {
+    void Scene::setLightBakingVolume(const AxisAlignedBox3D &volume) {
         mLightBakingVolume = volume;
     }
-    
+
 #pragma mark -
-    
+
     void Scene::calculateGeometricProperties() {
         mBoundingBox = AxisAlignedBox3D::MaximumReversed();
         mStaticGeometryArea = 0.0;
-        
+
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-            auto& instance = mMeshInstances[meshInstanceID];
-            auto& mesh = ResourcePool::shared().meshes[instance.meshID()];
+            auto &instance = mMeshInstances[meshInstanceID];
+            auto &mesh = ResourcePool::shared().meshes[instance.meshID()];
 
             for (ID subMeshID : mesh.subMeshes()) {
-                auto& subMesh = mesh.subMeshes()[subMeshID];
+                auto &subMesh = mesh.subMeshes()[subMeshID];
                 mStaticGeometryArea += subMesh.surfaceArea();
             }
 
@@ -149,11 +148,11 @@ namespace EARenderer {
     }
 
     void Scene::buildStaticGeometryOctree() {
-        auto containment = [&](const MeshTriangleRef& ref, const AxisAlignedBox3D& nodeBoundingBox) {
+        auto containment = [&](const MeshTriangleRef &ref, const AxisAlignedBox3D &nodeBoundingBox) {
             return nodeBoundingBox.contains(ref.triangle);
         };
 
-        auto collision = [&](const MeshTriangleRef& ref, const Ray3D& ray) {
+        auto collision = [&](const MeshTriangleRef &ref, const Ray3D &ray) {
             float distance = 0;
             return Collision::RayTriangle(ray, ref.triangle, distance);
         };
@@ -161,20 +160,20 @@ namespace EARenderer {
         mOctree = std::shared_ptr<SparseOctree<MeshTriangleRef>>(new SparseOctree<MeshTriangleRef>(mBoundingBox, mOctreeDepth, containment, collision));
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-            auto& meshInstance = mMeshInstances[meshInstanceID];
-            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            auto &meshInstance = mMeshInstances[meshInstanceID];
+            auto &mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
 
             auto modelMatrix = meshInstance.modelMatrix();
 
             for (ID subMeshID : mesh.subMeshes()) {
-                auto& subMesh = mesh.subMeshes()[subMeshID];
-                
+                auto &subMesh = mesh.subMeshes()[subMeshID];
+
                 for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
                     Triangle3D triangle(modelMatrix * subMesh.vertices()[i].position,
-                                        modelMatrix * subMesh.vertices()[i + 1].position,
-                                        modelMatrix * subMesh.vertices()[i + 2].position);
+                            modelMatrix * subMesh.vertices()[i + 1].position,
+                            modelMatrix * subMesh.vertices()[i + 2].position);
 
-                    MeshTriangleRef ref({ meshInstanceID, subMeshID, triangle });
+                    MeshTriangleRef ref({meshInstanceID, subMeshID, triangle});
                     mOctree->insert(ref);
                 }
             }
@@ -185,18 +184,18 @@ namespace EARenderer {
         std::vector<Triangle3D> triangles;
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-            auto& meshInstance = mMeshInstances[meshInstanceID];
-            auto& mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            auto &meshInstance = mMeshInstances[meshInstanceID];
+            auto &mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
 
             auto modelMatrix = meshInstance.modelMatrix();
 
             for (ID subMeshID : mesh.subMeshes()) {
-                auto& subMesh = mesh.subMeshes()[subMeshID];
+                auto &subMesh = mesh.subMeshes()[subMeshID];
 
                 for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
                     triangles.emplace_back(modelMatrix * subMesh.vertices()[i].position,
-                                           modelMatrix * subMesh.vertices()[i + 1].position,
-                                           modelMatrix * subMesh.vertices()[i + 2].position);
+                            modelMatrix * subMesh.vertices()[i + 1].position,
+                            modelMatrix * subMesh.vertices()[i + 2].position);
                 }
             }
         }
@@ -208,13 +207,13 @@ namespace EARenderer {
         mRaytracer = nullptr;
         mOctree = nullptr;
     }
-    
+
     void Scene::addMeshInstanceWithIDAsStatic(ID meshInstanceID) {
         mStaticMeshInstanceIDs.push_back(meshInstanceID);
     }
-    
+
     void Scene::addMeshInstanceWithIDAsDynamic(ID meshInstanceID) {
         mDynamicMeshInstanceIDs.push_back(meshInstanceID);
     }
-    
+
 }

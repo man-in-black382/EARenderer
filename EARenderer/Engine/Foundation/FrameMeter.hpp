@@ -14,25 +14,25 @@
 #include "Throttle.hpp"
 
 namespace EARenderer {
-    
+
     class FrameMeter {
     public:
         struct FrameCharacteristics {
             double framesPerSecond;
             double frameTimeMillisecons;
         };
-        
+
     private:
         uint64_t mPassedFrames;
         FrameCharacteristics mFrameCharacteristics;
         Throttle mThrottle;
-        
+
     public:
         FrameMeter(float throttleMilliseconds = 200);
-        
+
         FrameCharacteristics tick();
     };
-    
+
 }
 
 #endif /* FPSMeter_hpp */

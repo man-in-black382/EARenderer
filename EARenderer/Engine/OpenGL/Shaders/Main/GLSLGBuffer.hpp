@@ -10,21 +10,26 @@
 #define GLSLGBuffer_hpp
 
 #include "GLProgram.hpp"
-#include "PBRMaterial.hpp"
+#include "CookTorranceMaterial.hpp"
+#include "EmissiveMaterial.hpp"
 #include "Camera.hpp"
 #include "RenderingSettings.hpp"
 
 namespace EARenderer {
 
-    class GLSLGBuffer: public GLProgram {
+    class GLSLGBuffer : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLGBuffer();
 
-        void setCamera(const Camera& camera);
-        void setModelMatrix(const glm::mat4& matrix);
-        void setMaterial(const PBRMaterial& material);
+        void setCamera(const Camera &camera);
+
+        void setModelMatrix(const glm::mat4 &matrix);
+
+        void setMaterial(const CookTorranceMaterial &material);
+
+        void setMaterial(const EmissiveMaterial &material);
     };
 
 }

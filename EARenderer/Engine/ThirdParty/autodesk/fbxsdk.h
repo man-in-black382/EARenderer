@@ -38,12 +38,12 @@
   * files compatible with MotionBuilder version 6.0 and up. 
   */
 
-#pragma pack(push, 8)	//FBXSDK is compiled with default value (8)
+#pragma pack(push, 8)    //FBXSDK is compiled with default value (8)
 
 #include <fbxsdk/fbxsdk_def.h>
 
 #ifndef FBXSDK_NAMESPACE_USING
-	#define FBXSDK_NAMESPACE_USING 1
+#define FBXSDK_NAMESPACE_USING 1
 #endif
 
 //---------------------------------------------------------------------------------------
@@ -55,9 +55,13 @@
 #include <fbxsdk/core/base/fbxdynamicarray.h>
 #include <fbxsdk/core/base/fbxstatus.h>
 #include <fbxsdk/core/base/fbxfile.h>
+
 #ifndef FBXSDK_ENV_WINSTORE
-	#include <fbxsdk/core/base/fbxfolder.h>
+
+#include <fbxsdk/core/base/fbxfolder.h>
+
 #endif
+
 #include <fbxsdk/core/base/fbxhashmap.h>
 #include <fbxsdk/core/base/fbxintrusivelist.h>
 #include <fbxsdk/core/base/fbxmap.h>
@@ -82,10 +86,12 @@
 //---------------------------------------------------------------------------------------
 //Core Sync Includes
 #ifndef FBXSDK_ENV_WINSTORE
-	#include <fbxsdk/core/sync/fbxatomic.h>
-	#include <fbxsdk/core/sync/fbxclock.h>
-	#include <fbxsdk/core/sync/fbxsync.h>
-	#include <fbxsdk/core/sync/fbxthread.h>
+
+#include <fbxsdk/core/sync/fbxatomic.h>
+#include <fbxsdk/core/sync/fbxclock.h>
+#include <fbxsdk/core/sync/fbxsync.h>
+#include <fbxsdk/core/sync/fbxthread.h>
+
 #endif /* !FBXSDK_ENV_WINSTORE */
 
 //---------------------------------------------------------------------------------------
@@ -93,17 +99,25 @@
 #include <fbxsdk/core/fbxclassid.h>
 #include <fbxsdk/core/fbxconnectionpoint.h>
 #include <fbxsdk/core/fbxdatatypes.h>
+
 #ifndef FBXSDK_ENV_WINSTORE
-	#include <fbxsdk/core/fbxmodule.h>
-	#include <fbxsdk/core/fbxloadingstrategy.h>
+
+#include <fbxsdk/core/fbxmodule.h>
+#include <fbxsdk/core/fbxloadingstrategy.h>
+
 #endif /* !FBXSDK_ENV_WINSTORE */
+
 #include <fbxsdk/core/fbxmanager.h>
 #include <fbxsdk/core/fbxobject.h>
 #include <fbxsdk/core/fbxperipheral.h>
+
 #ifndef FBXSDK_ENV_WINSTORE
-	#include <fbxsdk/core/fbxplugin.h>
-	#include <fbxsdk/core/fbxplugincontainer.h>
+
+#include <fbxsdk/core/fbxplugin.h>
+#include <fbxsdk/core/fbxplugincontainer.h>
+
 #endif /* !FBXSDK_ENV_WINSTORE */
+
 #include <fbxsdk/core/fbxproperty.h>
 #include <fbxsdk/core/fbxpropertydef.h>
 #include <fbxsdk/core/fbxpropertyhandle.h>
@@ -111,10 +125,14 @@
 #include <fbxsdk/core/fbxpropertytypes.h>
 #include <fbxsdk/core/fbxquery.h>
 #include <fbxsdk/core/fbxqueryevent.h>
+
 #ifndef FBXSDK_ENV_WINSTORE
-	#include <fbxsdk/core/fbxscopedloadingdirectory.h>
-	#include <fbxsdk/core/fbxscopedloadingfilename.h>
+
+#include <fbxsdk/core/fbxscopedloadingdirectory.h>
+#include <fbxsdk/core/fbxscopedloadingfilename.h>
+
 #endif /* !FBXSDK_ENV_WINSTORE */
+
 #include <fbxsdk/core/fbxxref.h>
 
 //---------------------------------------------------------------------------------------
@@ -265,7 +283,7 @@
 
 //---------------------------------------------------------------------------------------
 #if defined(FBXSDK_NAMESPACE) && (FBXSDK_NAMESPACE_USING == 1)
-	using namespace FBXSDK_NAMESPACE;
+using namespace FBXSDK_NAMESPACE;
 #endif
 
 #pragma pack(pop)

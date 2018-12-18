@@ -13,7 +13,7 @@
 
 @interface SceneEditorTabView : NSTabView
 
-@property (assign, nonatomic) EARenderer::Scene *scene;
+@property(assign, nonatomic) EARenderer::Scene *scene;
 
 - (void)showMeshWithID:(EARenderer::ID)meshID;
 

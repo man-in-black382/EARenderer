@@ -55,8 +55,11 @@
 #include "./gtc/type_ptr.hpp"
 #include "./gtc/ulp.hpp"
 #include "./gtc/vec1.hpp"
+
 #if GLM_HAS_ALIGNED_TYPE
+
 #	include "./gtc/type_aligned.hpp"
+
 #endif
 
 #include "./gtx/associated_min_max.hpp"
@@ -98,9 +101,13 @@
 #include "./gtx/rotate_vector.hpp"
 #include "./gtx/spline.hpp"
 #include "./gtx/std_based_type.hpp"
+
 #if !(GLM_COMPILER & GLM_COMPILER_CUDA)
+
 #	include "./gtx/string_cast.hpp"
+
 #endif
+
 #include "./gtx/transform.hpp"
 #include "./gtx/transform2.hpp"
 #include "./gtx/vector_angle.hpp"
@@ -108,9 +115,13 @@
 #include "./gtx/wrap.hpp"
 
 #if GLM_HAS_TEMPLATE_ALIASES
+
 #	include "./gtx/scalar_multiplication.hpp"
+
 #endif
 
 #if GLM_HAS_RANGE_FOR
+
 #	include "./gtx/range.hpp"
+
 #endif

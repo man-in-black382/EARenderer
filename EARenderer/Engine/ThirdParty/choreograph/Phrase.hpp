@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,24 +29,22 @@
 
 #include "TimeType.h"
 
-namespace choreograph
-{
+namespace choreograph {
 
-template<typename T>
-class Phrase;
+    template<typename T>
+    class Phrase;
 
-template<typename T>
-using PhraseRef = std::shared_ptr<Phrase<T>>;
+    template<typename T>
+    using PhraseRef = std::shared_ptr<Phrase<T>>;
 
-template<typename T>
-using PhraseUniqueRef = std::unique_ptr<Phrase<T>>;
+    template<typename T>
+    using PhraseUniqueRef = std::unique_ptr<Phrase<T>>;
 
 /// The default templated linear interpolation function.
-template<typename T>
-T lerpT( const T &a, const T &b, float t )
-{
-  return a + (b - a) * t;
-}
+    template<typename T>
+    T lerpT(const T &a, const T &b, float t) {
+        return a + (b - a) * t;
+    }
 
 ///
 /// A Phrase of motion.
@@ -55,46 +53,55 @@ T lerpT( const T &a, const T &b, float t )
 /// A concrete Phrase is a part of a Sequence.
 /// It describes a value over time.
 ///
-template<typename T>
-class Phrase
-{
-public:
-  Phrase( Time duration ):
-    _duration( duration )
-  {}
+    template<typename T>
+    class Phrase {
+    public:
+        Phrase(Time duration) :
+                _duration(duration) {
+        }
 
-  virtual ~Phrase() = default;
+        virtual ~Phrase() = default;
 
-  //=================================================
-  // Virtual Interface.
-  //=================================================
+        //=================================================
+        // Virtual Interface.
+        //=================================================
 
-  /// Override to provide value at requested time.
-  /// Returns the interpolated value at the given time.
-  virtual T getValue( Time at_time ) const = 0;
+        /// Override to provide value at requested time.
+        /// Returns the interpolated value at the given time.
+        virtual T getValue(Time at_time) const = 0;
 
-  /// Override to provide value at start (and before).
-  virtual T getStartValue() const { return getValue( 0 ); }
+        /// Override to provide value at start (and before).
+        virtual T getStartValue() const {
+            return getValue(0);
+        }
 
-  /// Override to provide value at end (and beyond).
-  virtual T getEndValue() const { return getValue( getDuration() ); }
+        /// Override to provide value at end (and beyond).
+        virtual T getEndValue() const {
+            return getValue(getDuration());
+        }
 
-  //=================================================
-  // Time querying.
-  //=================================================
+        //=================================================
+        // Time querying.
+        //=================================================
 
-  /// Returns normalized time if t is in range [start_time, end_time]. Does not clamp output range.
-  inline Time normalizeTime( Time t ) const { return t / _duration; }
+        /// Returns normalized time if t is in range [start_time, end_time]. Does not clamp output range.
+        inline Time normalizeTime(Time t) const {
+            return t / _duration;
+        }
 
-  /// Returns the duration of this source.
-  inline Time getDuration() const { return _duration; }
+        /// Returns the duration of this source.
+        inline Time getDuration() const {
+            return _duration;
+        }
 
-  /// Returns the Phrase value at \a time, looping past the end from inflection point to the end.
-  /// Relies on the subclass implementation of getValue( t ).
-  T getValueWrapped( Time time, Time inflectionPoint = 0.0f ) const { return getValue( wrapTime( time, getDuration(), inflectionPoint ) ); }
+        /// Returns the Phrase value at \a time, looping past the end from inflection point to the end.
+        /// Relies on the subclass implementation of getValue( t ).
+        T getValueWrapped(Time time, Time inflectionPoint = 0.0f) const {
+            return getValue(wrapTime(time, getDuration(), inflectionPoint));
+        }
 
-private:
-  const Time _duration = 0;
-};
+    private:
+        const Time _duration = 0;
+    };
 
 } // namespace choreograph

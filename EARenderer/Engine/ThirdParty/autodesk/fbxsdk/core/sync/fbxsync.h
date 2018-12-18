@@ -23,7 +23,9 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxMutexImpl;
+
 class FbxSemaphoreImpl;
+
 class FbxGateImpl;
 
 /** A spinlock is the fastest and most simple thread lock mechanism available.
@@ -35,15 +37,14 @@ class FbxGateImpl;
   * \note Spinlocks does not support recursive locking. A thread attempting to lock the same spinlock twice will wait
   * indefinitely.
   */
-class FBXSDK_DLL FbxSpinLock
-{
+class FBXSDK_DLL FbxSpinLock {
 public:
     FbxSpinLock();
 
-	/** Acquire the lock; thread will wait indefinitely until it is available. */
+    /** Acquire the lock; thread will wait indefinitely until it is available. */
     void Acquire();
 
-	/** Release the lock; this will allow other threads to acquire the lock if they are waiting. */
+    /** Release the lock; this will allow other threads to acquire the lock if they are waiting. */
     void Release();
 
 private:
@@ -56,36 +57,36 @@ private:
   * it as been acquired before other threads can acquire the context. It is sometimes referred as a critical section.
   * This is the heaviest thread lock implementation, but also the most secure.
   */
-class FBXSDK_DLL FbxMutex
-{
+class FBXSDK_DLL FbxMutex {
 public:
-	/** Constructor
-	  * \param pInitialOwnership If pInitialOwnership is true, the lock will be initialized as being locked by the
-	  * current thread.
-	  */
-	FbxMutex(bool pInitialOwnership=false);
-	virtual ~FbxMutex(); //!< Destructor
+    /** Constructor
+      * \param pInitialOwnership If pInitialOwnership is true, the lock will be initialized as being locked by the
+      * current thread.
+      */
+    FbxMutex(bool pInitialOwnership = false);
 
-	/** Acquire the lock; thread will wait indefinitely until it is available.
-	  * \remarks The same thread can acquire the lock multiple times without blocking.
-	  */
-	void Acquire();
+    virtual ~FbxMutex(); //!< Destructor
 
-	/** Try acquiring the lock; thread will not wait if it is not available.
-	  * \param pRetryCount The number of retries in case the lock is not available.
-	  * \return True if the lock is acquired, false otherwise.
-	  * \remarks The same thread can acquire the lock multiple times without blocking.
-	  */
-	bool TryAcquire(unsigned int pRetryCount);
+    /** Acquire the lock; thread will wait indefinitely until it is available.
+      * \remarks The same thread can acquire the lock multiple times without blocking.
+      */
+    void Acquire();
 
-	/** Release the lock; this will allow other threads to acquire the lock if they are waiting.
-	  * \remarks Only the owner thread should call Release(), and it needs to be released as many times as it was
-	  * acquired.
-	  */
-	void Release();
+    /** Try acquiring the lock; thread will not wait if it is not available.
+      * \param pRetryCount The number of retries in case the lock is not available.
+      * \return True if the lock is acquired, false otherwise.
+      * \remarks The same thread can acquire the lock multiple times without blocking.
+      */
+    bool TryAcquire(unsigned int pRetryCount);
+
+    /** Release the lock; this will allow other threads to acquire the lock if they are waiting.
+      * \remarks Only the owner thread should call Release(), and it needs to be released as many times as it was
+      * acquired.
+      */
+    void Release();
 
 private:
-	FbxMutexImpl* mImpl;
+    FbxMutexImpl *mImpl;
 };
 
 /** Mutually excluding thread waiting mechanism with a counter.
@@ -93,92 +94,97 @@ private:
   * proceeding to the next step. In other words, that thread waits a number of signals from other threads. This
   * is the best mechanism to use to synchronize threads since it doesn't require an heavy critical section.
   */
-class FBXSDK_DLL FbxSemaphore
-{
+class FBXSDK_DLL FbxSemaphore {
 public:
-	FbxSemaphore(); //!< Constructor
-	virtual ~FbxSemaphore(); //!< Destructor
+    FbxSemaphore(); //!< Constructor
+    virtual ~FbxSemaphore(); //!< Destructor
 
-	/** Wait indefinitely until the semaphore as been signaled as many times as specified.
-	  * \param pCount Number of signal to wait before this function returns.
-	  * \return True if the wait exit without errors.
-	  * \remarks If pCount is set to zero, this function returns immediately without waiting.
-	  */
-	bool Wait(unsigned int pCount=1);
+    /** Wait indefinitely until the semaphore as been signaled as many times as specified.
+      * \param pCount Number of signal to wait before this function returns.
+      * \return True if the wait exit without errors.
+      * \remarks If pCount is set to zero, this function returns immediately without waiting.
+      */
+    bool Wait(unsigned int pCount = 1);
 
-	/** Signal the semaphore as many times as specified.
-	  * \param pCount The number of signal to send to the semaphore.
-	  * \return True if the semaphore was signaled without errors.
-	  */
-	bool Signal(unsigned int pCount=1);
+    /** Signal the semaphore as many times as specified.
+      * \param pCount The number of signal to send to the semaphore.
+      * \return True if the semaphore was signaled without errors.
+      */
+    bool Signal(unsigned int pCount = 1);
 
 private:
-	FbxSemaphoreImpl* mImpl;
+    FbxSemaphoreImpl *mImpl;
 };
 
 /** A gate thread locking mechanism is very similar to a semaphore, except that when it is opened, any
   * further call to wait will not wait until it is closed. It is generally used to block multiple threads
   * until one of them open the gate to release them all.
   */
-class FBXSDK_DLL FbxGate
-{
+class FBXSDK_DLL FbxGate {
 public:
     FbxGate(); //!< Constructor
     virtual ~FbxGate(); //!< Destructor
 
-	/** Open the gate to release all threads waiting.
-	  * \remarks All waiting threads will unblock until the gate is closed.
-	  */
+    /** Open the gate to release all threads waiting.
+      * \remarks All waiting threads will unblock until the gate is closed.
+      */
     void Open();
 
-	/** Close the gate so that the next time a thread call Wait() it will be blocked. */
+    /** Close the gate so that the next time a thread call Wait() it will be blocked. */
     void Close();
 
-	/** Check if the gate is open.
-	  * \return True if the gate is open, otherwise false.
-	  */
+    /** Check if the gate is open.
+      * \return True if the gate is open, otherwise false.
+      */
     bool IsOpen();
 
-	/** Wait indefinitely until the gate open.
-	  * \return True if the wait completed without errors.
-	  * \remarks If the gate is already open, this function returns immediately.
-	  */
+    /** Wait indefinitely until the gate open.
+      * \return True if the wait completed without errors.
+      * \remarks If the gate is already open, this function returns immediately.
+      */
     bool Wait();
 
 private:
-	FbxGateImpl* mImpl;
+    FbxGateImpl *mImpl;
 };
 
 /** A simple stack of linked items that is multi-thread safe, protected by a spinlock.
   */
-class FBXSDK_DLL FbxSyncStack
-{
+class FBXSDK_DLL FbxSyncStack {
 public:
-	//! A single link item to be used to construct the stack
-	struct Item
-	{
-		Item* mNext;
-		inline Item(){ mNext = NULL; }
-		inline Item* Set(Item* pNext){ return mNext = pNext; }
-		inline Item* Next(){ return mNext; }
-	};
+    //! A single link item to be used to construct the stack
+    struct Item {
+        Item *mNext;
 
-	//! Constructor
-	FbxSyncStack();
+        inline Item() {
+            mNext = NULL;
+        }
 
-	/** Add an item on the top of the stack.
-	  * \param pItem The item to add on top of the stack.
-	  */
-	void Push(Item* pItem);
+        inline Item *Set(Item *pNext) {
+            return mNext = pNext;
+        }
 
-	/** Remove the item on the top of the stack.
-	  * \return Returns the item on top of the stack, otherwise NULL if stack empty.
-	  */
-	Item* Pop();
+        inline Item *Next() {
+            return mNext;
+        }
+    };
+
+    //! Constructor
+    FbxSyncStack();
+
+    /** Add an item on the top of the stack.
+      * \param pItem The item to add on top of the stack.
+      */
+    void Push(Item *pItem);
+
+    /** Remove the item on the top of the stack.
+      * \return Returns the item on top of the stack, otherwise NULL if stack empty.
+      */
+    Item *Pop();
 
 private:
-	FbxSpinLock	mLock;
-	Item*		mTop;
+    FbxSpinLock mLock;
+    Item *mTop;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

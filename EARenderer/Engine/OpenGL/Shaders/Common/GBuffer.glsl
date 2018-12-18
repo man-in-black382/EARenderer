@@ -1,6 +1,6 @@
 #include "Packing.glsl"
 
-struct GBuffer {
+struct GBufferCookTorrance {
     vec3 albedo;
     vec3 normal;
     float roughness;
@@ -8,7 +8,11 @@ struct GBuffer {
     float AO;
 };
 
-// GBuffer packing scheme
+struct GBufferEmissive {
+    vec3 emission;
+};
+
+// GBufferCookTorrance packing scheme
 //
 // | Albedo R | Albedo G | Albedo B | Roughness | Metalness |    AO    |        Normal Z      |
 // |          |          |          |           |           |          |                      |
@@ -23,24 +27,35 @@ struct GBuffer {
 // |______________________|______________________|
 // |________Third component of output UVEC3______|
 //
-GBuffer DecodeGBuffer(usampler2D albedoRoughnessMetalnessAONormal, vec2 normTexCoords) {
-    GBuffer gBuffer;
+GBufferCookTorrance DecodeGBufferCookTorrance(uvec4 materialData) {
+     GBufferCookTorrance gBuffer;
 
-    uvec3 encoded = texture(albedoRoughnessMetalnessAONormal, normTexCoords).xyz;
-    vec4 albedoRoughness = Decode8888(encoded.x);
-    uint metalnessAONormalZ = encoded.y;
-    vec2 metalnessAO = Decode8888(metalnessAONormalZ).xy;
-    float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
-    vec2 normalXY = UnpackSnorm2x16(encoded.z, 1.0);
+     uvec3 encoded = materialData.xyz;
+     vec4 albedoRoughness = Decode8888(encoded.x);
+     uint metalnessAONormalZ = encoded.y;
+     vec2 metalnessAO = Decode8888(metalnessAONormalZ).xy;
+     float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
+     vec2 normalXY = UnpackSnorm2x16(encoded.z, 1.0);
 
-    gBuffer.albedo    = albedoRoughness.rgb;
-    gBuffer.normal    = vec3(normalXY, normalZ);
-    gBuffer.roughness = albedoRoughness.a;
-    gBuffer.metalness = metalnessAO.r;
-    gBuffer.AO        = metalnessAO.g;
+     gBuffer.albedo    = albedoRoughness.rgb;
+     gBuffer.normal    = vec3(normalXY, normalZ);
+     gBuffer.roughness = albedoRoughness.a;
+     gBuffer.metalness = metalnessAO.r;
+     gBuffer.AO        = metalnessAO.g;
 
-    return gBuffer;
-}
+     return gBuffer;
+ }
+
+ GBufferEmissive DecodeGBufferEmissive(uvec4 materialData) {
+     GBufferEmissive gBuffer;
+     uvec3 encoded = materialData.xyz;
+     gBuffer.emission = uintBitsToFloat(encoded);
+     return gBuffer;
+ }
+
+ int DecodeGBufferMaterialType(uvec4 materialData) {
+     return int(materialData.w);
+ }
 
 vec3 ReconstructWorldPosition(sampler2D depthBuffer, // Depth values after viewport transformation in [0; 1] range
                               vec2 normTexCoords, // Normalized texture coordinates [0; 1]
@@ -67,8 +82,8 @@ vec3 ReconstructWorldPosition(sampler2D depthBuffer, // Depth values after viewp
     return worldSpacePosition.xyz;
 }
 
-vec3 DecodeGBufferNormal(usampler2D albedoRoughnessMetalnessAONormal, vec2 normTexCoords) {
-    uvec3 encoded = texture(albedoRoughnessMetalnessAONormal, normTexCoords).xyz;
+vec3 DecodeGBufferCookTorranceNormal(uvec4 materialData) {
+    uvec3 encoded = materialData.xyz;
     uint metalnessAONormalZ = encoded.y;
     float normalZ = UnpackSnorm2x16(metalnessAONormalZ, 1.0).y;
     vec2 normalXY = UnpackSnorm2x16(encoded.z, 1.0);

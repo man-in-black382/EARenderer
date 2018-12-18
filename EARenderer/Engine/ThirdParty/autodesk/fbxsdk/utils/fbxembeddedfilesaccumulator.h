@@ -24,8 +24,7 @@
   * \see FbxProcessor::ProcessCollection(FbxCollection *)
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxEmbeddedFilesAccumulator : public FbxProcessor
-{
+class FBXSDK_DLL FbxEmbeddedFilesAccumulator : public FbxProcessor {
 public:
     /**
     * Map the object to the property's hierarchical name.
@@ -35,43 +34,36 @@ public:
     * We thus need to store the index along with the property.
     */
     //@{
-    struct PropertyUrlIndex
-    {
+    struct PropertyUrlIndex {
         FbxString mPropName;
-        int     mIndex;
+        int mIndex;
 
-        PropertyUrlIndex() : mIndex(0)
-        {
+        PropertyUrlIndex() : mIndex(0) {
         }
 
-        PropertyUrlIndex(const FbxString& pUrl, int pIndex)
-            : mPropName(pUrl)
-            , mIndex(pIndex)
-        {
+        PropertyUrlIndex(const FbxString &pUrl, int pIndex)
+                : mPropName(pUrl), mIndex(pIndex) {
         }
     };
 
     //! Comparer for PropertyUrlIndexSet, which outputs consistent partial orders for PropertyUrlIndex pairs
-    struct FbxPropertyUrlIndexCompare
-    {
-        inline int operator()(const PropertyUrlIndex& pKeyA, const PropertyUrlIndex& pKeyB) const
-        {
-            if( pKeyA.mPropName < pKeyB.mPropName ) return -1;
-            if( pKeyB.mPropName < pKeyA.mPropName ) return 1;
-            if( pKeyA.mIndex < pKeyB.mIndex ) return -1;
-            if( pKeyB.mIndex < pKeyA.mIndex ) return 1;
-            return 0;                
+    struct FbxPropertyUrlIndexCompare {
+        inline int operator()(const PropertyUrlIndex &pKeyA, const PropertyUrlIndex &pKeyB) const {
+            if (pKeyA.mPropName < pKeyB.mPropName) return -1;
+            if (pKeyB.mPropName < pKeyA.mPropName) return 1;
+            if (pKeyA.mIndex < pKeyB.mIndex) return -1;
+            if (pKeyB.mIndex < pKeyA.mIndex) return 1;
+            return 0;
         }
     };
 
     typedef FbxSet<PropertyUrlIndex, FbxPropertyUrlIndexCompare> PropertyUrlIndexSet;
 
-    typedef FbxMap<FbxObject*, PropertyUrlIndexSet> ObjectPropertyMap;
+    typedef FbxMap<FbxObject *, PropertyUrlIndexSet> ObjectPropertyMap;
 
-    struct EmbeddedFileInfo
-    {
-        FbxString                 mOriginalPropertyUrl;
-        ObjectPropertyMap   mConsumers;
+    struct EmbeddedFileInfo {
+        FbxString mOriginalPropertyUrl;
+        ObjectPropertyMap mConsumers;
     };
     //@}
 
@@ -81,13 +73,13 @@ public:
     * all the keys.
     */
     //@{
-    typedef FbxMap<FbxString, EmbeddedFileInfo>     EmbeddedFilesMap;
+    typedef FbxMap<FbxString, EmbeddedFileInfo> EmbeddedFilesMap;
 
-    EmbeddedFilesMap   mEmbeddedFiles;
+    EmbeddedFilesMap mEmbeddedFiles;
     //@}
 
 public:
-    
+
     /** Constructor.
     * The name is not important.
     * The property filter is a list of strings, property names, which are automatically ignored when
@@ -97,7 +89,8 @@ public:
     * \param pName              Name of this object.
     * \param pPropertyFilter    Reference to the property filter.
     */
-    FbxEmbeddedFilesAccumulator(FbxManager& pManager, const char* pName, FbxSet<FbxString>& pPropertyFilter);
+    FbxEmbeddedFilesAccumulator(FbxManager &pManager, const char *pName, FbxSet<FbxString> &pPropertyFilter);
+
     virtual ~FbxEmbeddedFilesAccumulator();
 
 /*****************************************************************************************************************************
@@ -105,8 +98,9 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    virtual bool internal_ProcessObject(FbxObject* pObject);
-    FbxSet<FbxString>   mPropertyFilter;
+    virtual bool internal_ProcessObject(FbxObject *pObject);
+
+    FbxSet<FbxString> mPropertyFilter;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -24,41 +24,51 @@ typedef FbxArray<FbxNodeAttribute::EType> FbxAttributeFilters;
 
 /* Internal helper class used to traverse scene in the FbxAxisSystem and FbxSystemUnit
  */
-class FbxObjectsContainer
-{
+class FbxObjectsContainer {
 public:
-    enum EDepth
-	{
+    enum EDepth {
         eChildOnly,
         eChildAndSubChild,
-		eSubChildWithNoScaleInherit
+        eSubChildWithNoScaleInherit
     };
 
-	FbxObjectsContainer() : mStartNode(NULL) {}
-    virtual ~FbxObjectsContainer(){ Clear(); }
+    FbxObjectsContainer() : mStartNode(NULL) {
+    }
+
+    virtual ~FbxObjectsContainer() {
+        Clear();
+    }
 
     // Store all anim curve nodes pointers that need to be converted
-    FbxArray<FbxAnimCurveNode*> mFCurvesT;
-    FbxArray<FbxAnimCurveNode*> mFCurvesR;
-	FbxArray<FbxAnimCurveNode*> mFCurvesS;
+    FbxArray<FbxAnimCurveNode *> mFCurvesT;
+    FbxArray<FbxAnimCurveNode *> mFCurvesR;
+    FbxArray<FbxAnimCurveNode *> mFCurvesS;
 
     // Store all node that need to be converted
-    FbxArray<FbxNode*> mNodes;
-   
+    FbxArray<FbxNode *> mNodes;
+
 public:
-    void ExtractSceneObjects(FbxScene* pScene, EDepth pDepth, const FbxAttributeFilters& pFilters);
+    void ExtractSceneObjects(FbxScene *pScene, EDepth pDepth, const FbxAttributeFilters &pFilters);
 
-	void ExtractSceneObjects(FbxNode* pRootNode, EDepth pDepth, const FbxAttributeFilters& pFilters);
+    void ExtractSceneObjects(FbxNode *pRootNode, EDepth pDepth, const FbxAttributeFilters &pFilters);
 
-    void Clear() { mFCurvesT.Clear(); mFCurvesR.Clear(); mFCurvesS.Clear(); mNodes.Clear(); mStartNode = NULL; }
+    void Clear() {
+        mFCurvesT.Clear();
+        mFCurvesR.Clear();
+        mFCurvesS.Clear();
+        mNodes.Clear();
+        mStartNode = NULL;
+    }
 
 protected:
     // Extract all node and fcurve from all take for this node.
-    void ExtractNodesAnimCurveNodes(FbxNode* pNode, EDepth pDepth, const FbxAttributeFilters& pFilters);
-    void ExtractAnimCurveNodes(FbxNode* pNode);
-	bool InheritsScale( FbxNode* pNode ) const;
+    void ExtractNodesAnimCurveNodes(FbxNode *pNode, EDepth pDepth, const FbxAttributeFilters &pFilters);
 
-	FbxNode* mStartNode;
+    void ExtractAnimCurveNodes(FbxNode *pNode);
+
+    bool InheritsScale(FbxNode *pNode) const;
+
+    FbxNode *mStartNode;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

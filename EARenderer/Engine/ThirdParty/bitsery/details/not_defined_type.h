@@ -31,48 +31,55 @@ namespace bitsery {
         //this type is used to show clearer error messages
         struct NotDefinedType {
             //just swallow anything that is passed during creating
-            template <typename ... T>
-            NotDefinedType(T&& ...){}
+            template<typename ... T>
+            NotDefinedType(T &&...) {
+            }
+
             NotDefinedType() = default;
+
             //define operators so that we also swallow deeper errors, to reduce error stack
             //this time will be used as iterator, so define all operators nessesarry to work with iterators
-            friend bool operator == (const NotDefinedType&, const NotDefinedType&) {
+            friend bool operator==(const NotDefinedType &, const NotDefinedType &) {
                 return true;
             }
-            friend bool operator != (const NotDefinedType&, const NotDefinedType&) {
+
+            friend bool operator!=(const NotDefinedType &, const NotDefinedType &) {
                 return false;
             }
-            NotDefinedType& operator += (int) {
-                return *this;
-            }
-            NotDefinedType& operator -= (int) {
+
+            NotDefinedType &operator+=(int) {
                 return *this;
             }
 
-            friend int operator - (const NotDefinedType&, const NotDefinedType&) {
+            NotDefinedType &operator-=(int) {
+                return *this;
+            }
+
+            friend int operator-(const NotDefinedType &, const NotDefinedType &) {
                 return 0;
             }
 
-            int& operator*() {
+            int &operator*() {
                 return data;
             }
+
             int data;
         };
 
-        template <typename T>
-        struct IsDefined:public std::integral_constant<bool, !std::is_same<NotDefinedType, T>::value> {
+        template<typename T>
+        struct IsDefined : public std::integral_constant<bool, !std::is_same<NotDefinedType, T>::value> {
         };
     }
 }
 
 namespace std {
     //define iterator traits to work with standart algorithms
-    template <>
+    template<>
     struct iterator_traits<bitsery::details::NotDefinedType> {
         using difference_type = int;
         using value_type = int;
-        using pointer = int*;
-        using reference = int&;
+        using pointer = int *;
+        using reference = int &;
         using iterator_category = std::random_access_iterator_tag;
     };
 }

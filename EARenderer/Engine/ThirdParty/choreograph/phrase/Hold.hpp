@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,36 +29,33 @@
 
 #include "choreograph/Phrase.hpp"
 
-namespace choreograph
-{
+namespace choreograph {
 
 ///
 /// Hold is a phrase that hangs in there, never changing.
 ///
-template<typename T>
-class Hold : public Phrase<T>
-{
-public:
+    template<typename T>
+    class Hold : public Phrase<T> {
+    public:
 
-  /// Constructs a Hold that holds \a value for \a duration.
-  Hold( Time duration, const T &value ):
-    Phrase<T>( duration ),
-    _value( value )
-  {}
+        /// Constructs a Hold that holds \a value for \a duration.
+        Hold(Time duration, const T &value) :
+                Phrase<T>(duration),
+                _value(value) {
+        }
 
-  /// Constructor variant to support Sequence::then<> syntax.
-  Hold( Time duration, const T &start_value, const T &end_value ):
-  Phrase<T>( duration ),
-  _value( end_value )
-  {}
+        /// Constructor variant to support Sequence::then<> syntax.
+        Hold(Time duration, const T &start_value, const T &end_value) :
+                Phrase<T>(duration),
+                _value(end_value) {
+        }
 
-  T getValue( Time atTime ) const override
-  {
-    return _value;
-  }
+        T getValue(Time atTime) const override {
+            return _value;
+        }
 
-private:
-  T       _value;
-};
+    private:
+        T _value;
+    };
 
 } // namespace choreograph

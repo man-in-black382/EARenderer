@@ -33,7 +33,8 @@ namespace bitsery {
 
         template<typename ... TArgs>
         struct ContainerTraits<std::deque<TArgs...>>
-                : public StdContainer<std::deque<TArgs...>, true, false> {};
+                : public StdContainer<std::deque<TArgs...>, true, false> {
+        };
 
     }
 

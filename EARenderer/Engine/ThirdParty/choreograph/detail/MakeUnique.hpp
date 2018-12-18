@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,21 +27,18 @@
 
 #pragma once
 
-namespace choreograph
-{
-namespace detail
-{
+namespace choreograph {
+    namespace detail {
 /*
 // Per github issue #30, Xcode Version 6.3 (6D570) breaks the template alias for unique_ptr.
 // We use our own make_unique template in all cases to avoid this issue.
 #if __cplusplus < 201402L
 */
-  // If you aren't using C++14, we define our own make_unique for choreograph::detail
-  template<typename T, typename ...Args>
-  std::unique_ptr<T> make_unique( Args&& ...args )
-  {
-    return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
-  }
+        // If you aren't using C++14, we define our own make_unique for choreograph::detail
+        template<typename T, typename ...Args>
+        std::unique_ptr<T> make_unique(Args &&...args) {
+            return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+        }
 /*
 #else
   // Use std::make_unique in the choreograph::detail namespace.
@@ -50,5 +47,5 @@ namespace detail
 #endif
 */
 
-} // namespace detail
+    } // namespace detail
 } // namespace choreograph

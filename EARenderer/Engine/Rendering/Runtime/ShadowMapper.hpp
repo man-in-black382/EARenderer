@@ -34,42 +34,48 @@ namespace EARenderer {
         const Scene *mScene = nullptr;
         uint8_t mCascadeCount;
         std::shared_ptr<const SceneGBuffer> mGBuffer;
-        
+
         FrustumCascades mShadowCascades;
         RenderingSettings mSettings;
-    
+
         GLSLShadowMap mShadowMapShader;
         GLSLDirectionalPenumbra mDirectionalPenumbraGenerationShader;
         GLSLOmnidirectionalPenumbra mOmnidirectionalPenumbraGenerationShader;
-        
+
         GLFramebuffer mShadowFramebuffer;
         GLFramebuffer mOmnidirectionalShadowFramebuffer;
         GLFramebuffer mPenumbraFramebuffer;
-        
+
         GLDepthTexture2DArray mDirectionalShadowMapArray;
         GLNormalizedTexture2D<GLTexture::Normalized::R> mDirectionalPenumbra;
         std::unordered_map<ID, GLDepthTextureCubemap> mOmnidirectionalShadowMaps;
         std::unordered_map<ID, GLNormalizedTexture2D<GLTexture::Normalized::R>> mOmnidirectionalPenumbras;
-        
+
         GLSampler mBilinearSampler;
-                
+
         void renderDirectionalPenumbra();
+
         void renderOmnidirectionalPenumbras();
+
         void renderDirectionalShadowMaps();
+
         void renderOmnidirectionalShadowMaps();
 
     public:
         ShadowMapper(const Scene *scene, std::shared_ptr<const SceneGBuffer> gBuffer, uint8_t cascadeCount);
 
-        void setRenderingSettings(const RenderingSettings& settings);
-        
-        const GLDepthTexture2DArray& directionalShadowMapArray() const;
-        const GLNormalizedTexture2D<GLTexture::Normalized::R>& directionalPenumbra() const;
-        const GLDepthTextureCubemap& shadowMapForPointLight(ID pointLightID) const;
-        const GLNormalizedTexture2D<GLTexture::Normalized::R>& penumbraForPointLight(ID pointLightID) const;
-        
-        const FrustumCascades& cascades() const;
-        
+        void setRenderingSettings(const RenderingSettings &settings);
+
+        const GLDepthTexture2DArray &directionalShadowMapArray() const;
+
+        const GLNormalizedTexture2D<GLTexture::Normalized::R> &directionalPenumbra() const;
+
+        const GLDepthTextureCubemap &shadowMapForPointLight(ID pointLightID) const;
+
+        const GLNormalizedTexture2D<GLTexture::Normalized::R> &penumbraForPointLight(ID pointLightID) const;
+
+        const FrustumCascades &cascades() const;
+
         void render();
     };
 

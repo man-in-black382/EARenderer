@@ -12,14 +12,14 @@
 #include <stdlib.h>
 
 namespace EArenderer {
-    
+
     struct Range {
         int64_t start;
         int64_t length;
-        
+
         Range(int64_t start, int64_t length);
     };
-    
+
 }
 
 #endif /* Range_hpp */

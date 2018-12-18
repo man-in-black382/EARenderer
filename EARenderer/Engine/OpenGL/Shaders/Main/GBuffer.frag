@@ -1,14 +1,11 @@
-#version 400 core
+#version 410 core
 
 #include "Packing.glsl"
-
-// Constants
-
-const float PI = 3.1415926535897932384626433832795;
+#include "Constants.glsl"
 
 // Output
 
-layout(location = 0) out uvec3 oAlbedoRoughnessMetalnessAONormal;
+layout(location = 0) out uvec4 oMaterialData;
 layout(location = 1) out float oDepth;
 
 // Input
@@ -21,7 +18,7 @@ in vec3 vCameraPosInTangentSpace;
 
 // Uniforms
 
-struct Material {
+struct MaterialCookTorrance {
     sampler2D albedoMap;
     sampler2D normalMap;
     sampler2D metallicMap;
@@ -30,7 +27,13 @@ struct Material {
     sampler2D displacementMap; // Parallax occlusion displacements
 };
 
-uniform Material uMaterial;
+struct MaterialEmissive {
+    vec3 emission; // Emission color
+};
+
+uniform MaterialCookTorrance uMaterialCookTorrance;
+uniform MaterialEmissive uMaterialEmissive;
+uniform int uMaterialType;
 
 // Functions
 
@@ -43,28 +46,28 @@ vec3 LinearFromSRGB(vec3 sRGB) {
 }
 
 vec3 FetchAlbedoMap(vec2 texCoords) {
-    return LinearFromSRGB(texture(uMaterial.albedoMap, texCoords).rgb);
+    return LinearFromSRGB(texture(uMaterialCookTorrance.albedoMap, texCoords).rgb);
 }
 
 vec3 FetchNormalMap(vec2 texCoords) {
-    vec3 normal = texture(uMaterial.normalMap, texCoords).xyz;
+    vec3 normal = texture(uMaterialCookTorrance.normalMap, texCoords).xyz;
     return normalize(vTBN * (normal * 2.0 - 1.0));
 }
 
 float FetchMetallicMap(vec2 texCoords) {
-    return texture(uMaterial.metallicMap, texCoords).r;
+    return texture(uMaterialCookTorrance.metallicMap, texCoords).r;
 }
 
 float FetchRoughnessMap(vec2 texCoords) {
-    return texture(uMaterial.roughnessMap, texCoords).r;
+    return texture(uMaterialCookTorrance.roughnessMap, texCoords).r;
 }
 
 float FetchAOMap(vec2 texCoords) {
-    return texture(uMaterial.AOMap, texCoords).r;
+    return texture(uMaterialCookTorrance.AOMap, texCoords).r;
 }
 
 float FetchDisplacementMap() {
-    return texture(uMaterial.displacementMap, vTexCoords.st).r;
+    return texture(uMaterialCookTorrance.displacementMap, vTexCoords.st).r;
 }
 
 vec2 DisplacedTextureCoords() {
@@ -89,13 +92,13 @@ vec2 DisplacedTextureCoords() {
 
     // Get initial values
     vec2  currentTexCoords     = texCoords;
-    float currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+    float currentDepthMapValue = 1.0 - texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
 
     while(currentLayerDepth < currentDepthMapValue) {
         // Shift texture coordinates along direction of P
         currentTexCoords -= deltaTexCoords;
         // Get depthmap value at current texture coordinates
-        currentDepthMapValue = 1.0 - texture(uMaterial.displacementMap, currentTexCoords).r;
+        currentDepthMapValue = 1.0 - texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
         // Get depth of next layer
         currentLayerDepth += layerDepth;
     }
@@ -105,7 +108,7 @@ vec2 DisplacedTextureCoords() {
 
     // Get depth after and before collision for linear interpolation
     float afterDepth  = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = (1.0 - texture(uMaterial.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+    float beforeDepth = (1.0 - texture(uMaterialCookTorrance.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
 
     // Interpolation of texture coordinates
     float weight = afterDepth / (afterDepth - beforeDepth);
@@ -118,21 +121,21 @@ vec2 DisplacedTextureCoords() {
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
-void main() {
+void EncodeCookTorranceMaterial() {
     // Packing scheme
     //
     // | Albedo R | Albedo G | Albedo B | Rougness | Metalness |    AO    |        Normal Z      |
     // |          |          |          |          |           |          |                      |
     // |  1 Byte  |  1 Byte  |  1 Byte  |  1 Byte  |  1 Byte   |  1 Byte  |        2 Bytes       |
     // |__________|__________|__________|__________|___________|__________|______________________|
-    // |______First component of output UVEC3______|_______Second component of output UVEC3______|
+    // |______First component of output UVEC4______|_______Second component of output UVEC4______|
     //
     //
-    // |        Normal X      |        Normal Y      |
-    // |                      |                      |
-    // |        2 Bytes       |        2 Bytes       |
-    // |______________________|______________________|
-    // |________Third component of output UVEC3______|
+    // |        Normal X      |        Normal Y      |                  Material type              |
+    // |                      |                      |                                             |
+    // |        2 Bytes       |        2 Bytes       |                    4 bytes                  |
+    // |______________________|______________________|_____________________________________________|
+    // |________Third component of output UVEC4______|_______Fourth component of output UVEC4______|
 
     vec2 texCoords = vTexCoords.st; //DisplacedTextureCoords();
 
@@ -150,6 +153,19 @@ void main() {
 
     uint metalnessAONormalZ = metalnessAO | normalZ;
 
-    oAlbedoRoughnessMetalnessAONormal = uvec3(albedoRoughness, metalnessAONormalZ, normalXY);
+    oMaterialData = uvec4(albedoRoughness, metalnessAONormalZ, normalXY, uint(MaterialTypeCookTorrance));
+}
+
+void EncodeEmissiveMaterial() {
+    uvec3 emission = floatBitsToUint(uMaterialEmissive.emission);
+    oMaterialData = uvec4(emission, uint(MaterialTypeEmissive));
+}
+
+void main() {
+    switch (uMaterialType) {
+        case 0: EncodeCookTorranceMaterial(); break;
+        case 1: EncodeEmissiveMaterial(); break;
+    }
+
     oDepth = gl_FragCoord.z;
 }

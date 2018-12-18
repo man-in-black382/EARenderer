@@ -29,26 +29,27 @@ class FbxProperty;
 /** Base class to manage query. A query contains a filter and reference ID, which will be used to search and retrieve objects. 
 * The derived query classes are used to create FbxCriteria.
 * \nosubgrouping */
-class FBXSDK_DLL FbxQuery
-{
+class FBXSDK_DLL FbxQuery {
 public:
-	//! Get unique filter Id
-	virtual FbxInt GetUniqueId() const { return FBXSDK_QUERY_UNIQUE_ID; }
+    //! Get unique filter Id
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID;
+    }
 
-	/** Judge if the given property is valid.
-	* \param pProperty The given property.
-	* \return \c true always, not implemented. */
-	virtual bool IsValid(const FbxProperty& pProperty) const;
+    /** Judge if the given property is valid.
+    * \param pProperty The given property.
+    * \return \c true always, not implemented. */
+    virtual bool IsValid(const FbxProperty &pProperty) const;
 
-	/** This compares whether two FbxQuery are the same, NOT whether the query matches or not. It's strictly the equivalent of an operator==, but virtual.
-	* \param pOtherQuery The given FbxQuery */
-	virtual bool IsEqual(FbxQuery* pOtherQuery) const;
+    /** This compares whether two FbxQuery are the same, NOT whether the query matches or not. It's strictly the equivalent of an operator==, but virtual.
+    * \param pOtherQuery The given FbxQuery */
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
 
-	//! Add one to ref count.
-	void Ref();
+    //! Add one to ref count.
+    void Ref();
 
-	//! Minus one to ref count, if ref count is zero, delete this query object.
-	void Unref();
+    //! Minus one to ref count, if ref count is zero, delete this query object.
+    void Unref();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -56,30 +57,39 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     FbxQuery();
+
     virtual ~FbxQuery();
 
 private:
-    class InternalFilter : public FbxConnectionPointFilter
-	{
-	public:
-		InternalFilter(FbxQuery* pQuery);
-		~InternalFilter();
+    class InternalFilter : public FbxConnectionPointFilter {
+    public:
+        InternalFilter(FbxQuery *pQuery);
 
-	public:
-		FbxConnectionPointFilter*	Ref();
-		void						Unref();
-		FbxInt						GetUniqueId() const { return mQuery->GetUniqueId(); }
-		bool						IsValid(FbxConnectionPoint* pConnect) const;
-		bool						IsEqual(FbxConnectionPointFilter* pConnectFilter) const;
+        ~InternalFilter();
 
-		FbxQuery*					mQuery;
+    public:
+        FbxConnectionPointFilter *Ref();
+
+        void Unref();
+
+        FbxInt GetUniqueId() const {
+            return mQuery->GetUniqueId();
+        }
+
+        bool IsValid(FbxConnectionPoint *pConnect) const;
+
+        bool IsEqual(FbxConnectionPointFilter *pConnectFilter) const;
+
+        FbxQuery *mQuery;
     };
 
-    InternalFilter	mFilter;
-    int				mRefCount;
+    InternalFilter mFilter;
+    int mRefCount;
 
     FBXSDK_FRIEND_NEW();
+
     friend class FbxProperty;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -101,158 +111,187 @@ private:
 * \see FbxProperty::GetSrcObjectCount(const FbxCriteria&) const
 * \see FbxCollection::GetMemberCount(const FbxCriteria&) const
 * \nosubgrouping */
-class FBXSDK_DLL FbxCriteria
-{
+class FBXSDK_DLL FbxCriteria {
 public:
-	/** Creates a new query criteria that only selects objects which have a specific
-	* class ID or derive from a class with a specific class ID.
-	* \param pClassId The base type class ID */
-	static FbxCriteria ObjectType(const FbxClassId& pClassId);
+    /** Creates a new query criteria that only selects objects which have a specific
+    * class ID or derive from a class with a specific class ID.
+    * \param pClassId The base type class ID */
+    static FbxCriteria ObjectType(const FbxClassId &pClassId);
 
-	/** Creates a new query criteria that only selects objects which have a specific class ID.
-	* \param pClassId The type class ID */
-	static FbxCriteria ObjectTypeStrict(const FbxClassId& pClassId);
+    /** Creates a new query criteria that only selects objects which have a specific class ID.
+    * \param pClassId The type class ID */
+    static FbxCriteria ObjectTypeStrict(const FbxClassId &pClassId);
 
-	//! Creates a new query criteria that only selects properties.
-	static FbxCriteria IsProperty();
+    //! Creates a new query criteria that only selects properties.
+    static FbxCriteria IsProperty();
 
-	/** Gets a logical conjunction (and) criteria from this and the specified criteria.
-	* \param pCriteria The specified criteria */
-	FbxCriteria operator&&(const FbxCriteria& pCriteria) const;
+    /** Gets a logical conjunction (and) criteria from this and the specified criteria.
+    * \param pCriteria The specified criteria */
+    FbxCriteria operator&&(const FbxCriteria &pCriteria) const;
 
-	/** Gets a logical disjunction (or) criteria from this and the specified criteria.
-	* \param pCriteria The specified criteria */
-	FbxCriteria operator||(const FbxCriteria& pCriteria) const;
+    /** Gets a logical disjunction (or) criteria from this and the specified criteria.
+    * \param pCriteria The specified criteria */
+    FbxCriteria operator||(const FbxCriteria &pCriteria) const;
 
-	//! Returns a negated version of the criteria.
-	FbxCriteria operator!() const;
+    //! Returns a negated version of the criteria.
+    FbxCriteria operator!() const;
 
-	/** Retrieves the query.
-	* \return The query of this criteria */
-	FbxQuery* GetQuery() const;
+    /** Retrieves the query.
+    * \return The query of this criteria */
+    FbxQuery *GetQuery() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxCriteria();
-	FbxCriteria(const FbxCriteria& pCriteria);
-	FbxCriteria(FbxQuery* pQuery);
-	~FbxCriteria();
 
-	FbxCriteria& operator=(const FbxCriteria& pCriteria);
+    FbxCriteria();
+
+    FbxCriteria(const FbxCriteria &pCriteria);
+
+    FbxCriteria(FbxQuery *pQuery);
+
+    ~FbxCriteria();
+
+    FbxCriteria &operator=(const FbxCriteria &pCriteria);
 
 private:
-    FbxQuery* mQuery;
+    FbxQuery *mQuery;
 
-	static void FreeGlobalCache();
+    static void FreeGlobalCache();
 
     FBXSDK_FRIEND_NEW();
-	friend class FbxManager;
+
+    friend class FbxManager;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 //! Functor to compare FbxCriteria
-struct FbxCriteriaCompare
-{
-	inline int operator()(const FbxCriteria& pKeyA, const FbxCriteria& pKeyB) const
-	{
-		const FbxQuery* lKeyA = pKeyA.GetQuery();
-		const FbxQuery* lKeyB = pKeyB.GetQuery();
-		return lKeyA < lKeyB ? -1 : (lKeyA > lKeyB ? 1 : 0);
-	}
+struct FbxCriteriaCompare {
+    inline int operator()(const FbxCriteria &pKeyA, const FbxCriteria &pKeyB) const {
+        const FbxQuery *lKeyA = pKeyA.GetQuery();
+        const FbxQuery *lKeyB = pKeyB.GetQuery();
+        return lKeyA < lKeyB ? -1 : (lKeyA > lKeyB ? 1 : 0);
+    }
 };
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class FBXSDK_DLL FbxQueryOperator : public FbxQuery
-{
+
+class FBXSDK_DLL FbxQueryOperator : public FbxQuery {
 public:
     FBXSDK_FRIEND_NEW();
 
-	enum EType {eAND, eOR};
+    enum EType {
+        eAND, eOR
+    };
 
-    static FbxQueryOperator* Create(FbxQuery* pA, EType pOperator, FbxQuery* pB);
-    virtual FbxInt GetUniqueId() const { return FBXSDK_QUERY_UNIQUE_ID+1; }
-    virtual bool IsValid(const FbxProperty& pProperty) const;
-    virtual bool IsEqual(FbxQuery* pOtherQuery) const;
+    static FbxQueryOperator *Create(FbxQuery *pA, EType pOperator, FbxQuery *pB);
+
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID + 1;
+    }
+
+    virtual bool IsValid(const FbxProperty &pProperty) const;
+
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
 
 protected:
-    FbxQueryOperator(FbxQuery* pA, EType pOperator, FbxQuery* pB);
+    FbxQueryOperator(FbxQuery *pA, EType pOperator, FbxQuery *pB);
+
     virtual ~FbxQueryOperator();
 
 private:
-    FbxQuery	*mA, *mB;
-    EType		mOperator;
+    FbxQuery *mA, *mB;
+    EType mOperator;
 };
 
-class FBXSDK_DLL FbxQueryOperatorUnary : public FbxQuery
-{
+class FBXSDK_DLL FbxQueryOperatorUnary : public FbxQuery {
 public:
     FBXSDK_FRIEND_NEW();
 
-    static FbxQueryOperatorUnary* Create(FbxQuery* pA);
-    virtual FbxInt GetUniqueId() const{ return FBXSDK_QUERY_UNIQUE_ID+2; }
-    virtual bool IsValid(const FbxProperty& pProperty) const;
-    virtual bool IsEqual(FbxQuery* pOtherQuery) const;
+    static FbxQueryOperatorUnary *Create(FbxQuery *pA);
+
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID + 2;
+    }
+
+    virtual bool IsValid(const FbxProperty &pProperty) const;
+
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
 
 protected:
-    FbxQueryOperatorUnary(FbxQuery* pA);
+    FbxQueryOperatorUnary(FbxQuery *pA);
+
     virtual ~FbxQueryOperatorUnary();
 
 private:
-    FbxQuery* mA;
+    FbxQuery *mA;
 };
 
-class FBXSDK_DLL FbxQueryClassId : public FbxQuery
-{
+class FBXSDK_DLL FbxQueryClassId : public FbxQuery {
 public:
     FBXSDK_FRIEND_NEW();
 
-    static FbxQueryClassId* Create(const FbxClassId& pClassId);
-    virtual FbxInt GetUniqueId() const{ return FBXSDK_QUERY_UNIQUE_ID+3; }
-    virtual bool IsValid(const FbxProperty& pProperty) const;
-    virtual bool IsEqual(FbxQuery* pOtherQuery) const;
+    static FbxQueryClassId *Create(const FbxClassId &pClassId);
+
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID + 3;
+    }
+
+    virtual bool IsValid(const FbxProperty &pProperty) const;
+
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
 
 protected:
-    FbxQueryClassId(const FbxClassId& pClassId);
-
-private:
-    FbxClassId	mClassId;
-};
-
-class FBXSDK_DLL FbxQueryIsA : public FbxQuery
-{
-public:
-    FBXSDK_FRIEND_NEW();
-
-    static FbxQueryIsA* Create(const FbxClassId& pClassId);       
-    virtual FbxInt GetUniqueId() const{ return FBXSDK_QUERY_UNIQUE_ID+4; }
-    virtual bool IsValid(const FbxProperty& pProperty) const;
-    virtual bool IsEqual(FbxQuery* pOtherQuery) const;
-
-protected:
-    FbxQueryIsA(const FbxClassId& pClassId);
+    FbxQueryClassId(const FbxClassId &pClassId);
 
 private:
     FbxClassId mClassId;
 };
 
-class FBXSDK_DLL FbxQueryIsProperty : public FbxQuery
-{
+class FBXSDK_DLL FbxQueryIsA : public FbxQuery {
 public:
     FBXSDK_FRIEND_NEW();
 
-    static FbxQueryIsProperty* Create();
-    virtual FbxInt GetUniqueId() const{ return FBXSDK_QUERY_UNIQUE_ID+5; }
-    virtual bool IsValid(const FbxProperty& pProperty) const;
-    virtual bool IsEqual(FbxQuery* pOtherQuery) const;
+    static FbxQueryIsA *Create(const FbxClassId &pClassId);
+
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID + 4;
+    }
+
+    virtual bool IsValid(const FbxProperty &pProperty) const;
+
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
+
+protected:
+    FbxQueryIsA(const FbxClassId &pClassId);
+
+private:
+    FbxClassId mClassId;
+};
+
+class FBXSDK_DLL FbxQueryIsProperty : public FbxQuery {
+public:
+    FBXSDK_FRIEND_NEW();
+
+    static FbxQueryIsProperty *Create();
+
+    virtual FbxInt GetUniqueId() const {
+        return FBXSDK_QUERY_UNIQUE_ID + 5;
+    }
+
+    virtual bool IsValid(const FbxProperty &pProperty) const;
+
+    virtual bool IsEqual(FbxQuery *pOtherQuery) const;
 
 protected:
     FbxQueryIsProperty();
 };
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 
 #include <fbxsdk/fbxsdk_nsend.h>

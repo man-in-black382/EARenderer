@@ -32,7 +32,8 @@ namespace bitsery {
     namespace ext {
         //this class is used to make default RangeSpec float specialization always prefer constructor with precision
         struct BitsConstraint {
-            explicit constexpr BitsConstraint(size_t bits) : value{bits} {}
+            explicit constexpr BitsConstraint(size_t bits) : value{bits} {
+            }
 
             const size_t value;
         };
@@ -152,7 +153,7 @@ namespace bitsery {
         bool isRangeValid(const T &v, const RangeSpec<T> &r) {
             using VT = typename std::underlying_type<T>::type;
             return !(static_cast<VT>(r.min) > static_cast<VT>(v)
-                     || static_cast<VT>(v) > static_cast<VT>(r.max));
+                    || static_cast<VT>(v) > static_cast<VT>(r.max));
         }
     }
 
@@ -163,7 +164,8 @@ namespace bitsery {
         public:
 
             template<typename ... Args>
-            explicit constexpr ValueRange(Args &&... args):_range{std::forward<Args>(args)...} {}
+            explicit constexpr ValueRange(Args &&... args):_range{std::forward<Args>(args)...} {
+            }
 
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &, Writer &writer, const T &v, Fnc &&) const {

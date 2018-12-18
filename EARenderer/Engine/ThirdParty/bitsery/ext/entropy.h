@@ -51,7 +51,7 @@ namespace bitsery {
              * @param values list of most common values
              * @param alignBeforeData only makes sense when bit-packing enabled, by default aligns after writing bits for index
              */
-            constexpr Entropy(TContainer& values, bool alignBeforeData=true)
+            constexpr Entropy(TContainer &values, bool alignBeforeData = true)
                     : _values{values},
                       _alignBeforeData{alignBeforeData} {
             };
@@ -75,13 +75,13 @@ namespace bitsery {
                 if (_alignBeforeData)
                     d.align();
                 if (index)
-                    obj = *std::next(std::begin(_values), index-1);
+                    obj = *std::next(std::begin(_values), index - 1);
                 else
                     fnc(obj);
             }
 
         private:
-            TContainer& _values;
+            TContainer &_values;
             bool _alignBeforeData;
         };
     }

@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,28 +29,28 @@
 
 #include "TimelineItem.h"
 
-namespace choreograph
-{
+namespace choreograph {
 
 ///
 /// Calls a function after time has elapsed.
 ///
-class Cue : public TimelineItem
-{
-public:
-  Cue() = delete;
+    class Cue : public TimelineItem {
+    public:
+        Cue() = delete;
 
-  /// Creates a cue from a function and a delay.
-  Cue( const std::function<void ()> &fn, Time delay );
+        /// Creates a cue from a function and a delay.
+        Cue(const std::function<void()> &fn, Time delay);
 
-  /// Calls cue function if time threshold has been crossed.
-  void update() final override;
+        /// Calls cue function if time threshold has been crossed.
+        void update() final override;
 
-  /// Cues are instantaneous.
-  Time getDuration() const final override { return 0.0f; }
+        /// Cues are instantaneous.
+        Time getDuration() const final override {
+            return 0.0f;
+        }
 
-private:
-  std::function<void ()>    _cue;
-};
+    private:
+        std::function<void()> _cue;
+    };
 
 } // namespace choreograph

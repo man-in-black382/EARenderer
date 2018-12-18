@@ -17,16 +17,21 @@
 
 namespace EARenderer {
 
-    class GLSLLightProbeLinksRendering: public GLProgram {
+    class GLSLLightProbeLinksRendering : public GLProgram {
     public:
         GLSLLightProbeLinksRendering();
 
-        void setCamera(const Camera& camera);
-        void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t>& indices);
-        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t>& metadata);
-        void setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3>& centers);
-        void setProbesGridResolution(const glm::ivec3& resolution);
+        void setCamera(const Camera &camera);
+
+        void setWorldBoundingBox(const AxisAlignedBox3D &box);
+
+        void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t> &indices);
+
+        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t> &metadata);
+
+        void setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3> &centers);
+
+        void setProbesGridResolution(const glm::ivec3 &resolution);
     };
 
 }

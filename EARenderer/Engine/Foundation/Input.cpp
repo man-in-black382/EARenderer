@@ -15,60 +15,60 @@
 static constexpr std::chrono::milliseconds ClickDetectionTime(200);
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    Input& Input::shared() {
+
+    Input &Input::shared() {
         static Input i;
         return i;
     }
-    
+
 #pragma mark - Getters
-    
-    Input::SimpleMouseEvent& Input::simpleMouseEvent() {
+
+    Input::SimpleMouseEvent &Input::simpleMouseEvent() {
         return mSimpleMouseEvent;
     }
-    
-    Input::ScrollEvent& Input::scrollMouseEvent() {
+
+    Input::ScrollEvent &Input::scrollMouseEvent() {
         return mMouseScrollEvent;
     }
-    
-    Input::ClickEvent& Input::clickMouseEvent() {
+
+    Input::ClickEvent &Input::clickMouseEvent() {
         return mMouseClickEvent;
     }
-    
-    Input::KeyboardEvent& Input::keyboardEvent() {
+
+    Input::KeyboardEvent &Input::keyboardEvent() {
         return mKeyboardEvent;
     }
-    
+
     uint8_t Input::clicksCount() const {
         return mClickCount;
     }
-    
-    const glm::vec2& Input::scrollDelta() const {
+
+    const glm::vec2 &Input::scrollDelta() const {
         return mScrollDelta;
     }
-    
-    const glm::vec2& Input::mousePosition() const {
+
+    const glm::vec2 &Input::mousePosition() const {
         return mMousePosition;
     }
-    
+
     const Input::KeyCode Input::pressedMouseButtonsMask() const {
         return mPressedMouseButtonsMask;
     }
-    
-    const Input::KeySet& Input::pressedKeyboardButtons() const {
+
+    const Input::KeySet &Input::pressedKeyboardButtons() const {
         return mPressedKeyboardKeys;
     }
-    
+
 #pragma mark - Other methods
-    
-    void Input::registerMouseAction(SimpleMouseAction action, const glm::vec2& position, KeyCode keysMask) {
+
+    void Input::registerMouseAction(SimpleMouseAction action, const glm::vec2 &position, KeyCode keysMask) {
         using namespace std::chrono;
-        
+
         auto now = steady_clock::now();
         milliseconds clickDuration = duration_cast<milliseconds>(now - mTimePoint);
-        
+
         switch (action) {
             case SimpleMouseAction::PressDown: {
                 if (clickDuration >= ClickDetectionTime) {
@@ -85,16 +85,18 @@ namespace EARenderer {
                 }
                 break;
             }
-            
-            default: { break; }
+
+            default: {
+                break;
+            }
         }
-        
+
         mMousePosition = position;
         mPressedMouseButtonsMask = keysMask;
         mSimpleMouseEvent[action](this);
     }
-    
-    void Input::registerMouseScroll(const glm::vec2& delta) {
+
+    void Input::registerMouseScroll(const glm::vec2 &delta) {
         mScrollDelta = delta;
         mMouseScrollEvent(this);
     }
@@ -108,16 +110,16 @@ namespace EARenderer {
         mPressedKeyboardKeys.erase(code);
         mKeyboardEvent[KeyboardAction::KeyUp](this);
     }
-    
+
     bool Input::isKeyPressed(Key key) const {
         using type = std::underlying_type<Key>::type;
         type rawKey = static_cast<type>(key);
-        const auto& it = mPressedKeyboardKeys.find(rawKey);
+        const auto &it = mPressedKeyboardKeys.find(rawKey);
         return it != mPressedKeyboardKeys.end();
     }
-    
+
     bool Input::isMouseButtonPressed(uint8_t button) const {
         return (1 << button) & mPressedMouseButtonsMask;
     }
-    
+
 }

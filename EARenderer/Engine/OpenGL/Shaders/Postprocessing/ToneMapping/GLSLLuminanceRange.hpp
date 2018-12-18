@@ -14,13 +14,14 @@
 
 namespace EARenderer {
 
-    class GLSLLuminanceRange: public GLProgram {
+    class GLSLLuminanceRange : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLLuminanceRange();
 
-        void setLuminance(const GLFloatTexture2D<GLTexture::Float::RG16F>& luminance);
+        void setLuminance(const GLFloatTexture2D<GLTexture::Float::RG16F> &luminance);
+
         void setMipLevel(int8_t mipLevel);
     };
 

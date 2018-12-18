@@ -10,8 +10,7 @@
 
 @implementation SceneObjectMarker
 
-- (instancetype)initWithObjectID:(EARenderer::ID)objectID type:(SceneObjectMarkerType)marker
-{
+- (instancetype)initWithObjectID:(EARenderer::ID)objectID type:(SceneObjectMarkerType)marker {
     self = [super init];
     if (self) {
         _objectID = objectID;

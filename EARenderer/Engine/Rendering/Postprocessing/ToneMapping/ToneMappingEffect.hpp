@@ -27,8 +27,8 @@ namespace EARenderer {
     // Efficient Histogram Generation Using Scattering on GPUs
     // https://developer.amd.com/wordpress/media/2012/10/GPUHistogramGeneration_preprint.pdf
 
-    template <GLTexture::Float TextureFormat>
-    class ToneMappingEffect: public PostprocessEffect<TextureFormat> {
+    template<GLTexture::Float TextureFormat>
+    class ToneMappingEffect : public PostprocessEffect<TextureFormat> {
     public:
         GLSLLuminance mLuminanceShader;
         GLSLLuminanceRange mLuminanceRangeShader;
@@ -51,7 +51,7 @@ namespace EARenderer {
         ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
 
         void toneMap(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-                     std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
     };
 
 }

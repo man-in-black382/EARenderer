@@ -8,22 +8,22 @@
 namespace EARenderer {
 
     GLSLOmnidirectionalPenumbra::GLSLOmnidirectionalPenumbra()
-    :
-    GLProgram("FullScreenQuad.vert", "OmnidirectionalPenumbra.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "OmnidirectionalPenumbra.frag", "") {
+    }
 
-    void GLSLOmnidirectionalPenumbra::setCamera(const Camera& camera) {
+    void GLSLOmnidirectionalPenumbra::setCamera(const Camera &camera) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraViewInverse")>).location(), 1, GL_FALSE,
                 glm::value_ptr(camera.inverseViewMatrix()));
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraProjectionInverse")>).location(), 1, GL_FALSE,
                 glm::value_ptr(camera.inverseProjectionMatrix()));
     }
 
-    void GLSLOmnidirectionalPenumbra::setGBuffer(const SceneGBuffer& GBuffer) {
+    void GLSLOmnidirectionalPenumbra::setGBuffer(const SceneGBuffer &GBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uGBufferHiZBuffer")>, *GBuffer.HiZBuffer);
     }
 
-    void GLSLOmnidirectionalPenumbra::setShadowMap(const GLDepthTextureCubemap &shadowMap, const GLSampler& bilinearSampler) {
+    void GLSLOmnidirectionalPenumbra::setShadowMap(const GLDepthTextureCubemap &shadowMap, const GLSampler &bilinearSampler) {
         setUniformTexture(uint32_constant<ctcrc32("uOmnidirectionalShadowMapBilinearSampler")>, shadowMap, &bilinearSampler);
     }
 

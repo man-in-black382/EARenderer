@@ -12,12 +12,12 @@
 #include "GLSLGenericGeometry.hpp"
 
 namespace EARenderer {
-    
-    class GLSLTriangleRendering: public GLSLGenericGeometry {
+
+    class GLSLTriangleRendering : public GLSLGenericGeometry {
     public:
         GLSLTriangleRendering();
     };
-    
+
 }
 
 #endif /* GLSLTriangleRendering_hpp */

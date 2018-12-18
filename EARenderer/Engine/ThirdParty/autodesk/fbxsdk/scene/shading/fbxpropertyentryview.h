@@ -36,45 +36,44 @@
   *
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxPropertyEntryView : public FbxEntryView
-{
+class FBXSDK_DLL FbxPropertyEntryView : public FbxEntryView {
 public:
-	
-	/** Name of the entry type used in the binding entry.
-	* It should be "FbxPropertyEntry" in this case.
-	*/
-	static const char* sEntryType;
+
+    /** Name of the entry type used in the binding entry.
+    * It should be "FbxPropertyEntry" in this case.
+    */
+    static const char *sEntryType;
 
     /**
     * \name Constructor and Destructor.
     */
     //@{
-	/** Constructor.
-	* \param pEntry           The binding table entry to create the entry view for.
-	* \param pAsSource        \c true to create the entry view as source, \c false as destination.
-	* \param pCreate          \c true to create the entry view, \c false otherwise.
-	*/
-	FbxPropertyEntryView( FbxBindingTableEntry* pEntry, bool pAsSource, bool pCreate = false );
+    /** Constructor.
+    * \param pEntry           The binding table entry to create the entry view for.
+    * \param pAsSource        \c true to create the entry view as source, \c false as destination.
+    * \param pCreate          \c true to create the entry view, \c false otherwise.
+    */
+    FbxPropertyEntryView(FbxBindingTableEntry *pEntry, bool pAsSource, bool pCreate = false);
 
-	//! Destructor.
-	~FbxPropertyEntryView();
+    //! Destructor.
+    ~FbxPropertyEntryView();
     //@}
 
-	/** Get the property name from the binding entry.
-	*   \return The property name.
-	*/
-	const char* GetProperty() const;
+    /** Get the property name from the binding entry.
+    *   \return The property name.
+    */
+    const char *GetProperty() const;
 
-	/** Set the property name to the binding entry.
-	*   \param pPropertyName The property name to set.
-	*/
-	void SetProperty(const char* pPropertyName);
+    /** Set the property name to the binding entry.
+    *   \param pPropertyName The property name to set.
+    */
+    void SetProperty(const char *pPropertyName);
 
-	/** Get the entry type.
-	* \return       Entry type as string "FbxPropertyEntry".
-	* \remarks Always use EntryType() to get the right entry type.
-	*/
-	virtual const char* EntryType() const;
+    /** Get the entry type.
+    * \return       Entry type as string "FbxPropertyEntry".
+    * \remarks Always use EntryType() to get the right entry type.
+    */
+    virtual const char *EntryType() const;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

@@ -19,33 +19,31 @@
 
 /** Class to manipulate a map that can contain multiple times the same key.
 * \nosubgrouping */
-class FBXSDK_DLL FbxMultiMap
-{
+class FBXSDK_DLL FbxMultiMap {
 public:
-	struct Pair
-	{
-		FbxHandle mKey;
-		FbxHandle mItem;
-	};
+    struct Pair {
+        FbxHandle mKey;
+        FbxHandle mItem;
+    };
 
-	/** If can't find the matching item,append a item at the end of the array.
-	* If find the matching item ,insert the new item before the matching item. 
+    /** If can't find the matching item,append a item at the end of the array.
+    * If find the matching item ,insert the new item before the matching item.
     * \param pKey The value of Key in new item, also is the character for matching.
-	* \param pItem The value of Item in new item.
-	* \return If add successfully return true,otherwise return false.
+    * \param pItem The value of Item in new item.
+    * \return If add successfully return true,otherwise return false.
     */
     bool Add(FbxHandle pKey, FbxHandle pItem);
-	
-	/** Remove the first matching item, whose reference is the same as given.
-	* \param pKey The given reference.
-	* \return If remove successfully return true,otherwise return false.
-	*/
+
+    /** Remove the first matching item, whose reference is the same as given.
+    * \param pKey The given reference.
+    * \return If remove successfully return true,otherwise return false.
+    */
     bool Remove(FbxHandle pKey);
-	
-	/** Remove all the matching item, whose item is the same as given.
-	* \param pItem The given item.
-	* \return If remove successfully return true,otherwise return false.
-	*/
+
+    /** Remove all the matching item, whose item is the same as given.
+    * \param pItem The given item.
+    * \return If remove successfully return true,otherwise return false.
+    */
     bool RemoveItem(FbxHandle pItem);
 
     /** Set first matching item with the given parameter.
@@ -61,52 +59,57 @@ public:
 	* \return The value of Item in the matching item.
     * \remarks If there are multiple elements that match the character, the index returned is unspecified.
     */
-    FbxHandle Get(FbxHandle pKey, int* pIndex=NULL);
+    FbxHandle Get(FbxHandle pKey, int *pIndex = NULL);
 
-	//! Delete the array.
+    //! Delete the array.
     void Clear();
 
-	/** Get the item of the given index.
+    /** Get the item of the given index.
     * \param pIndex The index for matching.
-	* \param pKey The pointer to the Key of the matching item.
-	* \return The value of Item in the matching item.
+    * \param pKey The pointer to the Key of the matching item.
+    * \return The value of Item in the matching item.
     */
-    FbxHandle GetFromIndex(int pIndex, FbxHandle* pKey=NULL);
+    FbxHandle GetFromIndex(int pIndex, FbxHandle *pKey = NULL);
 
-	/** Remove the item of the given index
-	* \param pIndex The given index.
-	* \return If remove successfully return true,otherwise return false.
-	*/
+    /** Remove the item of the given index
+    * \param pIndex The given index.
+    * \return If remove successfully return true,otherwise return false.
+    */
     bool RemoveFromIndex(int pIndex);
 
-	/** Get number of items in the array.
-	* \return The number of items in the array. */
-    int GetCount() const { return mSetCount; }
+    /** Get number of items in the array.
+    * \return The number of items in the array. */
+    int GetCount() const {
+        return mSetCount;
+    }
 
-	/** Swap the value of Key and Item in every item of array, and sort the new array with the value of Key. */
+    /** Swap the value of Key and Item in every item of array, and sort the new array with the value of Key. */
     void Swap();
 
-	/** Sort the array according the value of Key in each item. */
+    /** Sort the array according the value of Key in each item. */
     void Sort();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxMultiMap(int pItemPerBlock=20);
-	FbxMultiMap(const FbxMultiMap& pOther);
-	~FbxMultiMap();
 
-    FbxMultiMap& operator=(const FbxMultiMap&);
+    FbxMultiMap(int pItemPerBlock = 20);
+
+    FbxMultiMap(const FbxMultiMap &pOther);
+
+    ~FbxMultiMap();
+
+    FbxMultiMap &operator=(const FbxMultiMap &);
 
 private:
-    Pair*	FindEqual(FbxHandle pKey) const;
+    Pair *FindEqual(FbxHandle pKey) const;
 
-    Pair*	mSetArray;
-    int		mSetCount;
-    int		mBlockCount;
-    int		mItemPerBlock;
-    bool	mIsChanged;
+    Pair *mSetArray;
+    int mSetCount;
+    int mBlockCount;
+    int mItemPerBlock;
+    bool mIsChanged;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

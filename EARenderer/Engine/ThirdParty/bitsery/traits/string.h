@@ -35,22 +35,23 @@ namespace bitsery {
 
         template<typename ... TArgs>
         struct ContainerTraits<std::basic_string<TArgs...>>
-            :public StdContainer<std::basic_string<TArgs...>, true, true> {};
+                : public StdContainer<std::basic_string<TArgs...>, true, true> {
+        };
 
-        template <typename ... TArgs>
+        template<typename ... TArgs>
         struct TextTraits<std::basic_string<TArgs...>> {
             using TValue = typename ContainerTraits<std::basic_string<TArgs...>>::TValue;
             //string is automatically null-terminated
             static constexpr bool addNUL = false;
 
             //is is not 100% accurate, but for performance reasons assume that string stores text, not binary data
-            static size_t length(const std::basic_string<TArgs...>& str) {
+            static size_t length(const std::basic_string<TArgs...> &str) {
                 return str.size();
             }
         };
 
         //specialization for c-array
-        template <typename T, size_t N>
+        template<typename T, size_t N>
         struct TextTraits<T[N]> {
             using TValue = T;
             static constexpr bool addNUL = true;
@@ -62,7 +63,8 @@ namespace bitsery {
 
         template<typename ... TArgs>
         struct BufferAdapterTraits<std::basic_string<TArgs...>>
-                :public StdContainerForBufferAdapter<std::basic_string<TArgs...>> {};
+                : public StdContainerForBufferAdapter<std::basic_string<TArgs...>> {
+        };
 
     }
 

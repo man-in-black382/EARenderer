@@ -29,10 +29,10 @@ namespace EARenderer {
 
     public:
         DiffuseLightProbeRenderer(const Scene *scene,
-                                  std::shared_ptr<const DiffuseLightProbeData> probeData,
-                                  std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics);
+                std::shared_ptr<const DiffuseLightProbeData> probeData,
+                std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics);
 
-        void setRenderingSettings(const RenderingSettings& settings);
+        void setRenderingSettings(const RenderingSettings &settings);
 
         void render();
     };

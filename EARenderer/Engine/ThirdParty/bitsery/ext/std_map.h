@@ -32,7 +32,8 @@ namespace bitsery {
         class StdMap {
         public:
 
-            constexpr explicit StdMap(size_t maxSize):_maxSize{maxSize} {}
+            constexpr explicit StdMap(size_t maxSize) : _maxSize{maxSize} {
+            }
 
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &, Writer &writer, const T &obj, Fnc &&fnc) const {
@@ -63,6 +64,7 @@ namespace bitsery {
                     hint = obj.emplace_hint(hint, std::move(key), std::move(value));
                 }
             }
+
         private:
             size_t _maxSize;
         };

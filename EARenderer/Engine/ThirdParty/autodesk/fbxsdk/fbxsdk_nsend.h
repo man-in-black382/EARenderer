@@ -12,5 +12,5 @@
 //! \file fbxsdk_nsend.h
 
 #if FBXSDK_DEFINE_NAMESPACE == 1
-	}
+}
 #endif

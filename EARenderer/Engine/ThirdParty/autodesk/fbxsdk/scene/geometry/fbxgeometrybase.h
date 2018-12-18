@@ -40,9 +40,8 @@ class FbxStatus;
   * layers can be used. More information can be found in the FbxLayerContainer and FbxLayer classes description.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxGeometryBase : public FbxLayerContainer
-{
-    FBXSDK_OBJECT_DECLARE(FbxGeometryBase, FbxLayerContainer);
+class FBXSDK_DLL FbxGeometryBase : public FbxLayerContainer {
+FBXSDK_OBJECT_DECLARE(FbxGeometryBase, FbxLayerContainer);
 
 public:
     /**
@@ -63,14 +62,14 @@ public:
       * \remarks          The normals initialized with this function will have the ReferenceMode set to eDirect. Also,
       *                   the array will always be defined on layer 0.
       */
-    void InitNormals(int pCount = 0 );
+    void InitNormals(int pCount = 0);
 
     /** Allocates memory space for the array of normals cloned from the pSrc.
       * \param pSrc       The source geometry from which the normals information is cloned.
       * \remarks          This function must be called with the argument, otherwise it does not do anything. Also,
       *                   it will only process the normals array defined on layer 0 of the pSrc.
       */
-    void InitNormals(FbxGeometryBase* pSrc);
+    void InitNormals(FbxGeometryBase *pSrc);
 
     /** Allocates memory space for the array of tangents on specified layer.
       * \param pCount      The desired size of the tangent array. If pCount is specified, the array will be the same size as pCount.
@@ -80,14 +79,14 @@ public:
       * \remarks           This function must be called after function FbxLayerContainer::InitControlPoints().
       *                    The tangents initialized with this function will have the reference mode set to eDirect.
       */
-    void InitTangents(int pCount = 0, const int pLayerIndex = 0, const char* pName = "" );
+    void InitTangents(int pCount = 0, const int pLayerIndex = 0, const char *pName = "");
 
     /** Allocates memory space for the array of tangents cloned from the pSrc on the specified layer.
       * \param pSrc        The source geometry from which the tangents information is cloned.
 	  * \param pLayerIndex The specified layer index to allocate memory space for cloned array of tangents from the pSrc.
       * \remarks           This function must be called with the argument, otherwise it does not do anything.
       */
-    void InitTangents(FbxGeometryBase* pSrc, const int pLayerIndex = 0);
+    void InitTangents(FbxGeometryBase *pSrc, const int pLayerIndex = 0);
 
     /** Allocates memory space for the array of binormals.
       * \param pCount      The desired size of the binormal array. If pCount is specified, the array will have the same size as pCount.
@@ -97,14 +96,14 @@ public:
       * \remarks           This function must be called after function FbxLayerContainer::InitControlPoints().
       *                    The binormals initialized with this function will have the reference mode set to eDirect.
       */
-    void InitBinormals(int pCount = 0, const int pLayerIndex = 0, const char* pName = "" );
+    void InitBinormals(int pCount = 0, const int pLayerIndex = 0, const char *pName = "");
 
     /** Allocates memory space for the array of binormals cloned from the pSrc.
       * \param pSrc        The source geometry from which the binormals information is cloned.
 	  * \param pLayerIndex The specified layer index to allocate memory space for cloned array of binormals from the pSrc.
       * \remarks           This function must be called with the argument, otherwise it does not do anything.
       */
-    void InitBinormals(FbxGeometryBase* pSrc, const int pLayerIndex = 0);
+    void InitBinormals(FbxGeometryBase *pSrc, const int pLayerIndex = 0);
 
     /** Sets the control point and the normal values at the specified index.
       * \param pCtrlPoint     The value of the control point.
@@ -117,7 +116,7 @@ public:
       * \remarks              If the arrays (control points and normals) are not big enough to store the values at the 
 	  *                       specified index, they will be automatically resized to accommodate the new entries.
       */
-    virtual void SetControlPointAt(const FbxVector4 &pCtrlPoint , const FbxVector4 &pNormal , int pIndex, bool pI2DSearch = false);
+    virtual void SetControlPointAt(const FbxVector4 &pCtrlPoint, const FbxVector4 &pNormal, int pIndex, bool pI2DSearch = false);
 
 
     /** Sets the control point at a specified index.
@@ -127,7 +126,7 @@ public:
     * \remarks              If the array is not big enough to store the value at the specified index, it will be 
 	*						automatically resized to accommodate the new entry.
     */
-    virtual void SetControlPointAt(const FbxVector4 &pCtrlPoint , int pIndex);
+    virtual void SetControlPointAt(const FbxVector4 &pCtrlPoint, int pIndex);
 
     /** Gets the control point at the specified index.
     * \param pIndex         The specified index of the control point.
@@ -147,7 +146,7 @@ public:
     * \remarks              If the array is not big enough to store the value at the specified index, it will be 
 	*						automatically resized to accommodate the new entry.
     */
-    virtual void SetControlPointNormalAt(const FbxVector4 &pNormal, int pIndex, bool pI2DSearch=false);
+    virtual void SetControlPointNormalAt(const FbxVector4 &pNormal, int pIndex, bool pI2DSearch = false);
 
     /** Returns the number of control points.
       * \return     The number of control points allocated in the geometry.
@@ -160,13 +159,13 @@ public:
       * \return         Pointer to the array of control points, or \c NULL if the array has not been allocated.
       * \remarks        Use the function FbxGeometryBase::InitControlPoints() to allocate the array.
       */
-    virtual FbxVector4* GetControlPoints(FbxStatus* pStatus=NULL) const;
+    virtual FbxVector4 *GetControlPoints(FbxStatus *pStatus = NULL) const;
 
     /** Allocates memory space for the array of control points.
       * \param pCount     The number of control points.
       * \remarks          Any previously allocated array of control points will NOT be cleared.
       */
-	virtual void SetControlPointCount(int pCount);
+    virtual void SetControlPointCount(int pCount);
 
     //@}
 
@@ -175,24 +174,24 @@ public:
       * \name Public and fast access Properties
       */
     //@{
-		//! Control the geometry render state. Geometry can still cast shadows even if this is turned off.
-		FbxPropertyT<FbxBool> PrimaryVisibility;
+    //! Control the geometry render state. Geometry can still cast shadows even if this is turned off.
+    FbxPropertyT<FbxBool> PrimaryVisibility;
 
-		//! If true, the geometry will produce shadows.
-		FbxPropertyT<FbxBool> CastShadow;
+    //! If true, the geometry will produce shadows.
+    FbxPropertyT<FbxBool> CastShadow;
 
-		//! If true, the geometry will receive shadows.
-		FbxPropertyT<FbxBool> ReceiveShadow;
+    //! If true, the geometry will receive shadows.
+    FbxPropertyT<FbxBool> ReceiveShadow;
 
-        //! The minimum value of the control points bounding box. 
-        FbxPropertyT<FbxDouble3> BBoxMin;
+    //! The minimum value of the control points bounding box. 
+    FbxPropertyT<FbxDouble3> BBoxMin;
 
-        //! The maximum value of the control points bounding box.
-        FbxPropertyT<FbxDouble3> BBoxMax;
+    //! The maximum value of the control points bounding box.
+    FbxPropertyT<FbxDouble3> BBoxMax;
 
-        /** Computes the control points Bounding box.
-          */
-        void ComputeBBox();
+    /** Computes the control points Bounding box.
+      */
+    void ComputeBBox();
     //@}
 
 
@@ -209,25 +208,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementNormal* CreateElementNormal();
+    FbxGeometryElementNormal *CreateElementNormal();
 
     /** Remove the normal geometry element from this geometry.
       * \param pElementNormal   A pointer to the normal element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementNormal(FbxGeometryElementNormal* pElementNormal);
+    bool RemoveElementNormal(FbxGeometryElementNormal *pElementNormal);
 
     /** Returns this geometry's normal element.
       * \param pIndex           The normal geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementNormal* GetElementNormal(int pIndex = 0);
+    FbxGeometryElementNormal *GetElementNormal(int pIndex = 0);
 
     /** Returns this geometry's normal element.
       * \param pIndex           The normal geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementNormal* GetElementNormal(int pIndex = 0) const;
+    const FbxGeometryElementNormal *GetElementNormal(int pIndex = 0) const;
 
     /** Get the number of this geometry's normal geometry element.
       * \return                 Total number of normal geometry elements for this geometry.
@@ -238,25 +237,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementBinormal* CreateElementBinormal();
+    FbxGeometryElementBinormal *CreateElementBinormal();
 
     /** Remove the binormal geometry element from this geometry.
       * \param pElementBinormal A pointer to the binormal element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementBinormal(FbxGeometryElementBinormal* pElementBinormal);
+    bool RemoveElementBinormal(FbxGeometryElementBinormal *pElementBinormal);
 
     /** Returns this geometry's binormal element.
       * \param pIndex           The binormal geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementBinormal* GetElementBinormal(int pIndex = 0);
+    FbxGeometryElementBinormal *GetElementBinormal(int pIndex = 0);
 
     /** Returns this geometry's binormal element.
       * \param pIndex           The binormal geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementBinormal* GetElementBinormal(int pIndex = 0) const;
+    const FbxGeometryElementBinormal *GetElementBinormal(int pIndex = 0) const;
 
     /** Get the number of this geometry's binormal geometry element.
       * \return                 Total number of binormal geometry elements for this geometry.
@@ -267,25 +266,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementTangent* CreateElementTangent();
+    FbxGeometryElementTangent *CreateElementTangent();
 
     /** Remove the tangent geometry element from this geometry.
       * \param pElementTangent  A pointer to the tangent element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementTangent(FbxGeometryElementTangent* pElementTangent);
+    bool RemoveElementTangent(FbxGeometryElementTangent *pElementTangent);
 
     /** Returns this geometry's tangent element.
       * \param pIndex           The tangent geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementTangent* GetElementTangent(int pIndex = 0);
+    FbxGeometryElementTangent *GetElementTangent(int pIndex = 0);
 
     /** Returns this geometry's tangent element.
       * \param pIndex           The tangent geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementTangent* GetElementTangent(int pIndex = 0) const;
+    const FbxGeometryElementTangent *GetElementTangent(int pIndex = 0) const;
 
     /** Get the number of this geometry's tangent geometry element.
       * \return                 Total number of tangent geometry elements for this geometry.
@@ -296,25 +295,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementMaterial* CreateElementMaterial();
+    FbxGeometryElementMaterial *CreateElementMaterial();
 
     /** Remove the material geometry element from this geometry.
       * \param pElementMaterial A pointer to the material element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementMaterial(FbxGeometryElementMaterial* pElementMaterial);
+    bool RemoveElementMaterial(FbxGeometryElementMaterial *pElementMaterial);
 
     /** Returns this geometry's material element.
       * \param pIndex           The material geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementMaterial* GetElementMaterial(int pIndex = 0);
+    FbxGeometryElementMaterial *GetElementMaterial(int pIndex = 0);
 
     /** Returns this geometry's material element.
       * \param pIndex           The material geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementMaterial* GetElementMaterial(int pIndex = 0) const;
+    const FbxGeometryElementMaterial *GetElementMaterial(int pIndex = 0) const;
 
     /** Get the number of this geometry's material geometry element.
       * \return                 Total number of material geometry elements for this geometry.
@@ -325,25 +324,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementPolygonGroup* CreateElementPolygonGroup();
+    FbxGeometryElementPolygonGroup *CreateElementPolygonGroup();
 
     /** Remove the polygon group geometry element from this geometry.
       * \param pElementPolygonGroup   A pointer to the polygon group element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementPolygonGroup(FbxGeometryElementPolygonGroup* pElementPolygonGroup);
+    bool RemoveElementPolygonGroup(FbxGeometryElementPolygonGroup *pElementPolygonGroup);
 
     /** Returns this geometry's polygon group element.
       * \param pIndex           The polygon group geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementPolygonGroup* GetElementPolygonGroup(int pIndex = 0);
+    FbxGeometryElementPolygonGroup *GetElementPolygonGroup(int pIndex = 0);
 
     /** Returns this geometry's polygon group element.
       * \param pIndex           The polygon group geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementPolygonGroup* GetElementPolygonGroup(int pIndex = 0) const;
+    const FbxGeometryElementPolygonGroup *GetElementPolygonGroup(int pIndex = 0) const;
 
     /** Get the number of this geometry's polygon group geometry element.
       * \return                 Total number of polygon group geometry elements for this geometry.
@@ -354,25 +353,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementVertexColor* CreateElementVertexColor();
+    FbxGeometryElementVertexColor *CreateElementVertexColor();
 
     /** Remove the vertex color geometry element from this geometry.
       * \param pElementVertexColor   A pointer to the vertex color element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementVertexColor(FbxGeometryElementVertexColor* pElementVertexColor);
+    bool RemoveElementVertexColor(FbxGeometryElementVertexColor *pElementVertexColor);
 
     /** Returns this geometry's vertex color element.
       * \param pIndex           The vertex color geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementVertexColor* GetElementVertexColor(int pIndex = 0);
+    FbxGeometryElementVertexColor *GetElementVertexColor(int pIndex = 0);
 
     /** Returns this geometry's vertex color element.
       * \param pIndex           The vertex color geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementVertexColor* GetElementVertexColor(int pIndex = 0) const;
+    const FbxGeometryElementVertexColor *GetElementVertexColor(int pIndex = 0) const;
 
     /** Get the number of this geometry's vertex color geometry element.
       * \return                 Total number of vertex color geometry elements for this geometry.
@@ -383,25 +382,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementSmoothing* CreateElementSmoothing();
+    FbxGeometryElementSmoothing *CreateElementSmoothing();
 
     /** Remove the smoothing geometry element from this geometry.
       * \param pElementSmoothing   A pointer to the smoothing element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementSmoothing(FbxGeometryElementSmoothing* pElementSmoothing);
+    bool RemoveElementSmoothing(FbxGeometryElementSmoothing *pElementSmoothing);
 
     /** Returns this geometry's smoothing element.
       * \param pIndex           The smoothing geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementSmoothing* GetElementSmoothing(int pIndex = 0);
+    FbxGeometryElementSmoothing *GetElementSmoothing(int pIndex = 0);
 
     /** Returns this geometry's smoothing element.
       * \param pIndex           The smoothing geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementSmoothing* GetElementSmoothing(int pIndex = 0) const;
+    const FbxGeometryElementSmoothing *GetElementSmoothing(int pIndex = 0) const;
 
     /** Get the number of this geometry's smoothing geometry element.
       * \return                 Total number of smoothing geometry elements for this geometry.
@@ -412,25 +411,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementCrease* CreateElementVertexCrease();
+    FbxGeometryElementCrease *CreateElementVertexCrease();
 
     /** Remove the vertex crease geometry element from this geometry.
       * \param pElementCrease   A pointer to the vertex crease element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementVertexCrease(FbxGeometryElementCrease* pElementCrease);
+    bool RemoveElementVertexCrease(FbxGeometryElementCrease *pElementCrease);
 
     /** Returns this geometry's vertex crease element.
       * \param pIndex           The vertex crease geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementCrease* GetElementVertexCrease(int pIndex = 0);
+    FbxGeometryElementCrease *GetElementVertexCrease(int pIndex = 0);
 
     /** Returns this geometry's vertex crease element.
       * \param pIndex           The vertex crease geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementCrease* GetElementVertexCrease(int pIndex = 0) const;
+    const FbxGeometryElementCrease *GetElementVertexCrease(int pIndex = 0) const;
 
     /** Get the number of this geometry's vertex crease geometry element.
       * \return                 Total number of vertex crease geometry elements for this geometry.
@@ -441,25 +440,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementCrease* CreateElementEdgeCrease();
+    FbxGeometryElementCrease *CreateElementEdgeCrease();
 
     /** Remove the edge crease geometry element from this geometry.
       * \param pElementCrease   A pointer to the edge crease element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementEdgeCrease(FbxGeometryElementCrease* pElementCrease);
+    bool RemoveElementEdgeCrease(FbxGeometryElementCrease *pElementCrease);
 
     /** Returns this geometry's edge crease element.
       * \param pIndex           The edge crease geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementCrease* GetElementEdgeCrease(int pIndex = 0);
+    FbxGeometryElementCrease *GetElementEdgeCrease(int pIndex = 0);
 
     /** Returns this geometry's edge crease element.
       * \param pIndex           The edge crease geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementCrease* GetElementEdgeCrease(int pIndex = 0) const;
+    const FbxGeometryElementCrease *GetElementEdgeCrease(int pIndex = 0) const;
 
     /** Get the number of this geometry's edge crease geometry element.
       * \return                 Total number of edge crease geometry elements for this geometry.
@@ -470,25 +469,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementHole* CreateElementHole();
+    FbxGeometryElementHole *CreateElementHole();
 
     /** Remove the hole geometry element from this geometry.
       * \param pElementHole     A pointer to the hole element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementHole(FbxGeometryElementHole* pElementHole);
+    bool RemoveElementHole(FbxGeometryElementHole *pElementHole);
 
     /** Returns this geometry's hole element.
       * \param pIndex           The hole geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementHole* GetElementHole(int pIndex = 0);
+    FbxGeometryElementHole *GetElementHole(int pIndex = 0);
 
     /** Returns this geometry's hole element.
       * \param pIndex           The hole geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementHole* GetElementHole(int pIndex = 0) const;
+    const FbxGeometryElementHole *GetElementHole(int pIndex = 0) const;
 
     /** Get the number of this geometry's hole geometry element.
       * \return                 Total number of hole geometry elements for this geometry.
@@ -499,25 +498,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementUserData* CreateElementUserData();
+    FbxGeometryElementUserData *CreateElementUserData();
 
     /** Remove the user data geometry element from this geometry.
       * \param pElementUserData A pointer to the user data element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementUserData(FbxGeometryElementUserData* pElementUserData);
+    bool RemoveElementUserData(FbxGeometryElementUserData *pElementUserData);
 
     /** Returns this geometry's user data element.
       * \param pIndex           The user data geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementUserData* GetElementUserData(int pIndex = 0);
+    FbxGeometryElementUserData *GetElementUserData(int pIndex = 0);
 
     /** Returns this geometry's user data element.
       * \param pIndex           The user data geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementUserData* GetElementUserData(int pIndex = 0) const;
+    const FbxGeometryElementUserData *GetElementUserData(int pIndex = 0) const;
 
     /** Get the number of this geometry's user data geometry element.
       * \return                 Total number of user data geometry elements for this geometry.
@@ -528,25 +527,25 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementVisibility* CreateElementVisibility();
+    FbxGeometryElementVisibility *CreateElementVisibility();
 
     /** Remove the visibility geometry element from this geometry.
       * \param pElementVisibility   A pointer to the visibility element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementVisibility(FbxGeometryElementVisibility* pElementVisibility);
+    bool RemoveElementVisibility(FbxGeometryElementVisibility *pElementVisibility);
 
     /** Returns this geometry's visibility element.
       * \param pIndex           The visibility geometry element index.
       * \return                 A pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    FbxGeometryElementVisibility* GetElementVisibility(int pIndex = 0);
+    FbxGeometryElementVisibility *GetElementVisibility(int pIndex = 0);
 
     /** Returns this geometry's visibility element.
       * \param pIndex           The visibility geometry element index.
       * \return                 A const pointer to the geometry element or \c NULL if \e pIndex is out of range.
       */
-    const FbxGeometryElementVisibility* GetElementVisibility(int pIndex = 0) const;
+    const FbxGeometryElementVisibility *GetElementVisibility(int pIndex = 0) const;
 
     /** Get the number of this geometry's visibility geometry element.
       * \return                 Total number of visibility geometry elements for this geometry.
@@ -559,13 +558,13 @@ public:
       * \return                 A pointer to the newly created geometry element.
       * \remarks                The created geometry element is associated with this geometry automatically.
       */
-    FbxGeometryElementUV* CreateElementUV(const char* pUVSetName, FbxLayerElement::EType pTypeIdentifier=FbxLayerElement::eTextureDiffuse);
+    FbxGeometryElementUV *CreateElementUV(const char *pUVSetName, FbxLayerElement::EType pTypeIdentifier = FbxLayerElement::eTextureDiffuse);
 
     /** Remove the UV geometry element from this geometry.
       * \param pElementUV       A pointer to the UV element to be removed.
       * \return                 \c True if the geometry element is removed, \c false otherwise.
       */
-    bool RemoveElementUV(FbxGeometryElementUV* pElementUV);
+    bool RemoveElementUV(FbxGeometryElementUV *pElementUV);
 
     /** Returns this geometry's UV element.
       * \param pIndex           The UV geometry element index.
@@ -574,7 +573,7 @@ public:
       * \remarks                If \e pTypeIdentifier is not specified, the function will return the geometry element
       *                         regardless of its texture type.
       */
-    FbxGeometryElementUV* GetElementUV(int pIndex = 0, FbxLayerElement::EType pTypeIdentifier=FbxLayerElement::eUnknown);
+    FbxGeometryElementUV *GetElementUV(int pIndex = 0, FbxLayerElement::EType pTypeIdentifier = FbxLayerElement::eUnknown);
 
     /** Returns this geometry's UV element.
       * \param pIndex           The UV geometry element index.
@@ -583,7 +582,7 @@ public:
       * \remarks                If \e pTypeIdentifier is not specified, the function will return the geometry element
       *                         regardless of its texture type.
       */
-    const FbxGeometryElementUV* GetElementUV(int pIndex = 0, FbxLayerElement::EType pTypeIdentifier=FbxLayerElement::eUnknown) const;
+    const FbxGeometryElementUV *GetElementUV(int pIndex = 0, FbxLayerElement::EType pTypeIdentifier = FbxLayerElement::eUnknown) const;
 
     /** Get the number of this geometry's UV geometry element.
       * \param pTypeIdentifier  The texture channel the UVIndex refers to.
@@ -591,24 +590,24 @@ public:
       * \remarks                If \e pTypeIdentifier is not specified, the function will return the geometry element
       *                         regardless of its texture type.      
       */
-    int GetElementUVCount(FbxLayerElement::EType pTypeIdentifier=FbxLayerElement::eUnknown) const;
+    int GetElementUVCount(FbxLayerElement::EType pTypeIdentifier = FbxLayerElement::eUnknown) const;
 
     /** Returns this geometry's UV element.
       * \param pUVSetName       The UV set name of the UV geometry element.
       * \return                 A pointer to the UV geometry element or \c NULL if no UV geometry element with this name exists.
       */
-    FbxGeometryElementUV* GetElementUV(const char* pUVSetName);
+    FbxGeometryElementUV *GetElementUV(const char *pUVSetName);
 
     /** Returns this geometry's UV element.
       * \param pUVSetName       The UV set name of the UV geometry element.
       * \return                 A const pointer to the UV geometry element or \c NULL if no UV geometry element with this name exists.
       */
-    const FbxGeometryElementUV* GetElementUV(const char* pUVSetName) const;
+    const FbxGeometryElementUV *GetElementUV(const char *pUVSetName) const;
 
     /** Returns this geometry's all UV set names.
       * \param pUVSetNameList   A reference to \c FbxStringList that will be filled with this geometry's all UV set names.
       */
-    void GetUVSetNames(FbxStringList& pUVSetNameList) const;
+    void GetUVSetNames(FbxStringList &pUVSetNameList) const;
 
     //@}
 
@@ -622,45 +621,54 @@ public:
 	  *  (v * sizeof(array item size)) bytes big. The methods will also call the parent class ones to dump the Layers content.
       */
     //@{
-        /** Writes the content of the geometry object to the specified stream.
-          * \param pStream The destination stream.
-          * \return \c True if the content is successfully processed
-          * by the receiving stream, \c false otherwise.
-          */
-        virtual bool ContentWriteTo(FbxStream& pStream) const;
+    /** Writes the content of the geometry object to the specified stream.
+      * \param pStream The destination stream.
+      * \return \c True if the content is successfully processed
+      * by the receiving stream, \c false otherwise.
+      */
+    virtual bool ContentWriteTo(FbxStream &pStream) const;
 
-        /** Reads the content of the geometry object from the specified stream.
-          * \param pStream The source stream.
-          * \return \c True if the geometry object fills itself with the received data
-          * from the stream successfully, \c false otherwise.
-          */
-        virtual bool ContentReadFrom(const FbxStream& pStream);
+    /** Reads the content of the geometry object from the specified stream.
+      * \param pStream The source stream.
+      * \return \c True if the geometry object fills itself with the received data
+      * from the stream successfully, \c false otherwise.
+      */
+    virtual bool ContentReadFrom(const FbxStream &pStream);
     //@}
 
-        /** Calculate the actual amount of memory used by this geometry object. 
-          * \return The memory size in bytes (includes the amount use by the data defined in the layers).
-          */
-        virtual int MemoryUsage() const;
+    /** Calculate the actual amount of memory used by this geometry object. 
+      * \return The memory size in bytes (includes the amount use by the data defined in the layers).
+      */
+    virtual int MemoryUsage() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	virtual FbxObject& Copy(const FbxObject& pObject);
-	virtual void Compact();
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    virtual void Compact();
 
     FbxArray<FbxVector4> mControlPoints;
 
-    bool GetNormals(FbxLayerElementArrayTemplate<FbxVector4>** pLockableArray) const;
-    bool GetNormalsIndices(FbxLayerElementArrayTemplate<int>** pLockableArray) const;
-    bool GetTangents(FbxLayerElementArrayTemplate<FbxVector4>** pLockableArray, const int pLayerIndex = 0) const;
-    bool GetTangentsIndices(FbxLayerElementArrayTemplate<int>** pLockableArray, const int pLayerIndex = 0) const;
-    bool GetBinormals(FbxLayerElementArrayTemplate<FbxVector4>** pLockableArray, const int pLayerIndex = 0) const;
-    bool GetBinormalsIndices(FbxLayerElementArrayTemplate<int>** pLockableArray, const int pLayerIndex = 0) const;
+    bool GetNormals(FbxLayerElementArrayTemplate<FbxVector4> **pLockableArray) const;
+
+    bool GetNormalsIndices(FbxLayerElementArrayTemplate<int> **pLockableArray) const;
+
+    bool GetTangents(FbxLayerElementArrayTemplate<FbxVector4> **pLockableArray, const int pLayerIndex = 0) const;
+
+    bool GetTangentsIndices(FbxLayerElementArrayTemplate<int> **pLockableArray, const int pLayerIndex = 0) const;
+
+    bool GetBinormals(FbxLayerElementArrayTemplate<FbxVector4> **pLockableArray, const int pLayerIndex = 0) const;
+
+    bool GetBinormalsIndices(FbxLayerElementArrayTemplate<int> **pLockableArray, const int pLayerIndex = 0) const;
 
 protected:
     virtual void ConstructProperties(bool pForceSet);
+
     virtual void ContentClear();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

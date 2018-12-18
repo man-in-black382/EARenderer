@@ -13,13 +13,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLLuminance::GLSLLuminance()
-    :
-    GLProgram("FullScreenQuad.vert", "Luminance.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "Luminance.frag", "") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLLuminance::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
+    void GLSLLuminance::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 

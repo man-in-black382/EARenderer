@@ -38,16 +38,16 @@ namespace EARenderer {
 
     public:
         void initializeBuffers();
-        
-        void serialize(const std::string& filePath);
 
-        bool deserialize(const std::string& filePath);
+        void serialize(const std::string &filePath);
 
-        const std::vector<DiffuseLightProbe>& probes() const;
+        bool deserialize(const std::string &filePath);
 
-        const std::vector<SurfelClusterProjection>& surfelClusterProjections() const;
+        const std::vector<DiffuseLightProbe> &probes() const;
 
-        const glm::ivec3& gridResolution() const;
+        const std::vector<SurfelClusterProjection> &surfelClusterProjections() const;
+
+        const glm::ivec3 &gridResolution() const;
 
         std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> projectionClusterSHsBufferTexture() const;
 

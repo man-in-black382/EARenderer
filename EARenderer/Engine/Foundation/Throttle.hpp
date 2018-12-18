@@ -14,22 +14,23 @@
 #include <functional>
 
 namespace EARenderer {
-    
+
     class Throttle {
     private:
         using TimePoint = std::chrono::time_point<std::chrono::high_resolution_clock>;
-        
+
         TimePoint mPreviousFrameTime;
         float mCooldown = 0.0;
-        
+
     public:
         using Action = std::function<void()>;
-        
+
         Throttle(float cooldown);
-        
+
         float cooldown() const;
+
         void setCooldown(float cooldown);
-        
+
         /**
          Performs an action if enough time has passed since the last performed action
 
@@ -37,7 +38,7 @@ namespace EARenderer {
          */
         void attemptToPerformAction(Action action);
     };
-    
+
 }
 
 #endif /* Throttle_hpp */

@@ -10,16 +10,15 @@
 
 #import "SceneGLView.h"
 
-@interface NumericTextFieldManager()
+@interface NumericTextFieldManager ()
 
-@property (weak) IBOutlet SceneGLView *openGLView;
+@property(weak) IBOutlet SceneGLView *openGLView;
 
 @end
 
 @implementation NumericTextFieldManager
 
-- (IBAction)textFieldActionRecieved:(NSTextField *)sender
-{
+- (IBAction)textFieldActionRecieved:(NSTextField *)sender {
 //    [sender.window makeFirstResponder:self.openGLView];
 }
 

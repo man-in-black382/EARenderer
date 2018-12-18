@@ -22,10 +22,15 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxIO;
+
 class FbxReader;
+
 class FbxWriter;
+
 class FbxFile;
+
 class FbxStream;
+
 class FbxXRefManager;
 
 /** 
@@ -117,41 +122,41 @@ class FbxXRefManager;
  */
 
 //File version numbers
-#define FBX_FILE_VERSION_2000		2000	//FBX 2.0
-#define FBX_FILE_VERSION_2001		2001	//FBX 2.01
-#define FBX_FILE_VERSION_3000		3000	//FBX 3.0
-#define FBX_FILE_VERSION_3001		3001	//FBX 3.01
-#define FBX_FILE_VERSION_4000		4000	//FBX 4.0
-#define FBX_FILE_VERSION_4001		4001	//FBX 4.01
-#define FBX_FILE_VERSION_4050		4050	//FBX 4.5
-#define FBX_FILE_VERSION_5000		5000	//FBX 5.0
-#define FBX_FILE_VERSION_5800		5800	//FBX 5.8
-#define FBX_FILE_VERSION_6000		6000	//FBX 6.0
-#define FBX_FILE_VERSION_6100		6100	//FBX 6.1 (guarantee compatibility with Autodesk 2010 products)
-#define FBX_FILE_VERSION_7000		7000	//Compatible with 7.1, and taken as such
-#define FBX_FILE_VERSION_7099		7099	//Compatible with 7.1, and taken as such
-#define FBX_FILE_VERSION_7100		7100	//FBX 7.1 (guarantee compatibility with Autodesk 2011 products)
-#define FBX_FILE_VERSION_7200		7200	//FBX 7.2 (guarantee compatibility with Autodesk 2012 products)
-#define FBX_FILE_VERSION_7300		7300	//FBX 7.3 (guarantee compatibility with Autodesk 2013 products)
-#define FBX_FILE_VERSION_7400		7400	//FBX 7.4 (guarantee compatibility with Autodesk 2014 products)
+#define FBX_FILE_VERSION_2000        2000    //FBX 2.0
+#define FBX_FILE_VERSION_2001        2001    //FBX 2.01
+#define FBX_FILE_VERSION_3000        3000    //FBX 3.0
+#define FBX_FILE_VERSION_3001        3001    //FBX 3.01
+#define FBX_FILE_VERSION_4000        4000    //FBX 4.0
+#define FBX_FILE_VERSION_4001        4001    //FBX 4.01
+#define FBX_FILE_VERSION_4050        4050    //FBX 4.5
+#define FBX_FILE_VERSION_5000        5000    //FBX 5.0
+#define FBX_FILE_VERSION_5800        5800    //FBX 5.8
+#define FBX_FILE_VERSION_6000        6000    //FBX 6.0
+#define FBX_FILE_VERSION_6100        6100    //FBX 6.1 (guarantee compatibility with Autodesk 2010 products)
+#define FBX_FILE_VERSION_7000        7000    //Compatible with 7.1, and taken as such
+#define FBX_FILE_VERSION_7099        7099    //Compatible with 7.1, and taken as such
+#define FBX_FILE_VERSION_7100        7100    //FBX 7.1 (guarantee compatibility with Autodesk 2011 products)
+#define FBX_FILE_VERSION_7200        7200    //FBX 7.2 (guarantee compatibility with Autodesk 2012 products)
+#define FBX_FILE_VERSION_7300        7300    //FBX 7.3 (guarantee compatibility with Autodesk 2013 products)
+#define FBX_FILE_VERSION_7400        7400    //FBX 7.4 (guarantee compatibility with Autodesk 2014 products)
 
 //Default file version number used when writing new FBX files
-#define FBX_DEFAULT_FILE_VERSION	FBX_FILE_VERSION_7400
+#define FBX_DEFAULT_FILE_VERSION    FBX_FILE_VERSION_7400
 
 //File version compatibility strings
-#define FBX_53_MB55_COMPATIBLE		"FBX53_MB55"
-#define FBX_60_COMPATIBLE			"FBX60_MB60"
-#define FBX_2005_08_COMPATIBLE		"FBX200508_MB70"
-#define FBX_2006_02_COMPATIBLE		"FBX200602_MB75"
-#define FBX_2006_08_COMPATIBLE		"FBX200608"
-#define FBX_2006_11_COMPATIBLE		"FBX200611"
-#define FBX_2009_00_COMPATIBLE		"FBX200900"
-#define FBX_2009_00_V7_COMPATIBLE	"FBX200900v7"
-#define FBX_2010_00_COMPATIBLE		"FBX201000"
-#define FBX_2011_00_COMPATIBLE		"FBX201100"
-#define FBX_2012_00_COMPATIBLE		"FBX201200"
-#define FBX_2013_00_COMPATIBLE		"FBX201300"
-#define FBX_2014_00_COMPATIBLE		"FBX201400"
+#define FBX_53_MB55_COMPATIBLE        "FBX53_MB55"
+#define FBX_60_COMPATIBLE            "FBX60_MB60"
+#define FBX_2005_08_COMPATIBLE        "FBX200508_MB70"
+#define FBX_2006_02_COMPATIBLE        "FBX200602_MB75"
+#define FBX_2006_08_COMPATIBLE        "FBX200608"
+#define FBX_2006_11_COMPATIBLE        "FBX200611"
+#define FBX_2009_00_COMPATIBLE        "FBX200900"
+#define FBX_2009_00_V7_COMPATIBLE    "FBX200900v7"
+#define FBX_2010_00_COMPATIBLE        "FBX201000"
+#define FBX_2011_00_COMPATIBLE        "FBX201100"
+#define FBX_2012_00_COMPATIBLE        "FBX201200"
+#define FBX_2013_00_COMPATIBLE        "FBX201300"
+#define FBX_2014_00_COMPATIBLE        "FBX201400"
 
 /** Convert the FBX file version string to an integral number for <= or >= tests purposes.
   * \param pFileVersion File version string.
@@ -166,28 +171,26 @@ class FbxXRefManager;
   * \endcode
   * \returns the file version number or 0 if an unsupported string value is passed.
   */
-FBXSDK_DLL int FbxFileVersionStrToInt(const char* pFileVersion);
+FBXSDK_DLL int FbxFileVersionStrToInt(const char *pFileVersion);
 
 /** \internal Used internally by readers to evaluate what is the current section */
-enum
-{
-	FBX_NO_SECTION = -1,	//!< indicate not in a valid section
-	FBX_MAIN_SECTION,		//!< indicate currently in the main section
-	FBX_EXTENSION_SECTION_0	//!< indicate currently in the extention section 0
+enum {
+    FBX_NO_SECTION = -1,    //!< indicate not in a valid section
+    FBX_MAIN_SECTION,        //!< indicate currently in the main section
+    FBX_EXTENSION_SECTION_0    //!< indicate currently in the extention section 0
 };
 
 /** Render and resolution information.
 * \nosubgrouping 
 */
-class FBXSDK_DLL FbxIODefaultRenderResolution
-{
+class FBXSDK_DLL FbxIODefaultRenderResolution {
 public:
     /** If the resolution data is ready. */
-    bool    mIsOK;
+    bool mIsOK;
     /** camera name. */
     FbxString mCameraName;
     /** resolution mode. ex: "Fixed Resolution","Fixed Ratio","Fixed Width","Fixed Height","Window Size"*/
-	FbxString mResolutionMode;
+    FbxString mResolutionMode;
     /** resolution width. */
     double mResolutionW;
     /** resolution height. */
@@ -214,8 +217,7 @@ public:
 * to get or set important values like the file format version number (mFileVersion).
 * The file version number will be used to select a particular Reader or Writer.
 * \nosubgrouping */
-class FBXSDK_DLL FbxIOFileHeaderInfo
-{
+class FBXSDK_DLL FbxIOFileHeaderInfo {
 public:
     /**
     * \name Constructors and Destructor
@@ -233,44 +235,44 @@ public:
     */
     //@{
 
-	//! Reset values to default.
-	virtual void				Reset();
+    //! Reset values to default.
+    virtual void Reset();
 
     /** A derived class can override this function to read additional information from the file header.
     *   \return false in case of failure that should stop loading the file.
     */
-    virtual bool				ReadExtendedHeaderInformation(FbxIO*);
+    virtual bool ReadExtendedHeaderInformation(FbxIO *);
     //@}
 
-	//! FbxIODefaultRenderResolution to handle default resolution values
-    FbxIODefaultRenderResolution    mDefaultRenderResolution;
+    //! FbxIODefaultRenderResolution to handle default resolution values
+    FbxIODefaultRenderResolution mDefaultRenderResolution;
 
-	//!Read only properties (not used for file write)
-	
-	//@{
-	/** File version ex; 5000, 6000, 6100, 7000, 7099, 7100 
-	*   the major part is the first digit, the minor part, 3 other digits
-	*   ex: 7100 means version 7.1
-	*/
-    int                         mFileVersion;
+    //!Read only properties (not used for file write)
 
-	/** Indicates whether a creation time stamp is preset */
-    bool                        mCreationTimeStampPresent;
+    //@{
+    /** File version ex; 5000, 6000, 6100, 7000, 7099, 7100 
+    *   the major part is the first digit, the minor part, 3 other digits
+    *   ex: 7100 means version 7.1
+    */
+    int mFileVersion;
 
-	/** Indicates whether the mCreationTimeStamp member variable contains the actual creation time of the file. */
-    FbxLocalTime                  mCreationTimeStamp;
+    /** Indicates whether a creation time stamp is preset */
+    bool mCreationTimeStampPresent;
+
+    /** Indicates whether the mCreationTimeStamp member variable contains the actual creation time of the file. */
+    FbxLocalTime mCreationTimeStamp;
 
     /** Indicates who is the creator of the file
 	*   Ex: "FBX SDK/FBX Plugins version 2011.2" 
 	*/
-    FbxString                     mCreator;				
+    FbxString mCreator;
 
-	/** Indicates whether the file is created by a genuine Autodesk plug-in or not */
-	bool						mIOPlugin;
+    /** Indicates whether the file is created by a genuine Autodesk plug-in or not */
+    bool mIOPlugin;
 
-	/** The flag indicates that the header was created by a personal learning edition (PLE) of FBX. */
-    bool                        mPLE;
-	//@}
+    /** The flag indicates that the header was created by a personal learning edition (PLE) of FBX. */
+    bool mPLE;
+    //@}
 };
 
 /** FbxIO represents an FBX file. 
@@ -315,49 +317,44 @@ public:
   * ProjectClose(); // or delete the FbxIO object created.
   * \endcode
   */
-class FBXSDK_DLL FbxIO
-{
+class FBXSDK_DLL FbxIO {
 public:
 
     /** \internal Exception-safe way of setting/resetting the xref manager in a FbxIO object.
 	*/
-    struct FbxAutoResetXRefManager
-    {
-        FbxIO*                   mFbx;
-        const FbxXRefManager*  mXRefManager;
+    struct FbxAutoResetXRefManager {
+        FbxIO *mFbx;
+        const FbxXRefManager *mXRefManager;
 
-		/** Default constructor */
-        FbxAutoResetXRefManager(FbxIO* pFbx, FbxXRefManager& pXRefManager)
-        : mFbx(pFbx)
-        , mXRefManager(NULL)
-        {
-            if( mFbx )
-            {
+        /** Default constructor */
+        FbxAutoResetXRefManager(FbxIO *pFbx, FbxXRefManager &pXRefManager)
+                : mFbx(pFbx), mXRefManager(NULL) {
+            if (mFbx) {
                 mXRefManager = mFbx->ProjectGetXRefManager();
                 mFbx->ProjectSetXRefManager(&pXRefManager);
             }
         }
 
-		/** Destructor */
-        ~FbxAutoResetXRefManager()
-        {
-            if( mFbx )
-            {
+        /** Destructor */
+        ~FbxAutoResetXRefManager() {
+            if (mFbx) {
                 mFbx->ProjectSetXRefManager(mXRefManager);
             }
         }
     };
 
-	/** Creation function for this FbxIO class
+    /** Creation function for this FbxIO class
       * \param pStatus  The FbxStatus object to hold error codes.
-	  * \return a new FbxIO object pointer
-	  */
-    static FbxIO* Create(FbxStatus& pStatus){ return FbxNew< FbxIO >(pStatus); }
+      * \return a new FbxIO object pointer
+      */
+    static FbxIO *Create(FbxStatus &pStatus) {
+        return FbxNew<FbxIO>(pStatus);
+    }
 
-	/** Default constructor */
-    FbxIO(FbxStatus& pStatus);
+    /** Default constructor */
+    FbxIO(FbxStatus &pStatus);
 
-	/** Destructor */
+    /** Destructor */
     virtual ~FbxIO();
 
     /**
@@ -376,7 +373,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectOpen(void* pAddress, FbxULong pMaxLength, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectOpen(void *pAddress, FbxULong pMaxLength, FbxReader *pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Open a project. 
       * \param pName
@@ -386,9 +383,9 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectOpen(const char* pName, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectOpen(const char *pName, FbxReader *pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
-	/** Open a project. 
+    /** Open a project. 
       * \param pStream
       * \param pStreamData
       * \param pReader
@@ -397,7 +394,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectOpen(FbxStream* pStream, void* pStreamData, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectOpen(FbxStream *pStream, void *pStreamData, FbxReader *pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Open project file without necessarily an .fbx extension. 
       * \param pName
@@ -407,7 +404,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectOpenDirect(const char* pName, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectOpenDirect(const char *pName, FbxReader *pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Create a project in Memory 
       * \param pAddress
@@ -418,7 +415,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreate(void* pAddress, FbxUInt pSize, FbxWriter* pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectCreate(void *pAddress, FbxUInt pSize, FbxWriter *pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Create a project. 
       * \param pName
@@ -428,7 +425,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreate(const char* pName, FbxWriter* pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectCreate(const char *pName, FbxWriter *pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Create a project. 
       * \param pStream
@@ -439,7 +436,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreate(FbxStream* pStream, void* pStreamData, FbxWriter* pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectCreate(FbxStream *pStream, void *pStreamData, FbxWriter *pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Create a project without necessary an .fbx extension.
       * \param pName
@@ -449,7 +446,7 @@ public:
       * \param pFileHeaderInfo
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreateDirect(const char* pName, FbxWriter* pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+    bool ProjectCreateDirect(const char *pName, FbxWriter *pWriter, bool pBinary, bool pEncrypted, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
     /** Create a project, without writing out the header (yet)
       * \param pName
@@ -459,7 +456,7 @@ public:
       * \param pEncrypted
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreateEmpty(const char* pName, FbxWriter* pWriter, int pVersion, bool pBinary, bool pEncrypted);
+    bool ProjectCreateEmpty(const char *pName, FbxWriter *pWriter, int pVersion, bool pBinary, bool pEncrypted);
 
     /** Create a project, without writing out the header (yet)
       * \param pStream
@@ -470,7 +467,7 @@ public:
       * \param pEncrypted
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectCreateEmpty(FbxStream* pStream, void* pStreamData, FbxWriter* pWriter, int pVersion, bool pBinary, bool pEncrypted);
+    bool ProjectCreateEmpty(FbxStream *pStream, void *pStreamData, FbxWriter *pWriter, int pVersion, bool pBinary, bool pEncrypted);
 
     /** Write FBX signature at the top of the file, prepare file for writing header information 
       * \return \c true on success, \c false otherwise.
@@ -486,7 +483,7 @@ public:
       * \param pExtendedHeader
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectWrite_WriteExtendedHeader(const FbxIOFileHeaderInfo* pExtendedHeader);
+    bool ProjectWrite_WriteExtendedHeader(const FbxIOFileHeaderInfo *pExtendedHeader);
 
     /** Close the extended header 
       * \return \c true on success, \c false otherwise.
@@ -503,17 +500,17 @@ public:
       * \param pSize
       * \return \c true on success, \c false otherwise.
       */
-    bool ProjectClose(void** pData=0, size_t* pSize=0);
+    bool ProjectClose(void **pData = 0, size_t *pSize = 0);
 
     /** Provide the XRef Manager to use to create the .fbm folder. 
      * \remarks If NULL is used, the old behavior (using the .fbx's folder) is used instead. 
      */
-    void ProjectSetXRefManager(const FbxXRefManager*);
+    void ProjectSetXRefManager(const FbxXRefManager *);
 
     /** Get the XRef Manager to use. 
      * \return NULL if no XRef manager has been set. 
      */
-    const FbxXRefManager* ProjectGetXRefManager() const;
+    const FbxXRefManager *ProjectGetXRefManager() const;
 
     /** Select (and create) a folder to store embedded files (the .fbm 
       *   file folder).  Takes into account the settings from the XRef Manager. 
@@ -529,7 +526,7 @@ public:
       * This will be automatically called if ProjectSetXRefManager()
       * has been called before the .fbm folder needs to be created. 
       */
-    bool ProjectCreateEmbeddedFolder(const FbxXRefManager& pXRefManager, FbxString& pCreatedFolder, const char* pUserDefinedFolder = NULL); 
+    bool ProjectCreateEmbeddedFolder(const FbxXRefManager &pXRefManager, FbxString &pCreatedFolder, const char *pUserDefinedFolder = NULL);
 
     /** On store event, use this function to tell if we are embedding. 
       * \param pValue
@@ -539,11 +536,11 @@ public:
     /** Explicitly set the embedding extraction folder. If this is never called, the FBX SDK will determine the best folder to extract embedded files.
       * \param pExtractionFolder The file path name where the embedded files should be extracted.
       */
-    void SetEmbeddingExtractionFolder(const char* pExtractionFolder);
+    void SetEmbeddingExtractionFolder(const char *pExtractionFolder);
 
     /** Retrieve the current folder destination where the embedded files will be extracted. This might not be initialized until file I/O is performed.
       */
-    const char* GetEmbeddingExtractionFolder();
+    const char *GetEmbeddingExtractionFolder();
 
     /** Check if file is embedded or not. 
       * \return \c true if file is embedded, false otherwise.
@@ -558,7 +555,7 @@ public:
     /** Return if binary file is encrypted 
       * \return \c true if file is encrypted, false otherwise.
       */
-    bool IsEncrypted () const;
+    bool IsEncrypted() const;
 
     /** Check CRC code. File must be open, binary and encrypted.
     *   \return \c true if CRC code is valid or file is not open, binary and encrypted.
@@ -568,7 +565,7 @@ public:
     /** Return the file version number 
       * \return the file version number
       */
-    FbxUInt32 GetFileVersionNumber() const; 
+    FbxUInt32 GetFileVersionNumber() const;
 
     /** Set the cache size for accelerated IO 
     * \param pCacheSize cache size to set (Kilo Byte)
@@ -578,7 +575,7 @@ public:
     /** Return the current cache size
       * \return the current cache size
       */
-    FbxUInt32 CacheSize() const; 
+    FbxUInt32 CacheSize() const;
 
     //@}
 
@@ -610,7 +607,7 @@ public:
     void CompressArrays(bool pCompress);
 
     //! \return Current compression minimum size.
-    int  CompressMinimumSize() const;
+    int CompressMinimumSize() const;
 
     /** Set the compression minimum size.
       * \param pSize Threshold at which compression may embark.
@@ -618,7 +615,7 @@ public:
     void CompressMinimumSize(int pSize);
 
     //! \return Current compression level.
-    int  CompressLevel() const;
+    int CompressLevel() const;
 
     /** Set the compression level.
       * \param pLevel Value of the desired compression.
@@ -690,7 +687,7 @@ public:
     * \param pMinor Integer to receive minor version number.
     * \param pRevision Integer to receive revision version number.
     */
-    static void ProjectConvertVersionNumber(int pVersion, int& pMajor, int& pMinor, int& pRevision);
+    static void ProjectConvertVersionNumber(int pVersion, int &pMajor, int &pMinor, int &pRevision);
 
     /** Check the password protection flag.
     * \return \c true if the current section has a password, \c false otherwise.
@@ -702,7 +699,7 @@ public:
     * \return \c true if the argument matches the password stored in the section, \c false otherwise.
     * \remarks This function only works in read mode.
     */
-    bool CheckPassword(const char* pPassword);
+    bool CheckPassword(const char *pPassword);
 
     /** Encrypt and store password in a section.
     * \param pPassword
@@ -710,7 +707,7 @@ public:
     * \remarks This function only works in write mode and out of any enclosing block.
     * \remarks This function must not be called more than once per section.
     */
-    bool WritePassword(const char* pPassword);
+    bool WritePassword(const char *pPassword);
 
     //@}
 
@@ -722,7 +719,7 @@ public:
     /** Get project file name. 
       * \return project file name.
       */
-    const char* GetFilename() const;
+    const char *GetFilename() const;
 
     /** Get project data directory name. 
       * \param pAutoCreate
@@ -738,44 +735,44 @@ public:
       *  return an empty string, unless we're explicitly asked to
       *  create it.
       */
-    FbxString GetMediaDirectory(bool pCreate = false, const char* pUserDefinedFolder = NULL);
+    FbxString GetMediaDirectory(bool pCreate = false, const char *pUserDefinedFolder = NULL);
 
     /** Get the full path of the directory to extract the template file. 
       * \param pTemplateName
       * \param pCreate
       * \return the full path of the directory to extract the template file.
       */
-    FbxString GetContainerTemplateDirectory(const char* pTemplateName, bool pCreate);
+    FbxString GetContainerTemplateDirectory(const char *pTemplateName, bool pCreate);
 
     /** Get the path relative to project directory. 
       * \param pPath
       * \return the path relative to project directory.
       */
-    char* GetRelativePath(const char* pPath);
+    char *GetRelativePath(const char *pPath);
 
     /** Get the file path relative to project directory. 
       * \param pFilePath
       * \return the file path relative to project directory.
       */
-    char* GetRelativeFilePath(const char* pFilePath);
+    char *GetRelativeFilePath(const char *pFilePath);
 
     /** Get the full path of path relative to project directory. 
       * \param pRelativePath
       * \return the full path of path relative to project directory.
       */
-    char* GetFullPath(const char* pRelativePath);
+    char *GetFullPath(const char *pRelativePath);
 
     /** Get the full file path of path relative to project directory. 
       * \param pRelativeFilePath
       * \return the full file path of path relative to project directory.
       */
-    char* GetFullFilePath(const char* pRelativeFilePath);
+    char *GetFullFilePath(const char *pRelativeFilePath);
 
     /** Get the temporary project name. 
       * \param pName
       * \return the temporary project name.
       */
-    char* GetTmpProjectName(const char* pName) const;
+    char *GetTmpProjectName(const char *pName) const;
 
     /** Swap from temporary project. 
       * \param pName
@@ -783,7 +780,7 @@ public:
       * \param pErrorSize 
       * \return \c true on success, \c false otherwise.
       */
-    bool SwapFromTmpProject(const char* pName, char* pError=NULL, int pErrorSize=0);
+    bool SwapFromTmpProject(const char *pName, char *pError = NULL, int pErrorSize = 0);
 
     //@}
 
@@ -806,13 +803,13 @@ public:
       * \param pFieldIndex
       * \return the name of field indexed pFieldIndex.
       */
-    const char* FieldGetName(int pFieldIndex) const;
+    const char *FieldGetName(int pFieldIndex) const;
 
     /** Get number of instance field pFieldName has. 
       * \param pFieldName
       * \return the number of instance field pFieldName has.
       */
-    int FieldGetInstanceCount(const char* pFieldName) const;
+    int FieldGetInstanceCount(const char *pFieldName) const;
 
     /** Start to read field instance referred by field indexed pFieldIndex, instance indexed pInstance. 
       * \param pFieldIndex
@@ -825,14 +822,14 @@ public:
       * \param pFieldName
       * \return \c true on success, \c false otherwise.
       */
-    bool FieldReadBegin(const char* pFieldName);
+    bool FieldReadBegin(const char *pFieldName);
 
     /** Start to read field instance referred field pFieldName, instance indexed pInstance. 
       * \param pFieldName
       * \param pInstance
       * \return \c true on success, \c false otherwise.
       */
-    bool FieldReadBegin(const char* pFieldName, int pInstance);
+    bool FieldReadBegin(const char *pFieldName, int pInstance);
 
     //! Stop to read the current field.
     void FieldReadEnd();
@@ -862,25 +859,25 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    char FieldReadCH(const char* pFieldName, char pDefault=0);
+    char FieldReadCH(const char *pFieldName, char pDefault = 0);
 
     //! Return current field value as a char pointer.
-    const char* FieldReadC();
+    const char *FieldReadC();
 
     /** Return field pFieldName's value as a char pointer. 
       * \param pFieldName
       * \param pDefault
       */
-    const char* FieldReadC(const char* pFieldName, const char* pDefault="");
+    const char *FieldReadC(const char *pFieldName, const char *pDefault = "");
 
     //! Return current field value as a string (a char pointer).
-    const char* FieldReadS();
+    const char *FieldReadS();
 
     /** Return field pFieldName's value as a char pointer. 
       * \param pFieldName
       * \param pDefault
       */
-    const char* FieldReadS(const char* pFieldName, const char* pDefault="");
+    const char *FieldReadS(const char *pFieldName, const char *pDefault = "");
 
     //! Return current field value as an bool.
     bool FieldReadB();
@@ -889,7 +886,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    bool FieldReadB(const char* pFieldName, bool pDefault = false);
+    bool FieldReadB(const char *pFieldName, bool pDefault = false);
 
     //! Return current field value as an integer.
     int FieldReadI();
@@ -897,7 +894,7 @@ public:
     /** Return field pFieldName's value as an integer. 
       * \param pFieldName
       * \param pDefault
-      */int FieldReadI(const char* pFieldName, int pDefault=0);
+      */int FieldReadI(const char *pFieldName, int pDefault = 0);
 
     //! Return current field value as an integer.
     FbxLongLong FieldReadLL();
@@ -906,7 +903,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxLongLong FieldReadLL(const char* pFieldName, FbxLongLong pDefault=0);
+    FbxLongLong FieldReadLL(const char *pFieldName, FbxLongLong pDefault = 0);
 
     //! Return current field value as a float.
     float FieldReadF();
@@ -915,7 +912,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    float FieldReadF(const char* pFieldName, float pDefault=0);
+    float FieldReadF(const char *pFieldName, float pDefault = 0);
 
     //! Return current field value as a double.
     double FieldReadD();
@@ -924,12 +921,12 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    double FieldReadD(const char* pFieldName, double pDefault=0);
+    double FieldReadD(const char *pFieldName, double pDefault = 0);
 
     /** Return field pFieldName's value as a time value. 
       * \param pFieldName
       */
-    FbxTime FieldReadT(const char* pFieldName);
+    FbxTime FieldReadT(const char *pFieldName);
 
     //! Return field pFieldName's value as a time value.
     FbxTime FieldReadT();
@@ -937,7 +934,7 @@ public:
     /** Return field pFieldName's value as a timespan value. 
       * \param pFieldName
       */
-    FbxTimeSpan FieldReadTS(const char* pFieldName);
+    FbxTimeSpan FieldReadTS(const char *pFieldName);
 
     //! Return field pFieldName's value as a timespan value.
     FbxTimeSpan FieldReadTS();
@@ -946,17 +943,17 @@ public:
       * \param pValue
       * \param pn
       */
-    void FieldReadFn(float* pValue, FbxUInt pn);
+    void FieldReadFn(float *pValue, FbxUInt pn);
 
     /** Return current field value as a 3 floats array. 
       * \param pValue
       */
-    void FieldRead3F(float* pValue);
+    void FieldRead3F(float *pValue);
 
     /** Return current field value as a 4 floats array. 
       * \param pValue
       */
-    void FieldRead4F(float* pValue);
+    void FieldRead4F(float *pValue);
 
     /** Return field pFieldName's value as n floats array. 
       * \param pFieldName
@@ -964,37 +961,37 @@ public:
       * \param pDefault
       * \param pn
       */
-    void FieldReadFn(const char* pFieldName, float* pValue, const float *pDefault, FbxUInt pn);
+    void FieldReadFn(const char *pFieldName, float *pValue, const float *pDefault, FbxUInt pn);
 
     /** Return field pFieldName's value as 4 floats array. 
       * \param pFieldName
       * \param pValue
       * \param pDefault
       */
-    void FieldRead3F(const char* pFieldName, float* pValue, const float* pDefault=NULL);
+    void FieldRead3F(const char *pFieldName, float *pValue, const float *pDefault = NULL);
 
     /** Return field pFieldName's value as 3 floats array. 
       * \param pFieldName
       * \param pValue
       * \param pDefault
       */
-    void FieldRead4F(const char* pFieldName, float* pValue, const float* pDefault=NULL);
+    void FieldRead4F(const char *pFieldName, float *pValue, const float *pDefault = NULL);
 
     /** Return current field value as a n doubles array. 
       * \param pValue
       * \param pn
       */
-    void FieldReadDn(double* pValue, FbxUInt pn);
+    void FieldReadDn(double *pValue, FbxUInt pn);
 
     /** Return current field value as a 3 doubles array. 
       * \param pValue
       */
-    void FieldRead3D(double* pValue);
+    void FieldRead3D(double *pValue);
 
     /** Return current field value as a 4 doubles array. 
       * \param pValue
       */
-    void FieldRead4D(double* pValue);
+    void FieldRead4D(double *pValue);
 
     /** Return field pFieldName's value as n doubles array. 
       * \param pFieldName
@@ -1002,37 +999,37 @@ public:
       * \param pDefault
       * \param pn
       */
-    void FieldReadDn(const char* pFieldName, double* pValue, const double *pDefault, FbxUInt pn);
+    void FieldReadDn(const char *pFieldName, double *pValue, const double *pDefault, FbxUInt pn);
 
     /** Return field pFieldName's value as 4 doubles array. 
       * \param pFieldName
       * \param pValue
       * \param pDefault
       */
-    void FieldRead3D(const char* pFieldName, double* pValue, const double* pDefault=NULL);
+    void FieldRead3D(const char *pFieldName, double *pValue, const double *pDefault = NULL);
 
     /** Return field pFieldName's value as 3 doubles array. 
       * \param pFieldName
       * \param pValue
       * \param pDefault
       */
-    void FieldRead4D(const char* pFieldName, double* pValue, const double* pDefault=NULL);
+    void FieldRead4D(const char *pFieldName, double *pValue, const double *pDefault = NULL);
 
     /** Return current field value as raw data. 
       * \param pByteSize
       */
-    void* FieldReadR(int* pByteSize);
+    void *FieldReadR(int *pByteSize);
 
     /** Return field pFieldName's value as raw data. 
       * \param pFieldName
       * \param pByteSize
       */
-    void* FieldReadR(const char* pFieldName,int* pByteSize);
+    void *FieldReadR(const char *pFieldName, int *pByteSize);
 
-	/**
-	  * \name FBX SDK 2009.3 and later
-	  */
-	//@{
+    /**
+      * \name FBX SDK 2009.3 and later
+      */
+    //@{
     //! Return field pFieldName's value as byte.
     FbxChar FieldReadByte();
 
@@ -1040,7 +1037,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxChar FieldReadByte(const char* pFieldName, FbxChar pDefault=0);
+    FbxChar FieldReadByte(const char *pFieldName, FbxChar pDefault = 0);
 
     //! Return field pFieldName's value as unsigned byte.
     FbxUChar FieldReadUByte();
@@ -1049,7 +1046,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxUChar FieldReadUByte(const char* pFieldName, FbxUChar pDefault=0);
+    FbxUChar FieldReadUByte(const char *pFieldName, FbxUChar pDefault = 0);
 
     //! Return field pFieldName's value as short.
     FbxShort FieldReadShort();
@@ -1058,7 +1055,7 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxShort FieldReadShort(const char* pFieldName, FbxShort pDefault=0);
+    FbxShort FieldReadShort(const char *pFieldName, FbxShort pDefault = 0);
 
     //! Return field pFieldName's value as unsigned short.
     FbxUShort FieldReadUShort();
@@ -1067,16 +1064,16 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxUShort FieldReadUShort(const char* pFieldName, FbxUShort pDefault=0);
+    FbxUShort FieldReadUShort(const char *pFieldName, FbxUShort pDefault = 0);
 
-	//! Return field pFieldName's value as unsigned integer.
+    //! Return field pFieldName's value as unsigned integer.
     unsigned int FieldReadUI();
-	
+
     /** Return field pFieldName's value as an unsigned int as a value. 
       * \param pFieldName
       * \param pDefault
       */
-    unsigned int FieldReadUI(const char* pFieldName, unsigned int pDefault=0);
+    unsigned int FieldReadUI(const char *pFieldName, unsigned int pDefault = 0);
 
     //! Return field pFieldName's value as 64 bit unsigned integer.
     FbxULongLong FieldReadULL();
@@ -1085,53 +1082,60 @@ public:
       * \param pFieldName
       * \param pDefault
       */
-    FbxULongLong FieldReadULL(const char* pFieldName, FbxULongLong pDefault=0);
+    FbxULongLong FieldReadULL(const char *pFieldName, FbxULongLong pDefault = 0);
 
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const FbxChar*		FieldReadArraySBytes( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-	const FbxShort*		FieldReadArrayShort	( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-	const FbxUShort*		FieldReadArrayUShort( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-	const unsigned int*	FieldReadArrayUI	( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-	const FbxULongLong*	FieldReadArrayULL	( int &pCount );
+    const FbxChar *FieldReadArraySBytes(int &pCount);
 
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const FbxChar*        FieldReadArray(int &pCount, const FbxChar*);
+    const FbxShort *FieldReadArrayShort(int &pCount);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const FbxUShort *FieldReadArrayUShort(int &pCount);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const unsigned int *FieldReadArrayUI(int &pCount);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const FbxULongLong *FieldReadArrayULL(int &pCount);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const FbxChar *FieldReadArray(int &pCount, const FbxChar *);
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const FbxShort*		FieldReadArray(int &pCount, const FbxShort*);
+    const FbxShort *FieldReadArray(int &pCount, const FbxShort *);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const FbxUShort*		FieldReadArray(int &pCount, const FbxUShort*);
+    const FbxUShort *FieldReadArray(int &pCount, const FbxUShort *);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const unsigned int* FieldReadArray(int &pCount, const unsigned int*);
+    const unsigned int *FieldReadArray(int &pCount, const unsigned int *);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-	const FbxULongLong*	FieldReadArray(int &pCount, const FbxULongLong*);
-	//@}
+    const FbxULongLong *FieldReadArray(int &pCount, const FbxULongLong *);
+    //@}
 
     /** Read field and copy it into a file.
     * \param pFileName Embedded file full path+name.
@@ -1141,57 +1145,67 @@ public:
     * \remarks Only works when file is binary. This function is not related to flag mEmbedded.
     * \return \c false if operation failed.
     */
-    virtual bool FieldReadEmbeddedFile (FbxString& pFileName, FbxString& pRelativeFileName, const char* pEmbeddedMediaDirectory = "", bool *pIsFileCreated=NULL);
+    virtual bool FieldReadEmbeddedFile(FbxString &pFileName, FbxString &pRelativeFileName, const char *pEmbeddedMediaDirectory = "", bool *pIsFileCreated = NULL);
 
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const double*   FieldReadArrayD( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-    const float*    FieldReadArrayF( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-    const int*      FieldReadArrayI( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-    const FbxLongLong*FieldReadArrayLL(int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-    const bool*     FieldReadArrayB( int &pCount );
-    /** Read the whole array and return the pointer to it.
-      * \param pCount Nb of items in the array.
-      */
-    const FbxUChar*   FieldReadArrayBytes( int &pCount );
+    const double *FieldReadArrayD(int &pCount);
 
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const int*    FieldReadArray(int& pCount, const int*);
+    const float *FieldReadArrayF(int &pCount);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const float*  FieldReadArray(int& pCount, const float*);
+    const int *FieldReadArrayI(int &pCount);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const double* FieldReadArray(int& pCount, const double*);
+    const FbxLongLong *FieldReadArrayLL(int &pCount);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const FbxLongLong* FieldReadArray(int& pCount, const FbxLongLong*);
+    const bool *FieldReadArrayB(int &pCount);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const bool* FieldReadArray(int& pCount, const bool*);
+    const FbxUChar *FieldReadArrayBytes(int &pCount);
+
     /** Read the whole array and return the pointer to it.
       * \param pCount Nb of items in the array.
       */
-    const FbxUChar* FieldReadArray(int& pCount, const FbxUChar*);
+    const int *FieldReadArray(int &pCount, const int *);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const float *FieldReadArray(int &pCount, const float *);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const double *FieldReadArray(int &pCount, const double *);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const FbxLongLong *FieldReadArray(int &pCount, const FbxLongLong *);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const bool *FieldReadArray(int &pCount, const bool *);
+
+    /** Read the whole array and return the pointer to it.
+      * \param pCount Nb of items in the array.
+      */
+    const FbxUChar *FieldReadArray(int &pCount, const FbxUChar *);
 
     //@}
 
@@ -1204,7 +1218,7 @@ public:
     /** Start to write a field called pFieldName. 
       * \param pFieldName
       */
-    void FieldWriteBegin(const char* pFieldName);
+    void FieldWriteBegin(const char *pFieldName);
 
     //! Stop to write the current field.
     void FieldWriteEnd();
@@ -1217,7 +1231,7 @@ public:
       * \param pName
       * \param pSubType
       */
-    void FieldWriteObjectBegin(const char* pObjectType, const char* pName, const char* pSubType=NULL);
+    void FieldWriteObjectBegin(const char *pObjectType, const char *pName, const char *pSubType = NULL);
 
     //! Stop to write an object reference field.
     void FieldWriteObjectEnd();
@@ -1226,10 +1240,10 @@ public:
       * \param pFileName
       * \remarks This function is disabled but kept accessible for the FBX SDK.
       */
-    void FieldWriteBlockBegin(const char* pFileName);
+    void FieldWriteBlockBegin(const char *pFileName);
 
     //! Stop to write a block of field.
-    void FieldWriteBlockEnd ();
+    void FieldWriteBlockEnd();
 
     /** Write field value as a char. 
       * \param pValue
@@ -1240,40 +1254,40 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteCH(const char* pFieldName, char pValue);
+    void FieldWriteCH(const char *pFieldName, char pValue);
 
     /** Write field value as char pointer pValue. 
       * \param pValue
       */
-    void FieldWriteC(const char* pValue);
+    void FieldWriteC(const char *pValue);
 
     /** Write field pFieldName with a char pointer as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteC(const char* pFieldName, const char* pValue);
+    void FieldWriteC(const char *pFieldName, const char *pValue);
 
     /** Write field value as FbxString pValue. 
       * \param pValue
       */
-    void FieldWriteS(const char* pValue);
+    void FieldWriteS(const char *pValue);
 
     /** Write field value as FbxString pValue. 
       * \param pValue
       */
-    void FieldWriteS(const FbxString& pValue);
+    void FieldWriteS(const FbxString &pValue);
 
     /** Write field pFieldName field with a FbxString as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteS(const char* pFieldName, const char* pValue);
+    void FieldWriteS(const char *pFieldName, const char *pValue);
 
     /** Write field pFieldName field with a FbxString as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteS(const char* pFieldName, const FbxString& pValue);
+    void FieldWriteS(const char *pFieldName, const FbxString &pValue);
 
     /** Write field value as bool. 
       * \param pValue
@@ -1284,7 +1298,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteB(const char* pFieldName, bool pValue);
+    void FieldWriteB(const char *pFieldName, bool pValue);
 
     /** Write field value as integer. 
       * \param pValue
@@ -1295,7 +1309,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteI(const char* pFieldName, int pValue);
+    void FieldWriteI(const char *pFieldName, int pValue);
 
     /** Write field value as 64 bit integer. 
       * \param pValue
@@ -1306,7 +1320,7 @@ public:
                      * \param pFieldName 
                      * \param pValue
                      */
-    void FieldWriteLL(const char* pFieldName, FbxLongLong pValue);
+    void FieldWriteLL(const char *pFieldName, FbxLongLong pValue);
 
     /** Write field value as float.
     * \param pValue
@@ -1319,18 +1333,18 @@ public:
     * \param pValue
     * \remarks Only compatible with 1) MotionBuilder 4.0 and later 2) FBX SDK 3.6.1 and later.
     */
-    void FieldWriteF(const char* pFieldName, float pValue);
+    void FieldWriteF(const char *pFieldName, float pValue);
 
     /** Write field value as double. 
       * \param pValue
       */
-    void FieldWriteD(double  pValue);
+    void FieldWriteD(double pValue);
 
     /** Write field pFieldName field with a double as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteD(const char* pFieldName, double pValue);
+    void FieldWriteD(const char *pFieldName, double pValue);
 
     /** Write field value as time value. 
       * \param pTime
@@ -1341,7 +1355,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteT(const char* pFieldName,FbxTime pValue);
+    void FieldWriteT(const char *pFieldName, FbxTime pValue);
 
     /** Write field value as timespan value. 
       * \param pTimeSpan
@@ -1352,77 +1366,77 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteTS(const char* pFieldName,FbxTimeSpan pValue);
+    void FieldWriteTS(const char *pFieldName, FbxTimeSpan pValue);
 
     /** Write field value as an array of n floats (nF vector). 
       * \param pValue
       * \param pn
       */
-    void FieldWriteFn(const float* pValue, FbxUInt pn);
+    void FieldWriteFn(const float *pValue, FbxUInt pn);
 
     /** Write field pFieldName field with a array of n floats as a value. 
       * \param pFieldName
       * \param pValue
       * \param pn
       */
-    void FieldWriteFn(const char* pFieldName, const float* pValue, FbxUInt pn);
+    void FieldWriteFn(const char *pFieldName, const float *pValue, FbxUInt pn);
 
     /** Write field value as an array of 3 floats (3F vector). 
       * \param pValue
       */
-    void FieldWrite3F(const float* pValue);
+    void FieldWrite3F(const float *pValue);
 
     /** Write field pFieldName field with a array of 3 floats as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWrite3F(const char* pFieldName, const float* pValue);
+    void FieldWrite3F(const char *pFieldName, const float *pValue);
 
     /** Write field value as an array of 4 floats (4F vector). 
       * \param pValue
       */
-    void FieldWrite4F(const float* pValue);
+    void FieldWrite4F(const float *pValue);
 
     /** Write field pFieldName field with a array of 4 floats as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWrite4F(const char* pFieldName, const float* pValue);
+    void FieldWrite4F(const char *pFieldName, const float *pValue);
 
     /** Write field value as an array of n doubles (nD vector). 
       * \param pValue
       * \param pn
       */
-    void FieldWriteDn(const double* pValue, FbxUInt pn);
+    void FieldWriteDn(const double *pValue, FbxUInt pn);
 
     /** Write field pFieldName field with a array of n doubles as a value. 
       * \param pFieldName
       * \param pValue
       * \param pn
       */
-    void FieldWriteDn(const char* pFieldName, const double* pValue, FbxUInt pn);
+    void FieldWriteDn(const char *pFieldName, const double *pValue, FbxUInt pn);
 
     /** Write field value as an array of 3 doubles (3D vector). 
       * \param pValue
       */
-    void FieldWrite3D(const double* pValue);
+    void FieldWrite3D(const double *pValue);
 
     /** Write field pFieldName field with a array of 3 doubles as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWrite3D(const char* pFieldName, const double* pValue);
+    void FieldWrite3D(const char *pFieldName, const double *pValue);
 
     /** Write field value as an array of 4 doubles (4D vector). 
       * \param pValue
       */
-    void FieldWrite4D(const double* pValue);
+    void FieldWrite4D(const double *pValue);
 
     /** Write field pFieldName field with a array of 4 doubles as a value. 
       * \param pFieldName
       * \param pValue
       */
-    void FieldWrite4D(const char* pFieldName, const double* pValue);
+    void FieldWrite4D(const char *pFieldName, const double *pValue);
 
     // The maximum number of value entries is, in theory, 2**32.  In practice it should be a lot less than that.
     // pSize is the number of values to write from each pointer location, and stride is how much we 
@@ -1435,60 +1449,65 @@ public:
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayD( int n, const double*     pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayD(int n, const double *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayF( int n, const float*      pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayF(int n, const float *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayI( int n, const int*        pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayI(int n, const int *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayLL(int n, const FbxLongLong*  pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayLL(int n, const FbxLongLong *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayB( int n, const bool*       pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayB(int n, const bool *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayBytes( int n, const FbxUChar* pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayBytes(int n, const FbxUChar *pValue, int pSize = 1, int pStride = 0);
 
     /** Write field value as a raw data. 
       * \param pRawData
       * \param pByteSize
       */
-    void FieldWriteR(const void* pRawData, int pByteSize);
+    void FieldWriteR(const void *pRawData, int pByteSize);
 
     /** Write field pFieldName field with raw data as a value. 
       * \param pFieldName
       * \param pRawData
       * \param pByteSize
       */
-    void FieldWriteR(const char* pFieldName, const void* pRawData, int pByteSize);
+    void FieldWriteR(const char *pFieldName, const void *pRawData, int pByteSize);
 
-	/**
-	  * \name FBX SDK 2009.3 and later
-	  */
-	//@{
+    /**
+      * \name FBX SDK 2009.3 and later
+      */
+    //@{
 
     /** Write field value as byte. 
       * \param pValue
@@ -1499,7 +1518,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteByte(const char* pFieldName, FbxChar pValue);
+    void FieldWriteByte(const char *pFieldName, FbxChar pValue);
 
     /** Write field value as unsigned byte. 
       * \param pValue
@@ -1510,7 +1529,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteUByte(const char* pFieldName, FbxUChar pValue);
+    void FieldWriteUByte(const char *pFieldName, FbxUChar pValue);
 
     /** Write field value as short. 
       * \param pValue
@@ -1521,7 +1540,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteShort(const char* pFieldName, FbxShort pValue);
+    void FieldWriteShort(const char *pFieldName, FbxShort pValue);
 
     /** Write field value as unsigned short. 
       * \param pValue
@@ -1532,7 +1551,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteUShort(const char* pFieldName, FbxUShort pValue);
+    void FieldWriteUShort(const char *pFieldName, FbxUShort pValue);
 
     /** Write field value as an unsigned integer. 
       * \param pValue
@@ -1543,7 +1562,7 @@ public:
       * \param pFieldName
       * \param pValue
       */
-    void FieldWriteUI(const char* pFieldName, unsigned int pValue);
+    void FieldWriteUI(const char *pFieldName, unsigned int pValue);
 
     /** Write field value as 64 bit unsigned integer. 
       * \param pValue
@@ -1555,7 +1574,7 @@ public:
       * \param pValue
       * \return void
       */
-    void FieldWriteULL(const char* pFieldName, FbxULongLong pValue);
+    void FieldWriteULL(const char *pFieldName, FbxULongLong pValue);
 
     /** Write array to file.
       * \param n Nb of items in the array.
@@ -1563,36 +1582,40 @@ public:
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-	void FieldWriteArraySBytes( int n, const FbxChar* pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArraySBytes(int n, const FbxChar *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-	void FieldWriteArrayShort( int n, const FbxShort* pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayShort(int n, const FbxShort *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-	void FieldWriteArrayUShort( int n, const FbxUShort* pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayUShort(int n, const FbxUShort *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayUI( int n, const unsigned int*        pValue, int pSize = 1, int pStride = 0 );
+    void FieldWriteArrayUI(int n, const unsigned int *pValue, int pSize = 1, int pStride = 0);
+
     /** Write array to file.
       * \param n Nb of items in the array.
       * \param pValue Pointer to the data.
       * \param pSize Size of each item in the array.
       * \param pStride Array stride.
       */
-    void FieldWriteArrayULL(int n, const FbxULongLong*  pValue, int pSize = 1, int pStride = 0 );
-	//@}
+    void FieldWriteArrayULL(int n, const FbxULongLong *pValue, int pSize = 1, int pStride = 0);
+    //@}
 
     /** ASCII files may limit how big you can write your raw data, forcing you to break it down into chunks. 
       * \return int
@@ -1602,13 +1625,13 @@ public:
     /** Write object reference pName in the current field. 
       * \param pName
       */
-    void FieldWriteObjectReference(const char* pName);
+    void FieldWriteObjectReference(const char *pName);
 
     /** Write object reference pName in field pFieldName. 
       * \param pFieldName
       * \param pName
       */
-    void FieldWriteObjectReference(const char* pFieldName, const char* pName);
+    void FieldWriteObjectReference(const char *pFieldName, const char *pName);
 
     /** Write field with file content as a value.
     * \param pFileName
@@ -1616,12 +1639,12 @@ public:
     * \remarks Only works when file is binary. This function is not related to flag mEmbedded.
     * \return \c false if operation failed.
     */
-    bool FieldWriteEmbeddedFile (FbxString pFileName, FbxString pRelativeFileName);
+    bool FieldWriteEmbeddedFile(FbxString pFileName, FbxString pRelativeFileName);
 
     /** Write comments, only effective in ASCII mode. 
       * \param pFieldName
       */
-    void WriteComments(const char* pFieldName);
+    void WriteComments(const char *pFieldName);
 
     //@}
 
@@ -1630,97 +1653,124 @@ public:
     void StdoutDump();
 #endif
 
-	/** Get if the embedded file is currently loaded
-	* \return true if loaded, false otherwise
-	* \remarks  An embedded file is a file like a JPEG image used for texture or an AVI file for video.
-	*           When files are embedded, the size of the FBX file can be very large since other files are embedded in it.
-	*           FBX Version 6 and lower cannot embed files when saved in ASCII.
-	*			FBX Version 7 and over can embed files even when saved in ASCII mode.
-	*/
+    /** Get if the embedded file is currently loaded
+    * \return true if loaded, false otherwise
+    * \remarks  An embedded file is a file like a JPEG image used for texture or an AVI file for video.
+    *           When files are embedded, the size of the FBX file can be very large since other files are embedded in it.
+    *           FBX Version 6 and lower cannot embed files when saved in ASCII.
+    *			FBX Version 7 and over can embed files even when saved in ASCII mode.
+    */
     bool GetHaveLoadedEmbededFile() const;
 
-	/** Get the maximum byte count written
-	* \param pMemPtr The address of the memory file
-	* \param[out] pSize Stores the maximum byte count written
-	*/
-    void GetMemoryFileInfo(void** pMemPtr, size_t& pSize) const;
+    /** Get the maximum byte count written
+    * \param pMemPtr The address of the memory file
+    * \param[out] pSize Stores the maximum byte count written
+    */
+    void GetMemoryFileInfo(void **pMemPtr, size_t &pSize) const;
 
-	/** Get a internal flag to manage pre FBX version 6 data format
-	*   Used for backwards compatibility
-	*/
-    bool    IsBeforeVersion6() const;
+    /** Get a internal flag to manage pre FBX version 6 data format
+    *   Used for backwards compatibility
+    */
+    bool IsBeforeVersion6() const;
 
-	/** Set a internal flag to manage pre FBX version 6 data format
-	*   Used for backwards compatibility
-	*/
-    void    SetIsBeforeVersion6(bool pIsBeforeVersion6);
+    /** Set a internal flag to manage pre FBX version 6 data format
+    *   Used for backwards compatibility
+    */
+    void SetIsBeforeVersion6(bool pIsBeforeVersion6);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    bool ProjectOpen (FbxFile * pFile, FbxReader* pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo* pFileHeaderInfo = NULL);
+
+    bool ProjectOpen(FbxFile *pFile, FbxReader *pReader, bool pCheckCRC = false, bool pOpenMainSection = true, FbxIOFileHeaderInfo *pFileHeaderInfo = NULL);
 
 private:
     // to resolve warning C4512: 'class' : assignment operator could not be generated
-    FbxIO& operator=(const FbxIO& pOther);
+    FbxIO &operator=(const FbxIO &pOther);
 
-    FbxStatus& mStatus;
+    FbxStatus &mStatus;
 
     struct InternalImpl;
-    InternalImpl* mImpl;
+    InternalImpl *mImpl;
 
     //! Project Global
 
     void ProjectClear();
+
     void ProjectReset();
 
-    bool ProjectReadHeader(bool pCheckASCIIHeader, bool pCheckCRC, bool pOpenMainSection, FbxIOFileHeaderInfo* pFileHeaderInfo);
-    bool ProjectReadExtendedHeader(int& pExtendedHeaderEnd, FbxIOFileHeaderInfo* pFileHeaderInfo);
+    bool ProjectReadHeader(bool pCheckASCIIHeader, bool pCheckCRC, bool pOpenMainSection, FbxIOFileHeaderInfo *pFileHeaderInfo);
+
+    bool ProjectReadExtendedHeader(int &pExtendedHeaderEnd, FbxIOFileHeaderInfo *pFileHeaderInfo);
+
     bool BinaryReadHeader();
+
     bool BinaryReadSectionPosition();
+
     bool ASCIIReadHeader();
+
     bool ASCIIReadSectionPosition();
 
-    bool ProjectWriteHeader(FbxIOFileHeaderInfo* pFileHeaderInfo);
-    bool ProjectWriteExtendedHeader(FbxIOFileHeaderInfo* pFileHeaderInfo);
+    bool ProjectWriteHeader(FbxIOFileHeaderInfo *pFileHeaderInfo);
+
+    bool ProjectWriteExtendedHeader(FbxIOFileHeaderInfo *pFileHeaderInfo);
+
     void BinaryWriteHeader();
+
     void ASCIIWriteHeader();
 
-    void ReadEncryptionKey(char* pEncryptionKey);
-    void WriteEncryptionKey(char* pEncryptionKey);
+    void ReadEncryptionKey(char *pEncryptionKey);
+
+    void WriteEncryptionKey(char *pEncryptionKey);
 
     //! Project Section
 
     bool ProjectClearSection();
+
     bool ProjectOpenSection(int pSection);
+
     bool BinaryReadSectionHeader();
-    int BinaryReadSectionFooter(char* pSourceCheck);
-    bool BinaryReadExtensionCode(FbxUInt32 pFollowingSectionStart, FbxUInt32& pSectionStart, FbxUInt32& pSectionVersion);
+
+    int BinaryReadSectionFooter(char *pSourceCheck);
+
+    bool BinaryReadExtensionCode(FbxUInt32 pFollowingSectionStart, FbxUInt32 &pSectionStart, FbxUInt32 &pSectionVersion);
+
     void BinaryReadSectionPassword();
 
     bool ProjectWriteSectionHeader();
+
     void BinaryWriteSectionFooter();
+
     bool BinaryWriteExtensionCode(FbxUInt32 pSectionStart, FbxUInt32 pSectionVersion);
 
     FbxString GetCreationTime() const;
+
     void SetCreationTime(FbxString pCreationTime);
-    void CreateSourceCheck(char* lSourceCheck);
-    bool TestSourceCheck(char* pSourceCheck, char* pSourceCompany);
+
+    void CreateSourceCheck(char *lSourceCheck);
+
+    bool TestSourceCheck(char *pSourceCheck, char *pSourceCompany);
+
     FbxString GetMangledCreationTime();
-    void EncryptSourceCheck(char* pSourceCheck, char* pEncryptionData);
-    void DecryptSourceCheck(char* pSourceCheck, const char* pEncryptionData);
+
+    void EncryptSourceCheck(char *pSourceCheck, char *pEncryptionData);
+
+    void DecryptSourceCheck(char *pSourceCheck, const char *pEncryptionData);
 
     void EncryptPasswordV1(FbxString pOriginalPassword, FbxString &pEncryptedPassword);
+
     void DecryptPasswordV1(FbxString pEncryptedPassword, FbxString &pDecryptedPassword);
 
     //! Read
 
-    void CheckValidityOfFieldName(const char* pFieldName);
-    void GetUnusedEmbeddedName(const FbxString& pDirectory, const FbxString& pName, FbxString& pResult, bool pCreateSubdirectory);
+    void CheckValidityOfFieldName(const char *pFieldName);
+
+    void GetUnusedEmbeddedName(const FbxString &pDirectory, const FbxString &pName, FbxString &pResult, bool pCreateSubdirectory);
 
     //! Get project media directory name
-    FbxString GetDirectory(bool pAutoCreate, const char* pExtension);
+    FbxString GetDirectory(bool pAutoCreate, const char *pExtension);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

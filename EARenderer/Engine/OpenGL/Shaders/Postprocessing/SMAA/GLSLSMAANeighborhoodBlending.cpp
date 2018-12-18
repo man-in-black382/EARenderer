@@ -13,17 +13,17 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLSMAANeighborhoodBlending::GLSLSMAANeighborhoodBlending()
-    :
-    GLProgram("SMAANeighborhoodBlending.vert", "SMAANeighborhoodBlending.frag", "")
-    { }
+            :
+            GLProgram("SMAANeighborhoodBlending.vert", "SMAANeighborhoodBlending.frag", "") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLSMAANeighborhoodBlending::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
+    void GLSLSMAANeighborhoodBlending::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 
-    void GLSLSMAANeighborhoodBlending::setBlendingWeights(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& weightsTexture) {
+    void GLSLSMAANeighborhoodBlending::setBlendingWeights(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &weightsTexture) {
         setUniformTexture(uint32_constant<ctcrc32("uBlendingWeights")>, weightsTexture);
     }
 

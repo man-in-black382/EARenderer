@@ -21,14 +21,13 @@
 
 /** Containing the valid parameter definition and modification in local scope.
   */
-struct FbxColladaNamespace
-{
+struct FbxColladaNamespace {
 public:
     /** Push the newparam and setparam elements found in this element.
       * Call this method at the beginning of importing an element.
       * \param pElement The specific element.
       */
-    void Push(xmlNode * pElement);
+    void Push(xmlNode *pElement);
 
     /** Pop the newparam and setparam elements found in this element.
       * Call this method at the end of importing an element.
@@ -39,13 +38,13 @@ public:
       * \param pSID The given SID.
       * \return Return the found element or NULL if fail.
       */
-    xmlNode * FindParamDefinition(const char * pSID) const;
+    xmlNode *FindParamDefinition(const char *pSID) const;
 
     /** Find the specific setparam element with given SID.
       * \param pSID The given SID.
       * \return Return the found element or NULL if fail.
       */
-    xmlNode * FindParamModification(const char * pSID) const;
+    xmlNode *FindParamModification(const char *pSID) const;
 
     /** Get the count of all the setparam elements in local scope.
       * \return The count.
@@ -56,13 +55,13 @@ public:
       * \param pIndex The given index.
       * \return The element.
       */
-    xmlNode * GetParamModification(int pIndex) const;
+    xmlNode *GetParamModification(int pIndex) const;
 
 private:
-    FbxArray<xmlNode*> mParamDefinition;
+    FbxArray<xmlNode *> mParamDefinition;
     FbxArray<int> mParamDefinitionCount;
 
-    FbxArray<xmlNode*> mParamModification;
+    FbxArray<xmlNode *> mParamModification;
     FbxArray<int> mParamModificationCount;
 };
 

@@ -10,10 +10,9 @@
 
 @implementation OutlineView
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [super awakeFromNib];
-    
+
 }
 
 @end

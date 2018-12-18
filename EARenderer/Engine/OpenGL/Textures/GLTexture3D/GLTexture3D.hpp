@@ -15,16 +15,18 @@
 
 namespace EARenderer {
 
-    class GLTexture3D: public GLTexture {
+    class GLTexture3D : public GLTexture {
     protected:
         size_t mDepth = 0;
 
-        void initialize(const Size2D& size, size_t depth, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat);
-        void initialize(const Size2D& size, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
-                        const std::vector<void *> pixelData);
-    
+        void initialize(const Size2D &size, size_t depth, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat);
+
+        void initialize(const Size2D &size, Sampling::Filter filter, Sampling::WrapMode wrapMode, GLint internalFormat, GLenum format, GLenum type,
+                const std::vector<void *> pixelData);
+
     public:
         GLTexture3D();
+
         virtual ~GLTexture3D() = 0;
 
         size_t depth() const;

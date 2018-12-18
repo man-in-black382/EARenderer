@@ -12,6 +12,6 @@
 
 @interface MeshEditingTabViewItem : NSTabViewItem
 
-@property (assign, nonatomic) EARenderer::Transformation *meshTransform;
+@property(assign, nonatomic) EARenderer::Transformation *meshTransform;
 
 @end

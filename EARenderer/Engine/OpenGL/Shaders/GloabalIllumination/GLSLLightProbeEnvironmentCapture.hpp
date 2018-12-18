@@ -11,23 +11,26 @@
 
 #include "GLProgram.hpp"
 
-#include "PBRMaterial.hpp"
+#include "CookTorranceMaterial.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 
 namespace EARenderer {
-    
-    class GLSLLightProbeEnvironmentCapture: public GLProgram {
+
+    class GLSLLightProbeEnvironmentCapture : public GLProgram {
     public:
         GLSLLightProbeEnvironmentCapture();
 
         void setModelMatrix(const glm::mat4 &modelMatrix);
+
 //        void setLightProbe(const LightProbe& probe);
-        void setLight(const PointLight& light);
-        void setLight(const DirectionalLight& light);
-        void setMaterial(const PBRMaterial& material);
+        void setLight(const PointLight &light);
+
+        void setLight(const DirectionalLight &light);
+
+        void setMaterial(const CookTorranceMaterial &material);
     };
-    
+
 }
 
 #endif /* GLSLLightProbeEnvironmentCapture_hpp */

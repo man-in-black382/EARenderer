@@ -13,18 +13,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     GLSLEquirectangularMapConversion::GLSLEquirectangularMapConversion()
-    :
-    GLSLCubemapRendering("EquirectangularMapConversion.frag")
-    { }
-    
+            :
+            GLSLCubemapRendering("EquirectangularMapConversion.frag") {
+    }
+
 #pragma mark - Setters
 
 //    void GLSLEquirectangularMapConversion::setEquirectangularEnvironmentMap(const GLHDRTexture2D& map) {
 //        setUniformTexture(uint32_constant<ctcrc32("uEquirectangularMap")>, map);
 //    }
-    
+
 }

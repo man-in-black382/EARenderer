@@ -31,8 +31,6 @@ in vec3 vTexCoords;
 in vec3 vWorldPosition;
 in mat3 vTBN;
 in vec4 vPosInCSMSplitSpace;
-//in vec3 vPosInTangentSpace;
-//in vec3 vCameraPosInTangentSpace;
 
 // Uniforms
 

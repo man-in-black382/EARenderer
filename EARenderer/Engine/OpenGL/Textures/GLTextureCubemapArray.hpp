@@ -15,13 +15,13 @@
 
 namespace EARenderer {
 
-    template <class TextureFormat, TextureFormat Format>
-    class GLTextureCubemapArray: public GLTexture {
+    template<class TextureFormat, TextureFormat Format>
+    class GLTextureCubemapArray : public GLTexture {
     protected:
 
         size_t mCount;
 
-        void initialize(const Size2D& size, size_t count, Sampling::Filter filter, Sampling::WrapMode wrapMode) {
+        void initialize(const Size2D &size, size_t count, Sampling::Filter filter, Sampling::WrapMode wrapMode) {
 
             if (size.width <= 0.0 || size.height <= 0.0) {
                 throw std::invalid_argument("Texture size must not be zero");
@@ -37,34 +37,34 @@ namespace EARenderer {
             constexpr GLTextureFormat f = glFormat(Format);
 
             glTexStorage3D(GL_TEXTURE_3D,
-                           1, // No mipmaps (1 means that there is only one base image level)
-                           f.internalFormat, // Internal format
-                           size.width, // Width
-                           size.height, // Height
-                           (GLint)count * 6); // Number of layers * number of faces per layer
+                    1, // No mipmaps (1 means that there is only one base image level)
+                    f.internalFormat, // Internal format
+                    size.width, // Width
+                    size.height, // Height
+                    (GLint) count * 6); // Number of layers * number of faces per layer
 
             setFilter(filter);
             setWrapMode(wrapMode);
         }
 
     public:
-        GLTextureCubemapArray() : GLTexture(GL_TEXTURE_CUBE_MAP_ARRAY) { };
+        GLTextureCubemapArray() : GLTexture(GL_TEXTURE_CUBE_MAP_ARRAY) {
+        };
 
         virtual ~GLTextureCubemapArray() = 0;
     };
 
-    template <class TextureFormat, TextureFormat Format>
+    template<class TextureFormat, TextureFormat Format>
     GLTextureCubemapArray<TextureFormat, Format>::~GLTextureCubemapArray() = default;
 
 
     template<GLTexture::Normalized Format>
-    class GLNormalizedTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Normalized, Format> {
+    class GLNormalizedTextureCubemapArray : public GLTextureCubemapArray<GLTexture::Normalized, Format> {
     public:
-        GLNormalizedTextureCubemapArray(const Size2D& size,
-                                        size_t count,
-                                        Sampling::Filter filter = Sampling::Filter::Bilinear,
-                                        Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
-        {
+        GLNormalizedTextureCubemapArray(const Size2D &size,
+                size_t count,
+                Sampling::Filter filter = Sampling::Filter::Bilinear,
+                Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge) {
             this->initialize(size, count, filter, wrapMode);
         }
 
@@ -73,9 +73,9 @@ namespace EARenderer {
 
 
     template<GLTexture::Integer Format>
-    class GLIntegerTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Integer, Format> {
+    class GLIntegerTextureCubemapArray : public GLTextureCubemapArray<GLTexture::Integer, Format> {
     public:
-        GLIntegerTextureCubemapArray(const Size2D& size, size_t count) {
+        GLIntegerTextureCubemapArray(const Size2D &size, size_t count) {
             this->initialize(size, count, Sampling::Filter::None, Sampling::WrapMode::ClampToEdge);
         }
 
@@ -84,13 +84,12 @@ namespace EARenderer {
 
 
     template<GLTexture::Float Format>
-    class GLFloatTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Float, Format> {
+    class GLFloatTextureCubemapArray : public GLTextureCubemapArray<GLTexture::Float, Format> {
     public:
-        GLFloatTextureCubemapArray(const Size2D& size,
-                                   size_t count,
-                                   Sampling::Filter filter = Sampling::Filter::Bilinear,
-                                   Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge)
-        {
+        GLFloatTextureCubemapArray(const Size2D &size,
+                size_t count,
+                Sampling::Filter filter = Sampling::Filter::Bilinear,
+                Sampling::WrapMode wrapMode = Sampling::WrapMode::ClampToEdge) {
             this->initialize(size, count, filter, wrapMode);
         }
 
@@ -98,9 +97,9 @@ namespace EARenderer {
     };
 
 
-    class GLDepthTextureCubemapArray: public GLTextureCubemapArray<GLTexture::Depth, GLTexture::Depth::Default> {
+    class GLDepthTextureCubemapArray : public GLTextureCubemapArray<GLTexture::Depth, GLTexture::Depth::Default> {
     public:
-        GLDepthTextureCubemapArray(const Size2D& size, size_t count, Sampling::ComparisonMode comparisonMode = Sampling::ComparisonMode::None) {
+        GLDepthTextureCubemapArray(const Size2D &size, size_t count, Sampling::ComparisonMode comparisonMode = Sampling::ComparisonMode::None) {
             initialize(size, count, Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge);
             setComparisonMode(comparisonMode);
         }

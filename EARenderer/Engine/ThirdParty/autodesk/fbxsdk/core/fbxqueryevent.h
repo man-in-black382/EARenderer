@@ -24,8 +24,8 @@
 *  it to you with the right information in it.  A query event is emitted, and plug-in who are listening to that type of query, 
 *  fill the data that can be accessed by the query emitter.
 */
-template <typename QueryT> class FbxQueryEvent : public FbxEvent<FbxQueryEvent<QueryT> >
-{
+template<typename QueryT>
+class FbxQueryEvent : public FbxEvent<FbxQueryEvent<QueryT> > {
 public:
     /**
     *\name Public interface
@@ -34,22 +34,33 @@ public:
     /** Constructor.
 	  * \param pData The requested data.  
       */
-    explicit FbxQueryEvent(QueryT* pData):mData(pData){}
+    explicit FbxQueryEvent(QueryT *pData) : mData(pData) {
+    }
 
     /** Accessor to a mutable reference to the data. Event are usually const and can't be modified by listener. 
      * This special type of event can have is content modified via this accessor.
      * \return A mutable reference the requested data.
     */
-    QueryT& GetData()const { return *mData; }
+    QueryT &GetData() const {
+        return *mData;
+    }
     //@}
 
 private:
-    mutable QueryT* mData;
+    mutable QueryT *mData;
 
 private:
-    virtual const char* GetEventName() const { FBX_ASSERT(false); return ""; }
-    static const char* FbxEventName() { FBX_ASSERT(false); return ""; }
-    friend class FbxEvent< FbxQueryEvent<QueryT> >;
+    virtual const char *GetEventName() const {
+        FBX_ASSERT(false);
+        return "";
+    }
+
+    static const char *FbxEventName() {
+        FBX_ASSERT(false);
+        return "";
+    }
+
+    friend class FbxEvent<FbxQueryEvent<QueryT> >;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

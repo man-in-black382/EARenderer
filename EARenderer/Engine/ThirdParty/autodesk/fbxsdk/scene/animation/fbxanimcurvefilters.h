@@ -19,12 +19,14 @@
 #include <fbxsdk/core/base/fbxstatus.h>
 #include <fbxsdk/scene/animation/fbxanimcurve.h>
 #include <fbxsdk/fileio/fbxiosettings.h>
-#include <fbxsdk/core/math/fbxtransforms.h>		// for FbxLimits
+#include <fbxsdk/core/math/fbxtransforms.h>        // for FbxLimits
 
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxObject;
+
 class FbxAnimStack;
+
 class FbxRotationOrder;
 
 /** Base class for animation curve filters.
@@ -72,68 +74,78 @@ class FbxRotationOrder;
 * 
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilter();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilter() {};
+    virtual ~FbxAnimCurveFilter() {
+    };
 
-	/**
-	 * \name Member functions
-	 */
-	//@{
+    /**
+     * \name Member functions
+     */
+    //@{
     /** Get the name of the filter.
       * \return     Pointer to the name.
       */
-    virtual const char* GetName() const {return NULL;}
+    virtual const char *GetName() const {
+        return NULL;
+    }
 
     /** Get the start time for the application of the filter.
 	  * The part of the animation curves before the start time will remain untouched.
       * \return     The time expressed as FbxTime.
       */
-    FbxTime& GetStartTime() {return mStart;}
+    FbxTime &GetStartTime() {
+        return mStart;
+    }
 
     /** Set the start time for the application of the filter.
 	  * The part of the animation curves before the start time will remain untouched.
       * \param pTime     The time to be set.
       */
-    void SetStartTime(FbxTime& pTime) { mStart = pTime; }
+    void SetStartTime(FbxTime &pTime) {
+        mStart = pTime;
+    }
 
     /** Get the stop time for the application of the filter.
 	  * The part of the animation curves after the stop time will remain untouched.
       * \return     The time expressed as FbxTime.
       */
-    FbxTime& GetStopTime() {return mStop;}
+    FbxTime &GetStopTime() {
+        return mStop;
+    }
 
     /** Set the stop time for the application of the filter.
 	  * The part of the animation curves after the stop time will remain untouched.
       * \param pTime     The time to be set.
       */
-    void SetStopTime(FbxTime& pTime) { mStop = pTime; }
+    void SetStopTime(FbxTime &pTime) {
+        mStop = pTime;
+    }
 
     /** Get the index of start key on the given curve. This is the index of the first key
 	  * after (or on) the filter's start time.
       * \param pCurve     Curve on which we want to retrieve the start key.
       * \return           Index of the start key.
       */
-    int GetStartKey(FbxAnimCurve& pCurve) const;
+    int GetStartKey(FbxAnimCurve &pCurve) const;
 
     /** Get the index of stop key on the given curve. This is the index of the last key
 	  * before (or on) the filter's stop time.
       * \param pCurve     Curve on which we want to retrieve the stop key.
       * \return           Index of the stop key.
       */
-    int GetStopKey(FbxAnimCurve& pCurve) const;
+    int GetStopKey(FbxAnimCurve &pCurve) const;
 
     /** Check if any curve on the animation stack needs an application of the filter.
       * \param pAnimStack     Animation stack where to retrieve the animation curves
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if at least one animated property needs an application of the filter.
       */
-    virtual bool NeedApply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL);
 
     /** Check if all the animated properties of the object need an application of the filter.
       * \param pObj           Object containing the properties to test.
@@ -141,7 +153,7 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if at least one animated property needs an application of the filter.
       */
-    virtual bool NeedApply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL);
 
     /** Check if the animation curve node needs an application of the filter.
       * \param pCurveNode     Curve node to test.
@@ -150,7 +162,7 @@ public:
       * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
       *                       and calls NeedApply(FbxAnimCurve**, int)
       */
-    virtual bool NeedApply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Check if the given animation curve need an application of the filter.
       * \param pCurve     Array of curves to test if they need the and application of the filter.
@@ -158,21 +170,21 @@ public:
       * \param pStatus    The FbxStatus object to hold error codes.
       * \return           \c true if at least one animation curve in the array needs an application of the filter.
       */
-    virtual bool NeedApply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** Check if an animation curve need an application of the filter.
       * \param pCurve     Curve to test if it needs application of filter.
       * \param pStatus    The FbxStatus object to hold error codes.
       * \return           \c true if the animation curve needs an application of the filter.
       */
-    virtual bool NeedApply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Apply filter to all the curves stored in the animation stack.
       * \param pAnimStack     Animation stack where to retrieve the animation curves
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL);
 
     /** Apply filter to all the animated properties of the object.
       * \param pObj           Object containing the animated properties to which the filter is applied.
@@ -180,7 +192,7 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL);
 
     /** Apply filter on all the curves of an animation curve node.
       * \param pCurveNode     Curve node to which the filter is applied.
@@ -189,7 +201,7 @@ public:
       * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
       *                       and calls Apply(FbxAnimCurve**, int)
       */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an array of animation curves.
       * \param pCurve     Array of curves to which the filter is applied.
@@ -197,34 +209,35 @@ public:
       * \param pStatus    The FbxStatus object to hold error codes.
       * \return           \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus = NULL) = 0;
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL) = 0;
 
     /** Reset the filter to its default parameters.
     */
-    virtual void Reset() 
-    { 
-        mStart= FBXSDK_TIME_MINUS_INFINITE;
-        mStop = FBXSDK_TIME_INFINITE;    
+    virtual void Reset() {
+        mStart = FBXSDK_TIME_MINUS_INFINITE;
+        mStop = FBXSDK_TIME_INFINITE;
     }
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	static bool GetContinuousOffset(FbxRotationOrder& pOrder, FbxVector4& pOffset, FbxVector4& pNew, FbxVector4& pOld);
+
+    static bool GetContinuousOffset(FbxRotationOrder &pOrder, FbxVector4 &pOffset, FbxVector4 &pNew, FbxVector4 &pOld);
 
 protected:
-    void GetKFCurvesFromAnimCurve(FbxAnimCurve** pSrc, int pSrcCount, KFCurve** pDst, int& pDstCount);
+    void GetKFCurvesFromAnimCurve(FbxAnimCurve **pSrc, int pSrcCount, KFCurve **pDst, int &pDstCount);
 
     // Called for progress bar update, indicating what portion of work is done.
-    virtual void UpdateProgressInformation(FbxTime /*pStart*/, FbxTime /*pStop*/) {};
+    virtual void UpdateProgressInformation(FbxTime /*pStart*/, FbxTime /*pStop*/) {
+    };
 
     // Time span for applying the filter.
     FbxTime mStart, mStop;
@@ -239,27 +252,35 @@ protected:
   * at a definite degree of precision. It filters recursively from the
   * strongest difference first. All useless keys are eliminated.
   */
-class FBXSDK_DLL FbxAnimCurveFilterConstantKeyReducer : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterConstantKeyReducer : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterConstantKeyReducer();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterConstantKeyReducer() {};
+    virtual ~FbxAnimCurveFilterConstantKeyReducer() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)  { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)          { return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);
+    }
     //@}
 
     /** Apply filter on all the curves of an animation curve node.
@@ -269,14 +290,14 @@ public:
       * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
       *                       and calls Apply(FbxAnimCurve**, int)
       */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters.
       */
@@ -310,7 +331,7 @@ public:
     /** Set the state of the KeepFirstAndLastKeys flag.
       * \param pKeepFirstAndLastKeys     Set to \c true if you want the filter to keep the first and last keys.
       */
-    void SetKeepFirstAndLastKeys( bool pKeepFirstAndLastKeys );
+    void SetKeepFirstAndLastKeys(bool pKeepFirstAndLastKeys);
 
     /** Get the state of the KeepOneKey flag.
 	  * If all the keys are constant and this flag is c\ true, the filter will keep the first key.  
@@ -324,42 +345,47 @@ public:
 	  * If all the keys are constant and this flag is c\ false, the filter will delete all the keys. 
       * \param pKeepOneKey     Set to \c true if you want the filter to keep the first key when all keys are constant.
       */
-    void SetKeepOneKey( bool pKeepOneKey );
+    void SetKeepOneKey(bool pKeepOneKey);
 
     /** Tell the filter to keep CUBIC curve keys which are not pure AUTO.
 	  * \param pKeep KeepNotPureAutoKeys flag.
 	  */
-	void SetKeepNotPureAutoKeys(bool pKeep);
+    void SetKeepNotPureAutoKeys(bool pKeep);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     //
     //  If ValueTolerance is default, we use the thresholds here, otherwise
     //  it is the ValueTolerance that is used. (Mainly for backward compatibility)
     //
-    void SetTranslationThreshold    ( double pTranslationThreshold );
-    void SetRotationThreshold       ( double pRotationThreshold );
-    void SetScalingThreshold        ( double pScalingThreshold );
-    void SetDefaultThreshold        ( double pDefaultThreshold );
+    void SetTranslationThreshold(double pTranslationThreshold);
 
-    void SetModes(bool pExporting, FbxIOSettings& pIOS);
+    void SetRotationThreshold(double pRotationThreshold);
+
+    void SetScalingThreshold(double pScalingThreshold);
+
+    void SetDefaultThreshold(double pDefaultThreshold);
+
+    void SetModes(bool pExporting, FbxIOSettings &pIOS);
 
 private:
-    double  mDerTol;
-    double  mValTol;
+    double mDerTol;
+    double mValTol;
 
-    double  mTranslationThreshold;
-    double  mRotationThreshold;
-    double  mScalingThreshold;
-    double  mDefaultThreshold;
+    double mTranslationThreshold;
+    double mRotationThreshold;
+    double mScalingThreshold;
+    double mDefaultThreshold;
 
-    bool   mKeepFirstAndLastKeys;
-    bool   mKeepOneKey;
-    bool   mKeepNotPureAutoKeys;
+    bool mKeepFirstAndLastKeys;
+    bool mKeepOneKey;
+    bool mKeepNotPureAutoKeys;
 
-    bool IsKeyConstant(FbxAnimCurve& pCurve, int pIndex, int pFirstIndex, int pLastIndex, double pMinValue, double pMaxValue, bool pOnlyCheckAutoKeys);
+    bool IsKeyConstant(FbxAnimCurve &pCurve, int pIndex, int pFirstIndex, int pLastIndex, double pMinValue, double pMaxValue, bool pOnlyCheckAutoKeys);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -370,22 +396,33 @@ private:
  * If you want to change the inherit type of certain nodes from eInheritRrs to eInheritRrSs, 
  * you may call this filter to compensate scale.
  */
-class FBXSDK_DLL FbxAnimCurveFilterScaleCompensate : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterScaleCompensate : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterScaleCompensate();
+
     //! Return name of the filter.
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)  { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus = NULL)             { return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);       }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus = NULL)        { return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);   }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);
+    }
     //@}
 
     /**Compensate parent's scale to children's scale. 
@@ -396,9 +433,10 @@ public:
      * \return       \c true if the curve filtering operation was successful, \c false otherwise.
      * \remarks      This filter will re-sample the animation curves.
      */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxIOSettings& pIOS, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxIOSettings &pIOS, FbxStatus *pStatus = NULL);
+
     /** Always fail because this filter needs 2 curves. */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 };
 
 /**GimbleKiller filter.
@@ -408,8 +446,7 @@ public:
   * \remarks This filter has been superseded by the Unroll filter. It is strongly advised to use
   *          the latter.
   */
-class FBXSDK_DLL FbxAnimCurveFilterGimbleKiller : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterGimbleKiller : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterGimbleKiller();
@@ -420,7 +457,7 @@ public:
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /** This filter expects to work with 3 interdependent curves. Passing the animation stack makes no sense.
       * since this object would not know which curves to handle.
@@ -428,7 +465,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool NeedApply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** This filter expects to work with 3 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 3 interdependent curves.
@@ -437,7 +477,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false
       */
-    virtual bool NeedApply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Check if the animation curve node needs an application of the filter.
       * \param pCurveNode     Curve node to test.
@@ -447,7 +490,7 @@ public:
 	  *                       It will validate that 3 animation curves are defined. 
 	  *                       If the condition is not met, the method will return \c false.
       */
-    virtual bool NeedApply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Check if the given animation curve need an application of the filter.
       * \param pCurve         Array of curves to test if they need the and application of the filter.
@@ -458,20 +501,26 @@ public:
       *                       that they are all coming from an Euler rotation anim curve node. Therefore, it expects 
       *                       \e pCount to be equal to 3.
       */
-    virtual bool NeedApply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
-     /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
-       * \return              \c false
-       */
-    virtual bool NeedApply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
-    
+    /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
+      * \return              \c false
+      */
+    virtual bool NeedApply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
+
     /** This filter expects to work with 3 interdependent curves. Passing the animation stack makes no sense
       * since this object would not know which curves to handle.
       * \param pAnimStack     Animation stack
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool Apply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** This filter expects to work with 3 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 3 interdependent curves.
@@ -480,7 +529,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false
       */
-    virtual bool Apply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Apply filter on all the curves of an animation curve node.
       * \param pCurveNode     Curve node to which the filter is applied.
@@ -489,7 +541,7 @@ public:
       * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
       *                       and calls Apply(FbxAnimCurve**, int)
       */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on the given animation curve.
       * \param pCurve         Array of curve to which the filter is applied.
@@ -500,33 +552,36 @@ public:
       *                       that they are all coming from an Euler rotation anim curve node. Therefore, it expects 
       *                       \e pCount to be equal to 3.
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus = NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
       * \return               \c false
       */
-    virtual bool Apply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus = NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Reset the filter to its default parameters.
       */
     virtual void Reset();
 
-	//! Return \c true if key sync filter is enabled.
-	bool GetApplyKeySyncFilter() const;
+    //! Return \c true if key sync filter is enabled.
+    bool GetApplyKeySyncFilter() const;
 
-	/** Set to \c true to enable key sync filter.
-	  * \param pFlag Key sync filter flag.
-	  */
-	void SetApplyKeySyncFilter(bool pFlag);
+    /** Set to \c true to enable key sync filter.
+      * \param pFlag Key sync filter flag.
+      */
+    void SetApplyKeySyncFilter(bool pFlag);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    FbxRotationOrder*   mRotationOrder;
-    bool                mApplyKeySyncFilter;
-    int                 mRotationLayerType;
+    FbxRotationOrder *mRotationOrder;
+    bool mApplyKeySyncFilter;
+    int mRotationLayerType;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -536,27 +591,35 @@ private:
   * at a definite degree of precision. It filters recursively from the
   * strongest difference first. All useless keys are eliminated.
   */
-class FBXSDK_DLL FbxAnimCurveFilterKeyReducer : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterKeyReducer : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterKeyReducer();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterKeyReducer() {};
+    virtual ~FbxAnimCurveFilterKeyReducer() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)  { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)               { return FbxAnimCurveFilter::Apply(pCurveNode, pStatus); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);
+    }
     //@}
 
     /** Apply filter on the given animation curve.
@@ -565,48 +628,50 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters.
       */
     virtual void Reset();
 
-	//!	Get precision.
-	double GetPrecision() const;
+    //!	Get precision.
+    double GetPrecision() const;
 
-	/**	Set precision.
-	  * \param pPrecision The precision to set.
-	  */
-	void SetPrecision(double pPrecision);
+    /**	Set precision.
+      * \param pPrecision The precision to set.
+      */
+    void SetPrecision(double pPrecision);
 
-	//!	Return \c true key sync is applied at the end.
-	bool GetKeySync() const;
+    //!	Return \c true key sync is applied at the end.
+    bool GetKeySync() const;
 
-	/**	Set to \c true to apply key sync at the end.
-	  * \param pKeySync Key sync flag.
-	  */
-	void SetKeySync(bool pKeySync);
+    /**	Set to \c true to apply key sync at the end.
+      * \param pKeySync Key sync flag.
+      */
+    void SetKeySync(bool pKeySync);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    bool  KeyReducer(FbxAnimCurve& pSCurve, FbxAnimCurve& pTCurve, FbxTime pStart, FbxTime pStop);
-    bool  Subdivise(FbxAnimCurve& pSCurve, FbxAnimCurve& pTCurve, int pLeft, int pRight);
-    double FindMaxError(FbxAnimCurve& pSCurve, FbxAnimCurve& pTCurve, int pLeft, int pRight, int& pSplit);
-    	
+    bool KeyReducer(FbxAnimCurve &pSCurve, FbxAnimCurve &pTCurve, FbxTime pStart, FbxTime pStop);
+
+    bool Subdivise(FbxAnimCurve &pSCurve, FbxAnimCurve &pTCurve, int pLeft, int pRight);
+
+    double FindMaxError(FbxAnimCurve &pSCurve, FbxAnimCurve &pTCurve, int pLeft, int pRight, int &pSplit);
+
     // User parameters.
-    double  mPrecision;
-    int    mProgressCurrentRecurseLevel;
-    bool   mKeySync;
+    double mPrecision;
+    int mProgressCurrentRecurseLevel;
+    bool mKeySync;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -615,30 +680,47 @@ private:
   * \nosubgrouping
   * Filter to synchronize the keys of a set of animation curves.
 */
-class FBXSDK_DLL FbxAnimCurveFilterKeySync : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterKeySync : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterKeySync();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterKeySync() {};
+    virtual ~FbxAnimCurveFilterKeySync() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool NeedApply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::NeedApply(pAnimStack, pStatus); }
-    virtual bool NeedApply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)  { return FbxAnimCurveFilter::NeedApply(pObj, pAnimStack, pStatus); }
-    virtual bool NeedApply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)               { return FbxAnimCurveFilter::NeedApply(pCurveNode, pStatus); }
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                       { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)      { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::Apply(pCurveNode, pStatus); }
+    //@{
+    virtual bool NeedApply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::NeedApply(pAnimStack, pStatus);
+    }
+
+    virtual bool NeedApply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::NeedApply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool NeedApply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::NeedApply(pCurveNode, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);
+    }
     //@}
 
     /** Check if the given animation curve need an application of the filter.
@@ -647,14 +729,17 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if at least one animation curve in the array needs an application of the filter.
       */
-    virtual bool NeedApply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** One single curve cannot be sync'ed.
       * \param pCurve     Curve to test if it needs application of filter.
       * \param pStatus    The FbxStatus object to hold error codes.
       * \return           \c false
       */
-    virtual bool NeedApply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Apply filter on the given animation curve.
       * \param pCurve         Array of curve to which the filter is applied.
@@ -662,7 +747,7 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
@@ -670,7 +755,10 @@ public:
       * \return               \c true.
       * \remarks              Has no effect since there is only one curve.
       */
-    virtual bool Apply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return true; }
+    virtual bool Apply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return true;
+    }
 };
 
 
@@ -678,28 +766,39 @@ public:
   * \nosubgrouping
   * Filter to re-sample animation curves.
   */
-class FBXSDK_DLL FbxAnimCurveFilterResample : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterResample : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterResample();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterResample() {};
+    virtual ~FbxAnimCurveFilterResample() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                       { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)      { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)                   { return FbxAnimCurveFilter::Apply(pCurveNode, pStatus); }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)              { return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);
+    }
     //@}
 
     /** Apply the filter on an animation curve.
@@ -707,7 +806,7 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters.
       */
@@ -741,7 +840,7 @@ public:
 	  *          If intelligent mode is off, the interpolation type of each created curve key 
 	  *          will always be set to CUBIC, and tangent mode will always be set to AUTO.
       */
-    bool  GetIntelligentMode() const;
+    bool GetIntelligentMode() const;
 
     /** Set the mode that determines how the re-sample filter will set the interpolation and tangent of each key.
 	  * \param pIntelligent     \c true, set interpolation type and tangent mode of each created curve key equal to
@@ -749,16 +848,16 @@ public:
 	  *                         \c false, always set the interpolation type of each created curve key to CUBIC,
 	  *                         and always set the tangent mode to AUTO.
       */
-    void  SetIntelligentMode( bool pIntelligent );
+    void SetIntelligentMode(bool pIntelligent);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    bool    mKeysOnFrame;
-    FbxTime   mPeriod;
-	bool    mIntelligent;
+    bool mKeysOnFrame;
+    FbxTime mPeriod;
+    bool mIntelligent;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -767,44 +866,52 @@ private:
   * \nosubgrouping
   * Filter to scale the keys of a set of animation curves.
 */
-class FBXSDK_DLL FbxAnimCurveFilterScale : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterScale : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterScale();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterScale() {};
+    virtual ~FbxAnimCurveFilterScale() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                       { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)      { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)              { return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);
+    }
     //@}
 
-     /** Apply filter on all the curves of an animation curve node.
-      * \param pCurveNode     Curve node to which the filter is applied.
-      * \param pStatus        The FbxStatus object to hold error codes.
-      * \return               \c true if the curve filtering operation was successful, \c false otherwise.
-      * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
-      *                       and calls Apply(FbxAnimCurve**, int)
-      */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    /** Apply filter on all the curves of an animation curve node.
+     * \param pCurveNode     Curve node to which the filter is applied.
+     * \param pStatus        The FbxStatus object to hold error codes.
+     * \return               \c true if the curve filtering operation was successful, \c false otherwise.
+     * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
+     *                       and calls Apply(FbxAnimCurve**, int)
+     */
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters.
       */
@@ -813,12 +920,12 @@ public:
     /** Get the scale factor.
 	  *	\return The current scale factor.
 	  */
-	double GetScale() const;
+    double GetScale() const;
 
-	/** Set the scale factor.
+    /** Set the scale factor.
       * \param pScale The new scale factor to set.
-	  */
-	void SetScale(double pScale);
+      */
+    void SetScale(double pScale);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -835,44 +942,52 @@ private:
   * \nosubgrouping
   * Filter to scale the keys of a set of animation curves.
 */
-class FBXSDK_DLL FbxAnimCurveFilterScaleByCurve : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterScaleByCurve : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterScaleByCurve();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterScaleByCurve() {};
+    virtual ~FbxAnimCurveFilterScaleByCurve() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                       { return FbxAnimCurveFilter::Apply(pAnimStack, pStatus); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)      { return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus); }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)              { return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurve, pCount, pStatus);
+    }
     //@}
 
-     /** Apply filter on all the curves of an animation curve node.
-      * \param pCurveNode     Curve node to which the filter is applied.
-      * \param pStatus        The FbxStatus object to hold error codes.
-      * \return               \c true if the curve filtering operation was successful, \c false otherwise.
-      * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
-      *                       and calls Apply(FbxAnimCurve**, int)
-      */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    /** Apply filter on all the curves of an animation curve node.
+     * \param pCurveNode     Curve node to which the filter is applied.
+     * \param pStatus        The FbxStatus object to hold error codes.
+     * \return               \c true if the curve filtering operation was successful, \c false otherwise.
+     * \remarks              This method collects all the FbxAnimCurve objects connected to the curve node
+     *                       and calls Apply(FbxAnimCurve**, int)
+     */
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on an animation curve.
       * \param pCurve         Curve to which the filter is applied.
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters. (null curve)
       */
@@ -881,19 +996,19 @@ public:
     /** Get the scale factor.
 	  *	\return The current scale factor.
 	  */
-	FbxAnimCurve* GetScale() const;
+    FbxAnimCurve *GetScale() const;
 
-	/** Set the scale factor.
+    /** Set the scale factor.
       * \param pScale The new scale factor to set.
-	  */
-	void SetScale(FbxAnimCurve* pScale);
+      */
+    void SetScale(FbxAnimCurve *pScale);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    FbxAnimCurve* mScale;
+    FbxAnimCurve *mScale;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -901,28 +1016,43 @@ private:
   *\nosubgrouping
   * Filter to shift key times and scale key values on animation curves.
   */
-class FBXSDK_DLL FbxAnimCurveFilterTSS : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterTSS : public FbxAnimCurveFilter {
 public:
     //! Constructor. 
     FbxAnimCurveFilterTSS();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterTSS() {};
+    virtual ~FbxAnimCurveFilterTSS() {
+    };
 
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool Apply(FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)                       { FBX_UNUSED(pStatus); return FbxAnimCurveFilter::Apply(pAnimStack); }
-    virtual bool Apply(FbxObject* pObj, FbxAnimStack* pAnimStack, FbxStatus* pStatus=NULL)      { FBX_UNUSED(pStatus); return FbxAnimCurveFilter::Apply(pObj, pAnimStack); }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)                   { FBX_UNUSED(pStatus); return FbxAnimCurveFilter::Apply(pCurveNode); }
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)              { FBX_UNUSED(pStatus); return FbxAnimCurveFilter::Apply(pCurve, pCount); }
+    //@{
+    virtual bool Apply(FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return FbxAnimCurveFilter::Apply(pAnimStack);
+    }
+
+    virtual bool Apply(FbxObject *pObj, FbxAnimStack *pAnimStack, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return FbxAnimCurveFilter::Apply(pObj, pAnimStack);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return FbxAnimCurveFilter::Apply(pCurveNode);
+    }
+
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return FbxAnimCurveFilter::Apply(pCurve, pCount);
+    }
     //@}
 
     /** Apply filter on an animation curve.
@@ -930,7 +1060,7 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       */
-    virtual bool Apply(FbxAnimCurve& pCurve, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve &pCurve, FbxStatus *pStatus = NULL);
 
     /** Reset the filter to its default parameters.
       */
@@ -939,30 +1069,30 @@ public:
     /** Get the time shift value.
     * \return     The time value used for the shift.
     */
-	FbxTime GetShift() const;
+    FbxTime GetShift() const;
 
     /** Set the time shift value.
       * \param pShift     The time value used for the shift.
       */
-	void SetShift(FbxTime& pShift);
+    void SetShift(FbxTime &pShift);
 
     /** Get the scale factor.
     * \return     The current scale factor.
     */
-	double GetScale() const;
+    double GetScale() const;
 
     /** Set the scale factor.
       * \param pScale     The new scale factor to set.
       */
-	void SetScale(double pScale);
+    void SetScale(double pScale);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    FbxTime  mShift;
-    double  mScale;
+    FbxTime mShift;
+    double mScale;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -981,19 +1111,19 @@ private:
   *          Using the AUTO tangents mode can result in a more consistent interpolation between
   *          the curve keys.
   */
-class FBXSDK_DLL FbxAnimCurveFilterUnroll : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterUnroll : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterUnroll();
 
     //! Destructor.
-    virtual ~FbxAnimCurveFilterUnroll() {};
-   
+    virtual ~FbxAnimCurveFilterUnroll() {
+    };
+
     /** Get the name of the filter.
       * \return     Pointer to the name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /** This filter expects to work with 3 interdependent curves. Passing the animation stack makes no sense
       * since this object would not know which curves to handle.
@@ -1001,7 +1131,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool NeedApply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; };
+    virtual bool NeedApply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    };
 
     /** This filter expects to work with 3 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 3 interdependent curves.
@@ -1010,7 +1143,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool NeedApply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Check if the animation curve node needs an application of the filter.
       * \param pCurveNode     Curve node to test.
@@ -1020,7 +1156,7 @@ public:
 	  *                       It will validate that 3 animation curves are defined. 
 	  *                       If the condition is not met, the method will return \c false.
       */
-    virtual bool NeedApply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Check if the given animation curve needs an application of the filter.
       * \param pCurve         Array of curves to test if they need an application of the filter.
@@ -1032,12 +1168,15 @@ public:
       *                       that they are all coming from an Euler rotation anim curve node. Therefore, it expects 
       *                       \e pCount to be equal to 3.
       */
-    virtual bool NeedApply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
       * \return               \c false.
       */
-    virtual bool NeedApply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; };
+    virtual bool NeedApply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    };
 
     /** This filter expects to work with 3 interdependent curves. Passing the animation stack makes no sense
       * since this object would not know which curves to handle.
@@ -1045,7 +1184,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool Apply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; };
+    virtual bool Apply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    };
 
     /** This filter expects to work with 3 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 3 interdependent curves.
@@ -1054,7 +1196,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool Apply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Apply filter on all the curves of an animation curve node.
       * \param pCurveNode     Curve node to which the filter is applied.
@@ -1062,7 +1207,7 @@ public:
       * \return               \c true if the curve filtering operation was successful, \c false otherwise.
       * \remarks              This filter expects a Euler rotation curve node with three curves.
       */
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL);
 
     /** Apply filter on the given animation curve.
       * \param pCurve         Array of curve to which the filter is applied.
@@ -1073,12 +1218,15 @@ public:
       *                       that they are all coming from an Euler rotation anim curve node. Therefore, it expects 
       *                       \e pCount to be equal to 3.
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** This filter expects to work with 3 interdependent curves. Receiving one single curve is useless.
       * \return               \c false.
       */
-    virtual bool Apply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Reset the filter to its default parameters.
       */
@@ -1140,16 +1288,17 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     void SetRotationOrder(FbxEuler::EOrder pOrder);
 
 private:
-    double  InterpolationQualityFactor(FbxVector4& lV1, FbxVector4& lV2);
+    double InterpolationQualityFactor(FbxVector4 &lV1, FbxVector4 &lV2);
 
-    double           mQualityTolerance;
-    bool             mTestForPath;
-    bool             mForceAutoTangents;
+    double mQualityTolerance;
+    bool mTestForPath;
+    bool mForceAutoTangents;
     FbxEuler::EOrder mRotationOrder;
-    int              mRotationLayerType;
+    int mRotationLayerType;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -1160,8 +1309,7 @@ private:
   *          internal unroll filter will automatically be configured to convert USER and 
   *          BREAK tangents to AUTO (refer to the FbxAnimCurveFilterUnroll documentation).
   */
-class FBXSDK_DLL FbxAnimCurveFilterMatrixConverter : public FbxAnimCurveFilter
-{
+class FBXSDK_DLL FbxAnimCurveFilterMatrixConverter : public FbxAnimCurveFilter {
 public:
     //! Constructor.
     FbxAnimCurveFilterMatrixConverter();
@@ -1172,15 +1320,23 @@ public:
     /** Get the name of the filter.
       * \return     Pointer to name.
       */
-    virtual const char* GetName() const;
+    virtual const char *GetName() const;
 
     /**
 	 * \name Exposed parent class methods.
 	 */
-	//@{
-    virtual bool NeedApply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL)          { return FbxAnimCurveFilter::NeedApply(pCurve, pCount,pStatus); }
-    virtual bool NeedApply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus=NULL)               { return FbxAnimCurveFilter::NeedApply(pCurveNode, pStatus);    }
-    virtual bool Apply(FbxAnimCurveNode& pCurveNode, FbxStatus* pStatus = NULL)                 { return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);        }
+    //@{
+    virtual bool NeedApply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::NeedApply(pCurve, pCount, pStatus);
+    }
+
+    virtual bool NeedApply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::NeedApply(pCurveNode, pStatus);
+    }
+
+    virtual bool Apply(FbxAnimCurveNode &pCurveNode, FbxStatus *pStatus = NULL) {
+        return FbxAnimCurveFilter::Apply(pCurveNode, pStatus);
+    }
     //@}
 
     /** This filter expects to work with interdependent curves. Passing the animation stack makes no sense
@@ -1189,7 +1345,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false 
       */
-    virtual bool NeedApply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** This filter expects to work with 9 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 9 interdependent curves.
@@ -1198,7 +1357,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false
       */
-    virtual bool NeedApply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Check if the animation curve nodes need an application of the filter.
       * \param pCurveNode     Curves to test if they need an application of the filter.
@@ -1209,12 +1371,15 @@ public:
       *                       \e pCurveNode[1] holds the rotation curves and \e pCurveNode[2] holds the
       *                       scaling curves.
       */
-    virtual bool NeedApply(FbxAnimCurveNode* pCurveNode[3], FbxStatus* pStatus=NULL);
+    virtual bool NeedApply(FbxAnimCurveNode *pCurveNode[3], FbxStatus *pStatus = NULL);
 
     /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
       * \return               \c false.
       */
-    virtual bool NeedApply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool NeedApply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** This filter expects to work with interdependent curves. Passing the animation stack makes no sense
       * since this object would not know which curves to handle.
@@ -1222,7 +1387,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool Apply(FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** This filter expects to work with 9 interdependent curves. Collecting all the animation curves from
       * the properties defined in \e pObj could not guarantee that we are manipulating 9 interdependent curves.
@@ -1231,7 +1399,10 @@ public:
       * \param pStatus        The FbxStatus object to hold error codes.
       * \return               \c false.
       */
-    virtual bool Apply(FbxObject* /*pObj*/, FbxAnimStack* /*pAnimStack*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; }
+    virtual bool Apply(FbxObject * /*pObj*/, FbxAnimStack * /*pAnimStack*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    }
 
     /** Apply filter on all the curves of the animation curve nodes.
       * \param pCurveNode     Curve nodes to which the filter is applied.
@@ -1241,7 +1412,7 @@ public:
       *                       \e pCurveNode[1] holds the rotation curves and \e pCurveNode[2] holds the
       *                       scaling curves.
       */
-    virtual bool Apply(FbxAnimCurveNode* pCurveNode[3], FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurveNode *pCurveNode[3], FbxStatus *pStatus = NULL);
 
     /** Apply filter on the given animation curves.
       * \param pCurve         Array of curve to which the filter is applied.
@@ -1256,7 +1427,7 @@ public:
       *                       The Apply(FbxAnimCurveNode*) method is not affected by this limitation since
       *                       the channel values can be accessed via the animation curve node. 
       */
-    virtual bool Apply(FbxAnimCurve** pCurve, int pCount, FbxStatus* pStatus=NULL);
+    virtual bool Apply(FbxAnimCurve **pCurve, int pCount, FbxStatus *pStatus = NULL);
 
     /** Apply filter on the given animation curves.
       * \param pCurve         Array of curve to which the filter is applied.
@@ -1269,12 +1440,15 @@ public:
       * \remarks              The curves are assumed to represent: Translation X,Y and Z, Rotation X,Y and Z and
       *                       Scaling X,Y and Z in this order.
       */
-    bool Apply(FbxAnimCurve** pCurve, double* pVals, FbxStatus* pStatus=NULL);
+    bool Apply(FbxAnimCurve **pCurve, double *pVals, FbxStatus *pStatus = NULL);
 
     /** This filter expects to work with interdependent curves. Receiving one single curve is useless.
       * \return               \c false.
       */
-    virtual bool Apply(FbxAnimCurve& /*pCurve*/, FbxStatus* pStatus=NULL) { FBX_UNUSED(pStatus); return false; };
+    virtual bool Apply(FbxAnimCurve & /*pCurve*/, FbxStatus *pStatus = NULL) {
+        FBX_UNUSED(pStatus);
+        return false;
+    };
 
     /** Reset the filter to its default parameters.
       */
@@ -1294,8 +1468,7 @@ public:
       * - \e eScalingPivot
       * - \e eMatrixIndexCount
       */
-    enum EMatrixIndex
-    {
+    enum EMatrixIndex {
         ePreGlobal,
         ePreTranslate,
         ePostTranslate,
@@ -1316,35 +1489,35 @@ public:
       * \param pIndex      The matrix ID.
       * \param pMatrix     The matrix used to receive the source matrix.
       */
-    void GetSourceMatrix(EMatrixIndex pIndex, FbxAMatrix& pMatrix) const;
+    void GetSourceMatrix(EMatrixIndex pIndex, FbxAMatrix &pMatrix) const;
 
     /** Set the Translation Rotation Scaling source matrix.
       * \param pIndex      The matrix ID.
       * \param pMatrix     The matrix used to set the source matrix.
       */
-    void SetSourceMatrix(EMatrixIndex pIndex, FbxAMatrix& pMatrix);
+    void SetSourceMatrix(EMatrixIndex pIndex, FbxAMatrix &pMatrix);
 
     /** Get the Translation Rotation Scaling destination matrix.
       * \param pIndex      The matrix ID.
       * \param pMatrix     The matrix used to receive the destination matrix.
       */
-    void GetDestMatrix(EMatrixIndex pIndex, FbxAMatrix& pMatrix) const;
+    void GetDestMatrix(EMatrixIndex pIndex, FbxAMatrix &pMatrix) const;
 
     /** Set the Translation Rotation Scaling destination matrix.
       * \param pIndex      The matrix ID.
       * \param pMatrix     The matrix used to set the destination matrix.
       */
-    void SetDestMatrix(EMatrixIndex pIndex, FbxAMatrix& pMatrix);
+    void SetDestMatrix(EMatrixIndex pIndex, FbxAMatrix &pMatrix);
 
     /** Get the re-sampling period.
       * \return     the re-sampling period.
       */
-    FbxTime GetResamplingPeriod () const;
+    FbxTime GetResamplingPeriod() const;
 
     /** Set the re-sampling period.
       * \param pResamplingPeriod     The re-sampling period to be set.
       */
-    void SetResamplingPeriod (FbxTime& pResamplingPeriod);
+    void SetResamplingPeriod(FbxTime &pResamplingPeriod);
 
     /** Get the current state of the flag which determines if the last key should be generated exactly at the end time or not.
 	  * This filter handles 9 animation curves, each of them has a stop time, the latest one is defined as the end time.
@@ -1434,17 +1607,17 @@ public:
     /** Set the Translation limits to be applied during conversion. Only active limits are applied.
       * \param limit     The rotation limit to be set.
       */
-    void SetTranslationLimits(FbxLimits &limit );
+    void SetTranslationLimits(FbxLimits &limit);
 
     /** Set the rotation limits to be applied during conversion. Only active limits are applied.
       * \param limit     The rotation limit to be set.
       */
-    void SetRotationLimits(FbxLimits &limit );
+    void SetRotationLimits(FbxLimits &limit);
 
     /** Set the scaling limits to be applied during conversion. Only active limits are applied.
       * \param limit     The scaling limit to be set.
       */
-    void SetScalingLimits(FbxLimits &limit );
+    void SetScalingLimits(FbxLimits &limit);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -1452,65 +1625,67 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
     // Nicer than referring to 0, 1, 2...
-    enum EAxisIndex {eX, eY, eZ, eAxisCount};
-		
-	// Convert parameter cell.
-    class Cell;
-    
-    bool MatricesEquivalence(FbxAMatrix pMatArrayA [eMatrixIndexCount], FbxAMatrix pMatArrayB [eMatrixIndexCount]) const;
+    enum EAxisIndex {
+        eX, eY, eZ, eAxisCount
+    };
 
-    bool DoConvert(FbxAnimCurve** pCurve, 
-                    double pT[eAxisCount], 
-                    double pR[eAxisCount], 
-                    double pS[eAxisCount]);
+    // Convert parameter cell.
+    class Cell;
+
+    bool MatricesEquivalence(FbxAMatrix pMatArrayA[eMatrixIndexCount], FbxAMatrix pMatArrayB[eMatrixIndexCount]) const;
+
+    bool DoConvert(FbxAnimCurve **pCurve,
+            double pT[eAxisCount],
+            double pR[eAxisCount],
+            double pS[eAxisCount]);
 
     void FindTimeInterval
-    (
-        FbxTime& pStart, 
-        FbxTime& pEnd,
-        FbxAnimCurve* pTFCurve [eAxisCount], 
-        FbxAnimCurve* pRFCurve [eAxisCount], 
-        FbxAnimCurve* pSFCurve [eAxisCount]
-    );
+            (
+                    FbxTime &pStart,
+                    FbxTime &pEnd,
+                    FbxAnimCurve *pTFCurve[eAxisCount],
+                    FbxAnimCurve *pRFCurve[eAxisCount],
+                    FbxAnimCurve *pSFCurve[eAxisCount]
+            );
 
     void ComputeTotalMatrix
-    (
-        FbxAMatrix& pGlobal, 
-        Cell& pCell,
-        FbxAMatrix& pTranslate,
-        FbxAMatrix& pRotate,
-        FbxAMatrix& pScale
-	);
+            (
+                    FbxAMatrix &pGlobal,
+                    Cell &pCell,
+                    FbxAMatrix &pTranslate,
+                    FbxAMatrix &pRotate,
+                    FbxAMatrix &pScale
+            );
 
     void ExtractTransforms
-    (
-        FbxVector4& pScaleVector,
-        FbxVector4& pRotateVector,
-        FbxVector4& pTranslateVector,
-        FbxAMatrix& pGlobal,
-        Cell& pDest
-    );
+            (
+                    FbxVector4 &pScaleVector,
+                    FbxVector4 &pRotateVector,
+                    FbxVector4 &pTranslateVector,
+                    FbxAMatrix &pGlobal,
+                    Cell &pDest
+            );
 
-    void SetDestFCurve(FbxAnimCurve* pCurve [eAxisCount], 
-                       int pIndex, 
-                       FbxTime pTime, 
-                       FbxVector4 pVector,
-                       FbxAnimCurveDef::EInterpolationType pInterpMode[eAxisCount], 
-                       FbxAnimCurveDef::ETangentMode pTangentMode[eAxisCount]);
+    void SetDestFCurve(FbxAnimCurve *pCurve[eAxisCount],
+            int pIndex,
+            FbxTime pTime,
+            FbxVector4 pVector,
+            FbxAnimCurveDef::EInterpolationType pInterpMode[eAxisCount],
+            FbxAnimCurveDef::ETangentMode pTangentMode[eAxisCount]);
 
-    void FillInterpAndTangeant(FbxTime& pTime, 
-                               FbxAnimCurve* pSourceCurve[eAxisCount], 
-                               FbxAnimCurveDef::EInterpolationType* pInterp, 
-                               FbxAnimCurveDef::ETangentMode* pTangeant);
+    void FillInterpAndTangeant(FbxTime &pTime,
+            FbxAnimCurve *pSourceCurve[eAxisCount],
+            FbxAnimCurveDef::EInterpolationType *pInterp,
+            FbxAnimCurveDef::ETangentMode *pTangeant);
 
-    void SetDestFCurveTangeant(FbxAnimCurve* pCurve [eAxisCount], 
-                               int pIndex, 
-                               FbxAnimCurveDef::ETangentMode pTangentMode[eAxisCount], 
-                               FbxVector4 pKeyValue, 
-                               FbxVector4 pNextKeyValue);
+    void SetDestFCurveTangeant(FbxAnimCurve *pCurve[eAxisCount],
+            int pIndex,
+            FbxAnimCurveDef::ETangentMode pTangentMode[eAxisCount],
+            FbxVector4 pKeyValue,
+            FbxVector4 pNextKeyValue);
 
-    Cell* mSource;
-    Cell* mDest;
+    Cell *mSource;
+    Cell *mDest;
 
     FbxTime mResamplingPeriod;
     bool mResamplingOnFrameRateMultiple;
@@ -1519,8 +1694,8 @@ private:
     bool mApplyConstantKeyReducer;
 
     // PP : So that the concatenation of matrices takes into account the rotation order
-    FbxRotationOrder* mSrcRotationOrder;
-    FbxRotationOrder* mDestRotationOrder;
+    FbxRotationOrder *mSrcRotationOrder;
+    FbxRotationOrder *mDestRotationOrder;
 
     // Set last key exactly at end time or a frame period later.	
     bool mGenerateLastKeyExactlyAtEndTime;
@@ -1537,7 +1712,7 @@ private:
     FbxLimits mScalingLimits;
 
     // internal usage
-    FbxAnimCurveNode* mRotationCurveNode;
+    FbxAnimCurveNode *mRotationCurveNode;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

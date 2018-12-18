@@ -14,7 +14,7 @@
 #include <glm/vec4.hpp>
 
 namespace EARenderer {
-    
+
     /**
      1 position
      1 normal
@@ -27,10 +27,10 @@ namespace EARenderer {
         glm::vec2 lightmapCoords;
         glm::vec3 normal;
 
-        Vertex1P1N2UV(const glm::vec4& position,
-                      const glm::vec3& texCoords,
-                      const glm::vec2& lightmapCoords,
-                      const glm::vec3& normal);
+        Vertex1P1N2UV(const glm::vec4 &position,
+                const glm::vec3 &texCoords,
+                const glm::vec2 &lightmapCoords,
+                const glm::vec3 &normal);
     };
 
 }

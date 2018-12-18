@@ -38,20 +38,21 @@
   * \note The event data is process by the callback function of event handler.
   * \see FbxEmitter FbxEventHandler FbxEvent FbxEventBase
   */
-class FBXSDK_DLL FbxListener
-{
+class FBXSDK_DLL FbxListener {
 public:
-	/**
-	  * \name Constructor and Destructor
-	  */
-	//@{
-	//!Destructor.
+    /**
+      * \name Constructor and Destructor
+      */
+    //@{
+    //!Destructor.
     ~FbxListener();
-	//!Constructor.
-    FbxListener(){}
-	//@}
-   
-	////////////////////////////////////////////////////////////////////////////////////////
+
+    //!Constructor.
+    FbxListener() {
+    }
+    //@}
+
+    ////////////////////////////////////////////////////////////////////////////////////////
     /**
     * \name Bind and unbind methods
     */
@@ -64,10 +65,10 @@ public:
 	 * \param pFunc             The callback function to process event date.
 	 * \return                  The automatically created event handler.
 	 */
-    template <typename EventType,typename ListenerType> FbxEventHandler* Bind(FbxEmitter& pEmitter, void (ListenerType::*pFunc)(const EventType*))
-    {
-        FbxMemberFuncEventHandler<EventType,ListenerType>* eventHandler = 
-            FbxNew< FbxMemberFuncEventHandler<EventType,ListenerType> >(static_cast<ListenerType*>(this),pFunc);
+    template<typename EventType, typename ListenerType>
+    FbxEventHandler *Bind(FbxEmitter &pEmitter, void (ListenerType::*pFunc)(const EventType *)) {
+        FbxMemberFuncEventHandler<EventType, ListenerType> *eventHandler =
+                FbxNew<FbxMemberFuncEventHandler<EventType, ListenerType> >(static_cast<ListenerType *>(this), pFunc);
         pEmitter.AddListener(*eventHandler);
         mEventHandler.PushBack(*eventHandler);
         return eventHandler;
@@ -80,10 +81,10 @@ public:
     * \param pFunc             The callback function to process event date.
     * \return                  The automatically created event handler.
     */
-    template <typename EventType,typename ListenerType> FbxEventHandler* Bind(FbxEmitter& pEmitter, void (ListenerType::*pFunc)(const EventType*)const)
-    {
-        FbxConstMemberFuncEventHandler<EventType,ListenerType>* eventHandler = 
-                    FbxNew< FbxConstMemberFuncEventHandler<EventType,ListenerType> >(static_cast<ListenerType*>(this),pFunc);
+    template<typename EventType, typename ListenerType>
+    FbxEventHandler *Bind(FbxEmitter &pEmitter, void (ListenerType::*pFunc)(const EventType *) const) {
+        FbxConstMemberFuncEventHandler<EventType, ListenerType> *eventHandler =
+                FbxNew<FbxConstMemberFuncEventHandler<EventType, ListenerType> >(static_cast<ListenerType *>(this), pFunc);
         pEmitter.AddListener(*eventHandler);
         mEventHandler.PushBack(*eventHandler);
         return eventHandler;
@@ -96,20 +97,20 @@ public:
     * \param pFunc             The callback function to process event date.
     * \return                  The automatically created event handler.
     */
-    template <typename EventType> FbxEventHandler* Bind(FbxEmitter& pEmitter, void (*pFunc)(const EventType*,FbxListener*))
-    {
-        FbxFuncEventHandler<EventType>* eventHandler = 
-                        FbxNew< FbxFuncEventHandler<EventType> >(this, pFunc);
+    template<typename EventType>
+    FbxEventHandler *Bind(FbxEmitter &pEmitter, void (*pFunc)(const EventType *, FbxListener *)) {
+        FbxFuncEventHandler<EventType> *eventHandler =
+                FbxNew<FbxFuncEventHandler<EventType> >(this, pFunc);
         pEmitter.AddListener(*eventHandler);
         mEventHandler.PushBack(*eventHandler);
         return eventHandler;
     }
-    
-	/**Unbind an event handler. The specified event handler will be removed from the handlers list of current listener. 
-	  * \param aBindId       The event handler to unbind.
-	  */
-    void Unbind(const FbxEventHandler* aBindId);
-	//@}
+
+    /**Unbind an event handler. The specified event handler will be removed from the handlers list of current listener.
+      * \param aBindId       The event handler to unbind.
+      */
+    void Unbind(const FbxEventHandler *aBindId);
+    //@}
 
 private:
     typedef FbxIntrusiveList<FbxEventHandler, FbxEventHandler::eListener> EventHandlerList;

@@ -17,8 +17,8 @@
 
 namespace EARenderer {
 
-    template <GLTexture::Float TextureFormat>
-    class SMAAEffect: public PostprocessEffect<TextureFormat> {
+    template<GLTexture::Float TextureFormat>
+    class SMAAEffect : public PostprocessEffect<TextureFormat> {
     private:
         GLNormalizedTexture2D<GLTexture::Normalized::RG> mAreaTexture;
         GLNormalizedTexture2D<GLTexture::Normalized::R> mSearchTexture;
@@ -30,15 +30,17 @@ namespace EARenderer {
         GLSLSMAANeighborhoodBlending mNeighborhoodBlendingShader;
 
         void detectEdges(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image);
+
         void calculateBlendingWeights();
+
         void blendNeighbors(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image,
-                            std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
 
     public:
         SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
 
         void antialise(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-                       std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
     };
 
 }

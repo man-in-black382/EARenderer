@@ -17,13 +17,15 @@
 
 namespace EARenderer {
 
-    class GLSLProbeOcclusionRendering: public GLProgram {
+    class GLSLProbeOcclusionRendering : public GLProgram {
     public:
         GLSLProbeOcclusionRendering();
 
-        void setCamera(const Camera& camera);
+        void setCamera(const Camera &camera);
+
 //        void setDiffuseProbeOcclusionMapsAtlas(const GLHDRTexture2D& atlas);
-        void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets);
+        void setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2> &offsets);
+
         void setProbeIndex(size_t index);
     };
 

@@ -33,7 +33,8 @@ namespace bitsery {
 
         template<typename ... TArgs>
         struct ContainerTraits<std::list<TArgs...>>
-                : public StdContainer<std::list<TArgs...>, true, false> {};
+                : public StdContainer<std::list<TArgs...>, true, false> {
+        };
 
     }
 

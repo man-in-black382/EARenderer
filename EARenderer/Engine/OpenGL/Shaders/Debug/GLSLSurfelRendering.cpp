@@ -9,13 +9,13 @@
 #include "GLSLSurfelRendering.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     GLSLSurfelRendering::GLSLSurfelRendering()
-    :
-    GLProgram("SurfelRendering.vert", "SurfelRendering.frag", "SurfelRendering.geom")
-    { }
+            :
+            GLProgram("SurfelRendering.vert", "SurfelRendering.frag", "SurfelRendering.geom") {
+    }
 
 #pragma mark - Setters
 
@@ -31,7 +31,7 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(ctcrc32("uUseExternalColor")).location(), useExternalColor);
     }
 
-    void GLSLSurfelRendering::setExternalColor(const Color& externalColor) {
+    void GLSLSurfelRendering::setExternalColor(const Color &externalColor) {
         glUniform4fv(uniformByNameCRC32(ctcrc32("uExternalColor")).location(), 1, reinterpret_cast<const float *>(&externalColor));
     }
 
@@ -39,11 +39,11 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(ctcrc32("uSurfelGroupOffset")).location(), surfelGroupOffset);
     }
 
-    void GLSLSurfelRendering::setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F>& surfelLuminances) {
+    void GLSLSurfelRendering::setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F> &surfelLuminances) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelLuminances")>, surfelLuminances);
     }
 
-    void GLSLSurfelRendering::setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer) {
+    void GLSLSurfelRendering::setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F> &gBuffer) {
         setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
     }
 

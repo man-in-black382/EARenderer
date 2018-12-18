@@ -20,43 +20,41 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 /** This class decodes Base64 encoded data. */
-class FBXSDK_DLL FbxBase64Decoder
-{
+class FBXSDK_DLL FbxBase64Decoder {
 public:
-	/** Decodes the input buffer.
-	* \param pInBuffer the input buffer containing Base64 data.
-	* \param pInSize the size of the input data in bytes (must be a multiple of 4)
-	* \param pOutBuffer the destination buffer.
-	* \param pOutSize the capacity of the output buffer in bytes.
-	* \return the number of bytes put in the output buffer, or -1 if the output buffer is too small, or contains invalid characters */
-    int Decode(const void* pInBuffer, int pInSize, void* pOutBuffer, int pOutSize);
+    /** Decodes the input buffer.
+    * \param pInBuffer the input buffer containing Base64 data.
+    * \param pInSize the size of the input data in bytes (must be a multiple of 4)
+    * \param pOutBuffer the destination buffer.
+    * \param pOutSize the capacity of the output buffer in bytes.
+    * \return the number of bytes put in the output buffer, or -1 if the output buffer is too small, or contains invalid characters */
+    int Decode(const void *pInBuffer, int pInSize, void *pOutBuffer, int pOutSize);
 
-	/** Decodes the input buffer.
-	* \param pInBuffer the input buffer containing Base64 data; its length is computed using strlen().
-	* \param pOutBuffer the destination buffer.
-	* \param pOutSize the capacity of the output buffer in bytes.
-	* \return the number of bytes put in the output buffer. */
-    int Decode(const char* pInBuffer, void* pOutBuffer, int pOutSize);
+    /** Decodes the input buffer.
+    * \param pInBuffer the input buffer containing Base64 data; its length is computed using strlen().
+    * \param pOutBuffer the destination buffer.
+    * \param pOutSize the capacity of the output buffer in bytes.
+    * \return the number of bytes put in the output buffer. */
+    int Decode(const char *pInBuffer, void *pOutBuffer, int pOutSize);
 };
 
 /** This class encodes data in the Base64 format. */
-class FBXSDK_DLL FbxBase64Encoder
-{
+class FBXSDK_DLL FbxBase64Encoder {
 public:
-	/** Encodes the input buffer.
-	* \param pInBuffer the input buffer containing data.
-	* \param pInSize the size of the input data in bytes.
-	* \param pOutBuffer the destination buffer, receives data encoded in Base64.
-	* \param pOutSize the capacity of the output buffer in bytes, which should be at least 33% larger than the input buffer size, or 4 bytes whichever is more.
-	* \return the number of bytes put in the output buffer, or -1 if we ran out of room. */
-    int Encode(const void* pInBuffer, int pInSize, void* pOutBuffer, int pOutSize);
+    /** Encodes the input buffer.
+    * \param pInBuffer the input buffer containing data.
+    * \param pInSize the size of the input data in bytes.
+    * \param pOutBuffer the destination buffer, receives data encoded in Base64.
+    * \param pOutSize the capacity of the output buffer in bytes, which should be at least 33% larger than the input buffer size, or 4 bytes whichever is more.
+    * \return the number of bytes put in the output buffer, or -1 if we ran out of room. */
+    int Encode(const void *pInBuffer, int pInSize, void *pOutBuffer, int pOutSize);
 
-	/** Encodes the input buffer.
-	* \param pInBuffer the input buffer containing data.
-	* \param pInSize the size of the input data in bytes.
-	* \param pOutBuffer the destination buffer; data is set, not appended.
-	* \return the number of bytes put in the output buffer. */
-    int Encode(const void* pInBuffer, int pInSize, FbxString& pOutBuffer);
+    /** Encodes the input buffer.
+    * \param pInBuffer the input buffer containing data.
+    * \param pInSize the size of the input data in bytes.
+    * \param pOutBuffer the destination buffer; data is set, not appended.
+    * \return the number of bytes put in the output buffer. */
+    int Encode(const void *pInBuffer, int pInSize, FbxString &pOutBuffer);
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

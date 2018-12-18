@@ -22,6 +22,7 @@ namespace EARenderer {
         GLint divisor;
 
         GLVertexAttribute(GLint sizeInBytes, GLint componentCount);
+
         GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor, GLint location);
 
         /**

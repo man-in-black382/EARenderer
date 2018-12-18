@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Protected
 
-    float DiffuseLightProbeGenerator::surfelSolidAngle(const Surfel& surfel, const DiffuseLightProbe& probe) {
+    float DiffuseLightProbeGenerator::surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe) {
         glm::vec3 Wps = surfel.position - probe.position;
         float distance2 = glm::length2(Wps);
         Wps = glm::normalize(Wps);
@@ -32,11 +32,11 @@ namespace EARenderer {
         return distanceTerm * visibilityTerm * visibilityTest;
     }
 
-    SurfelClusterProjection DiffuseLightProbeGenerator::projectSurfelCluster(const SurfelCluster& cluster, const DiffuseLightProbe& probe) {
+    SurfelClusterProjection DiffuseLightProbeGenerator::projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe) {
         SurfelClusterProjection projection;
 
         for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-            const Surfel& surfel = mSurfelData->surfels()[i];
+            const Surfel &surfel = mSurfelData->surfels()[i];
             glm::vec3 Wps_norm = glm::normalize(surfel.position - probe.position);
             float solidAngle = surfelSolidAngle(surfel, probe);
 
@@ -52,8 +52,8 @@ namespace EARenderer {
         return projection;
     }
 
-    void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe& probe) {
-        probe.surfelClusterProjectionGroupOffset = (uint32_t)mProbeData->mSurfelClusterProjections.size();
+    void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe &probe) {
+        probe.surfelClusterProjectionGroupOffset = (uint32_t) mProbeData->mSurfelClusterProjections.size();
 
         for (size_t i = 0; i < mSurfelData->surfelClusters().size(); i++) {
             const SurfelCluster &cluster = mSurfelData->surfelClusters()[i];
@@ -61,7 +61,7 @@ namespace EARenderer {
 
             // Only accept projections with non-zero SH
             if (projection.sphericalHarmonics.magnitude2() > 0.0) {
-                projection.surfelClusterIndex = (uint32_t)i;
+                projection.surfelClusterIndex = (uint32_t) i;
                 mProbeData->mSurfelClusterProjections.push_back(projection);
                 probe.surfelClusterProjectionGroupSize++;
             }
@@ -74,13 +74,13 @@ namespace EARenderer {
         int32_t iterationCount = 0;
 
         // Phi - azimuth (horizontal) angle
-        for(float phi = 0.0; phi < M_PI * 2.0; phi += sampleDelta) {
+        for (float phi = 0.0; phi < M_PI * 2.0; phi += sampleDelta) {
 
             float sinPhi = sin(phi);
             float cosPhi = cos(phi);
 
             // Theta - zenith (vertical) angle
-            for(float theta = 0.0; theta < M_PI; theta += sampleDelta) {
+            for (float theta = 0.0; theta < M_PI; theta += sampleDelta) {
 
                 float sinTheta = sin(theta);
                 float cosTheta = cos(theta);
@@ -99,7 +99,7 @@ namespace EARenderer {
                 iterationCount++;
             }
         }
-        
+
         probe.skySphericalHarmonics.scale(glm::vec3(1.0 / iterationCount));
         probe.skySphericalHarmonics.convolve();
     }
@@ -121,7 +121,7 @@ namespace EARenderer {
             for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
                 for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
                     for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
-                        DiffuseLightProbe probe({ x, y, z });
+                        DiffuseLightProbe probe({x, y, z});
                         projectSurfelClustersOnProbe(probe);
                         projectSkyOnProbe(probe);
                         mProbeData->mProbes.push_back(probe);

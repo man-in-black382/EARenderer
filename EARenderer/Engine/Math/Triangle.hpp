@@ -16,7 +16,7 @@ namespace EARenderer {
 
     struct AxisAlignedBox3D;
 
-    template <typename Point>
+    template<typename Point>
     struct Triangle {
         union {
             struct {
@@ -30,17 +30,19 @@ namespace EARenderer {
                 Point p2;
                 Point p3;
             };
-            
+
             std::array<Point, 3> points;
             std::array<float, 3 * sizeof(Point) / sizeof(float)> values;
         };
-        
+
         Triangle() = default;
-        Triangle(const Point& p1, const Point& p2, const Point& p3) : a(p1), b(p2), c(p3) { }
-        
+
+        Triangle(const Point &p1, const Point &p2, const Point &p3) : a(p1), b(p2), c(p3) {
+        }
+
         virtual float area() const = 0;
     };
-    
+
 }
 
 #endif /* Triangle_hpp */

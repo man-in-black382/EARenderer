@@ -14,13 +14,13 @@
 
 namespace EARenderer {
 
-    class GLSLLuminance: public GLProgram {
+    class GLSLLuminance : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLLuminance();
 
-        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
+        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image);
     };
 
 }

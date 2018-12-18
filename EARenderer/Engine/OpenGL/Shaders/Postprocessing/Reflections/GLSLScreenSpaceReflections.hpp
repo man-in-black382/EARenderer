@@ -16,14 +16,15 @@
 
 namespace EARenderer {
 
-    class GLSLScreenSpaceReflections: public GLProgram {
+    class GLSLScreenSpaceReflections : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLScreenSpaceReflections();
 
-        void setCamera(const Camera& camera);
-        void setGBuffer(const SceneGBuffer& GBuffer);
+        void setCamera(const Camera &camera);
+
+        void setGBuffer(const SceneGBuffer &GBuffer);
     };
 
 }

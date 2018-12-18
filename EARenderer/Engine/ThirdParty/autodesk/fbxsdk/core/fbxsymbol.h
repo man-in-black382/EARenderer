@@ -22,8 +22,7 @@
 
 /** Defines a symbol string. A symbol string is a string that is unique and stored in a global symbol table.
 * \nosubgrouping */
-class FBXSDK_DLL FbxSymbol
-{
+class FBXSDK_DLL FbxSymbol {
 public:
     /**
     * \name Constructors and Destructor
@@ -35,7 +34,7 @@ public:
     * \param pName Symbol name.
     * \param pRealm The real value for this symbol. 
     */
-    FbxSymbol(const char* pName, const char* pRealm);
+    FbxSymbol(const char *pName, const char *pRealm);
 
     //! Destructor.
     ~FbxSymbol();
@@ -59,27 +58,26 @@ public:
     /** Equality operator.
     * \param pSymbol The symbol to be compared. 
     */
-    bool operator==(FbxSymbol const& pSymbol) const;
+    bool operator==(FbxSymbol const &pSymbol) const;
 
     /** Inequality operator.
     * \param pSymbol The symbol to be compared. 
     */
-    bool operator!=(FbxSymbol const& pSymbol) const;
+    bool operator!=(FbxSymbol const &pSymbol) const;
     //@}
 
 private:
     unsigned int mID;
 };
 
-typedef FbxMap< FbxString, int, FbxStringCompare > FbxStringSymbolMap;
+typedef FbxMap<FbxString, int, FbxStringCompare> FbxStringSymbolMap;
 
 
 /** This class is to mark a string as symbol.
   * String Symbol only has its name.
   * /remarks Each symbol is unique. That means there are no symbols which have the same name.
 * \nosubgrouping */
-class FBXSDK_DLL FbxStringSymbol
-{
+class FBXSDK_DLL FbxStringSymbol {
 public:
     /**
     * \name Constructors and Destructor
@@ -93,24 +91,25 @@ public:
     * Construct a symbol and add it to global symbol table.
     * \param pName Symbol name.
     */
-    FbxStringSymbol(const char* pName);
+    FbxStringSymbol(const char *pName);
 
     //! Copy constructor.
-    FbxStringSymbol(const FbxStringSymbol& pOther);
+    FbxStringSymbol(const FbxStringSymbol &pOther);
 
     //! Destructor.
     ~FbxStringSymbol();
     //@}
 
     //! Cast operator to const char* type.
-    inline operator const char*() const { return mItem ? ((const char*) mItem->GetKey()) : NULL; }
+    inline operator const char *() const {
+        return mItem ? ((const char *) mItem->GetKey()) : NULL;
+    }
 
 
     /** Determine the symbol empty or not.
     * \return \c true if empty. \c false otherwise.
-    */    
-    inline bool IsEmpty() const
-    {
+    */
+    inline bool IsEmpty() const {
         return !mItem || mItem->GetKey().IsEmpty();
     }
 
@@ -124,10 +123,10 @@ public:
     * \param pName  The symbol value. 
     * \return       The self after assignment.
     */
-    FbxStringSymbol& operator=(const char* pName);
+    FbxStringSymbol &operator=(const char *pName);
 
 private:
-    FbxStringSymbolMap::RecordType* mItem;
+    FbxStringSymbolMap::RecordType *mItem;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

@@ -35,58 +35,61 @@
   *
   *\nosubgrouping
   */
-class FBXSDK_DLL FbxDeformer : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxDeformer, FbxObject);
+class FBXSDK_DLL FbxDeformer : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxDeformer, FbxObject);
 
 public:
-	/**
-	  * \name Multi-Layer Flag
-	  * This flag is available for backward compatibility with older 
-	  * version of FBX files and should not be used anymore. All the animation layering
-	  * system has been moved to the FbxAnimLayer and FbxAnimStack classes.
-	  */
-	//@{
-        /** Set multi-layer state flag.
-          * \param pMultiLayer     Set to \c true to enable multi-layering.
-          */
-        void SetMultiLayer(bool pMultiLayer);
+    /**
+      * \name Multi-Layer Flag
+      * This flag is available for backward compatibility with older 
+      * version of FBX files and should not be used anymore. All the animation layering
+      * system has been moved to the FbxAnimLayer and FbxAnimStack classes.
+      */
+    //@{
+    /** Set multi-layer state flag.
+      * \param pMultiLayer     Set to \c true to enable multi-layering.
+      */
+    void SetMultiLayer(bool pMultiLayer);
 
-        /** Get multi-layer state.
-          * \return     The current state of the multi-layer flag.
-          */
-        bool GetMultiLayer() const;
-        //@}
+    /** Get multi-layer state.
+      * \return     The current state of the multi-layer flag.
+      */
+    bool GetMultiLayer() const;
+    //@}
 
-        /**
-          * \name Deformer types
-          */
-        //@{
-        /** \enum EDeformerType Deformer types.
-          */
-        enum EDeformerType
-        {
-            eUnknown,		//!< Unknown deformer type
-            eSkin,			//!< Type FbxSkin
-			eBlendShape,	//!< Type FbxBlendShape
-            eVertexCache	//!< Type FbxVertexCacheDeformer
-        };
+    /**
+      * \name Deformer types
+      */
+    //@{
+    /** \enum EDeformerType Deformer types.
+      */
+    enum EDeformerType {
+        eUnknown,        //!< Unknown deformer type
+        eSkin,            //!< Type FbxSkin
+        eBlendShape,    //!< Type FbxBlendShape
+        eVertexCache    //!< Type FbxVertexCacheDeformer
+    };
 
-        /** Get the deformer type.
-          * \return     Deformer type identifier. Default value is eUnknown.
-          */
-        virtual EDeformerType GetDeformerType() const { return eUnknown; }
-        //@}
+    /** Get the deformer type.
+      * \return     Deformer type identifier. Default value is eUnknown.
+      */
+    virtual EDeformerType GetDeformerType() const {
+        return eUnknown;
+    }
+    //@}
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual FbxStringList GetTypeFlags() const { return FbxStringList(); }
+    virtual void Construct(const FbxObject *pFrom);
 
-	bool		mMultiLayer;
+    virtual FbxStringList GetTypeFlags() const {
+        return FbxStringList();
+    }
+
+    bool mMultiLayer;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -14,20 +14,26 @@
 #include "GLTexture2DArray.hpp"
 
 namespace EARenderer {
-    
-    class GLSLSurfelRendering: public GLProgram {
+
+    class GLSLSurfelRendering : public GLProgram {
     public:
         GLSLSurfelRendering();
 
-        void setViewProjectionMatrix(const glm::mat4& mvp);
+        void setViewProjectionMatrix(const glm::mat4 &mvp);
+
         void setSurfelRadius(float radius);
+
         void setShouldUseExternalColor(bool useExternalColor);
-        void setExternalColor(const Color& externalColor);
+
+        void setExternalColor(const Color &externalColor);
+
         void setSurfelGroupOffset(int32_t surfelGroupOffset);
-        void setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F>& surfelLuminances);
-        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer);
+
+        void setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F> &surfelLuminances);
+
+        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F> &gBuffer);
     };
-    
+
 }
 
 #endif /* GLSLSurfelRendering_hpp */

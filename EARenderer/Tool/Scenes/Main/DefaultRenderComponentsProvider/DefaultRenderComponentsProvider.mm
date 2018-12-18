@@ -10,14 +10,14 @@
 #import <OpenGL/gl3.h>
 
 DefaultRenderComponentsProvider::DefaultRenderComponentsProvider(EARenderer::GLViewport *mainViewport)
-:
-mMainViewport(mainViewport)
-{ }
+        :
+        mMainViewport(mainViewport) {
+}
 
 void DefaultRenderComponentsProvider::bindSystemFramebuffer() const {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-const EARenderer::GLViewport& DefaultRenderComponentsProvider::defaultViewport() const {
+const EARenderer::GLViewport &DefaultRenderComponentsProvider::defaultViewport() const {
     return *mMainViewport;
 }

@@ -46,9 +46,8 @@
   * \nosubgrouping
   * \see FbxOperatorEntryView, FbxBindingTableEntry, FbxPropertyEntryView
   */
-class FBXSDK_DLL FbxBindingOperator : public FbxBindingTableBase
-{
-    FBXSDK_OBJECT_DECLARE(FbxBindingOperator, FbxBindingTableBase);
+class FBXSDK_DLL FbxBindingOperator : public FbxBindingTableBase {
+FBXSDK_OBJECT_DECLARE(FbxBindingOperator, FbxBindingTableBase);
 
 public:
     /** Run the operator on the given object.
@@ -56,16 +55,14 @@ public:
       * \param pResult A pointer to a buffer to hold the result.
       * \return \c true on success, \c false otherwise.
       */
-    template <class FBXTYPE>
-    bool Evaluate(const FbxObject* pObject, FBXTYPE* pResult) const
-    {
+    template<class FBXTYPE>
+    bool Evaluate(const FbxObject *pObject, FBXTYPE *pResult) const {
         EFbxType lResultType;
-        void* lResult = NULL;
+        void *lResult = NULL;
 
         bool lSuccess = Evaluate(pObject, &lResultType, &lResult);
 
-        if (lSuccess)
-        {
+        if (lSuccess) {
             FbxTypeCopy(*pResult, lResult, lResultType);
         }
 
@@ -73,7 +70,7 @@ public:
 
         return lSuccess;
     }
-    
+
     /** Run the inverse operator on the given object,
       * assigning the result directly to the object.
       * \param pObject The object that will be evaluated.
@@ -82,19 +79,17 @@ public:
       * \param index Used only in FbxMultiplyDistBOF.
       * \return \c true on success, \c false otherwise.
       */
-    template <class FBXTYPE>
-    bool ReverseEvaluation(const FbxObject* pObject, FBXTYPE * pInOut, 
-                            bool setObj=false, int index=0) const
-    {
+    template<class FBXTYPE>
+    bool ReverseEvaluation(const FbxObject *pObject, FBXTYPE *pInOut,
+            bool setObj = false, int index = 0) const {
 
-        const void* lIn = pInOut;
-        void* lOut = NULL;
+        const void *lIn = pInOut;
+        void *lOut = NULL;
         EFbxType lOutType;
 
         bool lSuccess = ReverseEvaluate(pObject, lIn, &lOut, &lOutType, setObj, index);
 
-        if (lSuccess)
-        {
+        if (lSuccess) {
             FbxTypeCopy(*pInOut, lOut, lOutType);
         }
 
@@ -116,16 +111,14 @@ public:
 	  *          evaluate the operator function to get the property's value; for any other types of entry, this method
 	  *          is meaningless.
       */
-    template <class FBXTYPE>
-    bool EvaluateEntry(const FbxObject* pObject, const char* pEntryDestinationName, FBXTYPE* pResult) const
-    {
+    template<class FBXTYPE>
+    bool EvaluateEntry(const FbxObject *pObject, const char *pEntryDestinationName, FBXTYPE *pResult) const {
         EFbxType lResultType;
-        void* lResult = NULL;
+        void *lResult = NULL;
 
         bool lSuccess = EvaluateEntry(pObject, pEntryDestinationName, &lResultType, &lResult);
 
-        if (lSuccess)
-        {
+        if (lSuccess) {
             FbxTypeCopy(*pResult, lResult, lResultType);
         }
 
@@ -134,31 +127,31 @@ public:
         return lSuccess;
     }
 
-	/** This property stores the name of function.
-	  *
-	  * Default value is "".
-	  */
+    /** This property stores the name of function.
+      *
+      * Default value is "".
+      */
     FbxPropertyT<FbxString> FunctionName;
 
-	/** This property stores the name of target.
-	*
-	* Default value is "".
-	*/
+    /** This property stores the name of target.
+    *
+    * Default value is "".
+    */
     FbxPropertyT<FbxString> TargetName;
 
     //////////////////////////////////////////////////////////////////////////
     // Static values
     //////////////////////////////////////////////////////////////////////////
 
-	//! Function name.
-    static const char* sFunctionName;
-	//! Target name.
-    static const char* sTargetName;
+    //! Function name.
+    static const char *sFunctionName;
+    //! Target name.
+    static const char *sTargetName;
 
     //! Default value for function name.
-    static const char* sDefaultFunctionName;
-	//! Default value for target name.
-    static const char* sDefaultTargetName;
+    static const char *sDefaultFunctionName;
+    //! Default value for target name.
+    static const char *sDefaultTargetName;
 
 
     //////////////////////////////////////////////////////////////////////////
@@ -180,120 +173,110 @@ public:
       * Any binding operation need to specify a certain kind of binding function.
       * \nosubgrouping
       */
-    class FBXSDK_DLL Function
-    {
+    class FBXSDK_DLL Function {
     public:
-		//!Destructor.
-        virtual ~Function() {}
+        //!Destructor.
+        virtual ~Function() {
+        }
 
-		/** Run the operator on the given object.
-		  * \param pOperator The operator that will be applied.
-		  * \param pObject The object that will be evaluated.
-		  * \param pResultType Will be filled by the type of the result.
-		  * \param pResult Will be filled by a pointer to a buffer that hold the result.
-		  * The caller must call FreeEvaluationResult() when it is done with this pointer.
-		  * \return \c true on success, \c false otherwise.
-		  */
-        virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const = 0;
-        
-		/** Run the inverse operator on the given object,
-		  * assigning the result directly to the object.
-		  * \param pOperator The operator that will be applied.
-		  * \param pTarget The object that will be evaluated.
-		  * \param pIn
-		  * \param pOut
-		  * \param pOutType Type of value being reversed.
-		  * \param setObj Control to set the property (only to query by the default ).
-		  * \param index Used only in FbxMultiplyDistBOF.
-		  * \return \c true on success, \c false otherwise.
-		  */
-		virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const = 0;
+        /** Run the operator on the given object.
+          * \param pOperator The operator that will be applied.
+          * \param pObject The object that will be evaluated.
+          * \param pResultType Will be filled by the type of the result.
+          * \param pResult Will be filled by a pointer to a buffer that hold the result.
+          * The caller must call FreeEvaluationResult() when it is done with this pointer.
+          * \return \c true on success, \c false otherwise.
+          */
+        virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const = 0;
+
+        /** Run the inverse operator on the given object,
+          * assigning the result directly to the object.
+          * \param pOperator The operator that will be applied.
+          * \param pTarget The object that will be evaluated.
+          * \param pIn
+          * \param pOut
+          * \param pOutType Type of value being reversed.
+          * \param setObj Control to set the property (only to query by the default ).
+          * \param index Used only in FbxMultiplyDistBOF.
+          * \return \c true on success, \c false otherwise.
+          */
+        virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const = 0;
     };
 
     /** The abstract factory class for binding function.
       * \nosubgrouping
       */
-    class FBXSDK_DLL FunctionCreatorBase
-    {
+    class FBXSDK_DLL FunctionCreatorBase {
     public:
-		//!Destructor.
-        virtual ~FunctionCreatorBase() {}
+        //!Destructor.
+        virtual ~FunctionCreatorBase() {
+        }
 
-		/** Get name of the function.
-		  * \return The name of the function.
-		  */
-        virtual const char* GetFunctionName() const = 0;
+        /** Get name of the function.
+          * \return The name of the function.
+          */
+        virtual const char *GetFunctionName() const = 0;
 
-		/** Create the function.
-		*/
-        virtual Function* CreateFunction() const = 0;
+        /** Create the function.
+        */
+        virtual Function *CreateFunction() const = 0;
     };
 
     /** The concrete factory class for binding function.
       * \nosubgrouping
       */
-    template <class FUNCTION>
-    class FunctionCreator : public FunctionCreatorBase
-    {
+    template<class FUNCTION>
+    class FunctionCreator : public FunctionCreatorBase {
     public:
 
-		/** Get Name of the operation function.
-		  * \return The Name of the operation function.
-		  */
-        virtual const char* GetFunctionName() const
-        {
+        /** Get Name of the operation function.
+          * \return The Name of the operation function.
+          */
+        virtual const char *GetFunctionName() const {
             return FUNCTION::FunctionName;
         }
 
-		/** Create the operation function.
-		*/
-        virtual Function* CreateFunction() const
-        {
-            return FbxNew< FUNCTION >();
+        /** Create the operation function.
+        */
+        virtual Function *CreateFunction() const {
+            return FbxNew<FUNCTION>();
         }
     };
 
     /** This utility class is used to register and unregister the binding function creators.
       * \nosubgrouping
       */
-    class FBXSDK_DLL FunctionRegistry
-    {
+    class FBXSDK_DLL FunctionRegistry {
     public:
-		/** To register the binding function creator.
-		* \param pCreator The binding function creator to register.
-		*/
-        static void RegisterFunctionCreator(FunctionCreatorBase const& pCreator)
-        {
+        /** To register the binding function creator.
+        * \param pCreator The binding function creator to register.
+        */
+        static void RegisterFunctionCreator(FunctionCreatorBase const &pCreator) {
             sRegistry.Insert(pCreator.GetFunctionName(), &pCreator);
         }
 
-		/** To unregister the binding function creator.
-		* \param pCreator The binding function creator to unregister.
-		*/
-        static void UnregisterFunctionCreator(FunctionCreatorBase const& pCreator)
-        {
+        /** To unregister the binding function creator.
+        * \param pCreator The binding function creator to unregister.
+        */
+        static void UnregisterFunctionCreator(FunctionCreatorBase const &pCreator) {
             sRegistry.Remove(pCreator.GetFunctionName());
         }
 
-		/** To find the binding function creator by name.
-		* \param pName The name of the operation function creator to find.
-		*/
-        static const FunctionCreatorBase* FindCreator(const char* pName)
-        {
-            RegistryType::RecordType* lRecord = sRegistry.Find(pName);
+        /** To find the binding function creator by name.
+        * \param pName The name of the operation function creator to find.
+        */
+        static const FunctionCreatorBase *FindCreator(const char *pName) {
+            RegistryType::RecordType *lRecord = sRegistry.Find(pName);
 
-            if (lRecord)
-            {
+            if (lRecord) {
                 return lRecord->GetValue();
-            }
-            else
-            {
+            } else {
                 return NULL;
             }
         }
 
     private:
-        typedef FbxMap<const char*, const FunctionCreatorBase*, FbxCharPtrCompare> RegistryType;
+        typedef FbxMap<const char *, const FunctionCreatorBase *, FbxCharPtrCompare> RegistryType;
         static RegistryType sRegistry;
     };
 
@@ -302,20 +285,27 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    bool EvaluateEntry(const FbxObject* pObject, const char* pEntryDestinationName, EFbxType* pResultType, void** pResult) const;
-    bool GetEntryProperty(const FbxObject* pObject, const char* pEntryDestinationName, FbxProperty & pProp) const;
+
+    bool EvaluateEntry(const FbxObject *pObject, const char *pEntryDestinationName, EFbxType *pResultType, void **pResult) const;
+
+    bool GetEntryProperty(const FbxObject *pObject, const char *pEntryDestinationName, FbxProperty &pProp) const;
 
 protected:
-    virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void Destruct(bool pRecursive);
+
     virtual void ConstructProperties(bool pForceSet);
 
     void InstantiateFunction();
-    bool Evaluate(const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    bool ReverseEvaluate(const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    void FreeEvaluationResult(EFbxType pResultType, void* pResult) const;
 
-    Function* mFunction;
+    bool Evaluate(const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    bool ReverseEvaluate(const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
+    void FreeEvaluationResult(EFbxType pResultType, void *pResult) const;
+
+    Function *mFunction;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -323,74 +313,77 @@ protected:
 /**  An evaluation operator to get the position of the node that is bound with this operator via a certain property.
   *  The position of the node is represented by translation.
   */
-class FbxNodePositionBOF : public FbxBindingOperator::Function
-{
+class FbxNodePositionBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-	static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
-	/** Evaluate the position of the node that is bound with this operator via a certain property.
-	  *   The position of the node is represented by translation.
-	  *
-	  * \param pOperator Operator running on the object.
-	  * \param pObject The object that will be evaluated.
-	  * \param pResultType The type of the result to be returned, eFbxDouble4 in this case.
-	  * \param pResult A pointer to a buffer that can hold the result.
-	  * \return \c true on success, \c false otherwise.
-	  */
-	virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-	
-	//! Inverse evaluation for this binding function is not implemented yet.
-	virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    /** Evaluate the position of the node that is bound with this operator via a certain property.
+      *   The position of the node is represented by translation.
+      *
+      * \param pOperator Operator running on the object.
+      * \param pObject The object that will be evaluated.
+      * \param pResultType The type of the result to be returned, eFbxDouble4 in this case.
+      * \param pResult A pointer to a buffer that can hold the result.
+      * \return \c true on success, \c false otherwise.
+      */
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    //! Inverse evaluation for this binding function is not implemented yet.
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxNodePositionBOF();
-	virtual ~FbxNodePositionBOF();
+
+    FbxNodePositionBOF();
+
+    virtual ~FbxNodePositionBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 /**  An evaluation operator to get the direction of the node that is bound with this operator via a certain property.
   *  The direction of the node is represented by Euler rotation.
   */
-class FbxNodeDirectionBOF : public FbxBindingOperator::Function
-{
+class FbxNodeDirectionBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-	static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
-	/** Evaluate the direction of the node that is bound with this operator via a certain property.
-	  *   The direction of the node is represented by Euler rotation.
-	  *
-	  * \param pOperator Operator running on the object.
-	  * \param pObject The object that will be evaluated.
-	  * \param pResultType The type of the result to be returned, eFbxDouble4 in this case.
-	  * \param pResult A pointer to a buffer that can hold the result.
-	  * \return \c true on success, \c false otherwise.
-	  */
-	virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-	
-	//! Inverse evaluation for this binding function is not implemented yet.
-	virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    /** Evaluate the direction of the node that is bound with this operator via a certain property.
+      *   The direction of the node is represented by Euler rotation.
+      *
+      * \param pOperator Operator running on the object.
+      * \param pObject The object that will be evaluated.
+      * \param pResultType The type of the result to be returned, eFbxDouble4 in this case.
+      * \param pResult A pointer to a buffer that can hold the result.
+      * \return \c true on success, \c false otherwise.
+      */
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    //! Inverse evaluation for this binding function is not implemented yet.
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxNodeDirectionBOF();
-	virtual ~FbxNodeDirectionBOF();
+
+    FbxNodeDirectionBOF();
+
+    virtual ~FbxNodeDirectionBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 /** A pass through operator used to assign constants to parameters.
 */
-class FbxAssignBOF : public FbxBindingOperator::Function
-{
+class FbxAssignBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "X" and returns it.
     * \param pOperator Operator running on the object.
@@ -398,17 +391,20 @@ public:
     * \param pResultType Will be filled by the type of the result.
     * \param pResult Will be filled by a pointer to a buffer that hold the result.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    
-	//! Inverse evaluation for this binding function is not implemented yet.
-	virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    //! Inverse evaluation for this binding function is not implemented yet.
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxAssignBOF();
+
     virtual ~FbxAssignBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -416,11 +412,10 @@ public:
 /** A conditional operator that outputs one out of two properties, based on
   * the value of a predicate property.
   */
-class FbxConditionalBOF : public FbxBindingOperator::Function
-{
+class FbxConditionalBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "predicate".
     * If the property value is true (!= 0, != ""), returns the value of the
@@ -435,15 +430,19 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxConditionalBOF();
+
     virtual ~FbxConditionalBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -451,11 +450,10 @@ public:
 /** A switch operator that outputs one out of n properties, based on
   * the value of a predicate property.
   */
-class FbxSwitchBOF : public FbxBindingOperator::Function
-{
+class FbxSwitchBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "predicate".
     * Returns the value of the property specified by "case_n", where n
@@ -470,24 +468,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxSwitchBOF();
+
     virtual ~FbxSwitchBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxTRSToMatrixBOF : public FbxBindingOperator::Function
-{
+class FbxTRSToMatrixBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "T", "R" and "S" and
     *   return a transform matrix.
@@ -498,24 +499,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxTRSToMatrixBOF();
+
     virtual ~FbxTRSToMatrixBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxAddBOF : public FbxBindingOperator::Function
-{
+class FbxAddBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X" and "Y"
     *   return X+Y as a float.
@@ -526,24 +530,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxAddBOF();
+
     virtual ~FbxAddBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxSubstractBOF : public FbxBindingOperator::Function
-{
+class FbxSubstractBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X" and "Y"
     *   return X-Y as a float.
@@ -554,24 +561,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxSubstractBOF();
+
     virtual ~FbxSubstractBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxMultiplyBOF : public FbxBindingOperator::Function
-{
+class FbxMultiplyBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X" and "Y"
     *   return X*Y as a float.
@@ -582,25 +592,28 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    //Set index to 1 to get realWorldScale.  
-	virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    //Set index to 1 to get realWorldScale.
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxMultiplyBOF();
+
     virtual ~FbxMultiplyBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxMultiplyDistBOF : public FbxBindingOperator::Function
-{
+class FbxMultiplyDistBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X" and "Y"
     *   return X*Y as a float.
@@ -611,23 +624,26 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxMultiplyDistBOF();
+
     virtual ~FbxMultiplyDistBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-class FbxOneOverXBOF : public FbxBindingOperator::Function
-{
+class FbxOneOverXBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X"
     *   return 1/X as a float.
@@ -638,23 +654,26 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxOneOverXBOF();
+
     virtual ~FbxOneOverXBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-class FbxPowerBOF : public FbxBindingOperator::Function
-{
+class FbxPowerBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object properties specified by "X" and "Y"
     *   return X^Y as a float.
@@ -665,23 +684,26 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxPowerBOF();
+
     virtual ~FbxPowerBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-class FbxDegreeToRadianBOF : public FbxBindingOperator::Function
-{
+class FbxDegreeToRadianBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "X"
     *   return X converted to radian as a float.
@@ -692,24 +714,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxDegreeToRadianBOF();
+
     virtual ~FbxDegreeToRadianBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-class FbxVectorDegreeToVectorRadianBOF : public FbxBindingOperator::Function
-{
+class FbxVectorDegreeToVectorRadianBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "X"
     *   return X converted to radian as a vector3.
@@ -720,25 +745,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxVectorDegreeToVectorRadianBOF();
+
     virtual ~FbxVectorDegreeToVectorRadianBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-
-class FbxSphericalToCartesianBOF : public FbxBindingOperator::Function
-{
+class FbxSphericalToCartesianBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Evaluates the object property specified by "rho", "theta" and "phi"
     *   return the converted Cartesian coordinates as a double3.
@@ -749,25 +776,27 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxSphericalToCartesianBOF();
+
     virtual ~FbxSphericalToCartesianBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 
-
-class FbxIsYupBOF : public FbxBindingOperator::Function
-{
+class FbxIsYupBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Check if the scene coordinate system is y-up
     *   return a bool.
@@ -778,28 +807,30 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxIsYupBOF();
+
     virtual ~FbxIsYupBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
-
 
 
 /** A symbol(string) operator that search the string table and return its corresponding unique id, based on
   * the value of a predicate property.
   */
-class FbxSymbolIDBOF : public FbxBindingOperator::Function
-{
+class FbxSymbolIDBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Check in the symbol table the string and returns its unique ID as an integer
     *
@@ -809,15 +840,19 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxSymbolIDBOF();
+
     virtual ~FbxSymbolIDBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -825,11 +860,10 @@ public:
 /**  A chooser operator that check spot distribution and returns the correct value, based on
   *  the value of a predicate property.
   */
-class FbxSpotDistributionChooserBOF : public FbxBindingOperator::Function
-{
+class FbxSpotDistributionChooserBOF : public FbxBindingOperator::Function {
 public:
-	//! Name of the operation function.
-    static const char* FunctionName;
+    //! Name of the operation function.
+    static const char *FunctionName;
 
     /** Check the enum of the spot distribution and returns the correct value
     *   as an int.
@@ -840,17 +874,20 @@ public:
     * \param pResult A pointer to a buffer that can hold the result.
     * \return \c true on success, \c false otherwise.
     */
-    virtual bool Evaluate(const FbxBindingOperator* pOperator, const FbxObject* pObject, EFbxType* pResultType, void** pResult) const;
-    
-	//! Inverse evaluation for this binding function is not implemented yet.
-	virtual bool ReverseEvaluate(const FbxBindingOperator* pOperator, const FbxObject* pTarget, const void* pIn, void** pOut, EFbxType* pOutType, bool setObj, int index) const;
-    
+    virtual bool Evaluate(const FbxBindingOperator *pOperator, const FbxObject *pObject, EFbxType *pResultType, void **pResult) const;
+
+    //! Inverse evaluation for this binding function is not implemented yet.
+    virtual bool ReverseEvaluate(const FbxBindingOperator *pOperator, const FbxObject *pTarget, const void *pIn, void **pOut, EFbxType *pOutType, bool setObj, int index) const;
+
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     FbxSpotDistributionChooserBOF();
+
     virtual ~FbxSpotDistributionChooserBOF();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

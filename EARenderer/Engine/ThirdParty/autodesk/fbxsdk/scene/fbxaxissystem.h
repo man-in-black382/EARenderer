@@ -94,19 +94,17 @@
 
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxAxisSystem
-{
+class FBXSDK_DLL FbxAxisSystem {
 public:
 
     /** \enum EUpVector Specifies which canonical axis represents up in the system (typically Y or Z). 
       */
-    enum EUpVector
-	{
+    enum EUpVector {
         eXAxis = 1,
         eYAxis = 2,
         eZAxis = 3
     };
-    
+
     /** \enum EFrontVector  Vector with origin at the screen pointing toward the camera.
       *                     This is a subset of enum EUpVector because axis cannot be repeated.
 	  *                     We use the system of "parity" to define this vector because its value (X,Y or Z axis)
@@ -114,8 +112,7 @@ public:
 	  *                     coordinate system values for the predefined systems.
 	  * \see Detailed description of FbxAxisSystem.
       */
-    enum EFrontVector
-	{
+    enum EFrontVector {
         eParityEven = 1,
         eParityOdd = 2
     };
@@ -125,8 +122,7 @@ public:
 	  *                   and the relationship with the up and front vectors. The EPreDefinedAxisSystem list the up-vector, parity and
 	  *                   coordinate system values for the predefined systems.
       */
-    enum ECoordSystem
-	{
+    enum ECoordSystem {
         eRightHanded,
         eLeftHanded
     };
@@ -134,42 +130,41 @@ public:
     /** \enum EPreDefinedAxisSystem  Enumeration that can be used to initialize a new instance of this class with
 	  *                              predefined configurations (see the "Predefined axis systems" section).
       */
-    enum EPreDefinedAxisSystem
-	{
-        eMayaZUp,			/*!< UpVector = ZAxis, FrontVector = -ParityOdd, CoordSystem = RightHanded */
-        eMayaYUp,			/*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
-        eMax,				/*!< UpVector = ZAxis, FrontVector = -ParityOdd, CoordSystem = RightHanded */
-        eMotionBuilder,		/*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
-        eOpenGL,			/*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
-        eDirectX,			/*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = LeftHanded */
-        eLightwave			/*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = LeftHanded */
+    enum EPreDefinedAxisSystem {
+        eMayaZUp,            /*!< UpVector = ZAxis, FrontVector = -ParityOdd, CoordSystem = RightHanded */
+        eMayaYUp,            /*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
+        eMax,                /*!< UpVector = ZAxis, FrontVector = -ParityOdd, CoordSystem = RightHanded */
+        eMotionBuilder,        /*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
+        eOpenGL,            /*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = RightHanded */
+        eDirectX,            /*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = LeftHanded */
+        eLightwave            /*!< UpVector = YAxis, FrontVector =  ParityOdd, CoordSystem = LeftHanded */
     };
 
     /** 
       * \name Constructor and Destructor
       */
     //@{
-		FbxAxisSystem();
+    FbxAxisSystem();
 
-		/** Constructor!
-		  * \param pUpVector Specify the up vector.
-		  * \param pFrontVector Specify the front vector.
-		  * \param pCoorSystem Specify RightHanded coordinate system or LeftHanded coordinate system.
-		  */
-		FbxAxisSystem(EUpVector pUpVector, EFrontVector pFrontVector, ECoordSystem pCoorSystem);
+    /** Constructor!
+      * \param pUpVector Specify the up vector.
+      * \param pFrontVector Specify the front vector.
+      * \param pCoorSystem Specify RightHanded coordinate system or LeftHanded coordinate system.
+      */
+    FbxAxisSystem(EUpVector pUpVector, EFrontVector pFrontVector, ECoordSystem pCoorSystem);
 
-		/** Copy constructor!
-		  * \param pAxisSystem Another FbxAxisSystem object copied to this one.
-		  */
-		FbxAxisSystem(const FbxAxisSystem& pAxisSystem);
+    /** Copy constructor!
+      * \param pAxisSystem Another FbxAxisSystem object copied to this one.
+      */
+    FbxAxisSystem(const FbxAxisSystem &pAxisSystem);
 
-		/** Constructor!
-		  * \param pAxisSystem Specify which predefined axis system to copy.
-		  */
-		FbxAxisSystem(const EPreDefinedAxisSystem pAxisSystem);
+    /** Constructor!
+      * \param pAxisSystem Specify which predefined axis system to copy.
+      */
+    FbxAxisSystem(const EPreDefinedAxisSystem pAxisSystem);
 
-		//! Destructor.
-		virtual ~FbxAxisSystem();
+    //! Destructor.
+    virtual ~FbxAxisSystem();
     //@}
 
     /**
@@ -181,23 +176,23 @@ public:
       * \param pAxisSystem The axis system to compare against this one.
       * \return \c true if these two axis systems are equal, \c false otherwise.
       */
-    bool operator==(const FbxAxisSystem& pAxisSystem)const;
+    bool operator==(const FbxAxisSystem &pAxisSystem) const;
 
     /** Non-equivalence operator.
       * \param pAxisSystem The axis system to compare against this one.
       * \return \c true if these two axis systems are unequal, \c false otherwise.
       */
-    bool operator!=(const FbxAxisSystem& pAxisSystem)const;
+    bool operator!=(const FbxAxisSystem &pAxisSystem) const;
     //@}
 
     /** Assignment operation.
       * \param pAxisSystem Axis system assigned to this one.
       */
-    FbxAxisSystem& operator=(const FbxAxisSystem& pAxisSystem);
+    FbxAxisSystem &operator=(const FbxAxisSystem &pAxisSystem);
 
-	/**
+    /**
       * \name Predefined axis systems.
-	  *	These static members define the axis system of the most popular applications.
+      *	These static members define the axis system of the most popular applications.
       */
     //@{
 
@@ -221,12 +216,12 @@ public:
 
     //! Predefined axis system: Lightwave (UpVector = +Y, FrontVector = +Z, CoordSystem = -X (LeftHanded))
     static const FbxAxisSystem Lightwave;
-	//@}
+    //@}
 
     /** Convert a scene to this axis system. Sets the axis system of the scene to this system unit. 
       * \param pScene     The scene to convert
       */
-    void ConvertScene(FbxScene* pScene) const;
+    void ConvertScene(FbxScene *pScene) const;
 
     /** Convert a scene to this axis system by using the specified
       *             node as an Fbx_Root. This is provided for backwards compatibility
@@ -234,19 +229,19 @@ public:
       * \param pScene       The scene to convert
       * \param pFbxRoot     The Fbx_Root node that will be transformed.
       */
-    void ConvertScene(FbxScene* pScene, FbxNode* pFbxRoot) const;
-	
+    void ConvertScene(FbxScene *pScene, FbxNode *pFbxRoot) const;
+
     /** Get the EFrontVector and its sign of this axis system.
       * \param pSign The sign of the axis, 1 for front, -1 for back (relative to observer).
       * \return The EFrontVector of this axis system.
       */
-    EFrontVector GetFrontVector( int & pSign ) const;
+    EFrontVector GetFrontVector(int &pSign) const;
 
     /** Get the EUpVector and its sign of this axis system.
       * \param pSign The sign of the axis, 1 for up, -1 for down (relative to observer).
       * \return The EUpVector of this axis system.
       */
-    EUpVector GetUpVector( int & pSign ) const;
+    EUpVector GetUpVector(int &pSign) const;
 
     /** Accessor to the ECoordSystem of this object.
       * \return The current coordinate axis system of this object.
@@ -260,38 +255,53 @@ public:
       * \param pRoot The node whose children are converted.
       * \param pSrcSystem The source axis system.
       */
-    void ConvertChildren(FbxNode* pRoot, const FbxAxisSystem& pSrcSystem) const;
+    void ConvertChildren(FbxNode *pRoot, const FbxAxisSystem &pSrcSystem) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	class AxisDef
-	{
-	public:
-		enum EAxis {eXAxis, eYAxis, eZAxis};
-		bool operator==(const AxisDef& pAxis) const { return (mAxis == pAxis.mAxis) && (mSign == pAxis.mSign); }
-		EAxis	mAxis;
-		int		mSign;
-	};
+    class AxisDef {
+    public:
+        enum EAxis {
+            eXAxis, eYAxis, eZAxis
+        };
+
+        bool operator==(const AxisDef &pAxis) const {
+            return (mAxis == pAxis.mAxis) && (mSign == pAxis.mSign);
+        }
+
+        EAxis mAxis;
+        int mSign;
+    };
 
     AxisDef mUpVector;
     AxisDef mFrontVector;
     AxisDef mCoorSystem;
 
-    void ConvertTProperty(FbxArray<FbxNode*>& pNodes, const FbxAxisSystem& pFrom) const;
-    void ConvertCurveNodes(FbxArray<FbxAnimCurveNode*>& pCurveNodes, const FbxAxisSystem& pFrom) const;
-    void AdjustPreRotation(FbxNode* pNode, const FbxMatrix& pConversionRM) const;
-    void AdjustPivots(FbxNode* pNode, const FbxMatrix& pConversionRM) const;
-    void GetConversionMatrix(const FbxAxisSystem& pFrom, FbxMatrix& pConversionRM) const;
-    void AdjustLimits(FbxNode* pNode, const FbxMatrix& pConversionRM) const;
-    void AdjustPoses(FbxScene* pScene, const FbxMatrix& pConversionRM) const;
-    void AdjustCamera(FbxNode* pNode, const FbxMatrix& pConversionRM ) const;
-    void AdjustCluster(FbxNode* pNode, const FbxMatrix& pConversionRM) const;
-    void ConvertChildren(FbxNode* pRoot, const FbxAxisSystem& pSrcSystem, bool pSubChildrenOnly) const;
+    void ConvertTProperty(FbxArray<FbxNode *> &pNodes, const FbxAxisSystem &pFrom) const;
+
+    void ConvertCurveNodes(FbxArray<FbxAnimCurveNode *> &pCurveNodes, const FbxAxisSystem &pFrom) const;
+
+    void AdjustPreRotation(FbxNode *pNode, const FbxMatrix &pConversionRM) const;
+
+    void AdjustPivots(FbxNode *pNode, const FbxMatrix &pConversionRM) const;
+
+    void GetConversionMatrix(const FbxAxisSystem &pFrom, FbxMatrix &pConversionRM) const;
+
+    void AdjustLimits(FbxNode *pNode, const FbxMatrix &pConversionRM) const;
+
+    void AdjustPoses(FbxScene *pScene, const FbxMatrix &pConversionRM) const;
+
+    void AdjustCamera(FbxNode *pNode, const FbxMatrix &pConversionRM) const;
+
+    void AdjustCluster(FbxNode *pNode, const FbxMatrix &pConversionRM) const;
+
+    void ConvertChildren(FbxNode *pRoot, const FbxAxisSystem &pSrcSystem, bool pSubChildrenOnly) const;
 
     friend class FbxGlobalSettings;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

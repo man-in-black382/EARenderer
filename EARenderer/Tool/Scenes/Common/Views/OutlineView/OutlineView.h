@@ -10,6 +10,6 @@
 
 @interface OutlineView : NSOutlineView
 
-@property (assign, nonatomic) IBInspectable BOOL isHeaderHidden;
+@property(assign, nonatomic) IBInspectable BOOL isHeaderHidden;
 
 @end

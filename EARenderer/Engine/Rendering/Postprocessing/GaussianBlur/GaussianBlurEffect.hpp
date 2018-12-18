@@ -20,22 +20,22 @@
 
 namespace EARenderer {
 
-    template <GLTexture::Float TextureFormat>
-    class GaussianBlurEffect: public PostprocessEffect<TextureFormat> {
+    template<GLTexture::Float TextureFormat>
+    class GaussianBlurEffect : public PostprocessEffect<TextureFormat> {
     private:
         GLSLGaussianBlur mBlurShader;
         std::vector<float> mWeights;
         std::vector<float> mTextureOffsets;
         GaussianBlurSettings mSettings;
 
-        void computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings);
+        void computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings &settings);
 
     public:
         using PostprocessEffect<TextureFormat>::PostprocessEffect;
 
         void blur(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-                  std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
-                  const GaussianBlurSettings& settings);
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
+                const GaussianBlurSettings &settings);
     };
 
 }

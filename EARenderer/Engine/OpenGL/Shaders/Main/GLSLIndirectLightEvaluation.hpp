@@ -18,15 +18,19 @@
 
 namespace EARenderer {
 
-    class GLSLIndirectLightEvaluation: public GLProgram {
+    class GLSLIndirectLightEvaluation : public GLProgram {
     public:
         GLSLIndirectLightEvaluation();
 
-        void setCamera(const Camera& camera);
-        void setGBuffer(const SceneGBuffer& GBuffer);
-        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
-        void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
+        void setCamera(const Camera &camera);
+
+        void setGBuffer(const SceneGBuffer &GBuffer);
+
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4> &textures);
+
+        void setWorldBoundingBox(const AxisAlignedBox3D &box);
+
+        void setProbePositions(const GLFloat3BufferTexture<glm::vec3> &positions);
     };
 
 }

@@ -11,26 +11,26 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     GLSLGenericGeometry::GLSLGenericGeometry()
-    :
-    GLProgram("GenericGeometry.vert", "GenericGeometry.frag", "")
-    { }
-    
+            :
+            GLProgram("GenericGeometry.vert", "GenericGeometry.frag", "") {
+    }
+
 #pragma mark - Setters
-    
+
     void GLSLGenericGeometry::setModelViewProjectionMatrix(const glm::mat4 &mvp) {
         glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uModelViewProjection")).location(), 1, GL_FALSE, glm::value_ptr(mvp));
     }
-    
-    void GLSLGenericGeometry::setColor(const Color& color) {
+
+    void GLSLGenericGeometry::setColor(const Color &color) {
         glUniform4fv(uniformByNameCRC32(ctcrc32("uColor")).location(), 1, reinterpret_cast<const float *>(&color));
     }
-    
-    void GLSLGenericGeometry::setHighlightColor(const Color& color) {
+
+    void GLSLGenericGeometry::setHighlightColor(const Color &color) {
         glUniform4fv(uniformByNameCRC32(ctcrc32("uHighlightColor")).location(), 1, reinterpret_cast<const GLfloat *>(&color));
     }
-    
+
 }

@@ -61,15 +61,17 @@ namespace bitsery {
             //contiguous doesn't nesessary equal to random access iterator.
             //contiguous hopefully will be available in c++20
             static constexpr bool isContiguous = false;
+
             //resize function, called only if container is resizable
-            static void resize(T& , size_t ) {
+            static void resize(T &, size_t) {
                 static_assert(std::is_void<T>::value,
-                              "Define ContainerTraits or include from <bitsery/traits/...> to use as container");
+                        "Define ContainerTraits or include from <bitsery/traits/...> to use as container");
             }
+
             //get container size
-            static size_t size(const T& ) {
+            static size_t size(const T &) {
                 static_assert(std::is_void<T>::value,
-                              "Define ContainerTraits or include from <bitsery/traits/...> to use as container");
+                        "Define ContainerTraits or include from <bitsery/traits/...> to use as container");
                 return 0u;
             }
         };
@@ -80,6 +82,7 @@ namespace bitsery {
             using TValue = T;
             static constexpr bool isResizable = false;
             static constexpr bool isContiguous = true;
+
             static size_t size(const T (&)[N]) {
                 return N;
             }
@@ -92,35 +95,37 @@ namespace bitsery {
             using TValue = T;
             static constexpr bool isResizable = false;
             static constexpr bool isContiguous = true;
-            static size_t size(const std::initializer_list<T>& container) {
+
+            static size_t size(const std::initializer_list<T> &container) {
                 return container.size();
             }
         };
 
         //specialization for pointer type buffer
         //only deserializer can use it
-        template <typename T>
-        struct ContainerTraits<const T*> {
+        template<typename T>
+        struct ContainerTraits<const T *> {
             using TValue = T;
             static constexpr bool isResizable = false;
             static constexpr bool isContiguous = true;
-            static size_t size(const T* ) {
+
+            static size_t size(const T *) {
                 static_assert(std::is_void<T>::value, "cannot get size for container of type T*");
                 return 0u;
             }
         };
 
-        template <typename T>
-        struct ContainerTraits<T*> {
+        template<typename T>
+        struct ContainerTraits<T *> {
             using TValue = T;
             static constexpr bool isResizable = false;
             static constexpr bool isContiguous = true;
-            static size_t size(const T* ) {
+
+            static size_t size(const T *) {
                 static_assert(std::is_void<T>::value, "cannot get size for container of type T*");
                 return 0u;
             }
         };
-
 
 
         //traits for text, default adds null-terminated character at the end
@@ -131,15 +136,15 @@ namespace bitsery {
             static constexpr bool addNUL = true;
 
             //get length of null terminated container
-            static size_t length(const T& ) {
+            static size_t length(const T &) {
                 static_assert(std::is_void<T>::value,
-                              "Define TextTraits or include from <bitsery/traits/...> to use as text");
+                        "Define TextTraits or include from <bitsery/traits/...> to use as text");
                 return 0u;
             }
         };
 
         //traits only for buffer adapters
-        template <typename T>
+        template<typename T>
         struct BufferAdapterTraits {
             //this function is only applies to resizable containers
 
@@ -149,9 +154,9 @@ namespace bitsery {
             //instead of using back_insert_iterator to append each byte to buffer.
             //thats why Writer return range iterators
 
-            static void increaseBufferSize(T& ) {
+            static void increaseBufferSize(T &) {
                 static_assert(std::is_void<T>::value,
-                              "Define BufferAdapterTraits or include from <bitsery/traits/...> to use as buffer adapter container");
+                        "Define BufferAdapterTraits or include from <bitsery/traits/...> to use as buffer adapter container");
             }
 
             using TIterator = details::NotDefinedType;
@@ -159,22 +164,22 @@ namespace bitsery {
         };
 
         //specialization for c-style buffer
-        template <typename T, size_t N>
+        template<typename T, size_t N>
         struct BufferAdapterTraits<T[N]> {
-            using TIterator = T*;
+            using TIterator = T *;
             using TValue = T;
         };
 
         //specialization for pointer type buffer
-        template <typename T>
-        struct BufferAdapterTraits<const T*> {
-            using TIterator = const T*;
+        template<typename T>
+        struct BufferAdapterTraits<const T *> {
+            using TIterator = const T *;
             using TValue = T;
         };
 
-        template <typename T>
-        struct BufferAdapterTraits<T*> {
-            using TIterator = T*;
+        template<typename T>
+        struct BufferAdapterTraits<T *> {
+            using TIterator = T *;
             using TValue = T;
         };
 

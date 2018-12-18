@@ -9,13 +9,13 @@
 #include "Range.hpp"
 
 namespace EArenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     Range::Range(int64_t start, int64_t length)
-    :
-    start(start),
-    length(length)
-    { }
-    
+            :
+            start(start),
+            length(length) {
+    }
+
 }

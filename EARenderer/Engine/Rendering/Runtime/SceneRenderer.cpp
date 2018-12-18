@@ -17,95 +17,94 @@
 #include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    SceneRenderer::SceneRenderer(const Scene* scene,
-                                 std::shared_ptr<const SurfelData> surfelData,
-                                 std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData)
-    :
-    mScene(scene),
-    mSurfelData(surfelData),
-    mDiffuseProbeData(diffuseProbeData),
-    mProbeGridResolution(scene->preferredProbeGridResolution()),
 
-    // Shadow maps
-    mDepthRenderbuffer(Size2D(1500)),
-    mDirectionalExponentialShadowMap(Size2D(1500)),
-    mDirectionalShadowFramebuffer(Size2D(1500)),
+    SceneRenderer::SceneRenderer(const Scene *scene,
+            std::shared_ptr<const SurfelData> surfelData,
+            std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData)
+            :
+            mScene(scene),
+            mSurfelData(surfelData),
+            mDiffuseProbeData(diffuseProbeData),
+            mProbeGridResolution(scene->preferredProbeGridResolution()),
 
-    // Image based lighting (IBL)
-    mEnvironmentMapCube(Size2D(512)),
-    mDiffuseIrradianceMap(Size2D(32)),
-    mSpecularIrradianceMap(Size2D(512)),
-    mBRDFIntegrationMap(Size2D(512)),
-    mIBLFramebuffer(Size2D(512)),
+            // Shadow maps
+            mDepthRenderbuffer(Size2D(1500)),
+            mDirectionalExponentialShadowMap(Size2D(1500)),
+            mDirectionalShadowFramebuffer(Size2D(1500)),
 
-    // Surfels and surfel clusters
-    mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
-    mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), GLTexture::Filter::None),
-    mSurfelsLuminanceFramebuffer(mSurfelsLuminanceMap.size()),
-    mSurfelClustersLuminanceFramebuffer(mSurfelClustersLuminanceMap.size()),
+            // Image based lighting (IBL)
+            mEnvironmentMapCube(Size2D(512)),
+            mDiffuseIrradianceMap(Size2D(32)),
+            mSpecularIrradianceMap(Size2D(512)),
+            mBRDFIntegrationMap(Size2D(512)),
+            mIBLFramebuffer(Size2D(512)),
 
-    // Diffuse light probes
-    mGridProbesSHMaps {
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
-        GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
-    },
-    mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
+            // Surfels and surfel clusters
+            mSurfelsLuminanceMap(surfelData->surfelsGBuffer()->size(), GLTexture::Filter::None),
+            mSurfelClustersLuminanceMap(surfelData->surfelClustersGBuffer()->size(), GLTexture::Filter::None),
+            mSurfelsLuminanceFramebuffer(mSurfelsLuminanceMap.size()),
+            mSurfelClustersLuminanceFramebuffer(mSurfelClustersLuminanceMap.size()),
 
-    // Output frame
-    mOutputFrame(Size2D(1280, 720)),
-    mThresholdFilteredOutputFrame(mOutputFrame.size()),
-    mOutputDepthRenderbuffer(mOutputFrame.size()),
-    mOutputFramebuffer(mOutputFrame.size()),
+            // Diffuse light probes
+            mGridProbesSHMaps{
+                    GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+                    GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+                    GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z),
+                    GLLDRTexture3D(Size2D(mProbeGridResolution.x, mProbeGridResolution.y), mProbeGridResolution.z)
+            },
+            mGridProbesSHFramebuffer(Size2D(mProbeGridResolution.x, mProbeGridResolution.y)),
 
-    // Effects
-    mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap)),
-    mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
-                 std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame)),
-    mToneMappingEffect(mBloomEffect.outputImage())
-    {
+            // Output frame
+            mOutputFrame(Size2D(1280, 720)),
+            mThresholdFilteredOutputFrame(mOutputFrame.size()),
+            mOutputDepthRenderbuffer(mOutputFrame.size()),
+            mOutputFramebuffer(mOutputFrame.size()),
+
+            // Effects
+            mShadowBlurEffect(std::shared_ptr<const GLHDRTexture2D>(&mDirectionalExponentialShadowMap)),
+            mBloomEffect(std::shared_ptr<const GLHDRTexture2D>(&mOutputFrame),
+                    std::shared_ptr<const GLHDRTexture2D>(&mThresholdFilteredOutputFrame)),
+            mToneMappingEffect(mBloomEffect.outputImage()) {
         mDiffuseProbesVAO.initialize(diffuseProbeData->probes(), {
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length())
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length())
         });
 
         setupGLState();
         setupTextures();
         setupFramebuffers();
     }
-    
+
 #pragma mark - Setters
-    
+
     void SceneRenderer::setDefaultRenderComponentsProvider(DefaultRenderComponentsProviding *provider) {
         mDefaultRenderComponentsProvider = provider;
     }
 
-    void SceneRenderer::setRenderingSettings(const RenderingSettings& settings) {
+    void SceneRenderer::setRenderingSettings(const RenderingSettings &settings) {
         mSettings = settings;
     }
 
 #pragma mark - Getters
 
-    const FrustumCascades& SceneRenderer::shadowCascades() const {
+    const FrustumCascades &SceneRenderer::shadowCascades() const {
         return mShadowCascades;
     }
 
 #pragma mark - Math
-    
-    bool SceneRenderer::raySelectsMesh(const Ray3D& ray, ID& meshID) {
+
+    bool SceneRenderer::raySelectsMesh(const Ray3D &ray, ID &meshID) {
         float minimumDistance = std::numeric_limits<float>::max();
         ID closestMeshID = IDNotFound;
-        
+
         for (ID id : mScene->meshInstances()) {
-            const MeshInstance& meshInstance = mScene->meshInstances()[id];
+            const MeshInstance &meshInstance = mScene->meshInstances()[id];
             glm::mat4 modelMatrix = meshInstance.transformation().modelMatrix();
             Ray3D meshLocalSpaceRay = ray;//.transformedBy(glm::inverse(modelMatrix)); // Had to comment the transformation and I don't remember why :(
-            
+
             float distance = 0;
             if (Collision::RayAABB(meshLocalSpaceRay, meshInstance.boundingBox(), distance)) {
                 // Intersection distance is in the mesh's local space
@@ -114,14 +113,14 @@ namespace EARenderer {
                 // Transform back to world space to obtain real origin -> intersection distance
                 glm::vec3 worldScaledDirection = modelMatrix * glm::vec4(localScaledDirection, 1.0);
                 float worldDistance = glm::length(worldScaledDirection);
-                
+
                 if (worldDistance < minimumDistance) {
                     minimumDistance = worldDistance;
                     closestMeshID = id;
                 }
             }
         }
-        
+
         meshID = closestMeshID;
         return closestMeshID != IDNotFound;
     }
@@ -161,69 +160,69 @@ namespace EARenderer {
 
 #pragma mark - Rendering
 #pragma mark - Baking
-    
+
     void SceneRenderer::convertEquirectangularMapToCubemap() {
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mEnvironmentMapCube);
         mIBLFramebuffer.viewport().apply();
-        
+
         mEqurectangularMapConversionShader.bind();
         mEqurectangularMapConversionShader.ensureSamplerValidity([this]() {
             mEqurectangularMapConversionShader.setEquirectangularEnvironmentMap(mScene->skybox()->equirectangularMap());
         });
-        
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
-        
+
         mEnvironmentMapCube.generateMipmaps();
     }
-    
+
     void SceneRenderer::buildDiffuseIrradianceMap() {
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mDiffuseIrradianceMap);
         GLViewport(mDiffuseIrradianceMap.size()).apply();
-        
+
         mRadianceConvolutionShader.bind();
         mRadianceConvolutionShader.setAlgorithm(GLSLRadianceConvolution::Algorithm::diffuse);
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
             mRadianceConvolutionShader.setEnvironmentRadianceMap(mEnvironmentMapCube);
         });
-        
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
-    
+
     void SceneRenderer::buildSpecularIrradianceMap() {
         mIBLFramebuffer.bind();
         GLViewport(mSpecularIrradianceMap.size()).apply();
-        
+
         mRadianceConvolutionShader.bind();
         mRadianceConvolutionShader.setAlgorithm(GLSLRadianceConvolution::Algorithm::specular);
         mRadianceConvolutionShader.ensureSamplerValidity([this]() {
             mRadianceConvolutionShader.setEnvironmentRadianceMap(mEnvironmentMapCube);
         });
-        
+
         for (int16_t mipLevel = 0; mipLevel < mNumberOfIrradianceMips; ++mipLevel) {
             Size2D mipSize = mEnvironmentMapCube.size().transformedBy(glm::vec2(std::pow(0.5, mipLevel)));
             GLViewport(mipSize).apply();
-            
-            float roughness = (float)mipLevel / (float)(mNumberOfIrradianceMips - 1);
+
+            float roughness = (float) mipLevel / (float) (mNumberOfIrradianceMips - 1);
             mRadianceConvolutionShader.setRoughness(roughness);
-            
+
             mIBLFramebuffer.attachTexture(mSpecularIrradianceMap, GLFramebuffer::ColorAttachment::Attachment0, mipLevel);
-            
+
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glDrawArrays(GL_TRIANGLES, 0, 4);
         }
     }
-    
+
     void SceneRenderer::buildBRDFIntegrationMap() {
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mBRDFIntegrationMap);
         mIBLFramebuffer.viewport().apply();
-        
+
         mBRDFIntegrationShader.bind();
-        
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 4);
     }
@@ -245,13 +244,13 @@ namespace EARenderer {
         mDepthPrepassShader.setCamera(*mScene->camera());
 
         for (ID instanceID : mScene->meshInstances()) {
-            auto& instance = mScene->meshInstances()[instanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            auto &instance = mScene->meshInstances()[instanceID];
+            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
             mDepthPrepassShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
+                auto &subMesh = subMeshes[subMeshID];
                 subMesh.draw();
             }
         }
@@ -273,13 +272,13 @@ namespace EARenderer {
             mDirectionalESMShader.setLightMatrix(mShadowCascades.lightViewProjections[cascade]);
 
             for (ID meshInstanceID : mScene->meshInstances()) {
-                auto& instance = mScene->meshInstances()[meshInstanceID];
-                auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+                auto &instance = mScene->meshInstances()[meshInstanceID];
+                auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
                 mDirectionalESMShader.setModelMatrix(instance.transformation().modelMatrix());
 
                 for (ID subMeshID : subMeshes) {
-                    auto& subMesh = subMeshes[subMeshID];
+                    auto &subMesh = subMeshes[subMeshID];
                     subMesh.draw();
                 }
             }
@@ -291,7 +290,7 @@ namespace EARenderer {
     }
 
     void SceneRenderer::relightSurfels() {
-        const DirectionalLight& directionalLight = mScene->directionalLight();
+        const DirectionalLight &directionalLight = mScene->directionalLight();
 
         mSurfelsLuminanceFramebuffer.bind();
         mSurfelsLuminanceFramebuffer.viewport().apply();
@@ -341,7 +340,7 @@ namespace EARenderer {
         mGridProbesSHFramebuffer.viewport().apply();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)mProbeGridResolution.z);
+        glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei) mProbeGridResolution.z);
     }
 
 #pragma mark - Public interface
@@ -357,8 +356,8 @@ namespace EARenderer {
     }
 
     void SceneRenderer::renderMeshes() {
-        const DirectionalLight& directionalLight = mScene->directionalLight();
-        
+        const DirectionalLight &directionalLight = mScene->directionalLight();
+
         mCookTorranceShader.bind();
 
         mCookTorranceShader.setSettings(mSettings);
@@ -371,7 +370,7 @@ namespace EARenderer {
             mCookTorranceShader.setFrustumCascades(mShadowCascades);
             mCookTorranceShader.setExponentialShadowMap(*mShadowBlurEffect.outputImage());
             mCookTorranceShader.setGridProbesSHTextures(mGridProbesSHMaps);
-//            mCookTorranceShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
+//            mLightEvaluationShader.setIBLUniforms(mDiffuseIrradianceMap, mSpecularIrradianceMap, mBRDFIntegrationMap, mNumberOfIrradianceMips);
         });
 
 //        mOutputFramebuffer.bind();
@@ -380,14 +379,14 @@ namespace EARenderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         for (ID instanceID : mScene->meshInstances()) {
-            auto& instance = mScene->meshInstances()[instanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            auto &instance = mScene->meshInstances()[instanceID];
+            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
             mCookTorranceShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
-                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+                auto &subMesh = subMeshes[subMeshID];
+                auto &material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
 
                 mCookTorranceShader.ensureSamplerValidity([this, &material]() {
                     mCookTorranceShader.setMaterial(material);
@@ -481,7 +480,7 @@ namespace EARenderer {
         mFSQuadShader.bind();
         mFSQuadShader.setApplyToneMapping(true);
 
-        Rect2D viewportRect({ 100, 0 }, { 100, 100 });
+        Rect2D viewportRect({100, 0}, {100, 100});
         GLViewport(viewportRect).apply();
 
         mFSQuadShader.ensureSamplerValidity([this]() {
@@ -504,7 +503,7 @@ namespace EARenderer {
             mGridProbeRenderingShader.setGridProbesSHTextures(mGridProbesSHMaps);
         });
 
-        glDrawArrays(GL_POINTS, 0, (GLsizei)mDiffuseProbeData->probes().size());
+        glDrawArrays(GL_POINTS, 0, (GLsizei) mDiffuseProbeData->probes().size());
     }
 
     void SceneRenderer::renderLinksForDiffuseProbe(size_t probeIndex) {
@@ -520,7 +519,7 @@ namespace EARenderer {
             mLightProbeLinksRenderingShader.setSurfelClusterCenters(*mSurfelData->surfelClusterCentersBufferTexture());
         });
 
-        glDrawArrays(GL_POINTS, (GLint)probeIndex, 1);
+        glDrawArrays(GL_POINTS, (GLint) probeIndex, 1);
     }
 
     void SceneRenderer::renderProbeOcclusionMap(size_t probeIndex) {
@@ -534,7 +533,7 @@ namespace EARenderer {
             mProbeOcclusionRenderingShader.setProbeOcclusionMapAtlasOffsets(*mDiffuseProbeData->occlusionMapAtlasOffsetsBufferTexture());
         });
 
-        glDrawArraysInstanced(GL_POINTS, (GLint)probeIndex, 1, 6);
+        glDrawArraysInstanced(GL_POINTS, (GLint) probeIndex, 1, 6);
     }
 
 }

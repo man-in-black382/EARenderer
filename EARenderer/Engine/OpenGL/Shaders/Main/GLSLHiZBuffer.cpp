@@ -13,9 +13,9 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLHiZBuffer::GLSLHiZBuffer()
-    :
-    GLProgram("FullScreenQuad.vert", "HiZBuffer.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "HiZBuffer.frag", "") {
+    }
 
 #pragma mark - Setters
 

@@ -34,10 +34,11 @@ namespace EARenderer {
         std::shared_ptr<SceneGBuffer> mGBuffer;
 
         void generateGBuffer();
+
         void generateHiZBuffer();
 
     public:
-        SceneGBufferConstructor(const Scene* scene, const RenderingSettings& settings);
+        SceneGBufferConstructor(const Scene *scene, const RenderingSettings &settings);
 
         std::shared_ptr<const SceneGBuffer> GBuffer() const;
 

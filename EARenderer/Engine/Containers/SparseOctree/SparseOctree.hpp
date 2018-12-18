@@ -26,11 +26,11 @@
 
 namespace EARenderer {
 
-    template <typename T>
+    template<typename T>
     class SparseOctree {
     public:
-        using ContainmentDetector = std::function<bool(const T& object, const AxisAlignedBox3D& nodeBoundingBox)>;
-        using CollisionDetector = std::function<bool(const T& object, const Ray3D& ray)>;
+        using ContainmentDetector = std::function<bool(const T &object, const AxisAlignedBox3D &nodeBoundingBox)>;
+        using CollisionDetector = std::function<bool(const T &object, const Ray3D &ray)>;
 
     private:
 
@@ -54,13 +54,17 @@ namespace EARenderer {
             std::vector<T> mObjects;
 
             void setChildPresent(BitMask childIndex, bool isPresent);
+
             void setChildLeaf(BitMask childIndex, bool isLeaf);
+
             bool isChildPresent(BitMask childIndex) const;
+
             bool isChildLeaf(BitMask childIndex) const;
 
         public:
-            const AxisAlignedBox3D& boundingBox() const;
-            const std::vector<T>& objects() const;
+            const AxisAlignedBox3D &boundingBox() const;
+
+            const std::vector<T> &objects() const;
         };
 
     private:
@@ -72,6 +76,7 @@ namespace EARenderer {
             float t_out;
 
             StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth);
+
             StackFrame(NodeIndex nodeIndex, uint8_t nodeDepth, float t_in, float t_out);
         };
 
@@ -113,21 +118,21 @@ namespace EARenderer {
 
         NodeIndex appendChildIndex(NodeIndex parent, NodeIndex child);
 
-        BitMask signMask(const glm::vec3& valueTriple) const;
+        BitMask signMask(const glm::vec3 &valueTriple) const;
 
-        BitMask sortMaskByMinimum(const glm::vec3& valueTriple) const;
+        BitMask sortMaskByMinimum(const glm::vec3 &valueTriple) const;
 
-        BitMask sortMaskByMaximum(const glm::vec3& valueTriple) const;
+        BitMask sortMaskByMaximum(const glm::vec3 &valueTriple) const;
 
         void pushRootNode();
 
-        void pushChildNodes(const StackFrame& currentFrame,
-                            const glm::vec3& t,
-                            BitMask signMaskA,
-                            BitMask signMaskB,
-                            BitMask p_first,
-                            BitMask p_last,
-                            size_t planeIntersectionCounter);
+        void pushChildNodes(const StackFrame &currentFrame,
+                const glm::vec3 &t,
+                BitMask signMaskA,
+                BitMask signMaskB,
+                BitMask p_first,
+                BitMask p_last,
+                size_t planeIntersectionCounter);
 
 #pragma mark - Public interface
 
@@ -144,34 +149,35 @@ namespace EARenderer {
             MapIterator mNodesEndIterator;
 
             Iterator(MapIterator i, MapIterator endIterator);
+
             Iterator(MapIterator endIterator);
 
         public:
-            Iterator& operator++();
+            Iterator &operator++();
 
-            const Node& operator*() const;
+            const Node &operator*() const;
 
-            const Node* operator->() const;
+            const Node *operator->() const;
 
-            bool operator!=(const Iterator& other) const;
+            bool operator!=(const Iterator &other) const;
         };
 
 #pragma mark - Lifecycle
 
-        SparseOctree(const AxisAlignedBox3D& boundingBox,
-                     size_t maximumDepth,
-                     const ContainmentDetector& containmentDetector,
-                     const CollisionDetector& collisionDetector);
+        SparseOctree(const AxisAlignedBox3D &boundingBox,
+                size_t maximumDepth,
+                const ContainmentDetector &containmentDetector,
+                const CollisionDetector &collisionDetector);
 
 #pragma mark - Building
 
-        void insert(const T& object);
+        void insert(const T &object);
 
 #pragma mark - Traversal
 
-        bool raymarch(const Ray3D& ray);
+        bool raymarch(const Ray3D &ray);
 
-        bool raymarch(const glm::vec3& p0, const glm::vec3& p1);
+        bool raymarch(const glm::vec3 &p0, const glm::vec3 &p1);
 
 #pragma mark - Iteration
 
@@ -182,12 +188,12 @@ namespace EARenderer {
     };
 
     template<typename T>
-    typename SparseOctree<T>::Iterator begin(const SparseOctree<T>& tree) {
+    typename SparseOctree<T>::Iterator begin(const SparseOctree<T> &tree) {
         return tree.begin();
     }
 
     template<typename T>
-    typename SparseOctree<T>::Iterator end(const SparseOctree<T>& tree) {
+    typename SparseOctree<T>::Iterator end(const SparseOctree<T> &tree) {
         return tree.end();
     }
 

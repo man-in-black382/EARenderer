@@ -21,11 +21,13 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 // these symbols are defined for backward compatibility
-#define FBXSDK_TAKENODE_DEFAULT_NAME	"Default"
-#define FBXSDK_ROOTCURVE_DEFAULT_NAME	"Defaults"
+#define FBXSDK_TAKENODE_DEFAULT_NAME    "Default"
+#define FBXSDK_ROOTCURVE_DEFAULT_NAME    "Defaults"
 
 class FbxTakeInfo;
+
 class FbxThumbnail;
+
 class FbxAnimEvaluator;
 
 /** The Animation stack is a collection of animation layers. The Fbx document can have one or 
@@ -34,9 +36,8 @@ class FbxAnimEvaluator;
   * are evaluated according to their blending modes to produce a resulting animation for a given attribute.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxAnimStack : public FbxCollection
-{
-    FBXSDK_OBJECT_DECLARE(FbxAnimStack, FbxCollection);
+class FBXSDK_DLL FbxAnimStack : public FbxCollection {
+FBXSDK_OBJECT_DECLARE(FbxAnimStack, FbxCollection);
 
 public:
     //////////////////////////////////////////////////////////////////////////
@@ -87,52 +88,52 @@ public:
       * Default value is 0
       */
     FbxPropertyT<FbxTime> ReferenceStop;
-  
+
     /** Reset the object time spans either to their default values or from the pTakeInfo structure, if provided.
       * \param pTakeInfo The take info to be used during reset.
       */
-    void Reset(const FbxTakeInfo* pTakeInfo = NULL);
+    void Reset(const FbxTakeInfo *pTakeInfo = NULL);
 
     /**
       * \name Utility functions.
       *
       */
     //@{
-        /** Get the LocalStart and LocalStop time properties as a FbxTimeSpan.
-          * \return The current local time span.
-          */
-        FbxTimeSpan GetLocalTimeSpan() const;
+    /** Get the LocalStart and LocalStop time properties as a FbxTimeSpan.
+      * \return The current local time span.
+      */
+    FbxTimeSpan GetLocalTimeSpan() const;
 
-        /** Set the LocalStart and LocalStop time properties from a FbxTimeSpan.
-          * \param pTimeSpan The new local time span.
-          */
-        void SetLocalTimeSpan(FbxTimeSpan& pTimeSpan);
+    /** Set the LocalStart and LocalStop time properties from a FbxTimeSpan.
+      * \param pTimeSpan The new local time span.
+      */
+    void SetLocalTimeSpan(FbxTimeSpan &pTimeSpan);
 
-        /** Get the ReferenceStart and ReferenceStop time properties as a FbxTimeSpan.
-          * \return The current reference time span.
-          */
-        FbxTimeSpan GetReferenceTimeSpan() const;
+    /** Get the ReferenceStart and ReferenceStop time properties as a FbxTimeSpan.
+      * \return The current reference time span.
+      */
+    FbxTimeSpan GetReferenceTimeSpan() const;
 
-        /** Set the ReferenceStart and ReferenceStop time properties from a FbxTimeSpan.
-          * \param pTimeSpan The new reference time span.
-          */
-        void SetReferenceTimeSpan(FbxTimeSpan& pTimeSpan);
+    /** Set the ReferenceStart and ReferenceStop time properties from a FbxTimeSpan.
+      * \param pTimeSpan The new reference time span.
+      */
+    void SetReferenceTimeSpan(FbxTimeSpan &pTimeSpan);
 
-        /** Bake all the animation layers on the base layer.
-          * This function will process all the properties on every animation layer and generate a re-sampled set of
-          * animation keys (representing the layers' evaluated result) on the base layer. Once this operation is completed
-          * successfully, all the layers (except the base one) are destroyed. Properties that are only defined on the base 
-          * layer will remain unaffected by the re-sampling. The stack local timespan is updated with the overall animation range.
-          * 
-          * \param pEvaluator The layer evaluator. This is the engine that evaluates the overall result of any given
-          *                   property according to the layers flags.
-          * \param pStart   The start time of the re-sampling range.
-          * \param pStop    The stop time of the re-sampling range.
-          * \param pPeriod  The time increment for the re-sampling.
-          * \return \c true if the operation was successful and \c false in case of errors.
-          * \remarks If this AnimStack contains only one AnimLayer, the function will return false and do nothing.
-          */
-        bool BakeLayers(FbxAnimEvaluator* pEvaluator, FbxTime pStart, FbxTime pStop, FbxTime pPeriod);
+    /** Bake all the animation layers on the base layer.
+      * This function will process all the properties on every animation layer and generate a re-sampled set of
+      * animation keys (representing the layers' evaluated result) on the base layer. Once this operation is completed
+      * successfully, all the layers (except the base one) are destroyed. Properties that are only defined on the base 
+      * layer will remain unaffected by the re-sampling. The stack local timespan is updated with the overall animation range.
+      * 
+      * \param pEvaluator The layer evaluator. This is the engine that evaluates the overall result of any given
+      *                   property according to the layers flags.
+      * \param pStart   The start time of the re-sampling range.
+      * \param pStop    The stop time of the re-sampling range.
+      * \param pPeriod  The time increment for the re-sampling.
+      * \return \c true if the operation was successful and \c false in case of errors.
+      * \remarks If this AnimStack contains only one AnimLayer, the function will return false and do nothing.
+      */
+    bool BakeLayers(FbxAnimEvaluator *pEvaluator, FbxTime pStart, FbxTime pStop, FbxTime pPeriod);
     //@}
 
 /*****************************************************************************************************************************
@@ -141,7 +142,9 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual void ConstructProperties(bool pForceSet);
-	virtual void Destruct(bool pRecursive);
+
+    virtual void Destruct(bool pRecursive);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -21,10 +21,10 @@
 
 
 @interface SettingsTabViewItem : NSTabViewItem {
-    @private
+@private
     EARenderer::RenderingSettings mSettings;
 }
 
-@property (strong, nonatomic) IBOutlet id<SettingsTabViewItemDelegate> delegate;
+@property(strong, nonatomic) IBOutlet id <SettingsTabViewItemDelegate> delegate;
 
 @end

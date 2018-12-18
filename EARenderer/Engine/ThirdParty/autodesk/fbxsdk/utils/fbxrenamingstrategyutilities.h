@@ -20,16 +20,15 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 #define NAMECLASH1_KEY      "_ncl1_" // name (x)
-#define NAMECLASH2_KEY		"_ncl2_" // Upper/lower cases clash
+#define NAMECLASH2_KEY        "_ncl2_" // Upper/lower cases clash
 
-#define UPPERTOLOWER_KEY	"ul"
-#define LOWERTOUPPER_KEY	"lu"
+#define UPPERTOLOWER_KEY    "ul"
+#define LOWERTOUPPER_KEY    "lu"
 
 /** \brief This class contains a set of utilities, which are used by the FBX renaming strategy.
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxRenamingStrategyUtils
-{
+class FBXSDK_DLL FbxRenamingStrategyUtils {
 public:
 
     /** Check if the string has non alphanumeric characters and replace them with a special string containing a prefix and 
@@ -50,7 +49,7 @@ public:
     *         Inversely, when the value is \c false, each non-alphanumeric characters is replaced with FBXCHR##### (where 
     *         ##### is the hexadecimal representation of the character code).
     */
-    static bool EncodeNonAlpha(FbxString &pString, bool pFirstCharMustBeAlphaOnly=false, FbxString pPermittedChars="", bool p8bitCharsOnly = true);
+    static bool EncodeNonAlpha(FbxString &pString, bool pFirstCharMustBeAlphaOnly = false, FbxString pPermittedChars = "", bool p8bitCharsOnly = true);
 
     /** Take a string that has been encoded by EncodeNonAlpha and re-extract the non-alphanumeric values.
     * \param pString String to be processed. The result of the conversion is also returned in this string.
@@ -64,7 +63,7 @@ public:
     * \return Always returns true.
     * \remarks please ALWAYS call Encode Duplicate BEFORE Encode Case Insensitive.
     */
-    static bool EncodeDuplicate(FbxString &pString, int pInstanceNumber=0);
+    static bool EncodeDuplicate(FbxString &pString, int pInstanceNumber = 0);
 
     /** This method will remove the _ncl1_xxx from the given string
     * \param pString

@@ -48,7 +48,9 @@ namespace bitsery {
              * Works with std::optional types
              * @param alignBeforeData only makes sense when bit-packing enabled, by default aligns after writing/reading bool state of optional
              */
-            explicit StdOptional(bool alignBeforeData=true):_alignBeforeData{alignBeforeData} {}
+            explicit StdOptional(bool alignBeforeData = true) : _alignBeforeData{alignBeforeData} {
+            }
+
             template<typename T>
             constexpr void assertType() const {
                 using TOpt = typename std::remove_cv<T>::type;
@@ -83,6 +85,7 @@ namespace bitsery {
                     obj = T{};
                 }
             }
+
         private:
             bool _alignBeforeData;
         };

@@ -11,7 +11,7 @@
 
 namespace EARenderer {
 
-    template <typename T>
+    template<typename T>
     void
     SparseOctree<T>::Node::setChildPresent(BitMask childIndex, bool isPresent) {
         uint16_t mask = 1 << (childIndex + 8);
@@ -23,7 +23,7 @@ namespace EARenderer {
         }
     }
 
-    template <typename T>
+    template<typename T>
     void
     SparseOctree<T>::Node::setChildLeaf(BitMask childIndex, bool isLeaf) {
         uint16_t mask = 1 << childIndex;
@@ -35,28 +35,28 @@ namespace EARenderer {
         }
     }
 
-    template <typename T>
+    template<typename T>
     bool
     SparseOctree<T>::Node::isChildPresent(BitMask childIndex) const {
         uint16_t mask = 1 << (childIndex + 8);
         return mChildInfo & mask;
     }
 
-    template <typename T>
+    template<typename T>
     bool
     SparseOctree<T>::Node::isChildLeaf(BitMask childIndex) const {
         uint16_t mask = 1 << childIndex;
         return mChildInfo & mask;
     }
 
-    template <typename T>
-    const AxisAlignedBox3D&
+    template<typename T>
+    const AxisAlignedBox3D &
     SparseOctree<T>::Node::boundingBox() const {
         return mBoundingBox;
     }
 
-    template <typename T>
-    const std::vector<T>&
+    template<typename T>
+    const std::vector<T> &
     SparseOctree<T>::Node::objects() const {
         return mObjects;
     }

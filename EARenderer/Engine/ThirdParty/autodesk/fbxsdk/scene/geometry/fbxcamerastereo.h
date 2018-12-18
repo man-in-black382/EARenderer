@@ -27,9 +27,8 @@
   * The left and right camera can also be get and set via related methods in FbxCameraStereo class.
   * \see FbxCamera and FbxCameraSwitcher.
   */
-class FBXSDK_DLL FbxCameraStereo : public FbxCamera
-{
-    FBXSDK_OBJECT_DECLARE(FbxCameraStereo, FbxCamera);
+class FBXSDK_DLL FbxCameraStereo : public FbxCamera {
+FBXSDK_OBJECT_DECLARE(FbxCameraStereo, FbxCamera);
 
 public:
     //! Return the type of node attribute which is EType::eCameraStereo.
@@ -40,12 +39,11 @@ public:
 
     /** Types of Stereo camera.
       */
-    enum EStereoType
-    {
-        eNone,		//!< Disable the stereo effect.(Default value)
-        eConverged,	//!< Computes the zero parallax plane by toeing in the cameras.
-        eOffAxis,	//!< Computes the convergence plane by shifting the frustum using camera film back.
-        eParallel	//!< A parallel camera setup where there is effectively no convergence plane.
+    enum EStereoType {
+        eNone,        //!< Disable the stereo effect.(Default value)
+        eConverged,    //!< Computes the zero parallax plane by toeing in the cameras.
+        eOffAxis,    //!< Computes the convergence plane by shifting the frustum using camera film back.
+        eParallel    //!< A parallel camera setup where there is effectively no convergence plane.
     };
 
     /** Get the left camera which connect to property LeftCamera.
@@ -53,14 +51,14 @@ public:
       * \remarks  Current FbxCameraStereo should work with two FbxCamera, left camera and right camera.
       * Use this method to get the left camera.
       */
-    FbxCamera* GetLeftCamera() const;
+    FbxCamera *GetLeftCamera() const;
 
     /** Get the right camera which connect to property RightCamera.
       * \return   A pointer to FbxCamera.
       * \remarks  Current FbxCameraStereo should work with two FbxCamera, left camera and right camera.
       * Use this method to get the right camera.
       */
-    FbxCamera* GetRightCamera() const;
+    FbxCamera *GetRightCamera() const;
 
     /** Set the left camera, connect property LeftCamera to pCamera.
 	  * \param pCamera The camera to set.
@@ -68,7 +66,7 @@ public:
       * \remarks Current FbxCameraStereo should work with two FbxCamera, left camera and right camera.
       * Use this method to set the left camera.
       */
-    bool SetLeftCamera(FbxCamera* pCamera);
+    bool SetLeftCamera(FbxCamera *pCamera);
 
     /** Set the right camera, connect property RightCamera to pCamera.
 	  * \param pCamera The camera to set.
@@ -76,7 +74,7 @@ public:
       * \remarks Current FbxCameraStereo should work with two FbxCamera, left camera and right camera.
       * Use this method to set the right camera.
       */
-    bool SetRightCamera(FbxCamera* pCamera);
+    bool SetRightCamera(FbxCamera *pCamera);
 
     /** Get the local transformation matrix of left camera.
       * \return The local transformation matrix of left camera.
@@ -133,7 +131,7 @@ public:
       *
       * \remarks Default Value is eNone.
       */
-    FbxPropertyT<EStereoType>                    Stereo;
+    FbxPropertyT<EStereoType> Stereo;
 
     /** This property handles the distance between left and right cameras.
       *
@@ -142,7 +140,7 @@ public:
       *
       * \remarks Default Value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       InteraxialSeparation;
+    FbxPropertyT<FbxDouble> InteraxialSeparation;
 
     /** This property handles the distance on the camera view axis where the zero parallax plane occurs.
       *
@@ -151,7 +149,7 @@ public:
       *
       * \remarks Default Value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       ZeroParallax;
+    FbxPropertyT<FbxDouble> ZeroParallax;
 
     /** This property is to offset the computed toe-in effect when it's in Converged mode.
       *
@@ -162,7 +160,7 @@ public:
       * This value is specified in degrees and acts as an offset to the computed toe-in.
 	  * \see EStereoType.
       */
-    FbxPropertyT<FbxDouble>                       ToeInAdjust;
+    FbxPropertyT<FbxDouble> ToeInAdjust;
 
     /** This property handles the film offset for the right camera.
       *
@@ -171,7 +169,7 @@ public:
       *
       * \remarks Default Value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       FilmOffsetRightCam;
+    FbxPropertyT<FbxDouble> FilmOffsetRightCam;
 
     /** This property handles the film offset for the left camera.
       *
@@ -180,7 +178,7 @@ public:
       *
       * \remarks Default Value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       FilmOffsetLeftCam;
+    FbxPropertyT<FbxDouble> FilmOffsetLeftCam;
 
     /** This property has the right camera connected to it.
       *
@@ -189,7 +187,7 @@ public:
       *
       * \remarks The right camera is connected as source object.
       */
-    FbxPropertyT<FbxReference>                     RightCamera;
+    FbxPropertyT<FbxReference> RightCamera;
 
     /** This property has the left camera connected to it.
       *
@@ -198,7 +196,7 @@ public:
       *
       * \remarks The left camera is connected as source object.
       */
-    FbxPropertyT<FbxReference>                     LeftCamera;
+    FbxPropertyT<FbxReference> LeftCamera;
 
     /** This property handles the precomp file name
     *
@@ -207,7 +205,7 @@ public:
     *
     * Default value is ""
     */
-    FbxPropertyT<FbxString>                        PrecompFileName;
+    FbxPropertyT<FbxString> PrecompFileName;
 
     /** This property handles the relative precomp file name
     *
@@ -216,7 +214,7 @@ public:
     *
     * Default value is ""
     */
-    FbxPropertyT<FbxString>                        RelativePrecompFileName;
+    FbxPropertyT<FbxString> RelativePrecompFileName;
 
     /** connect left and right camera property to stereo camera.
     * \return true if it's successful, otherwise return false.
@@ -235,10 +233,13 @@ protected:
     virtual void ConstructProperties(bool pForceSet);
 
     virtual FbxStringList GetTypeFlags() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-inline EFbxType FbxTypeOf(const FbxCameraStereo::EStereoType&){ return eFbxEnum; }
+inline EFbxType FbxTypeOf(const FbxCameraStereo::EStereoType &) {
+    return eFbxEnum;
+}
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

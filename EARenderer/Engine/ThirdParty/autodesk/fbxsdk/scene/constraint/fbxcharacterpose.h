@@ -45,9 +45,8 @@
   *     -# Call lCharacterPose->GetRootNode()->ComputeLocalState(1, true);
   *     -# Call lCharacterPose->GetRootNode()->SetCurrentTakeFromLocalState(FBXSDK_TIME_ZERO, true).
   */
-class FBXSDK_DLL FbxCharacterPose : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxCharacterPose,FbxObject);
+class FBXSDK_DLL FbxCharacterPose : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxCharacterPose, FbxObject);
 
 public:
     //! Reset to an empty character pose.
@@ -56,19 +55,19 @@ public:
     /** Get the root node.
       * \return     Pointer to the root node.
       */
-    FbxNode* GetRootNode() const;
+    FbxNode *GetRootNode() const;
 
     /** Get the character.
       * \return     Pointer to the character.
       */
-    FbxCharacter* GetCharacter() const;
+    FbxCharacter *GetCharacter() const;
 
     /** Get offset matrix for a given character node.
       * \param pCharacterNodeId     Character Node ID.
       * \param pOffset              Receives offset matrix.
       * \return                     \c true if successful, \c false otherwise.
       */
-    bool GetOffset(FbxCharacter::ENodeId pCharacterNodeId, FbxAMatrix& pOffset) const;
+    bool GetOffset(FbxCharacter::ENodeId pCharacterNodeId, FbxAMatrix &pOffset) const;
 
     /** Get local position for a given character node.
       * \param pCharacterNodeId     Character Node ID.
@@ -77,33 +76,37 @@ public:
       * \param pLocalS              Receives local scaling vector.
       * \return                     \c true if successful, \c false otherwise.
       */
-    bool GetLocalPosition(FbxCharacter::ENodeId pCharacterNodeId, FbxVector4& pLocalT, FbxVector4& pLocalR, FbxVector4& pLocalS) const;
+    bool GetLocalPosition(FbxCharacter::ENodeId pCharacterNodeId, FbxVector4 &pLocalT, FbxVector4 &pLocalR, FbxVector4 &pLocalS) const;
 
     /** Get global position for a given character node.
       * \param pCharacterNodeId     Character Node ID.
       * \param pGlobalPosition      Receives global position.
       * \return                     \c true if successful, \c false otherwise.
       */
-    bool GetGlobalPosition(FbxCharacter::ENodeId pCharacterNodeId, FbxAMatrix& pGlobalPosition) const;
+    bool GetGlobalPosition(FbxCharacter::ENodeId pCharacterNodeId, FbxAMatrix &pGlobalPosition) const;
 
-	/** Retrieve the pose scene used by this character pose
-	* \return The pose's scene (this is a different scene than the scene the character pose is in). */
-	FbxScene* GetPoseScene() const;
+    /** Retrieve the pose scene used by this character pose
+    * \return The pose's scene (this is a different scene than the scene the character pose is in). */
+    FbxScene *GetPoseScene() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
-    virtual FbxObject* Clone(                          FbxObject::ECloneType pCloneType=eDeepClone, FbxObject* pContainer=NULL, void* pSet = NULL) const;    
-            void       Clone(FbxScene* pPoseScene,     FbxObject::ECloneType pCloneType=eDeepClone, FbxObject* pContainer=NULL, void* pSet = NULL);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    virtual FbxObject *Clone(FbxObject::ECloneType pCloneType = eDeepClone, FbxObject *pContainer = NULL, void *pSet = NULL) const;
+
+    void Clone(FbxScene *pPoseScene, FbxObject::ECloneType pCloneType = eDeepClone, FbxObject *pContainer = NULL, void *pSet = NULL);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void Destruct(bool pRecursive);
 
 private:
-    FbxScene* mPoseScene;
+    FbxScene *mPoseScene;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

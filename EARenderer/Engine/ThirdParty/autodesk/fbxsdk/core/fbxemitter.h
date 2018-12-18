@@ -46,46 +46,47 @@ class FbxListener;
 * \nosubgrouping
 * \see FbxListener FbxEventHandler FbxEvent FbxEventBase
 */
-class FBXSDK_DLL FbxEmitter
-{
+class FBXSDK_DLL FbxEmitter {
 public:
-	/** Add the specified event handler to current emitter list.
-	* \param pHandler The event handler will be added to the handlers list of current emitter. */
-	void AddListener(FbxEventHandler& pHandler);
+    /** Add the specified event handler to current emitter list.
+    * \param pHandler The event handler will be added to the handlers list of current emitter. */
+    void AddListener(FbxEventHandler &pHandler);
 
-	/** Remove the specified event handler from current emitter list.
-	* \param pHandler The event handler will be removed from the handlers list of current emitter. */
-	void RemoveListener(FbxEventHandler& pHandler);
+    /** Remove the specified event handler from current emitter list.
+    * \param pHandler The event handler will be removed from the handlers list of current emitter. */
+    void RemoveListener(FbxEventHandler &pHandler);
 
-	/** Emit an event with the specified the event type. One the event is emitted, the listener to this event will receive a signal.
-	* \param pEvent Specify the event type to emit. Could be a specific class which derived from FbxEvent, such as FbxObjectPropertyChanged.
-	* \see FbxEventBase FbxObjectPropertyChanged FbxEventReferencedDocument FbxEventPostExport
-	* \see FbxEventPostImport FbxEventPreExport FbxEventPreImport FbxEventPopulateSystemLibrary */
-	template <typename EventType> void Emit(const EventType& pEvent) const
-	{
-		if( !mData ) return;
-		EventHandlerList::iterator itBegin = mData->mEventHandlerList.Begin();
-		EventHandlerList::iterator itEnd = mData->mEventHandlerList.End();
-		for( EventHandlerList::iterator it = itBegin; it != itEnd; ++it )
-		{
-			if ((*it).GetHandlerEventType() == pEvent.GetTypeId())
-			{
-				(*it).FunctionCall(pEvent);
-			}
-		}
-	}
+    /** Emit an event with the specified the event type. One the event is emitted, the listener to this event will receive a signal.
+    * \param pEvent Specify the event type to emit. Could be a specific class which derived from FbxEvent, such as FbxObjectPropertyChanged.
+    * \see FbxEventBase FbxObjectPropertyChanged FbxEventReferencedDocument FbxEventPostExport
+    * \see FbxEventPostImport FbxEventPreExport FbxEventPreImport FbxEventPopulateSystemLibrary */
+    template<typename EventType>
+    void Emit(const EventType &pEvent) const {
+        if (!mData) return;
+        EventHandlerList::iterator itBegin = mData->mEventHandlerList.Begin();
+        EventHandlerList::iterator itEnd = mData->mEventHandlerList.End();
+        for (EventHandlerList::iterator it = itBegin; it != itEnd; ++it) {
+            if ((*it).GetHandlerEventType() == pEvent.GetTypeId()) {
+                (*it).FunctionCall(pEvent);
+            }
+        }
+    }
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxEmitter();
-	~FbxEmitter();
+
+    FbxEmitter();
+
+    ~FbxEmitter();
 
 protected:
     typedef FbxIntrusiveList<FbxEventHandler, FbxEventHandler::eEmitter> EventHandlerList;
-    struct EventData { EventHandlerList mEventHandlerList; };
-    EventData* mData;
+    struct EventData {
+        EventHandlerList mEventHandlerList;
+    };
+    EventData *mData;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

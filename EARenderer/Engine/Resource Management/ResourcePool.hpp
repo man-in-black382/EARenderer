@@ -12,11 +12,13 @@
 #include "PackedLookupTable.hpp"
 #include "Mesh.hpp"
 #include "SubMesh.hpp"
-#include "PBRMaterial.hpp"
+#include "CookTorranceMaterial.hpp"
+#include "EmissiveMaterial.hpp"
 #include "GLVertexArray.hpp"
+#include "MaterialType.hpp"
 
 namespace EARenderer {
-    
+
     class ResourcePool {
     private:
         GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
@@ -24,13 +26,15 @@ namespace EARenderer {
 
     public:
         PackedLookupTable<Mesh> meshes;
-        PackedLookupTable<PBRMaterial> materials;
-        
-        static ResourcePool& shared();
-        
+        PackedLookupTable<CookTorranceMaterial> mCookTorranceMaterials;
+        PackedLookupTable<EmissiveMaterial> mEmissiveMaterials;
+
+        static ResourcePool &shared();
+
         ResourcePool();
 
-        const GLVertexArray<Vertex1P1N2UV1T1BT>& VAO() const;
+        const GLVertexArray<Vertex1P1N2UV1T1BT> &VAO() const;
+
         int32_t totalVertexCount() const;
 
         /**
@@ -38,8 +42,16 @@ namespace EARenderer {
          Updates VBO offsets and vertex counts in sub meshes.
          */
         void transferMeshesToGPU();
+
+        MaterialReference addMaterial(CookTorranceMaterial &&material);
+
+        MaterialReference addMaterial(EmissiveMaterial &&material);
+
+        const CookTorranceMaterial &cookTorranceMaterial(ID materialID) const;
+
+        const EmissiveMaterial &emissiveMaterial(ID materialID) const;
     };
-    
+
 }
 
 #endif /* ResourcePool_hpp */

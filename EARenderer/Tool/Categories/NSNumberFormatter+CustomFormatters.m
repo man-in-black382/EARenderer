@@ -10,8 +10,7 @@
 
 @implementation NSNumberFormatter (CustomFormatters)
 
-+ (NSNumberFormatter *)floatInputFormatter
-{
++ (NSNumberFormatter *)floatInputFormatter {
     static NSNumberFormatter *formatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -21,8 +20,7 @@
     return formatter;
 }
 
-+ (NSNumberFormatter *)fpsFormatter
-{
++ (NSNumberFormatter *)fpsFormatter {
     static NSNumberFormatter *formatter;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

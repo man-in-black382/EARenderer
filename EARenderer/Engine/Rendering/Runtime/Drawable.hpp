@@ -27,9 +27,9 @@ namespace EARenderer {
         namespace TriangleMesh {
             void Draw(size_t count = 1);
         }
-        
+
     }
-    
+
 }
 
 #endif /* Renderable_hpp */

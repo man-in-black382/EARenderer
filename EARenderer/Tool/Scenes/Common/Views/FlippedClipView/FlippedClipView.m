@@ -10,8 +10,7 @@
 
 @implementation FlippedClipView
 
-- (BOOL)isFlipped
-{
+- (BOOL)isFlipped {
     return YES;
 }
 

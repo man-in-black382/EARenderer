@@ -12,49 +12,49 @@
 #include "PackedLookupTable.hpp"
 #include "Transformation.hpp"
 #include "AxisAlignedBox3D.hpp"
+#include "MaterialType.hpp"
 
 #include <unordered_map>
-
 #include <glm/mat4x4.hpp>
+#include <optional>
 
 namespace EARenderer {
-    
+
     class MeshInstance {
-    public:
-        using Index = uint32_t;
-
-        static constexpr Index InvalidIndex = -1;
-
     private:
         ID mMeshID;
         bool mIsSelected = false;
         bool mIsHighlighted = false;
         Transformation mTransformation;
         glm::mat4 mModelMatrix;
-        std::unordered_map<ID, ID> mSubMeshMaterialMap;
-        std::unordered_map<ID, Index> mSubMeshSHTextureIndexMap;
-        
-    public:
+        std::unordered_map<ID, MaterialReference> mSubMeshMaterialMap;
 
+    public:
         MeshInstance(ID meshID);
-        
+
         ID meshID() const;
+
         bool isSelected() const;
+
         bool isHighlighted() const;
-        const glm::mat4& modelMatrix() const;
+
+        const glm::mat4 &modelMatrix() const;
+
         Transformation transformation() const;
+
         AxisAlignedBox3D boundingBox() const;
-        ID materialIDForSubMeshID(ID subMeshID) const;
-        Index SHTextureIndexForSubMesh(ID subMeshID) const;
-        
+
+        std::optional<MaterialReference> materialReferenceForSubMeshID(ID subMeshID) const;
+
         void setIsSelected(bool selected);
+
         void setIsHighlighted(bool highlighted);
-        void setTransformation(const Transformation& transform);
-        void setMaterialIDForSubMeshID(ID materialID, ID subMeshID);
-        void setMaterialIDForAllSubmeshes(ID materialID);
-        void setDedicatedSHTextureIndexForSubMeshID(Index textureIndex, ID subMeshID);
+
+        void setTransformation(const Transformation &transform);
+
+        void setMaterialReferenceForSubMeshID(const MaterialReference &ref, ID subMeshID);
     };
-    
+
 }
 
 #endif /* RenderableEntity_hpp */

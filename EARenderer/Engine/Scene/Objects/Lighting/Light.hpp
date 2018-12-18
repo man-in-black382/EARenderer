@@ -16,12 +16,13 @@
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
-    
+
     class Light {
     protected:
         glm::vec3 mPosition;
         Color mColor = Color::white();
         bool mIsEnabled = true;
+        float mArea = 1.0; // Used for penumbra estimation, no physical meaning right now
 
     protected:
 
@@ -36,20 +37,29 @@ namespace EARenderer {
          @return far clip plane for 'cascadeIndex' cascade
          */
         float split(uint8_t cascadeIndex, uint8_t cascadesCount, float nearPlane, float farPlane, float lambda) const;
-        
+
     public:
         Light() = default;
-        Light(const glm::vec3& position, const Color& color);
-        
-        const glm::vec3& position() const;
-        const Color& color() const;
-        
-        void setPosition(const glm::vec3& position);
-        void setColor(const Color& color);
-        void setIsEnabled(bool enabled);
+
+        Light(const glm::vec3 &position, const Color &color, float area);
+
+        const glm::vec3 &position() const;
+
+        const Color &color() const;
+
+        float area() const;
+
         bool isEnabled() const;
+
+        void setPosition(const glm::vec3 &position);
+
+        void setColor(const Color &color);
+
+        void setIsEnabled(bool enabled);
+
+        void setArea(float area);
     };
-    
+
 }
 
 #endif /* Light_hpp */

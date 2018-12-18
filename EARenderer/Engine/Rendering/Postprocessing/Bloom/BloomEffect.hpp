@@ -20,8 +20,8 @@
 
 namespace EARenderer {
 
-    template <GLTexture::Float TextureFormat>
-    class BloomEffect: public PostprocessEffect<TextureFormat> {
+    template<GLTexture::Float TextureFormat>
+    class BloomEffect : public PostprocessEffect<TextureFormat> {
     private:
         GaussianBlurEffect<TextureFormat> mSmallBlurEffect;
         GaussianBlurEffect<TextureFormat> mMediumBlurEffect;
@@ -33,9 +33,9 @@ namespace EARenderer {
         BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
 
         void bloom(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> baseImage,
-                   std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> thresholdFilteredImage,
-                   std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
-                   const BloomSettings& settings);
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> thresholdFilteredImage,
+                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
+                const BloomSettings &settings);
     };
 
 }

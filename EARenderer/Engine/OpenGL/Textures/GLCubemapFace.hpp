@@ -12,8 +12,8 @@
 #include <OpenGL/gl3.h>
 
 namespace EARenderer {
-    
-    enum class GLCubemapFace: GLenum {
+
+    enum class GLCubemapFace : GLenum {
         PositiveX = GL_TEXTURE_CUBE_MAP_POSITIVE_X,
         NegativeX = GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
         PositiveY = GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
@@ -21,10 +21,11 @@ namespace EARenderer {
         PositiveZ = GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
         NegativeZ = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
     };
-    
+
     GLCubemapFace CubemapFaceFromIndex(uint8_t index);
+
     uint8_t IndexFromCubemapFace(GLCubemapFace face);
-    
+
 }
 
 #endif /* GLCubemapFace_hpp */

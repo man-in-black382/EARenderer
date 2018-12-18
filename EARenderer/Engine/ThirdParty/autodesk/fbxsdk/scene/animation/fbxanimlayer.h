@@ -27,9 +27,8 @@ class FbxAnimCurveNode;
   * with the data of the other layers during the evaluation. 
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxAnimLayer : public FbxCollection
-{
-    FBXSDK_OBJECT_DECLARE(FbxAnimLayer, FbxCollection);
+class FBXSDK_DLL FbxAnimLayer : public FbxCollection {
+FBXSDK_OBJECT_DECLARE(FbxAnimLayer, FbxCollection);
 
 public:
     //////////////////////////////////////////////////////////////////////////
@@ -44,14 +43,14 @@ public:
       *
       * Default value is \c 100.0
       */
-    FbxPropertyT<FbxDouble>       Weight;
+    FbxPropertyT<FbxDouble> Weight;
 
     /** This property stores the mute state.
       * The mute state indicates that this layer should be excluded from the evaluation.
       *
       * Default value is \c false
       */
-    FbxPropertyT<FbxBool>         Mute;
+    FbxPropertyT<FbxBool> Mute;
 
     /** This property stores the solo state.
       * The solo state indicates that this layer is the only one that should be
@@ -59,7 +58,7 @@ public:
       *
       * Default value is \c false
       */
-    FbxPropertyT<FbxBool>         Solo;
+    FbxPropertyT<FbxBool> Solo;
 
     /** This property stores the lock state.
       * The lock state indicates that this layer has been "locked" from editing operations
@@ -67,7 +66,7 @@ public:
       *
       * Default value is \c false
       */
-    FbxPropertyT<FbxBool>         Lock;
+    FbxPropertyT<FbxBool> Lock;
 
     /** This property stores the display color.
       * This color can be used by applications if they display a graphical representation
@@ -76,7 +75,7 @@ public:
       *
       * Default value is \c (0.8, 0.8, 0.8)
       */
-    FbxPropertyT<FbxDouble3>       Color;
+    FbxPropertyT<FbxDouble3> Color;
 
     /** This property stores the blend mode.
       * The blend mode is used to specify how this layer influences the animation evaluation. See the
@@ -84,7 +83,7 @@ public:
       *
       * Default value is \c eModeAdditive
       */
-    FbxPropertyT<FbxEnum>			BlendMode;
+    FbxPropertyT<FbxEnum> BlendMode;
 
     /** This property stores the rotation accumulation mode.
       * This option indicates how the rotation curves on this layer combine with any preceding layers 
@@ -93,7 +92,7 @@ public:
       *
       * Default value is \c eRotationByLayer
       */
-    FbxPropertyT<FbxEnum>			RotationAccumulationMode;
+    FbxPropertyT<FbxEnum> RotationAccumulationMode;
 
     /** This property stores the scale accumulation mode.
       * This option indicates how the scale curves on this layer combine with any preceding layers 
@@ -102,10 +101,10 @@ public:
       *
       * Default value is \c eScaleMultiply
       */
-    FbxPropertyT<FbxEnum>			ScaleAccumulationMode;
+    FbxPropertyT<FbxEnum> ScaleAccumulationMode;
 
-	//! Reset this object properties to their default value.
-	void Reset();
+    //! Reset this object properties to their default value.
+    void Reset();
 
     /**
       * \name BlendMode bypass functions
@@ -117,66 +116,63 @@ public:
       */
     //@{
 
-		/** Set the bypass flag for the given data type.
-		  * \param pType The fbxType identifier.
-		  * \param pState The new state of the bypass flag.
-		  * \remarks If pType is eFbxTypeCount, then pState is applied to all the data types.
-		  */
-		void SetBlendModeBypass(EFbxType pType, bool pState);
+    /** Set the bypass flag for the given data type.
+      * \param pType The fbxType identifier.
+      * \param pState The new state of the bypass flag.
+      * \remarks If pType is eFbxTypeCount, then pState is applied to all the data types.
+      */
+    void SetBlendModeBypass(EFbxType pType, bool pState);
 
-		/** Get the current state of the bypass flag for the given data type.
-		  * \param pType The fbxType identifier.
-		  * \return The current state of the flag for a valid pType value and \c false in any other case.
-		  */
-		bool GetBlendModeBypass(EFbxType pType);
+    /** Get the current state of the bypass flag for the given data type.
+      * \param pType The fbxType identifier.
+      * \return The current state of the flag for a valid pType value and \c false in any other case.
+      */
+    bool GetBlendModeBypass(EFbxType pType);
 
     //@}
 
 
     /** Blend mode type between animation layers.
       */
-	enum EBlendMode
-	{
-		eBlendAdditive,	//! The layer "adds" its animation to layers that precede it in the stack and affect the same attributes.
-		eBlendOverride,	//! The layer "overrides" the animation of any layer that shares the same attributes and precedes it in the stack.
-		eBlendOverridePassthrough	/*!<This mode is like the eOverride but the Weight value 
+    enum EBlendMode {
+        eBlendAdditive,    //! The layer "adds" its animation to layers that precede it in the stack and affect the same attributes.
+        eBlendOverride,    //! The layer "overrides" the animation of any layer that shares the same attributes and precedes it in the stack.
+        eBlendOverridePassthrough    /*!<This mode is like the eOverride but the Weight value 
 									influence how much animation from the preceding layers is 
 									allowed to pass-through. When using this mode with a Weight of 
 									100.0, this layer is completely opaque and it masks any animation
 									from the preceding layers for the same attribute. If the Weight
 									is 50.0, half of this layer animation is mixed with half of the
 									animation of the preceding layers for the same attribute. */
-	};
-    
+    };
+
     /** Rotation accumulation mode of animation layer.
       */
-	enum ERotationAccumulationMode
-	{
-		eRotationByLayer,	//! Rotation values are weighted per layer and the result rotation curves are calculated using concatenated quaternion values.
-		eRotationByChannel	//! Rotation values are weighted per component and the result rotation curves are calculated by adding each independent Euler XYZ value.
-	};
+    enum ERotationAccumulationMode {
+        eRotationByLayer,    //! Rotation values are weighted per layer and the result rotation curves are calculated using concatenated quaternion values.
+        eRotationByChannel    //! Rotation values are weighted per component and the result rotation curves are calculated by adding each independent Euler XYZ value.
+    };
 
     /** Scale accumulation mode of animation layer.
       */
-	enum EScaleAccumulationMode
-	{
-		eScaleMultiply,	//! Independent XYZ scale values per layer are calculated using the layer weight value as an exponent, and result scale curves are calculated by multiplying each independent XYZ scale value.
-		eScaleAdditive	//! Result scale curves are calculated by adding each independent XYZ value.
-	};
+    enum EScaleAccumulationMode {
+        eScaleMultiply,    //! Independent XYZ scale values per layer are calculated using the layer weight value as an exponent, and result scale curves are calculated by multiplying each independent XYZ scale value.
+        eScaleAdditive    //! Result scale curves are calculated by adding each independent XYZ value.
+    };
 
     /**
       * \name CurveNode management
       */
     //@{
-        /** Create a FbxAnimCurveNode based on the property data type.
-          * \param pProperty The property that the created FbxAnimCurveNode will be connected to.
-          * \return Pointer to the created FbxAnimCurveNode, or NULL if an error occurred.
-          * \remarks This function will fail if the property FbxPropertyFlags::eAnimatable flag is not set.
-          * \remarks This function sets the eAnimated flag of the property.
-          * \remarks The newly created FbxAnimCurveNode is automatically connected to both
-          *         this object and the property.
-          */
-        FbxAnimCurveNode* CreateCurveNode(FbxProperty& pProperty);
+    /** Create a FbxAnimCurveNode based on the property data type.
+      * \param pProperty The property that the created FbxAnimCurveNode will be connected to.
+      * \return Pointer to the created FbxAnimCurveNode, or NULL if an error occurred.
+      * \remarks This function will fail if the property FbxPropertyFlags::eAnimatable flag is not set.
+      * \remarks This function sets the eAnimated flag of the property.
+      * \remarks The newly created FbxAnimCurveNode is automatically connected to both
+      *         this object and the property.
+      */
+    FbxAnimCurveNode *CreateCurveNode(FbxProperty &pProperty);
     //@}
 
 /*****************************************************************************************************************************
@@ -184,11 +180,12 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void ConstructProperties(bool pForceSet);
-	virtual FbxAnimLayer* GetAnimLayer();
+    virtual void ConstructProperties(bool pForceSet);
+
+    virtual FbxAnimLayer *GetAnimLayer();
 
 private:
-    FbxPropertyT<FbxULongLong>	mBlendModeBypass;	
+    FbxPropertyT<FbxULongLong> mBlendModeBypass;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

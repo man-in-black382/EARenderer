@@ -22,16 +22,15 @@
 /** This class contains settings for Lambert Materials.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxSurfaceLambert : public FbxSurfaceMaterial
-{
-	FBXSDK_OBJECT_DECLARE(FbxSurfaceLambert,FbxSurfaceMaterial);
+class FBXSDK_DLL FbxSurfaceLambert : public FbxSurfaceMaterial {
+FBXSDK_OBJECT_DECLARE(FbxSurfaceLambert, FbxSurfaceMaterial);
 
 public:
-	/**
-	 * \name Material properties
-	 */
-	//@{
-	
+    /**
+     * \name Material properties
+     */
+    //@{
+
     //! Emissive color property.
     FbxPropertyT<FbxDouble3> Emissive;
 
@@ -59,12 +58,12 @@ public:
     /** NormalMap property. This property can be used to specify the distortion of the surface 
      * normals and create the illusion of a bumpy surface.
      */
-   	FbxPropertyT<FbxDouble3> NormalMap;
+    FbxPropertyT<FbxDouble3> NormalMap;
 
     /** Bump property. This property is used to distort the
 	 * surface normal and create the illusion of a bumpy surface.
      */
-   	FbxPropertyT<FbxDouble3> Bump;
+    FbxPropertyT<FbxDouble3> Bump;
 
     /** Bump factor property. This factor is used to
      * make a surface more or less bumpy.
@@ -91,32 +90,32 @@ public:
     //! Vector displacement factor property.
     FbxPropertyT<FbxDouble> VectorDisplacementFactor;
 
-	//@}
+    //@}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Static values
-	//////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    // Static values
+    //////////////////////////////////////////////////////////////////////////
 
-	/**
-	  * \name Default property values
-	  */
-	//@{
+    /**
+      * \name Default property values
+      */
+    //@{
 
-	static const FbxDouble3 sEmissiveDefault;
-	static const FbxDouble sEmissiveFactorDefault;
+    static const FbxDouble3 sEmissiveDefault;
+    static const FbxDouble sEmissiveFactorDefault;
 
-	static const FbxDouble3 sAmbientDefault;
-	static const FbxDouble sAmbientFactorDefault;
+    static const FbxDouble3 sAmbientDefault;
+    static const FbxDouble sAmbientFactorDefault;
 
-	static const FbxDouble3 sDiffuseDefault;
-	static const FbxDouble sDiffuseFactorDefault;
-	
-	static const FbxDouble3 sBumpDefault;
+    static const FbxDouble3 sDiffuseDefault;
+    static const FbxDouble sDiffuseFactorDefault;
+
+    static const FbxDouble3 sBumpDefault;
     static const FbxDouble3 sNormalMapDefault;
     static const FbxDouble sBumpFactorDefault;
 
-	static const FbxDouble3 sTransparentDefault;
-	static const FbxDouble sTransparencyFactorDefault;
+    static const FbxDouble3 sTransparentDefault;
+    static const FbxDouble sTransparencyFactorDefault;
 
     static const FbxDouble3 sDisplacementDefault;
     static const FbxDouble sDisplacementFactorDefault;
@@ -131,10 +130,11 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void ConstructProperties(bool pForceSet);
+    virtual void ConstructProperties(bool pForceSet);
 
-	// Local
-	void Init();	
+    // Local
+    void Init();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -14,13 +14,14 @@
 
 namespace EARenderer {
 
-    class GLSLHiZBuffer: public GLProgram {
+    class GLSLHiZBuffer : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLHiZBuffer();
 
-        void setTexture(const GLFloatTexture2D<GLTexture::Float::R32F>& texture);
+        void setTexture(const GLFloatTexture2D<GLTexture::Float::R32F> &texture);
+
         void setMipLevel(int8_t mipLevel);
     };
 

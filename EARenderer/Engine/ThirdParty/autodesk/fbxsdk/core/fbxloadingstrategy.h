@@ -28,13 +28,11 @@
  * We could have a simple strategy that loads only a single dll on PC. 
  * We could also implement a strategy that load multiple dlls from a directory.
  */
-class FBXSDK_DLL FbxLoadingStrategy : public FbxPluginContainer
-{
+class FBXSDK_DLL FbxLoadingStrategy : public FbxPluginContainer {
 public:
     /** Result state of loading plug-in.
      */
-    enum EState
-	{
+    enum EState {
         eAllLoaded,     //!< All plug-in are loaded.
         eNoneLoaded,    //!< No plug-in is loaded, i.e., there is not plug-in to load. 
         eAllFailed,     //!< All plug-in are failed to load.
@@ -45,15 +43,15 @@ public:
     *\name Public interface
     */
     //@{
-		/** Execute the operation of loading the plug-in(s). The way it is executed is determined by the specific implementations.
-		* \param pData  Plug in data that can be access inside the plug-ins.
-		* \return If the plugin loading is successful return \c true, otherwise return \c false.
-		*/
-		EState Load(FbxPluginData& pData);
+    /** Execute the operation of loading the plug-in(s). The way it is executed is determined by the specific implementations.
+    * \param pData  Plug in data that can be access inside the plug-ins.
+    * \return If the plugin loading is successful return \c true, otherwise return \c false.
+    */
+    EState Load(FbxPluginData &pData);
 
-		/** Execute the operation of unloading the plug-in(s). The way it is executed is determined by the specific implementations.
-		*/
-		void Unload();
+    /** Execute the operation of unloading the plug-in(s). The way it is executed is determined by the specific implementations.
+    */
+    void Unload();
     //@}
 
 protected:
@@ -61,15 +59,15 @@ protected:
     *\name User implementation
     */
     //@{
-		/** Called by the Load method, it contains the specific user implementation strategy to load the desired plug-in(s).
-		* \param pData  Plug in data that can be access inside the plug-ins.
-		* \return If the plugin loading is successful return \c true, otherwise return \c false
-		*/
-		virtual bool SpecificLoad(FbxPluginData& pData) = 0;
+    /** Called by the Load method, it contains the specific user implementation strategy to load the desired plug-in(s).
+    * \param pData  Plug in data that can be access inside the plug-ins.
+    * \return If the plugin loading is successful return \c true, otherwise return \c false
+    */
+    virtual bool SpecificLoad(FbxPluginData &pData) = 0;
 
-		/** Called by the Unload method, it contains the specific user implementation strategy to unload the desired plug-in(s).
-		*/
-		virtual void SpecificUnload(FbxPluginData& pData) = 0;
+    /** Called by the Unload method, it contains the specific user implementation strategy to unload the desired plug-in(s).
+    */
+    virtual void SpecificUnload(FbxPluginData &pData) = 0;
     //@}
 
     //! Whether the plugin is loaded or not.

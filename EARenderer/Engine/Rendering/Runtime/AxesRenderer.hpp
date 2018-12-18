@@ -22,34 +22,36 @@
 #include "AxesSelection.hpp"
 
 namespace EARenderer {
-    
+
     class AxesRenderer {
     private:
         Scene *mScene = nullptr;
         GLSLGenericGeometry mGenericGeometryShader;
-        
+
         std::unordered_map<ID, CartesianAxis> mAxesToHighlight;
         AxesSystem mAxesSystem;
-        Color mXAxisColor = { 0.807, 0.184, 0.0, 1.0 };
-        Color mYAxisColor = { 0.209, 0.557, 1.0, 1.0 };
-        Color mZAxisColor = { 0.470, 0.749, 0.0, 1.0 };
-        
-        void renderAxes(CartesianAxis axesToHighlight, const glm::mat4& mvp);
-        void renderSegments(CartesianAxis axesToHighlight, const glm::mat4& mvp);
-        
+        Color mXAxisColor = {0.807, 0.184, 0.0, 1.0};
+        Color mYAxisColor = {0.209, 0.557, 1.0, 1.0};
+        Color mZAxisColor = {0.470, 0.749, 0.0, 1.0};
+
+        void renderAxes(CartesianAxis axesToHighlight, const glm::mat4 &mvp);
+
+        void renderSegments(CartesianAxis axesToHighlight, const glm::mat4 &mvp);
+
     public:
         AxesRenderer(Scene *scene);
-        
-        const AxesSystem& axesSystem() const;
-        
-        bool raySelectsAxes(const Ray3D& ray, AxesSelection& selection);
-        
+
+        const AxesSystem &axesSystem() const;
+
+        bool raySelectsAxes(const Ray3D &ray, AxesSelection &selection);
+
         void enableAxesHighlightForMesh(CartesianAxis axesMask, ID meshID);
+
         void disableAxesHighlight();
-        
+
         void render();
     };
-        
+
 }
 
 #endif /* AxisVisualizer_hpp */

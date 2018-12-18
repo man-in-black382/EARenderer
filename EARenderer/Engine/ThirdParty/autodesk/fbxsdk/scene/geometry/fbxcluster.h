@@ -44,9 +44,8 @@
   *
   *\nosubgrouping
   */
-class FBXSDK_DLL FbxCluster : public FbxSubDeformer
-{
-    FBXSDK_OBJECT_DECLARE(FbxCluster,FbxSubDeformer);
+class FBXSDK_DLL FbxCluster : public FbxSubDeformer {
+FBXSDK_OBJECT_DECLARE(FbxCluster, FbxSubDeformer);
 
 public:
     /**
@@ -56,7 +55,9 @@ public:
     /** Get the type of the sub deformer.
       * \return SubDeformer type identifier: eCluster.
       */
-    EType GetSubDeformerType() const {return eCluster; };
+    EType GetSubDeformerType() const {
+        return eCluster;
+    };
 
     /** Restore the cluster to its initial state.
       * Calling this function will clear the following:
@@ -77,26 +78,25 @@ public:
       * point. The weights assigned to a control point are distributed among
       * the set of links associated with an instance of class FbxGeometry.
       */
-    enum ELinkMode
-    {
-		eNormalize,       /*!<	  In mode eNormalize, the sum of the weights assigned to a control point
+    enum ELinkMode {
+        eNormalize,       /*!<	  In mode eNormalize, the sum of the weights assigned to a control point
 		                          is normalized to 1.0. Setting the associate model in this mode is not
 		                          relevant. The influence of the link is a function of the displacement of the
 		                          link node relative to the node containing the control points.*/
         eAdditive,
-		                  /*!<    In mode eAdditive, the sum of the weights assigned to a control point
-		                          is kept as is. It is the only mode where setting the associate model is
-		                          relevant. The influence of the link is a function of the displacement of
-		                          the link node relative to the node containing the control points or,
-		                          if set, the associate model. The weight gives the proportional displacement
-		                          of a control point. For example, if the weight of a link over a control
-		                          point is set to 2.0, a displacement of the link node of 1 unit in the X
-		                          direction relative to the node containing the control points or, if set,
-		                          the associate model, triggers a displacement of the control point of 2
-		                          units in the same direction.*/
-        eTotalOne   
-		                  /*!<    Mode eTotalOne is identical to mode eNormalize except that the sum of the
-		                          weights assigned to a control point is not normalized and must equal 1.0.*/
+        /*!<    In mode eAdditive, the sum of the weights assigned to a control point
+                is kept as is. It is the only mode where setting the associate model is
+                relevant. The influence of the link is a function of the displacement of
+                the link node relative to the node containing the control points or,
+                if set, the associate model. The weight gives the proportional displacement
+                of a control point. For example, if the weight of a link over a control
+                point is set to 2.0, a displacement of the link node of 1 unit in the X
+                direction relative to the node containing the control points or, if set,
+                the associate model, triggers a displacement of the control point of 2
+                units in the same direction.*/
+                eTotalOne
+        /*!<    Mode eTotalOne is identical to mode eNormalize except that the sum of the
+                weights assigned to a control point is not normalized and must equal 1.0.*/
     };
 
     /** Set the link mode.
@@ -114,19 +114,19 @@ public:
       * of the control points. Typically, the link node is the bone a skin is attached to.
       * \param pNode     The link node.     
       */
-    void SetLink(const FbxNode* pNode);
+    void SetLink(const FbxNode *pNode);
 
     /** Get the link node. The link node is the node which influences the displacement
       * of the control points. Typically, the link node is the bone a skin is attached to.
       * \return      The link node or \c NULL if FbxCluster::SetLink() has not been called before.
       */
-    FbxNode* GetLink();
+    FbxNode *GetLink();
 
     /** Get the link node (as const). The link node is the node which influences the displacement
       * of the control points. Typically, the link node is the bone a skin is attached to.
       * \return      The link node or \c NULL if FbxCluster::SetLink() has not been called before. 
       */
-    const FbxNode* GetLink() const;
+    const FbxNode *GetLink() const;
 
     /** Set the associate model.
       * The associate model is optional. It is only relevant if the link mode
@@ -136,7 +136,7 @@ public:
       * Typically, the associate model node is the parent of the bone a skin is attached to.
       * \param pNode     The associate model node.   
       */
-    void SetAssociateModel(FbxNode* pNode);
+    void SetAssociateModel(FbxNode *pNode);
 
     /** Get the associate model.
       * The associate model is optional. It is only relevant if the link mode is of type
@@ -146,7 +146,7 @@ public:
       * Typically, the associate model node is the parent of the bone a skin is attached to.
       * \return      The associate model node or \c NULL if FbxCluster::SetAssociateModel() has not been called before. 
       */
-    FbxNode* GetAssociateModel() const;
+    FbxNode *GetAssociateModel() const;
     //@}
     /**
       * \name Control Points
@@ -173,13 +173,13 @@ public:
       * \return     Pointer to the array of control point indices.
       *             \c NULL if no control point indices have been added or the array has been reset.
       */
-    int* GetControlPointIndices() const;
+    int *GetControlPointIndices() const;
 
     /** Get the array of control point weights.
       * \return     Pointer to the array of control point weights.
       *             \c NULL if no control point indices have been added or the array has been reset.
       */
-    double* GetControlPointWeights() const;
+    double *GetControlPointWeights() const;
 
     //@}
 
@@ -187,7 +187,7 @@ public:
 	  * and the array of blend weights.
       * \param pCount The new count.
       */
-	void SetControlPointIWCount(int pCount);
+    void SetControlPointIWCount(int pCount);
 
     /**
       * \name Transformation matrices
@@ -206,51 +206,53 @@ public:
     /** Set matrix associated with the node containing the link.
       * \param pMatrix     Transformation matrix.
       */
-    void SetTransformMatrix(const FbxAMatrix& pMatrix);
+    void SetTransformMatrix(const FbxAMatrix &pMatrix);
 
     /** Get matrix associated with the node containing the link.
       * \param pMatrix     Transformation matrix to be filled with appropriate data.
       * \return            Input parameter matrix filled with appropriate data.
       */
-    FbxAMatrix& GetTransformMatrix(FbxAMatrix& pMatrix) const;
+    FbxAMatrix &GetTransformMatrix(FbxAMatrix &pMatrix) const;
 
     /** Set matrix associated with the link node.
       * \param pMatrix     Transformation matrix.
       */
-    void SetTransformLinkMatrix(const FbxAMatrix& pMatrix);
+    void SetTransformLinkMatrix(const FbxAMatrix &pMatrix);
 
     /** Get matrix associated with the link node.
       * \param pMatrix     Transformation matrix to be filled with appropriate data..
       * \return            Input parameter matrix filled with appropriate data.
       */
-    FbxAMatrix& GetTransformLinkMatrix(FbxAMatrix& pMatrix) const;
+    FbxAMatrix &GetTransformLinkMatrix(FbxAMatrix &pMatrix) const;
 
     /** Set matrix associated with the associate model.
       * \param pMatrix     Transformation matrix.
       */
-    void SetTransformAssociateModelMatrix(const FbxAMatrix& pMatrix);
+    void SetTransformAssociateModelMatrix(const FbxAMatrix &pMatrix);
 
     /** Get matrix associated with the associate model.
       * \param pMatrix     Transformation matrix to be filled with appropriate data..
       * \return            Input parameter matrix filled with appropriate data.
       */
-    FbxAMatrix& GetTransformAssociateModelMatrix(FbxAMatrix& pMatrix) const;
+    FbxAMatrix &GetTransformAssociateModelMatrix(FbxAMatrix &pMatrix) const;
 
     /** Set matrix associated with the parent node.
       * \param pMatrix     Transformation matrix.
       */
-    void SetTransformParentMatrix(const FbxAMatrix& pMatrix);
+    void SetTransformParentMatrix(const FbxAMatrix &pMatrix);
 
     /** Get matrix associated with the parent node.
       * \param pMatrix     Transformation matrix to be filled with appropriate data..
       * \return            Input parameter matrix filled with appropriate data.
       */
-    FbxAMatrix& GetTransformParentMatrix(FbxAMatrix& pMatrix) const;
+    FbxAMatrix &GetTransformParentMatrix(FbxAMatrix &pMatrix) const;
 
     /** Get the Transform Parent set flag value.
       * \return           \c true if transform matrix associated with parent node is set.
       */
-    bool IsTransformParentSet() const { return mIsTransformParentSet; }
+    bool IsTransformParentSet() const {
+        return mIsTransformParentSet;
+    }
 
     //@}
 
@@ -258,33 +260,39 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
-    void SetUserData(const char* pUserDataID, const char* pUserData);
-    const char* GetUserDataID () const;
-    const char* GetUserData () const;
-    const char* GetUserData (const char* pUserDataID) const;
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    void SetUserData(const char *pUserDataID, const char *pUserData);
+
+    const char *GetUserDataID() const;
+
+    const char *GetUserData() const;
+
+    const char *GetUserData(const char *pUserDataID) const;
 
     // For pre version 6 support
-    FbxString	mBeforeVersion6LinkName;
-    FbxString	mBeforeVersion6AssociateModelName;
+    FbxString mBeforeVersion6LinkName;
+    FbxString mBeforeVersion6AssociateModelName;
 
 
 protected:
-    virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void ConstructProperties(bool pForceSet);
 
     virtual FbxStringList GetTypeFlags() const;
 
-    ELinkMode               mLinkMode;
-    FbxString               mUserDataID;
-    FbxString               mUserData;
-    FbxArray<int>           mControlPointIndices;
-    FbxArray<double>        mControlPointWeights;
-    FbxMatrix              mTransform;
-    FbxMatrix              mTransformLink;
-    FbxMatrix              mTransformAssociate;
-    FbxMatrix              mTransformParent;
-    bool                    mIsTransformParentSet;
+    ELinkMode mLinkMode;
+    FbxString mUserDataID;
+    FbxString mUserData;
+    FbxArray<int> mControlPointIndices;
+    FbxArray<double> mControlPointWeights;
+    FbxMatrix mTransform;
+    FbxMatrix mTransformLink;
+    FbxMatrix mTransformAssociate;
+    FbxMatrix mTransformParent;
+    bool mIsTransformParentSet;
 
     FbxPropertyT<FbxReference> SrcModelReference;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/

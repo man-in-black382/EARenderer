@@ -9,14 +9,14 @@
 #include "Vertex1P1N2UV.hpp"
 
 namespace EARenderer {
-    
-    Vertex1P1N2UV::Vertex1P1N2UV(const glm::vec4& position, const glm::vec3& texCoords,
-                                 const glm::vec2& lightmapCoords, const glm::vec3& normal)
-    :
-    position(position),
-    textureCoords(texCoords),
-    lightmapCoords(lightmapCoords),
-    normal(normal)
-    { }
-    
+
+    Vertex1P1N2UV::Vertex1P1N2UV(const glm::vec4 &position, const glm::vec3 &texCoords,
+            const glm::vec2 &lightmapCoords, const glm::vec3 &normal)
+            :
+            position(position),
+            textureCoords(texCoords),
+            lightmapCoords(lightmapCoords),
+            normal(normal) {
+    }
+
 }

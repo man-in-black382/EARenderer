@@ -29,7 +29,7 @@
 
 namespace bitsery {
     template<typename S, typename ... TArgs>
-    void serialize(S &s, std::vector<TArgs... > &obj) {
+    void serialize(S &s, std::vector<TArgs...> &obj) {
         flexible::processContainer(s, obj);
     }
 }

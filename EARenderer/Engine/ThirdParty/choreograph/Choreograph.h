@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -38,7 +38,7 @@
 #include "phrase/Sugar.hpp"
 
 #if defined( CINDER_CINDER )
-  #include "specialization/CinderSpecialization.hpp"
+#include "specialization/CinderSpecialization.hpp"
 #endif
 
 ///
@@ -46,6 +46,7 @@
 /// For information on usage see README.md and peruse the samples/ project.
 /// This header (Choreograph.h) brings in the entire library.
 ///
-namespace choreograph {} // namespace choreograph
+namespace choreograph {
+} // namespace choreograph
 
 namespace ch = choreograph;

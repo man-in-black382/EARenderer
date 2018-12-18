@@ -21,20 +21,29 @@
 
 namespace EARenderer {
 
-    class GLSLSurfelLighting: public GLProgram {
+    class GLSLSurfelLighting : public GLProgram {
     public:
         GLSLSurfelLighting();
 
-        void setLight(const PointLight& light);
-        void setLight(const DirectionalLight& light);
-        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F>& gBuffer);
-        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
-        void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProbePositions(const GLFloat3BufferTexture<glm::vec3>& positions);
-        void setShadowCascades(const FrustumCascades& cascades);
-        void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array);
-        void setOmnidirectionalShadowMap(const GLDepthTextureCubemap& shadowMap);
-        void setSettings(const RenderingSettings& settings);
+        void setLight(const PointLight &light);
+
+        void setLight(const DirectionalLight &light);
+
+        void setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F> &gBuffer);
+
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4> &textures);
+
+        void setWorldBoundingBox(const AxisAlignedBox3D &box);
+
+        void setProbePositions(const GLFloat3BufferTexture<glm::vec3> &positions);
+
+        void setShadowCascades(const FrustumCascades &cascades);
+
+        void setDirectionalShadowMapArray(const GLDepthTexture2DArray &array);
+
+        void setOmnidirectionalShadowMap(const GLDepthTextureCubemap &shadowMap);
+
+        void setSettings(const RenderingSettings &settings);
     };
 
 }

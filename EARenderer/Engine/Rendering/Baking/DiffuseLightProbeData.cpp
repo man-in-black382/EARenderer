@@ -22,13 +22,13 @@ namespace EARenderer {
     void DiffuseLightProbeData::initializeBuffers() {
         // Transfer spherical harmonics coefficients to the GPU via buffer texture
         std::vector<SphericalHarmonics> shs;
-        for (auto& projection : mSurfelClusterProjections) {
+        for (auto &projection : mSurfelClusterProjections) {
             shs.push_back(projection.sphericalHarmonics);
         }
 
         // Transfer surfel cluster indices to the GPU via buffer texture
         std::vector<uint32_t> indices;
-        for (auto& projection : mSurfelClusterProjections) {
+        for (auto &projection : mSurfelClusterProjections) {
             indices.push_back(static_cast<uint32_t>(projection.surfelClusterIndex));
         }
 
@@ -37,9 +37,9 @@ namespace EARenderer {
         std::vector<uint32_t> metadata;
         std::vector<glm::vec3> positions;
 
-        for (auto& probe : mProbes) {
-            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupOffset);
-            metadata.push_back((uint32_t)probe.surfelClusterProjectionGroupSize);
+        for (auto &probe : mProbes) {
+            metadata.push_back((uint32_t) probe.surfelClusterProjectionGroupOffset);
+            metadata.push_back((uint32_t) probe.surfelClusterProjectionGroupSize);
             positions.push_back(probe.position);
             skySHs.push_back(probe.skySphericalHarmonics);
         }
@@ -60,7 +60,7 @@ namespace EARenderer {
         mProbePositionsBufferTexture->buffer().initialize(positions);
     }
 
-    void DiffuseLightProbeData::serialize(const std::string& filePath) {
+    void DiffuseLightProbeData::serialize(const std::string &filePath) {
         std::ofstream stream(filePath, std::ios::trunc | std::ios::binary);
         if (!stream.is_open()) {
             throw std::runtime_error(string_format("Unable to serialize light probes: %s", filePath.c_str()));
@@ -73,7 +73,7 @@ namespace EARenderer {
         bitsery::AdapterAccess::getWriter(serializer).flush();
     }
 
-    bool DiffuseLightProbeData::deserialize(const std::string& filePath) {
+    bool DiffuseLightProbeData::deserialize(const std::string &filePath) {
         std::ifstream stream(filePath);
         if (!stream.is_open()) {
             return false;
@@ -84,7 +84,7 @@ namespace EARenderer {
         deserializer.container(mSurfelClusterProjections, std::numeric_limits<uint32_t>::max());
         deserializer.object(mGridResolution);
 
-        auto& reader = bitsery::AdapterAccess::getReader(deserializer);
+        auto &reader = bitsery::AdapterAccess::getReader(deserializer);
 
         if (reader.isCompletedSuccessfully()) {
             initializeBuffers();
@@ -95,15 +95,15 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    const std::vector<DiffuseLightProbe>& DiffuseLightProbeData::probes() const {
+    const std::vector<DiffuseLightProbe> &DiffuseLightProbeData::probes() const {
         return mProbes;
     }
 
-    const std::vector<SurfelClusterProjection>& DiffuseLightProbeData::surfelClusterProjections() const {
+    const std::vector<SurfelClusterProjection> &DiffuseLightProbeData::surfelClusterProjections() const {
         return mSurfelClusterProjections;
     }
 
-    const glm::ivec3& DiffuseLightProbeData::gridResolution() const {
+    const glm::ivec3 &DiffuseLightProbeData::gridResolution() const {
         return mGridResolution;
     }
 

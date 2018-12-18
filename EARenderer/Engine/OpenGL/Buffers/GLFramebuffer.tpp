@@ -12,12 +12,12 @@
 namespace EARenderer {
 
     template<class... TexturePtrs>
-    void GLFramebuffer::redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures) {
+    void GLFramebuffer::redirectRenderingToTexturesMip(const GLViewport &viewport, uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures) {
         detachAllColorAttachments();
         attachTextures(mipLevel, *textures...);
         activateDrawBuffers(*textures...);
         viewport.apply();
-        
+
         if (buffersToClear != UnderlyingBuffer::None) {
             using type = std::underlying_type<UnderlyingBuffer>::type;
             glClear(static_cast<type>(buffersToClear));
@@ -31,12 +31,12 @@ namespace EARenderer {
     }
 
     template<class... TexturePtrs>
-    void GLFramebuffer::redirectRenderingToTextures(const GLViewport& viewport, UnderlyingBuffer buffersToClear, TexturePtrs... textures) {
+    void GLFramebuffer::redirectRenderingToTextures(const GLViewport &viewport, UnderlyingBuffer buffersToClear, TexturePtrs... textures) {
         detachAllColorAttachments();
         attachTextures(0, *textures...);
         activateDrawBuffers(*textures...);
         viewport.apply();
-        
+
         if (buffersToClear != UnderlyingBuffer::None) {
             using type = std::underlying_type<UnderlyingBuffer>::type;
             glClear(static_cast<type>(buffersToClear));
@@ -48,54 +48,50 @@ namespace EARenderer {
         redirectRenderingToTextures(mViewport, buffersToClear, textures...);
     }
 
-    template <class Texture>
-    void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture& texture) {
+    template<class Texture>
+    void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture &texture) {
         attachTextureToColorAttachment(texture, ColorAttachment::Automatic, mipLevel);
     }
 
-    template <class Texture, class... Textures>
-    void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture& head, const Textures&... tail) {
+    template<class Texture, class... Textures>
+    void GLFramebuffer::attachTextures(uint16_t mipLevel, const Texture &head, const Textures &... tail) {
         attachTextureToColorAttachment(head, ColorAttachment::Automatic, mipLevel);
         attachTextures(mipLevel, tail...);
     }
 
     template<class Format, Format F>
-    void GLFramebuffer::attachTexture(const GLTexture2D<Format, F>& texture,
-                                      uint16_t mipLevel,
-                                      ColorAttachment colorAttachment)
-    {
+    void GLFramebuffer::attachTexture(const GLTexture2D <Format, F> &texture,
+            uint16_t mipLevel,
+            ColorAttachment colorAttachment) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
     template<class Format, Format F>
-    void GLFramebuffer::attachTexture(const GLTextureCubemapArray<Format, F>& texture,
-                                      uint16_t mipLevel,
-                                      int16_t layer,
-                                      ColorAttachment colorAttachment)
-    {
+    void GLFramebuffer::attachTexture(const GLTextureCubemapArray <Format, F> &texture,
+            uint16_t mipLevel,
+            int16_t layer,
+            ColorAttachment colorAttachment) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
     }
-    
+
     template<class Format, Format F>
-    void GLFramebuffer::attachTexture(const GLTexture2DArray<Format, F>& texture,
-                                      uint16_t mipLevel,
-                                      int16_t layer,
-                                      ColorAttachment colorAttachment)
-    {
+    void GLFramebuffer::attachTexture(const GLTexture2DArray <Format, F> &texture,
+            uint16_t mipLevel,
+            int16_t layer,
+            ColorAttachment colorAttachment) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
     }
-    
+
     template<class Format, Format F>
-    void GLFramebuffer::attachTexture(const GLTextureCubemap<Format, F>& texture,
-                                      uint16_t mipLevel,
-                                      int16_t layer,
-                                      ColorAttachment colorAttachment)
-    {
+    void GLFramebuffer::attachTexture(const GLTextureCubemap <Format, F> &texture,
+            uint16_t mipLevel,
+            int16_t layer,
+            ColorAttachment colorAttachment) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel, layer);
     }
 
     template<class Texture>
-    void GLFramebuffer::activateDrawBuffers(const Texture& texture) {
+    void GLFramebuffer::activateDrawBuffers(const Texture &texture) {
         auto attachmentIt = mTextureAttachmentMap.find(texture.name());
         if (attachmentIt == mTextureAttachmentMap.end()) {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", texture.name()));
@@ -108,7 +104,7 @@ namespace EARenderer {
     }
 
     template<class Texture, class... Textures>
-    void GLFramebuffer::activateDrawBuffers(const Texture& head, const Textures&... tail) {
+    void GLFramebuffer::activateDrawBuffers(const Texture &head, const Textures &... tail) {
         auto attachmentIt = mTextureAttachmentMap.find(head.name());
         if (attachmentIt == mTextureAttachmentMap.end()) {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot redirect rendering to it.", head.name()));

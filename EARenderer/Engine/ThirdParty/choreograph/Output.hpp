@@ -10,7 +10,7 @@
 * notice, this list of conditions and the following disclaimer.
 * Redistributions in binary form must reproduce the above copyright
 * notice, this list of conditions and the following disclaimer in the
-* documentation and/or other materials provided with the distribution.
+* documentation and/or other mCookTorranceMaterials provided with the distribution.
 *
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -27,10 +27,10 @@
 
 #pragma once
 
-namespace choreograph
-{
+namespace choreograph {
 
-template<typename T> class Motion;
+    template<typename T>
+    class Motion;
 
 ///
 /// Safe type for Choreograph outputs.
@@ -41,118 +41,141 @@ template<typename T> class Motion;
 /// This avoids ambiguity around what copying would mean, and since the STL is move-aware,
 /// std::vectors of Outputs (or types containing them) just work.
 ///
-template<typename T>
-class Output
-{
-public:
-  /// Disconnect on destruction.
-  ~Output() { disconnect(); }
+    template<typename T>
+    class Output {
+    public:
+        /// Disconnect on destruction.
+        ~Output() {
+            disconnect();
+        }
 
-  /// Default constructor.
-  Output() = default;
+        /// Default constructor.
+        Output() = default;
 
-  /// Construct with a value.
-  Output( const T &value ):
-  _value( value )
-  {}
+        /// Construct with a value.
+        Output(const T &value) :
+                _value(value) {
+        }
 
-  /// Move assignment takes value and any input Motion.
-  Output<T>& operator= ( Output<T> &&rhs );
-  /// Move constructor takes value and any input Motion.
-  Output( Output<T> &&rhs );
+        /// Move assignment takes value and any input Motion.
+        Output<T> &operator=(Output<T> &&rhs);
 
-  /// Delete copy assignment. Confusing if we only copy value, lying if we steal input Motions.
-  Output<T>& operator= ( const Output<T> &rhs ) = delete;
-  /// Delete copy constructor. Confusing if we only copy value, lying if we steal input Motions.
-  Output( const Output<T> &rhs ) = delete;
+        /// Move constructor takes value and any input Motion.
+        Output(Output<T> &&rhs);
 
-  /// Disconnect from Motion input.
-  void disconnect();
+        /// Delete copy assignment. Confusing if we only copy value, lying if we steal input Motions.
+        Output<T> &operator=(const Output<T> &rhs) = delete;
 
-  /// Returns true iff this Output has a Motion input.
-  bool isConnected() const { return _input != nullptr; }
+        /// Delete copy constructor. Confusing if we only copy value, lying if we steal input Motions.
+        Output(const Output<T> &rhs) = delete;
 
-  /// Value assignment operator.
-  Output<T>& operator= ( T value ) { _value = value; return *this; }
-  /// Value add-assign.
-  Output<T>& operator+= ( T value ) { _value += value; return *this; }
+        /// Disconnect from Motion input.
+        void disconnect();
 
-  /// Returns value of output.
-  const T&    value() const { return _value; }
+        /// Returns true iff this Output has a Motion input.
+        bool isConnected() const {
+            return _input != nullptr;
+        }
 
-  /// Returns value of output.
-  const T&    operator() () const { return _value; }
+        /// Value assignment operator.
+        Output<T> &operator=(T value) {
+            _value = value;
+            return *this;
+        }
 
-  /// Returns value of output for manipulating.
-  T&          operator() () { return _value; }
+        /// Value add-assign.
+        Output<T> &operator+=(T value) {
+            _value += value;
+            return *this;
+        }
 
-  /// Returns the value this output will have at the end of its connected motion.
-  /// Returns current value if no motion attached.
-  T           endValue() const;
+        /// Returns value of output.
+        const T &value() const {
+            return _value;
+        }
 
-  /// Enable cast to value type.
-  operator const T&()  { return _value; }
+        /// Returns value of output.
+        const T &operator()() const {
+            return _value;
+        }
 
-  /// Returns pointer to value.
-  const T*    valuePtr() const { return &_value; }
+        /// Returns value of output for manipulating.
+        T &operator()() {
+            return _value;
+        }
 
-  /// Returns pointer to value.
-  T*          valuePtr() { return &_value; }
+        /// Returns the value this output will have at the end of its connected motion.
+        /// Returns current value if no motion attached.
+        T endValue() const;
 
-  Motion<T>*  inputPtr() { return _input; }
+        /// Enable cast to value type.
+        operator const T &() {
+            return _value;
+        }
 
-private:
-  T         _value;
-  Motion<T> *_input = nullptr;
+        /// Returns pointer to value.
+        const T *valuePtr() const {
+            return &_value;
+        }
 
-  friend class Motion<T>;
-};
+        /// Returns pointer to value.
+        T *valuePtr() {
+            return &_value;
+        }
+
+        Motion<T> *inputPtr() {
+            return _input;
+        }
+
+    private:
+        T _value;
+        Motion<T> *_input = nullptr;
+
+        friend class Motion<T>;
+    };
 
 //=================================================
 // Output Implementation
 //=================================================
 
 // Move constructor takes value and any input Motion.
-template<typename T>
-Output<T>::Output( Output<T> &&rhs ):
-  _value( std::move( rhs._value ) ),
-  _input( std::move( rhs._input ) )
-{
-  if( _input ) {
-    _input->setOutput( this );
-  }
-}
+    template<typename T>
+    Output<T>::Output(Output<T> &&rhs):
+            _value(std::move(rhs._value)),
+            _input(std::move(rhs._input)) {
+        if (_input) {
+            _input->setOutput(this);
+        }
+    }
 
 // Move assignment takes value and any input Motion.
-template<typename T>
-Output<T>& Output<T>::operator= ( Output<T> &&rhs ) {
-  if( this != &rhs ) {
-    _value = std::move( rhs._value );
-    _input = std::move( rhs._input );
-    if( _input ) {
-      _input->setOutput( this );
+    template<typename T>
+    Output<T> &Output<T>::operator=(Output<T> &&rhs) {
+        if (this != &rhs) {
+            _value = std::move(rhs._value);
+            _input = std::move(rhs._input);
+            if (_input) {
+                _input->setOutput(this);
+            }
+        }
+        return *this;
     }
-  }
-  return *this;
-}
 
-template<typename T>
-void Output<T>::disconnect()
-{
-  if( _input ) {
-    // Use Motion::disconnect, since TimelineItem::cancel only stops evaluation.
-    // Motion::disconnect also nullifies our pointer to the input.
-    _input->disconnect();
-  }
-}
+    template<typename T>
+    void Output<T>::disconnect() {
+        if (_input) {
+            // Use Motion::disconnect, since TimelineItem::cancel only stops evaluation.
+            // Motion::disconnect also nullifies our pointer to the input.
+            _input->disconnect();
+        }
+    }
 
-template<typename T>
-T Output<T>::endValue() const
-{
-  if( _input ) {
-    return _input->getSequence().getEndValue();
-  }
-  return _value;
-}
+    template<typename T>
+    T Output<T>::endValue() const {
+        if (_input) {
+            return _input->getSequence().getEndValue();
+        }
+        return _value;
+    }
 
 } // namespace choreograph

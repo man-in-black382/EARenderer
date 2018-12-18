@@ -17,14 +17,15 @@
 
 namespace EARenderer {
 
-    class GLSLToneMapping: public GLProgram {
+    class GLSLToneMapping : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLToneMapping();
 
-        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image);
-        void setExposure(const GLFloatTexture2D<GLTexture::Float::R16F>& exposure);
+        void setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image);
+
+        void setExposure(const GLFloatTexture2D<GLTexture::Float::R16F> &exposure);
     };
 
 }

@@ -17,15 +17,16 @@
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
-    
-    class GLSLShadowMap: public GLProgram {
-    public:        
+
+    class GLSLShadowMap : public GLProgram {
+    public:
         GLSLShadowMap();
-        
-        void setModelMatrix(const glm::mat4& modelMatrix);
-        void setViewProjectionMatrices(const std::vector<glm::mat4>& matrices);
+
+        void setModelMatrix(const glm::mat4 &modelMatrix);
+
+        void setViewProjectionMatrices(const std::vector<glm::mat4> &matrices);
     };
-    
+
 }
 
 #endif /* GLSLDirectionalShadowMap_hpp */

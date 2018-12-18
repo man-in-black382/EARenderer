@@ -16,14 +16,18 @@
 
 namespace EARenderer {
 
-    class GLSLGridLightProbeRendering: public GLProgram {
+    class GLSLGridLightProbeRendering : public GLProgram {
     public:
         GLSLGridLightProbeRendering();
 
-        void setCamera(const Camera& camera);
-        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4>& textures);
-        void setWorldBoundingBox(const AxisAlignedBox3D& box);
-        void setProbesGridResolution(const glm::ivec3& resolution);
+        void setCamera(const Camera &camera);
+
+        void setGridProbesSHTextures(const std::array<GLLDRTexture3D, 4> &textures);
+
+        void setWorldBoundingBox(const AxisAlignedBox3D &box);
+
+        void setProbesGridResolution(const glm::ivec3 &resolution);
+
         void setSphereRadius(float radius);
     };
 

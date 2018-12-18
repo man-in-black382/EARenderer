@@ -17,9 +17,9 @@ namespace EARenderer {
 
     class MeshLoader {
     public:
-        static std::shared_ptr<MeshLoader> Create(const std::string& meshPath);
+        static std::shared_ptr<MeshLoader> Create(const std::string &meshPath);
 
-        virtual void load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D &boundingBox) = 0;
+        virtual void load(std::vector<SubMesh> &subMeshes, std::string &meshName, AxisAlignedBox3D &boundingBox) = 0;
     };
 
 }

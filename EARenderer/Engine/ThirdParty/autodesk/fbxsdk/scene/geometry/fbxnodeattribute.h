@@ -26,13 +26,12 @@ class FbxNode;
   *    A node attribute is the content of a node. A \c NULL node attribute is set 
   * by calling function FbxNode::SetNodeAttribute() with a \c NULL pointer.
   */
-class FBXSDK_DLL FbxNodeAttribute : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxNodeAttribute, FbxObject);
+class FBXSDK_DLL FbxNodeAttribute : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxNodeAttribute, FbxObject);
 
 public:
     //! Property Names
-    static const char* sColor;
+    static const char *sColor;
 
     //! Property Default Values
     static const FbxDouble3 sDefaultColor;
@@ -67,16 +66,15 @@ public:
       * - \e eCachedEffect
       * - \e eLine
       */
-    enum EType
-    {   
+    enum EType {
         eUnknown,
         eNull,
         eMarker,
-        eSkeleton, 
-        eMesh, 
-        eNurbs, 
+        eSkeleton,
+        eMesh,
+        eNurbs,
         ePatch,
-        eCamera, 
+        eCamera,
         eCameraStereo,
         eCameraSwitcher,
         eLight,
@@ -98,16 +96,16 @@ public:
       */
     virtual FbxNodeAttribute::EType GetAttributeType() const;
 
-	/** Return the node count using this attribute.
-	  * \return  The count of nodes with this attribute set.
-	  */
-	int GetNodeCount() const;
+    /** Return the node count using this attribute.
+      * \return  The count of nodes with this attribute set.
+      */
+    int GetNodeCount() const;
 
     /** Return the node this attribute is set to.
 	  * \param pIndex	The index of the node to retrieve
       * \return			Pointer to the node, or \c NULL if the current attribute is not set to a node.
       */
-    FbxNode* GetNode(int pIndex=0) const;
+    FbxNode *GetNode(int pIndex = 0) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -115,6 +113,7 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual void ConstructProperties(bool pForceSet);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

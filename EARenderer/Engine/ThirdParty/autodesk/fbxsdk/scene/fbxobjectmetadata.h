@@ -26,9 +26,8 @@
   * all meta-data information should be stored in properties.
   * 
   */
-class FBXSDK_DLL FbxObjectMetaData : public FbxObject
-{
-	FBXSDK_OBJECT_DECLARE(FbxObjectMetaData, FbxObject);
+class FBXSDK_DLL FbxObjectMetaData : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxObjectMetaData, FbxObject);
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

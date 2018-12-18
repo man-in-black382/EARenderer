@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -33,8 +33,7 @@
 #include <vector>
 #include <array>
 
-namespace choreograph
-{
+namespace choreograph {
 
 ///
 /// Choreograph uses float to measure Time by default.
@@ -43,17 +42,15 @@ namespace choreograph
 /// Switch to double if you need more precision.
 ///
 
-using Time = double;
+    using Time = double;
 
 /// Wrap \a time past \a duration around \a inflectionPoint.
-inline Time wrapTime( Time time, Time duration, Time inflectionPoint=0.0f )
-{
-  if( time > duration ) {
-    return inflectionPoint + std::fmod( time, duration - inflectionPoint );
-  }
-  else {
-    return time;
-  }
-}
+    inline Time wrapTime(Time time, Time duration, Time inflectionPoint = 0.0f) {
+        if (time > duration) {
+            return inflectionPoint + std::fmod(time, duration - inflectionPoint);
+        } else {
+            return time;
+        }
+    }
 
 } // namespace choreograph

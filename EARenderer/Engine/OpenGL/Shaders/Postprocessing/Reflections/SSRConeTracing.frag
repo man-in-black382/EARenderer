@@ -16,7 +16,7 @@ in vec2 vTexCoords;
 
 // Uniforms
 
-uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
+uniform usampler2D uMaterialData;
 uniform sampler2D uGBufferHiZBuffer;
 uniform sampler2D uReflections; // Source image
 uniform sampler2D uRayHitInfo;
@@ -78,7 +78,7 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
 ////////////////////////// Main ////////////////////////////
 ////////////////////////////////////////////////////////////
 
-vec3 TraceCones(GBuffer gBuffer, vec4 rayHitInfo) {
+vec3 TraceCones(GBufferCookTorrance gBuffer, vec4 rayHitInfo) {
 
     if (rayHitInfo.a == 0) {
         return vec3(0.0);
@@ -152,8 +152,9 @@ vec3 TraceCones(GBuffer gBuffer, vec4 rayHitInfo) {
 }
 
 void main() {
-    vec4 rayHitInfo    = textureLod(uRayHitInfo, vTexCoords, 0);
-    GBuffer gBuffer    = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
+    vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
+    uvec4 materialData = texture(uMaterialData, vTexCoords);
+    GBufferCookTorrance gBuffer = DecodeGBufferCookTorrance(materialData);
     vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     vec3 reflectedPointWorldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, rayHitInfo.xy, uCameraViewInverse, uCameraProjectionInverse);
 

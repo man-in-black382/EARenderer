@@ -22,8 +22,7 @@
 /** Contains data about an external document.
   * The document is a FbxDocument object.
   */
-struct FBXSDK_DLL FbxExternalDocumentInfo
-{
+struct FBXSDK_DLL FbxExternalDocumentInfo {
     FbxString mDocumentName;      //!< Bare name of external document in document hierarchy.
     FbxString mClassName;         //!< Class name of the document (FbxDocument, FbxLibrary...).
     FbxString mParentFullName;    //!< Full name of the parent document in document hierarchy.
@@ -33,11 +32,12 @@ struct FBXSDK_DLL FbxExternalDocumentInfo
 /** Event that is emitted on loading document when a referenced document
   * is encountered while loading external references.
   */
-class FBXSDK_DLL FbxEventReferencedDocument : public FbxEvent<FbxEventReferencedDocument>, public FbxExternalDocumentInfo
-{
-    FBXSDK_EVENT_DECLARE(FbxEventReferencedDocument);
+class FBXSDK_DLL FbxEventReferencedDocument
+        : public FbxEvent<FbxEventReferencedDocument>, public FbxExternalDocumentInfo {
+FBXSDK_EVENT_DECLARE(FbxEventReferencedDocument);
 public:
-    FbxEventReferencedDocument() {}
+    FbxEventReferencedDocument() {
+    }
 };
 
 
@@ -53,8 +53,7 @@ class FbxExternalDocRefListenerData;
 * And later unregister it like so:
 *     lRefDocListener.Unbind(lHandler);
 */
-class FBXSDK_DLL FbxExternalDocRefListener : public FbxListener
-{
+class FBXSDK_DLL FbxExternalDocRefListener : public FbxListener {
 public:
     /** Constructor. 
       * \param pManager
@@ -62,14 +61,15 @@ public:
       * \remarks Keep a reference to the SDK and the path of the document
       * to be able to resolve relative paths. 
       */
-    FbxExternalDocRefListener( FbxManager & pManager, const FbxString & pDocFilePath );
+    FbxExternalDocRefListener(FbxManager &pManager, const FbxString &pDocFilePath);
+
     virtual ~FbxExternalDocRefListener();
 
     /** Set the document file path used to resolve documents. 
       * \param pDocFilePath
       * \remarks Allows re-using the same instance for multiple document loadings.
       */
-    virtual void SetDocumentFilePath( const FbxString & pDocFilePath );
+    virtual void SetDocumentFilePath(const FbxString &pDocFilePath);
 
     /** Verify that all documents that were previously loaded in a previous
       * load session are still valid.
@@ -107,25 +107,29 @@ public:
       *             After, it tries to resolve dangling documents by calling
       *             TryConnectingDanglingLibraries().
       */
-    virtual void HandleEvent(const FbxEventReferencedDocument * pEvent);
+    virtual void HandleEvent(const FbxEventReferencedDocument *pEvent);
 
 protected:
     /**
      * Turn a relative path to an absolute path using the file path of the original document being loaded.
      * If the path is already is absolute, it is returned as is.
      */
-    virtual FbxString MakeFilenameAbsolute(const FbxString & pFilename) const;
+    virtual FbxString MakeFilenameAbsolute(const FbxString &pFilename) const;
+
     //! Locate a document by its document path.
-    virtual FbxDocument * FindDocument( const FbxString & pPathToDoc );
+    virtual FbxDocument *FindDocument(const FbxString &pPathToDoc);
+
     //! Load a library, potentially under another library.
-    virtual FbxDocument * LoadDocument(FbxObject * pParent, const FbxString & pClassName, const FbxString & pFilename);
+    virtual FbxDocument *LoadDocument(FbxObject *pParent, const FbxString &pClassName, const FbxString &pFilename);
+
     //! Try to connect a library to its parent given its document path.
     virtual bool ConnectToParentLibrary(const FbxExternalDocumentInfo &);
+
     //! Try to reconnect dangling libraries that didn't find their parent.
     virtual void TryConnectingDanglingLibraries();
 
 private:
-    FbxExternalDocRefListenerData * mData;
+    FbxExternalDocRefListenerData *mData;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

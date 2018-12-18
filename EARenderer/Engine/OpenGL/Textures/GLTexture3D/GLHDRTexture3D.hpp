@@ -13,9 +13,10 @@
 
 namespace EARenderer {
 
-    class GLHDRTexture3D: public GLTexture3D {
+    class GLHDRTexture3D : public GLTexture3D {
     public:
-        GLHDRTexture3D(const Size2D& size, size_t depth);
+        GLHDRTexture3D(const Size2D &size, size_t depth);
+
         ~GLHDRTexture3D() = default;
     };
 

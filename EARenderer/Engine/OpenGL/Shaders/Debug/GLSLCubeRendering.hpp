@@ -14,14 +14,17 @@
 
 namespace EARenderer {
 
-    class GLSLCubeRendering: public GLProgram {
+    class GLSLCubeRendering : public GLProgram {
     public:
-        enum class Mode { Sides, Edges };
+        enum class Mode {
+            Sides, Edges
+        };
 
         GLSLCubeRendering(Mode mode);
 
-        void setViewProjectionMatrix(const glm::mat4& mvp);
-        void setColor(const Color& color);
+        void setViewProjectionMatrix(const glm::mat4 &mvp);
+
+        void setColor(const Color &color);
     };
 
 }

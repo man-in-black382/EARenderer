@@ -9,23 +9,23 @@
 #include "FileManager.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    FileManager& FileManager::shared() {
+
+    FileManager &FileManager::shared() {
         static FileManager manager;
         return manager;
     }
-    
+
 #pragma mark - Getters
 
-    const std::string& FileManager::resourceRootPath() const {
+    const std::string &FileManager::resourceRootPath() const {
         return mResourceRootPath;
     }
-    
+
 #pragma mark - Setters
 
-    void FileManager::setResourceRootPath(const std::string& path) {
+    void FileManager::setResourceRootPath(const std::string &path) {
         if (path.back() == '/') {
             mResourceRootPath = path;
         } else {

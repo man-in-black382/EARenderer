@@ -12,15 +12,15 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <GLTexture::Float Format>
-    PostprocessTexturePool<Format>::PostprocessTexturePool(const Size2D& resolution)
-    :
-    mTextureResolution(resolution)
-    { }
+    template<GLTexture::Float Format>
+    PostprocessTexturePool<Format>::PostprocessTexturePool(const Size2D &resolution)
+            :
+            mTextureResolution(resolution) {
+    }
 
 #pragma mark - Getters & Setters
 
-    template <GLTexture::Float Format>
+    template<GLTexture::Float Format>
     std::shared_ptr<typename PostprocessTexturePool<Format>::PostprocessTexture>
     PostprocessTexturePool<Format>::claim() {
         if (mFreeTextures.empty()) {
@@ -37,7 +37,7 @@ namespace EARenderer {
         return texture;
     }
 
-    template <GLTexture::Float Format>
+    template<GLTexture::Float Format>
     void PostprocessTexturePool<Format>::putBack(std::shared_ptr<PostprocessTexture> texture) {
         auto textureIt = mClaimedTextures.find(texture);
         if (textureIt == mClaimedTextures.end()) {

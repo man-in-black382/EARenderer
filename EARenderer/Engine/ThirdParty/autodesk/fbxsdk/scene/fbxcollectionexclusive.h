@@ -22,15 +22,14 @@
 /** Class for exclusive collections. An object (FbxObject) should belong to only one exclusive collection at most.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxCollectionExclusive : public FbxCollection
-{
-    FBXSDK_OBJECT_DECLARE(FbxCollectionExclusive, FbxCollection);
+class FBXSDK_DLL FbxCollectionExclusive : public FbxCollection {
+FBXSDK_OBJECT_DECLARE(FbxCollectionExclusive, FbxCollection);
 
 public:
     /** Add a member if it's not a member of any other FbxCollectionExclusive objects.
       * \param pMember Object to be added
       */
-    bool AddMember(FbxObject* pMember);
+    bool AddMember(FbxObject *pMember);
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

@@ -9,15 +9,15 @@
 #include "Vertex1P3.hpp"
 
 namespace EARenderer {
-    
+
     Vertex1P3::Vertex1P3()
-    :
-    position(glm::vec3())
-    { }
-    
+            :
+            position(glm::vec3()) {
+    }
+
     Vertex1P3::Vertex1P3(glm::vec3 p)
-    :
-    position(p)
-    { }
-    
+            :
+            position(p) {
+    }
+
 }

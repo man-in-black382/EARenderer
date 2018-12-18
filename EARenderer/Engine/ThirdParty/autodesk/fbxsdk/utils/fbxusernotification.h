@@ -22,7 +22,9 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxLogFile;
+
 class FbxMessageEmitter;
+
 class FbxUserNotificationFilteredIterator;
 
 /** This class defines one entry object held by the FbxUserNotification class.
@@ -31,17 +33,15 @@ class FbxUserNotificationFilteredIterator;
   * Direct manipulation of this object should not be required. At most, access to
   * its members can be granted for querying purposes.
   */
-class FBXSDK_DLL FbxAccumulatorEntry
-{
+class FBXSDK_DLL FbxAccumulatorEntry {
 public:
     /** Category of the accumulator entry.   
      */
-    enum EClass
-	{
-        eError=1,    //!< Error message entry.
-        eWarning=2,  //!< Warning message entry.
-        eInformation=4,     //!< Information message entry.
-        eAny=7       //!< Entry that does not belong to above class. Cannot be used as a class ID
+    enum EClass {
+        eError = 1,    //!< Error message entry.
+        eWarning = 2,  //!< Warning message entry.
+        eInformation = 4,     //!< Information message entry.
+        eAny = 7       //!< Entry that does not belong to above class. Cannot be used as a class ID
     };
 
     /** Constructor.
@@ -55,14 +55,14 @@ public:
       *                     output routines of the UserNotification accumulator. The entry gets activated 
       *                     (unmuted) by the calls to AddDetail() in the accumulator.                
       */
-    FbxAccumulatorEntry(EClass pAEClass, const FbxString& pName, const FbxString& pDescr, 
-                     FbxString pDetail="", bool pMuteState=true);
+    FbxAccumulatorEntry(EClass pAEClass, const FbxString &pName, const FbxString &pDescr,
+            FbxString pDetail = "", bool pMuteState = true);
 
     /** Copy Constructor.
       * \param pAE Another FbxAccumulatorEntry object to be copied.
       * \param pSkipDetails Flag to skip details.
       */
-    FbxAccumulatorEntry(const FbxAccumulatorEntry& pAE, bool pSkipDetails);
+    FbxAccumulatorEntry(const FbxAccumulatorEntry &pAE, bool pSkipDetails);
 
     //! Destructor.
     ~FbxAccumulatorEntry();
@@ -74,7 +74,7 @@ public:
     FbxString GetName() const;
 
     //! Returns the description of this entry.
-    FbxString    GetDescription() const;
+    FbxString GetDescription() const;
 
     //! Returns the number of details stored.
     int GetDetailsCount() const;
@@ -85,22 +85,23 @@ public:
       * \param id  The detail id.
       * \return Pointer to the specific detail.
       */
-    const FbxString* GetDetail(int id) const;
+    const FbxString *GetDetail(int id) const;
 
     //! Returns True if this entry is muted.
     bool IsMuted() const;
 
 private:
-    FbxArray<FbxString*>&	GetDetails();
-    void					Mute(bool pState);
+    FbxArray<FbxString *> &GetDetails();
 
-    bool					mMute;
-    EClass					mAEClass;
-    FbxString				mName;
-    FbxString				mDescr;
-    FbxArray<FbxString*>	mDetails;
+    void Mute(bool pState);
 
-	friend class FbxUserNotification;
+    bool mMute;
+    EClass mAEClass;
+    FbxString mName;
+    FbxString mDescr;
+    FbxArray<FbxString *> mDetails;
+
+    friend class FbxUserNotification;
 };
 
 
@@ -108,8 +109,7 @@ private:
   * If this class is not derived, the data can only be sent to a log file. To send data to a log file, 
   * it must be opened before attempting to send data, otherwise, the messages will be lost.
   */
-class FBXSDK_DLL FbxUserNotification
-{
+class FBXSDK_DLL FbxUserNotification {
 public:
     /**
      * Create and initialize user notification object for the SDK manager.
@@ -122,14 +122,14 @@ public:
      * \param pSessionDescription     This string is used to separate session logs in the file.
      * \return    the global user notification object owned by the SDK manager. 
      */
-    static FbxUserNotification* Create(FbxManager* pManager, 
-                                        const FbxString& pLogFileName, 
-                                        const FbxString& pSessionDescription);
+    static FbxUserNotification *Create(FbxManager *pManager,
+            const FbxString &pLogFileName,
+            const FbxString &pSessionDescription);
 
     /**
      * Destroy the global user notification object owned by the SDK manager.
      */
-    static void Destroy(FbxManager* pManager);
+    static void Destroy(FbxManager *pManager);
 
     /** Instantiate a FbxUserNotification but leave it uninitialized. The caller must
       * explicitly call InitAccumulator to initialize it and ClearAccumulator when finished
@@ -146,9 +146,9 @@ public:
       *                                opened in the InitAccumulator) or at the end of the processing in the 
       *                                PostTerminate method.
       */
-    FbxUserNotification(FbxManager* pManager,
-                         FbxString const& pLogFileName, 
-                         FbxString const& pSessionDescription);
+    FbxUserNotification(FbxManager *pManager,
+            FbxString const &pLogFileName,
+            FbxString const &pSessionDescription);
 
     //! Destructor.
     virtual ~FbxUserNotification();
@@ -168,8 +168,7 @@ public:
 
     /** IDs for pre-defined message entries.
      */
-    enum EEntryID
-	{
+    enum EEntryID {
         eBindPoseInvalidObject,
         eBindPoseInvalidRoot,
         eBindPoseNotAllAncestorsNodes,
@@ -177,10 +176,10 @@ public:
         eBindPoseNotAllAncestorsDefinitionNodes,
         eBindPoseRelativeMatrix,
         eEmbedMediaNotify,
-        eFileIONotify,						//!< this is generic for reader and writer to log notifications.
+        eFileIONotify,                        //!< this is generic for reader and writer to log notifications.
         eFileIONotifyMaterial,
         eFileIONotifyDXFNotSupportNurbs,
-        eEntryStartID						//!< Starting ID for any Accumulator entry added by derived classes.
+        eEntryStartID                        //!< Starting ID for any Accumulator entry added by derived classes.
     };
 
     /**
@@ -194,7 +193,7 @@ public:
       * \param pClass       The category of this entry.
       * \return             The ID of the newly allocated entry. This ID is pEntryId.
       */
-    int AddEntry(const int pID, const FbxString& pName, const FbxString& pDescr, FbxAccumulatorEntry::EClass pClass=FbxAccumulatorEntry::eWarning);
+    int AddEntry(const int pID, const FbxString &pName, const FbxString &pDescr, FbxAccumulatorEntry::EClass pClass = FbxAccumulatorEntry::eWarning);
 
     /** Completes the accumulator entry (there can be more that one detail for each entry) and implicitly defines
       * the sequence of events. Each call to this method is internally recorded, making it possible to output each
@@ -226,24 +225,24 @@ public:
       * \return             The id of the detail in the recorded sequence of events. This Id should be used when the call to
       *                     Output has the eSequencedDetails set as a source. If an error occurs, the returned value is -1
       */
-    int AddDetail(int pEntryId, FbxNode* pNode);
+    int AddDetail(int pEntryId, FbxNode *pNode);
 
     //! Returns the number of AccumulatorEntries currently stored in this accumulator.
-    int  GetNbEntries() const;
+    int GetNbEntries() const;
 
     /** Get the specified FbxAccumulatorEntry.
       * \param pEntryId     ID of the entry to retrieve.
       * \return             Pointer to the specified entry, otherwise \c NULL if either the id is invalid or the Accumulator
       *                     is not properly initialized.
       */
-    const FbxAccumulatorEntry* GetEntry(int pEntryId);
+    const FbxAccumulatorEntry *GetEntry(int pEntryId);
 
     /** Get the FbxAccumulatorEntry at the specified index.
       * \param pEntryIndex     index of the entry to retrieve.
       * \return                Pointer to the specified entry, otherwise \c NULL if either the index is invalid or the Accumulator
       *                        is not properly initialized..
       */
-    const FbxAccumulatorEntry* GetEntryAt(int pEntryIndex) const;
+    const FbxAccumulatorEntry *GetEntryAt(int pEntryIndex) const;
 
     //! Returns the number of Details recorded so far in this accumulator.
     int GetNbDetails() const;
@@ -257,7 +256,7 @@ public:
       * \remarks             A value of -1 is acceptable and means that the FbxAccumulatorEntry has no details. However,
       *                      if pAE is NULL, the return value is meaningless.
       */
-    int GetDetail(int pDetailId, const FbxAccumulatorEntry*& pAE) const;
+    int GetDetail(int pDetailId, const FbxAccumulatorEntry *&pAE) const;
 
     //@}
 
@@ -267,8 +266,7 @@ public:
     //@{
     /** Specify send what kind of data to output device.
      */
-    enum EOutputSource
-	{
+    enum EOutputSource {
         eAccumulatorEntry,     //!< Entry with its details.  
         eSequencedDetails      //!< Details in the recorded order.
     };
@@ -284,7 +282,7 @@ public:
       * \param pExtraDevicesOnly     If this parameter is True, the output is not sent to the log file.
       * \remarks                     The pExtraDevicesOnly parameter is ignored if the log file has been disabled.
       */
-    bool Output(EOutputSource pOutSrc=eAccumulatorEntry, int pIndex = -1, bool pExtraDevicesOnly = false);
+    bool Output(EOutputSource pOutSrc = eAccumulatorEntry, int pIndex = -1, bool pExtraDevicesOnly = false);
 
     /** Send the accumulator entry to the output devices.
       * \param pId                     Send the entry/detail that matching pIdx to the output devices,
@@ -293,8 +291,8 @@ public:
       *                              to send the Details in the recorded order. Set to ACCUMULATOR_ENTRY to send
       *                              each entry with its details regardless of the order in which the events occurred..
       * \param pExtraDevicesOnly     If this parameter is True, the output is not sent to the log file.
-      */      
-    bool OutputById(EEntryID pId, EOutputSource pOutSrc=eAccumulatorEntry, bool pExtraDevicesOnly = false);
+      */
+    bool OutputById(EEntryID pId, EOutputSource pOutSrc = eAccumulatorEntry, bool pExtraDevicesOnly = false);
 
     /** Send an immediate entry to the output devices.
       * This method bypasses the accumulator by sending the entry directly to the output devices
@@ -305,7 +303,7 @@ public:
       * \param pExtraDevicesOnly     If this parameter is True, the output is not sent to the log file.
       * \remarks                     The pExtraDevicesOnly parameter is ignored if the log file has been disabled.
       */
-    bool Output(const FbxString& pName, const FbxString& pDescr, FbxAccumulatorEntry::EClass pClass, bool pExtraDevicesOnly = false);
+    bool Output(const FbxString &pName, const FbxString &pDescr, FbxAccumulatorEntry::EClass pClass, bool pExtraDevicesOnly = false);
 
     /** Sends the content of the iterator to the output devices.
       * This method bypasses the accumulator by sending each entry in the iterator directly to 
@@ -314,12 +312,12 @@ public:
       * \param pExtraDevicesOnly     If this parameter is True, the output is not sent to the log file.
       * \remarks                     The pExtraDevicesOnly parameter is ignored if the log file has been disabled.
       */
-    bool Output(FbxUserNotificationFilteredIterator& pAEFIter, bool pExtraDevicesOnly = false);
+    bool Output(FbxUserNotificationFilteredIterator &pAEFIter, bool pExtraDevicesOnly = false);
 
     /** Set log message emitter.
      *  \param pLogMessageEmitter   The new log message emitter.
      */
-    void SetLogMessageEmitter(FbxMessageEmitter * pLogMessageEmitter);
+    void SetLogMessageEmitter(FbxMessageEmitter *pLogMessageEmitter);
 
     /**
       * \name Utilities
@@ -329,32 +327,37 @@ public:
       *  returns the TEMP directory.
       * \param pPath     The returned path.
       */
-    virtual void GetLogFilePath(FbxString& pPath);
-    
-    /** Returns the log file name.      */    
-    inline FbxString GetLogFileName() { return mLogFileName; }
+    virtual void GetLogFilePath(FbxString &pPath);
+
+    /** Returns the log file name.      */
+    inline FbxString GetLogFileName() {
+        return mLogFileName;
+    }
     //@}
 
 protected:
     /**
      * Identify one detail in all accumulator entries by record the entry object and its detail id.
      */
-    class AESequence
-    {
+    class AESequence {
     public:
-        AESequence(FbxAccumulatorEntry* pAE, int pDetailId) :
-            mAE(pAE),
-            mDetailId(pDetailId)
-            {
-            };
+        AESequence(FbxAccumulatorEntry *pAE, int pDetailId) :
+                mAE(pAE),
+                mDetailId(pDetailId) {
+        };
 
         //! Return the entry object the detail belongs to.
-        FbxAccumulatorEntry* AE() { return mAE; }
+        FbxAccumulatorEntry *AE() {
+            return mAE;
+        }
+
         //! Return the detail id in the entry object
-        int DetailId() { return mDetailId; }
+        int DetailId() {
+            return mDetailId;
+        }
 
     private:
-        FbxAccumulatorEntry* mAE;
+        FbxAccumulatorEntry *mAE;
         int mDetailId;
     };
 
@@ -388,7 +391,7 @@ protected:
       * \param pEntries Accumulator entries to output.
       * \return     \c true if successful, \c false otherwise.
       */
-    virtual bool SendToExtraDevices(bool pOutputNow, FbxArray<FbxAccumulatorEntry*>& pEntries);
+    virtual bool SendToExtraDevices(bool pOutputNow, FbxArray<FbxAccumulatorEntry *> &pEntries);
 
     /** Allow the implementation class to send all the accumulator entries to the devices.
       * By default this method loop trough all the elements of the received array and
@@ -397,7 +400,7 @@ protected:
       * \param pAESequence Accumulator entries to output.
       * \return     \c true if successful, \c false otherwise.
       */
-    virtual bool SendToExtraDevices(bool pOutputNow, FbxArray<AESequence*>& pAESequence);
+    virtual bool SendToExtraDevices(bool pOutputNow, FbxArray<AESequence *> &pAESequence);
 
     /** Allow the implementation class to send one accumulator entry to the devices.
       * By default this method does nothing. 
@@ -408,9 +411,9 @@ protected:
       * \remarks     Derived methods should check for the IsMuted() state to decide if the accumulator
       *              entry should get through or get discarded. See AddDetail for more details.
       */
-    virtual bool SendToExtraDevices(bool pOutputNow, const FbxAccumulatorEntry* pAccEntry, int pDetailId = -1);
+    virtual bool SendToExtraDevices(bool pOutputNow, const FbxAccumulatorEntry *pAccEntry, int pDetailId = -1);
 
-    
+
     /** Allow the implementation class to close it's output devices (called in the ClearAccumulator)
       * By default this method does nothing.
       */
@@ -432,32 +435,31 @@ protected:
       * \param pAccEntry The accumulator entry.
       * \param pDetailId Detail id.
       */
-    void SendToLog(const FbxAccumulatorEntry* pAccEntry, int pDetailId = -1);
+    void SendToLog(const FbxAccumulatorEntry *pAccEntry, int pDetailId = -1);
 
 private:
     FbxString mLogFileName;
-    FbxString* mLog;
-    FbxLogFile* mLogFile;
-    FbxMessageEmitter* mLogMessageEmitter;
+    FbxString *mLog;
+    FbxLogFile *mLogFile;
+    FbxMessageEmitter *mLogMessageEmitter;
 
     bool mProperlyInitialized;
     FbxString mSessionDescription;
     bool mProperlyCleaned;
 
     FbxMultiMap mAccuHT;                             // The set establish a relationship between an FbxAccumulatorEntry and it's ID
-    FbxArray<FbxAccumulatorEntry*> mAccu;  // The array defines the order the FbxAccumulatorEntry objects have been 
-                                              // added to the accumulator (calls to AddEntry)
-                                              // Both structures share the same pointers.
-    FbxArray<AESequence*> mAESequence;
-    FbxManager*             mSdkManager;
+    FbxArray<FbxAccumulatorEntry *> mAccu;  // The array defines the order the FbxAccumulatorEntry objects have been
+    // added to the accumulator (calls to AddEntry)
+    // Both structures share the same pointers.
+    FbxArray<AESequence *> mAESequence;
+    FbxManager *mSdkManager;
 };
 
 /** This class iterates through the accumulated messages depending on the configuration
   * flags (filter). The iterator keeps a local copy of the data extracted from the
   * accumulator.
   */
-class FBXSDK_DLL FbxUserNotificationFilteredIterator
-{
+class FBXSDK_DLL FbxUserNotificationFilteredIterator {
 public:
     /** Constructor. 
       * \param pAccumulator     This reference is only used during construction for retrieving
@@ -471,7 +473,7 @@ public:
       *                            devices. If left to its default value, only the description of the
       *                            FbxAccumulatorEntry is sent.
       */
-    FbxUserNotificationFilteredIterator(FbxUserNotification& pAccumulator, 
+    FbxUserNotificationFilteredIterator(FbxUserNotification &pAccumulator,
             int pFilterClass,
             FbxUserNotification::EOutputSource pSrc = FbxUserNotification::eSequencedDetails,
             bool pNoDetail = true);
@@ -479,7 +481,7 @@ public:
     virtual ~FbxUserNotificationFilteredIterator();
 
     //! Returns the number of elements contained in this iterator.
-    int  GetNbItems() const;
+    int GetNbItems() const;
 
     //! Put the iterator in its reset state.
     void Reset();
@@ -487,7 +489,7 @@ public:
     /** Get this iterator's first item. 
       * \return     NULL if the iterator is empty.
       */
-    FbxAccumulatorEntry* const First();
+    FbxAccumulatorEntry *const First();
 
     /** Get this iterator's previous item.
       * \return     NULL if the iterator reached the beginning (or is empty).
@@ -496,7 +498,7 @@ public:
       *             its reset state (meaning that a call to First() is mandatory
       *             to be able to iterate again).
       */
-    FbxAccumulatorEntry* const Previous();
+    FbxAccumulatorEntry *const Previous();
 
     /** Get this iterator's next item.
       * \return     NULL if the iterator reached the end (or is empty).
@@ -505,17 +507,17 @@ public:
       *             First() or after a preceding call to Previous() reached 
       *             beyond the beginning).
       */
-    FbxAccumulatorEntry* const Next();
+    FbxAccumulatorEntry *const Next();
 
 protected:
     // Called in the constructor.
-    virtual void BuildFilteredList(FbxUserNotification& pAccumulator);
+    virtual void BuildFilteredList(FbxUserNotification &pAccumulator);
 
-    int                                    mIterator;
-    int                                    mFilterClass;
-    bool                                mNoDetail;
-    FbxUserNotification::EOutputSource    mAccuSrcData;
-    FbxArray<FbxAccumulatorEntry*>    mFilteredAE;
+    int mIterator;
+    int mFilterClass;
+    bool mNoDetail;
+    FbxUserNotification::EOutputSource mAccuSrcData;
+    FbxArray<FbxAccumulatorEntry *> mFilteredAE;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,34 +29,35 @@
 
 #include "choreograph/Phrase.hpp"
 
-namespace choreograph
-{
+namespace choreograph {
 
 ///
 /// AnalyticChange is a phrase that calls a std::function every step.
 /// You could do similar things with a Motion's updateFn, but this is composable within Sequences.
 ///
-template<typename T>
-class ProceduralPhrase : public Phrase<T>
-{
-public:
-  /// Analytic Function receives start, end, and normalized time.
-  /// Most basic would be mix( a, b, t ) or lerp( a, b, t ).
-  /// Intended use is to apply something like cos() or random jitter.
-  using Function = std::function<T (Time normalizedTime, Time duration)>;
+    template<typename T>
+    class ProceduralPhrase : public Phrase<T> {
+    public:
+        /// Analytic Function receives start, end, and normalized time.
+        /// Most basic would be mix( a, b, t ) or lerp( a, b, t ).
+        /// Intended use is to apply something like cos() or random jitter.
+        using Function = std::function<
 
-  ProceduralPhrase( Time duration, const Function &fn ):
-    Phrase<T>( duration ),
-    _function( fn )
-  {}
+        T(Time normalizedTime, Time duration)
 
-  T getValue( Time atTime ) const override
-  {
-    return _function( this->normalizeTime( atTime ), this->getDuration() );
-  }
+        >;
 
-private:
-  Function  _function;
-};
+        ProceduralPhrase(Time duration, const Function &fn) :
+                Phrase<T>(duration),
+                _function(fn) {
+        }
+
+        T getValue(Time atTime) const override {
+            return _function(this->normalizeTime(atTime), this->getDuration());
+        }
+
+    private:
+        Function _function;
+    };
 
 } // namespace choreograph

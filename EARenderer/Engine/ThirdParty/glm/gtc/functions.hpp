@@ -23,30 +23,29 @@
 #	pragma message("GLM: GLM_GTC_functions extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtc_functions
-	/// @{
+namespace glm {
+    /// @addtogroup gtc_functions
+    /// @{
 
-	/// 1D gauss function
-	///
-	/// @see gtc_epsilon
-	template <typename T>
-	GLM_FUNC_DECL T gauss(
-		T x,
-		T ExpectedValue,
-		T StandardDeviation);
+    /// 1D gauss function
+    ///
+    /// @see gtc_epsilon
+    template<typename T>
+    GLM_FUNC_DECL T gauss(
+            T x,
+            T ExpectedValue,
+            T StandardDeviation);
 
-	/// 2D gauss function
-	///
-	/// @see gtc_epsilon
-	template <typename T, precision P>
-	GLM_FUNC_DECL T gauss(
-		tvec2<T, P> const& Coord,
-		tvec2<T, P> const& ExpectedValue,
-		tvec2<T, P> const& StandardDeviation);
+    /// 2D gauss function
+    ///
+    /// @see gtc_epsilon
+    template<typename T, precision P>
+    GLM_FUNC_DECL T gauss(
+            tvec2<T, P> const &Coord,
+            tvec2<T, P> const &ExpectedValue,
+            tvec2<T, P> const &StandardDeviation);
 
-	/// @}
+    /// @}
 }//namespace glm
 
 #include "functions.inl"

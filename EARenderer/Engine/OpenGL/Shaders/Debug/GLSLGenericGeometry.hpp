@@ -17,18 +17,20 @@
 #include "Color.hpp"
 
 namespace EARenderer {
-    
-    class GLSLGenericGeometry: public GLProgram {
+
+    class GLSLGenericGeometry : public GLProgram {
     public:
         using GLProgram::GLProgram;
-        
+
         GLSLGenericGeometry();
-        
-        void setModelViewProjectionMatrix(const glm::mat4& mvp);
-        void setColor(const Color& color);
-        void setHighlightColor(const Color& color);
+
+        void setModelViewProjectionMatrix(const glm::mat4 &mvp);
+
+        void setColor(const Color &color);
+
+        void setHighlightColor(const Color &color);
     };
-    
+
 }
 
 #endif /* GLNormalVisualizationProgram_hpp */

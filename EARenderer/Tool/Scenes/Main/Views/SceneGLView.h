@@ -17,13 +17,14 @@ struct RendererOpaque;
 @protocol SceneGLViewDelegate <NSObject>
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view;
+
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view;
 
 @end
 
 
 @interface SceneGLView : NSOpenGLView
-    
-@property (weak, nonatomic) id<SceneGLViewDelegate> delegate;
+
+@property(weak, nonatomic) id <SceneGLViewDelegate> delegate;
 
 @end

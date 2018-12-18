@@ -31,9 +31,8 @@ class FbxTexture;
   * followed node associated with function FbxNode::SetTarget().
   * \see FbxCameraStereo and FbxCameraSwitcher.
   */
-class FBXSDK_DLL FbxCamera : public FbxNodeAttribute
-{
-    FBXSDK_OBJECT_DECLARE(FbxCamera,FbxNodeAttribute);
+class FBXSDK_DLL FbxCamera : public FbxNodeAttribute {
+FBXSDK_OBJECT_DECLARE(FbxCamera, FbxNodeAttribute);
 
 public:
     //! Return the type of node attribute which is EType::eCamera.
@@ -52,117 +51,114 @@ public:
       *                   - angle of view/focal length
       *                   - squeeze ratio
       */
-    enum EProjectionType
-    {
-        ePerspective,	//!< Perspective projection.
-        eOrthogonal		//!< Orthogonal projection.
+    enum EProjectionType {
+        ePerspective,    //!< Perspective projection.
+        eOrthogonal        //!< Orthogonal projection.
     };
 
-	/**
+    /**
       * \name Functions to handle the viewing area.
       */
     //@{
-        /** Camera formats identifiers.
-		  * \remarks This is designed as the same as in MotionBuilder.
-		  * \see SetFormat, GetFormat and CameraFormat.
-          */
-        enum EFormat
-        {
-            eCustomFormat,	//!< The format's width, height, or pixel ratio has been user-specified, and matches none of the other picture formats.
-            eD1NTSC,		//!< Standard format for D1 NTSC (720 by 486).
-            eNTSC,			//!< NTSC standard for North American television broadcast (640 by 480).
-            ePAL,			//!< PAL standard for European television broadcast (570 by 486).
-            eD1PAL,			//!< Standard format for D1 PAL (720 by 576).
-            eHD,			//!< HD format(1920 by 1080).
-            e640x480,		//!< Recommended computer screen format (640 by 480).
-            e320x200,		//!< Recommended format for World Wide Web production(320 by 200).
-            e320x240,		//!< Alternate World Wide Web format(320 by 240).
-            e128x128,		//!< Format(128 by 128)
-            eFullscreen		//!< Full computer screen format (1280 by 1024 pixels).
-        };
+    /** Camera formats identifiers.
+      * \remarks This is designed as the same as in MotionBuilder.
+      * \see SetFormat, GetFormat and CameraFormat.
+      */
+    enum EFormat {
+        eCustomFormat,    //!< The format's width, height, or pixel ratio has been user-specified, and matches none of the other picture formats.
+        eD1NTSC,        //!< Standard format for D1 NTSC (720 by 486).
+        eNTSC,            //!< NTSC standard for North American television broadcast (640 by 480).
+        ePAL,            //!< PAL standard for European television broadcast (570 by 486).
+        eD1PAL,            //!< Standard format for D1 PAL (720 by 576).
+        eHD,            //!< HD format(1920 by 1080).
+        e640x480,        //!< Recommended computer screen format (640 by 480).
+        e320x200,        //!< Recommended format for World Wide Web production(320 by 200).
+        e320x240,        //!< Alternate World Wide Web format(320 by 240).
+        e128x128,        //!< Format(128 by 128)
+        eFullscreen        //!< Full computer screen format (1280 by 1024 pixels).
+    };
 
-        /** Set the camera format.
-          * \param pFormat     The camera format identifier.
-          * \remarks           Changing the camera format sets the camera aspect
-          *                    ratio mode to eFixedResolution and modifies the aspect width
-          *                    size, height size, and pixel ratio accordingly.
-          */
-        void SetFormat(EFormat pFormat);
+    /** Set the camera format.
+      * \param pFormat     The camera format identifier.
+      * \remarks           Changing the camera format sets the camera aspect
+      *                    ratio mode to eFixedResolution and modifies the aspect width
+      *                    size, height size, and pixel ratio accordingly.
+      */
+    void SetFormat(EFormat pFormat);
 
-        /** Get the camera format.
-          * \return     The current camera format identifier.
-          */
-        EFormat GetFormat() const;
+    /** Get the camera format.
+      * \return     The current camera format identifier.
+      */
+    EFormat GetFormat() const;
 
-        /** Camera's aspect ratio modes.
-		  * \see SetAspect, GetAspectRatioMode, AspectWidth, AspectHeight and AspectRatioMode.
-          */
-        enum EAspectRatioMode
-        {
-            eWindowSize,		//!< Both width and height values aren't relevant.
-            eFixedRatio,		//!< The height value is set to 1.0 and the width value is relative to the height value.
-            eFixedResolution,	//!< Both width and height values are in pixels.
-            eFixedWidth,		//!< The width value is in pixels and the height value is relative to the width value.
-            eFixedHeight		//!< The height value is in pixels and the width value is relative to the height value.
-        };
+    /** Camera's aspect ratio modes.
+      * \see SetAspect, GetAspectRatioMode, AspectWidth, AspectHeight and AspectRatioMode.
+      */
+    enum EAspectRatioMode {
+        eWindowSize,        //!< Both width and height values aren't relevant.
+        eFixedRatio,        //!< The height value is set to 1.0 and the width value is relative to the height value.
+        eFixedResolution,    //!< Both width and height values are in pixels.
+        eFixedWidth,        //!< The width value is in pixels and the height value is relative to the width value.
+        eFixedHeight        //!< The height value is in pixels and the width value is relative to the height value.
+    };
 
-        /** Set the camera's aspect ratio mode.
-          * \param pRatioMode     Camera's aspect ratio mode.
-          * \param pWidth         Camera's aspect width, must be a positive value.
-          * \param pHeight        Camera's aspect height, must be a positive value.
-          * \remarks              Changing the camera aspect sets the camera format to eCustomFormat.
-		  * \see EAspectRatioMode.
-          */
-        void SetAspect(EAspectRatioMode pRatioMode, double pWidth, double pHeight);
+    /** Set the camera's aspect ratio mode.
+      * \param pRatioMode     Camera's aspect ratio mode.
+      * \param pWidth         Camera's aspect width, must be a positive value.
+      * \param pHeight        Camera's aspect height, must be a positive value.
+      * \remarks              Changing the camera aspect sets the camera format to eCustomFormat.
+      * \see EAspectRatioMode.
+      */
+    void SetAspect(EAspectRatioMode pRatioMode, double pWidth, double pHeight);
 
-        /** Get the camera aspect ratio mode.
-          * \return     The current aspect ratio mode.
-          */
-        EAspectRatioMode GetAspectRatioMode() const;
+    /** Get the camera aspect ratio mode.
+      * \return     The current aspect ratio mode.
+      */
+    EAspectRatioMode GetAspectRatioMode() const;
 
-        /** Set the pixel ratio.
-          * \param pRatio     The pixel ratio value.
-          * \remarks          The value must be a positive number. Comprised between 0.05 and 20.0. Values
-          *                   outside these limits will be clamped. Changing the pixel ratio sets the camera format to eCustomFormat.
-          */
-        void SetPixelRatio(double pRatio);
+    /** Set the pixel ratio.
+      * \param pRatio     The pixel ratio value.
+      * \remarks          The value must be a positive number. Comprised between 0.05 and 20.0. Values
+      *                   outside these limits will be clamped. Changing the pixel ratio sets the camera format to eCustomFormat.
+      */
+    void SetPixelRatio(double pRatio);
 
-        /** Get the pixel ratio.
-          * \return     The current camera's pixel ratio value.
-          */
-        double GetPixelRatio() const;
+    /** Get the pixel ratio.
+      * \return     The current camera's pixel ratio value.
+      */
+    double GetPixelRatio() const;
 
-        /** Set the near plane distance from the camera.
-          * The near plane is the minimum distance to render a scene on the camera display.
-	      * A synonym for the near plane is "front clipping plane".
-          * \param pDistance     The near plane distance value.
-          * \remarks             The near plane value is limited to the range [0.001, 600000.0] and
-          *                      must be inferior to the far plane value.
-          */
-        void SetNearPlane(double pDistance);
+    /** Set the near plane distance from the camera.
+      * The near plane is the minimum distance to render a scene on the camera display.
+      * A synonym for the near plane is "front clipping plane".
+      * \param pDistance     The near plane distance value.
+      * \remarks             The near plane value is limited to the range [0.001, 600000.0] and
+      *                      must be inferior to the far plane value.
+      */
+    void SetNearPlane(double pDistance);
 
-        /** Get the near plane distance from the camera.
-          * The near plane is the minimum distance to render a scene on the camera display.
-	      * A synonym for the near plane is "front clipping plane".
-          * \return     The near plane value.
-          */
-        double GetNearPlane() const;
+    /** Get the near plane distance from the camera.
+      * The near plane is the minimum distance to render a scene on the camera display.
+      * A synonym for the near plane is "front clipping plane".
+      * \return     The near plane value.
+      */
+    double GetNearPlane() const;
 
-        /** Set the far plane distance from camera.
-          * The far plane is the maximum distance to render a scene on the camera display.
-	      * A synonym for the far plane is "back clipping plane".
-          * \param pDistance     The far plane distance value.
-          * \remarks             The far plane value is limited to the range [0.001, 600000.0] and
-          *                      must be superior to the near plane value.
-          */
-        void SetFarPlane(double pDistance);
+    /** Set the far plane distance from camera.
+      * The far plane is the maximum distance to render a scene on the camera display.
+      * A synonym for the far plane is "back clipping plane".
+      * \param pDistance     The far plane distance value.
+      * \remarks             The far plane value is limited to the range [0.001, 600000.0] and
+      *                      must be superior to the near plane value.
+      */
+    void SetFarPlane(double pDistance);
 
-        /** Get the far plane distance from camera.
-          * The far plane is the maximum distance to render a scene on the camera display.
-	      * A synonym for the far plane is "back clipping plane".
-          * \return     The far plane value.
-          */
-        double GetFarPlane() const;
+    /** Get the far plane distance from camera.
+      * The far plane is the maximum distance to render a scene on the camera display.
+      * A synonym for the far plane is "back clipping plane".
+      * \return     The far plane value.
+      */
+    double GetFarPlane() const;
 
     //@}
 
@@ -181,20 +177,19 @@ public:
    	  * \remarks This is designed as the same as in MotionBuilder.
 	  * \see SetApertureFormat, GetApertureFormat, FilmFormat, FilmWidth, FilmHeight, FilmSqueezeRatio and FilmAspectRatio.
       */
-    enum EApertureFormat
-    {
-		eCustomAperture,	//!< The film size, squeeze ratio and aspect ratio has been user-specified, and matches none of the other aperture formats.
-        e16mmTheatrical,	//!< Film Size: 0.404, 0.295 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.369.
-        eSuper16mm,			//!< Film Size: 0.493, 0.292 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.688.
-        e35mmAcademy,		//!< Film Size: 0.864, 0.630 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.371. 
-        e35mmTVProjection,	//!< Film Size: 0.816, 0.612 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.333.
-        e35mmFullAperture,	//!< Film Size: 0.980, 0.735 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.333.
-        e35mm185Projection,	//!< Film Size: 0.825, 0.446 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.850.
-        e35mmAnamorphic,	//!< Film Size: 0.864, 0.732 inches. Film Squeeze Ratio: 2.0. Film Aspect Ratio:1.180. 
-        e70mmProjection,	//!< Film Size: 2.066, 0.906 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 2.280.
-        eVistaVision,		//!< Film Size: 1.485, 0.991 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.498.
-        eDynaVision,		//!< Film Size: 2.080, 1.480 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.405.
-        eIMAX				//!< Film Size: 2.772, 2.072 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.338.
+    enum EApertureFormat {
+        eCustomAperture,    //!< The film size, squeeze ratio and aspect ratio has been user-specified, and matches none of the other aperture formats.
+        e16mmTheatrical,    //!< Film Size: 0.404, 0.295 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.369.
+        eSuper16mm,            //!< Film Size: 0.493, 0.292 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.688.
+        e35mmAcademy,        //!< Film Size: 0.864, 0.630 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.371. 
+        e35mmTVProjection,    //!< Film Size: 0.816, 0.612 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.333.
+        e35mmFullAperture,    //!< Film Size: 0.980, 0.735 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.333.
+        e35mm185Projection,    //!< Film Size: 0.825, 0.446 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.850.
+        e35mmAnamorphic,    //!< Film Size: 0.864, 0.732 inches. Film Squeeze Ratio: 2.0. Film Aspect Ratio:1.180. 
+        e70mmProjection,    //!< Film Size: 2.066, 0.906 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 2.280.
+        eVistaVision,        //!< Film Size: 1.485, 0.991 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.498.
+        eDynaVision,        //!< Film Size: 2.080, 1.480 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.405.
+        eIMAX                //!< Film Size: 2.772, 2.072 inches. Film Squeeze Ratio: 1.0. Film Aspect Ratio: 1.338.
     };
 
     /** Set the camera aperture format.
@@ -213,12 +208,11 @@ public:
 	  * If the aperture mode is \e eHorizAndVert, \e eHorizontal, or \e eVertical, then the field of view is used. 
 	  * If the aperture mode is \e eFocalLength, then the focal length is used.
       */
-    enum EApertureMode
-    {
-		eHorizAndVert,	//!< Set the angle values for both the horizontal and vertical settings. 
-        eHorizontal,	//!< Set only the horizontal angle. 
-        eVertical,		//!< Set only the vertical angle. 
-        eFocalLength	//!< Use focal length directly. 
+    enum EApertureMode {
+        eHorizAndVert,    //!< Set the angle values for both the horizontal and vertical settings. 
+        eHorizontal,    //!< Set only the horizontal angle. 
+        eVertical,        //!< Set only the vertical angle. 
+        eFocalLength    //!< Use focal length directly. 
     };
 
     /** Set the camera aperture mode.
@@ -275,14 +269,13 @@ public:
 	  * It is the resolution gate that represents the rendering resolution. 
 	  * The gate fit mode controls the size of the resolution gate relative to the film gate. 
       */
-    enum EGateFit
-    {
-        eFitNone,		//!< No resolution gate fit.
-        eFitVertical,	//!< Fit the resolution gate vertically within the film gate.
-        eFitHorizontal,	//!< Fit the resolution gate horizontally within the film gate.
-        eFitFill,		//!< Fit the resolution gate within the film gate.
-        eFitOverscan,	//!< Fit the film gate within the resolution gate.
-        eFitStretch		//!< Fit the resolution gate to the film gate.
+    enum EGateFit {
+        eFitNone,        //!< No resolution gate fit.
+        eFitVertical,    //!< Fit the resolution gate vertically within the film gate.
+        eFitHorizontal,    //!< Fit the resolution gate horizontally within the film gate.
+        eFitFill,        //!< Fit the resolution gate within the film gate.
+        eFitOverscan,    //!< Fit the film gate within the resolution gate.
+        eFitStretch        //!< Fit the resolution gate to the film gate.
     };
 
     /** Compute the angle of view based on the given focal length, the aperture width, and aperture height.
@@ -301,10 +294,9 @@ public:
 
     /** Specifies how the roll is applied with respect to the pivot value.
       */
-    enum EFilmRollOrder
-    {
-        eRotateFirst,	//!< The film back is first rotated then translated by the pivot point value.
-        eTranslateFirst	//!< The film back is first translated then rotated by the film roll value.
+    enum EFilmRollOrder {
+        eRotateFirst,    //!< The film back is first rotated then translated by the pivot point value.
+        eTranslateFirst    //!< The film back is first translated then rotated by the film roll value.
     };
 
     //@}
@@ -331,14 +323,14 @@ public:
 	  * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
 	  *                      and must not be used in any other cases.
       */
-    void SetBackgroundFileName(const char* pFileName);
+    void SetBackgroundFileName(const char *pFileName);
 
     /** Get the background image file name.
       * \return     Pointer to the background filename string or \c NULL if not set.
 	  * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
 	  *                      and must not be used in any other cases.
       */
-    const char* GetBackgroundFileName() const;
+    const char *GetBackgroundFileName() const;
 
     /** Set the media name associated to the background image file.
       * \param pFileName     The media name of the background image file.
@@ -346,14 +338,14 @@ public:
 	  * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
 	  *                      and must not be used in any other cases.
       */
-    void SetBackgroundMediaName(const char* pFileName);
+    void SetBackgroundMediaName(const char *pFileName);
 
     /** Get the media name associated to the background image file.
       * \return     Pointer to the media name string or \c NULL if not set.
 	  * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
 	  *                      and must not be used in any other cases.
       */
-    const char* GetBackgroundMediaName() const;
+    const char *GetBackgroundMediaName() const;
 
     /** Set the associated foreground image file.
     * \param pFileName     The path of the foreground image file.
@@ -361,14 +353,14 @@ public:
     * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
     *                      and must not be used in any other cases.
     */
-    void SetForegroundFileName(const char* pFileName);
+    void SetForegroundFileName(const char *pFileName);
 
     /** Get the foreground image file name.
     * \return     Pointer to the foreground filename string or \c NULL if not set.
     * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
     *                      and must not be used in any other cases.
     */
-    const char* GetForegroundFileName() const;
+    const char *GetForegroundFileName() const;
 
     /** Set the media name associated to the foreground image file.
     * \param pFileName     The media name of the foreground image file.
@@ -376,26 +368,25 @@ public:
     * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
     *                      and must not be used in any other cases.
     */
-    void SetForegroundMediaName(const char* pFileName);
+    void SetForegroundMediaName(const char *pFileName);
 
     /** Get the media name associated to the foreground image file.
     * \return     Pointer to the media name string or \c NULL if not set.
     * \remarks             This method is still provided just for legacy files (Fbx version 5.0 and earlier)
     *                      and must not be used in any other cases.
     */
-    const char* GetForegroundMediaName() const;
+    const char *GetForegroundMediaName() const;
 
-	
-	/** Image plate drawing modes.
+
+    /** Image plate drawing modes.
       */
-    enum EPlateDrawingMode
-    {
-        ePlateBackground,	//!< Image is drawn behind models.
-        ePlateForeground,	//!< Image is drawn in front of models based on alpha channel.
-        ePlateBackAndFront	//!< Image is drawn behind and in front of models depending on alpha channel.
+    enum EPlateDrawingMode {
+        ePlateBackground,    //!< Image is drawn behind models.
+        ePlateForeground,    //!< Image is drawn in front of models based on alpha channel.
+        ePlateBackAndFront    //!< Image is drawn behind and in front of models depending on alpha channel.
     };
 
-	/** Set front plate matte threshold.
+    /** Set front plate matte threshold.
       * \param pThreshold     Threshold value on a range from 0.0 to 1.0.
       * \remarks              This option is only relevant if the image plate drawing mode is set to ePlateForeground or ePlateBackAndFront.
       */
@@ -407,8 +398,8 @@ public:
       */
     double GetBackgroundAlphaTreshold() const;
 
-	/** Change the back plate fit image flag.
-	  * If this flag is on, scale the back plate image to fit on the back plane. 
+    /** Change the back plate fit image flag.
+      * If this flag is on, scale the back plate image to fit on the back plane. 
       * \param pFitImage    New value for the BackPlateFitImage property.
       */
     void SetBackPlateFitImage(bool pFitImage);
@@ -459,22 +450,22 @@ public:
       */
     bool GetBackPlateKeepRatio() const;
 
-	/** Enable or disable the display of the texture without the need to disconnect it from its plate.
+    /** Enable or disable the display of the texture without the need to disconnect it from its plate.
       * \param pEnable     If \c true the texture is displayed, \c false otherwise.
       * \remarks           It is the responsibility of the client application to perform the required tasks according to the state
       *                    of this flag.
       */
     void SetShowFrontPlate(bool pEnable);
 
-	/** Get the current state of the flag to display the front plate or not.
+    /** Get the current state of the flag to display the front plate or not.
       * \return            \c true if show front plate is enabled, otherwise \c false.
       * \remarks           It is the responsibility of the client application to perform the required tasks according to the state
       *                    of this flag.
       */
     bool GetShowFrontPlate() const;
- 
-	/** Change the front plate fit image flag.
-	  * If this flag is on, scale the front plate image to fit on the front plane. 
+
+    /** Change the front plate fit image flag.
+      * If this flag is on, scale the front plate image to fit on the front plane. 
       * \param pFrontPlateFitImage	  New value for the FrontPlateFitImage property.
       */
     void SetFrontPlateFitImage(bool pFrontPlateFitImage);
@@ -538,23 +529,22 @@ public:
     /** Attach the texture to the front plate.
       * \param pTexture       The pointer to the texture to attach.
       */
-    void SetForegroundTexture(FbxTexture* pTexture);
+    void SetForegroundTexture(FbxTexture *pTexture);
 
     /** Get the texture connected to the front plate.
       * \return     A pointer to the texture attached to front plate.
       */
-    FbxTexture* GetForegroundTexture() const;
+    FbxTexture *GetForegroundTexture() const;
 
-	/** Front and BackPlane distance modes.
-	  * \see SetBackPlaneDistanceMode and GetBackPlaneDistanceMode.
+    /** Front and BackPlane distance modes.
+      * \see SetBackPlaneDistanceMode and GetBackPlaneDistanceMode.
       */
-    enum EFrontBackPlaneDistanceMode
-    {
-        eRelativeToInterest,	//!< The back plane distance is measured in relation to the camera interest.
-        eRelativeToCamera		//!< The back plane distance is measured in relation to the camera.
+    enum EFrontBackPlaneDistanceMode {
+        eRelativeToInterest,    //!< The back plane distance is measured in relation to the camera interest.
+        eRelativeToCamera        //!< The back plane distance is measured in relation to the camera.
     };
 
-	/** Set the back plane distance mode.
+    /** Set the back plane distance mode.
       * \param pMode    The back plane distance mode to set.
       */
     void SetBackPlaneDistanceMode(EFrontBackPlaneDistanceMode pMode);
@@ -564,11 +554,11 @@ public:
       */
     EFrontBackPlaneDistanceMode GetBackPlaneDistanceMode() const;
 
-	/** Set the front plane distance from the camera. The the absolute position of the plane must be calculated
-	  * by taking into consideration of the FrontPlaneDistanceMode.
+    /** Set the front plane distance from the camera. The the absolute position of the plane must be calculated
+      * by taking into consideration of the FrontPlaneDistanceMode.
       * \param pDistance    The front plane distance value.
-	  * \remarks			It is the responsibility of the client application to ensure that this plane position is 
-	  *                     within the frustum boundaries.
+      * \remarks			It is the responsibility of the client application to ensure that this plane position is 
+      *                     within the frustum boundaries.
       */
     void SetFrontPlaneDistance(double pDistance);
 
@@ -589,13 +579,12 @@ public:
 
     /** Front/back plane display modes.
       */
-    enum EFrontBackPlaneDisplayMode
-    {
-        ePlanesDisabled,	//!< Disables the front/back plane whether a texture is being projected or not.
-        ePlanesAlways,		//!< Always shows the front/back plane, even if no texture has been added.
-        ePlanesWhenMedia	//!< Shows the front/back plane only if a texture has been added.
+    enum EFrontBackPlaneDisplayMode {
+        ePlanesDisabled,    //!< Disables the front/back plane whether a texture is being projected or not.
+        ePlanesAlways,        //!< Always shows the front/back plane, even if no texture has been added.
+        ePlanesWhenMedia    //!< Shows the front/back plane only if a texture has been added.
     };
-	
+
     /** Set the front plane display mode. This mode can be used by the client application to
 	  * decide under which circumstance the front plane should be drawn in the viewport.
       * \param pMode        The front/back plane display mode.
@@ -617,7 +606,7 @@ public:
       * \return     The front/back plane display mode.
       */
     EFrontBackPlaneDisplayMode GetViewFrustumBackPlaneMode() const;
-    
+
     //@}
 
     /**
@@ -637,7 +626,7 @@ public:
       */
     bool GetViewCameraInterest() const;
 
-	/** Change the camera near and far planes visibility flag.
+    /** Change the camera near and far planes visibility flag.
       * \param pEnable      Set to \c true if the near and far planes are shown, \c false otherwise.
       */
     void SetViewNearFarPlanes(bool pEnable);
@@ -649,10 +638,9 @@ public:
 
     /** Camera safe area display styles.
       */
-    enum ESafeAreaStyle
-    {
-		eSafeAreaRound,	//!< Rounded safe area.
-        eSafeAreaSquare	//!< Square safe area.
+    enum ESafeAreaStyle {
+        eSafeAreaRound,    //!< Rounded safe area.
+        eSafeAreaSquare    //!< Square safe area.
     };
 
     //@}
@@ -666,101 +654,97 @@ public:
 
     /** Render options usage time.
       */
-    enum ERenderOptionsUsageTime
-    {
-        eInteractive,	//!< To render in real time.
-        eOnDemand		//!< Only render when it is asked.
+    enum ERenderOptionsUsageTime {
+        eInteractive,    //!< To render in real time.
+        eOnDemand        //!< Only render when it is asked.
     };
 
     /** Anti-aliasing methods.
       */
-    enum EAntialiasingMethod
-    {
-        eAAOversampling,	//!< To do anti-aliasing by oversampling.
-        eAAHardware			//!< To do anti-aliasing by hardware.
+    enum EAntialiasingMethod {
+        eAAOversampling,    //!< To do anti-aliasing by oversampling.
+        eAAHardware            //!< To do anti-aliasing by hardware.
     };
 
     /** Oversampling types for anti-aliasing.
       */
-    enum ESamplingType
-    {
-		eSamplingUniform,	/*!<	The Uniform method samples each pixel at the same location. 
+    enum ESamplingType {
+        eSamplingUniform,    /*!<	The Uniform method samples each pixel at the same location. 
 									The pixel is divided into equal parts, and each part is sampled. 
 									The number of samples determines the number of times the pixel is divided. */
-		eSamplingStochastic	/*!<	The Stochastic method randomly samples each pixel. 
+        eSamplingStochastic    /*!<	The Stochastic method randomly samples each pixel. 
 									This produces an accurate color using a small number of samples. */
     };
 
     /** Camera focus sources, that is the focal point for the depth of field.
 	  * \see FocusDistance.
       */
-    enum EFocusDistanceSource
-    {
-        eFocusSrcCameraInterest,	/*!<	Base the depth of field on the camera interest. Models at the camera interest are in focus. 
+    enum EFocusDistanceSource {
+        eFocusSrcCameraInterest,    /*!<	Base the depth of field on the camera interest. Models at the camera interest are in focus. 
 											As you move toward or away from the camera interest, models become increasingly blurred. */
-        eFocusSpecificDistance		//!<	Base the depth of field on a point defined by a specific distance from the camera interest.
+        eFocusSpecificDistance        //!<	Base the depth of field on a point defined by a specific distance from the camera interest.
     };
 
     //@}
 
-	//! \name Utility Functions.
-	//@{
-		/** Evaluate the camera position (eye).
-		* \param pTime The time at which the camera should be evaluated.
-		* \return The camera position evaluated from property value and animation. */
-		FbxVector4 EvaluatePosition(const FbxTime& pTime=FBXSDK_TIME_ZERO) const;
+    //! \name Utility Functions.
+    //@{
+    /** Evaluate the camera position (eye).
+    * \param pTime The time at which the camera should be evaluated.
+    * \return The camera position evaluated from property value and animation. */
+    FbxVector4 EvaluatePosition(const FbxTime &pTime = FBXSDK_TIME_ZERO) const;
 
-		/** Evaluate the camera target position (look at).
-		* \param pTime The time at which the camera should be evaluated.
-		* \return The camera target position evaluated from property value and animation. */
-		FbxVector4 EvaluateLookAtPosition(const FbxTime& pTime=FBXSDK_TIME_ZERO) const;
+    /** Evaluate the camera target position (look at).
+    * \param pTime The time at which the camera should be evaluated.
+    * \return The camera target position evaluated from property value and animation. */
+    FbxVector4 EvaluateLookAtPosition(const FbxTime &pTime = FBXSDK_TIME_ZERO) const;
 
-		/** Evaluate the camera up direction, taking target up objects into consideration.
-		* \param pCameraPosition The camera current position. You can retrieve this with FbxCamera::EvaluatePosition().
-		* \param pLookAtPosition The camera target position. you can retrieve this with FbxCamera::EvaluateLookAtPosition().
-		* \param pTime The time at which the camera should be evaluated.
-		* \return The camera up direction vector based on provided information. */
-		FbxVector4 EvaluateUpDirection(const FbxVector4& pCameraPosition, const FbxVector4& pLookAtPosition, const FbxTime& pTime=FBXSDK_TIME_ZERO) const;
+    /** Evaluate the camera up direction, taking target up objects into consideration.
+    * \param pCameraPosition The camera current position. You can retrieve this with FbxCamera::EvaluatePosition().
+    * \param pLookAtPosition The camera target position. you can retrieve this with FbxCamera::EvaluateLookAtPosition().
+    * \param pTime The time at which the camera should be evaluated.
+    * \return The camera up direction vector based on provided information. */
+    FbxVector4 EvaluateUpDirection(const FbxVector4 &pCameraPosition, const FbxVector4 &pLookAtPosition, const FbxTime &pTime = FBXSDK_TIME_ZERO) const;
 
-		/** Compute the camera projection matrix.
-		* \param pWidth The width of the output frame.
-		* \param pHeight The height of the output frame.
-		* \param pVerticalFOV Calculate FOV vertically (based on height) if true or horizontally (based on width) if false (Note: Only applicable in perspective proj).
-		* \return The camera projection matrix, or the default identity matrix in case of wrong camera parameters. */
-		FbxMatrix ComputeProjectionMatrix(const int pWidth, const int pHeight, const bool pVerticalFOV = true) const;
+    /** Compute the camera projection matrix.
+    * \param pWidth The width of the output frame.
+    * \param pHeight The height of the output frame.
+    * \param pVerticalFOV Calculate FOV vertically (based on height) if true or horizontally (based on width) if false (Note: Only applicable in perspective proj).
+    * \return The camera projection matrix, or the default identity matrix in case of wrong camera parameters. */
+    FbxMatrix ComputeProjectionMatrix(const int pWidth, const int pHeight, const bool pVerticalFOV = true) const;
 
-		/** Determine if the given bounding box is in the camera's view. The input points do not need to be ordered in any particular way.
-		* \param pWorldToScreen The world to screen transformation. Please refer to FbxCamera::ComputeWorldToScreen.
-		* \param pWorldToCamera The world to camera transformation. Inverse of the matrix returned from FbxAnimEvaluator::GetNodeGlobalTransform is suitable.
-		* Please refer to FbxScene::GetEvaluator and FbxAnimEvaluator::GetNodeGlobalTransform.
-		* \param pPoints 8 corners of the bounding box.
-		* \return \c true if any of the given points are in the camera's view, \c false otherwise. */
-		bool IsBoundingBoxInView(const FbxMatrix& pWorldToScreen, const FbxMatrix& pWorldToCamera, const FbxVector4 pPoints[8]) const;
+    /** Determine if the given bounding box is in the camera's view. The input points do not need to be ordered in any particular way.
+    * \param pWorldToScreen The world to screen transformation. Please refer to FbxCamera::ComputeWorldToScreen.
+    * \param pWorldToCamera The world to camera transformation. Inverse of the matrix returned from FbxAnimEvaluator::GetNodeGlobalTransform is suitable.
+    * Please refer to FbxScene::GetEvaluator and FbxAnimEvaluator::GetNodeGlobalTransform.
+    * \param pPoints 8 corners of the bounding box.
+    * \return \c true if any of the given points are in the camera's view, \c false otherwise. */
+    bool IsBoundingBoxInView(const FbxMatrix &pWorldToScreen, const FbxMatrix &pWorldToCamera, const FbxVector4 pPoints[8]) const;
 
-		/** Determine if the given 3d point is in the camera's view. 
-		* \param pWorldToScreen The world to screen transformation. Please refer to FbxCamera::ComputeWorldToScreen.
-		* \param pWorldToCamera The world to camera transformation. Inverse of the matrix returned from FbxAnimEvaluator::GetNodeGlobalTransform is suitable.
-		* Please refer to FbxScene::GetEvaluator and FbxAnimEvaluator::GetNodeGlobalTransform.
-		* \param pPoint World-space point to test.
-		* \return \c true if the given point is in the camera's view, \c false otherwise. */
-		bool IsPointInView(const FbxMatrix& pWorldToScreen, const FbxMatrix& pWorldToCamera, const FbxVector4& pPoint) const;
+    /** Determine if the given 3d point is in the camera's view. 
+    * \param pWorldToScreen The world to screen transformation. Please refer to FbxCamera::ComputeWorldToScreen.
+    * \param pWorldToCamera The world to camera transformation. Inverse of the matrix returned from FbxAnimEvaluator::GetNodeGlobalTransform is suitable.
+    * Please refer to FbxScene::GetEvaluator and FbxAnimEvaluator::GetNodeGlobalTransform.
+    * \param pPoint World-space point to test.
+    * \return \c true if the given point is in the camera's view, \c false otherwise. */
+    bool IsPointInView(const FbxMatrix &pWorldToScreen, const FbxMatrix &pWorldToCamera, const FbxVector4 &pPoint) const;
 
-		/** Compute world space to screen space transformation matrix.
-		* \param pPixelHeight The pixel height of the output image.
-		* \param pPixelWidth The pixel height of the output image.
-		* \param pWorldToCamera The world to camera affine transformation matrix.
-		* \return The world to screen space matrix, or the identity matrix on error. */
-		FbxMatrix ComputeWorldToScreen(int pPixelWidth, int pPixelHeight, const FbxAMatrix& pWorldToCamera) const;
+    /** Compute world space to screen space transformation matrix.
+    * \param pPixelHeight The pixel height of the output image.
+    * \param pPixelWidth The pixel height of the output image.
+    * \param pWorldToCamera The world to camera affine transformation matrix.
+    * \return The world to screen space matrix, or the identity matrix on error. */
+    FbxMatrix ComputeWorldToScreen(int pPixelWidth, int pPixelHeight, const FbxAMatrix &pWorldToCamera) const;
 
-		/** Compute screen space to world space ray direction.
-		* \param pX The horizontal screen coordinate.
-		* \param pY The vertical screen coordinate.
-		* \param pWidth The width of the viewport in pixels.
-		* \param pHeight The height of the viewport in pixels.
-		* \param pTime The time to use to evaluate the camera's view matrix.
-		* \return a normalized vector corresponding to the ray direction. */
-		FbxVector4 ComputeScreenToWorld(float pX, float pY, float pWidth, float pHeight, const FbxTime& pTime=FBXSDK_TIME_INFINITE) const;
-	//@}
+    /** Compute screen space to world space ray direction.
+    * \param pX The horizontal screen coordinate.
+    * \param pY The vertical screen coordinate.
+    * \param pWidth The width of the viewport in pixels.
+    * \param pHeight The height of the viewport in pixels.
+    * \param pTime The time to use to evaluate the camera's view matrix.
+    * \return a normalized vector corresponding to the ray direction. */
+    FbxVector4 ComputeScreenToWorld(float pX, float pY, float pWidth, float pHeight, const FbxTime &pTime = FBXSDK_TIME_INFINITE) const;
+    //@}
 
     //////////////////////////////////////////////////////////////////////////
     //
@@ -779,7 +763,7 @@ public:
       *
       * \remarks Default Value is (0.0, 0.0, 0.0).
       */
-    FbxPropertyT<FbxDouble3>                       Position;
+    FbxPropertyT<FbxDouble3> Position;
 
     /** This property handles the camera's Up Vector (XYZ coordinates).
       *
@@ -788,7 +772,7 @@ public:
       *
       * \remarks Default Value is (0.0, 1.0, 0.0).
       */
-    FbxPropertyT<FbxDouble3>                       UpVector;
+    FbxPropertyT<FbxDouble3> UpVector;
 
     /** This property handles the default point (XYZ coordinates) the camera is looking at.
       *
@@ -801,7 +785,7 @@ public:
       *
       * \remarks Default Value is (0.0, 0.0, 0.0).
       */
-    FbxPropertyT<FbxDouble3>                       InterestPosition;
+    FbxPropertyT<FbxDouble3> InterestPosition;
 
     /** This property handles the camera roll angle in degrees.
       *
@@ -810,7 +794,7 @@ public:
       *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       Roll;
+    FbxPropertyT<FbxDouble> Roll;
 
     /** This property handles the camera optical center X, in pixels.
       * It sets horizontal offset of the optical center.
@@ -821,7 +805,7 @@ public:
       *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       OpticalCenterX;
+    FbxPropertyT<FbxDouble> OpticalCenterX;
 
     /** This property handles the camera optical center Y, in pixels.
       * It sets the vertical offset of the optical center. 
@@ -832,7 +816,7 @@ public:
       *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       OpticalCenterY;
+    FbxPropertyT<FbxDouble> OpticalCenterY;
 
     /** This property handles the RGB values of the camera's background color.
       *
@@ -841,7 +825,7 @@ public:
       *
       * Default value is black (0, 0, 0)
       */
-    FbxPropertyT<FbxDouble3>                       BackgroundColor;
+    FbxPropertyT<FbxDouble3> BackgroundColor;
 
     /** When modeling 3D objects, you often need to review or evaluate your models during the creation process. 
 	  * You may create a camera with turn table animation to view your models in 360 or certain degrees.
@@ -852,7 +836,7 @@ public:
       *
       * Default value is 0.
       */
-    FbxPropertyT<FbxDouble>                       TurnTable;
+    FbxPropertyT<FbxDouble> TurnTable;
 
     /** This property handles a flag that indicates if the camera displays the
       * Turn Table icon or not.
@@ -862,7 +846,7 @@ public:
       *
       * Default value is false (no display).
       */
-    FbxPropertyT<FbxBool>                         DisplayTurnTableIcon;
+    FbxPropertyT<FbxBool> DisplayTurnTableIcon;
 
     // -----------------------------------------------------------------------
     // Motion Blur
@@ -876,7 +860,7 @@ public:
       *
       * Default value is false (do not use motion blur).
       */
-    FbxPropertyT<FbxBool>                         UseMotionBlur;
+    FbxPropertyT<FbxBool> UseMotionBlur;
 
     /** This property handles a flag that indicates if the camera uses
       * real time motion blur or not.
@@ -886,7 +870,7 @@ public:
       *
       * Default value is false (use real time motion blur).
       */
-    FbxPropertyT<FbxBool>                         UseRealTimeMotionBlur;
+    FbxPropertyT<FbxBool> UseRealTimeMotionBlur;
 
     /** This property handles the camera's motion blur intensity (in pixels).
       *
@@ -895,7 +879,7 @@ public:
       *
       * Default value is 1.0.
       */
-    FbxPropertyT<FbxDouble>                       MotionBlurIntensity;
+    FbxPropertyT<FbxDouble> MotionBlurIntensity;
 
     // -----------------------------------------------------------------------
     // Optical
@@ -909,7 +893,7 @@ public:
       * Default value is eWindowSize.
       *
       */
-    FbxPropertyT<EAspectRatioMode>           AspectRatioMode;
+    FbxPropertyT<EAspectRatioMode> AspectRatioMode;
 
     /** This property handles the camera's aspect width.
       *
@@ -918,7 +902,7 @@ public:
       *
       * Default value is 320.
       */
-    FbxPropertyT<FbxDouble>                       AspectWidth;
+    FbxPropertyT<FbxDouble> AspectWidth;
 
     /** This property handles the camera's aspect height.
       *
@@ -927,7 +911,7 @@ public:
       *
       * Default value is 200.
       */
-    FbxPropertyT<FbxDouble>                       AspectHeight;
+    FbxPropertyT<FbxDouble> AspectHeight;
 
     /** This property handles the pixel aspect ratio.
       *
@@ -937,7 +921,7 @@ public:
       * Default value is 1.
       * \remarks Value range is [0.050, 20.0].
       */
-    FbxPropertyT<FbxDouble>                       PixelAspectRatio;
+    FbxPropertyT<FbxDouble> PixelAspectRatio;
 
     /** This property handles the aperture mode.
       *
@@ -946,7 +930,7 @@ public:
 	  *
       * Default value is eVertical.
       */
-    FbxPropertyT<EApertureMode>              ApertureMode;
+    FbxPropertyT<EApertureMode> ApertureMode;
 
     /** This property handles the gate fit mode.
       * To control the size of the resolution gate relative to the film gate. 
@@ -957,7 +941,7 @@ public:
       *
       * Default value is eFitNone.
       */
-    FbxPropertyT<EGateFit>                   GateFit;
+    FbxPropertyT<EGateFit> GateFit;
 
     /** This property handles the field of view in degrees.
       *
@@ -970,7 +954,7 @@ public:
       * \remarks Default value is 40.
       * \remarks Value range is [1.0, 179.0].
       */
-    FbxPropertyT<FbxDouble>                       FieldOfView;
+    FbxPropertyT<FbxDouble> FieldOfView;
 
     /** This property handles the X (horizontal) field of view in degrees.
       *
@@ -983,7 +967,7 @@ public:
       * Default value is 1.
       * \remarks Value range is [1.0, 179.0].
       */
-    FbxPropertyT<FbxDouble>                       FieldOfViewX;
+    FbxPropertyT<FbxDouble> FieldOfViewX;
 
     /** This property handles the Y (vertical) field of view in degrees.
       *
@@ -996,7 +980,7 @@ public:
       * \remarks Default value is 1.
       * \remarks Value range is [1.0, 179.0].
       */
-    FbxPropertyT<FbxDouble>                       FieldOfViewY;
+    FbxPropertyT<FbxDouble> FieldOfViewY;
 
     /** This property handles the focal length (in millimeters).
       *
@@ -1005,7 +989,7 @@ public:
       *
       * Default value is the result of ComputeFocalLength(40.0).
       */
-    FbxPropertyT<FbxDouble>                       FocalLength;
+    FbxPropertyT<FbxDouble> FocalLength;
 
     /** This property handles the camera's format.
       *
@@ -1017,7 +1001,7 @@ public:
 	  *
       * Default value is eCustomFormat.
       */
-    FbxPropertyT<EFormat>                    CameraFormat;
+    FbxPropertyT<EFormat> CameraFormat;
 
     // -----------------------------------------------------------------------
     // Frame
@@ -1029,16 +1013,16 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         UseFrameColor;
+    FbxPropertyT<FbxBool> UseFrameColor;
 
-	/** This property is used to define the color of the border around the camera view.
+    /** This property is used to define the color of the border around the camera view.
       *
       * To access this property do: FrameColor.Get().
       * To set this property do: FrameColor.Set(FbxDouble3).
       *
       * Default value is (0.3, 0.3, 0.3).
       */
-    FbxPropertyT<FbxDouble3>                       FrameColor;
+    FbxPropertyT<FbxDouble3> FrameColor;
 
     // -----------------------------------------------------------------------
     // On Screen Display
@@ -1051,7 +1035,7 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ShowName;
+    FbxPropertyT<FbxBool> ShowName;
 
     /** This property handles the flag to show info on moving or not.
       *
@@ -1060,7 +1044,7 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ShowInfoOnMoving;
+    FbxPropertyT<FbxBool> ShowInfoOnMoving;
 
     /** This property handles the flag to draw floor grid or not.
       *
@@ -1069,7 +1053,7 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ShowGrid;
+    FbxPropertyT<FbxBool> ShowGrid;
 
     /** This property handles the flag to show optical center or not.
       *
@@ -1078,7 +1062,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         ShowOpticalCenter;
+    FbxPropertyT<FbxBool> ShowOpticalCenter;
 
     /** This property handles the flag to show the camera's sight line or not.
 	  * When the camera is revolved about the center of interest in the perspective view,
@@ -1090,7 +1074,7 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ShowAzimut;
+    FbxPropertyT<FbxBool> ShowAzimut;
 
     /** This property handles the flag to show time code or not.
       *
@@ -1099,7 +1083,7 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ShowTimeCode;
+    FbxPropertyT<FbxBool> ShowTimeCode;
 
     /** This property handles the flag to show audio or not.
       *
@@ -1108,7 +1092,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         ShowAudio;
+    FbxPropertyT<FbxBool> ShowAudio;
 
     /** This property handles audio color.
       *
@@ -1117,7 +1101,7 @@ public:
       *
       * Default value is (0.0, 1.0, 0.0).
       */
-    FbxPropertyT<FbxDouble3>                       AudioColor;
+    FbxPropertyT<FbxDouble3> AudioColor;
 
     // -----------------------------------------------------------------------
     // Clipping Planes
@@ -1131,7 +1115,7 @@ public:
       * Default value is 10.
       * \remarks Value range is [0.001, 600000.0].
       */
-    FbxPropertyT<FbxDouble>                       NearPlane;
+    FbxPropertyT<FbxDouble> NearPlane;
 
     /** This property handles the far plane distance.
       *
@@ -1141,7 +1125,7 @@ public:
       * Default value is 4000.
       * \remarks Value range is [0.001, 600000.0].
       */
-    FbxPropertyT<FbxDouble>                       FarPlane;
+    FbxPropertyT<FbxDouble> FarPlane;
 
     /** This property indicates that the clip planes should be automatically computed or not.
       *
@@ -1151,7 +1135,7 @@ public:
       * When this property is set to true, the NearPlane and FarPlane values are
       * ignored. Note that not all applications support this flag.
       */
-    FbxPropertyT<FbxBool>                         AutoComputeClipPlanes;
+    FbxPropertyT<FbxBool> AutoComputeClipPlanes;
 
 
     // -----------------------------------------------------------------------
@@ -1167,7 +1151,7 @@ public:
       * Default value is 0.8160.
       * \remarks Value range is [0.0001, +inf).
       */
-    FbxPropertyT<FbxDouble>                       FilmWidth;
+    FbxPropertyT<FbxDouble> FilmWidth;
 
     /** This property handles the film aperture height (in inches).
       *
@@ -1178,7 +1162,7 @@ public:
       * Default value is 0.6120.
       * \remarks Value range is [0.0001, +inf).
       */
-    FbxPropertyT<FbxDouble>                       FilmHeight;
+    FbxPropertyT<FbxDouble> FilmHeight;
 
     /** This property handles the film aperture aspect ratio.
       *
@@ -1188,7 +1172,7 @@ public:
       * Default value is (FilmWidth / FilmHeight).
       * \remarks Value range is [0.0001, +inf).
       */
-    FbxPropertyT<FbxDouble>                       FilmAspectRatio;
+    FbxPropertyT<FbxDouble> FilmAspectRatio;
 
     /** This property handles the film aperture squeeze ratio.
       *
@@ -1199,7 +1183,7 @@ public:
       * Default value is 1.0.
       * \remarks Value range is [0.0001, +inf).
       */
-    FbxPropertyT<FbxDouble>                       FilmSqueezeRatio;
+    FbxPropertyT<FbxDouble> FilmSqueezeRatio;
 
     /** This property handles the film aperture format.
       *
@@ -1209,7 +1193,7 @@ public:
 	  *
       * Default value is eCustomAperture.
       */
-    FbxPropertyT<EApertureFormat>            FilmFormat;
+    FbxPropertyT<EApertureFormat> FilmFormat;
 
     /** This property handles the horizontal offset from the center of the film aperture,
     * defined by the film height and film width. The offset is measured in inches.
@@ -1219,7 +1203,7 @@ public:
     *
 	* Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       FilmOffsetX;
+    FbxPropertyT<FbxDouble> FilmOffsetX;
 
     /** This property handles the vertical offset from the center of the film aperture,
     * defined by the film height and film width. The offset is measured
@@ -1230,7 +1214,7 @@ public:
     *
 	* Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       FilmOffsetY;
+    FbxPropertyT<FbxDouble> FilmOffsetY;
 
     /** This property handles the pre-scale value. 
       * The value is multiplied against the computed projection matrix. 
@@ -1241,14 +1225,14 @@ public:
 	  *
       * Default value is 1.0.
       */
-    FbxPropertyT<FbxDouble>                       PreScale;
+    FbxPropertyT<FbxDouble> PreScale;
 
     /** This property handles the horizontal film horizontal translation.
       * To access this property do: FilmTranslateX.Get().
       * To set this property do: FilmTranslateX.Set(FbxDouble).
       * Default value is 0.0
       */
-    FbxPropertyT<FbxDouble>                       FilmTranslateX;
+    FbxPropertyT<FbxDouble> FilmTranslateX;
 
     /** This property handles the vertical film translation.
 	  *
@@ -1257,7 +1241,7 @@ public:
 	  *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       FilmTranslateY;
+    FbxPropertyT<FbxDouble> FilmTranslateY;
 
     /** This property handles the horizontal pivot point used for rotating the film back.
 	  *
@@ -1267,7 +1251,7 @@ public:
       * Default value is 0.0.
       * \remarks FilmRollPivot value is used to compute the film roll matrix, which is a component of the post projection matrix.
       */
-    FbxPropertyT<FbxDouble>                       FilmRollPivotX;
+    FbxPropertyT<FbxDouble> FilmRollPivotX;
 
     /** This property handles the vertical pivot point used for rotating the film back.
 	  *
@@ -1277,7 +1261,7 @@ public:
 	  * Default value is 0.0.
       * \remarks FilmRollPivot value is used to compute the film roll matrix, which is a component of the post projection matrix.
       */
-    FbxPropertyT<FbxDouble>                       FilmRollPivotY;
+    FbxPropertyT<FbxDouble> FilmRollPivotY;
 
     /** This property handles the amount of rotation around the film back. 
       * The roll value is specified in degrees.
@@ -1289,7 +1273,7 @@ public:
       * \remarks The rotation occurs around the specified pivot point, 
       * this value is used to compute a film roll matrix, which is a component of the post-projection matrix. 
       */
-    FbxPropertyT<FbxDouble>                       FilmRollValue;
+    FbxPropertyT<FbxDouble> FilmRollValue;
 
     /** This property handles how the roll is applied with respect to the pivot value.
       * eRotateFirst    The film back is first rotated then translated by the pivot point value.
@@ -1300,7 +1284,7 @@ public:
 	  *
       * Default value is eRotateFirst.
       */
-    FbxPropertyT<EFilmRollOrder>             FilmRollOrder ;
+    FbxPropertyT<EFilmRollOrder> FilmRollOrder;
 
     // -----------------------------------------------------------------------
     // Camera View Widget Option
@@ -1314,16 +1298,16 @@ public:
       *
       * Default value is true.
       */
-    FbxPropertyT<FbxBool>                         ViewCameraToLookAt;
+    FbxPropertyT<FbxBool> ViewCameraToLookAt;
 
-	/** This property handles to display the near and far plane or not.
+    /** This property handles to display the near and far plane or not.
       *
       * To access this property do: ViewFrustumNearFarPlane.Get().
       * To set this property do: ViewFrustumNearFarPlane.Set(FbxBool).
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         ViewFrustumNearFarPlane;
+    FbxPropertyT<FbxBool> ViewFrustumNearFarPlane;
 
     /** This property handles the back plane display mode.
       *
@@ -1332,7 +1316,7 @@ public:
       *
       * Default value is ePlanesWhenMedia.
       */
-    FbxPropertyT<EFrontBackPlaneDisplayMode>	ViewFrustumBackPlaneMode;
+    FbxPropertyT<EFrontBackPlaneDisplayMode> ViewFrustumBackPlaneMode;
 
     /** This property handles the back plane distance.
       *
@@ -1341,7 +1325,7 @@ public:
       *
       * Default value is 100.0.
       */
-    FbxPropertyT<FbxDouble>                       BackPlaneDistance;
+    FbxPropertyT<FbxDouble> BackPlaneDistance;
 
     /** This property handles the back plane distance mode.
       *
@@ -1350,7 +1334,7 @@ public:
       *
       * Default value is eRelativeToInterest.
       */
-    FbxPropertyT<EFrontBackPlaneDistanceMode>	BackPlaneDistanceMode;
+    FbxPropertyT<EFrontBackPlaneDistanceMode> BackPlaneDistanceMode;
 
     /** This property handles the front plane mode.
       *
@@ -1359,7 +1343,7 @@ public:
       *
       * Default value is ePlanesWhenMedia.
       */
-    FbxPropertyT<EFrontBackPlaneDisplayMode>	ViewFrustumFrontPlaneMode;
+    FbxPropertyT<EFrontBackPlaneDisplayMode> ViewFrustumFrontPlaneMode;
 
     /** This property handles the front plane distance.
       *
@@ -1368,7 +1352,7 @@ public:
       *
       * Default value is 100.0.
       */
-    FbxPropertyT<FbxDouble>                       FrontPlaneDistance;
+    FbxPropertyT<FbxDouble> FrontPlaneDistance;
 
     /** This property handles the front plane distance mode.
       *
@@ -1377,7 +1361,7 @@ public:
       *
       * Default value is eRelativeToInterest.
       */
-    FbxPropertyT<EFrontBackPlaneDistanceMode>	FrontPlaneDistanceMode;
+    FbxPropertyT<EFrontBackPlaneDistanceMode> FrontPlaneDistanceMode;
 
     // -----------------------------------------------------------------------
     // Camera Lock Mode
@@ -1390,7 +1374,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         LockMode;
+    FbxPropertyT<FbxBool> LockMode;
 
     /** This property handles the flag to lock the camera interest's navigation.
       * When this flag is one, the position of the camera interest is locked.
@@ -1399,7 +1383,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         LockInterestNavigation;
+    FbxPropertyT<FbxBool> LockInterestNavigation;
 
     // -----------------------------------------------------------------------
     // Background Image Display Options
@@ -1413,7 +1397,7 @@ public:
       * Default value is false.
 	  * \see SetFitImage and GetFitImage.
       */
-    FbxPropertyT<FbxBool>                         BackPlateFitImage;
+    FbxPropertyT<FbxBool> BackPlateFitImage;
 
     /** This property handles the crop flag of back plane.
       *
@@ -1423,7 +1407,7 @@ public:
       * Default value is false.
 	  * \see SetCrop and GetCrop.
       */
-    FbxPropertyT<FbxBool>                         BackPlateCrop;
+    FbxPropertyT<FbxBool> BackPlateCrop;
 
     /** This property handles the center flag of back plane.
       *
@@ -1433,7 +1417,7 @@ public:
       * Default value is true.
 	  * see SetCenter and GetCenter.
       */
-    FbxPropertyT<FbxBool>                         BackPlateCenter;
+    FbxPropertyT<FbxBool> BackPlateCenter;
 
     /** This property handles the keep ratio flag of back plane.
       *
@@ -1443,7 +1427,7 @@ public:
       * Default value is true.
 	  * \see SetKeepRatio and GetKeepRatio.
       */
-    FbxPropertyT<FbxBool>                         BackPlateKeepRatio;
+    FbxPropertyT<FbxBool> BackPlateKeepRatio;
 
     /** This property handles the background alpha threshold value.
       *
@@ -1452,7 +1436,7 @@ public:
       *
       * Default value is 0.5.
       */
-    FbxPropertyT<FbxDouble>                       BackgroundAlphaTreshold;
+    FbxPropertyT<FbxDouble> BackgroundAlphaTreshold;
 
     /** This property handles the back plane offset X.
     *
@@ -1461,7 +1445,7 @@ public:
     *
     * Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       BackPlaneOffsetX;
+    FbxPropertyT<FbxDouble> BackPlaneOffsetX;
 
     /** This property handles the back plane offset Y.
     *
@@ -1470,7 +1454,7 @@ public:
     *
     * Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       BackPlaneOffsetY;
+    FbxPropertyT<FbxDouble> BackPlaneOffsetY;
 
     /** This property handles the back plane rotation.
       *
@@ -1479,7 +1463,7 @@ public:
       *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       BackPlaneRotation;
+    FbxPropertyT<FbxDouble> BackPlaneRotation;
 
     /** This property handles the back plane scaling X.
     *
@@ -1490,7 +1474,7 @@ public:
     * \remarks The application manipulating the camera has to take into consideration of
     * the BackPlateKeepRatio value too.
     */
-    FbxPropertyT<FbxDouble>                       BackPlaneScaleX;
+    FbxPropertyT<FbxDouble> BackPlaneScaleX;
 
     /** This property handles the back plane scaling Y.
     *
@@ -1501,7 +1485,7 @@ public:
     * \remarks The application manipulating the camera has to take into consideration of
     * the BackPlateKeepRatio value too.
     */
-    FbxPropertyT<FbxDouble>                       BackPlaneScaleY;
+    FbxPropertyT<FbxDouble> BackPlaneScaleY;
 
     /** This property handles the flag to show back plane or not.
     *
@@ -1511,7 +1495,7 @@ public:
     * Default value is false.
     * \remarks This replaces ForegroundTransparent. 
     */
-    FbxPropertyT<FbxBool>                         ShowBackplate;
+    FbxPropertyT<FbxBool> ShowBackplate;
 
     /** This property has the background texture connected to it.
       *
@@ -1581,7 +1565,7 @@ public:
     *
     * Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       FrontPlaneOffsetX;
+    FbxPropertyT<FbxDouble> FrontPlaneOffsetX;
 
     /** This property handles the front plane offset Y.
     *
@@ -1590,7 +1574,7 @@ public:
     *
     * Default value is 0.0.
     */
-    FbxPropertyT<FbxDouble>                       FrontPlaneOffsetY;
+    FbxPropertyT<FbxDouble> FrontPlaneOffsetY;
 
     /** This property handles the front plane rotation.
       *
@@ -1599,7 +1583,7 @@ public:
       *
       * Default value is 0.0.
       */
-    FbxPropertyT<FbxDouble>                       FrontPlaneRotation;
+    FbxPropertyT<FbxDouble> FrontPlaneRotation;
 
     /** This property handles the front plane scaling X.
     *
@@ -1608,7 +1592,7 @@ public:
     *
     * Default value is 1.0.
     */
-    FbxPropertyT<FbxDouble>                       FrontPlaneScaleX;
+    FbxPropertyT<FbxDouble> FrontPlaneScaleX;
 
     /** This property handles the front plane scaling Y.
     *
@@ -1617,16 +1601,16 @@ public:
     *
     * Default value is 1.0.
     */
-    FbxPropertyT<FbxDouble>                       FrontPlaneScaleY;
-	
-	/** This property has the foreground texture connected to it.
+    FbxPropertyT<FbxDouble> FrontPlaneScaleY;
+
+    /** This property has the foreground texture connected to it.
       *
       * To access this property do: ForegroundTexture.Get().
       * To set this property do: ForegroundTexture.Set().
       *
       * \remarks The foreground texture is connected as source object.
       */
-    FbxPropertyT<FbxReference>						ForegroundTexture;
+    FbxPropertyT<FbxReference> ForegroundTexture;
 
     /** This property handles the foreground image opacity value.
       *
@@ -1635,7 +1619,7 @@ public:
       *
       * Default value is 1.0.
       */
-    FbxPropertyT<FbxDouble>						ForegroundOpacity;
+    FbxPropertyT<FbxDouble> ForegroundOpacity;
 
     // -----------------------------------------------------------------------
     // Safe Area
@@ -1648,7 +1632,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         DisplaySafeArea;
+    FbxPropertyT<FbxBool> DisplaySafeArea;
 
     /** This property handles the flag display safe area on render or not.
       *
@@ -1657,7 +1641,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         DisplaySafeAreaOnRender;
+    FbxPropertyT<FbxBool> DisplaySafeAreaOnRender;
 
     /** This property handles the style to display safe area.
       *
@@ -1666,7 +1650,7 @@ public:
       *
       * Default value is eSafeAreaSquare.
       */
-    FbxPropertyT<ESafeAreaStyle>             SafeAreaDisplayStyle;
+    FbxPropertyT<ESafeAreaStyle> SafeAreaDisplayStyle;
 
     /** This property handles the display aspect ratio of safe area.
       *
@@ -1675,7 +1659,7 @@ public:
       *
       * Default value is 1.33333333333333.
       */
-    FbxPropertyT<FbxDouble>                       SafeAreaAspectRatio;
+    FbxPropertyT<FbxDouble> SafeAreaAspectRatio;
 
     // -----------------------------------------------------------------------
     // 2D Magnifier
@@ -1690,7 +1674,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         Use2DMagnifierZoom;
+    FbxPropertyT<FbxBool> Use2DMagnifierZoom;
 
     /** This property handles the 2d magnifier zoom value.
       *
@@ -1699,7 +1683,7 @@ public:
       *
       * Default value is 100.0.
       */
-    FbxPropertyT<FbxDouble>                       _2DMagnifierZoom;
+    FbxPropertyT<FbxDouble> _2DMagnifierZoom;
 
     /** This property handles the 2d magnifier X value.
       *
@@ -1708,7 +1692,7 @@ public:
       *
       * Default value is 50.0.
       */
-    FbxPropertyT<FbxDouble>                       _2DMagnifierX;
+    FbxPropertyT<FbxDouble> _2DMagnifierX;
 
     /** This property handles the 2d magnifier Y value.
       *
@@ -1717,7 +1701,7 @@ public:
       *
       * Default value is 50.0.
       */
-    FbxPropertyT<FbxDouble>                       _2DMagnifierY;
+    FbxPropertyT<FbxDouble> _2DMagnifierY;
 
     // -----------------------------------------------------------------------
     // Projection Type: Ortho, Perspective
@@ -1730,7 +1714,7 @@ public:
       *
       * Default value is ePerspective.
       */
-    FbxPropertyT<EProjectionType>            ProjectionType;
+    FbxPropertyT<EProjectionType> ProjectionType;
 
     /** This property handles the orthographic zoom value.
       *
@@ -1739,7 +1723,7 @@ public:
       *
       * Default value is 1.0.
       */
-    FbxPropertyT<FbxDouble>                       OrthoZoom;
+    FbxPropertyT<FbxDouble> OrthoZoom;
 
     // -----------------------------------------------------------------------
     // Depth Of Field & Anti Aliasing
@@ -1752,7 +1736,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         UseRealTimeDOFAndAA;
+    FbxPropertyT<FbxBool> UseRealTimeDOFAndAA;
 
     /** This property handles the flag to use depth of field or not.
       *
@@ -1761,7 +1745,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         UseDepthOfField;
+    FbxPropertyT<FbxBool> UseDepthOfField;
 
     /** This property handles the focus source.
       *
@@ -1771,7 +1755,7 @@ public:
       * Default value is eFocusSrcCameraInterest.
 	  * \see FocusDistance.
       */
-    FbxPropertyT<EFocusDistanceSource>       FocusSource;
+    FbxPropertyT<EFocusDistanceSource> FocusSource;
 
     /** This property handles the focus angle (in degrees).
       *
@@ -1780,7 +1764,7 @@ public:
       *
       * Default value is 3.5.
       */
-    FbxPropertyT<FbxDouble>                       FocusAngle;
+    FbxPropertyT<FbxDouble> FocusAngle;
 
     /** This property handles the focus distance.
 	  * Focus distance is the distance between the camera and the object on which the camera is focused. 
@@ -1792,7 +1776,7 @@ public:
       *
       * Default value is 200.0.
       */
-    FbxPropertyT<FbxDouble>                       FocusDistance;
+    FbxPropertyT<FbxDouble> FocusDistance;
 
     /** This property handles the flag to use anti aliasing or not.
       *
@@ -1801,7 +1785,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         UseAntialiasing;
+    FbxPropertyT<FbxBool> UseAntialiasing;
 
     /** This property handles the anti aliasing intensity.
       *
@@ -1810,7 +1794,7 @@ public:
       *
       * Default value is 0.77777.
       */
-    FbxPropertyT<FbxDouble>                       AntialiasingIntensity;
+    FbxPropertyT<FbxDouble> AntialiasingIntensity;
 
     /** This property handles the anti aliasing method.
       *
@@ -1819,7 +1803,7 @@ public:
       *
       * Default value is eAAOversampling.
       */
-    FbxPropertyT<EAntialiasingMethod>        AntialiasingMethod;
+    FbxPropertyT<EAntialiasingMethod> AntialiasingMethod;
 
     // -----------------------------------------------------------------------
     // Accumulation Buffer
@@ -1832,7 +1816,7 @@ public:
       *
       * Default value is false.
       */
-    FbxPropertyT<FbxBool>                         UseAccumulationBuffer;
+    FbxPropertyT<FbxBool> UseAccumulationBuffer;
 
     /** This property handles the frame sampling count.
       *
@@ -1841,7 +1825,7 @@ public:
       *
       * Default value is 7.
       */
-    FbxPropertyT<FbxInt>                      FrameSamplingCount;
+    FbxPropertyT<FbxInt> FrameSamplingCount;
 
     /** This property handles the frame sampling type.
       *
@@ -1850,17 +1834,19 @@ public:
       *
       * Default value is eSamplingStochastic.
       */
-    FbxPropertyT<ESamplingType>              FrameSamplingType;
+    FbxPropertyT<ESamplingType> FrameSamplingType;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
     virtual void ConstructProperties(bool pForceSet);
-	virtual FbxStringList GetTypeFlags() const;
+
+    virtual FbxStringList GetTypeFlags() const;
 
 private:
     double ComputePixelRatio(FbxUInt pWidth, FbxUInt pHeight, double pScreenRatio = 1.3333333333);
@@ -1873,25 +1859,69 @@ private:
     FbxString mForegroundMediaName;
     FbxString mForegroundFileName;
 
-	FbxVector4 mLastUp;
+    FbxVector4 mLastUp;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-inline EFbxType FbxTypeOf(const FbxCamera::EAntialiasingMethod&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EApertureFormat&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EApertureMode&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EAspectRatioMode&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EFrontBackPlaneDisplayMode&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EFrontBackPlaneDistanceMode&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EPlateDrawingMode&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EFocusDistanceSource&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EFormat&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EGateFit&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EProjectionType&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::ERenderOptionsUsageTime&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::ESafeAreaStyle&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::ESamplingType&){ return eFbxEnum; }
-inline EFbxType FbxTypeOf(const FbxCamera::EFilmRollOrder&){ return eFbxEnum; }
+inline EFbxType FbxTypeOf(const FbxCamera::EAntialiasingMethod &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EApertureFormat &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EApertureMode &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EAspectRatioMode &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EFrontBackPlaneDisplayMode &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EFrontBackPlaneDistanceMode &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EPlateDrawingMode &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EFocusDistanceSource &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EFormat &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EGateFit &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EProjectionType &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::ERenderOptionsUsageTime &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::ESafeAreaStyle &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::ESamplingType &) {
+    return eFbxEnum;
+}
+
+inline EFbxType FbxTypeOf(const FbxCamera::EFilmRollOrder &) {
+    return eFbxEnum;
+}
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

@@ -12,14 +12,13 @@
 
 @interface SceneEditorTabView ()
 
-@property (weak, nonatomic) IBOutlet MeshEditingTabViewItem *meshTab;
+@property(weak, nonatomic) IBOutlet MeshEditingTabViewItem *meshTab;
 
 @end
 
 @implementation SceneEditorTabView
 
-- (void)showMeshWithID:(EARenderer::ID)meshID
-{
+- (void)showMeshWithID:(EARenderer::ID)meshID {
 #warning TODO: Fix later
 //    const auto& mesh = self.scene->meshes()[meshID];
 //    self.meshTab.meshTransform = &self.scene->transforms()[mesh.transformID()];

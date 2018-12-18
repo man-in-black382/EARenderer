@@ -21,6 +21,7 @@ namespace EARenderer {
         using Kernel1D = std::vector<float>;
 
         static Kernel1D Produce1DKernel(size_t radius, float sigma);
+
         static Kernel1D Produce1DKernel(size_t radius);
     };
 

@@ -13,11 +13,11 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLCubeRendering::GLSLCubeRendering(Mode mode)
-    :
-    GLProgram("CubeRendering.vert",
-              "GenericGeometry.frag",
-              mode == Mode::Sides ? "CubeSidesRendering.geom" : "CubeEdgesRendering.geom")
-    { }
+            :
+            GLProgram("CubeRendering.vert",
+                    "GenericGeometry.frag",
+                    mode == Mode::Sides ? "CubeSidesRendering.geom" : "CubeEdgesRendering.geom") {
+    }
 
 #pragma mark - Setters
 
@@ -25,7 +25,7 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uViewProjectionMatrix")).location(), 1, GL_FALSE, glm::value_ptr(mvp));
     }
 
-    void GLSLCubeRendering::setColor(const Color& color) {
+    void GLSLCubeRendering::setColor(const Color &color) {
         glUniform4fv(uniformByNameCRC32(ctcrc32("uColor")).location(), 1, reinterpret_cast<const float *>(&color));
     }
 

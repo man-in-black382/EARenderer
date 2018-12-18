@@ -30,9 +30,8 @@ class FbxNode;
 
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxNurbsSurface : public FbxGeometry
-{
-    FBXSDK_OBJECT_DECLARE(FbxNurbsSurface, FbxGeometry);
+class FBXSDK_DLL FbxNurbsSurface : public FbxGeometry {
+FBXSDK_OBJECT_DECLARE(FbxNurbsSurface, FbxGeometry);
 
 public:
     //! Returns the FbxNodeAttribute::EType::eNurbsSurface node attribute type.
@@ -54,15 +53,16 @@ public:
     /** Returns the surface mode.
       * \return                 The surface mode identifier that is currently set.
       */
-    inline ESurfaceMode GetSurfaceMode() const {return mSurfaceMode;}
+    inline ESurfaceMode GetSurfaceMode() const {
+        return mSurfaceMode;
+    }
 
     /** \enum EType NURBS types.
       * - \e ePeriodic
       * - \e eClosed
       * - \e eOpen
       */
-    enum EType
-    {
+    enum EType {
         ePeriodic,
         eClosed,
         eOpen
@@ -81,22 +81,30 @@ public:
     /** Returns the number of U-dimension control points.
       * \return             Number of U-dimension control points.
       */
-    inline int GetUCount() const {return mUCount;}
+    inline int GetUCount() const {
+        return mUCount;
+    }
 
     /** Returns the number of V-dimension control points.
       * \return             Number of V-dimension control points.
       */
-    inline int GetVCount() const {return mVCount;}
+    inline int GetVCount() const {
+        return mVCount;
+    }
 
     /** Returns the U-dimension NURBS type.
       * \return             NURBS type identifier.
       */
-    inline EType GetNurbsUType() const {return mUType;}
+    inline EType GetNurbsUType() const {
+        return mUType;
+    }
 
     /** Returns the V-dimension NURBS type.
       * \return             NURBS type identifier.
       */
-    inline EType GetNurbsVType() const {return mVType;}
+    inline EType GetNurbsVType() const {
+        return mVType;
+    }
 
     /** Returns the number of elements in the U-dimension knot vector. See FbxNurbsCurve for more information.
       * \return             The number of elements in the U-dimension knot vector.
@@ -106,7 +114,7 @@ public:
     /** Returns the U-dimension knot vector.
       * \return             Pointer to the U-dimension knot vector.
       */
-    double* GetUKnotVector() const;
+    double *GetUKnotVector() const;
 
     /** Returns the number of elements in the V-dimension knot vector. See FbxNurbsCurve for more information.
       * \return             The number of elements in the V-dimension knot vector.
@@ -116,7 +124,7 @@ public:
     /** Returns the V-dimension knot vector.
       * \return             Pointer to the V-dimension knot vector.
       */
-    double* GetVKnotVector() const;
+    double *GetVKnotVector() const;
 
     /** Sets the order of the NURBS surface.
       * \param pUOrder      NURBS order in U dimension.
@@ -127,12 +135,16 @@ public:
     /** Returns the NURBS order in U dimension.
       * \return             NURBS order in U dimension.
       */
-    inline int GetUOrder() const {return mUOrder;}
+    inline int GetUOrder() const {
+        return mUOrder;
+    }
 
     /** Returns the NURBS order in V dimension.
       * \return             NURBS order in V dimension.
       */
-    inline int GetVOrder() const {return mVOrder;}
+    inline int GetVOrder() const {
+        return mVOrder;
+    }
 
     /** Sets the NURBS step.
       * The step value is the number of divisions between adjacent control points.
@@ -144,12 +156,16 @@ public:
     /** Returns the number of divisions between adjacent control points in U dimension.
       * \return             Steps in U dimension.
       */
-    inline int GetUStep() const {return mUStep;}
+    inline int GetUStep() const {
+        return mUStep;
+    }
 
     /** Returns the number of divisions between adjacent control points in V dimension.
       * \return             Steps in V dimension.
       */
-    inline int GetVStep() const {return mVStep;}
+    inline int GetVStep() const {
+        return mVStep;
+    }
 
     /** Calculates the number of surface spans in the U dimension.
       * See FbxNurbsCurve::GetSpanCount() for more information.
@@ -195,36 +211,38 @@ public:
     /** Returns flip flags state.
       * \return             \c True if we need to flip either the UV or the links.
       */
-    bool GetApplyFlip() const { return GetApplyFlipUV() || GetApplyFlipLinks(); }
+    bool GetApplyFlip() const {
+        return GetApplyFlipUV() || GetApplyFlipLinks();
+    }
 
     /** Adds a curve to the NURBS surface.
       * Adds a 2D, parametric space curve to this surface
       * \param pCurve       The curve to be added to the surface.
       */
-    void AddCurveOnSurface( FbxNode* pCurve );
+    void AddCurveOnSurface(FbxNode *pCurve);
 
-   /** Retrieves a curve from this surface
-     * \param pIndex        Index of the curve to retrieve (Valid range is 0 to GetCurveOnSurfaceCount() - 1).
-     * \return              The curve at the specified index, or returns NULL if pIndex is out of range.
-     */
-    FbxNode* GetCurveOnSurface( int pIndex );
+    /** Retrieves a curve from this surface
+      * \param pIndex        Index of the curve to retrieve (Valid range is 0 to GetCurveOnSurfaceCount() - 1).
+      * \return              The curve at the specified index, or returns NULL if pIndex is out of range.
+      */
+    FbxNode *GetCurveOnSurface(int pIndex);
 
-   /** Retrieves a curve from this surface
-     * \param pIndex        Index of the curve to retrieve (Valid range is 0 to GetCurveOnSurfaceCount() - 1).
-     * \return              The curve at the specified index, or returns NULL if pIndex is out of range.
-     */
-    const FbxNode* GetCurveOnSurface( int pIndex ) const;
+    /** Retrieves a curve from this surface
+      * \param pIndex        Index of the curve to retrieve (Valid range is 0 to GetCurveOnSurfaceCount() - 1).
+      * \return              The curve at the specified index, or returns NULL if pIndex is out of range.
+      */
+    const FbxNode *GetCurveOnSurface(int pIndex) const;
 
-   /** Returns the number of curves on this surface.
-     * \return              The number of curves on this surface.
-     */
+    /** Returns the number of curves on this surface.
+      * \return              The number of curves on this surface.
+      */
     int GetCurveOnSurfaceCount() const;
 
-   /** Removes a curve from this surface.
-     * \param pCurve        The curve to be removed.
-     * \return              \c True if the curve is removed successfully, if unsuccessful, returns \c false.
-     */
-    bool RemoveCurveOnSurface( FbxNode* pCurve );
+    /** Removes a curve from this surface.
+      * \param pCurve        The curve to be removed.
+      * \return              \c True if the curve is removed successfully, if unsuccessful, returns \c false.
+      */
+    bool RemoveCurveOnSurface(FbxNode *pCurve);
 
     //@}
 
@@ -238,8 +256,7 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     // Error identifiers, these are only used internally.
-    enum EErrorCode
-    {
+    enum EErrorCode {
         eNurbsTypeUnknown,
         eWrongNumberOfControlPoint,
         eWeightTooSmall,
@@ -248,15 +265,21 @@ public:
         eErrorCount
     };
 
-    virtual FbxObject& Copy(const FbxObject& pObject);
-    virtual void InitControlPoints(int pCount) { ParentClass::InitControlPoints(pCount); }
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    virtual void InitControlPoints(int pCount) {
+        ParentClass::InitControlPoints(pCount);
+    }
 
     void SetFlipNormals(bool pFlipNormals);
+
     bool GetFlipNormals() const;
+
     bool IsValidKnots() const;
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void Destruct(bool pRecursive);
 
     FbxUInt mUOrder, mVOrder;
@@ -264,8 +287,8 @@ protected:
     int mUStep, mVStep;
     EType mUType, mVType;
 
-    double* mUKnotVector;
-    double* mVKnotVector;
+    double *mUKnotVector;
+    double *mVKnotVector;
 
     ESurfaceMode mSurfaceMode;
 
@@ -274,6 +297,7 @@ protected:
     bool mFlipNormals;
 
     friend class FbxGeometryConverter;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -17,47 +17,46 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    GLProgram::GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName)
-    :
-    GLNamedObject(glCreateProgram()),
-    mVertexShader(vertexSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + vertexSourceName, GL_VERTEX_SHADER)),
-    mFragmentShader(fragmentSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + fragmentSourceName, GL_FRAGMENT_SHADER)),
-    mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + geometrySourceName, GL_GEOMETRY_SHADER))
-    {
+
+    GLProgram::GLProgram(const std::string &vertexSourceName, const std::string &fragmentSourceName, const std::string &geometrySourceName)
+            :
+            GLNamedObject(glCreateProgram()),
+            mVertexShader(vertexSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + vertexSourceName, GL_VERTEX_SHADER)),
+            mFragmentShader(fragmentSourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + fragmentSourceName, GL_FRAGMENT_SHADER)),
+            mGeometryShader(geometrySourceName.empty() ? nullptr : new GLShader(FileManager::shared().resourceRootPath() + geometrySourceName, GL_GEOMETRY_SHADER)) {
         link();
         bind();
         obtainVertexAttributes();
         obtainUniforms();
     }
-    
+
     GLProgram::~GLProgram() {
         glDeleteProgram(mName);
-        
+
         delete mVertexShader;
         delete mGeometryShader;
         delete mFragmentShader;
     }
-    
+
 #pragma mark - Private helper methods
 
     void GLProgram::link() {
         glAttachShader(mName, mVertexShader->name());
-        
-        if (mFragmentShader) { glAttachShader(mName, mFragmentShader->name()); }
-        if (mGeometryShader) { glAttachShader(mName, mGeometryShader->name()); }
-        
+
+        if (mFragmentShader) {glAttachShader(mName, mFragmentShader->name());}
+        if (mGeometryShader) {glAttachShader(mName, mGeometryShader->name());}
+
         glLinkProgram(mName);
-        
+
         GLint isLinked = 0;
         glGetProgramiv(mName, GL_LINK_STATUS, &isLinked);
-        
+
         if (!isLinked) {
             GLint infoLength = 0;
             glGetProgramiv(mName, GL_INFO_LOG_LENGTH, &infoLength);
-            
+
             if (infoLength > 1) {
                 std::vector<char> infoChars(infoLength);
                 glGetProgramInfoLog(mName, infoLength, nullptr, infoChars.data());
@@ -67,7 +66,7 @@ namespace EARenderer {
                     throw std::runtime_error(string_format("Failed to link program: %s", infoLog.c_str()));
                 }
             }
-            
+
             if (!isLinked) {
                 throw std::runtime_error("Failed to link program");
             }
@@ -100,9 +99,9 @@ namespace EARenderer {
             glGetActiveUniform(mName, index, static_cast<GLsizei>(uniformNameChars.size()), nullptr, &size, &type, uniformNameChars.data());
             std::string name(uniformNameChars.data());
             GLint location = glGetUniformLocation(mName, &name[0]);
-    
+
             GLUniform uniform = GLUniform(location, size, type, name);
-            
+
             if (uniform.isSampler()) {
                 if (textureUnit >= GLTextureUnitManager::Shared().maximumTextureUnits()) {
                     throw std::runtime_error(string_format("Exceeded the number of available texture units (%d)", mAvailableTextureUnits));
@@ -112,35 +111,35 @@ namespace EARenderer {
 
                 textureUnit++;
             }
-            
+
             uint32_t crc = crc32(name.c_str(), name.length());
             mUniforms.insert(std::make_pair(crc, uniform));
         }
     }
-    
+
 #pragma mark - Swap
-    
-    void GLProgram::swap(GLProgram& that) {
+
+    void GLProgram::swap(GLProgram &that) {
         GLNamedObject::swap(that);
         std::swap(mVertexShader, that.mVertexShader);
         std::swap(mFragmentShader, that.mFragmentShader);
         std::swap(mGeometryShader, that.mGeometryShader);
         std::swap(mUniforms, that.mUniforms);
     }
-    
-    void swap(GLProgram& lhs, GLProgram& rhs) {
+
+    void swap(GLProgram &lhs, GLProgram &rhs) {
         lhs.swap(rhs);
     }
-    
+
 #pragma mark - Bindable
-    
+
     void GLProgram::bind() const {
         glUseProgram(mName);
     }
-    
+
 #pragma mark - Protected
-    
-    void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture, const GLSampler* sampler) {
+
+    void GLProgram::setUniformTexture(CRC32 uniformNameCRC32, const GLTexture &texture, const GLSampler *sampler) {
         GLUniform uniform = uniformByNameCRC32(uniformNameCRC32);
 
         if (!uniform.isSampler()) {
@@ -152,15 +151,15 @@ namespace EARenderer {
         }
 
         GLTextureUnitManager::Shared().bindTextureToUnit(texture, uniform.textureUnit());
-        
+
         if (sampler) {
             GLTextureUnitManager::Shared().bindSamplerToUnit(*sampler, uniform.textureUnit());
         }
     }
-    
+
 #pragma mark - Public
 
-    const GLVertexAttribute& GLProgram::vertexAttributeByName(const std::string& name) {
+    const GLVertexAttribute &GLProgram::vertexAttributeByName(const std::string &name) {
         auto it = mVertexAttributes.find(name);
         if (it == mVertexAttributes.end()) {
             throw std::invalid_argument(string_format("Vertex attribute '%s' couldn't be found", name.c_str()));
@@ -168,7 +167,7 @@ namespace EARenderer {
         return it->second;
     }
 
-    const GLUniform& GLProgram::uniformByNameCRC32(CRC32 crc32) {
+    const GLUniform &GLProgram::uniformByNameCRC32(CRC32 crc32) {
         auto it = mUniforms.find(crc32);
         if (it == mUniforms.end()) {
             throw std::invalid_argument("Uniform couldn't be found");
@@ -186,7 +185,7 @@ namespace EARenderer {
         GLTextureUnitManager::Shared().activateUnit(GLTextureUnitManager::Shared().maximumTextureUnits() - 1);
         isModifyingUniforms = false;
     }
-    
+
     bool GLProgram::validateState() const {
         GLsizei loglen = 0;
         GLchar logbuffer[1000];
@@ -198,5 +197,5 @@ namespace EARenderer {
         }
         return true;
     }
-    
+
 }

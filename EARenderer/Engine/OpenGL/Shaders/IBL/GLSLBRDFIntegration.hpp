@@ -12,12 +12,12 @@
 #include "GLProgram.hpp"
 
 namespace EARenderer {
-    
-    class GLSLBRDFIntegration: public GLProgram {
+
+    class GLSLBRDFIntegration : public GLProgram {
     public:
         GLSLBRDFIntegration();
     };
-    
+
 }
 
 #endif /* GLSLBRDFIntegration_hpp */

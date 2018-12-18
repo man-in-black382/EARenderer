@@ -41,8 +41,8 @@ namespace bitsery {
 /*
  * size read/write functions
  */
-        template <typename Reader>
-        void readSize(Reader& r, size_t& size, size_t maxSize) {
+        template<typename Reader>
+        void readSize(Reader &r, size_t &size, size_t maxSize) {
             uint8_t hb{};
             r.template readBytes<1>(hb);
             if (hb < 0x80u) {
@@ -64,8 +64,8 @@ namespace bitsery {
             }
         }
 
-        template <typename Writter>
-        void writeSize(Writter& w, const size_t size) {
+        template<typename Writter>
+        void writeSize(Writter &w, const size_t size) {
             if (size < 0x80u) {
                 w.template writeBytes<1>(static_cast<uint8_t>(size));
             } else {

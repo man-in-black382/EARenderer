@@ -52,9 +52,9 @@ namespace bitsery {
         using TIterator = typename BufferIterators<Buffer>::TIterator;
         using TValue = typename traits::BufferAdapterTraits<Buffer>::TValue;
         static_assert(details::IsDefined<TValue>::value,
-                      "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
+                "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
         static_assert(traits::ContainerTraits<Buffer>::isContiguous,
-                      "BufferAdapter only works with contiguous containers");
+                "BufferAdapter only works with contiguous containers");
 
         InputBufferAdapter(TIterator begin, TIterator end)
                 : BufferIterators<Buffer>(begin, end) {
@@ -106,9 +106,9 @@ namespace bitsery {
         using TIterator = typename BufferIterators<Buffer>::TIterator;
         using TValue = typename traits::BufferAdapterTraits<Buffer>::TValue;
         static_assert(details::IsDefined<TValue>::value,
-                      "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
+                "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
         static_assert(traits::ContainerTraits<Buffer>::isContiguous,
-                      "BufferAdapter only works with contiguous containers");
+                "BufferAdapter only works with contiguous containers");
 
         UnsafeInputBufferAdapter(TIterator begin, TIterator end) : BufferIterators<Buffer>(begin, end) {
         }
@@ -149,9 +149,9 @@ namespace bitsery {
         using TValue = typename traits::BufferAdapterTraits<Buffer>::TValue;
 
         static_assert(details::IsDefined<TValue>::value,
-                      "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
+                "Please define BufferAdapterTraits or include from <bitsery/traits/...>");
         static_assert(traits::ContainerTraits<Buffer>::isContiguous,
-                      "BufferAdapter only works with contiguous containers");
+                "BufferAdapter only works with contiguous containers");
 
         OutputBufferAdapter(Buffer &buffer)
                 : _buffer{std::addressof(buffer)} {

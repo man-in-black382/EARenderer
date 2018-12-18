@@ -10,13 +10,14 @@
 #import "DefaultRenderComponentsProviding.hpp"
 #import "GLViewport.hpp"
 
-class DefaultRenderComponentsProvider: public EARenderer::DefaultRenderComponentsProviding {
+class DefaultRenderComponentsProvider : public EARenderer::DefaultRenderComponentsProviding {
 private:
     EARenderer::GLViewport *mMainViewport;
-    
+
 public:
     DefaultRenderComponentsProvider(EARenderer::GLViewport *mainViewport);
-    
+
     void bindSystemFramebuffer() const override;
-    const EARenderer::GLViewport& defaultViewport() const override;
+
+    const EARenderer::GLViewport &defaultViewport() const override;
 };

@@ -10,13 +10,11 @@
 
 @implementation ColoredView
 
-- (BOOL)wantsUpdateLayer
-{
+- (BOOL)wantsUpdateLayer {
     return YES;
 }
 
-- (void)updateLayer
-{
+- (void)updateLayer {
     self.layer.backgroundColor = self.fillColor.CGColor;
 }
 

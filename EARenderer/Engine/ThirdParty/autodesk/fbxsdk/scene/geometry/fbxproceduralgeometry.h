@@ -24,9 +24,8 @@
   * to be created on-the-fly.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxProceduralGeometry : public FbxGeometry
-{
-    FBXSDK_OBJECT_DECLARE(FbxProceduralGeometry, FbxGeometry);
+class FBXSDK_DLL FbxProceduralGeometry : public FbxGeometry {
+FBXSDK_OBJECT_DECLARE(FbxProceduralGeometry, FbxGeometry);
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

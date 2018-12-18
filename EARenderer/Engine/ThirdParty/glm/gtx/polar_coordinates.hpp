@@ -19,26 +19,25 @@
 #	pragma message("GLM: GLM_GTX_polar_coordinates extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_polar_coordinates
-	/// @{
+namespace glm {
+    /// @addtogroup gtx_polar_coordinates
+    /// @{
 
-	/// Convert Euclidean to Polar coordinates, x is the xz distance, y, the latitude and z the longitude.
-	///
-	/// @see gtx_polar_coordinates
-	template <typename T, precision P>
-	GLM_FUNC_DECL tvec3<T, P> polar(
-		tvec3<T, P> const & euclidean);
+    /// Convert Euclidean to Polar coordinates, x is the xz distance, y, the latitude and z the longitude.
+    ///
+    /// @see gtx_polar_coordinates
+    template<typename T, precision P>
+    GLM_FUNC_DECL tvec3<T, P> polar(
+            tvec3<T, P> const &euclidean);
 
-	/// Convert Polar to Euclidean coordinates.
-	///
-	/// @see gtx_polar_coordinates
-	template <typename T, precision P>
-	GLM_FUNC_DECL tvec3<T, P> euclidean(
-		tvec2<T, P> const & polar);
+    /// Convert Polar to Euclidean coordinates.
+    ///
+    /// @see gtx_polar_coordinates
+    template<typename T, precision P>
+    GLM_FUNC_DECL tvec3<T, P> euclidean(
+            tvec2<T, P> const &polar);
 
-	/// @}
+    /// @}
 }//namespace glm
 
 #include "polar_coordinates.inl"

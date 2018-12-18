@@ -60,7 +60,9 @@ namespace bitsery {
         class PolymorphicHandlerBase {
         public:
             virtual void *create() const = 0;
+
             virtual void process(void *ser, void *obj) const = 0;
+
             virtual ~PolymorphicHandlerBase() = default;
         };
 
@@ -117,7 +119,7 @@ namespace bitsery {
             template<typename TSerializer, typename TBase, typename TDerived, typename T1, typename ... Tn>
             void addChilds(PolymorphicClassesList<T1, Tn...>) {
                 static_assert(std::is_base_of<TDerived, T1>::value,
-                              "PolymorphicBaseClass<TBase> must derive a list of derived classes from TBase.");
+                        "PolymorphicBaseClass<TBase> must derive a list of derived classes from TBase.");
                 add<TSerializer, TBase, T1>();
                 addChilds<TSerializer, TBase, TDerived>(PolymorphicClassesList<Tn...>{});
                 //iterate through derived class hierarchy as well
@@ -174,7 +176,7 @@ namespace bitsery {
                 //convert derived hash to derived index, to make it work in cross-platform environment
                 auto &vec = _baseToDerivedArray.find(key.baseHash)->second;
                 auto derivedIndex = static_cast<size_t>(std::distance(vec.begin(), std::find(vec.begin(), vec.end(),
-                                                                                             key.derivedHash)));
+                        key.derivedHash)));
                 details::writeSize(writer, derivedIndex);
 
                 //serialize

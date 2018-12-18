@@ -41,7 +41,7 @@ namespace bitsery {
 
                 using TElement = typename std::remove_pointer<T>::type;
 
-                static TElement* getPtr(T &obj) {
+                static TElement *getPtr(T &obj) {
                     return obj;
                 }
 
@@ -49,12 +49,12 @@ namespace bitsery {
                     return PointerOwnershipType::Owner;
                 }
 
-                static void assign(T& obj, TElement* valuePtr) {
+                static void assign(T &obj, TElement *valuePtr) {
                     delete obj;
                     obj = valuePtr;
                 }
 
-                static void clear(T& obj) {
+                static void clear(T &obj) {
                     delete obj;
                     obj = nullptr;
                 }
@@ -67,11 +67,11 @@ namespace bitsery {
                 using TElement = typename std::remove_pointer<T>::type;
 
                 //observer must return reference to pointer, so that it could be updated later
-                static TElement*& getPtrRef(T& obj) {
+                static TElement *&getPtrRef(T &obj) {
                     return obj;
                 }
 
-                static TElement* getPtr(T& obj) {
+                static TElement *getPtr(T &obj) {
                     return obj;
                 }
 
@@ -79,12 +79,12 @@ namespace bitsery {
                     return PointerOwnershipType::Observer;
                 }
 
-                static void assign(T& obj, TElement* valuePtr) {
+                static void assign(T &obj, TElement *valuePtr) {
                     //do not delete existing object
                     obj = valuePtr;
                 }
 
-                static void clear(T& obj) {
+                static void clear(T &obj) {
                     obj = nullptr;
                 }
 
@@ -97,7 +97,7 @@ namespace bitsery {
 
                 using TElement = T;
 
-                static TElement* getPtr(T& obj) {
+                static TElement *getPtr(T &obj) {
                     return &obj;
                 }
 
@@ -107,9 +107,11 @@ namespace bitsery {
 
                 // this code is unreachable for reference type, but is necessary to compile
                 // LCOV_EXCL_START
-                static void assign(T& , TElement* ) {}
+                static void assign(T &, TElement *) {
+                }
 
-                static void clear(T& ) {}
+                static void clear(T &) {
+                }
                 // LCOV_EXCL_STOP
 
             };
@@ -117,7 +119,7 @@ namespace bitsery {
             // this class is used by NonPtrManager
             struct NoRTTI {
                 template<typename TBase>
-                static size_t get(TBase& ) {
+                static size_t get(TBase &) {
                     return 0;
                 }
 
@@ -127,9 +129,9 @@ namespace bitsery {
                 }
 
                 template<typename TBase, typename TDerived>
-                static constexpr TDerived* cast(TBase* obj) {
+                static constexpr TDerived *cast(TBase *obj) {
                     static_assert(!std::is_pointer<TDerived>::value, "");
-                    return dynamic_cast<TDerived*>(obj);
+                    return dynamic_cast<TDerived *>(obj);
                 }
 
                 template<typename TBase>
@@ -155,7 +157,8 @@ namespace bitsery {
         public:
             ReferencedByPointer() : pointer_utils::PointerObjectExtensionBase<
                     pointer_details::NonPtrManager, PolymorphicContext, pointer_details::NoRTTI>(
-                    PointerType::NotNull) {}
+                    PointerType::NotNull) {
+            }
         };
 
     }
@@ -163,7 +166,7 @@ namespace bitsery {
     namespace traits {
 
         template<typename T, typename RTTI>
-        struct ExtensionTraits<ext::PointerOwnerBase<RTTI>, T*> {
+        struct ExtensionTraits<ext::PointerOwnerBase<RTTI>, T *> {
             using TValue = T;
             static constexpr bool SupportValueOverload = true;
             static constexpr bool SupportObjectOverload = true;
@@ -172,7 +175,7 @@ namespace bitsery {
         };
 
         template<typename T>
-        struct ExtensionTraits<ext::PointerObserver, T*> {
+        struct ExtensionTraits<ext::PointerObserver, T *> {
             //although pointer observer doesn't serialize anything, but we still add value overload support to be consistent with pointer owners
             //observer only writes/reads pointer id from pointer linking context
             using TValue = T;

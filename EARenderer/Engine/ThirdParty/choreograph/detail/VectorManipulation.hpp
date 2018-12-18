@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,30 +29,25 @@
 
 #include <algorithm>
 
-namespace choreograph
-{
-namespace detail
-{
+namespace choreograph {
+    namespace detail {
 
 /// Remove all elements from \a container that match \a compare
-template<class CONTAINER_TYPE, class COMPARATOR>
-void erase_if( CONTAINER_TYPE *container, COMPARATOR compare )
-{
-  container->erase( std::remove_if( container->begin(),
-                                   container->end(),
-                                   compare ),
-                   container->end() );
-}
+        template<class CONTAINER_TYPE, class COMPARATOR>
+        void erase_if(CONTAINER_TYPE *container, COMPARATOR compare) {
+            container->erase(std::remove_if(container->begin(),
+                    container->end(),
+                    compare),
+                    container->end());
+        }
 
 /// Remove all copies of \a element from \a vec
-template<class ELEMENT_TYPE>
-void vector_remove( std::vector<ELEMENT_TYPE> *vec, const ELEMENT_TYPE &element )
-{
-  vec->erase( std::remove_if( vec->begin()
-                             , vec->end()
-                             , [element](const ELEMENT_TYPE &e){ return e == element; } )
-             , vec->end() );
-}
+        template<class ELEMENT_TYPE>
+        void vector_remove(std::vector<ELEMENT_TYPE> *vec, const ELEMENT_TYPE &element) {
+            vec->erase(std::remove_if(vec->begin(), vec->end(), [element](const ELEMENT_TYPE &e) {
+                return e == element;
+            }), vec->end());
+        }
 
-} // namespace detail
+    } // namespace detail
 } // namespace choreograph

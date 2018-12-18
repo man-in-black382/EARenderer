@@ -13,17 +13,17 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLToneMapping::GLSLToneMapping()
-    :
-    GLProgram("FullScreenQuad.vert", "ToneMapping.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "ToneMapping.frag", "") {
+    }
 
 #pragma mark - Lifecycle
 
-    void GLSLToneMapping::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
+    void GLSLToneMapping::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 
-    void GLSLToneMapping::setExposure(const GLFloatTexture2D<GLTexture::Float::R16F>& exposure) {
+    void GLSLToneMapping::setExposure(const GLFloatTexture2D<GLTexture::Float::R16F> &exposure) {
         setUniformTexture(uint32_constant<ctcrc32("uExposure")>, exposure);
     }
 

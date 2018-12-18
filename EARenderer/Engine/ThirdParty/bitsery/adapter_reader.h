@@ -29,7 +29,7 @@
 
 namespace bitsery {
 
-    template <typename TReader>
+    template<typename TReader>
     class AdapterReaderBitPackingWrapper;
 
     template<typename InputAdapter, typename Config>
@@ -43,10 +43,9 @@ namespace bitsery {
 
         using TIterator = typename InputAdapter::TIterator;// used by session reader
 
-        explicit AdapterReader(InputAdapter&& adapter)
+        explicit AdapterReader(InputAdapter &&adapter)
                 : _inputAdapter{std::move(adapter)},
-                  _session{*this, _inputAdapter}
-        {
+                  _session{*this, _inputAdapter} {
         }
 
         AdapterReader(const AdapterReader &) = delete;
@@ -75,9 +74,9 @@ namespace bitsery {
         }
 
         template<typename T>
-        void readBits(T &, size_t ) {
+        void readBits(T &, size_t) {
             static_assert(std::is_void<T>::value,
-                          "Bit-packing is not enabled.\nEnable by call to `enableBitPacking`) or create Deserializer with bit packing enabled.");
+                    "Bit-packing is not enabled.\nEnable by call to `enableBitPacking`) or create Deserializer with bit packing enabled.");
         }
 
         void align() {
@@ -116,8 +115,9 @@ namespace bitsery {
 
         InputAdapter _inputAdapter;
         typename std::conditional<Config::BufferSessionsEnabled,
-                session::SessionsReader<AdapterReader<InputAdapter, Config>>,
-        session::DisabledSessionsReader<AdapterReader<InputAdapter, Config>>>::type
+                session::SessionsReader < AdapterReader<InputAdapter, Config>>,
+        session::DisabledSessionsReader <AdapterReader<InputAdapter, Config>>>
+        ::type
                 _session;
 
         template<typename T>
@@ -131,11 +131,13 @@ namespace bitsery {
 
         template<typename T>
         void _swapDataBits(T *v, size_t count, std::true_type) {
-            std::for_each(v, std::next(v, count), [this](T &x) { x = details::swap(x); });
+            std::for_each(v, std::next(v, count), [this](T &x) {
+                x = details::swap(x);
+            });
         }
 
         template<typename T>
-        void _swapDataBits(T *, size_t , std::false_type) {
+        void _swapDataBits(T *, size_t, std::false_type) {
             //empty function because no swap is required
         }
 
@@ -152,15 +154,16 @@ namespace bitsery {
         using ScratchType = typename details::ScratchType<UnsignedValue>::type;
         static_assert(details::IsDefined<ScratchType>::value, "Underlying adapter value type is not supported");
 
-        explicit AdapterReaderBitPackingWrapper(TReader& reader):_reader{reader}
-        {
+        explicit AdapterReaderBitPackingWrapper(TReader &reader) : _reader{reader} {
         }
 
-        AdapterReaderBitPackingWrapper(const AdapterReaderBitPackingWrapper&) = delete;
-        AdapterReaderBitPackingWrapper& operator = (const AdapterReaderBitPackingWrapper&) = delete;
+        AdapterReaderBitPackingWrapper(const AdapterReaderBitPackingWrapper &) = delete;
 
-        AdapterReaderBitPackingWrapper(AdapterReaderBitPackingWrapper&& ) noexcept = default;
-        AdapterReaderBitPackingWrapper& operator = (AdapterReaderBitPackingWrapper&& ) noexcept = default;
+        AdapterReaderBitPackingWrapper &operator=(const AdapterReaderBitPackingWrapper &) = delete;
+
+        AdapterReaderBitPackingWrapper(AdapterReaderBitPackingWrapper &&) noexcept = default;
+
+        AdapterReaderBitPackingWrapper &operator=(AdapterReaderBitPackingWrapper &&) noexcept = default;
 
         ~AdapterReaderBitPackingWrapper() {
             align();
@@ -172,7 +175,7 @@ namespace bitsery {
             static_assert(sizeof(T) == SIZE, "");
             using UT = typename std::make_unsigned<T>::type;
             if (!m_scratchBits)
-                _reader.template readBytes<SIZE,T>(v);
+                _reader.template readBytes<SIZE, T>(v);
             else
                 readBits(reinterpret_cast<UT &>(v), details::BitsSize<T>::value);
         }
@@ -183,7 +186,7 @@ namespace bitsery {
             static_assert(sizeof(T) == SIZE, "");
 
             if (!m_scratchBits) {
-                _reader.template readBuffer<SIZE,T>(buf, count);
+                _reader.template readBuffer<SIZE, T>(buf, count);
             } else {
                 using UT = typename std::make_unsigned<T>::type;
                 //todo improve implementation
@@ -231,7 +234,7 @@ namespace bitsery {
         }
 
     private:
-        TReader& _reader;
+        TReader &_reader;
         ScratchType m_scratch{};
         size_t m_scratchBits{};
 

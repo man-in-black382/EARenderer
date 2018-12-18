@@ -10,7 +10,7 @@
 #define GLFramebuffer_hpp
 
 #include "GLNamedObject.hpp"
- 
+
 #include "GLViewport.hpp"
 
 #include "GLTexture2D.hpp"
@@ -33,7 +33,7 @@
 
 namespace EARenderer {
 
-    class GLFramebuffer: public GLNamedObject {
+    class GLFramebuffer : public GLNamedObject {
     public:
         enum class ColorAttachment {
             Automatic = 0,
@@ -68,29 +68,32 @@ namespace EARenderer {
         std::vector<GLenum> mDrawBuffers;
 
         void obtainHardwareLimits();
+
         void setRequestedDrawBuffers();
-        void attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel = 0, int16_t layer = -1);
-        void attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
+
+        void attachTextureToDepthAttachment(const GLTexture &texture, uint16_t mipLevel = 0, int16_t layer = -1);
+
+        void attachTextureToColorAttachment(const GLTexture &texture, ColorAttachment colorAttachment, uint16_t mipLevel = 0, int16_t layer = -1);
 
     public:
 
 #pragma mark - Lifecycle
 
-        GLFramebuffer(const Size2D& size);
+        GLFramebuffer(const Size2D &size);
 
-        GLFramebuffer(GLFramebuffer&& that) = default;
+        GLFramebuffer(GLFramebuffer &&that) = default;
 
-        GLFramebuffer& operator=(GLFramebuffer&& rhs) = default;
+        GLFramebuffer &operator=(GLFramebuffer &&rhs) = default;
 
         ~GLFramebuffer() override;
 
 #pragma mark - Getters
 
         void bind() const;
-        
-        const Size2D& size() const;
 
-        const GLViewport& viewport() const;
+        const Size2D &size() const;
+
+        const GLViewport &viewport() const;
 
         bool isComplete() const;
 
@@ -98,58 +101,58 @@ namespace EARenderer {
 
 #pragma mark - Attachments
 
-        template <class Texture>
-        void attachTextures(uint16_t mipLevel, const Texture& texture);
+        template<class Texture>
+        void attachTextures(uint16_t mipLevel, const Texture &texture);
 
-        template <class Texture, class... Textures>
-        void attachTextures(uint16_t mipLevel, const Texture& head, const Textures&... tail);
-
-        template<class Format, Format F>
-        void attachTexture(const GLTexture2D<Format, F>& texture,
-                           uint16_t mipLevel = 0,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
+        template<class Texture, class... Textures>
+        void attachTextures(uint16_t mipLevel, const Texture &head, const Textures &... tail);
 
         template<class Format, Format F>
-        void attachTexture(const GLTextureCubemapArray<Format, F>& texture,
-                           uint16_t mipLevel = 0,
-                           int16_t layer = AllLayers,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
-        
+        void attachTexture(const GLTexture2D<Format, F> &texture,
+                uint16_t mipLevel = 0,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic);
+
         template<class Format, Format F>
-        void attachTexture(const GLTexture2DArray<Format, F>& texture,
-                           uint16_t mipLevel = 0,
-                           int16_t layer = AllLayers,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
-        
+        void attachTexture(const GLTextureCubemapArray<Format, F> &texture,
+                uint16_t mipLevel = 0,
+                int16_t layer = AllLayers,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic);
+
         template<class Format, Format F>
-        void attachTexture(const GLTextureCubemap<Format, F>& texture,
-                           uint16_t mipLevel = 0,
-                           int16_t layer = AllLayers,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic);
+        void attachTexture(const GLTexture2DArray<Format, F> &texture,
+                uint16_t mipLevel = 0,
+                int16_t layer = AllLayers,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
-        void attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
-        
-        void attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel = 0);
-        
-        void attachDepthTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel = 0);
-        
-        void attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
+        template<class Format, Format F>
+        void attachTexture(const GLTextureCubemap<Format, F> &texture,
+                uint16_t mipLevel = 0,
+                int16_t layer = AllLayers,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic);
 
-        void attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer);
+        void attachDepthTexture(const GLDepthTextureCubemapArray &texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
 
-        void detachTexture(const GLTexture& texture);
+        void attachDepthTexture(const GLDepthTexture2D &texture, uint16_t mipLevel = 0);
+
+        void attachDepthTexture(const GLDepthTextureCubemap &texture, uint16_t mipLevel = 0);
+
+        void attachDepthTexture(const GLDepthTexture2DArray &texture, uint16_t mipLevel = 0, int16_t layer = AllLayers);
+
+        void attachRenderbuffer(const GLDepthRenderbuffer &renderbuffer);
+
+        void detachTexture(const GLTexture &texture);
 
         void detachAllColorAttachments();
 
         template<class Texture>
-        void activateDrawBuffers(const Texture& texture);
+        void activateDrawBuffers(const Texture &texture);
 
         template<class Texture, class... Textures>
-        void activateDrawBuffers(const Texture& head, const Textures&... tail);
+        void activateDrawBuffers(const Texture &head, const Textures &... tail);
 
         void activateAllDrawBuffers();
 
-        void blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter = true);
+        void blit(const GLTexture &fromTexture, const GLTexture &toTexture, bool useLinearFilter = true);
 
         void clear(UnderlyingBuffer bufferMask);
 
@@ -166,7 +169,7 @@ namespace EARenderer {
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTexturesMip(const GLViewport& viewport, uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
+        void redirectRenderingToTexturesMip(const GLViewport &viewport, uint8_t mipLevel, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         /**
          Replaces all currenlty attached textures with the passed ones and uses a specified mip map,
@@ -190,7 +193,7 @@ namespace EARenderer {
          @param textures textures to which rendering will be redirected
          */
         template<class... TexturePtrs>
-        void redirectRenderingToTextures(const GLViewport& viewport, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
+        void redirectRenderingToTextures(const GLViewport &viewport, UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         /**
          Replaces all currenlty attached textures with the passed ones,
@@ -204,15 +207,15 @@ namespace EARenderer {
         void redirectRenderingToTextures(UnderlyingBuffer buffersToClear, TexturePtrs... textures);
 
         // FIXME: Deprecated attachment functions
-        void attachTexture(const GLHDRTexture3D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
+        void attachTexture(const GLHDRTexture3D &texture,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic,
+                uint16_t mipLevel = 0);
 
-        void attachTexture(const GLLDRTexture3D& texture,
-                           ColorAttachment colorAttachment = ColorAttachment::Automatic,
-                           uint16_t mipLevel = 0);
+        void attachTexture(const GLLDRTexture3D &texture,
+                ColorAttachment colorAttachment = ColorAttachment::Automatic,
+                uint16_t mipLevel = 0);
     };
-    
+
 }
 
 ENABLE_BITMASK_OPERATORS(EARenderer::GLFramebuffer::UnderlyingBuffer);

@@ -33,23 +33,33 @@ namespace EARenderer {
     public:
         SubMesh() = default;
 
-        const std::string& name() const;
-        const std::string& materialName() const;
-        const std::vector<Vertex1P1N2UV1T1BT>& vertices() const;
-        const AxisAlignedBox3D& boundingBox() const;
-        std::vector<Vertex1P1N2UV1T1BT>& vertices();
+        const std::string &name() const;
+
+        const std::string &materialName() const;
+
+        const std::vector<Vertex1P1N2UV1T1BT> &vertices() const;
+
+        const AxisAlignedBox3D &boundingBox() const;
+
+        std::vector<Vertex1P1N2UV1T1BT> &vertices();
+
         float surfaceArea() const;
 
-        void setName(const std::string& name);
-        void setMaterialName(const std::string& name);
+        void setName(const std::string &name);
+
+        void setMaterialName(const std::string &name);
+
         void setVBOOffset(int32_t offset);
+
         void setVertexCount(int32_t count);
-        void addVertex(const Vertex1P1N2UV1T1BT& vertex);
+
+        void addVertex(const Vertex1P1N2UV1T1BT &vertex);
 
         void draw() const;
+
         void drawInstanced(size_t instanceCount);
     };
-    
+
 }
 
 #endif /* SubMesh_hpp */

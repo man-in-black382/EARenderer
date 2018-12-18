@@ -24,11 +24,10 @@
 class FbxThumbnail;
 
 /** This FbxTakeLayerInfo structure is used to identify a layer by name and id number.
-  */ 
-struct FbxTakeLayerInfo
-{
-	FbxString	mName;
-	int			mId;
+  */
+struct FbxTakeLayerInfo {
+    FbxString mName;
+    int mId;
 };
 
 /** This class contains take information from an imported file
@@ -53,87 +52,85 @@ struct FbxTakeLayerInfo
   * }
   * \endcode 
   */
-class FBXSDK_DLL FbxTakeInfo
-{
+class FBXSDK_DLL FbxTakeInfo {
 public:
 
-	/** Default constructor.
-	  */
-	FbxTakeInfo();
+    /** Default constructor.
+      */
+    FbxTakeInfo();
 
     /** Destructor.
 	  */
-	virtual ~FbxTakeInfo();
+    virtual ~FbxTakeInfo();
 
     /** Copy Constructor.
       * \param pTakeInfo        The take information to be copied. 
       */
-	FbxTakeInfo(const FbxTakeInfo& pTakeInfo);
+    FbxTakeInfo(const FbxTakeInfo &pTakeInfo);
 
     /** Assignment operator.
       * \param pTakeInfo        The take information to be assigned. . 
       */
-	FbxTakeInfo& operator=(const FbxTakeInfo& pTakeInfo);
+    FbxTakeInfo &operator=(const FbxTakeInfo &pTakeInfo);
 
-	//! Take name.
-	FbxString mName;
+    //! Take name.
+    FbxString mName;
 
-	/** The take name once it is imported in a scene.
-	  * You can modify it if it must be different from the take name in the imported file.
-	  * \remarks                This field is only used when importing a scene.
-	  */
-	FbxString mImportName;
+    /** The take name once it is imported in a scene.
+      * You can modify it if it must be different from the take name in the imported file.
+      * \remarks                This field is only used when importing a scene.
+      */
+    FbxString mImportName;
 
-	//! Take description.
-	FbxString mDescription;
+    //! Take description.
+    FbxString mDescription;
 
-	/** Import/export flag.
-	  * Set to \c true by default, set to \c false if the take must not be imported or exported.
-	  */
-	bool mSelect;
+    /** Import/export flag.
+      * Set to \c true by default, set to \c false if the take must not be imported or exported.
+      */
+    bool mSelect;
 
-	//! Local time span, set to animation interval if it is left at the default value.
-	FbxTimeSpan mLocalTimeSpan;
+    //! Local time span, set to animation interval if it is left at the default value.
+    FbxTimeSpan mLocalTimeSpan;
 
-	//! Reference time span, set to animation interval if it is left at the default value.
-	FbxTimeSpan mReferenceTimeSpan;
+    //! Reference time span, set to animation interval if it is left at the default value.
+    FbxTimeSpan mReferenceTimeSpan;
 
-	/** Time value for offsetting the animation keys once they are imported in a scene.
-	  * You can modify it if you need the animation of a take to be offset.
-	  * The effect depends on the state of \c mImportOffsetType.
-	  * \remarks                This field is only used when importing a scene.
-	  */
-	FbxTime mImportOffset;
+    /** Time value for offsetting the animation keys once they are imported in a scene.
+      * You can modify it if you need the animation of a take to be offset.
+      * The effect depends on the state of \c mImportOffsetType.
+      * \remarks                This field is only used when importing a scene.
+      */
+    FbxTime mImportOffset;
 
-	/** \enum  EImportOffsetType       Import offset types.
-	  * - \e eAbsolute
-	  * - \e eRelative
-	  */
-	enum EImportOffsetType
-	{
-		eAbsolute,
-		eRelative
-	};
+    /** \enum  EImportOffsetType       Import offset types.
+      * - \e eAbsolute
+      * - \e eRelative
+      */
+    enum EImportOffsetType {
+        eAbsolute,
+        eRelative
+    };
 
-	/** Import offset type.
-	  * If set to \c eAbsolute, \c mImportOffset gives the absolute time of 
-	  * the first animation key and the appropriate time shift is applied 
-	  * to all of the other animation keys.
-	  * If set to \c eRelative, \c mImportOffset gives the relative time 
-	  * shift applied to all animation keys.
-	  */
-	EImportOffsetType mImportOffsetType;
+    /** Import offset type.
+      * If set to \c eAbsolute, \c mImportOffset gives the absolute time of
+      * the first animation key and the appropriate time shift is applied
+      * to all of the other animation keys.
+      * If set to \c eRelative, \c mImportOffset gives the relative time
+      * shift applied to all animation keys.
+      */
+    EImportOffsetType mImportOffsetType;
 
     /** Copies the layer information from the take information.
       * \param pTakeInfo          The take information to be copied.
       */
-	void CopyLayers(const FbxTakeInfo& pTakeInfo);
+    void CopyLayers(const FbxTakeInfo &pTakeInfo);
 
     //! List of each layer's information.
-	FbxArray<FbxTakeLayerInfo*>	mLayerInfoList;
+    FbxArray<FbxTakeLayerInfo *> mLayerInfoList;
 
     //! Current Layer.
-	int							mCurrentLayer;
+    int mCurrentLayer;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

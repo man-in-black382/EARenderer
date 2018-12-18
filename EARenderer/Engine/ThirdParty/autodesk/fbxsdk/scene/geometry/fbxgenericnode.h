@@ -21,16 +21,16 @@
 /** Empty node containing properties.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxGenericNode : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxGenericNode, FbxObject);
+class FBXSDK_DLL FbxGenericNode : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxGenericNode, FbxObject);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual FbxStringList GetTypeFlags() const;
 
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/

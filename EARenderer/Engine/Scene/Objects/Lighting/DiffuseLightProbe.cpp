@@ -12,9 +12,9 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    DiffuseLightProbe::DiffuseLightProbe(const glm::vec3& position)
-    :
-    position(position)
-    { }
+    DiffuseLightProbe::DiffuseLightProbe(const glm::vec3 &position)
+            :
+            position(position) {
+    }
 
 }

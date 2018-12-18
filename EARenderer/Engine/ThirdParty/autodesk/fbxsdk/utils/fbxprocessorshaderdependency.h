@@ -24,9 +24,8 @@
 /** Crawls CgFx and HLSL shader files, copies them, and all dependent
   * shader files into the location specified by RootProcessPath. 
   */
-class FBXSDK_DLL FbxProcessorShaderDependency : public FbxProcessor
-{
-    FBXSDK_OBJECT_DECLARE(FbxProcessorShaderDependency, FbxProcessor);
+class FBXSDK_DLL FbxProcessorShaderDependency : public FbxProcessor {
+FBXSDK_OBJECT_DECLARE(FbxProcessorShaderDependency, FbxProcessor);
 
 public:
     FbxPropertyT<FbxString> RootProcessPath;
@@ -41,7 +40,7 @@ public:
     * \name Overridable internal function    */
     //@{
 protected:
-    virtual bool internal_ProcessObject(FbxObject* pObject);
+    virtual bool internal_ProcessObject(FbxObject *pObject);
     //@}
 
 /*****************************************************************************************************************************
@@ -51,23 +50,21 @@ protected:
 // Constructor / Destructor
 protected:
     virtual void ConstructProperties(bool pForceSet);
+
     virtual void Destruct(bool pRecursive);
 
 public:
 
-    class StringHash
-    {
+    class StringHash {
     public:
-        unsigned int operator()( const FbxString& pValue ) const
-        {
+        unsigned int operator()(const FbxString &pValue) const {
             // from wikipedia.org
             // Jenkins One-at-a-time hash
 
             size_t lLen = pValue.GetLen();
             unsigned int lHashValue = 0;
-            const char* lData = pValue.Buffer();
-            for( size_t i = 0; i < lLen; ++i )
-            {
+            const char *lData = pValue.Buffer();
+            for (size_t i = 0; i < lLen; ++i) {
                 lHashValue += lData[i];
                 lHashValue += (lHashValue << 10);
                 lHashValue ^= (lHashValue >> 16);
@@ -82,47 +79,48 @@ public:
 
 protected:
 
-    class FileDeleter
-    {
-    public: 
-        FileDeleter( const char* pFileUrl ) : mFileUrl( pFileUrl) {};
-        ~FileDeleter()
-        {
-            if( !mFileUrl.IsEmpty() )
-            {
-                remove( mFileUrl );
+    class FileDeleter {
+    public:
+        FileDeleter(const char *pFileUrl) : mFileUrl(pFileUrl) {
+        };
+
+        ~FileDeleter() {
+            if (!mFileUrl.IsEmpty()) {
+                remove(mFileUrl);
             }
         };
 
-        void Release() { mFileUrl = ""; }
+        void Release() {
+            mFileUrl = "";
+        }
 
-    private: FbxString mFileUrl;
+    private:
+        FbxString mFileUrl;
     };
 
     // first == string as it appears in the file
     // second == string URL
-    struct FilePathData
-    {
+    struct FilePathData {
         FbxString mOriginalStr;
         FbxString mOriginalAbsUrl;
 
         FbxString mNewStr;
     };
 
-    typedef FbxDynamicArray< FilePathData > FilePathList;
+    typedef FbxDynamicArray<FilePathData> FilePathList;
 
-    virtual bool GetIncludePaths( FbxString& pFile, FilePathList& pPaths, FbxXRefManager& pManager ) const;
-    virtual bool ReplaceUrls( const FbxString& pFileUrl, const FbxString& pNewFileUrl, 
-                    const FilePathList& pPaths ) const;
+    virtual bool GetIncludePaths(FbxString &pFile, FilePathList &pPaths, FbxXRefManager &pManager) const;
+
+    virtual bool ReplaceUrls(const FbxString &pFileUrl, const FbxString &pNewFileUrl,
+            const FilePathList &pPaths) const;
 
 private:
-    struct Dependency
-    {
+    struct Dependency {
         FbxString mNewUrl;
         FbxString mOriginalUrl;
     };
 
-    typedef FbxHashMap< FbxString, Dependency, StringHash > DependMap;
+    typedef FbxHashMap<FbxString, Dependency, StringHash> DependMap;
 
     DependMap mDependMap;
 
@@ -134,9 +132,12 @@ private:
     // magic number to limit the size of files we can parse =(
     static const int sMaxFileSize;
 
-    bool ParseDependencies( const FbxBindingTable& pTable );
-    bool AddDependency( FbxString& pFileUrl );
+    bool ParseDependencies(const FbxBindingTable &pTable);
+
+    bool AddDependency(FbxString &pFileUrl);
+
     bool AddSystemPaths();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

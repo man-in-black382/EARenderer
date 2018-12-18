@@ -13,5 +13,5 @@
 #include <fbxsdk/fbxsdk_def.h>
 
 #if FBXSDK_DEFINE_NAMESPACE == 1
-	namespace FBXSDK_NAMESPACE {
+namespace FBXSDK_NAMESPACE {
 #endif

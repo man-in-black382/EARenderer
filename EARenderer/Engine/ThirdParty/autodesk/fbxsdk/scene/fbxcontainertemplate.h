@@ -29,9 +29,8 @@ struct FbxContainerTemplate_internal;
 /** Class for Container Template files.
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxContainerTemplate : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxContainerTemplate, FbxObject);
+class FBXSDK_DLL FbxContainerTemplate : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxContainerTemplate, FbxObject);
 
 public:
     /** Parse template file to get extend templates.
@@ -39,18 +38,18 @@ public:
     * \param  pExtendTemplateNames  Fill extend templates' names to this array.
     * \remark Call this function to get extend templates' names.
     */
-    void ParseTemplateFile(const char* pTemplateFilePath, FbxArray<FbxString*>& pExtendTemplateNames);
+    void ParseTemplateFile(const char *pTemplateFilePath, FbxArray<FbxString *> &pExtendTemplateNames);
 
     /** Add extend template path.
     * \param  pExtendTemplatePath  The template file path to be added.
     */
-    void AddExtendTemplatePath(const char* pExtendTemplatePath);
+    void AddExtendTemplatePath(const char *pExtendTemplatePath);
 
     /** Get the (pIndex)th extend template path.
     * \param  pIndex  Index of the queried item.
     * \return The (pIndex)th extend template path.
     */
-    char* GetExtendTemplatePathAt(FbxUInt pIndex) const;
+    char *GetExtendTemplatePathAt(FbxUInt pIndex) const;
 
     /** Get the count of extend template path.
     * \return The count of extend template path.
@@ -102,13 +101,15 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void ConstructProperties(bool pForceSet);
+
     virtual void Destruct(bool pRecursive);
-    
+
 private:
-	FbxContainerTemplate_internal*	mData;
-    FbxArray<FbxString*>		mExtendTemplatePaths;
+    FbxContainerTemplate_internal *mData;
+    FbxArray<FbxString *> mExtendTemplatePaths;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

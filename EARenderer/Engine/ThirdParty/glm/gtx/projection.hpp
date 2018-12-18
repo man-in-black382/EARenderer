@@ -19,18 +19,17 @@
 #	pragma message("GLM: GLM_GTX_projection extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_projection
-	/// @{
+namespace glm {
+    /// @addtogroup gtx_projection
+    /// @{
 
-	/// Projects x on Normal.
-	///
-	/// @see gtx_projection
-	template <typename vecType>
-	GLM_FUNC_DECL vecType proj(vecType const & x, vecType const & Normal);
+    /// Projects x on Normal.
+    ///
+    /// @see gtx_projection
+    template<typename vecType>
+    GLM_FUNC_DECL vecType proj(vecType const &x, vecType const &Normal);
 
-	/// @}
+    /// @}
 }//namespace glm
 
 #include "projection.inl"

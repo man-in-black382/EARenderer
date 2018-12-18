@@ -39,51 +39,50 @@
  * \see FbxBindingTableEntry and FbxBindingTable.
  * \nosubgrouping
  */
-class FBXSDK_DLL FbxSemanticEntryView : public FbxEntryView
-{
+class FBXSDK_DLL FbxSemanticEntryView : public FbxEntryView {
 public:
 
-	/** Name of the entry type used in the binding entry.
-	* It should be "FbxSemanticEntry" in this case.
-	*/
-	static const char* sEntryType;
+    /** Name of the entry type used in the binding entry.
+    * It should be "FbxSemanticEntry" in this case.
+    */
+    static const char *sEntryType;
 
     /**
     * \name Constructor and Destructor.
     */
     //@{
-	/** Constructor.
-	* \param pEntry           The binding table entry to create the entry view for.
-	* \param pAsSource        \c true to create the entry view as source, \c false as destination.
-	* \param pCreate          \c true to create the entry view, \c false otherwise.
-	*/
-	FbxSemanticEntryView (FbxBindingTableEntry* pEntry, bool pAsSource, bool pCreate = false);
+    /** Constructor.
+    * \param pEntry           The binding table entry to create the entry view for.
+    * \param pAsSource        \c true to create the entry view as source, \c false as destination.
+    * \param pCreate          \c true to create the entry view, \c false otherwise.
+    */
+    FbxSemanticEntryView(FbxBindingTableEntry *pEntry, bool pAsSource, bool pCreate = false);
 
     //! Destructor.
-	virtual ~FbxSemanticEntryView();
+    virtual ~FbxSemanticEntryView();
     //@}
 
     /** Set the semantic to the binding entry.
     *   \param pSemantic The semantic string to set.
     */
-	void SetSemantic( const char* pSemantic );
+    void SetSemantic(const char *pSemantic);
 
     /** Get the semantic from the binding entry.
     *   \param  pAppendIndex \c true if the returned semantic append a index, \c false otherwise.
     *   \return The semantic.
     */
-	FbxString GetSemantic(bool pAppendIndex = true) const;
+    FbxString GetSemantic(bool pAppendIndex = true) const;
 
     /** Get the semantic index suffix.
     *   \return Semantic index suffix.
     */
-	int GetIndex() const;
+    int GetIndex() const;
 
-	/** Get the entry type.
-	* \return       Entry type as string "FbxSemanticEntry".
-	* \remarks Always use EntryType() to get the right entry type.
-	*/
-	virtual const char* EntryType() const;
+    /** Get the entry type.
+    * \return       Entry type as string "FbxSemanticEntry".
+    * \remarks Always use EntryType() to get the right entry type.
+    */
+    virtual const char *EntryType() const;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

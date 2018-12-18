@@ -13,27 +13,27 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     GLSLRadianceConvolution::GLSLRadianceConvolution()
-    :
-    GLSLCubemapRendering("RadianceConvolution.frag")
-    { }
-    
+            :
+            GLSLCubemapRendering("RadianceConvolution.frag") {
+    }
+
 #pragma mark - Setters
-    
+
 //    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLHDRTextureCubemap& map) {
 //        setUniformTexture(uint32_constant<ctcrc32("uEnvironmentMap")>, map);
 //        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uEnvironmentResolution")>).location(), map.size().width);
 //    }
-    
+
     void GLSLRadianceConvolution::setRoughness(float roughness) {
         glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uRoughness")>).location(), roughness);
     }
-    
+
     void GLSLRadianceConvolution::setAlgorithm(Algorithm algorithm) {
         glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uAlgorithm")>).location(), static_cast<GLint>(algorithm));
     }
-    
+
 }

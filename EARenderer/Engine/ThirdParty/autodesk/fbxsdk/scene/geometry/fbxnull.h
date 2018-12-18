@@ -22,9 +22,8 @@
 /** \brief This node attribute contains the properties of a null node.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxNull : public FbxNodeAttribute
-{
-    FBXSDK_OBJECT_DECLARE(FbxNull, FbxNodeAttribute);
+class FBXSDK_DLL FbxNull : public FbxNodeAttribute {
+FBXSDK_OBJECT_DECLARE(FbxNull, FbxNodeAttribute);
 
 public:
     //! Returns the EType::eNull node attribute type.
@@ -42,8 +41,7 @@ public:
       * - \e eNone
       * - \e eCross
       */
-    enum ELook
-	{
+    enum ELook {
         eNone,
         eCross,
     };
@@ -59,16 +57,16 @@ public:
       * \name Property Names
       */
     //@{
-    static const char*          sSize;
-    static const char*          sLook;
+    static const char *sSize;
+    static const char *sLook;
     //@}
 
     /**
       * \name Property Default Values
       */
     //@{
-    static const FbxDouble     sDefaultSize;
-    static const ELook      sDefaultLook;
+    static const FbxDouble sDefaultSize;
+    static const ELook sDefaultLook;
     //@}
 
 
@@ -85,7 +83,7 @@ public:
       *
       * The default value is 100.
       */
-    FbxPropertyT<FbxDouble>       Size;
+    FbxPropertyT<FbxDouble> Size;
 
     /** This property handles the look of the null node.
       *
@@ -94,25 +92,30 @@ public:
       *
       * The default value is true
       */
-    FbxPropertyT<ELook>            Look;
+    FbxPropertyT<ELook> Look;
 
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
-    virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void ConstructProperties(bool pForceSet);
 
 public:
     virtual FbxStringList GetTypeFlags() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-inline EFbxType FbxTypeOf(const FbxNull::ELook&){ return eFbxEnum; }
+inline EFbxType FbxTypeOf(const FbxNull::ELook &) {
+    return eFbxEnum;
+}
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

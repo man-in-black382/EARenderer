@@ -12,19 +12,19 @@
 #include "GLBuffer.hpp"
 
 namespace EARenderer {
-    
-    template <typename DataType>
-    class GLTextureBuffer: public GLBuffer<DataType> {
+
+    template<typename DataType>
+    class GLTextureBuffer : public GLBuffer<DataType> {
     private:
         GLenum mInternalFormat;
-        
+
     public:
         GLTextureBuffer(GLenum internalFormat)
-        :
-        GLBuffer<DataType>(GL_TEXTURE_BUFFER, GL_STATIC_DRAW),
-        mInternalFormat(internalFormat)
-        { }
-        
+                :
+                GLBuffer<DataType>(GL_TEXTURE_BUFFER, GL_STATIC_DRAW),
+                mInternalFormat(internalFormat) {
+        }
+
         void bind() const {
             GLBuffer<DataType>::bind();
             glTexBuffer(GL_TEXTURE_BUFFER, mInternalFormat, GLBuffer<DataType>::mName);

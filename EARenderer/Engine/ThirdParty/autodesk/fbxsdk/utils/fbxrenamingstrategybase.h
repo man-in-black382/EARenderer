@@ -23,8 +23,7 @@
 /** \brief Base class for renaming strategy.
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxRenamingStrategyBase
-{
+class FBXSDK_DLL FbxRenamingStrategyBase {
 public:
 
     //! Default constructor
@@ -42,26 +41,26 @@ public:
     * \param pScene
     * \return Returns true if some names have been modified.
     */
-    virtual bool DecodeScene(FbxScene* pScene)=0;
+    virtual bool DecodeScene(FbxScene *pScene) = 0;
 
     /** This method renames all the names in the scene
     * \param pScene
     * \return Returns true if some names have been modified.
     */
-    virtual bool EncodeScene(FbxScene* pScene)=0;
+    virtual bool EncodeScene(FbxScene *pScene) = 0;
 
     /** This method find the original name of a given string
     * \param pString
     * \return Returns true if the name has been modified.
     */
-    virtual bool DecodeString(FbxNameHandler& pString)=0;
+    virtual bool DecodeString(FbxNameHandler &pString) = 0;
 
     /** This method find the renaming name of a given string
     * \param pString
     * \param pIsPropertyName
     * \return Returns true if the name has been modified.
     */
-    virtual bool EncodeString(FbxNameHandler& pString, bool pIsPropertyName=false)=0;
+    virtual bool EncodeString(FbxNameHandler &pString, bool pIsPropertyName = false) = 0;
 
     //! clean up the name cells.
     virtual void CleanUp();
@@ -70,20 +69,19 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    struct NameCell
-    {
-        NameCell(const char* pName) :
-    mName(pName),
-        mInstanceCount(0)
-    {
-    }
 
-    FbxString mName;
-    int mInstanceCount;		
-    };    
+    struct NameCell {
+        NameCell(const char *pName) :
+                mName(pName),
+                mInstanceCount(0) {
+        }
 
-    char                     mNamespaceSymbol;
-    FbxCharPtrSet					mStringNameArray;
+        FbxString mName;
+        int mInstanceCount;
+    };
+
+    char mNamespaceSymbol;
+    FbxCharPtrSet mStringNameArray;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -38,7 +38,8 @@ namespace bitsery {
             using TValue = typename T::value_type;
             static constexpr bool isResizable = Resizable;
             static constexpr bool isContiguous = Contiguous;
-            static size_t size(const T& container) {
+
+            static size_t size(const T &container) {
                 return container.size();
             }
         };
@@ -49,25 +50,27 @@ namespace bitsery {
             using TValue = typename T::value_type;
             static constexpr bool isResizable = true;
             static constexpr bool isContiguous = Contiguous;
-            static size_t size(const T& container) {
+
+            static size_t size(const T &container) {
                 return container.size();
             }
-            static void resize(T& container, size_t size) {
+
+            static void resize(T &container, size_t size) {
                 container.resize(size);
             }
         };
 
-        template <typename T, bool Resizable = ContainerTraits<T>::isResizable>
+        template<typename T, bool Resizable = ContainerTraits<T>::isResizable>
         struct StdContainerForBufferAdapter {
             using TIterator = typename T::iterator;
             using TValue = typename ContainerTraits<T>::TValue;
         };
 
         //specialization for resizable buffers
-        template <typename T>
+        template<typename T>
         struct StdContainerForBufferAdapter<T, true> {
 
-            static void increaseBufferSize(T& container) {
+            static void increaseBufferSize(T &container) {
                 //since we're writing to buffer use different resize strategy than default implementation
                 //when small size grow faster, to avoid thouse 2/4/8/16... byte allocations
                 auto newSize = static_cast<size_t>(container.size() * 1.5 + 128);
@@ -75,6 +78,7 @@ namespace bitsery {
                 newSize -= newSize % 64;//64 is cache line size
                 container.resize((std::max)(newSize, container.capacity()));
             }
+
             using TIterator = typename T::iterator;
             using TValue = typename ContainerTraits<T>::TValue;
         };

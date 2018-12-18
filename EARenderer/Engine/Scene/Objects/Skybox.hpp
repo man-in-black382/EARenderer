@@ -16,19 +16,19 @@
 #include <memory>
 
 namespace EARenderer {
-    
+
     class Skybox {
     private:
         std::unique_ptr<GLFloatTexture2D<GLTexture::Float::RGB16F>> mEquirectangularMap;
-        
+
     public:
-        Skybox(const std::string& equirectangularImage);
-        
-        const GLFloatTexture2D<GLTexture::Float::RGB16F>* equirectangularMap() const;
-        
+        Skybox(const std::string &equirectangularImage);
+
+        const GLFloatTexture2D<GLTexture::Float::RGB16F> *equirectangularMap() const;
+
         void draw() const;
     };
-    
+
 }
 
 #endif /* Skybox_hpp */

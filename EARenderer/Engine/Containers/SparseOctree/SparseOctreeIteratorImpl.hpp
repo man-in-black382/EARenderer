@@ -13,24 +13,24 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <typename T>
+    template<typename T>
     SparseOctree<T>::Iterator::Iterator(MapIterator i, MapIterator endIterator)
-    :
-    mNodesIterator(i),
-    mNodesEndIterator(endIterator)
-    { }
+            :
+            mNodesIterator(i),
+            mNodesEndIterator(endIterator) {
+    }
 
-    template <typename T>
+    template<typename T>
     SparseOctree<T>::Iterator::Iterator(MapIterator endIterator)
-    :
-    mNodesIterator(endIterator),
-    mNodesEndIterator(endIterator)
-    { }
+            :
+            mNodesIterator(endIterator),
+            mNodesEndIterator(endIterator) {
+    }
 
 #pragma mark - Operators
 
-    template <typename T>
-    typename SparseOctree<T>::Iterator&
+    template<typename T>
+    typename SparseOctree<T>::Iterator &
     SparseOctree<T>::Iterator::operator++() {
         if (mNodesIterator == mNodesEndIterator) {
             throw std::out_of_range("Incrementing an iterator which had reached the end already");
@@ -41,21 +41,21 @@ namespace EARenderer {
         return *this;
     }
 
-    template <typename T>
-    const typename SparseOctree<T>::Node&
+    template<typename T>
+    const typename SparseOctree<T>::Node &
     SparseOctree<T>::Iterator::operator*() const {
         return mNodesIterator->second;
     }
 
-    template <typename T>
-    const typename SparseOctree<T>::Node*
+    template<typename T>
+    const typename SparseOctree<T>::Node *
     SparseOctree<T>::Iterator::operator->() const {
         return &(mNodesIterator->second);
     }
 
-    template <typename T>
+    template<typename T>
     bool
-    SparseOctree<T>::Iterator::operator!=(const Iterator& other) const {
+    SparseOctree<T>::Iterator::operator!=(const Iterator &other) const {
         return mNodesIterator != other.mNodesIterator;
     }
 

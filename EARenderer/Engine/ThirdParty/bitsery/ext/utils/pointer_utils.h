@@ -67,27 +67,34 @@ namespace bitsery {
             struct PLCInfo {
                 explicit PLCInfo(PointerOwnershipType ownershipType_)
                         : ownershipType{ownershipType_},
-                          isSharedProcessed{false} {};
+                          isSharedProcessed{false} {
+                };
                 PointerOwnershipType ownershipType;
                 bool isSharedProcessed;
             };
 
-            struct PLCInfoSerializer: PLCInfo {
+            struct PLCInfoSerializer : PLCInfo {
                 PLCInfoSerializer(size_t id_, PointerOwnershipType ownershipType_)
-                        : PLCInfo(ownershipType_), id{id_} {}
+                        : PLCInfo(ownershipType_), id{id_} {
+                }
+
                 size_t id;
             };
 
             struct PLCInfoDeserializer : PLCInfo {
                 PLCInfoDeserializer(void *ptr, PointerOwnershipType ownershipType_)
                         : PLCInfo(ownershipType_),
-                          ownerPtr{ptr} {};
+                          ownerPtr{ptr} {
+                };
 
                 //need to override these explicitly because we have pointer member
-                PLCInfoDeserializer(const PLCInfoDeserializer&) = delete;
-                PLCInfoDeserializer(PLCInfoDeserializer&&) = default;
-                PLCInfoDeserializer& operator =(const PLCInfoDeserializer&) = delete;
-                PLCInfoDeserializer& operator =(PLCInfoDeserializer&&) = default;
+                PLCInfoDeserializer(const PLCInfoDeserializer &) = delete;
+
+                PLCInfoDeserializer(PLCInfoDeserializer &&) = default;
+
+                PLCInfoDeserializer &operator=(const PLCInfoDeserializer &) = delete;
+
+                PLCInfoDeserializer &operator=(PLCInfoDeserializer &&) = default;
 
                 void processOwner(void *ptr) {
                     ownerPtr = ptr;
@@ -133,7 +140,8 @@ namespace bitsery {
             public:
                 explicit PointerLinkingContextSerialization()
                         : _currId{0},
-                          _ptrMap{} {}
+                          _ptrMap{} {
+                }
 
                 PointerLinkingContextSerialization(const PointerLinkingContextSerialization &) = delete;
 
@@ -160,10 +168,10 @@ namespace bitsery {
                 //we cannot serialize pointers, if we haven't serialized objects themselves
                 bool isPointerSerializationValid() const {
                     return std::all_of(_ptrMap.begin(), _ptrMap.end(),
-                                       [](const std::pair<const void *, PLCInfoSerializer> &p) {
-                                           return p.second.ownershipType == PointerOwnershipType::SharedOwner ||
-                                                  p.second.ownershipType == PointerOwnershipType::Owner;
-                                       });
+                            [](const std::pair<const void *, PLCInfoSerializer> &p) {
+                                return p.second.ownershipType == PointerOwnershipType::SharedOwner ||
+                                        p.second.ownershipType == PointerOwnershipType::Owner;
+                            });
                 }
 
             private:
@@ -175,7 +183,8 @@ namespace bitsery {
             class PointerLinkingContextDeserialization {
             public:
                 explicit PointerLinkingContextDeserialization()
-                        : _idMap{} {}
+                        : _idMap{} {
+                }
 
                 PointerLinkingContextDeserialization(const PointerLinkingContextDeserialization &) = delete;
 
@@ -203,10 +212,10 @@ namespace bitsery {
                 //valid, when all pointers has owners
                 bool isPointerDeserializationValid() const {
                     return std::all_of(_idMap.begin(), _idMap.end(),
-                                       [](const std::pair<const size_t, PLCInfoDeserializer> &p) {
-                                           return p.second.ownershipType == PointerOwnershipType::SharedOwner ||
-                                                  p.second.ownershipType == PointerOwnershipType::Owner;
-                                       });
+                            [](const std::pair<const size_t, PLCInfoDeserializer> &p) {
+                                return p.second.ownershipType == PointerOwnershipType::SharedOwner ||
+                                        p.second.ownershipType == PointerOwnershipType::Owner;
+                            });
                 }
 
             private:
@@ -219,7 +228,8 @@ namespace bitsery {
             public:
 
                 explicit PointerObjectExtensionBase(PointerType ptrType = PointerType::Nullable) :
-                        _ptrType{ptrType} {}
+                        _ptrType{ptrType} {
+                }
 
                 template<typename Ser, typename Writer, typename T, typename Fnc>
                 void serialize(Ser &ser, Writer &w, const T &obj, Fnc &&fnc) const {
@@ -232,7 +242,7 @@ namespace bitsery {
                         details::writeSize(w, ptrInfo.id);
                         if (TPtrManager<T>::getOwnership() != PointerOwnershipType::Observer) {
                             if (!ptrInfo.isSharedProcessed)
-                                serializeImpl(ser, ptr, std::forward<Fnc>(fnc), w, IsPolymorphic<T>{});
+                                serializeImpl(ser, ptr, std::forward<Fnc>(fnc), w, IsPolymorphic < T > {});
                         }
                     } else {
                         assert(_ptrType == PointerType::Nullable);
@@ -249,8 +259,8 @@ namespace bitsery {
                         auto ctx = des.template context<PointerLinkingContext>();
                         assert(ctx != nullptr);
                         auto &ptrInfo = ctx->getInfoById(id, TPtrManager<T>::getOwnership());
-                        deserializeImpl(ptrInfo, des, obj, std::forward<Fnc>(fnc), r, IsPolymorphic<T>{},
-                                        std::integral_constant<PointerOwnershipType, TPtrManager<T>::getOwnership()>{});
+                        deserializeImpl(ptrInfo, des, obj, std::forward<Fnc>(fnc), r, IsPolymorphic < T > {},
+                                std::integral_constant<PointerOwnershipType, TPtrManager<T>::getOwnership()>{});
                     } else {
                         if (_ptrType == PointerType::Nullable) {
                             TPtrManager<T>::clear(obj);
@@ -287,20 +297,20 @@ namespace bitsery {
 
                 template<typename Des, typename T, typename Fnc, typename Reader>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &des, T &obj, Fnc &&,
-                                     Reader &r, std::true_type ,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::Owner>) const {
+                        Reader &r, std::true_type,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::Owner>) const {
                     const auto &ctx = des.template context<TPolymorphicContext<RTTI>>();
                     ctx->deserialize(des, r, TPtrManager<T>::getPtr(obj),
-                                     [&obj, this](typename TPtrManager<T>::TElement *valuePtr) {
-                                         TPtrManager<T>::assign(obj, valuePtr);
-                                     });
+                            [&obj, this](typename TPtrManager<T>::TElement *valuePtr) {
+                                TPtrManager<T>::assign(obj, valuePtr);
+                            });
                     ptrInfo.processOwner(TPtrManager<T>::getPtr(obj));
                 }
 
                 template<typename Des, typename T, typename Fnc, typename Reader>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &, T &obj, Fnc &&fnc,
-                                     Reader &, std::false_type ,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::Owner>) const {
+                        Reader &, std::false_type,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::Owner>) const {
                     auto ptr = TPtrManager<T>::getPtr(obj);
                     if (ptr) {
                         fnc(*ptr);
@@ -314,15 +324,15 @@ namespace bitsery {
 
                 template<typename Des, typename T, typename Fnc, typename Reader>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &des, T &obj, Fnc &&,
-                                     Reader &r, std::true_type ,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>) const {
+                        Reader &r, std::true_type,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>) const {
                     auto &sharedState = ptrInfo.sharedState;
                     if (!sharedState) {
                         const auto &ctx = des.template context<TPolymorphicContext<RTTI>>();
                         ctx->deserialize(des, r, TPtrManager<T>::getPtr(obj),
-                                         [&obj, &sharedState](typename TPtrManager<T>::TElement *valuePtr) {
-                                             sharedState = TPtrManager<T>::createSharedState(valuePtr);
-                                         });
+                                [&obj, &sharedState](typename TPtrManager<T>::TElement *valuePtr) {
+                                    sharedState = TPtrManager<T>::createSharedState(valuePtr);
+                                });
                         if (!sharedState)
                             sharedState = TPtrManager<T>::saveToSharedState(obj);
                     }
@@ -332,8 +342,8 @@ namespace bitsery {
 
                 template<typename Des, typename T, typename Fnc, typename Reader>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &, T &obj, Fnc &&fnc,
-                                     Reader &, std::false_type ,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>) const {
+                        Reader &, std::false_type,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>) const {
                     auto &sharedState = ptrInfo.sharedState;
                     if (!sharedState) {
                         if (auto ptr = TPtrManager<T>::getPtr(obj)) {
@@ -351,16 +361,16 @@ namespace bitsery {
 
                 template<typename Des, typename T, typename Fnc, typename Reader, typename isPolymorph>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &des, T &obj, Fnc &&fnc,
-                                     Reader &r, isPolymorph polymorph,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedObserver>) const {
+                        Reader &r, isPolymorph polymorph,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedObserver>) const {
                     deserializeImpl(ptrInfo, des, obj, fnc, r, polymorph,
-                                    std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>{});
+                            std::integral_constant<PointerOwnershipType, PointerOwnershipType::SharedOwner>{});
                 }
 
                 template<typename Des, typename T, typename Fnc, typename Reader, typename isPolymorphic>
                 void deserializeImpl(PLCInfoDeserializer &ptrInfo, Des &, T &obj, Fnc &&,
-                                     Reader &, isPolymorphic,
-                                     std::integral_constant<PointerOwnershipType, PointerOwnershipType::Observer>) const {
+                        Reader &, isPolymorphic,
+                        std::integral_constant<PointerOwnershipType, PointerOwnershipType::Observer>) const {
                     ptrInfo.processObserver(reinterpret_cast<void *&>(TPtrManager<T>::getPtrRef(obj)));
                 }
 

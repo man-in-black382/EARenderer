@@ -17,14 +17,14 @@
 
 namespace EARenderer {
 
-    class GLSLBloom: public GLProgram {
+    class GLSLBloom : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLBloom();
 
-        void setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& baseImageTexture,
-                         const GLFloatTexture2D<GLTexture::Float::RGBA16F>& blurTexture);
+        void setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &baseImageTexture,
+                const GLFloatTexture2D<GLTexture::Float::RGBA16F> &blurTexture);
 
         void setTextureWeights(float smallBlurWeight, float mediumBlurWeight, float largeBlurWeight);
     };

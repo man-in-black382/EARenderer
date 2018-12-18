@@ -22,56 +22,55 @@
 /** This class contains settings for Phong Materials.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxSurfacePhong : public FbxSurfaceLambert
-{
-	FBXSDK_OBJECT_DECLARE(FbxSurfacePhong, FbxSurfaceLambert);
+class FBXSDK_DLL FbxSurfacePhong : public FbxSurfaceLambert {
+FBXSDK_OBJECT_DECLARE(FbxSurfacePhong, FbxSurfaceLambert);
 
 public:
-	/**
-	 * \name Material properties
-	 */
-	//@{
+    /**
+     * \name Material properties
+     */
+    //@{
     //! Specular property.
     FbxPropertyT<FbxDouble3> Specular;
-	
+
     /** Specular factor property. This factor is used to 
      *  attenuate the specular color.
      */
-	FbxPropertyT<FbxDouble> SpecularFactor;
+    FbxPropertyT<FbxDouble> SpecularFactor;
 
     /** Shininess property. This property controls the aspect
 	 *  of the shiny spot. It is the specular exponent in the Phong
 	 *  illumination model.
      */
-	FbxPropertyT<FbxDouble> Shininess;
+    FbxPropertyT<FbxDouble> Shininess;
 
     /** Reflection color property. This property is used to
 	 * implement reflection mapping.
      */
-	FbxPropertyT<FbxDouble3> Reflection;
+    FbxPropertyT<FbxDouble3> Reflection;
 
     /** Reflection factor property. This property is used to
 	 * attenuate the reflection color.
      */
-	FbxPropertyT<FbxDouble> ReflectionFactor;
-	//@}
+    FbxPropertyT<FbxDouble> ReflectionFactor;
+    //@}
 
-	//////////////////////////////////////////////////////////////////////////
-	// Static values
-	//////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////
+    // Static values
+    //////////////////////////////////////////////////////////////////////////
 
-	/**
-	  * \name Default property values
-	  */
-	//@{
-	
-	static const FbxDouble3 sSpecularDefault;
-	static const FbxDouble sSpecularFactorDefault;
+    /**
+      * \name Default property values
+      */
+    //@{
 
-	static const FbxDouble sShininessDefault;
-	
-	static const FbxDouble3 sReflectionDefault;
-	static const FbxDouble sReflectionFactorDefault;
+    static const FbxDouble3 sSpecularDefault;
+    static const FbxDouble sSpecularFactorDefault;
+
+    static const FbxDouble sShininessDefault;
+
+    static const FbxDouble3 sReflectionDefault;
+    static const FbxDouble sReflectionFactorDefault;
 
     //@}
 
@@ -80,10 +79,11 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void ConstructProperties(bool pForceSet);
+    virtual void ConstructProperties(bool pForceSet);
 
-	// Local
-	void Init();
+    // Local
+    void Init();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

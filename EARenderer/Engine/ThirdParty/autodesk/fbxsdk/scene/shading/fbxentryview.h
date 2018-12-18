@@ -23,54 +23,53 @@ class FbxBindingTableEntry;
   * \see FbxBindingTableEntry and FbxBindingTable.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxEntryView
-{
+class FBXSDK_DLL FbxEntryView {
 public:
-	
+
     //! Entry type.
-	static const char* sEntryType;
+    static const char *sEntryType;
 
     /**
     * \name Constructor and Destructor.
     */
     //@{
 
-	/** Constructor.
-	* \param pEntry           The binding table entry to create the entry view for.
-	* \param pAsSource        \c true to create the entry view as source, \c false as destination.
-	* \param pCreate          \c true to create the entry view, \c false otherwise.
-	*/
-	FbxEntryView( FbxBindingTableEntry* pEntry, bool pAsSource, bool pCreate = false );
+    /** Constructor.
+    * \param pEntry           The binding table entry to create the entry view for.
+    * \param pAsSource        \c true to create the entry view as source, \c false as destination.
+    * \param pCreate          \c true to create the entry view, \c false otherwise.
+    */
+    FbxEntryView(FbxBindingTableEntry *pEntry, bool pAsSource, bool pCreate = false);
 
-	//! Destructor.
-	virtual ~FbxEntryView();
+    //! Destructor.
+    virtual ~FbxEntryView();
     //@}
 
 
-	/** Check whether this entry view is valid or not.
-	  * If this entry view corresponds with an valid entry which is not NULL, and the
-	  * entry type of this entry view is the same as that of the entry it corresponds with,
-	  * then this entry view is valid.
-	  * \return     \c true if the entry view is valid, \c false otherwise.
-	  */
-	virtual bool IsValid() const;
+    /** Check whether this entry view is valid or not.
+      * If this entry view corresponds with an valid entry which is not NULL, and the
+      * entry type of this entry view is the same as that of the entry it corresponds with,
+      * then this entry view is valid.
+      * \return     \c true if the entry view is valid, \c false otherwise.
+      */
+    virtual bool IsValid() const;
 
-	/** Create a new entry view.
-	  * \return     \c true if the entry view is created successfully, \c false otherwise.
-	  */
-	virtual bool Create();
+    /** Create a new entry view.
+      * \return     \c true if the entry view is created successfully, \c false otherwise.
+      */
+    virtual bool Create();
 
-	/** Get the entry type of this entry view.
-	  */
-	virtual const char* EntryType() const;
+    /** Get the entry type of this entry view.
+      */
+    virtual const char *EntryType() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	bool mAsSource;
-	FbxBindingTableEntry* mEntry;
+    bool mAsSource;
+    FbxBindingTableEntry *mEntry;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

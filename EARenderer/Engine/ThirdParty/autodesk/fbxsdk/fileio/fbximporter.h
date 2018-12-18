@@ -26,10 +26,15 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxIO;
+
 class FbxIOFileHeaderInfo;
+
 class FbxDocumentInfo;
+
 class FbxTakeInfo;
+
 class FbxReader;
+
 class FbxThread;
 
 struct FbxImportThreadArg;
@@ -87,88 +92,86 @@ struct FbxImportThreadArg;
 *          Supported files formats: FBX 5/6/7 Binary & ASCII, Collada, DXF, OBJ, 3DS
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxImporter : public FbxIOBase
-{
-	FBXSDK_OBJECT_DECLARE(FbxImporter, FbxIOBase);
+class FBXSDK_DLL FbxImporter : public FbxIOBase {
+FBXSDK_OBJECT_DECLARE(FbxImporter, FbxIOBase);
 
 public:
-	/** 
-	  * \name Import Functions
-	  */
-	//@{
+    /**
+      * \name Import Functions
+      */
+    //@{
 
-	/** Initialize object.
-	  * \param pFileName          Name of file to access.
+    /** Initialize object.
+      * \param pFileName          Name of file to access.
       * \param pFileFormat        file format identifier User does not need to specify it by default.
                                   if not specified, plugin will detect the file format according to file suffix automatically.
-	  * \param pIOSettings        client IOSettings, if not specified, a default IOSettings will be created
-	  * \return                   \c true on success, \c false otherwise.
-      * \remarks                  To identify the error that occurred, inspect the status object accessed 
+      * \param pIOSettings        client IOSettings, if not specified, a default IOSettings will be created
+      * \return                   \c true on success, \c false otherwise.
+      * \remarks                  To identify the error that occurred, inspect the status object accessed
       *                           using the GetStatus() function.
       * \remarks                  You do not need to give the pFileFormat if the suffix of pFileName is recognized
-	  */
-	virtual bool Initialize(const char* pFileName, int pFileFormat=-1, FbxIOSettings * pIOSettings=NULL);
+      */
+    virtual bool Initialize(const char *pFileName, int pFileFormat = -1, FbxIOSettings *pIOSettings = NULL);
 
-	/** Initialize object.
-	  *	\param pStream            stream to access.
-	  * \param pStreamData        user-defined stream data.
+    /** Initialize object.
+      *	\param pStream            stream to access.
+      * \param pStreamData        user-defined stream data.
       * \param pFileFormat        file format identifier User does not need to specify it by default.
                                   if not specified, plugin will request the file format from the stream automatically.
-	  * \param pIOSettings        client IOSettings, if not specified, a default IOSettings will be created
+      * \param pIOSettings        client IOSettings, if not specified, a default IOSettings will be created
       *	\return                   \c true on success, \c false otherwise.
       * \remarks                  To identify the error that occurred, inspect the status object accessed 
       *                           using the GetStatus() function.
       * \remarks                  You do not need to give the pFileFormat if the suffix of pFileName is recognized
       */
-	virtual bool Initialize(FbxStream* pStream, void* pStreamData=NULL, const int pFileFormat=-1, FbxIOSettings* pIOSettings=NULL);
+    virtual bool Initialize(FbxStream *pStream, void *pStreamData = NULL, const int pFileFormat = -1, FbxIOSettings *pIOSettings = NULL);
 
-	/** Get the FBX version number of the FBX file.
-	  * FBX version numbers start at 5.0.0.
-	  * \param pMajor        Version major number.
-	  * \param pMinor        Version minor number.
-	  * \param pRevision     Version revision number.
-	  *	\remarks             This function must be called after FbxImporter::Initialize().	  
-	  */
-	void GetFileVersion(int& pMajor, int& pMinor, int& pRevision);
+    /** Get the FBX version number of the FBX file.
+      * FBX version numbers start at 5.0.0.
+      * \param pMajor        Version major number.
+      * \param pMinor        Version minor number.
+      * \param pRevision     Version revision number.
+      *	\remarks             This function must be called after FbxImporter::Initialize().
+      */
+    void GetFileVersion(int &pMajor, int &pMinor, int &pRevision);
 
-	/**	Get the default rendering resolution if present in the file header.
-	  * \param pCamName            Returned name of the camera.
-	  * \param pResolutionMode     Returned resolution mode.
-	  * \param pW                  Returned width.
-	  * \param pH                  Returned height.
-	  * \return                    \c true if the default rendering settings are defined in the file, otherwise
-	  *                            returns \c false with empty parameters.
-	  */
-	bool GetDefaultRenderResolution(FbxString& pCamName, FbxString& pResolutionMode, double& pW, double& pH);
+    /**	Get the default rendering resolution if present in the file header.
+      * \param pCamName            Returned name of the camera.
+      * \param pResolutionMode     Returned resolution mode.
+      * \param pW                  Returned width.
+      * \param pH                  Returned height.
+      * \return                    \c true if the default rendering settings are defined in the file, otherwise
+      *                            returns \c false with empty parameters.
+      */
+    bool GetDefaultRenderResolution(FbxString &pCamName, FbxString &pResolutionMode, double &pW, double &pH);
 
-	/**	Get the complete file header information.
-	  * \return		valid pointer to the complete header information
-	  */
-	FbxIOFileHeaderInfo* GetFileHeaderInfo();
+    /**	Get the complete file header information.
+      * \return		valid pointer to the complete header information
+      */
+    FbxIOFileHeaderInfo *GetFileHeaderInfo();
 
-	/** \enum EStreamOptionsGeneration Stream options identifiers.
-	  * - \e eParseFile			Parse the file
-	  * - \e eDoNotParseFile	Do not parse the file.
-	  */
-	enum EStreamOptionsGeneration
-	{
-		eParseFile,		// Parse the file
-		eDoNotParseFile	// Do not parse the file (fast)
-	};
+    /** \enum EStreamOptionsGeneration Stream options identifiers.
+      * - \e eParseFile			Parse the file
+      * - \e eDoNotParseFile	Do not parse the file.
+      */
+    enum EStreamOptionsGeneration {
+        eParseFile,        // Parse the file
+        eDoNotParseFile    // Do not parse the file (fast)
+    };
 
     /** Read the currently opened file header to retrieve information related to takes.
 	  * \param pStreamOptionsGeneration     Stream options identifier.
 	  *	\return                \c true on success, \c false otherwise.
 	  * \remarks                            Caller gets ownership of the returned structure.
       */
- 	  bool GetImportOptions(EStreamOptionsGeneration pStreamOptionsGeneration = eParseFile);	
+    bool GetImportOptions(EStreamOptionsGeneration pStreamOptionsGeneration = eParseFile);
 
     /** Read the currently opened file header to retrieve information related to takes.
 	  * \param pFbxObject     Target FBX file.
 	  *	\return                \c true on success, \c false otherwise.
 	  * \remarks              Caller gets ownership of the returned structure.
       */
-	  bool GetImportOptions(FbxIO* pFbxObject);
+    bool GetImportOptions(FbxIO *pFbxObject);
 
     /** Import the currently opened file into a scene. 
       * \param pDocument          Document to fill with file content.
@@ -181,9 +184,10 @@ public:
 	  *                           set or wrong, the FbxStatus object access with GetStatus() will be set with
 	  *                           FbxStatus::ePasswordError.
       */
-	  bool Import(FbxDocument* pDocument, bool pNonBlocking=false);
+    bool Import(FbxDocument *pDocument, bool pNonBlocking = false);
 
 #ifndef FBXSDK_ENV_WINSTORE
+
     /** Check if the importer is currently importing.
 	  * \param pImportResult  This parameter, after the import finished, will contain the result of the import success or failure.
       * \return               Return true if the importer is currently importing.
@@ -192,199 +196,217 @@ public:
 	  *                       It is very important to periodically check if the import finished using this function,
       *                       since it will also free up the thread's allocations when its done.
       */
-	  bool IsImporting(bool& pImportResult);
+    bool IsImporting(bool &pImportResult);
+
 #endif /* !FBXSDK_ENV_WINSTORE */
 
-	/** Get the progress status in non-blocking mode.
-	  *	\param pStatus Optional current status string.
+    /** Get the progress status in non-blocking mode.
+      *	\param pStatus Optional current status string.
       *	\return Percentage of the finished workload
-	  */
-      float GetProgress(FbxString* pStatus=NULL);
+      */
+    float GetProgress(FbxString *pStatus = NULL);
 
     /** Register a callback function for progress reporting in single thread mode.
       *	\param pCallback Pointer of the callback function.
 	  * \param pArgs pointer to the arguments passed to the callback function.
       */
-      void SetProgressCallback(FbxProgressCallback pCallback, void* pArgs=NULL);
+    void SetProgressCallback(FbxProgressCallback pCallback, void *pArgs = NULL);
 
     /** Explicitly set the embedding extraction folder. If this is never called, the FBX SDK will determine the best folder to extract embedded files.
       * \param pExtractFolder The file path name where the embedded files should be extracted.
       */
-	void SetEmbeddingExtractionFolder(const char* pExtractFolder);
+    void SetEmbeddingExtractionFolder(const char *pExtractFolder);
 
-	/** Retrieve the current folder destination where the embedded files will be extracted. This might not be initialized until file I/O is performed.
-	  */
-	const char* GetEmbeddingExtractionFolder();
+    /** Retrieve the current folder destination where the embedded files will be extracted. This might not be initialized until file I/O is performed.
+      */
+    const char *GetEmbeddingExtractionFolder();
 
-	/** Access to a IOSettings object.
+    /** Access to a IOSettings object.
       * \return The pointer to IOSettings or \c NULL \c if the object has not been allocated.
       */
- 	  FbxIOSettings* GetIOSettings();
+    FbxIOSettings *GetIOSettings();
 
-	/** Set the IOSettings pointer
-	  * \param pIOSettings Point to a FbxIOSettings object.
-	  */
-	  void SetIOSettings(FbxIOSettings* pIOSettings);
+    /** Set the IOSettings pointer
+      * \param pIOSettings Point to a FbxIOSettings object.
+      */
+    void SetIOSettings(FbxIOSettings *pIOSettings);
 
-	/** Set the password.
-	  * All subsequently imported files are opened with the given password.
+    /** Set the password.
+      * All subsequently imported files are opened with the given password.
       * \param pPassword     Password string.
       */
-      void SetPassword(char* pPassword);
+    void SetPassword(char *pPassword);
 
-	/** 
-	  * \name Animation Stack Description Access
-	  * \see FbxAnimStack
-	  */
-	//@{
-	
+    /**
+      * \name Animation Stack Description Access
+      * \see FbxAnimStack
+      */
+    //@{
+
     /** Get the number of available animation stacks in the file.
       * \return      Number of animation stacks.
       *	\remarks     This function must be called after FbxImporter::Initialize().
       */
-      int GetAnimStackCount();
+    int GetAnimStackCount();
 
-	/** Get the take information about an available take.
-	  * Use the returned reference to a FbxTakeInfo object to set whether the indexed take is imported.
-	  *	\param pIndex     Index of the requested take.
-	  *	\return           Take information or \c NULL if function failed.
-	  *	\remarks          This function must be called after FbxImporter::Initialize().
-	  */
-	  FbxTakeInfo* GetTakeInfo(int pIndex);
+    /** Get the take information about an available take.
+      * Use the returned reference to a FbxTakeInfo object to set whether the indexed take is imported.
+      *	\param pIndex     Index of the requested take.
+      *	\return           Take information or \c NULL if function failed.
+      *	\remarks          This function must be called after FbxImporter::Initialize().
+      */
+    FbxTakeInfo *GetTakeInfo(int pIndex);
 
     /** Return the active animation stack name.
       * \return     Active animation stack name if there is one, otherwise returns an empty string.
       * \remarks    This function must be called after FbxImporter::Initialize().
       */
-      FbxString GetActiveAnimStackName();
+    FbxString GetActiveAnimStackName();
 
-	//@}
+    //@}
 
-	/** 
-	  * \name Scene Description Access
-	  */
-	//@{
+    /**
+      * \name Scene Description Access
+      */
+    //@{
 
-	/** Get the scene info.
-	  * \return     Pointer to the scene info or \c NULL if no scene information
-	  *             is available in the file.
-	  */
-	FbxDocumentInfo* GetSceneInfo();
+    /** Get the scene info.
+      * \return     Pointer to the scene info or \c NULL if no scene information
+      *             is available in the file.
+      */
+    FbxDocumentInfo *GetSceneInfo();
 
-	//@}
-	/** 
-	  * \name File Format
-	  */
-	//@{
+    //@}
+    /**
+      * \name File Format
+      */
+    //@{
 
-	/** Returns the index of the reader (FbxReader) associated with the file format. 
-	    This index is considered the identifier of the file format. 
-		The array of registered readers can't be retrieved. 
-		\return Index of the registered FbxReader associated with the file format. 
-		        If no reader found return -1.
-		\remarks According to the number of readers registered this value can change 
-		         for the same reader between SDK Manager instantiations.
-	*/
-	int GetFileFormat ();
+    /** Returns the index of the reader (FbxReader) associated with the file format.
+        This index is considered the identifier of the file format.
+        The array of registered readers can't be retrieved.
+        \return Index of the registered FbxReader associated with the file format.
+                If no reader found return -1.
+        \remarks According to the number of readers registered this value can change
+                 for the same reader between SDK Manager instantiations.
+    */
+    int GetFileFormat();
 
-	/** \return     \c true if the file format is a recognized FBX format.
-	  */
-	bool IsFBX();
-	//@}
+    /** \return     \c true if the file format is a recognized FBX format.
+      */
+    bool IsFBX();
+    //@}
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxFile* GetFile();
-    FbxStream* GetStream();
-    void*      GetStreamData();
 
-	void ParseForGlobalSettings(bool pState);
+    FbxFile *GetFile();
+
+    FbxStream *GetStream();
+
+    void *GetStreamData();
+
+    void ParseForGlobalSettings(bool pState);
+
     void ParseForStatistics(bool pState);
-	bool GetAxisInfo(FbxAxisSystem* pAxisSystem, FbxSystemUnit* pSystemUnits);
-    bool GetStatistics(FbxStatistics* pStatistics);
-	bool GetFrameRate(FbxTime::EMode &pTimeMode);
+
+    bool GetAxisInfo(FbxAxisSystem *pAxisSystem, FbxSystemUnit *pSystemUnits);
+
+    bool GetStatistics(FbxStatistics *pStatistics);
+
+    bool GetFrameRate(FbxTime::EMode &pTimeMode);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void Destruct(bool pRecursive);
-	virtual void SetOrCreateIOSettings(FbxIOSettings* pIOSettings, bool pAllowNULL);
+    virtual void Construct(const FbxObject *pFrom);
 
-	void Reset();
-    bool FileOpen(FbxFile* pFile = NULL);
-	bool FileOpen(FbxStream* pStream, void* pStreamData);
-	void FileClose();
+    virtual void Destruct(bool pRecursive);
 
-	void GetImportOptionsInfo();
-    bool IsNativeExtension ();
+    virtual void SetOrCreateIOSettings(FbxIOSettings *pIOSettings, bool pAllowNULL);
 
-	//These two internal functions are only used to read old character pose data
-	bool Initialize(FbxFile* pFile, const int pFileFormat=-1, FbxIOSettings* pIOSettings=NULL);
-	bool Import(FbxDocument* pDocument, FbxIO* pFbxObject);
+    void Reset();
+
+    bool FileOpen(FbxFile *pFile = NULL);
+
+    bool FileOpen(FbxStream *pStream, void *pStreamData);
+
+    void FileClose();
+
+    void GetImportOptionsInfo();
+
+    bool IsNativeExtension();
+
+    //These two internal functions are only used to read old character pose data
+    bool Initialize(FbxFile *pFile, const int pFileFormat = -1, FbxIOSettings *pIOSettings = NULL);
+
+    bool Import(FbxDocument *pDocument, FbxIO *pFbxObject);
 
 private:
-	bool ImportProcess(FbxDocument* pDocument);
+    bool ImportProcess(FbxDocument *pDocument);
 
-    int						mFileFormat;
-    FbxReader*				mReader;
-	FbxString				mExtractFolder;
-    bool					mParseForGlobalSettings;
-    FbxAxisSystem			mAxisSystem;
-    FbxSystemUnit			mSystemUnits;
-	FbxTime::EMode			mFrameRate;
-    bool					mParseForStatistics;
-    FbxStatistics			mStatistics;
+    int mFileFormat;
+    FbxReader *mReader;
+    FbxString mExtractFolder;
+    bool mParseForGlobalSettings;
+    FbxAxisSystem mAxisSystem;
+    FbxSystemUnit mSystemUnits;
+    FbxTime::EMode mFrameRate;
+    bool mParseForStatistics;
+    FbxStatistics mStatistics;
 #ifndef FBXSDK_ENV_WINSTORE
-	FbxThread*				mImportThread;
-	FbxImportThreadArg*		mImportThreadArg;
-	bool					mImportThreadResult;
-	bool					mIsThreadImporting;
+    FbxThread *mImportThread;
+    FbxImportThreadArg *mImportThreadArg;
+    bool mImportThreadResult;
+    bool mIsThreadImporting;
 #endif /* !FBXSDK_ENV_WINSTORE */
-    FbxProgress				mProgress;
-    FbxFile*				mFile;
-	FbxStream*				mStream;
-	void*					mStreamData;
-	bool					mImportOptionsDone;
-	FbxArray<FbxTakeInfo*>	mTakeInfo;
-	FbxDocumentInfo*		mSceneInfo;
-	FbxString				mActiveAnimStackName;
-	int						mMajorVersion;
-	int						mMinorVersion;
-	int						mRevisionVersion;
-	FbxIOFileHeaderInfo*	mHeaderInfo;
-	FbxIOSettings*			mIOSettings;
-	bool					mClientIOSettings;
+    FbxProgress mProgress;
+    FbxFile *mFile;
+    FbxStream *mStream;
+    void *mStreamData;
+    bool mImportOptionsDone;
+    FbxArray<FbxTakeInfo *> mTakeInfo;
+    FbxDocumentInfo *mSceneInfo;
+    FbxString mActiveAnimStackName;
+    int mMajorVersion;
+    int mMinorVersion;
+    int mRevisionVersion;
+    FbxIOFileHeaderInfo *mHeaderInfo;
+    FbxIOSettings *mIOSettings;
+    bool mClientIOSettings;
 
-	//For Initialize and Import
-	friend class FbxReaderFbx5;
-	friend class FbxReaderFbx6;
-	friend struct FbxReaderFbx7_Impl;
+    //For Initialize and Import
+    friend class FbxReaderFbx5;
 
-	friend void ImportThread(void*);
+    friend class FbxReaderFbx6;
+
+    friend struct FbxReaderFbx7_Impl;
+
+    friend void ImportThread(void *);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 //! Event that is emitted to plugins before a FBX file has been imported.
-class FBXSDK_DLL FbxEventPreImport : public FbxEvent<FbxEventPreImport>
-{
-    FBXSDK_EVENT_DECLARE(FbxEventPreImport);
+class FBXSDK_DLL FbxEventPreImport : public FbxEvent<FbxEventPreImport> {
+FBXSDK_EVENT_DECLARE(FbxEventPreImport);
 public:
-    inline FbxEventPreImport( FbxDocument* pDocument ) : mDocument(pDocument) {};
+    inline FbxEventPreImport(FbxDocument *pDocument) : mDocument(pDocument) {
+    };
 
     //! The document the FBX file is to be imported into.
-    FbxDocument* mDocument; 
+    FbxDocument *mDocument;
 };
 
 //! Event that is emitted to plugins after a FBX file has been imported.
-class FBXSDK_DLL FbxEventPostImport : public FbxEvent<FbxEventPostImport>
-{
-    FBXSDK_EVENT_DECLARE(FbxEventPostImport);
+class FBXSDK_DLL FbxEventPostImport : public FbxEvent<FbxEventPostImport> {
+FBXSDK_EVENT_DECLARE(FbxEventPostImport);
 public:
-    inline FbxEventPostImport( FbxDocument* pDocument ) : mDocument(pDocument) {};
+    inline FbxEventPostImport(FbxDocument *pDocument) : mDocument(pDocument) {
+    };
 
     //! The imported document
-    FbxDocument* mDocument; 
+    FbxDocument *mDocument;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

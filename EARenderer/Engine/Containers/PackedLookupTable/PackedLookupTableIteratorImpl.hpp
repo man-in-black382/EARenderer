@@ -11,27 +11,27 @@
 
 namespace EARenderer {
 
-    template <typename T>
-    PackedLookupTable<T>::Iterator::Iterator(ID* in)
-    :
-    mCurrentObjectID(in)
-    { }
+    template<typename T>
+    PackedLookupTable<T>::Iterator::Iterator(ID *in)
+            :
+            mCurrentObjectID(in) {
+    }
 
-    template <typename T>
-    typename PackedLookupTable<T>::Iterator&
+    template<typename T>
+    typename PackedLookupTable<T>::Iterator &
     PackedLookupTable<T>::Iterator::operator++() {
         mCurrentObjectID++;
         return *this;
     }
 
-    template <typename T>
-    typename PackedLookupTable<T>::Iterator&
+    template<typename T>
+    typename PackedLookupTable<T>::Iterator &
     PackedLookupTable<T>::Iterator::operator+=(size_t offset) {
         mCurrentObjectID += offset;
         return *this;
     }
 
-    template <typename T>
+    template<typename T>
     typename PackedLookupTable<T>::Iterator
     PackedLookupTable<T>::Iterator::operator+(size_t offset) {
         Iterator copy(*this);
@@ -39,15 +39,15 @@ namespace EARenderer {
         return copy;
     }
 
-    template <typename T>
+    template<typename T>
     ID
     PackedLookupTable<T>::Iterator::operator*() const {
         return *mCurrentObjectID;
     }
 
-    template <typename T>
+    template<typename T>
     bool
-    PackedLookupTable<T>::Iterator::operator!=(const Iterator& other) const {
+    PackedLookupTable<T>::Iterator::operator!=(const Iterator &other) const {
         return mCurrentObjectID != other.mCurrentObjectID;
     }
 

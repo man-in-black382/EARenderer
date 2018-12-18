@@ -12,7 +12,7 @@
 
 @interface FPSView : NSView
 
-@property (assign, nonatomic) EARenderer::FrameMeter::FrameCharacteristics frameCharacteristics;
-@property (assign, nonatomic) CGSize viewportResolution;
+@property(assign, nonatomic) EARenderer::FrameMeter::FrameCharacteristics frameCharacteristics;
+@property(assign, nonatomic) CGSize viewportResolution;
 
 @end

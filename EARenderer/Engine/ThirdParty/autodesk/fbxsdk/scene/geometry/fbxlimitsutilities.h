@@ -24,81 +24,87 @@
 /** \brief This class represent a utility of limits for transforms.
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxLimitsUtilities
-{
+class FBXSDK_DLL FbxLimitsUtilities {
 public:
     /** \enum EType    Limit Type.
     * - \e eTranslation               Translation type
     * - \e eRotation               Rotation type
     * - \e eScaling               Scale type
     */
-	enum EType
-	{
-		eTranslation,
-		eRotation,
-		eScaling
-	};
+    enum EType {
+        eTranslation,
+        eRotation,
+        eScaling
+    };
 
     /** \enum ERotationType            Rotation type.
     * - \e eQuaternion   Quaternion rotation type
     * - \e eEuler        Euler rotation type
     */
-	enum ERotationType
-	{ 
-		eQuaternion, 
-		eEuler
-	};
+    enum ERotationType {
+        eQuaternion,
+        eEuler
+    };
 
     /** \enum ERotationClampType              Rotation clamp type.
     * - \e eRectangular   Rectangular clamp type
     * - \e eEllipsoid      Ellipsoid clamp type
     */
-	enum ERotationClampType
-	{ 
-		eRectangular, 
-		eEllipsoid
-	};
+    enum ERotationClampType {
+        eRectangular,
+        eEllipsoid
+    };
 
 
-	FbxLimitsUtilities(FbxNode* pNode);
+    FbxLimitsUtilities(FbxNode *pNode);
 
     /**
       * \name Getter/Setter functions
       */
     //@{
-		void SetAuto(EType pType, bool pAuto);
-		bool GetAuto(EType pType) const;
+    void SetAuto(EType pType, bool pAuto);
 
-		void SetEnable(EType pType, bool pEnable);
-		bool GetEnable(EType pType) const;
+    bool GetAuto(EType pType) const;
 
-		void SetDefault(EType pType, FbxVector4 pDefault);
-		FbxVector4 GetDefault(EType pType) const;
+    void SetEnable(EType pType, bool pEnable);
 
-		void SetMin(EType pType, FbxVector4 pMin);
-		FbxVector4 GetMin(EType pType) const;
+    bool GetEnable(EType pType) const;
 
-		void SetMax(EType pType, FbxVector4 pMax);
-		FbxVector4 GetMax(EType pType) const;
+    void SetDefault(EType pType, FbxVector4 pDefault);
 
-		void SetRotationType(ERotationType pType);
-		ERotationType GetRotationType() const;
+    FbxVector4 GetDefault(EType pType) const;
 
-		ERotationClampType GetRotationClampType() const;
+    void SetMin(EType pType, FbxVector4 pMin);
 
-		void SetRotationAxis(FbxVector4 pRotationAxis);
-		FbxVector4 GetRotationAxis() const;
+    FbxVector4 GetMin(EType pType) const;
 
-		void SetAxisLength(double pLength);
-		double GetAxisLength() const;
+    void SetMax(EType pType, FbxVector4 pMax);
 
-		void UpdateAutomatic(FbxNode* pNode);
-		FbxVector4 GetEndPointTranslation(FbxNode* pNode) const;
-		FbxVector4 GetEndSite(FbxNode* pNode) const;
+    FbxVector4 GetMax(EType pType) const;
+
+    void SetRotationType(ERotationType pType);
+
+    ERotationType GetRotationType() const;
+
+    ERotationClampType GetRotationClampType() const;
+
+    void SetRotationAxis(FbxVector4 pRotationAxis);
+
+    FbxVector4 GetRotationAxis() const;
+
+    void SetAxisLength(double pLength);
+
+    double GetAxisLength() const;
+
+    void UpdateAutomatic(FbxNode *pNode);
+
+    FbxVector4 GetEndPointTranslation(FbxNode *pNode) const;
+
+    FbxVector4 GetEndSite(FbxNode *pNode) const;
     //@}
 
-	FbxNode*	mNode;
-	double		mAxisLength; 
+    FbxNode *mNode;
+    double mAxisLength;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

@@ -23,15 +23,13 @@
  * \brief A gobo is a filter placed over a spot light to project light patterns through fog on a surface.
  * You can also use an image file as a gobo, which cause the light to project an image, much like a projector. 
  */
-class FbxGobo
-{
+class FbxGobo {
 public:
-	FbxGobo(char* pName) :
-	  mName(pName)
-	  {
-	  }
+    FbxGobo(char *pName) :
+            mName(pName) {
+    }
 
-	//! Gobo name.
+    //! Gobo name.
     FbxString mName;
     //! path and file name of the image file.
     FbxString mFileName;

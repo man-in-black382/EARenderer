@@ -31,39 +31,39 @@
   * class documentation.
   * \see FbxPlugin
   */
-class FBXSDK_DLL FbxPluginContainer : public FbxEmitter
-{
+class FBXSDK_DLL FbxPluginContainer : public FbxEmitter {
 public:
-	//! Definition of a plug-in list.
-	typedef FbxIntrusiveList<FbxPlugin> PluginList;
+    //! Definition of a plug-in list.
+    typedef FbxIntrusiveList<FbxPlugin> PluginList;
 
-	/** The registration function that must be called when the module containing the plug-in is loaded.
-	  * \param pPlugin The plug-in to register.
-	  */
-	void Register(FbxPlugin& pPlugin);
+    /** The registration function that must be called when the module containing the plug-in is loaded.
+      * \param pPlugin The plug-in to register.
+      */
+    void Register(FbxPlugin &pPlugin);
 
-	/** The unregistration function that must be called when the module containing the plug-in is unloaded.
-	  * \param pPlugin The plug-in to unregister.
-	  */
-	void Unregister(FbxPlugin& pPlugin);
+    /** The unregistration function that must be called when the module containing the plug-in is unloaded.
+      * \param pPlugin The plug-in to unregister.
+      */
+    void Unregister(FbxPlugin &pPlugin);
 
-	/** Const accessor to the list of plug-ins owned by the container.
-	  * \return A list of plug-in registered to this container.
-	  */
-	const PluginList& GetPlugins() const;
+    /** Const accessor to the list of plug-ins owned by the container.
+      * \return A list of plug-in registered to this container.
+      */
+    const PluginList &GetPlugins() const;
 
-	/** Accessor to the list of plug-ins owned by the container.
-	  * \return A list of plug-in registered to this container.
-	  */
-	PluginList& GetPlugins();
+    /** Accessor to the list of plug-ins owned by the container.
+      * \return A list of plug-in registered to this container.
+      */
+    PluginList &GetPlugins();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual ~FbxPluginContainer();
-	PluginList mPlugins;
+    virtual ~FbxPluginContainer();
+
+    PluginList mPlugins;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

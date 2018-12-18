@@ -13,15 +13,16 @@
 #include "PackedLookupTable.hpp"
 
 namespace EARenderer {
-    
+
     struct AxesSelection {
         CartesianAxis axesMask = CartesianAxis::none;
         ID meshID = IDNotFound;
-        
+
         AxesSelection() = default;
+
         AxesSelection(CartesianAxis axesMask, ID meshID);
     };
-    
+
 }
 
 #endif /* AxesSelection_hpp */

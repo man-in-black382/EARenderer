@@ -25,42 +25,42 @@
 #include <glm/vec3.hpp>
 
 namespace EARenderer {
-    
+
     // Based on
     // http://www.cg.tuwien.ac.at/research/publications/2009/cline-09-poisson/cline-09-poisson-paper.pdf
     // http://davidkuri.de/downloads/SIC-GI.pdf
-    
+
     class SurfelGenerator {
     private:
-        
+
 #pragma mark - Nested types
-        
+
         struct TransformedTriangleData {
             Triangle3D positions;
             Triangle3D normals;
             Triangle2D UVs;
-            
-            TransformedTriangleData(const Triangle3D& positions, const Triangle3D& normals, const Triangle2D& UVs);
-            
+
+            TransformedTriangleData(const Triangle3D &positions, const Triangle3D &normals, const Triangle2D &UVs);
+
             std::array<TransformedTriangleData, 4> split() const;
         };
-        
+
         struct SurfelCandidate {
             using BinIterator = LogarithmicBin<TransformedTriangleData>::Iterator;
-            
+
             glm::vec3 position;
             glm::vec3 normal;
             glm::vec3 barycentricCoordinate;
             BinIterator logarithmicBinIterator;
-            
-            SurfelCandidate(const glm::vec3& position, const glm::vec3& normal, const glm::vec3& barycentric, BinIterator iterator);
+
+            SurfelCandidate(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec3 &barycentric, BinIterator iterator);
         };
-        
+
 #pragma mark - Member variables
-        
+
         float mSurfelSpacing;
         size_t mMaximumSurfelClusterSize = 256;
-        
+
         std::mt19937 mEngine;
         std::uniform_real_distribution<float> mDistribution;
         PackedLookupTable<Surfel> mSurfelFlatStorage;
@@ -68,7 +68,7 @@ namespace EARenderer {
         std::shared_ptr<SurfelData> mSurfelDataContainer;
         const ResourcePool *mResourcePool = nullptr;
         const Scene *mScene = nullptr;
-        
+
 #pragma mark - Member functions
 
         /**
@@ -85,7 +85,7 @@ namespace EARenderer {
          @param workingVolume extents of a spatial hash structure
          @return space division resolution to passed to the spatial hash
          */
-        uint32_t spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D& workingVolume) const;
+        uint32_t spaceDivisionResolution(float surfelCountPerCellDimension, const AxisAlignedBox3D &workingVolume) const;
 
         /**
          Generates 3 random numbers between 0 and 1
@@ -93,7 +93,7 @@ namespace EARenderer {
          @return Normalized triple of random numbers
          */
         glm::vec3 randomBarycentricCoordinates();
-        
+
         /**
          Creates LogarithmicBin data structure and fills it with sub mesh's transformed triangle data
 
@@ -101,24 +101,24 @@ namespace EARenderer {
          @param containingInstance Mesh instance that applies transformation and materials to underlying sub mesh
          @return A logarithmic bin containing sub mesh's triangle data (positions, normals, albedo values and texture coordinates)
          */
-        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(const SubMesh& subMesh, const MeshInstance& containingInstance);
-        
+        LogarithmicBin<TransformedTriangleData> constructSubMeshVertexDataBin(const SubMesh &subMesh, const MeshInstance &containingInstance);
+
         /**
          Checks to see whether triangle is completely covered by any surfel from existing surfel set
 
          @param triangle Test subject
          @return Bool value indicating whether triangle is covered
          */
-        bool triangleCompletelyCovered(Triangle3D& triangle);
-        
+        bool triangleCompletelyCovered(Triangle3D &triangle);
+
         /**
          Checks to see whether surfel candidate is far enough from all the already generated surfels
 
          @param candidate Test subject
          @return Bool value indicating whether surfel candidate is far enough to be accepted as a full-fledged surfel
          */
-        bool surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate& candidate);
-        
+        bool surfelCandidateMeetsMinimumDistanceRequirement(SurfelCandidate &candidate);
+
         /**
          Generates a surfel candidate with minimum amount of data required to perform routines deciding
          whether this candidate is worthy to be added to a full-fledged surfel set
@@ -127,8 +127,8 @@ namespace EARenderer {
          @param transformedVerticesBin Bin that holds all transformed triangle data of the sub mesh
          @return A surfel candidate ready to participate in validity tests
          */
-        SurfelCandidate generateSurfelCandidate(const SubMesh& subMesh, LogarithmicBin<TransformedTriangleData>& transformedVerticesBin);
-        
+        SurfelCandidate generateSurfelCandidate(const SubMesh &subMesh, LogarithmicBin<TransformedTriangleData> &transformedVerticesBin);
+
         /**
          Computes all necessary data for a surfel candidate (normal, albedo, uv and an area) to transform it into a full-fledged surfel
 
@@ -137,16 +137,16 @@ namespace EARenderer {
          @return Surfel ready to be added to a scene and participate in rendering
          */
         template<class TextureFormat, TextureFormat Format>
-        Surfel generateSurfel(SurfelCandidate& surfelCandidate,
-                              LogarithmicBin<TransformedTriangleData>& transformedVerticesBin,
-                              const GLTexture2DSampler<TextureFormat, Format>& albedoMapSampler);
-        
+        Surfel generateSurfel(SurfelCandidate &surfelCandidate,
+                LogarithmicBin<TransformedTriangleData> &transformedVerticesBin,
+                const GLTexture2DSampler<TextureFormat, Format> &albedoMapSampler);
+
         /**
          Generates surfels for a single mesh instance
 
          @param instance An instance on which surfels will be generated on
          */
-        void generateSurflesOnMeshInstance(const MeshInstance& instance);
+        void generateSurflesOnMeshInstance(const MeshInstance &instance);
 
         /**
          Determines resemblance of two surfels to decide whether thay belong to the same cluster
@@ -156,19 +156,19 @@ namespace EARenderer {
          @param workingVolumeMaximumExtent2 squared largest length of scene's light baking volume
          @return returns a true if surfels are alike and belong to the same surfel cluster
          */
-        bool surfelsAlike(const Surfel& first, const Surfel& second, float workingVolumeMaximumExtent2);
+        bool surfelsAlike(const Surfel &first, const Surfel &second, float workingVolumeMaximumExtent2);
 
         /**
          Gathers similar surfels into clusters
          */
         void formClusters();
-        
+
     public:
         SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene);
 
         std::shared_ptr<SurfelData> generateStaticGeometrySurfels();
     };
-    
+
 }
 
 #endif /* MeshSampler_hpp */

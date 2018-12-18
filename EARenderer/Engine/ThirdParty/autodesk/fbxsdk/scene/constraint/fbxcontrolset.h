@@ -26,21 +26,20 @@ class FbxControlSetPlug;
   * \brief This class represents a link between a given character's FK node and the associated node in the character hierarchy.
   *
   */
-class FBXSDK_DLL FbxControlSetLink
-{
+class FBXSDK_DLL FbxControlSetLink {
 public:
-	//! Default constructor.
+    //! Default constructor.
     FbxControlSetLink();
 
-	/** Copy constructor.
-	* \param pControlSetLink Given object.
-	*/
-    FbxControlSetLink(const FbxControlSetLink& pControlSetLink);
+    /** Copy constructor.
+    * \param pControlSetLink Given object.
+    */
+    FbxControlSetLink(const FbxControlSetLink &pControlSetLink);
 
-	/** Assignment operator.
-	  * \param pControlSetLink Another FbxControlSetLink object assigned to this one.
-	  */
-    FbxControlSetLink& operator=(const FbxControlSetLink& pControlSetLink);
+    /** Assignment operator.
+      * \param pControlSetLink Another FbxControlSetLink object assigned to this one.
+      */
+    FbxControlSetLink &operator=(const FbxControlSetLink &pControlSetLink);
 
     /** Reset to default values.
       *
@@ -49,7 +48,7 @@ public:
     void Reset();
 
     //! The character's node in a hierarchy linked to this control set link.
-    FbxNode* mNode;
+    FbxNode *mNode;
 
     //! A template name is a naming convention that is used to automatically map
     //! the nodes of other skeletons that use the same naming convention for automatic characterization.
@@ -59,86 +58,83 @@ public:
 /** 
   * An effector wraps a character node (FbxNode) used to animate its control rig (FbxControlSet) via inverse kinematics.
   */
-class FBXSDK_DLL FbxEffector
-{
+class FBXSDK_DLL FbxEffector {
 public:
-	enum ESetId
-	{
-		eDefaultSet,
-		eAux1Set,
-		eAux2Set,
-		eAux3Set,
-		eAux4Set,
-		eAux5Set,
-		eAux6Set,
-		eAux7Set,
-		eAux8Set,
-		eAux9Set,
-		eAux10Set,
-		eAux11Set,
-		eAux12Set,
-		eAux13Set,
-		eAux14Set,
-		eSetIdCount
-	};
+    enum ESetId {
+        eDefaultSet,
+        eAux1Set,
+        eAux2Set,
+        eAux3Set,
+        eAux4Set,
+        eAux5Set,
+        eAux6Set,
+        eAux7Set,
+        eAux8Set,
+        eAux9Set,
+        eAux10Set,
+        eAux11Set,
+        eAux12Set,
+        eAux13Set,
+        eAux14Set,
+        eSetIdCount
+    };
 
-	enum ENodeId
-	{
-		eHips,
-		eLeftAnkle,
-		eRightAnkle,
-		eLeftWrist,
-		eRightWrist,
-		eLeftKnee,
-		eRightKnee,
-		eLeftElbow,
-		eRightElbow,
-		eChestOrigin,
-		eChestEnd,
-		eLeftFoot,
-		eRightFoot,
-		eLeftShoulder,
-		eRightShoulder,
-		eHead,
-		eLeftHip,
-		eRightHip,
-		eLeftHand,
-		eRightHand,
-		eLeftHandThumb,
-		eLeftHandIndex,
-		eLeftHandMiddle,
-		eLeftHandRing,
-		eLeftHandPinky,
-		eLeftHandExtraFinger,
-		eRightHandThumb,
-		eRightHandIndex,
-		eRightHandMiddle,
-		eRightHandRing,
-		eRightHandPinky,
-		eRightHandExtraFinger,
-		eLeftFootThumb,
-		eLeftFootIndex,
-		eLeftFootMiddle,
-		eLeftFootRing,
-		eLeftFootPinky,
-		eLeftFootExtraFinger,
-		eRightFootThumb,
-		eRightFootIndex,
-		eRightFootMiddle,
-		eRightFootRing,
-		eRightFootPinky,
-		eRightFootExtraFinger,
-		eNodeIdCount,
-		eNodeIdInvalid=-1
-	};
+    enum ENodeId {
+        eHips,
+        eLeftAnkle,
+        eRightAnkle,
+        eLeftWrist,
+        eRightWrist,
+        eLeftKnee,
+        eRightKnee,
+        eLeftElbow,
+        eRightElbow,
+        eChestOrigin,
+        eChestEnd,
+        eLeftFoot,
+        eRightFoot,
+        eLeftShoulder,
+        eRightShoulder,
+        eHead,
+        eLeftHip,
+        eRightHip,
+        eLeftHand,
+        eRightHand,
+        eLeftHandThumb,
+        eLeftHandIndex,
+        eLeftHandMiddle,
+        eLeftHandRing,
+        eLeftHandPinky,
+        eLeftHandExtraFinger,
+        eRightHandThumb,
+        eRightHandIndex,
+        eRightHandMiddle,
+        eRightHandRing,
+        eRightHandPinky,
+        eRightHandExtraFinger,
+        eLeftFootThumb,
+        eLeftFootIndex,
+        eLeftFootMiddle,
+        eLeftFootRing,
+        eLeftFootPinky,
+        eLeftFootExtraFinger,
+        eRightFootThumb,
+        eRightFootIndex,
+        eRightFootMiddle,
+        eRightFootRing,
+        eRightFootPinky,
+        eRightFootExtraFinger,
+        eNodeIdCount,
+        eNodeIdInvalid = -1
+    };
 
-	//! Default constructor with uninitialized character node.
+    //! Default constructor with uninitialized character node.
     FbxEffector();
 
-	/** Assignment operator.
-	  * \param pEffector Another FbxEffector assigned to this one.
-	  */
-    FbxEffector& operator=(const FbxEffector& pEffector);
+    /** Assignment operator.
+      * \param pEffector Another FbxEffector assigned to this one.
+      */
+    FbxEffector &operator=(const FbxEffector &pEffector);
 
     /** Reset to default values.
       *     - mNode is set to NULL.
@@ -147,7 +143,7 @@ public:
     void Reset();
 
     //! The character's node in a hierarchy linked to this effector.
-    FbxNode* mNode;
+    FbxNode *mNode;
 
     //! \c true if the effector is visible, \c false if hidden
     bool mShow;
@@ -157,7 +153,7 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     //These members are for backward compatibility and should not be used.
-	//These properties are now published through class FbxControlSetPlug.
+    //These properties are now published through class FbxControlSetPlug.
     bool mTActive;
     bool mRActive;
     bool mCandidateTActive;
@@ -182,8 +178,7 @@ public:
   *
   * \see FbxEffector, FbxControlSetLink
   */
-class FBXSDK_DLL FbxControlSet
-{
+class FBXSDK_DLL FbxControlSet {
 public:
     /** Reset to default values.
       * Reset all effector and control set links.
@@ -195,8 +190,7 @@ public:
       * - \e eFkIk       Both an FK rig and IK rig.
       * - \e eIkOnly     Only an IK rig.
       */
-    enum EType
-    {
+    enum EType {
         eNone,
         eFkIk,
         eIkOnly
@@ -207,9 +201,9 @@ public:
 	*/
     void SetType(EType pType);
 
-   	/** Get type.
-	* \return The gotten type.
-	*/
+    /** Get type.
+ * \return The gotten type.
+ */
     EType GetType() const;
 
     /** Set use axis flag as given.
@@ -222,24 +216,24 @@ public:
 	*/
     bool GetUseAxis() const;
 
-   	/** Set lock transform flag as given.
-	* \param pLockTransform The given lock transform flag.
-	*/
+    /** Set lock transform flag as given.
+ * \param pLockTransform The given lock transform flag.
+ */
     void SetLockTransform(bool pLockTransform);
 
     /** Get lock transform flag.
 	* \return The gotten lock transform flag.
 	*/
-    bool GetLockTransform()const;
+    bool GetLockTransform() const;
 
-   /** Set lock 3D pick flag as given.
-	* \param pLock3DPick The given lock 3D pick flag.
-	*/
+    /** Set lock 3D pick flag as given.
+     * \param pLock3DPick The given lock 3D pick flag.
+     */
     void SetLock3DPick(bool pLock3DPick);
 
-   	/** Get lock 3D pick flag.
-	* \return The gotten lock 3D pick flag.
-	*/
+    /** Get lock 3D pick flag.
+ * \return The gotten lock 3D pick flag.
+ */
     bool GetLock3DPick() const;
 
     /** Set a control set link for a character node ID.
@@ -251,7 +245,7 @@ public:
       *                             eCharacterProps0, eCharacterProps1, eCharacterProps2, eCharacterProps3 or eCharacterProps4.
       *                             None of these nodes are part of a control set.
       */
-    bool SetControlSetLink(FbxCharacter::ENodeId pCharacterNodeId, const FbxControlSetLink& pControlSetLink);
+    bool SetControlSetLink(FbxCharacter::ENodeId pCharacterNodeId, const FbxControlSetLink &pControlSetLink);
 
     /** Get the control set link associated with a character node ID.
       * \param pCharacterNodeId     Requested character node ID.
@@ -262,7 +256,7 @@ public:
       *                             eCharacterProps0, eCharacterProps1, eCharacterProps2, eCharacterProps3 or eCharacterProps4.
       *                             None of these nodes are part of a control set.
       */
-    bool GetControlSetLink(FbxCharacter::ENodeId pCharacterNodeId, FbxControlSetLink* pControlSetLink = NULL) const;
+    bool GetControlSetLink(FbxCharacter::ENodeId pCharacterNodeId, FbxControlSetLink *pControlSetLink = NULL) const;
 
     /** Set an effector node for an effector node ID.
       * \param pEffectorNodeId     Effector node ID.
@@ -276,7 +270,7 @@ public:
       * \param pEffector           Optional pointer that returns the effector if the function succeeds.
       * \return                    \c true if successful, \c false otherwise.
       */
-    bool GetEffector(FbxEffector::ENodeId pEffectorNodeId, FbxEffector* pEffector = NULL);
+    bool GetEffector(FbxEffector::ENodeId pEffectorNodeId, FbxEffector *pEffector = NULL);
 
     /** Set an auxiliary effector node for an effector node ID.
       * \param pEffectorNodeId     Effector node ID.
@@ -284,7 +278,7 @@ public:
       * \param pEffectorSetId      Effector set ID. Set to FbxEffector::eAux1Set by default.
       * \return                    \c true if successful, \c false otherwise.
       */
-    bool SetEffectorAux(FbxEffector::ENodeId pEffectorNodeId, FbxNode* pNode, FbxEffector::ESetId pEffectorSetId=FbxEffector::eAux1Set);
+    bool SetEffectorAux(FbxEffector::ENodeId pEffectorNodeId, FbxNode *pNode, FbxEffector::ESetId pEffectorSetId = FbxEffector::eAux1Set);
 
     /** Get the auxiliary effector associated with an effector node ID.
       * \param pEffectorNodeId     ID of requested auxiliary effector node.
@@ -292,78 +286,88 @@ public:
       * \param pEffectorSetId      Effector set ID. Set to FbxEffector::eAux1Set by default.
       * \return                    \c true if successful, \c false otherwise.
       */
-    bool GetEffectorAux(FbxEffector::ENodeId pEffectorNodeId, FbxNode** pNode=NULL, FbxEffector::ESetId pEffectorSetId=FbxEffector::eAux1Set) const;
+    bool GetEffectorAux(FbxEffector::ENodeId pEffectorNodeId, FbxNode **pNode = NULL, FbxEffector::ESetId pEffectorSetId = FbxEffector::eAux1Set) const;
 
     /** Get the name associated with an effector node ID.
       * \param pEffectorNodeId     Effector node ID.
       * \return                    Name associated with the effector node ID.
       */
-    static char* GetEffectorNodeName(FbxEffector::ENodeId pEffectorNodeId);
+    static char *GetEffectorNodeName(FbxEffector::ENodeId pEffectorNodeId);
 
     /** Get ID associated with an effector node name.
       * \param pEffectorNodeName     Effector node name.
       * \return                      Effector node ID associated with the given effector node name, or FbxEffector::eNodeIdInvalid (-1) if
       *                              no effector node with pEffectorNodeName exists.
       */
-    static FbxEffector::ENodeId GetEffectorNodeId(char* pEffectorNodeName);
+    static FbxEffector::ENodeId GetEffectorNodeId(char *pEffectorNodeName);
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+
     void FromPlug(FbxControlSetPlug *pPlug);
+
     void ToPlug(FbxControlSetPlug *pPlug);
 
 private:
     FbxControlSet();
+
     ~FbxControlSet();
 
-    FbxCharacter*		mCharacter;
-    EType				mType;
-    bool				mUseAxis;
-    bool				mLockTransform;
-    bool				mLock3DPick;
-    FbxControlSetLink	mControlSetLink[FbxCharacter::eNodeIdCount]; // Except floor node IDs!
-    FbxEffector			mEffector[FbxEffector::eNodeIdCount];
-    FbxNode*			mEffectorAux[FbxEffector::eNodeIdCount][FbxEffector::eSetIdCount-1];
+    FbxCharacter *mCharacter;
+    EType mType;
+    bool mUseAxis;
+    bool mLockTransform;
+    bool mLock3DPick;
+    FbxControlSetLink mControlSetLink[FbxCharacter::eNodeIdCount]; // Except floor node IDs!
+    FbxEffector mEffector[FbxEffector::eNodeIdCount];
+    FbxNode *mEffectorAux[FbxEffector::eNodeIdCount][FbxEffector::eSetIdCount - 1];
 
     FBXSDK_FRIEND_NEW();
+
     friend class FbxCharacter;
+
     friend class FbxNode;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
 /** Plug class for control set.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxControlSetPlug : public FbxObject
-{
-	FBXSDK_OBJECT_DECLARE(FbxControlSetPlug, FbxObject);
+class FBXSDK_DLL FbxControlSetPlug : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxControlSetPlug, FbxObject);
 
 public:
-	//! EType property of control set.
-	FbxPropertyT<FbxControlSet::EType> ControlSetType;
+    //! EType property of control set.
+    FbxPropertyT<FbxControlSet::EType> ControlSetType;
 
-	//! Use axis flag.
-	FbxPropertyT<FbxBool> UseAxis;
+    //! Use axis flag.
+    FbxPropertyT<FbxBool> UseAxis;
 
-	//! Reference character.
-	FbxPropertyT<FbxReference> Character;
+    //! Reference character.
+    FbxPropertyT<FbxReference> Character;
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void ConstructProperties(bool pForceSet);
-	virtual FbxStringList GetTypeFlags() const;
+    virtual void Construct(const FbxObject *pFrom);
+
+    virtual void ConstructProperties(bool pForceSet);
+
+    virtual FbxStringList GetTypeFlags() const;
 
 private:
-	FbxArray<FbxProperty>    mFKBuf;
-	FbxArray<FbxProperty>    mIKBuf;
+    FbxArray<FbxProperty> mFKBuf;
+    FbxArray<FbxProperty> mIKBuf;
 
-	friend class FbxScene;
-	friend class FbxControlSet;
+    friend class FbxScene;
+
+    friend class FbxControlSet;
 };
 
-inline EFbxType FbxTypeOf(const FbxControlSet::EType&){ return eFbxEnum; }
+inline EFbxType FbxTypeOf(const FbxControlSet::EType &) {
+    return eFbxEnum;
+}
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

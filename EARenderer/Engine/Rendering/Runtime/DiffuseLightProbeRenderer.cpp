@@ -14,21 +14,20 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     DiffuseLightProbeRenderer::DiffuseLightProbeRenderer(const Scene *scene,
-                                                         std::shared_ptr<const DiffuseLightProbeData> probeData,
-                                                         std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics)
-    :
-    mScene(scene),
-    mProbeData(probeData),
-    mSphericalHarmonics(sphericalHarmonics)
-    {
+            std::shared_ptr<const DiffuseLightProbeData> probeData,
+            std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics)
+            :
+            mScene(scene),
+            mProbeData(probeData),
+            mSphericalHarmonics(sphericalHarmonics) {
         mDiffuseProbesVAO.initialize(probeData->probes(), {
-            GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
+                GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
         });
     }
 
 #pragma mark - Setters
 
-    void DiffuseLightProbeRenderer::setRenderingSettings(const RenderingSettings& settings) {
+    void DiffuseLightProbeRenderer::setRenderingSettings(const RenderingSettings &settings) {
         mRenderingSettings = settings;
     }
 

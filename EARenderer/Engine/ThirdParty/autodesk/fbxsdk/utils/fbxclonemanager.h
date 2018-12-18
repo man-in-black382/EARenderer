@@ -47,8 +47,7 @@
   * \see FbxCloneManager::CloneSet
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxCloneManager
-{
+class FBXSDK_DLL FbxCloneManager {
 public:
 
     //! Maximum depth to clone dependents.
@@ -71,8 +70,7 @@ public:
       * \see FbxCloneManager
       * \see FbxCloneManager::CloneSet
       */
-    struct FBXSDK_DLL CloneSetElement
-    {
+    struct FBXSDK_DLL CloneSetElement {
     public:
         /** Constructor.
           * \param pSrcPolicy Specify how to handle source connections. Valid values are 0, sConnectToOriginal,
@@ -81,9 +79,9 @@ public:
           *                           the clone set. Valid values are 0 or sConnectToOriginal.
           * \param pCloneType Specify the type of cloning. FbxObject::Clone uses the same parameter.
           */
-        CloneSetElement( int pSrcPolicy = 0,
-                         int pExternalDstPolicy = 0,
-                         FbxObject::ECloneType pCloneType = FbxObject::eReferenceClone );
+        CloneSetElement(int pSrcPolicy = 0,
+                int pExternalDstPolicy = 0,
+                FbxObject::ECloneType pCloneType = FbxObject::eReferenceClone);
 
         //! the type of cloning to perform
         FbxObject::ECloneType mType;
@@ -102,7 +100,7 @@ public:
         /** This is a pointer to the newly created clone.
           * It is set after the call to FbxCloneManager::Clone()
           */
-        FbxObject* mObjectClone;
+        FbxObject *mObjectClone;
     };
 
     /** The CloneSet is a collection of pointers to objects that will be cloned in Clone()
@@ -110,7 +108,7 @@ public:
       * the corresponding object will be cloned, and how it will inherit connections
       * on the original object.
       */
-    typedef FbxMap<FbxObject*,CloneSetElement> CloneSet;
+    typedef FbxMap<FbxObject *, CloneSetElement> CloneSet;
 
     /** Constructor
       */
@@ -187,7 +185,7 @@ public:
       *     lClone->ConnectDstObject(lNewScene);
       * \endcode
       */
-    static FbxObject* Clone(const FbxObject* pObject, FbxObject* pContainer = NULL);
+    static FbxObject *Clone(const FbxObject *pObject, FbxObject *pContainer = NULL);
 
     /** Clone all objects in the set using the given policies for duplication
       * of connections. Each CloneSetElement in the set will have its mObjectClone
@@ -216,7 +214,7 @@ public:
       * \remark If \e pContainer is left \c NULL the cloned objects only exists in the FbxSdkManager and need to be 
       *         manually connected to the scene in order to be saved to disk.
       */
-    virtual bool Clone( CloneSet& pSet, FbxObject* pContainer = NULL ) const;
+    virtual bool Clone(CloneSet &pSet, FbxObject *pContainer = NULL) const;
 
     /** Add all dependents of the given object to the CloneSet.
       * Dependents of items already in the set are ignored to prevent
@@ -244,29 +242,33 @@ public:
       *
       * \endcode
       */
-    virtual void AddDependents( CloneSet& pSet,
-                        const FbxObject* pObject,
-                        const CloneSetElement& pCloneOptions = CloneSetElement(),
-                        FbxCriteria pTypes = FbxCriteria::ObjectType(FbxObject::ClassId),
-                        int pDepth = sMaximumCloneDepth ) const;
+    virtual void AddDependents(CloneSet &pSet,
+            const FbxObject *pObject,
+            const CloneSetElement &pCloneOptions = CloneSetElement(),
+            FbxCriteria pTypes = FbxCriteria::ObjectType(FbxObject::ClassId),
+            int pDepth = sMaximumCloneDepth) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    static FbxObject* Clone(const FbxObject* pObject, CloneSet* pSet, FbxObject* pContainer = NULL);
+
+    static FbxObject *Clone(const FbxObject *pObject, CloneSet *pSet, FbxObject *pContainer = NULL);
 
 private:
     friend class FbxScene;
 
-	bool ReAssignLayerElements( FbxCloneManager::CloneSet::RecordType* pIterator, const FbxCloneManager::CloneSet& pSet) const;
-	bool CloneConnections( CloneSet::RecordType* pIterator, const CloneSet& pSet) const;
-    bool CheckIfCloneOnSameScene(const FbxObject* pObject, FbxObject* pContainer) const;
+    bool ReAssignLayerElements(FbxCloneManager::CloneSet::RecordType *pIterator, const FbxCloneManager::CloneSet &pSet) const;
 
-    virtual void LookForIndirectDependent(const FbxObject* pObject, CloneSet& pSet, FbxArray<FbxObject*>& lIndirectDepend);
-    virtual bool NeedToBeExcluded(FbxObject* lObj) const;
+    bool CloneConnections(CloneSet::RecordType *pIterator, const CloneSet &pSet) const;
 
-    bool      mCloneOnSameScene;
+    bool CheckIfCloneOnSameScene(const FbxObject *pObject, FbxObject *pContainer) const;
+
+    virtual void LookForIndirectDependent(const FbxObject *pObject, CloneSet &pSet, FbxArray<FbxObject *> &lIndirectDepend);
+
+    virtual bool NeedToBeExcluded(FbxObject *lObj) const;
+
+    bool mCloneOnSameScene;
 
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };

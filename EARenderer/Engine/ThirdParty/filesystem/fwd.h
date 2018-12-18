@@ -18,7 +18,8 @@
 
 NAMESPACE_BEGIN(filesystem)
 
-class path;
-class resolver;
+    class path;
+
+    class resolver;
 
 NAMESPACE_END(filesystem)

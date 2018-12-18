@@ -29,20 +29,19 @@
   * \nosubgrouping
   * \see FbxCamera and FbxCameraStereo.
   */
-class FBXSDK_DLL FbxCameraSwitcher : public FbxNodeAttribute
-{
-    FBXSDK_OBJECT_DECLARE(FbxCameraSwitcher,FbxNodeAttribute);
+class FBXSDK_DLL FbxCameraSwitcher : public FbxNodeAttribute {
+FBXSDK_OBJECT_DECLARE(FbxCameraSwitcher, FbxNodeAttribute);
 
-    public:
+public:
     /**
       * \name Properties
       */
     //@{
-        /** This property handles the index of camera.
-          *
-          * Default value is 1.
-          */
-        FbxPropertyT<FbxInt>        CameraIndex;
+    /** This property handles the index of camera.
+      *
+      * Default value is 1.
+      */
+    FbxPropertyT<FbxInt> CameraIndex;
     //@}
 
     //! Return the type of node attribute which is EType::eCameraSwitcher.
@@ -59,19 +58,19 @@ class FBXSDK_DLL FbxCameraSwitcher : public FbxNodeAttribute
       */
     //@{
 
-        /** Get default camera index.
-          * \return Camera index. The return value is an integer between 1 and the number
-          *             of cameras in the scene, or 0 if there are no default camera set in the camera switcher.
-          */
-        int GetDefaultCameraIndex() const;
+    /** Get default camera index.
+      * \return Camera index. The return value is an integer between 1 and the number
+      *             of cameras in the scene, or 0 if there are no default camera set in the camera switcher.
+      */
+    int GetDefaultCameraIndex() const;
 
-        /** Set default camera index.
-          * \param pIndex The index of the camera to set as default. This parameter has an integer
-          *             scale from 1 to the number of cameras in the scene. Its default value is 1 if
-          *             there is at least one camera in the camera switcher, 0 if there are none.
-          *             No validation checks are made.
-          */
-        void SetDefaultCameraIndex(int pIndex);
+    /** Set default camera index.
+      * \param pIndex The index of the camera to set as default. This parameter has an integer
+      *             scale from 1 to the number of cameras in the scene. Its default value is 1 if
+      *             there is at least one camera in the camera switcher, 0 if there are none.
+      *             No validation checks are made.
+      */
+    void SetDefaultCameraIndex(int pIndex);
 
     //@}
 
@@ -79,20 +78,25 @@ class FBXSDK_DLL FbxCameraSwitcher : public FbxNodeAttribute
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
     virtual void Destruct(bool pRecursive);
+
     virtual void ConstructProperties(bool pForceSet);
 
 public:
-    void AddCameraName(char* pCameraName);
-    char* GetCameraName(FbxUInt pIndex) const;
+    void AddCameraName(char *pCameraName);
+
+    char *GetCameraName(FbxUInt pIndex) const;
+
     FbxUInt GetCameraNameCount() const;
-	void ClearCameraNames();
+
+    void ClearCameraNames();
 
 protected:
-    FbxArray<FbxString*> mCameraNameList;
+    FbxArray<FbxString *> mCameraNameList;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

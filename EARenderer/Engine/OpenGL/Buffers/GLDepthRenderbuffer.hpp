@@ -12,12 +12,12 @@
 #include "GLRenderbuffer.hpp"
 
 namespace EARenderer {
-    
-    class GLDepthRenderbuffer: public GLRenderbuffer {
+
+    class GLDepthRenderbuffer : public GLRenderbuffer {
     public:
-        GLDepthRenderbuffer(const Size2D& size);
+        GLDepthRenderbuffer(const Size2D &size);
     };
-    
+
 }
 
 #endif /* GLDepthRenderbuffer_hpp */

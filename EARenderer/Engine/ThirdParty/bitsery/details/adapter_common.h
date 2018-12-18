@@ -39,7 +39,7 @@ namespace bitsery {
     namespace details {
 
         template<typename T>
-        struct BitsSize:public std::integral_constant<size_t, sizeof(T) * 8> {
+        struct BitsSize : public std::integral_constant<size_t, sizeof(T) * 8> {
 
         };
 
@@ -90,9 +90,9 @@ namespace bitsery {
 
         constexpr EndiannessType getSystemEndianness() {
             static_assert(EndiannessTestData::_sample1stByte == 0x04 || EndiannessTestData::_sample1stByte == 0x01,
-                          "system must be either little or big endian");
+                    "system must be either little or big endian");
             return EndiannessTestData::_sample1stByte == 0x04 ? EndiannessType::LittleEndian
-                                                              : EndiannessType::BigEndian;
+                    : EndiannessType::BigEndian;
         }
 
 
@@ -110,12 +110,13 @@ namespace bitsery {
          * class used by session reader, to access underlying iterators of buffer
          */
         struct SessionAccess {
-            template <typename TReader, typename Iterator>
-            static Iterator& posIteratorRef(TReader& r) {
+            template<typename TReader, typename Iterator>
+            static Iterator &posIteratorRef(TReader &r) {
                 return r.posIt;
             }
-            template <typename TReader, typename Iterator>
-            static Iterator& endIteratorRef(TReader& r) {
+
+            template<typename TReader, typename Iterator>
+            static Iterator &endIteratorRef(TReader &r) {
                 return r.endIt;
             }
         };

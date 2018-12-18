@@ -59,12 +59,12 @@
 
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxStatistics
-{
+class FBXSDK_DLL FbxStatistics {
 public:
     /// \name Constructor and Destructor.
     //@{
     FbxStatistics();
+
     virtual ~FbxStatistics();
     //@}
 
@@ -80,25 +80,27 @@ public:
     * \param pItemCount		Output the item's count. 
     * \return				\c True if successful, \c False otherwise.
     */
-    bool GetItemPair(int pNum, FbxString& pItemName, int& pItemCount) const;
+    bool GetItemPair(int pNum, FbxString &pItemName, int &pItemCount) const;
 
-  	/** Assignment operator.
-	  * \param pStatistics FbxStatistics assigned to this one.
-	  */
-    FbxStatistics& operator=(const FbxStatistics& pStatistics);
+    /** Assignment operator.
+    * \param pStatistics FbxStatistics assigned to this one.
+    */
+    FbxStatistics &operator=(const FbxStatistics &pStatistics);
 
 protected:
-  	/** virtual function to define the process of the incoming statistics data.
-	  * \param pItemName            The item's name
-      * \param pItemCount           The item's count.
-      * \return                     False.
-	  */
-    virtual bool AddItem(FbxString& /*pItemName*/, int /*pItemCount*/) { return false; };
+    /** virtual function to define the process of the incoming statistics data.
+    * \param pItemName            The item's name
+    * \param pItemCount           The item's count.
+    * \return                     False.
+    */
+    virtual bool AddItem(FbxString & /*pItemName*/, int /*pItemCount*/) {
+        return false;
+    };
 
     //! An array to store item's name.
-    FbxArray<FbxString*> mItemName;
+    FbxArray<FbxString *> mItemName;
 
-	//! An array to store item's count.
+    //! An array to store item's count.
     FbxArray<int> mItemCount;
 };
 

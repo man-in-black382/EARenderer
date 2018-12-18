@@ -35,7 +35,8 @@ namespace bitsery {
         class StdSet {
         public:
 
-            constexpr explicit StdSet(size_t maxSize):_maxSize{maxSize} {}
+            constexpr explicit StdSet(size_t maxSize) : _maxSize{maxSize} {
+            }
 
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &, Writer &writer, const T &obj, Fnc &&fnc) const {
@@ -64,20 +65,24 @@ namespace bitsery {
                     hint = obj.emplace_hint(hint, std::move(key));
                 }
             }
+
         private:
 
-            template <typename T>
-            void reserve(std::unordered_set<T>& obj, size_t size) const {
+            template<typename T>
+            void reserve(std::unordered_set<T> &obj, size_t size) const {
                 obj.reserve(size);
             }
-            template <typename T>
-            void reserve(std::unordered_multiset<T>& obj, size_t size) const {
+
+            template<typename T>
+            void reserve(std::unordered_multiset<T> &obj, size_t size) const {
                 obj.reserve(size);
             }
-            template <typename T>
-            void reserve(T& , size_t ) const {
+
+            template<typename T>
+            void reserve(T &, size_t) const {
                 //for ordered container do nothing
             }
+
             size_t _maxSize;
         };
     }

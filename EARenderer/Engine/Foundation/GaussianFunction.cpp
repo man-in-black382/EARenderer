@@ -35,7 +35,7 @@ namespace EARenderer {
         sum *= 2.0;
         sum -= kernel[0];
 
-        for (float& weight : kernel) {
+        for (float &weight : kernel) {
             weight /= sum;
         }
 

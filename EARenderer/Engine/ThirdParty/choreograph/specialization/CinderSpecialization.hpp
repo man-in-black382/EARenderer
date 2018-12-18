@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,15 +30,13 @@
 #include "choreograph/Sequence.hpp"
 #include "cinder/Quaternion.h"
 
-namespace  choreograph
-{
+namespace choreograph {
 /// Specialization of lerpT for quaternions to use slerping.
 /// To prevent disappearing geometry, make sure to normalize your quat targets.
 /// The final value of your tween is what you put in, so make sure it's normalized.
-template<>
-inline ci::quat lerpT( const ci::quat &start, const ci::quat &end, float time )
-{
-  return glm::normalize( glm::slerp( start, end, time ) );
-}
+    template<>
+    inline ci::quat lerpT(const ci::quat &start, const ci::quat &end, float time) {
+        return glm::normalize(glm::slerp(start, end, time));
+    }
 
 } // namespace choreograph

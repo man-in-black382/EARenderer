@@ -33,22 +33,24 @@ namespace bitsery {
         /*
          * writer/reader implementations that disable session support
          */
-        template <typename TWriter>
+        template<typename TWriter>
         struct DisabledSessionsWriter {
-            void begin(TWriter& ) {
+            void begin(TWriter &) {
                 static_assert(std::is_void<TWriter>::value, "Sessions is disabled, enable it via configuration");
             }
-            void end(TWriter& ) {
+
+            void end(TWriter &) {
                 static_assert(std::is_void<TWriter>::value, "Sessions is disabled, enable it via configuration");
             }
-            void flushSessions(TWriter& ) {
+
+            void flushSessions(TWriter &) {
             }
         };
 
-        template <typename TReader>
+        template<typename TReader>
         struct DisabledSessionsReader {
-            template <typename TBufferContext>
-            DisabledSessionsReader(TReader& , TBufferContext& ) {
+            template<typename TBufferContext>
+            DisabledSessionsReader(TReader &, TBufferContext &) {
             }
 
             void begin() {
@@ -68,24 +70,27 @@ namespace bitsery {
          * writer/reader real implementations
          * sessions reading requires to have random access iterators, so it cannot be used with streams
          */
-        template <typename TWriter>
+        template<typename TWriter>
         class SessionsWriter {
         public:
 
             SessionsWriter() = default;
-            SessionsWriter(const SessionsWriter&) = delete;
-            SessionsWriter& operator = (const SessionsWriter& ) = delete;
 
-            SessionsWriter(SessionsWriter&&) = default;
-            SessionsWriter& operator = (SessionsWriter&& ) = default;
+            SessionsWriter(const SessionsWriter &) = delete;
 
-            void begin(TWriter& ) {
+            SessionsWriter &operator=(const SessionsWriter &) = delete;
+
+            SessionsWriter(SessionsWriter &&) = default;
+
+            SessionsWriter &operator=(SessionsWriter &&) = default;
+
+            void begin(TWriter &) {
                 //write position
                 _sessionIndex.push(_sessions.size());
                 _sessions.emplace_back(0);
             }
 
-            void end(TWriter& writer) {
+            void end(TWriter &writer) {
                 assert(!_sessionIndex.empty());
                 //change position to session end
                 auto sessionIt = std::next(std::begin(_sessions), _sessionIndex.top());
@@ -95,11 +100,11 @@ namespace bitsery {
                 *sessionIt = sessionSize;
             }
 
-            void flushSessions(TWriter& writer) {
+            void flushSessions(TWriter &writer) {
                 if (_sessions.size()) {
                     assert(_sessionIndex.empty());
                     auto dataSize = writer.writtenBytesCount();
-                    for(auto& s:_sessions) {
+                    for (auto &s:_sessions) {
                         details::writeSize(writer, s);
                     }
                     _sessions.clear();
@@ -110,29 +115,31 @@ namespace bitsery {
                     writer.template writeBytes<4>(static_cast<uint32_t>(sessionsOffset));
                 }
             }
+
         private:
             std::vector<size_t> _sessions{};
             std::stack<size_t> _sessionIndex{};
         };
 
-        template <typename TReader>
+        template<typename TReader>
         struct SessionsReader {
             using TIterator = typename TReader::TIterator;
 
-            template <typename InputAdapter>
-            SessionsReader(TReader& r, InputAdapter& adapter)
+            template<typename InputAdapter>
+            SessionsReader(TReader &r, InputAdapter &adapter)
                     :_reader{r},
                      _beginIt{details::SessionAccess::posIteratorRef<InputAdapter, TIterator>(adapter)},
                      _posItRef{details::SessionAccess::posIteratorRef<InputAdapter, TIterator>(adapter)},
-                     _endItRef{details::SessionAccess::endIteratorRef<InputAdapter, TIterator>(adapter)}
-            {
+                     _endItRef{details::SessionAccess::endIteratorRef<InputAdapter, TIterator>(adapter)} {
             }
 
-            SessionsReader(const SessionsReader&) = delete;
-            SessionsReader& operator = (const SessionsReader& ) = delete;
+            SessionsReader(const SessionsReader &) = delete;
 
-            SessionsReader(SessionsReader&&) = default;
-            SessionsReader& operator = (SessionsReader&& ) = default;
+            SessionsReader &operator=(const SessionsReader &) = delete;
+
+            SessionsReader(SessionsReader &&) = default;
+
+            SessionsReader &operator=(SessionsReader &&) = default;
 
             void begin() {
                 if (_sessions.empty()) {
@@ -146,8 +153,7 @@ namespace bitsery {
                     if (std::distance(_posItRef, _endItRef) > 0) {
                         //set end position for new session
                         auto newEnd = std::next(_beginIt, *_nextSessionIt);
-                        if (std::distance(newEnd, _endItRef) < 0)
-                        {
+                        if (std::distance(newEnd, _endItRef) < 0) {
                             //new session cannot end further than current end
                             _reader.setError(ReaderError::InvalidData);
                             return;
@@ -196,10 +202,10 @@ namespace bitsery {
             }
 
         private:
-            TReader& _reader;
+            TReader &_reader;
             TIterator _beginIt;
-            TIterator& _posItRef;
-            TIterator& _endItRef;
+            TIterator &_posItRef;
+            TIterator &_endItRef;
             std::vector<size_t> _sessions{};
             std::vector<size_t>::iterator _nextSessionIt{};
             std::stack<TIterator> _sessionsStack{};

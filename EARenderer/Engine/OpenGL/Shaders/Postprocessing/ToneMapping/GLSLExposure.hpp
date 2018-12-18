@@ -17,13 +17,13 @@
 
 namespace EARenderer {
 
-    class GLSLExposure: public GLProgram {
+    class GLSLExposure : public GLProgram {
     public:
         using GLProgram::GLProgram;
 
         GLSLExposure();
 
-        void setLuminanceHistogram(const GLFloatTexture2D<GLTexture::Float::R32F>& histogram);
+        void setLuminanceHistogram(const GLFloatTexture2D<GLTexture::Float::R32F> &histogram);
     };
 
 }

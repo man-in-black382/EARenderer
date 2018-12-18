@@ -10,17 +10,16 @@
 
 @interface SceneObjectsTabView ()
 
-@property (assign, nonatomic) EARenderer::Scene *scene;
+@property(assign, nonatomic) EARenderer::Scene *scene;
 
 @end
 
 @implementation SceneObjectsTabView
 
-- (void)buildTabsWithScene:(EARenderer::Scene *)scene
-{
+- (void)buildTabsWithScene:(EARenderer::Scene *)scene {
     self.scene = scene;
-    
-    #warning TODO: Fix later
+
+#warning TODO: Fix later
 //    [self.meshesTab buildOutlineViewWithMeshes:&self.scene->meshes() andSubMeshes:&self.scene->subMeshes()];
 }
 

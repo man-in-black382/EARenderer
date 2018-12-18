@@ -35,10 +35,12 @@ namespace bitsery {
             using TValue = typename std::forward_list<TArgs...>::value_type;
             static constexpr bool isResizable = true;
             static constexpr bool isContiguous = false;
-            static size_t size(const std::forward_list<TArgs...>& container) {
+
+            static size_t size(const std::forward_list<TArgs...> &container) {
                 return static_cast<size_t>(std::distance(container.begin(), container.end()));
             }
-            static void resize(std::forward_list<TArgs...>& container, size_t size) {
+
+            static void resize(std::forward_list<TArgs...> &container, size_t size) {
                 container.resize(size);
             }
         };

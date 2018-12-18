@@ -20,6 +20,7 @@
 #include <fbxsdk/fbxsdk_nsbegin.h>
 
 class FbxGeometry;
+
 class FbxBlendShapeChannel;
 
 /** Class for blend shape deformer.
@@ -36,9 +37,8 @@ class FbxBlendShapeChannel;
   * \nosubgrouping
   */
 
-class FBXSDK_DLL FbxBlendShape : public FbxDeformer
-{
-    FBXSDK_OBJECT_DECLARE(FbxBlendShape, FbxDeformer);
+class FBXSDK_DLL FbxBlendShape : public FbxDeformer {
+FBXSDK_OBJECT_DECLARE(FbxBlendShape, FbxDeformer);
 
 public:
     /** Set the geometry affected by this blend shape deformer.
@@ -48,24 +48,24 @@ public:
 	  *                     So when SetGeometry is called, the pGeometry will replace the
 	  *                     current base geometry connected to this blend shape deformer. 
       */
-    bool SetGeometry(FbxGeometry* pGeometry);
+    bool SetGeometry(FbxGeometry *pGeometry);
 
     /** Get the geometry affected by this blend shape deformer.
       * \return             A pointer to the geometry if it is set or \c NULL if not set yet.
       */
-    FbxGeometry* GetGeometry();
+    FbxGeometry *GetGeometry();
 
     /** Add a blend shape channel.
       * \param pBlendShapeChannel      Pointer to the blend shape channel object to add.
       * \return                        \c true on success, \c false otherwise.
       */
-    bool AddBlendShapeChannel(FbxBlendShapeChannel* pBlendShapeChannel);
+    bool AddBlendShapeChannel(FbxBlendShapeChannel *pBlendShapeChannel);
 
     /** Remove the given blend shape.
       * \param pBlendShapeChannel      Pointer to the blend shape channel to remove from this blend shape deformer.
       * \return                        Pointer to the blend shape channel or \c NULL if pBlendShapeChannel is not owned by this blend shape deformer.
       */
-    FbxBlendShapeChannel* RemoveBlendShapeChannel(FbxBlendShapeChannel* pBlendShapeChannel);
+    FbxBlendShapeChannel *RemoveBlendShapeChannel(FbxBlendShapeChannel *pBlendShapeChannel);
 
     /** Get the number of blend shape channels.
       * \return                        Number of blend shape channels that have been added to this object.
@@ -76,35 +76,40 @@ public:
       * \param pIndex                  Index of the blend shape channel.
       * \return                        Pointer to the blend shape channel or \c NULL if index is out of range.
       */
-    FbxBlendShapeChannel* GetBlendShapeChannel(int pIndex);
+    FbxBlendShapeChannel *GetBlendShapeChannel(int pIndex);
 
     /** Get the blend shape channel at given index.
       * \param pIndex                  Index of the blend shape channel.
       * \return                        Pointer to the blend shape channel or \c NULL if index is out of range.
       */
-    const FbxBlendShapeChannel* GetBlendShapeChannel(int pIndex) const;
+    const FbxBlendShapeChannel *GetBlendShapeChannel(int pIndex) const;
 
     /** Get the type of the deformer.
       * \return                         The deformer type identifier of blend shape deformer.
       */
-    EDeformerType GetDeformerType()  const {return eBlendShape; };
+    EDeformerType GetDeformerType() const {
+        return eBlendShape;
+    };
 
-	/** Restore the blend shape deformer to the initial state.
-	* Calling this function will do the following:
-	* \li Clear the pointer to base geometry.
-	* \li Remove all the blend shape channels.
-	*/
-	void Reset();
+    /** Restore the blend shape deformer to the initial state.
+    * Calling this function will do the following:
+    * \li Clear the pointer to base geometry.
+    * \li Remove all the blend shape channels.
+    */
+    void Reset();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
-    virtual FbxObject* Clone(FbxObject::ECloneType pCloneType=eDeepClone, FbxObject* pContainer=NULL, void* pSet = NULL) const;
-    
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    virtual FbxObject *Clone(FbxObject::ECloneType pCloneType = eDeepClone, FbxObject *pContainer = NULL, void *pSet = NULL) const;
+
 protected:
     virtual FbxStringList GetTypeFlags() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

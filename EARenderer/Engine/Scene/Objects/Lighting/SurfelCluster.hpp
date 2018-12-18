@@ -22,11 +22,12 @@ namespace EARenderer {
         glm::vec3 center;
 
         SurfelCluster() = default;
+
         SurfelCluster(size_t offset, size_t count);
     };
 
-    template <typename S>
-    void serialize(S& s, SurfelCluster& cluster) {
+    template<typename S>
+    void serialize(S &s, SurfelCluster &cluster) {
         s.value4b(cluster.surfelOffset);
         s.value4b(cluster.surfelCount);
         s.object(cluster.center);

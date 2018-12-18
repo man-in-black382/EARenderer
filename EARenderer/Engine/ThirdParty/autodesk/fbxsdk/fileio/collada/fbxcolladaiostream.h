@@ -25,17 +25,35 @@
   * \param pSourceEnd Return the end of the part of the source string.
   * \return Return \c true on success and \c false if else.
   */
-template <typename T> bool FromString(T * pDest, const char * pSourceBegin, const char ** pSourceEnd = NULL);
-template <> bool FromString(int * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(double * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxString * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxDouble2 * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxDouble3 * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxDouble4 * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxVector4 * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxAMatrix * pDest, const char * pSourceBegin, const char ** pSourceEnd);
-template <> bool FromString(FbxAMatrix * pDest, const char * pSourceBegin, const char ** pSourceEnd);
+template<typename T>
+bool FromString(T *pDest, const char *pSourceBegin, const char **pSourceEnd = NULL);
 
+template<>
+bool FromString(int *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(double *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxString *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxDouble2 *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxDouble3 *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxDouble4 *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxVector4 *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxAMatrix *pDest, const char *pSourceBegin, const char **pSourceEnd);
+
+template<>
+bool FromString(FbxAMatrix *pDest, const char *pSourceBegin, const char **pSourceEnd);
 
 
 /** Parse the string into an array.
@@ -45,8 +63,8 @@ template <> bool FromString(FbxAMatrix * pDest, const char * pSourceBegin, const
   * The valid unit range in each destination unit is [pDestUnitOffset, pDestUnitOffset + pDestValidUnitCount).
   * The units in invalid range of destination is set to a default value.
   */
-template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArray, int pSourceUnitOffset, int pSourceValidUnitCount, int pSourceGroupSize, int pDestUnitOffset, int pDestValidUnitCount, int pDestGroupSize, TYPE pDefaultValue = TYPE())
-{
+template<typename TYPE>
+int FromStringToArray(const char *pString, TYPE *pArray, int pSourceUnitOffset, int pSourceValidUnitCount, int pSourceGroupSize, int pDestUnitOffset, int pDestValidUnitCount, int pDestGroupSize, TYPE pDefaultValue = TYPE()) {
     if (pString == 0 || pArray == 0)
         return 0;
 
@@ -54,22 +72,19 @@ template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArr
     FBX_ASSERT(pSourceValidUnitCount >= 0 && pSourceUnitOffset + pSourceValidUnitCount <= pSourceGroupSize);
     FBX_ASSERT(pDestUnitOffset >= 0 && pDestUnitOffset < pDestGroupSize);
     FBX_ASSERT(pDestValidUnitCount >= 0 && pDestUnitOffset + pDestValidUnitCount <= pDestGroupSize);
-    const char * lSource = pString;
-    TYPE * lDest = pArray;
+    const char *lSource = pString;
+    TYPE *lDest = pArray;
 
     int lReadCount = 0;
     int lSourceCounter = 0;
     int lDestCounter = 0;
     const int lSourceUnitValidEnd = pSourceUnitOffset + pSourceValidUnitCount;
     const int lDestUnitGap = pDestGroupSize - pDestValidUnitCount - pDestUnitOffset;
-    while (lSource && *lSource)
-    {
+    while (lSource && *lSource) {
         TYPE lData;
-        const char * lSourceStart = lSource;
-        if (FromString(&lData, lSource, &lSource) && lSourceCounter >= pSourceUnitOffset && lSourceCounter < lSourceUnitValidEnd)
-        {
-            if (lDestCounter == 0)
-            {
+        const char *lSourceStart = lSource;
+        if (FromString(&lData, lSource, &lSource) && lSourceCounter >= pSourceUnitOffset && lSourceCounter < lSourceUnitValidEnd) {
+            if (lDestCounter == 0) {
                 for (int lIndex = 0; lIndex < pDestUnitOffset; ++lIndex)
                     *(lDest++) = pDefaultValue;
             }
@@ -77,20 +92,16 @@ template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArr
             *lDest++ = lData;
             ++lReadCount;
             ++lDestCounter;
-            if (lDestCounter == pDestValidUnitCount)
-            {
+            if (lDestCounter == pDestValidUnitCount) {
                 lDestCounter = 0;
                 for (int lIndex = 0; lIndex < lDestUnitGap; ++lIndex)
                     *lDest++ = pDefaultValue;
             }
-        }
-        else
-        {
+        } else {
             // we met a stop condition of FromString. In the normal case, lSource should now be "" or ' '. If not,
             // the converted string is corrupted and we have to break the loop. We can detect this by checking
             // if lSource pointer has moved.
-            if (lSource == lSourceStart)
-            {
+            if (lSource == lSourceStart) {
                 break;
             }
         }
@@ -103,15 +114,16 @@ template <typename TYPE> int FromStringToArray(const char * pString, TYPE * pArr
 
 //----------------------------------------------------------------------------//
 
-template <typename T>
-const FbxString ToString(const T & pValue)
-{
+template<typename T>
+const FbxString ToString(const T &pValue) {
     return FbxString(pValue);
 }
-template <>
-const FbxString ToString(const FbxVector4 & pValue);
-template <>
-const FbxString ToString(const FbxAMatrix & pValue);
+
+template<>
+const FbxString ToString(const FbxVector4 &pValue);
+
+template<>
+const FbxString ToString(const FbxAMatrix &pValue);
 
 //----------------------------------------------------------------------------//
 
@@ -120,7 +132,7 @@ const FbxString ToString(const FbxAMatrix & pValue);
   * \param pEncodedString The percent encoded string.
   * \return The decoded string.
   */
-const FbxString DecodePercentEncoding(const FbxString & pEncodedString);
+const FbxString DecodePercentEncoding(const FbxString &pEncodedString);
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

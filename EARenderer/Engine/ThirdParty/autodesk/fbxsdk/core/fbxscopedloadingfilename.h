@@ -25,23 +25,22 @@
 /** 
  * A plug-in loading strategy that loads a single DLL by specifying the file name in the constructor, and unloads the DLL in its destructor.
  */
-class FBXSDK_DLL FbxScopedLoadingFileName : public FbxLoadingStrategy
-{
+class FBXSDK_DLL FbxScopedLoadingFileName : public FbxLoadingStrategy {
 public:
     /**
      *\name Public interface
      */
     //@{
-		/** Constructor.
-		  * Load plug-in.
-		  * \param pPath The file path.
-		  */
-		explicit FbxScopedLoadingFileName(const char* pPath);
+    /** Constructor.
+      * Load plug-in.
+      * \param pPath The file path.
+      */
+    explicit FbxScopedLoadingFileName(const char *pPath);
 
-		/** Destructor.
-		 * Unload plug-in.
-		 */
-		virtual ~FbxScopedLoadingFileName();
+    /** Destructor.
+     * Unload plug-in.
+     */
+    virtual ~FbxScopedLoadingFileName();
     //@}
 
 /*****************************************************************************************************************************
@@ -49,8 +48,9 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-    virtual bool SpecificLoad(FbxPluginData& pData);
-    virtual void SpecificUnload(FbxPluginData& pData);
+    virtual bool SpecificLoad(FbxPluginData &pData);
+
+    virtual void SpecificUnload(FbxPluginData &pData);
 
     FbxModule mInstance;
     FbxString mPath;

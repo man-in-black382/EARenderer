@@ -15,17 +15,20 @@
 #include "Camera.hpp"
 
 namespace EARenderer {
-    
-    class GLSLDirectionalPenumbra: public GLProgram {
+
+    class GLSLDirectionalPenumbra : public GLProgram {
     public:
         GLSLDirectionalPenumbra();
-        
-        void setCamera(const Camera& camera);
-        void setGBuffer(const SceneGBuffer& GBuffer);
-        void setFrustumCascades(const FrustumCascades& cascades);
-        void setDirectionalShadowMapArray(const GLDepthTexture2DArray& array, const GLSampler& bilinearSampler);
+
+        void setCamera(const Camera &camera);
+
+        void setGBuffer(const SceneGBuffer &GBuffer);
+
+        void setFrustumCascades(const FrustumCascades &cascades);
+
+        void setDirectionalShadowMapArray(const GLDepthTexture2DArray &array, const GLSampler &bilinearSampler);
     };
-    
+
 }
 
 #endif /* GLSLPenumbra_hpp */

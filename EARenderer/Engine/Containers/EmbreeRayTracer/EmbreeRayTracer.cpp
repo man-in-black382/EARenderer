@@ -14,26 +14,25 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D>& triangles)
-    :
-    mDevice(rtcNewDevice(nullptr)),
-    mScene(rtcNewScene(mDevice))
-    {
+    EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D> &triangles)
+            :
+            mDevice(rtcNewDevice(nullptr)),
+            mScene(rtcNewScene(mDevice)) {
         RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
 
-        glm::vec3 *vertexBuffer = (glm::vec3 *)rtcSetNewGeometryBuffer(geometry,
-                                                                       RTC_BUFFER_TYPE_VERTEX,
-                                                                       0,
-                                                                       RTC_FORMAT_FLOAT3,
-                                                                       sizeof(glm::vec3),
-                                                                       triangles.size() * 3);
+        glm::vec3 *vertexBuffer = (glm::vec3 *) rtcSetNewGeometryBuffer(geometry,
+                RTC_BUFFER_TYPE_VERTEX,
+                0,
+                RTC_FORMAT_FLOAT3,
+                sizeof(glm::vec3),
+                triangles.size() * 3);
 
-        glm::uvec3* indexBuffer = (glm::uvec3 *)rtcSetNewGeometryBuffer(geometry,
-                                                                        RTC_BUFFER_TYPE_INDEX,
-                                                                        0,
-                                                                        RTC_FORMAT_UINT3,
-                                                                        sizeof(glm::uvec3),
-                                                                        triangles.size());
+        glm::uvec3 *indexBuffer = (glm::uvec3 *) rtcSetNewGeometryBuffer(geometry,
+                RTC_BUFFER_TYPE_INDEX,
+                0,
+                RTC_FORMAT_UINT3,
+                sizeof(glm::uvec3),
+                triangles.size());
 
         if (vertexBuffer && indexBuffer) {
             for (uint32_t i = 0; i < triangles.size(); ++i) {
@@ -62,7 +61,7 @@ namespace EARenderer {
         rtcSetDeviceErrorFunction(mDevice, deviceErrorCallback, this);
     }
 
-    EmbreeRayTracer::EmbreeRayTracer(EmbreeRayTracer&& that) {
+    EmbreeRayTracer::EmbreeRayTracer(EmbreeRayTracer &&that) {
         swap(that);
     }
 
@@ -73,58 +72,63 @@ namespace EARenderer {
 
 #pragma mark - Operators
 
-    EmbreeRayTracer& EmbreeRayTracer::operator=(EmbreeRayTracer rhs) {
+    EmbreeRayTracer &EmbreeRayTracer::operator=(EmbreeRayTracer rhs) {
         swap(rhs);
         return *this;
     }
 
 #pragma mark - Swap
 
-    void EmbreeRayTracer::swap(EmbreeRayTracer& that) {
+    void EmbreeRayTracer::swap(EmbreeRayTracer &that) {
         std::swap(mDevice, that.mDevice);
         std::swap(mScene, that.mScene);
     }
 
-    void swap(EmbreeRayTracer& lhs, EmbreeRayTracer& rhs) {
+    void swap(EmbreeRayTracer &lhs, EmbreeRayTracer &rhs) {
         lhs.swap(rhs);
     }
 
 #pragma mark - Callbacks
 
-    void EmbreeRayTracer::deviceErrorCallback(void* userPtr, enum RTCError code, const char* str) {
-        if (code == RTC_ERROR_NONE) { return; }
+    void EmbreeRayTracer::deviceErrorCallback(void *userPtr, enum RTCError code, const char *str) {
+        if (code == RTC_ERROR_NONE) {return;}
         printf("Embree device error detected: \ncode: %d, message: %s \n", code, str);
     }
 
-    void EmbreeRayTracer::intersectionFilter(const struct RTCFilterFunctionNArguments* args) {
+    void EmbreeRayTracer::intersectionFilter(const struct RTCFilterFunctionNArguments *args) {
         EmbreeRayTracer *thisPtr = reinterpret_cast<EmbreeRayTracer *>(args->geometryUserPtr);
 
         if (thisPtr->mFaceFilter == FaceFilter::None) return;
 
         glm::vec3 triangleNormal(RTCHitN_Ng_x(args->hit, args->N, 0),
-                                 RTCHitN_Ng_y(args->hit, args->N, 0),
-                                 RTCHitN_Ng_z(args->hit, args->N, 0));
+                RTCHitN_Ng_y(args->hit, args->N, 0),
+                RTCHitN_Ng_z(args->hit, args->N, 0));
 
         glm::vec3 rayDirection(RTCRayN_dir_x(args->ray, args->N, 0),
-                               RTCRayN_dir_y(args->ray, args->N, 0),
-                               RTCRayN_dir_z(args->ray, args->N, 0));
+                RTCRayN_dir_y(args->ray, args->N, 0),
+                RTCRayN_dir_z(args->ray, args->N, 0));
 
         float dot = glm::dot(triangleNormal, rayDirection);
         bool vectorsPointingInSameHemisphere = dot > 0.0;
 
         switch (thisPtr->mFaceFilter) {
-            case FaceFilter::CullFront: args->valid[0] = vectorsPointingInSameHemisphere ? -1 : 0; break;
-            case FaceFilter::CullBack: args->valid[0] = vectorsPointingInSameHemisphere ? 0 : -1; break;
-            default: break;
+            case FaceFilter::CullFront:
+                args->valid[0] = vectorsPointingInSameHemisphere ? -1 : 0;
+                break;
+            case FaceFilter::CullBack:
+                args->valid[0] = vectorsPointingInSameHemisphere ? 0 : -1;
+                break;
+            default:
+                break;
         }
     }
 
 #pragma mark - Occlusion
 
-    bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3& p0, const glm::vec3& p1, FaceFilter faceFilter) {
+    bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3 &p0, const glm::vec3 &p1, FaceFilter faceFilter) {
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
-        
+
         mFaceFilter = faceFilter;
 
         glm::vec3 direction = (p1 - p0);
@@ -148,7 +152,7 @@ namespace EARenderer {
         return ray.tfar < 0.0;
     }
 
-    bool EmbreeRayTracer::rayHit(const Ray3D& ray, float& distance, FaceFilter faceFilter) {
+    bool EmbreeRayTracer::rayHit(const Ray3D &ray, float &distance, FaceFilter faceFilter) {
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
 

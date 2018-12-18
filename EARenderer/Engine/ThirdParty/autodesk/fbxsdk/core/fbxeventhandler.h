@@ -38,38 +38,40 @@ class FbxListener;
 * \nosubgrouping
 * \see FbxListener FbxEventBase FbxEvent FbxEmitter
 */
-class FbxEventHandler
-{
+class FbxEventHandler {
 public:
-	//! Event handler base type.
-	enum EType
-	{
-		eListener,	//!< Listener event handler type.
-		eEmitter,	//!< Emitter event handler type.
-		eCount		//!< Count of different event handler types.
-	};
+    //! Event handler base type.
+    enum EType {
+        eListener,    //!< Listener event handler type.
+        eEmitter,    //!< Emitter event handler type.
+        eCount        //!< Count of different event handler types.
+    };
 
-	/** Get event type of current handler.
-	* \return The type ID of event. */
-	virtual int GetHandlerEventType()=0;
+    /** Get event type of current handler.
+    * \return The type ID of event. */
+    virtual int GetHandlerEventType() = 0;
 
-	/** Call function that process event data.
-	* \param pEvent specify the event type. pEvent could be a specific class which derived from FbxEventBase.
-	* \see FbxEventBase */
-	virtual void FunctionCall(const FbxEventBase& pEvent)=0;
+    /** Call function that process event data.
+    * \param pEvent specify the event type. pEvent could be a specific class which derived from FbxEventBase.
+    * \see FbxEventBase */
+    virtual void FunctionCall(const FbxEventBase &pEvent) = 0;
 
-	/** Get listener of current handler.
-	* \return A pointer to the listener object. */
-	virtual FbxListener* GetListener()=0;
+    /** Get listener of current handler.
+    * \return A pointer to the listener object. */
+    virtual FbxListener *GetListener() = 0;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    FbxEventHandler(){}
-    virtual ~FbxEventHandler(){}
 
-	FBXSDK_INTRUSIVE_LIST_NODE(FbxEventHandler, eCount);
+    FbxEventHandler() {
+    }
+
+    virtual ~FbxEventHandler() {
+    }
+
+FBXSDK_INTRUSIVE_LIST_NODE(FbxEventHandler, eCount);
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
@@ -78,50 +80,83 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-template <typename EventType, typename ListenerType> class FbxMemberFuncEventHandler : public FbxEventHandler
-{
-	typedef void (ListenerType::*CallbackFnc)(const EventType*);
+template<typename EventType, typename ListenerType>
+class FbxMemberFuncEventHandler : public FbxEventHandler {
+    typedef void (ListenerType::*CallbackFnc)(const EventType *);
 
 public:
-    FbxMemberFuncEventHandler(ListenerType* pListenerInstance, CallbackFnc pFunction) : mListener(pListenerInstance), mFunction(pFunction){}
-	virtual int GetHandlerEventType(){ return EventType::GetStaticTypeId(); }  
-	virtual void FunctionCall(const FbxEventBase& pEvent){ (*mListener.*mFunction)(reinterpret_cast<const EventType*>(&pEvent)); } 
-	virtual FbxListener* GetListener(){ return mListener; }
+    FbxMemberFuncEventHandler(ListenerType *pListenerInstance, CallbackFnc pFunction)
+            : mListener(pListenerInstance), mFunction(pFunction) {
+    }
+
+    virtual int GetHandlerEventType() {
+        return EventType::GetStaticTypeId();
+    }
+
+    virtual void FunctionCall(const FbxEventBase &pEvent) {
+        (*mListener.*mFunction)(reinterpret_cast<const EventType *>(&pEvent));
+    }
+
+    virtual FbxListener *GetListener() {
+        return mListener;
+    }
 
 private:
-	ListenerType*	mListener;
-	CallbackFnc		mFunction;
+    ListenerType *mListener;
+    CallbackFnc mFunction;
 };
 
-template <typename EventType, typename ListenerType> class FbxConstMemberFuncEventHandler : public FbxEventHandler
-{
-	typedef void (ListenerType::*CallbackFnc)(const EventType*) const;
+template<typename EventType, typename ListenerType>
+class FbxConstMemberFuncEventHandler : public FbxEventHandler {
+    typedef void (ListenerType::*CallbackFnc)(const EventType *) const;
 
 public:
-	FbxConstMemberFuncEventHandler(ListenerType* pListenerInstance, CallbackFnc pFunction) : mListener(pListenerInstance), mFunction(pFunction){}
-	virtual int GetHandlerEventType(){ return EventType::GetStaticTypeId(); }    
-	virtual void FunctionCall(const FbxEventBase& pEvent){ (*mListener.*mFunction)(reinterpret_cast<const EventType*>(&pEvent)); }
-	virtual FbxListener* GetListener(){ return mListener; }
+    FbxConstMemberFuncEventHandler(ListenerType *pListenerInstance, CallbackFnc pFunction)
+            : mListener(pListenerInstance), mFunction(pFunction) {
+    }
+
+    virtual int GetHandlerEventType() {
+        return EventType::GetStaticTypeId();
+    }
+
+    virtual void FunctionCall(const FbxEventBase &pEvent) {
+        (*mListener.*mFunction)(reinterpret_cast<const EventType *>(&pEvent));
+    }
+
+    virtual FbxListener *GetListener() {
+        return mListener;
+    }
 
 private:
-	ListenerType*	mListener;
-	CallbackFnc		mFunction;
+    ListenerType *mListener;
+    CallbackFnc mFunction;
 };
 
-template <typename EventType> class FbxFuncEventHandler : public FbxEventHandler
-{
-	typedef void (*CallbackFnc)(const EventType*, FbxListener*);
+template<typename EventType>
+class FbxFuncEventHandler : public FbxEventHandler {
+    typedef void (*CallbackFnc)(const EventType *, FbxListener *);
 
 public:
-	FbxFuncEventHandler(FbxListener* pListener, CallbackFnc pFunction) : mListener(pListener), mFunction(pFunction){}
-	virtual int GetHandlerEventType(){ return EventType::GetStaticTypeId(); }   
-	virtual void FunctionCall(const FbxEventBase& pEvent){ (*mFunction)(reinterpret_cast<const EventType*>(&pEvent), mListener); }
-	virtual FbxListener* GetListener(){ return mListener; }
+    FbxFuncEventHandler(FbxListener *pListener, CallbackFnc pFunction) : mListener(pListener), mFunction(pFunction) {
+    }
+
+    virtual int GetHandlerEventType() {
+        return EventType::GetStaticTypeId();
+    }
+
+    virtual void FunctionCall(const FbxEventBase &pEvent) {
+        (*mFunction)(reinterpret_cast<const EventType *>(&pEvent), mListener);
+    }
+
+    virtual FbxListener *GetListener() {
+        return mListener;
+    }
 
 private:
-	FbxListener*	mListener;
-	CallbackFnc		mFunction;
+    FbxListener *mListener;
+    CallbackFnc mFunction;
 };
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 
 #include <fbxsdk/fbxsdk_nsend.h>

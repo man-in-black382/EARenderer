@@ -9,12 +9,12 @@
 #include "Interval.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
+
     Interval::Interval(float min, float max)
-    :
-    min(min), max(max)
-    { }
-    
+            :
+            min(min), max(max) {
+    }
+
 }

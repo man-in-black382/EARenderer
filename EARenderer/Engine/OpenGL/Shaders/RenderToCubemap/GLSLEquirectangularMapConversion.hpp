@@ -12,14 +12,14 @@
 #include "GLSLCubemapRendering.hpp"
 
 namespace EARenderer {
-    
-    class GLSLEquirectangularMapConversion: public GLSLCubemapRendering {
-    public:        
+
+    class GLSLEquirectangularMapConversion : public GLSLCubemapRendering {
+    public:
         GLSLEquirectangularMapConversion();
-                
+
 //        void setEquirectangularEnvironmentMap(const GLHDRTexture2D& map);
     };
-    
+
 }
 
 #endif /* GLSLEquirectangularMapConversion_hpp */

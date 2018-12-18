@@ -16,7 +16,7 @@
 #include "Color.hpp"
 
 namespace EARenderer {
-    
+
     struct Surfel {
         glm::vec3 position;
         glm::vec3 normal;
@@ -24,18 +24,20 @@ namespace EARenderer {
         float area = 0;
 
         Surfel() = default;
-        Surfel(const glm::vec3& position, const glm::vec3& normal, const Color& albedo, float area);
-        Surfel(const glm::vec3& position, const glm::vec3& normal);
+
+        Surfel(const glm::vec3 &position, const glm::vec3 &normal, const Color &albedo, float area);
+
+        Surfel(const glm::vec3 &position, const glm::vec3 &normal);
     };
 
-    template <typename S>
-    void serialize(S& s, Surfel& surfel) {
+    template<typename S>
+    void serialize(S &s, Surfel &surfel) {
         s.object(surfel.position);
         s.object(surfel.normal);
         s.object(surfel.albedo);
         s.value4b(surfel.area);
     }
-    
+
 }
 
 #endif /* Surfel_hpp */

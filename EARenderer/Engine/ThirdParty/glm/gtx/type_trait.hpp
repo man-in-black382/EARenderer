@@ -32,221 +32,189 @@
 #	pragma message("GLM: GLM_GTX_type_trait extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_type_trait
-	/// @{
+namespace glm {
+    /// @addtogroup gtx_type_trait
+    /// @{
 
-	template <template <typename, precision> class genType, typename T, precision P>
-	struct type
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
-		static length_t const components = 0;
-		static length_t const cols = 0;
-		static length_t const rows = 0;
-	};
+    template<template<typename, precision> class genType, typename T, precision P>
+    struct type {
+        static bool const is_vec = false;
+        static bool const is_mat = false;
+        static bool const is_quat = false;
+        static length_t const components = 0;
+        static length_t const cols = 0;
+        static length_t const rows = 0;
+    };
 
-	template <typename T, precision P>
-	struct type<tvec1, T, P>
-	{
-		static bool const is_vec = true;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 1
-		};
-	};
+    template<typename T, precision P>
+    struct type<tvec1, T, P> {
+        static bool const is_vec = true;
+        static bool const is_mat = false;
+        static bool const is_quat = false;
+        enum {
+            components = 1
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tvec2, T, P>
-	{
-		static bool const is_vec = true;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 2
-		};
-	};
+    template<typename T, precision P>
+    struct type<tvec2, T, P> {
+        static bool const is_vec = true;
+        static bool const is_mat = false;
+        static bool const is_quat = false;
+        enum {
+            components = 2
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tvec3, T, P>
-	{
-		static bool const is_vec = true;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 3
-		};
-	};
+    template<typename T, precision P>
+    struct type<tvec3, T, P> {
+        static bool const is_vec = true;
+        static bool const is_mat = false;
+        static bool const is_quat = false;
+        enum {
+            components = 3
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tvec4, T, P>
-	{
-		static bool const is_vec = true;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 4
-		};
-	};
+    template<typename T, precision P>
+    struct type<tvec4, T, P> {
+        static bool const is_vec = true;
+        static bool const is_mat = false;
+        static bool const is_quat = false;
+        enum {
+            components = 4
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat2x2, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 2,
-			cols = 2,
-			rows = 2
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat2x2, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 2,
+            cols = 2,
+            rows = 2
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat2x3, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 2,
-			cols = 2,
-			rows = 3
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat2x3, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 2,
+            cols = 2,
+            rows = 3
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat2x4, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 2,
-			cols = 2,
-			rows = 4
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat2x4, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 2,
+            cols = 2,
+            rows = 4
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat3x2, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 3,
-			cols = 3,
-			rows = 2
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat3x2, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 3,
+            cols = 3,
+            rows = 2
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat3x3, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 3,
-			cols = 3,
-			rows = 3
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat3x3, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 3,
+            cols = 3,
+            rows = 3
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat3x4, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 3,
-			cols = 3,
-			rows = 4
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat3x4, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 3,
+            cols = 3,
+            rows = 4
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat4x2, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 4,
-			cols = 4,
-			rows = 2
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat4x2, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 4,
+            cols = 4,
+            rows = 2
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat4x3, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 4,
-			cols = 4,
-			rows = 3
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat4x3, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 4,
+            cols = 4,
+            rows = 3
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tmat4x4, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = true;
-		static bool const is_quat = false;
-		enum
-		{
-			components = 4,
-			cols = 4,
-			rows = 4
-		};
-	};
+    template<typename T, precision P>
+    struct type<tmat4x4, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = true;
+        static bool const is_quat = false;
+        enum {
+            components = 4,
+            cols = 4,
+            rows = 4
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tquat, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = true;
-		enum
-		{
-			components = 4
-		};
-	};
+    template<typename T, precision P>
+    struct type<tquat, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = false;
+        static bool const is_quat = true;
+        enum {
+            components = 4
+        };
+    };
 
-	template <typename T, precision P>
-	struct type<tdualquat, T, P>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = true;
-		enum
-		{
-			components = 8
-		};
-	};
+    template<typename T, precision P>
+    struct type<tdualquat, T, P> {
+        static bool const is_vec = false;
+        static bool const is_mat = false;
+        static bool const is_quat = true;
+        enum {
+            components = 8
+        };
+    };
 
-	/// @}
+    /// @}
 }//namespace glm
 
 #include "type_trait.inl"

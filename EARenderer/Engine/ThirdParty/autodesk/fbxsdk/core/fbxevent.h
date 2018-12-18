@@ -37,38 +37,37 @@
   * \nosubgrouping
   * \see FbxEvent FbxEventHandler FbxListener FbxEmitter
   */
-class FBXSDK_DLL FbxEventBase
-{
-  public:
-	 /**
-	   * \name Constructor and Destructor
-	   */
-     //@{
-	 //!Destructor
-     virtual ~FbxEventBase();
-	 //@}
+class FBXSDK_DLL FbxEventBase {
+public:
+    /**
+      * \name Constructor and Destructor
+      */
+    //@{
+    //!Destructor
+    virtual ~FbxEventBase();
+    //@}
 
-	 /** Retrieve the event type ID
-	   * \return            type id
-	   */
-     virtual int GetTypeId() const = 0;
+    /** Retrieve the event type ID
+      * \return            type id
+      */
+    virtual int GetTypeId() const = 0;
 
-	 /** Force events to give us a name
-	   * \return            event name 
-	   */
-     virtual const char* GetEventName() const = 0;   
+    /** Force events to give us a name
+      * \return            event name
+      */
+    virtual const char *GetEventName() const = 0;
 
-	protected:
-     static int GetStaticTypeId(const char*);
+protected:
+    static int GetStaticTypeId(const char *);
 };
 
 // Force events to declare a name by using an abstract method, and force them to use 
 // the proper name by making the call from FbxEvent<> go through the private static
 // method.
-#define FBXSDK_EVENT_DECLARE(Class)												\
-	public: virtual const char* GetEventName() const { return FbxEventName(); }	\
-	private: static const char* FbxEventName() { return #Class; }				\
-	friend class FbxEvent<Class>;												\
+#define FBXSDK_EVENT_DECLARE(Class)                                                \
+    public: virtual const char* GetEventName() const { return FbxEventName(); }    \
+    private: static const char* FbxEventName() { return #Class; }                \
+    friend class FbxEvent<Class>;                                                \
 
 //
 // Similar to above, but to be used when you've got an event template, and the
@@ -131,17 +130,17 @@ class ClassName: public  FbxEvent< ClassName <TemplateName,T> >\
 //---------------------------------------------------
 // T : We use the curiously recurring template pattern
 //          to initialize the typeId of each event type
-template<typename T> class FbxEvent : public FbxEventBase
-{
+template<typename T>
+class FbxEvent : public FbxEventBase {
 public:
     //!Destructor
-    virtual ~FbxEvent(){}
+    virtual ~FbxEvent() {
+    }
 
     /** Update the type ID of current event with the given type ID.
     * \param pTypeId     the new type ID.
     */
-    static void ForceTypeId(int pTypeId)
-    {
+    static void ForceTypeId(int pTypeId) {
         // This is to handle specific cases where the type ID must be hard coded
         // It is useful for shared event across DLL. We can then guarantee that
         // The ID of a certain type will always have the same ID
@@ -152,27 +151,23 @@ public:
     * \note This may be called from multiple threads.
     * \return            type id
     */
-    virtual int GetTypeId() const 
-    {
-		return GetStaticTypeId();
+    virtual int GetTypeId() const {
+        return GetStaticTypeId();
     }
 
     /** Retrieve the event type ID
     * \return            type id
     */
-    static int GetStaticTypeId() 
-    {
-        if( !smTypeId )
-        {
-            if( !smTypeId )
-            {
+    static int GetStaticTypeId() {
+        if (!smTypeId) {
+            if (!smTypeId) {
                 // If this does not compile, you need to add 
                 // FBXSDK_EVENT_DECLARE(YourEventClassName) to your class declaration
-                smTypeId  = FbxEventBase::GetStaticTypeId(T::FbxEventName());
+                smTypeId = FbxEventBase::GetStaticTypeId(T::FbxEventName());
             }
         }
 
-       return smTypeId;
+        return smTypeId;
     }
 
 private:

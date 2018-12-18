@@ -13,13 +13,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLProbeOcclusionRendering::GLSLProbeOcclusionRendering()
-    :
-    GLProgram("ProbeOcclusionRendering.vert", "ProbeOcclusionRendering.frag", "ProbeOcclusionRendering.geom")
-    { }
+            :
+            GLProgram("ProbeOcclusionRendering.vert", "ProbeOcclusionRendering.frag", "ProbeOcclusionRendering.geom") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLProbeOcclusionRendering::setCamera(const Camera& camera) {
+    void GLSLProbeOcclusionRendering::setCamera(const Camera &camera) {
         glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uCameraSpaceMat")>).location(), 1, GL_FALSE, glm::value_ptr(camera.viewProjectionMatrix()));
     }
 
@@ -27,12 +27,12 @@ namespace EARenderer {
 //        setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapsAtlas")>, atlas);
 //    }
 
-    void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2>& offsets) {
+    void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2> &offsets) {
         setUniformTexture(uint32_constant<ctcrc32("uProbeOcclusionMapAtlasOffsets")>, offsets);
     }
 
     void GLSLProbeOcclusionRendering::setProbeIndex(size_t index) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbeIndex")>).location(), (GLint)index);
+        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uProbeIndex")>).location(), (GLint) index);
     }
 
 }

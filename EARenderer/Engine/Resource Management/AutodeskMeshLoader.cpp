@@ -16,11 +16,11 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    AutodeskMeshLoader::AutodeskMeshLoader(const std::string& meshPath)
-    :
-    mManager(FbxManager::Create()),
-    mMeshPath(meshPath)
-    { }
+    AutodeskMeshLoader::AutodeskMeshLoader(const std::string &meshPath)
+            :
+            mManager(FbxManager::Create()),
+            mMeshPath(meshPath) {
+    }
 
     AutodeskMeshLoader::~AutodeskMeshLoader() {
         mManager->Destroy();
@@ -30,7 +30,7 @@ namespace EARenderer {
 
 #pragma mark - Private
 
-    FbxScene* AutodeskMeshLoader::importScene() {
+    FbxScene *AutodeskMeshLoader::importScene() {
         // Create an IOSettings object.
         FbxIOSettings *ios = FbxIOSettings::Create(mManager, IOSROOT);
         mManager->SetIOSettings(ios);
@@ -38,17 +38,17 @@ namespace EARenderer {
         // ... Configure the FbxIOSettings object ...
 
         // Create an importer.
-        FbxImporter* lImporter = FbxImporter::Create(mManager, "");
+        FbxImporter *lImporter = FbxImporter::Create(mManager, "");
 
         // Initialize the importer.
         bool lImportStatus = lImporter->Initialize(mMeshPath.c_str(), -1, mManager->GetIOSettings());
 
-        if(!lImportStatus) {
+        if (!lImportStatus) {
             throw std::runtime_error(string_format("Unable to load Autodesk mesh at path: %s \n Reason: %s", mMeshPath.c_str(), lImporter->GetStatus().GetErrorString()));
         }
 
         // Create a new scene so it can be populated by the imported file.
-        FbxScene* lScene = FbxScene::Create(mManager, "scene");
+        FbxScene *lScene = FbxScene::Create(mManager, "scene");
 
         // Import the contents of the file into the scene.
         lImporter->Import(lScene);
@@ -59,8 +59,8 @@ namespace EARenderer {
         return lScene;
     }
 
-    void AutodeskMeshLoader::processChildNode(FbxNode* node) {
-        if(!node->GetNodeAttribute()) {
+    void AutodeskMeshLoader::processChildNode(FbxNode *node) {
+        if (!node->GetNodeAttribute()) {
             return;
         }
 
@@ -68,7 +68,7 @@ namespace EARenderer {
 
         switch (attributeType) {
             case FbxNodeAttribute::eMesh: {
-                FbxMesh* mesh = (FbxMesh *)node->GetNodeAttribute();
+                FbxMesh *mesh = (FbxMesh *) node->GetNodeAttribute();
                 parseMesh(mesh);
                 break;
             }
@@ -77,17 +77,17 @@ namespace EARenderer {
                 break;
         }
 
-        for(size_t i = 0; i < node->GetChildCount(); i++) {
+        for (size_t i = 0; i < node->GetChildCount(); i++) {
             processChildNode(node->GetChild(i));
         }
     }
 
-    void AutodeskMeshLoader::parseMesh(FbxMesh* mesh) {
-        SubMesh& subMesh = mSubMeshes->emplace_back();
+    void AutodeskMeshLoader::parseMesh(FbxMesh *mesh) {
+        SubMesh &subMesh = mSubMeshes->emplace_back();
         subMesh.setName(mesh->GetName());
 
         size_t polygonCount = mesh->GetPolygonCount();
-        FbxVector4* controlPoints = mesh->GetControlPoints();
+        FbxVector4 *controlPoints = mesh->GetControlPoints();
         size_t controlPointsCount = mesh->GetControlPointsCount();
 
         extractMaterials(mesh);
@@ -119,12 +119,12 @@ namespace EARenderer {
         mBoundingBox->max = glm::max(subMesh.boundingBox().max, mBoundingBox->max);
     }
 
-    void AutodeskMeshLoader::extractUVs(FbxMesh* mesh, size_t vertexId) {
+    void AutodeskMeshLoader::extractUVs(FbxMesh *mesh, size_t vertexId) {
         FbxVector2 uv;
 
         for (size_t i = 0; i < mesh->GetElementUVCount(); ++i) {
 
-            const FbxGeometryElementUV* leUV = mesh->GetElementUV(i);
+            const FbxGeometryElementUV *leUV = mesh->GetElementUV(i);
             const bool lUseIndex = leUV->GetReferenceMode() != FbxGeometryElement::eDirect;
 
             switch (leUV->GetMappingMode()) {
@@ -147,16 +147,17 @@ namespace EARenderer {
                 case 1:
                     mSubMeshes->back().vertices().back().lightmapCoords = glm::vec2(uv[0], uv[1]);
                     break;
-                default: return;
+                default:
+                    return;
             }
         }
     }
 
-    void AutodeskMeshLoader::extractNormal(FbxMesh* mesh, size_t vertexId) {
+    void AutodeskMeshLoader::extractNormal(FbxMesh *mesh, size_t vertexId) {
 
         FbxVector4 normal;
 
-        FbxGeometryElementNormal* leNormal = mesh->GetElementNormal(0);
+        FbxGeometryElementNormal *leNormal = mesh->GetElementNormal(0);
 
         if (leNormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
 
@@ -172,23 +173,24 @@ namespace EARenderer {
                     break;
                 }
 
-                default: break; // other reference modes not shown here!
+                default:
+                    break; // other reference modes not shown here!
             }
         }
 
         mSubMeshes->back().vertices().back().normal = glm::vec3(normal[0], normal[1], normal[2]);
     }
 
-    void AutodeskMeshLoader::extractTangent(FbxMesh* mesh, size_t vertexId) {
+    void AutodeskMeshLoader::extractTangent(FbxMesh *mesh, size_t vertexId) {
         if (mesh->GetElementTangentCount() == 0) {
             return;
         }
 
-        FbxGeometryElementTangent* leTangent = mesh->GetElementTangent(0);
+        FbxGeometryElementTangent *leTangent = mesh->GetElementTangent(0);
 
         FbxVector4 tangent;
 
-        if(leTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+        if (leTangent->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
 
             switch (leTangent->GetReferenceMode()) {
 
@@ -211,16 +213,16 @@ namespace EARenderer {
         mSubMeshes->back().vertices().back().tangent = glm::vec3(tangent[0], tangent[1], tangent[2]);
     }
 
-    void AutodeskMeshLoader::extractBinormal(FbxMesh* mesh, size_t vertexId) {
+    void AutodeskMeshLoader::extractBinormal(FbxMesh *mesh, size_t vertexId) {
         if (mesh->GetElementBinormalCount() == 0) {
             return;
         }
 
-        FbxGeometryElementBinormal* leBinormal = mesh->GetElementBinormal(0);
+        FbxGeometryElementBinormal *leBinormal = mesh->GetElementBinormal(0);
 
         FbxVector4 binormal;
 
-        if(leBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+        if (leBinormal->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
 
             switch (leBinormal->GetReferenceMode()) {
 
@@ -243,21 +245,21 @@ namespace EARenderer {
         mSubMeshes->back().vertices().back().bitangent = glm::vec3(binormal[0], binormal[1], binormal[2]);
     }
 
-    void AutodeskMeshLoader::extractMaterials(FbxMesh* mesh) {
+    void AutodeskMeshLoader::extractMaterials(FbxMesh *mesh) {
         if (mesh->GetElementMaterialCount() == 0) {
             return;
         }
 
         FbxLayerElementMaterial *leMaterial = mesh->GetElementMaterial();
-        FbxSurfaceMaterial* lMaterial = mesh->GetNode()->GetMaterial(leMaterial->GetIndexArray().GetAt(0));
+        FbxSurfaceMaterial *lMaterial = mesh->GetNode()->GetMaterial(leMaterial->GetIndexArray().GetAt(0));
         mSubMeshes->back().setMaterialName(lMaterial->GetName());
     }
 
 #pragma mark - Public
 
-    void AutodeskMeshLoader::load(std::vector<SubMesh>& subMeshes, std::string& meshName, AxisAlignedBox3D &boundingBox) {
-        FbxScene* scene = importScene();
-        FbxNode* rootNode = scene->GetRootNode();
+    void AutodeskMeshLoader::load(std::vector<SubMesh> &subMeshes, std::string &meshName, AxisAlignedBox3D &boundingBox) {
+        FbxScene *scene = importScene();
+        FbxNode *rootNode = scene->GetRootNode();
 
         FbxGeometryConverter converter(mManager);
         converter.Triangulate(scene, true);
@@ -266,11 +268,11 @@ namespace EARenderer {
         mBoundingBox = &boundingBox;
         *mBoundingBox = AxisAlignedBox3D::MaximumReversed();
 
-        if(!rootNode) {
+        if (!rootNode) {
             return;
         }
 
-        for(size_t i = 0; i < rootNode->GetChildCount(); i++) {
+        for (size_t i = 0; i < rootNode->GetChildCount(); i++) {
             processChildNode(rootNode->GetChild(i));
         }
     }

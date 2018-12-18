@@ -28,12 +28,15 @@ namespace EARenderer {
         GLVertexArray<glm::vec3> mVAO;
 
     public:
-        enum class Mode { Sides, Edges, Full };
+        enum class Mode {
+            Sides, Edges, Full
+        };
 
-        BoxRenderer(const Camera *camera, const std::vector<AxisAlignedBox3D>& boxes);
+        BoxRenderer(const Camera *camera, const std::vector<AxisAlignedBox3D> &boxes);
+
         BoxRenderer(Scene *scene);
 
-        void render(Mode renderingMode, const glm::mat4& boxTransform = glm::mat4(1.0));
+        void render(Mode renderingMode, const glm::mat4 &boxTransform = glm::mat4(1.0));
     };
 
 }

@@ -27,8 +27,7 @@ class FbxGlobalLightSettingsProperties;
   * now the default no longer uses it. The relevant data (a subset of this class) has been moved to
   * the FbxGlobalSettings object and should be used instead.
   */
-class FBXSDK_DLL FbxGlobalLightSettings
-{
+class FBXSDK_DLL FbxGlobalLightSettings {
 
 public:
     FBXSDK_FRIEND_NEW();
@@ -79,11 +78,10 @@ public:
 
     /** \enum EFogMode                  Fog types.
       */
-    enum EFogMode
-    {
-        eLinear,				//! Linear fog mode.
-        eExponential,			//! Exponential fog mode.
-        eExponentialSquareRoot	//! Exponential square root fog mode.
+    enum EFogMode {
+        eLinear,                //! Linear fog mode.
+        eExponential,            //! Exponential fog mode.
+        eExponentialSquareRoot    //! Exponential square root fog mode.
     };
 
     /** Sets the fog mode.
@@ -144,8 +142,7 @@ public:
 
     /** Struct used to define the shadow plane.
       */
-    struct FBXSDK_DLL ShadowPlane
-    {
+    struct FBXSDK_DLL ShadowPlane {
         //! Default constructor.
         ShadowPlane();
 
@@ -156,7 +153,7 @@ public:
         FbxVector4 mOrigin;
 
         //! Normal vector.
-        FbxVector4 mNormal; 
+        FbxVector4 mNormal;
     };
 
     /** Activates or disables the display of shadow planes.
@@ -191,7 +188,7 @@ public:
       * \param pStatus              The FbxStatus object to hold error codes.
       * \return                     Pointer the shadow plane, or \c NULL if the index is out of range.
       */
-    ShadowPlane* GetShadowPlane(int pIndex, FbxStatus* pStatus=NULL);
+    ShadowPlane *GetShadowPlane(int pIndex, FbxStatus *pStatus = NULL);
 
     /** Adds a shadow plane.
       * \param pShadowPlane         The shadow plane to be added.
@@ -209,7 +206,7 @@ public:
     /** Assignment operator.
 	  * \param pGlobalLightSettings FbxGlobalLightSettings object assigned to this one.
 	  */
-    const FbxGlobalLightSettings& operator=(const FbxGlobalLightSettings& pGlobalLightSettings);
+    const FbxGlobalLightSettings &operator=(const FbxGlobalLightSettings &pGlobalLightSettings);
 
 
 /*****************************************************************************************************************************
@@ -218,9 +215,10 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
     FbxGlobalLightSettings();
+
     ~FbxGlobalLightSettings();
 
-    FbxGlobalLightSettingsProperties* mPH;
+    FbxGlobalLightSettingsProperties *mPH;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -30,12 +30,13 @@
 
 namespace bitsery {
 
-    template <typename Config>
+    template<typename Config>
     struct BasicMeasureSize {
         //measure class is bit-packing enabled, no need to create wrapper for it
         static constexpr bool BitPackingEnabled = true;
 
         using TConfig = Config;
+
         template<size_t SIZE, typename T>
         void writeBytes(const T &) {
             static_assert(std::is_integral<T>(), "");
@@ -97,7 +98,7 @@ namespace bitsery {
     //helper type for default config
     using MeasureSize = BasicMeasureSize<DefaultConfig>;
 
-    template <typename TWriter>
+    template<typename TWriter>
     class AdapterWriterBitPackingWrapper;
 
     template<typename OutputAdapter, typename Config>
@@ -109,9 +110,8 @@ namespace bitsery {
 
         static_assert(details::IsDefined<TValue>::value, "Please define adapter traits or include from <bitsery/traits/...>");
 
-        explicit AdapterWriter(OutputAdapter&& adapter)
-                : _outputAdapter{std::move(adapter)}
-        {
+        explicit AdapterWriter(OutputAdapter &&adapter)
+                : _outputAdapter{std::move(adapter)} {
         }
 
         AdapterWriter(const AdapterWriter &) = delete;
@@ -143,9 +143,9 @@ namespace bitsery {
         }
 
         template<typename T>
-        void writeBits(const T &, size_t ) {
+        void writeBits(const T &, size_t) {
             static_assert(std::is_void<T>::value,
-                          "Bit-packing is not enabled.\nEnable by call to `enableBitPacking`) or create Serializer with bit packing enabled.");
+                    "Bit-packing is not enabled.\nEnable by call to `enableBitPacking`) or create Serializer with bit packing enabled.");
         }
 
         //to have the same interface as bitpackingwriter
@@ -172,6 +172,7 @@ namespace bitsery {
 
     private:
         friend class AdapterWriterBitPackingWrapper<AdapterWriter<OutputAdapter, Config>>;
+
         template<typename T>
         void directWrite(T &&v, size_t count) {
             _directWriteSwapTag(std::forward<T>(v), count, std::integral_constant<bool,
@@ -212,15 +213,16 @@ namespace bitsery {
         static_assert(details::IsDefined<ScratchType>::value, "Underlying adapter value type is not supported");
 
         explicit AdapterWriterBitPackingWrapper(TWriter &writer)
-                : _writer{writer}
-        {
+                : _writer{writer} {
         }
 
-        AdapterWriterBitPackingWrapper(const AdapterWriterBitPackingWrapper&) = delete;
-        AdapterWriterBitPackingWrapper& operator = (const AdapterWriterBitPackingWrapper&) = delete;
+        AdapterWriterBitPackingWrapper(const AdapterWriterBitPackingWrapper &) = delete;
 
-        AdapterWriterBitPackingWrapper(AdapterWriterBitPackingWrapper&& ) noexcept = default;
-        AdapterWriterBitPackingWrapper& operator = (AdapterWriterBitPackingWrapper&& ) noexcept = default;
+        AdapterWriterBitPackingWrapper &operator=(const AdapterWriterBitPackingWrapper &) = delete;
+
+        AdapterWriterBitPackingWrapper(AdapterWriterBitPackingWrapper &&) noexcept = default;
+
+        AdapterWriterBitPackingWrapper &operator=(AdapterWriterBitPackingWrapper &&) noexcept = default;
 
         ~AdapterWriterBitPackingWrapper() {
             align();
@@ -232,7 +234,7 @@ namespace bitsery {
             static_assert(sizeof(T) == SIZE, "");
 
             if (!_scratchBits) {
-                _writer.template writeBytes<SIZE,T>(v);
+                _writer.template writeBytes<SIZE, T>(v);
             } else {
                 using UT = typename std::make_unsigned<T>::type;
                 writeBitsInternal(reinterpret_cast<const UT &>(v), details::BitsSize<T>::value);
@@ -244,7 +246,7 @@ namespace bitsery {
             static_assert(std::is_integral<T>(), "");
             static_assert(sizeof(T) == SIZE, "");
             if (!_scratchBits) {
-                _writer.template writeBuffer<SIZE,T>(buf, count);
+                _writer.template writeBuffer<SIZE, T>(buf, count);
             } else {
                 using UT = typename std::make_unsigned<T>::type;
                 //todo improve implementation
@@ -259,8 +261,8 @@ namespace bitsery {
             static_assert(std::is_integral<T>() && std::is_unsigned<T>(), "");
             assert(0 < bitsCount && bitsCount <= details::BitsSize<T>::value);
             assert(v <= (bitsCount < 64
-                         ? (1ULL << bitsCount) - 1
-                         : (1ULL << (bitsCount-1)) + ((1ULL << (bitsCount-1)) -1)));
+                    ? (1ULL << bitsCount) - 1
+                    : (1ULL << (bitsCount - 1)) + ((1ULL << (bitsCount - 1)) - 1)));
             writeBitsInternal(v, bitsCount);
         }
 
@@ -300,7 +302,7 @@ namespace bitsery {
                 _scratchBits += bits;
                 if (_scratchBits >= valueSize) {
                     auto tmp = static_cast<UnsignedType>(_scratch & _MASK);
-                    _writer.template writeBytes<sizeof(UnsignedType), UnsignedType >(tmp);
+                    _writer.template writeBytes<sizeof(UnsignedType), UnsignedType>(tmp);
                     _scratch >>= valueSize;
                     _scratchBits -= valueSize;
 
@@ -327,7 +329,7 @@ namespace bitsery {
         const UnsignedType _MASK = (std::numeric_limits<UnsignedType>::max)();
         ScratchType _scratch{};
         size_t _scratchBits{};
-        TWriter& _writer;
+        TWriter &_writer;
 
     };
 }

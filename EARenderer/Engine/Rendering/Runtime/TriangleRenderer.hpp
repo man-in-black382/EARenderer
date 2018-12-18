@@ -14,19 +14,19 @@
 #include "ResourcePool.hpp"
 
 namespace EARenderer {
-    
+
     class TriangleRenderer {
     private:
         GLSLTriangleRendering mTriangleRenderingShader;
         Scene *mScene;
         ResourcePool *mResourcePool;
-        
+
     public:
         TriangleRenderer(Scene *scene, ResourcePool *resourcePool);
-        
+
         void render();
     };
-    
+
 }
 
 #endif /* TriangleRenderer_hpp */

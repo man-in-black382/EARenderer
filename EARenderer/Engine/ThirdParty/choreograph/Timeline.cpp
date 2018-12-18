@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -30,160 +30,154 @@
 
 using namespace choreograph;
 
-namespace
-{
+namespace {
 
 // A single-item timeline for wrapping shared TimelineItems.
-class PassthroughTimelineItem : public TimelineItem
-{
-public:
-  explicit PassthroughTimelineItem( const TimelineItemRef &item )
-  : _item( item )
-  {}
+    class PassthroughTimelineItem : public TimelineItem {
+    public:
+        explicit PassthroughTimelineItem(const TimelineItemRef &item)
+                : _item(item) {
+        }
 
-  void update() override { _item->step( deltaTime() ); }
-  Time getDuration() const override { return _item->getDuration(); }
-  const void* getTarget() const override { return _item->getTarget(); }
-private:
-  TimelineItemRef _item;
-};
+        void update() override {
+            _item->step(deltaTime());
+        }
+
+        Time getDuration() const override {
+            return _item->getDuration();
+        }
+
+        const void *getTarget() const override {
+            return _item->getTarget();
+        }
+
+    private:
+        TimelineItemRef _item;
+    };
 
 } // namespace
 
-Timeline::Timeline( Timeline &&rhs )
-: _default_remove_on_finish( std::move( rhs._default_remove_on_finish ) ),
-_items( std::move( rhs._items ) ),
-_queue( std::move( rhs._queue ) ),
-_updating( std::move( rhs._updating ) ),
-_finish_fn( std::move( rhs._finish_fn ) )
-{}
-
-void Timeline::removeFinishedAndInvalidMotions()
-{
-  detail::erase_if( &_items, [] ( const TimelineItemUniqueRef &motion ) { return (motion->getRemoveOnFinish() && motion->isFinished()) || motion->cancelled(); } );
+Timeline::Timeline(Timeline &&rhs)
+        : _default_remove_on_finish(std::move(rhs._default_remove_on_finish)),
+          _items(std::move(rhs._items)),
+          _queue(std::move(rhs._queue)),
+          _updating(std::move(rhs._updating)),
+          _finish_fn(std::move(rhs._finish_fn)) {
 }
 
-void Timeline::customSetTime( Time time )
-{
-  for( auto &item : _items ) {
-    item->setTime( time );
-  }
+void Timeline::removeFinishedAndInvalidMotions() {
+    detail::erase_if(&_items, [](const TimelineItemUniqueRef &motion) {
+        return (motion->getRemoveOnFinish() && motion->isFinished()) || motion->cancelled();
+    });
 }
 
-void Timeline::update()
-{
-  _updating = true;
-  for( auto &item : _items ) {
-    item->step( deltaTime() );
-  }
-  _updating = false;
-
-  postUpdate();
-}
-
-void Timeline::postUpdate()
-{
-  bool was_empty = empty();
-
-  removeFinishedAndInvalidMotions();
-
-  processQueue();
-
-  if( _finish_fn )
-  {
-    auto d = getDuration();
-    if( forward() && time() >= d && previousTime() < d ) {
-      _finish_fn();
+void Timeline::customSetTime(Time time) {
+    for (auto &item : _items) {
+        item->setTime(time);
     }
-    else if( backward() && time() <= 0.0f && previousTime() > 0.0f ) {
-      _finish_fn();
+}
+
+void Timeline::update() {
+    _updating = true;
+    for (auto &item : _items) {
+        item->step(deltaTime());
     }
-  }
+    _updating = false;
 
-  // Call cleared function last if provided.
-  // We do this here so it's safe to destroy the timeline from the callback.
-  bool is_empty = empty();
-  if( _cleared_fn ) {
-    if( is_empty && ! was_empty ) {
-      _cleared_fn();
+    postUpdate();
+}
+
+void Timeline::postUpdate() {
+    bool was_empty = empty();
+
+    removeFinishedAndInvalidMotions();
+
+    processQueue();
+
+    if (_finish_fn) {
+        auto d = getDuration();
+        if (forward() && time() >= d && previousTime() < d) {
+            _finish_fn();
+        } else if (backward() && time() <= 0.0f && previousTime() > 0.0f) {
+            _finish_fn();
+        }
     }
-  }
-}
 
-Time Timeline::timeUntilFinish() const
-{
-  Time end = 0;
-  for( auto &item : _items ) {
-    end = std::max( end, item->getTimeUntilFinish() );
-  }
-  return end;
-}
-
-Time Timeline::getDuration() const
-{
-  Time duration = 0;
-  for( auto &item : _items ) {
-    duration = std::max( duration, item->getEndTime() );
-  }
-  return duration;
-}
-
-void Timeline::processQueue()
-{
-  using namespace std;
-  std::copy( make_move_iterator( _queue.begin() ), make_move_iterator( _queue.end() ), back_inserter( _items ) );
-  _queue.clear();
-}
-
-void Timeline::cancel( void *output )
-{
-  for( auto &item : _items ) {
-    if( item->getTarget() == output ) {
-      item->cancel();
+    // Call cleared function last if provided.
+    // We do this here so it's safe to destroy the timeline from the callback.
+    bool is_empty = empty();
+    if (_cleared_fn) {
+        if (is_empty && !was_empty) {
+            _cleared_fn();
+        }
     }
-  }
+}
 
-  for( auto &item : _queue ) {
-    if( item->getTarget() == output ) {
-      item->cancel();
+Time Timeline::timeUntilFinish() const {
+    Time end = 0;
+    for (auto &item : _items) {
+        end = std::max(end, item->getTimeUntilFinish());
     }
-  }
+    return end;
 }
 
-void Timeline::add( TimelineItemUniqueRef &&item )
-{
-  item->setRemoveOnFinish( _default_remove_on_finish );
-
-  if( _updating ) {
-    _queue.emplace_back( std::move( item ) );
-  }
-  else {
-    _items.emplace_back( std::move( item ) );
-  }
+Time Timeline::getDuration() const {
+    Time duration = 0;
+    for (auto &item : _items) {
+        duration = std::max(duration, item->getEndTime());
+    }
+    return duration;
 }
 
-TimelineOptions Timeline::addShared( const TimelineItemRef &shared )
-{
-  auto item = detail::make_unique<PassthroughTimelineItem>( shared );
-  item->setRemoveOnFinish( _default_remove_on_finish );
-  auto &ref = *item;
-
-  if( _updating ) {
-    _queue.emplace_back( std::move( item ) );
-  }
-  else {
-    _items.emplace_back( std::move( item ) );
-  }
-
-  return TimelineOptions( ref );
+void Timeline::processQueue() {
+    using namespace std;
+    std::copy(make_move_iterator(_queue.begin()), make_move_iterator(_queue.end()), back_inserter(_items));
+    _queue.clear();
 }
 
-TimelineOptions Timeline::cue( const std::function<void ()> &fn, Time delay )
-{
-  auto cue = detail::make_unique<Cue>( fn, delay );
-  TimelineOptions options( *cue );
+void Timeline::cancel(void *output) {
+    for (auto &item : _items) {
+        if (item->getTarget() == output) {
+            item->cancel();
+        }
+    }
 
-  add( std::move( cue ) );
+    for (auto &item : _queue) {
+        if (item->getTarget() == output) {
+            item->cancel();
+        }
+    }
+}
 
-  return options;
+void Timeline::add(TimelineItemUniqueRef &&item) {
+    item->setRemoveOnFinish(_default_remove_on_finish);
+
+    if (_updating) {
+        _queue.emplace_back(std::move(item));
+    } else {
+        _items.emplace_back(std::move(item));
+    }
+}
+
+TimelineOptions Timeline::addShared(const TimelineItemRef &shared) {
+    auto item = detail::make_unique<PassthroughTimelineItem>(shared);
+    item->setRemoveOnFinish(_default_remove_on_finish);
+    auto &ref = *item;
+
+    if (_updating) {
+        _queue.emplace_back(std::move(item));
+    } else {
+        _items.emplace_back(std::move(item));
+    }
+
+    return TimelineOptions(ref);
+}
+
+TimelineOptions Timeline::cue(const std::function<void()> &fn, Time delay) {
+    auto cue = detail::make_unique<Cue>(fn, delay);
+    TimelineOptions options(*cue);
+
+    add(std::move(cue));
+
+    return options;
 }

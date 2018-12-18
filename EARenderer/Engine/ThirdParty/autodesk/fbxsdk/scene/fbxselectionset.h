@@ -27,15 +27,14 @@
 *  you create a selection node (FbxSelectionNode) to group the object and its components together as a single item to be added. 
 *  \see FbxSelectionNode 
 */
-class FBXSDK_DLL FbxSelectionSet : public FbxCollection
-{
-    FBXSDK_OBJECT_DECLARE(FbxSelectionSet, FbxCollection);
+class FBXSDK_DLL FbxSelectionSet : public FbxCollection {
+FBXSDK_OBJECT_DECLARE(FbxSelectionSet, FbxCollection);
 
 public:
     /** This property stores annotation of the selection set.
     * Default value is "".
     */
-    FbxPropertyT<FbxString>        SelectionSetAnnotation;
+    FbxPropertyT<FbxString> SelectionSetAnnotation;
 
     /**
     * \name Utility functions
@@ -47,21 +46,21 @@ public:
     *    \param pPolygonIndexArray  The array to take the indices of the selected faces.
     *    \remarks                   The indices of selected faces will be put in pPolygonIndexArray.
     */
-    void GetFaceSelection( FbxObject* pObj,FbxArray<int>& pPolygonIndexArray ) const;
+    void GetFaceSelection(FbxObject *pObj, FbxArray<int> &pPolygonIndexArray) const;
 
-	/**  Get the selected edges of a specified object. 
-	*    \param pObj                The specified object.
-	*    \param pEdgeIndexArray     The array to take the indices of the selected edges.
-	*    \remarks                   The indices of selected face will be put in pEdgeIndexArray.
-	*/
-    void GetEdgeSelection( FbxObject* pObj,FbxArray<int>& pEdgeIndexArray ) const; 
+    /**  Get the selected edges of a specified object.
+    *    \param pObj                The specified object.
+    *    \param pEdgeIndexArray     The array to take the indices of the selected edges.
+    *    \remarks                   The indices of selected face will be put in pEdgeIndexArray.
+    */
+    void GetEdgeSelection(FbxObject *pObj, FbxArray<int> &pEdgeIndexArray) const;
 
-	/**  Get the selected vertices of a specified object. 
-	*    \param pObj                The specified object.
-	*    \param pVertexIndexArray   The array to take the indices of the selected vertices.
-	*    \remarks                   The indices of selected face will be put in pVertexIndexArray.
-	*/
-    void GetVertexSelection( FbxObject* pObj,FbxArray<int>& pVertexIndexArray ) const; 
+    /**  Get the selected vertices of a specified object.
+    *    \param pObj                The specified object.
+    *    \param pVertexIndexArray   The array to take the indices of the selected vertices.
+    *    \remarks                   The indices of selected face will be put in pVertexIndexArray.
+    */
+    void GetVertexSelection(FbxObject *pObj, FbxArray<int> &pVertexIndexArray) const;
 
     /**  Get list of two types of member in the selection set: SelectionNodes and Directly contained objects.
     *    \param pSelectionNodeList  The array to take selection nodes of the selection set.
@@ -69,7 +68,7 @@ public:
     *    \remarks There might be two types members for a selection set: selection node and directly contained object.
     *    They will be listed in pSelectionNodeList and pDirectObjectList separately.
     */
-    void GetSelectionNodesAndDirectObjects(FbxArray<FbxSelectionNode*> &pSelectionNodeList, FbxArray<FbxObject*> &pDirectObjectList) const; 
+    void GetSelectionNodesAndDirectObjects(FbxArray<FbxSelectionNode *> &pSelectionNodeList, FbxArray<FbxObject *> &pDirectObjectList) const;
 
     //@}
 
@@ -78,7 +77,8 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-    virtual void ConstructProperties(bool pForceSet); 
+    virtual void ConstructProperties(bool pForceSet);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

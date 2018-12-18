@@ -83,26 +83,31 @@ namespace EARenderer {
         GLSLFullScreenQuad mFSQuadShader;
 
         void bindDefaultFramebuffer();
+
         void performDepthPrepass();
+
         void renderSkybox();
+
         void renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image);
 
     public:
         using DebugOpportunity = std::function<void()>;
 
-        DeferredSceneRenderer(const Scene* scene,
-                              const DefaultRenderComponentsProviding *provider,
-                              const RenderingSettings& settings,
-                              std::shared_ptr<const SurfelData> surfelData,
-                              std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
-                              std::shared_ptr<const SceneGBuffer> GBuffer);
+        DeferredSceneRenderer(const Scene *scene,
+                const DefaultRenderComponentsProviding *provider,
+                const RenderingSettings &settings,
+                std::shared_ptr<const SurfelData> surfelData,
+                std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
+                std::shared_ptr<const SceneGBuffer> GBuffer);
 
         // Setters
-        void setRenderingSettings(const RenderingSettings& settings);
+        void setRenderingSettings(const RenderingSettings &settings);
 
         // Getters
         std::shared_ptr<const std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
+
         std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
+
         std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
 
         /**
@@ -111,7 +116,8 @@ namespace EARenderer {
          @param debugClosure render any debug information needed inside this closure
          before the final frame is displayed
          */
-        void render(const DebugOpportunity& debugClosure = []{});
+        void render(const DebugOpportunity &debugClosure = [] {
+        });
     };
 
 }

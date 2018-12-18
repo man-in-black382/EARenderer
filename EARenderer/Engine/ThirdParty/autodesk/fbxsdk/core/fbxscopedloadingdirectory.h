@@ -25,29 +25,29 @@
 class FbxPluginHandle;
 
 //! A plug-in loading strategy that loads all DLLs with a specific extension from a specific directory. When this class is destroyed all of the plug-ins are unloaded.
-class FBXSDK_DLL FbxScopedLoadingDirectory : public FbxLoadingStrategy
-{
+class FBXSDK_DLL FbxScopedLoadingDirectory : public FbxLoadingStrategy {
 public:
-	/** Constructor, which also load plug-ins in the folder specified.
-	* \param pDirectoryPath The directory path.
-	* \param pPluginExtension The plug-in extension. */
-	FbxScopedLoadingDirectory(const char* pDirectoryPath, const char* pPluginExtension);
+    /** Constructor, which also load plug-ins in the folder specified.
+    * \param pDirectoryPath The directory path.
+    * \param pPluginExtension The plug-in extension. */
+    FbxScopedLoadingDirectory(const char *pDirectoryPath, const char *pPluginExtension);
 
-	/** Destructor. Unload plug-ins. */
-	virtual ~FbxScopedLoadingDirectory();
+    /** Destructor. Unload plug-ins. */
+    virtual ~FbxScopedLoadingDirectory();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 private:
-	virtual bool SpecificLoad(FbxPluginData& pData);
-	virtual void SpecificUnload(FbxPluginData& pData);
+    virtual bool SpecificLoad(FbxPluginData &pData);
 
-	FbxString mDirectoryPath;
-	FbxString mExtension;
+    virtual void SpecificUnload(FbxPluginData &pData);
 
-	FbxArray<FbxModule> mPluginHandles;
+    FbxString mDirectoryPath;
+    FbxString mExtension;
+
+    FbxArray<FbxModule> mPluginHandles;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -8,6 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface NumericTextFieldManager : NSObject 
+@interface NumericTextFieldManager : NSObject
 
 @end

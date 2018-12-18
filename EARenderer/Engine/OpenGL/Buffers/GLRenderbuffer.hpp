@@ -13,24 +13,26 @@
 #include "Size2D.hpp"
 
 namespace EARenderer {
-    
-    class GLRenderbuffer: public GLNamedObject {
+
+    class GLRenderbuffer : public GLNamedObject {
     private:
         Size2D mSize;
-        
+
     protected:
-        GLRenderbuffer(const Size2D& size, GLenum internalFormat);
-        
+        GLRenderbuffer(const Size2D &size, GLenum internalFormat);
+
     public:
-        GLRenderbuffer(GLRenderbuffer&& that) = default;
-        GLRenderbuffer& operator=(GLRenderbuffer&& rhs) = default;
+        GLRenderbuffer(GLRenderbuffer &&that) = default;
+
+        GLRenderbuffer &operator=(GLRenderbuffer &&rhs) = default;
+
         ~GLRenderbuffer() = 0;
-        
+
         void bind() const;
-        
-        const Size2D& size() const;
+
+        const Size2D &size() const;
     };
-    
+
 }
 
 #endif /* GLRenderbuffer_hpp */

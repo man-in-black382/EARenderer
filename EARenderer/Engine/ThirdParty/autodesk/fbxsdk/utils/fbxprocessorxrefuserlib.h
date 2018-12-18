@@ -22,31 +22,30 @@
 /**
   * Specialized xref copy processor
   */
-class FBXSDK_DLL FbxProcessorXRefCopyUserLibrary : public FbxProcessorXRefCopy
-{
-    FBXSDK_OBJECT_DECLARE(FbxProcessorXRefCopyUserLibrary, FbxProcessorXRefCopy);
+class FBXSDK_DLL FbxProcessorXRefCopyUserLibrary : public FbxProcessorXRefCopy {
+FBXSDK_OBJECT_DECLARE(FbxProcessorXRefCopyUserLibrary, FbxProcessorXRefCopy);
 
 public:
     /**
     * \name Properties
     */
     //@{
-        // Do we copy files even if they are in the system library?
-        // Defaults to FALSE.
-        FbxPropertyT<FbxBool>     CopyAllAssets;
+    // Do we copy files even if they are in the system library?
+    // Defaults to FALSE.
+    FbxPropertyT<FbxBool> CopyAllAssets;
 
-        // Do we copy files even if they are not within the scene?  This is
-        // the typical use case when creating a new library, and defaults to
-        // TRUE.  If you want to extract assets from a specific library you
-        // you would set this to FALSE to ignore assets from external (user,
-        // system) libraries.
-        FbxPropertyT<FbxBool>     CopyExternalAssets;
+    // Do we copy files even if they are not within the scene?  This is
+    // the typical use case when creating a new library, and defaults to
+    // TRUE.  If you want to extract assets from a specific library you
+    // you would set this to FALSE to ignore assets from external (user,
+    // system) libraries.
+    FbxPropertyT<FbxBool> CopyExternalAssets;
 
-        // Do we copy assets that use absolute paths?  If true, then after
-        // the scene processor has run through the URL will be relative to
-        // the scene document.
-        // Defaults to TRUE.
-        FbxPropertyT<FbxBool>     CopyAbsoluteUrlAssets;
+    // Do we copy assets that use absolute paths?  If true, then after
+    // the scene processor has run through the URL will be relative to
+    // the scene document.
+    // Defaults to TRUE.
+    FbxPropertyT<FbxBool> CopyAbsoluteUrlAssets;
     //@}
 
 /*****************************************************************************************************************************
@@ -55,7 +54,9 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual void ConstructProperties(bool pForceSet);
-    virtual bool ValidPropertyForXRefCopy(FbxObject* pObject, FbxProperty& lProperty) const;
+
+    virtual bool ValidPropertyForXRefCopy(FbxObject *pObject, FbxProperty &lProperty) const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

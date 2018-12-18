@@ -13,14 +13,13 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SceneGBufferConstructor::SceneGBufferConstructor(const Scene* scene, const RenderingSettings& settings)
-    :
-    mScene(scene),
-    mFramebuffer(settings.displayedFrameResolution),
-    mDepthRenderbuffer(settings.displayedFrameResolution),
-    mGBuffer(std::make_shared<SceneGBuffer>(settings.displayedFrameResolution))
-    {
-        mFramebuffer.attachTexture(*mGBuffer->albedoRoughnessMetalnessAONormal);
+    SceneGBufferConstructor::SceneGBufferConstructor(const Scene *scene, const RenderingSettings &settings)
+            :
+            mScene(scene),
+            mFramebuffer(settings.displayedFrameResolution),
+            mDepthRenderbuffer(settings.displayedFrameResolution),
+            mGBuffer(std::make_shared<SceneGBuffer>(settings.displayedFrameResolution)) {
+        mFramebuffer.attachTexture(*mGBuffer->materialData);
         mFramebuffer.attachTexture(*mGBuffer->HiZBuffer);
         mFramebuffer.attachDepthTexture(*mGBuffer->depthBuffer);
 
@@ -45,23 +44,32 @@ namespace EARenderer {
         mGBufferShader.setCamera(*(mScene->camera()));
 
         // Attach 0 mip again after HiZ buffer construction
-        mFramebuffer.redirectRenderingToTexturesMip(0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
-                                                    mGBuffer->albedoRoughnessMetalnessAONormal, mGBuffer->HiZBuffer);
+        mFramebuffer.redirectRenderingToTexturesMip(
+                0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
+                mGBuffer->materialData, mGBuffer->HiZBuffer
+        );
 
         ResourcePool::shared().VAO().bind();
 
         for (ID instanceID : mScene->meshInstances()) {
-            auto& instance = mScene->meshInstances()[instanceID];
-            auto& subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            auto &instance = mScene->meshInstances()[instanceID];
+            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
 
             mGBufferShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
-                auto& subMesh = subMeshes[subMeshID];
-                auto& material = ResourcePool::shared().materials[instance.materialIDForSubMeshID(subMeshID)];
+                auto &subMesh = subMeshes[subMeshID];
 
-                mGBufferShader.ensureSamplerValidity([this, &material]() {
-                    mGBufferShader.setMaterial(material);
+                mGBufferShader.ensureSamplerValidity([&] {
+                    auto materialRef = instance.materialReferenceForSubMeshID(subMeshID);
+                    switch (materialRef->first) {
+                        case MaterialType::CookTorrance:
+                            mGBufferShader.setMaterial(ResourcePool::shared().cookTorranceMaterial(materialRef->second));
+                            break;
+                        case MaterialType::Emissive:
+                            mGBufferShader.setMaterial(ResourcePool::shared().emissiveMaterial(materialRef->second));
+                            break;
+                    }
                 });
 
                 subMesh.draw();

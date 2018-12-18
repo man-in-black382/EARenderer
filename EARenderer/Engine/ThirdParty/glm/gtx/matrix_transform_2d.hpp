@@ -22,57 +22,56 @@
 #	pragma message("GLM: GLM_GTX_matrix_transform_2d extension included")
 #endif
 
-namespace glm
-{
-	/// @addtogroup gtx_matrix_transform_2d
-	/// @{
-	
-	/// Builds a translation 3 * 3 matrix created from a vector of 2 components.
-	///
-	/// @param m Input matrix multiplied by this translation matrix.
-	/// @param v Coordinates of a translation vector.		
-	template <typename T, precision P>
-	GLM_FUNC_QUALIFIER tmat3x3<T, P> translate(
-		tmat3x3<T, P> const & m,
-		tvec2<T, P> const & v);
+namespace glm {
+    /// @addtogroup gtx_matrix_transform_2d
+    /// @{
 
-	/// Builds a rotation 3 * 3 matrix created from an angle. 
-	///
-	/// @param m Input matrix multiplied by this translation matrix.
-	/// @param angle Rotation angle expressed in radians if GLM_FORCE_RADIANS is defined or degrees otherwise.
-	template <typename T, precision P> 
-	GLM_FUNC_QUALIFIER tmat3x3<T, P> rotate(
-		tmat3x3<T, P> const & m,
-		T angle);
+    /// Builds a translation 3 * 3 matrix created from a vector of 2 components.
+    ///
+    /// @param m Input matrix multiplied by this translation matrix.
+    /// @param v Coordinates of a translation vector.
+    template<typename T, precision P>
+    GLM_FUNC_QUALIFIER tmat3x3<T, P> translate(
+            tmat3x3<T, P> const &m,
+            tvec2<T, P> const &v);
 
-	/// Builds a scale 3 * 3 matrix created from a vector of 2 components.
-	///
-	/// @param m Input matrix multiplied by this translation matrix.
-	/// @param v Coordinates of a scale vector.		
-	template <typename T, precision P> 
-	GLM_FUNC_QUALIFIER tmat3x3<T, P> scale(
-		tmat3x3<T, P> const & m,
-		tvec2<T, P> const & v);
+    /// Builds a rotation 3 * 3 matrix created from an angle.
+    ///
+    /// @param m Input matrix multiplied by this translation matrix.
+    /// @param angle Rotation angle expressed in radians if GLM_FORCE_RADIANS is defined or degrees otherwise.
+    template<typename T, precision P>
+    GLM_FUNC_QUALIFIER tmat3x3<T, P> rotate(
+            tmat3x3<T, P> const &m,
+            T angle);
 
-	/// Builds an horizontal (parallel to the x axis) shear 3 * 3 matrix. 
-	///
-	/// @param m Input matrix multiplied by this translation matrix.
-	/// @param y Shear factor.
-	template <typename T, precision P> 
-	GLM_FUNC_QUALIFIER tmat3x3<T, P> shearX(
-		tmat3x3<T, P> const & m,
-		T y);
+    /// Builds a scale 3 * 3 matrix created from a vector of 2 components.
+    ///
+    /// @param m Input matrix multiplied by this translation matrix.
+    /// @param v Coordinates of a scale vector.
+    template<typename T, precision P>
+    GLM_FUNC_QUALIFIER tmat3x3<T, P> scale(
+            tmat3x3<T, P> const &m,
+            tvec2<T, P> const &v);
 
-	/// Builds a vertical (parallel to the y axis) shear 3 * 3 matrix. 
-	///
-	/// @param m Input matrix multiplied by this translation matrix.
-	/// @param x Shear factor.
-	template <typename T, precision P> 
-	GLM_FUNC_QUALIFIER tmat3x3<T, P> shearY(
-		tmat3x3<T, P> const & m,
-		T x);
+    /// Builds an horizontal (parallel to the x axis) shear 3 * 3 matrix.
+    ///
+    /// @param m Input matrix multiplied by this translation matrix.
+    /// @param y Shear factor.
+    template<typename T, precision P>
+    GLM_FUNC_QUALIFIER tmat3x3<T, P> shearX(
+            tmat3x3<T, P> const &m,
+            T y);
 
-	/// @}
+    /// Builds a vertical (parallel to the y axis) shear 3 * 3 matrix.
+    ///
+    /// @param m Input matrix multiplied by this translation matrix.
+    /// @param x Shear factor.
+    template<typename T, precision P>
+    GLM_FUNC_QUALIFIER tmat3x3<T, P> shearY(
+            tmat3x3<T, P> const &m,
+            T x);
+
+    /// @}
 }//namespace glm
 
 #include "matrix_transform_2d.inl"

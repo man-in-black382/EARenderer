@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		36EBC1F364BD0CBF918E7A01 /* EmissiveMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */; };
 		36EBC4AC2D091587F6732862 /* OmnidirectionalPenumbra.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC1096F658E1D5553E563 /* OmnidirectionalPenumbra.frag */; };
 		36EBC62713D7340785504D91 /* GLSLOmnidirectionalPenumbra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC045C9B0B89CE72EE1C5 /* GLSLOmnidirectionalPenumbra.cpp */; };
 		36EBC9AC0E8FFE9B0E720E2E /* Transforms.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC4E9F704F49586DEF065 /* Transforms.glsl */; };
@@ -225,7 +226,7 @@
 		CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8761F8F8EBD00AD9027 /* Scene.cpp */; };
 		CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */; };
 		CE70FA281F8F8EF600AD9027 /* Cameraman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */; };
-		CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */; };
+		CE70FA2A1F8F8EF600AD9027 /* CookTorranceMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */; };
 		CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8821F8F8EBD00AD9027 /* Camera.cpp */; };
 		CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */; };
 		CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */; };
@@ -248,7 +249,6 @@
 		CE70FA4B1F8F8EF600AD9027 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9E91F8F8EBD00AD9027 /* GLProgram.cpp */; };
 		CE70FA501F8F8EF600AD9027 /* GLSLSkybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA021F8F8EBD00AD9027 /* GLSLSkybox.cpp */; };
 		CE70FA511F8F8EF600AD9027 /* GLSLGenericGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA071F8F8EBD00AD9027 /* GLSLGenericGeometry.cpp */; };
-		CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA0B1F8F8EBD00AD9027 /* GLSLCookTorrance.cpp */; };
 		CE70FA531F8F8EF600AD9027 /* GLNamedObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */; };
 		CE70FA541F8F8EF600AD9027 /* GLViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */; };
 		CE70FA551F8F8F7400AD9027 /* RadianceConvolution.frag in Resources */ = {isa = PBXBuildFile; fileRef = CE70F9DA1F8F8EBD00AD9027 /* RadianceConvolution.frag */; };
@@ -403,7 +403,10 @@
 /* Begin PBXFileReference section */
 		36EBC045C9B0B89CE72EE1C5 /* GLSLOmnidirectionalPenumbra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLOmnidirectionalPenumbra.cpp; sourceTree = "<group>"; };
 		36EBC1096F658E1D5553E563 /* OmnidirectionalPenumbra.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalPenumbra.frag; sourceTree = "<group>"; };
+		36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmissiveMaterial.cpp; sourceTree = "<group>"; };
+		36EBC34434EB045E5FA36E76 /* MaterialType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MaterialType.hpp; sourceTree = "<group>"; };
 		36EBC4E9F704F49586DEF065 /* Transforms.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Transforms.glsl; sourceTree = "<group>"; };
+		36EBC9BB3B90960654F51513 /* EmissiveMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EmissiveMaterial.hpp; sourceTree = "<group>"; };
 		36EBCD54620E3DE0B1D3C2B5 /* GLSLOmnidirectionalPenumbra.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLOmnidirectionalPenumbra.hpp; sourceTree = "<group>"; };
 		AC0636D42015E0560065DEB7 /* StringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StringUtils.hpp; sourceTree = "<group>"; };
 		AC0ADF1E2080B5F50026FD48 /* libfbxsdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfbxsdk.a; sourceTree = "<group>"; };
@@ -996,8 +999,8 @@
 		CE70F8791F8F8EBD00AD9027 /* SceneInteractor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneInteractor.hpp; sourceTree = "<group>"; };
 		CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInteractor.cpp; sourceTree = "<group>"; };
 		CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cameraman.cpp; sourceTree = "<group>"; };
-		CE70F87E1F8F8EBD00AD9027 /* PBRMaterial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PBRMaterial.hpp; sourceTree = "<group>"; };
-		CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PBRMaterial.cpp; sourceTree = "<group>"; };
+		CE70F87E1F8F8EBD00AD9027 /* CookTorranceMaterial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CookTorranceMaterial.hpp; sourceTree = "<group>"; };
+		CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CookTorranceMaterial.cpp; sourceTree = "<group>"; };
 		CE70F8821F8F8EBD00AD9027 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
 		CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
@@ -1330,8 +1333,6 @@
 		CE70FA071F8F8EBD00AD9027 /* GLSLGenericGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGenericGeometry.cpp; sourceTree = "<group>"; };
 		CE70FA081F8F8EBD00AD9027 /* GLShader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLShader.hpp; sourceTree = "<group>"; };
 		CE70FA0A1F8F8EBD00AD9027 /* CookTorrance.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.frag; sourceTree = "<group>"; };
-		CE70FA0B1F8F8EBD00AD9027 /* GLSLCookTorrance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLCookTorrance.cpp; sourceTree = "<group>"; };
-		CE70FA0C1F8F8EBD00AD9027 /* GLSLCookTorrance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLSLCookTorrance.hpp; sourceTree = "<group>"; };
 		CE70FA0D1F8F8EBD00AD9027 /* CookTorrance.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = CookTorrance.vert; sourceTree = "<group>"; };
 		CE70FA0E1F8F8EBD00AD9027 /* GLNamedObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLNamedObject.cpp; sourceTree = "<group>"; };
 		CE70FA101F8F8EBD00AD9027 /* GLViewport.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GLViewport.cpp; sourceTree = "<group>"; };
@@ -1992,8 +1993,6 @@
 		AC6CD80520D113C4000E6A22 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				CE70FA0B1F8F8EBD00AD9027 /* GLSLCookTorrance.cpp */,
-				CE70FA0C1F8F8EBD00AD9027 /* GLSLCookTorrance.hpp */,
 				CE70FA0A1F8F8EBD00AD9027 /* CookTorrance.frag */,
 				CE70FA0D1F8F8EBD00AD9027 /* CookTorrance.vert */,
 				CEA0B90A20E7741E00257E37 /* GLSLGBuffer.cpp */,
@@ -2906,8 +2905,11 @@
 		CE70F87D1F8F8EBD00AD9027 /* Materials */ = {
 			isa = PBXGroup;
 			children = (
-				CE70F87E1F8F8EBD00AD9027 /* PBRMaterial.hpp */,
-				CE70F8811F8F8EBD00AD9027 /* PBRMaterial.cpp */,
+				CE70F87E1F8F8EBD00AD9027 /* CookTorranceMaterial.hpp */,
+				CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */,
+				36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */,
+				36EBC9BB3B90960654F51513 /* EmissiveMaterial.hpp */,
+				36EBC34434EB045E5FA36E76 /* MaterialType.hpp */,
 			);
 			path = Materials;
 			sourceTree = "<group>";
@@ -4220,7 +4222,6 @@
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,
 				CE70FA481F8F8EF600AD9027 /* GLSLFullScreenQuad.cpp in Sources */,
-				CE70FA521F8F8EF600AD9027 /* GLSLCookTorrance.cpp in Sources */,
 				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
 				AC859C261FD5830000227038 /* GLSLLightProbeEnvironmentCapture.cpp in Sources */,
 				AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */,
@@ -4230,7 +4231,7 @@
 				AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
 				CEA0B90C20E7741E00257E37 /* GLSLGBuffer.cpp in Sources */,
-				CE70FA2A1F8F8EF600AD9027 /* PBRMaterial.cpp in Sources */,
+				CE70FA2A1F8F8EF600AD9027 /* CookTorranceMaterial.cpp in Sources */,
 				AC6B0A4D20FC941800B49BB8 /* GLSLHiZBuffer.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
 				CE152E04215E4A66009ACAC3 /* DiffuseLightProbeData.cpp in Sources */,
@@ -4293,6 +4294,7 @@
 				CE70FA461F8F8EF600AD9027 /* GLSLEquirectangularMapConversion.cpp in Sources */,
 				CE70FA1A1F8F8EF600AD9027 /* AxesSystem.cpp in Sources */,
 				36EBC62713D7340785504D91 /* GLSLOmnidirectionalPenumbra.cpp in Sources */,
+				36EBC1F364BD0CBF918E7A01 /* EmissiveMaterial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

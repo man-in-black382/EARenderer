@@ -37,9 +37,8 @@ class FbxGeometry;
   *
   * See FbxWeightedMapping for more details.
   */
-class FBXSDK_DLL FbxGeometryWeightedMap : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxGeometryWeightedMap, FbxObject);
+class FBXSDK_DLL FbxGeometryWeightedMap : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxGeometryWeightedMap, FbxObject);
 
 public:
 
@@ -49,35 +48,37 @@ public:
       *                                  when the object goes out of scope or on the next call to SetValues(). The deletion
       *                                  uses FbxDelete() so the content of the pointer must have been allocated with FbxNew<>()
       */
-    void SetValues(const FbxWeightedMapping* pWeightedMappingTable);
+    void SetValues(const FbxWeightedMapping *pWeightedMappingTable);
 
     /** Return correspondence values.
       * \return     Pointer to the correspondence values table.
       */
-    FbxWeightedMapping* GetValues() const;
+    FbxWeightedMapping *GetValues() const;
 
     /** Return source geometry.
       * \return     Pointer to the source geometry, or \c NULL if there is no connected source geometry
       */
-    FbxGeometry* GetSourceGeometry();
+    FbxGeometry *GetSourceGeometry();
 
     /** Return destination geometry.
       * \return     Pointer to the destination geometry, or \c NULL if there is no connected destination geometry
       */
-    FbxGeometry* GetDestinationGeometry();
+    FbxGeometry *GetDestinationGeometry();
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
+    virtual void Construct(const FbxObject *pFrom);
+
     virtual void Destruct(bool pRecursive);
 
     // Real weigths table
-    FbxWeightedMapping* mWeightedMapping;
+    FbxWeightedMapping *mWeightedMapping;
 
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };

@@ -22,41 +22,40 @@
 /** Contains information about a referenced file.
 * \nosubgrouping
 */
-class FBXSDK_DLL FbxSceneReference : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxSceneReference, FbxObject);
+class FBXSDK_DLL FbxSceneReference : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxSceneReference, FbxObject);
 
 public:
     /// \name Basic properties
     //@{
     //! Path to the referenced file.
-    FbxPropertyT< FbxString >	 	  ReferenceFilePath;
+    FbxPropertyT<FbxString> ReferenceFilePath;
     //! Referenced file's namespace.
-    FbxPropertyT< FbxString >	 	  ReferenceNameSpace;
+    FbxPropertyT<FbxString> ReferenceNameSpace;
     //! Referenced file's node name.
-    FbxPropertyT< FbxString >	 	  ReferenceNodeName;
+    FbxPropertyT<FbxString> ReferenceNodeName;
     //! Referenced file's node depth.
-    FbxPropertyT< FbxInt>	 		      ReferenceDepth;
+    FbxPropertyT<FbxInt> ReferenceDepth;
     //! \c True if referenced file is loaded.
-    FbxPropertyT< FbxBool >	 		  IsLoaded;
+    FbxPropertyT<FbxBool> IsLoaded;
     //! \c True if referenced file is locked.
-    FbxPropertyT< FbxBool >	 		  IsLocked;
+    FbxPropertyT<FbxBool> IsLocked;
     //@}
 
     /// \name Proxy related properties.
     //@{
-    	//! \c True if referenced file is the original proxy.
-    	FbxPropertyT< FbxBool >	 		  IsOriginalProxy;
+    //! \c True if referenced file is the original proxy.
+    FbxPropertyT<FbxBool> IsOriginalProxy;
 
-    	//! \c True if referenced file is active.
-    	FbxPropertyT< FbxBool >	 		  IsActiveProxy;
+    //! \c True if referenced file is active.
+    FbxPropertyT<FbxBool> IsActiveProxy;
 
-    	//! The name of proxy manager where the referenced file's proxy can be found.
-    	FbxPropertyT< FbxString >	 	  ProxyManagerName;
-     	/** Referenced file's proxy tag.
-		  * \remarks Proxy tags are unique names assigned to proxy references to more easily manage those references in Maya.
-		  */
-		FbxPropertyT< FbxString >	 	  ProxyTag;
+    //! The name of proxy manager where the referenced file's proxy can be found.
+    FbxPropertyT<FbxString> ProxyManagerName;
+    /** Referenced file's proxy tag.
+     * \remarks Proxy tags are unique names assigned to proxy references to more easily manage those references in Maya.
+     */
+    FbxPropertyT<FbxString> ProxyTag;
     //@}
 
 /*****************************************************************************************************************************
@@ -65,6 +64,7 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual void ConstructProperties(bool pForceSet);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

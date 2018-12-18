@@ -15,10 +15,12 @@
 #include <glm/mat4x4.hpp>
 
 namespace EARenderer {
-    
+
     struct FrustumCascades {
 
-        enum class SplitAxis { X = 0, Y = 1, Z = 2 };
+        enum class SplitAxis {
+            X = 0, Y = 1, Z = 2
+        };
 
         std::vector<glm::mat4> lightViewProjections;
         std::vector<float> splits;
@@ -28,7 +30,7 @@ namespace EARenderer {
         uint8_t amount;
 
     };
-    
+
 }
 
 #endif /* FrustumCascades_hpp */

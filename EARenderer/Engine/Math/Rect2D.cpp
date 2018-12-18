@@ -12,24 +12,24 @@ namespace EARenderer {
 
 #pragma mark - Singletons
 
-    const Rect2D& Rect2D::zero() {
+    const Rect2D &Rect2D::zero() {
         static Rect2D zero;
         return zero;
     }
 
 #pragma mark - Lifecycle
 
-    Rect2D::Rect2D(const Size2D& size)
-    :
-    origin({ 0, 0 }),
-    size(size)
-    { }
-    
-    Rect2D::Rect2D(const glm::vec2& origin, const Size2D& size)
-    :
-    origin(origin),
-    size(size)
-    { }
+    Rect2D::Rect2D(const Size2D &size)
+            :
+            origin({0, 0}),
+            size(size) {
+    }
+
+    Rect2D::Rect2D(const glm::vec2 &origin, const Size2D &size)
+            :
+            origin(origin),
+            size(size) {
+    }
 
 #pragma mark - Convenience
 
@@ -48,5 +48,5 @@ namespace EARenderer {
     float Rect2D::maxY() const {
         return origin.y + size.height;
     }
-    
+
 }

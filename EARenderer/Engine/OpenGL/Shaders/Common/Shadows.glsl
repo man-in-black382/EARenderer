@@ -229,7 +229,7 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
     // Constants that should be refactored into configurable parameters
     const int KernelSize = 4;
     const int VogelDiskSampleCount = KernelSize * KernelSize; // kernelSize * kernelSize
-    const float KernelScale = 3.0; // Can be used to increase sampling window when used in conjunction with penumbra
+    const float KernelScale = 2.0; // Can be used to increase sampling window when used in conjunction with penumbra
     const vec2 BiasLimits = vec2(0.0002, 0.001);
     //
 
@@ -241,7 +241,7 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
     // Get depth of current fragment from light's perspective
     float currentDepth = DepthFromPointLightPerspective(light, surfaceWorldPosition);
     float sine = 1.0 - dot(surfaceNormal, normalize(surfaceToLight));
-    float bias = max(BiasLimits.x, BiasLimits.y * sine);
+    float bias = 0.001;//max(BiasLimits.x, BiasLimits.y * sine);
     float biasedDepth = currentDepth - bias;
 
     #ifndef SHADOW_NO_PCF

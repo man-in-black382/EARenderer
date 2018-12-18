@@ -13,13 +13,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLExposure::GLSLExposure()
-    :
-    GLProgram("FullScreenQuad.vert", "Exposure.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "Exposure.frag", "") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLExposure::setLuminanceHistogram(const GLFloatTexture2D<GLTexture::Float::R32F>& histogram) {
+    void GLSLExposure::setLuminanceHistogram(const GLFloatTexture2D<GLTexture::Float::R32F> &histogram) {
         setUniformTexture(uint32_constant<ctcrc32("uHistogram")>, histogram);
     }
 

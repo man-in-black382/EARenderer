@@ -9,40 +9,40 @@
 #include "Vertex1P1N2UV1T1BT.hpp"
 
 namespace EARenderer {
-    
-#pragma mark - Lifecycle
-    
-    Vertex1P1N2UV1T1BT::Vertex1P1N2UV1T1BT(const glm::vec4& position,
-                                           const glm::vec3& texcoords,
-                                           const glm::vec2& lightmapCoords,
-                                           const glm::vec3& normal,
-                                           const glm::vec3& tangent,
-                                           const glm::vec3& bitangent)
-    :
-    Vertex1P1N2UV(position, texcoords, lightmapCoords, normal),
-    tangent(tangent),
-    bitangent(bitangent)
-    { }
 
-    Vertex1P1N2UV1T1BT::Vertex1P1N2UV1T1BT(const glm::vec4& position)
-    :
-    Vertex1P1N2UV(position, glm::vec3(0.0), glm::vec2(0.0), glm::vec3(0.0)),
-    tangent(glm::vec3(0.0)),
-    bitangent(glm::vec3(0.0))
-    { }
-    
+#pragma mark - Lifecycle
+
+    Vertex1P1N2UV1T1BT::Vertex1P1N2UV1T1BT(const glm::vec4 &position,
+            const glm::vec3 &texcoords,
+            const glm::vec2 &lightmapCoords,
+            const glm::vec3 &normal,
+            const glm::vec3 &tangent,
+            const glm::vec3 &bitangent)
+            :
+            Vertex1P1N2UV(position, texcoords, lightmapCoords, normal),
+            tangent(tangent),
+            bitangent(bitangent) {
+    }
+
+    Vertex1P1N2UV1T1BT::Vertex1P1N2UV1T1BT(const glm::vec4 &position)
+            :
+            Vertex1P1N2UV(position, glm::vec3(0.0), glm::vec2(0.0), glm::vec3(0.0)),
+            tangent(glm::vec3(0.0)),
+            bitangent(glm::vec3(0.0)) {
+    }
+
 #pragma mark - Transformations
-    
-    Vertex1P1N2UV1T1BT Vertex1P1N2UV1T1BT::transformedBy(const Transformation& t) {
+
+    Vertex1P1N2UV1T1BT Vertex1P1N2UV1T1BT::transformedBy(const Transformation &t) {
         glm::mat4 modelMatrix = t.modelMatrix();
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
-        
+
         return Vertex1P1N2UV1T1BT(modelMatrix * position,
-                                  textureCoords,
-                                  lightmapCoords,
-                                  normalMatrix * glm::vec4(normal, 1.0),
-                                  normalMatrix * glm::vec4(tangent, 1.0),
-                                  normalMatrix * glm::vec4(bitangent, 1.0));
+                textureCoords,
+                lightmapCoords,
+                normalMatrix * glm::vec4(normal, 1.0),
+                normalMatrix * glm::vec4(tangent, 1.0),
+                normalMatrix * glm::vec4(bitangent, 1.0));
     }
-    
+
 }

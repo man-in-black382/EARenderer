@@ -13,13 +13,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLSMAAEdgeDetection::GLSLSMAAEdgeDetection()
-    :
-    GLProgram("SMAAEdgeDetection.vert", "SMAAEdgeDetection.frag", "")
-    { }
+            :
+            GLProgram("SMAAEdgeDetection.vert", "SMAAEdgeDetection.frag", "") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLSMAAEdgeDetection::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& image) {
+    void GLSLSMAAEdgeDetection::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
         setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
     }
 

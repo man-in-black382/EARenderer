@@ -10,6 +10,6 @@
 
 @interface ColoredView : NSView
 
-@property (strong, nonatomic) IBInspectable NSColor *fillColor;
+@property(strong, nonatomic) IBInspectable NSColor *fillColor;
 
 @end

@@ -24,9 +24,8 @@
 * Used to group objects with their components (e.g. vertex, edge, and face), when adding it to a selection set (FbxSelectionSet).
 * \see FbxSelectionSet 
 */
-class FBXSDK_DLL FbxSelectionNode : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxSelectionNode, FbxObject);
+class FBXSDK_DLL FbxSelectionNode : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxSelectionNode, FbxObject);
 
 public:
     /** \enum ESelectType               SelectionNode type identifier.
@@ -36,8 +35,7 @@ public:
     * - \e eObjectLevel                Object level selection.
     * - \e eSelectTypeCount             Number of Select Types.
     */
-    enum ESelectType
-    {
+    enum ESelectType {
         eVertexLevel,
         eEdgeLevel,
         eFaceLevel,
@@ -50,12 +48,12 @@ public:
     * \return \c true if the object is set successfully. \c false otherwise.
     * \remarks It is possible a SDK user will try to set multiple objects to one SelectionNode, but only the last one will be kept.
     */
-    bool SetSelectionObject(FbxObject* pObject);
+    bool SetSelectionObject(FbxObject *pObject);
 
     /** Get the object whose components or itself or both are contained in the SelectionNode.
     * \return The object whose components or itself or both are contained in the SelectionNode. 
     */
-    FbxObject* GetSelectionObject() const;
+    FbxObject *GetSelectionObject() const;
 
     /** To detect if the SelectionNode is valid.
     *  \return \c true if this is a valid SelectionNode. \c false otherwise.
@@ -71,11 +69,11 @@ public:
 
     /** Index array for selected vertices.
     */
-    FbxArray<int> mVertexIndexArray;  
+    FbxArray<int> mVertexIndexArray;
 
     /** Index array for selected edges.
     */
-    FbxArray<int> mEdgeIndexArray; 
+    FbxArray<int> mEdgeIndexArray;
 
     /** Index array for selected faces.
     */
@@ -85,12 +83,14 @@ public:
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    FbxArray<FbxArray<int>*> mSubTypeSelectArray;
-    static const char* SELECT_TYPE_NAMES[(int)eSelectTypeCount];
+    FbxArray<FbxArray<int> *> mSubTypeSelectArray;
+    static const char *SELECT_TYPE_NAMES[(int) eSelectTypeCount];
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-    bool ConnectNotify (FbxConnectEvent const &pEvent);
+    virtual void Construct(const FbxObject *pFrom);
+
+    bool ConnectNotify(FbxConnectEvent const &pEvent);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -29,13 +29,13 @@ namespace EARenderer {
 
 #pragma mark - Members functions
 
-        float surfelSolidAngle(const Surfel& surfel, const DiffuseLightProbe& probe);
+        float surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe);
 
-        SurfelClusterProjection projectSurfelCluster(const SurfelCluster& cluster, const DiffuseLightProbe& probe);
+        SurfelClusterProjection projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe);
 
-        void projectSurfelClustersOnProbe(DiffuseLightProbe& probe);
+        void projectSurfelClustersOnProbe(DiffuseLightProbe &probe);
 
-        void projectSkyOnProbe(DiffuseLightProbe& probe);
+        void projectSkyOnProbe(DiffuseLightProbe &probe);
 
     public:
         std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData);

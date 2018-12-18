@@ -18,8 +18,8 @@
 #include "Range.hpp"
 
 namespace EARenderer {
-    
-    class GLShader: public GLNamedObject {
+
+    class GLShader : public GLNamedObject {
     private:
         using IncludePath = std::string;
         using IndexPair = std::pair<int32_t, int32_t>;
@@ -36,7 +36,7 @@ namespace EARenderer {
          @param filePath path to the root GLSL source file
          @return source string composed from all files: root and it's includes
          */
-        std::string assembleSource(const std::string& filePath);
+        std::string assembleSource(const std::string &filePath);
 
         /**
          Retrieves an error line number from info log message provided by OpenGL API
@@ -44,7 +44,7 @@ namespace EARenderer {
          @param infoLog error message from OpenGL
          @return zero-based index of the line in which error has occured
          */
-        int32_t errorLine(const std::string& infoLog);
+        int32_t errorLine(const std::string &infoLog);
 
         /**
          Matches an OpenGL-provided error line number with all files involved in
@@ -61,20 +61,23 @@ namespace EARenderer {
 
          @param source source code
          */
-        void compile(const std::string& source);
-        
+        void compile(const std::string &source);
+
     public:
         using GLNamedObject::GLNamedObject;
-        
-        GLShader(const std::string& sourcePath, GLenum type);
-        GLShader(const GLShader&) = delete;
-        GLShader& operator=(const GLShader&) = delete;
+
+        GLShader(const std::string &sourcePath, GLenum type);
+
+        GLShader(const GLShader &) = delete;
+
+        GLShader &operator=(const GLShader &) = delete;
+
         ~GLShader();
-        
-        void swap(GLShader&);
+
+        void swap(GLShader &);
     };
-    
-    void swap(GLShader&, GLShader&);
+
+    void swap(GLShader &, GLShader &);
 }
 
 #endif /* GLShader_hpp */

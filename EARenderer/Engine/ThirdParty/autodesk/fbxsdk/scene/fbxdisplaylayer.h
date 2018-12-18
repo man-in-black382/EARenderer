@@ -25,9 +25,8 @@
 * The members are exclusive. Members cannot be part of multiple display layers. 
 * Display layers enables user to organize elements of scene and affect visibility and manipulation attributes of multiple objects at once. 
 */
-class FBXSDK_DLL FbxDisplayLayer : public FbxCollectionExclusive
-{
-    FBXSDK_OBJECT_DECLARE(FbxDisplayLayer, FbxCollectionExclusive);
+class FBXSDK_DLL FbxDisplayLayer : public FbxCollectionExclusive {
+FBXSDK_OBJECT_DECLARE(FbxDisplayLayer, FbxCollectionExclusive);
 
 public:
     //////////////////////////////////////////////////////////////////////////
@@ -39,22 +38,22 @@ public:
     *
     * Default value is FbxDouble3(0.8,0.8,0.8).
     */
-    FbxPropertyT<FbxDouble3>       Color;
+    FbxPropertyT<FbxDouble3> Color;
     /** This property stores the visibility of this display layer.
     *
     * Default value is true.
     */
-    FbxPropertyT<FbxBool>         Show;
+    FbxPropertyT<FbxBool> Show;
     /** This property stores the manipulation state of this display layer.
     *
     * Default value is false.
     */
-    FbxPropertyT<FbxBool>         Freeze;
+    FbxPropertyT<FbxBool> Freeze;
     /** This property stores the level of detail mode of this display layer.
     *
     * Default value is false.
     */
-    FbxPropertyT<FbxBool>         LODBox;
+    FbxPropertyT<FbxBool> LODBox;
 
     //////////////////////////////////////////////////////////////////////////
     // Static values
@@ -68,7 +67,8 @@ public:
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-    virtual void ConstructProperties(bool pForceSet);  
+    virtual void ConstructProperties(bool pForceSet);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

@@ -12,36 +12,36 @@
 
 @interface SettingsTabViewItem () <NSTextFieldDelegate>
 
-@property (assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
+@property(assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
 
-@property (weak, nonatomic) IBOutlet NSButton *renderMeshesEnabledButton;
-@property (weak, nonatomic) IBOutlet NSButton *parallaxMappingEnabledButton;
-@property (weak, nonatomic) IBOutlet NSTextField *parallaxMappingStrengthTextField;
-@property (weak, nonatomic) IBOutlet NSButton *lightMultibounceEnabledButton;
-@property (weak, nonatomic) IBOutlet NSButton *skyboxRenderingEnabledButton;
-@property (weak, nonatomic) IBOutlet NSButton *triangleRenderingEnabledButton;
-@property (weak, nonatomic) IBOutlet NSButton *frameMeasurementEnabledButton;
+@property(weak, nonatomic) IBOutlet NSButton *renderMeshesEnabledButton;
+@property(weak, nonatomic) IBOutlet NSButton *parallaxMappingEnabledButton;
+@property(weak, nonatomic) IBOutlet NSTextField *parallaxMappingStrengthTextField;
+@property(weak, nonatomic) IBOutlet NSButton *lightMultibounceEnabledButton;
+@property(weak, nonatomic) IBOutlet NSButton *skyboxRenderingEnabledButton;
+@property(weak, nonatomic) IBOutlet NSButton *triangleRenderingEnabledButton;
+@property(weak, nonatomic) IBOutlet NSButton *frameMeasurementEnabledButton;
 
-@property (weak, nonatomic) IBOutlet NSTextField *ESMFactorTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *ESMDarkeningTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *shadowBlurRadiusTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *ESMFactorTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *ESMDarkeningTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *shadowBlurRadiusTextField;
 
 // Bloom
-@property (weak, nonatomic) IBOutlet NSTextField *bloomStrengthTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurRadiusTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurRadiusTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurRadiusTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurWeightTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurWeightTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurWeightTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomStrengthTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurRadiusTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurRadiusTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurRadiusTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomSmallBlurWeightTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomMediumBlurWeightTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *bloomLargeBlurWeightTextField;
 
-@property (weak, nonatomic) IBOutlet NSButton *surfelRenderingEnabledButton;
-@property (weak, nonatomic) IBOutlet NSPopUpButton *surfelRenderingModeButton;
-@property (weak, nonatomic) IBOutlet NSTextField *surfelProbeIndexTextField;
+@property(weak, nonatomic) IBOutlet NSButton *surfelRenderingEnabledButton;
+@property(weak, nonatomic) IBOutlet NSPopUpButton *surfelRenderingModeButton;
+@property(weak, nonatomic) IBOutlet NSTextField *surfelProbeIndexTextField;
 
-@property (weak, nonatomic) IBOutlet NSButton *diffuseProbesRenderingEnabledButton;
-@property (weak, nonatomic) IBOutlet NSTextField *probeSphereRadiusTextField;
-@property (weak, nonatomic) IBOutlet NSTextField *linkedProbeIndexTextField;
+@property(weak, nonatomic) IBOutlet NSButton *diffuseProbesRenderingEnabledButton;
+@property(weak, nonatomic) IBOutlet NSTextField *probeSphereRadiusTextField;
+@property(weak, nonatomic) IBOutlet NSTextField *linkedProbeIndexTextField;
 
 @end
 
@@ -49,8 +49,7 @@
 
 #pragma mark - Lifecycle
 
-- (void)awakeFromNib
-{
+- (void)awakeFromNib {
     [super awakeFromNib];
 
     self.parallaxMappingStrengthTextField.floatValue = mSettings.meshSettings.parallaxMappingStrength;
@@ -216,8 +215,12 @@
 
 - (IBAction)surfelRenderingModeChanged:(NSPopUpButton *)sender {
     switch (sender.indexOfSelectedItem) {
-        case 0: mSettings.surfelSettings.renderingMode = EARenderer::SurfelRenderer::Mode::Default; break;
-        case 1: mSettings.surfelSettings.renderingMode = EARenderer::SurfelRenderer::Mode::Clusters; break;
+        case 0:
+            mSettings.surfelSettings.renderingMode = EARenderer::SurfelRenderer::Mode::Default;
+            break;
+        case 1:
+            mSettings.surfelSettings.renderingMode = EARenderer::SurfelRenderer::Mode::Clusters;
+            break;
     }
     [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }

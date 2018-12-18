@@ -13,16 +13,16 @@
 #include <OpenGL/gl3.h>
 
 namespace EARenderer {
-    
-    template <typename Vertex>
+
+    template<typename Vertex>
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
         GLVertexArrayBuffer()
-        :
-        GLBuffer<Vertex>(GL_ARRAY_BUFFER, GL_STATIC_DRAW)
-        { }
+                :
+                GLBuffer<Vertex>(GL_ARRAY_BUFFER, GL_STATIC_DRAW) {
+        }
     };
-    
+
 }
 
 #endif /* GLVertexArrayBuffer_hpp */

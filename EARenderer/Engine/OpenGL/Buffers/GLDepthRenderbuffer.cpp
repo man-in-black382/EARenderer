@@ -9,12 +9,12 @@
 #include "GLDepthRenderbuffer.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    GLDepthRenderbuffer::GLDepthRenderbuffer(const Size2D& size)
-    :
-    GLRenderbuffer(size, GL_DEPTH_COMPONENT24)
-    { }
-    
+
+    GLDepthRenderbuffer::GLDepthRenderbuffer(const Size2D &size)
+            :
+            GLRenderbuffer(size, GL_DEPTH_COMPONENT24) {
+    }
+
 }

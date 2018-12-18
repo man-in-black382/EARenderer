@@ -7,7 +7,7 @@
 //
 
 #include "GLFramebuffer.hpp"
- 
+
 #include "StringUtils.hpp"
 
 #include <OpenGL/gl3.h>
@@ -15,63 +15,62 @@
 #include <stdexcept>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    GLFramebuffer::GLFramebuffer(const Size2D& size)
-    :
-    mBindingPoint(GL_FRAMEBUFFER),
-    mSize(size),
-    mViewport(Rect2D(size))
-    {
+
+    GLFramebuffer::GLFramebuffer(const Size2D &size)
+            :
+            mBindingPoint(GL_FRAMEBUFFER),
+            mSize(size),
+            mViewport(Rect2D(size)) {
         if (size.width <= 0 || size.height <= 0) {
             throw std::invalid_argument("Framebuffer's size must be greater than zero");
         }
-        
+
         glGenFramebuffers(1, &mName);
         obtainHardwareLimits();
 
-        std::vector<GLenum> colorAttachments {
-            GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
-            GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7,
-            GL_COLOR_ATTACHMENT8, GL_COLOR_ATTACHMENT9, GL_COLOR_ATTACHMENT10, GL_COLOR_ATTACHMENT11,
-            GL_COLOR_ATTACHMENT12, GL_COLOR_ATTACHMENT13, GL_COLOR_ATTACHMENT14, GL_COLOR_ATTACHMENT15
+        std::vector<GLenum> colorAttachments{
+                GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3,
+                GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5, GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7,
+                GL_COLOR_ATTACHMENT8, GL_COLOR_ATTACHMENT9, GL_COLOR_ATTACHMENT10, GL_COLOR_ATTACHMENT11,
+                GL_COLOR_ATTACHMENT12, GL_COLOR_ATTACHMENT13, GL_COLOR_ATTACHMENT14, GL_COLOR_ATTACHMENT15
         };
 
         mAvailableAttachments.insert(colorAttachments.begin(), colorAttachments.begin() + mMaximumColorAttachments);
     }
-    
+
     GLFramebuffer::~GLFramebuffer() {
         glDeleteFramebuffers(1, &mName);
     }
-    
+
 #pragma mark - Getters
-    
-    const Size2D& GLFramebuffer::size() const {
+
+    const Size2D &GLFramebuffer::size() const {
         return mSize;
     }
-    
+
     bool GLFramebuffer::isComplete() const {
         auto status = glCheckFramebufferStatus(mBindingPoint);
         return status == GL_FRAMEBUFFER_COMPLETE;
     }
-    
-    const GLViewport& GLFramebuffer::viewport() const {
+
+    const GLViewport &GLFramebuffer::viewport() const {
         return mViewport;
     }
 
     size_t GLFramebuffer::maximumColorAttachmentsCount() const {
         return mMaximumColorAttachments;
     }
-    
+
 #pragma mark - Binding
-    
+
     void GLFramebuffer::bind() const {
         glBindFramebuffer(mBindingPoint, mName);
     }
-    
+
 #pragma mark - Private helpers
-    
+
     void GLFramebuffer::obtainHardwareLimits() {
         glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &mMaximumColorAttachments);
         glGetIntegerv(GL_MAX_DRAW_BUFFERS, &mMaximumDrawBuffers);
@@ -88,31 +87,31 @@ namespace EARenderer {
 
         std::sort(drawBuffers.begin(), drawBuffers.begin() + i);
 
-        glDrawBuffers((GLsizei)mRequestedAttachments.size(), drawBuffers.data());
+        glDrawBuffers((GLsizei) mRequestedAttachments.size(), drawBuffers.data());
         glReadBuffer(GL_NONE);
     }
-    
-    void GLFramebuffer::attachTextureToDepthAttachment(const GLTexture& texture, uint16_t mipLevel, int16_t layer) {
+
+    void GLFramebuffer::attachTextureToDepthAttachment(const GLTexture &texture, uint16_t mipLevel, int16_t layer) {
         if (texture.size().width > mSize.width || texture.size().height > mSize.height) {
             throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
         }
-        
+
         bind();
-        
+
         if (layer == AllLayers) {
             glFramebufferTexture(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel);
         } else {
             glFramebufferTextureLayer(mBindingPoint, GL_DEPTH_ATTACHMENT, texture.name(), mipLevel, layer);
         }
-        
+
         if (mRequestedAttachments.empty()) {
             glDrawBuffer(GL_NONE);
         }
-        
+
         glReadBuffer(GL_NONE);
     }
-    
-    void GLFramebuffer::attachTextureToColorAttachment(const GLTexture& texture, ColorAttachment colorAttachment, uint16_t mipLevel, int16_t layer) {
+
+    void GLFramebuffer::attachTextureToColorAttachment(const GLTexture &texture, ColorAttachment colorAttachment, uint16_t mipLevel, int16_t layer) {
         if (texture.size().width > mSize.width || texture.size().height > mSize.height) {
             throw std::invalid_argument(string_format("Attempt to attach texture larger than framebuffer object. Texture size: %fx%f. FBO size: %fx%f", texture.size().width, texture.size().height, mSize.width, mSize.height));
         }
@@ -150,13 +149,12 @@ namespace EARenderer {
                 glAttachment = static_cast<std::underlying_type<ColorAttachment>::type>(*freeAttachmentIt);
                 mAvailableAttachments.erase(freeAttachmentIt);
             }
-        }
-        else {
+        } else {
             glAttachment = static_cast<std::underlying_type<ColorAttachment>::type>(colorAttachment);
             mAvailableAttachments.erase(glAttachment);
         }
 
-        AttachmentMetadata attachmentMetadata { colorAttachment, glAttachment, mipLevel, layer };
+        AttachmentMetadata attachmentMetadata{colorAttachment, glAttachment, mipLevel, layer};
         mTextureAttachmentMap[texture.name()] = attachmentMetadata;
 
         if (layer == AllLayers) {
@@ -170,48 +168,46 @@ namespace EARenderer {
         // FIXME: Delete this line, then ensure rendering works across the application
         setRequestedDrawBuffers();
     }
-    
+
 #pragma mark - Public
 
-    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemapArray& texture, uint16_t mipLevel, int16_t layer) {
+    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemapArray &texture, uint16_t mipLevel, int16_t layer) {
         attachTextureToDepthAttachment(texture, mipLevel, layer);
     }
 
-    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2D& texture, uint16_t mipLevel) {
+    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2D &texture, uint16_t mipLevel) {
         attachTextureToDepthAttachment(texture, mipLevel);
     }
-    
-    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemap& texture, uint16_t mipLevel) {
+
+    void GLFramebuffer::attachDepthTexture(const GLDepthTextureCubemap &texture, uint16_t mipLevel) {
         attachTextureToDepthAttachment(texture, mipLevel);
     }
-    
-    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2DArray& texture, uint16_t mipLevel, int16_t layer) {
+
+    void GLFramebuffer::attachDepthTexture(const GLDepthTexture2DArray &texture, uint16_t mipLevel, int16_t layer) {
         attachTextureToDepthAttachment(texture, mipLevel, layer);
     }
 
     // FIXME: Remove deprecated attachment functions
 
-    void GLFramebuffer::attachTexture(const GLHDRTexture3D& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
+    void GLFramebuffer::attachTexture(const GLHDRTexture3D &texture,
+            ColorAttachment colorAttachment,
+            uint16_t mipLevel) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
 
-    void GLFramebuffer::attachTexture(const GLLDRTexture3D& texture,
-                                      ColorAttachment colorAttachment,
-                                      uint16_t mipLevel)
-    {
+    void GLFramebuffer::attachTexture(const GLLDRTexture3D &texture,
+            ColorAttachment colorAttachment,
+            uint16_t mipLevel) {
         attachTextureToColorAttachment(texture, colorAttachment, mipLevel);
     }
-    
-    void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer& renderbuffer) {
+
+    void GLFramebuffer::attachRenderbuffer(const GLDepthRenderbuffer &renderbuffer) {
         bind();
         renderbuffer.bind();
         glFramebufferRenderbuffer(mBindingPoint, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer.name());
     }
 
-    void GLFramebuffer::detachTexture(const GLTexture& texture) {
+    void GLFramebuffer::detachTexture(const GLTexture &texture) {
         bind();
 
         auto attachmentIt = mTextureAttachmentMap.find(texture.name());
@@ -256,7 +252,7 @@ namespace EARenderer {
         setRequestedDrawBuffers();
     }
 
-    void GLFramebuffer::blit(const GLTexture& fromTexture, const GLTexture& toTexture, bool useLinearFilter) {
+    void GLFramebuffer::blit(const GLTexture &fromTexture, const GLTexture &toTexture, bool useLinearFilter) {
         auto fromAttachmentIt = mTextureAttachmentMap.find(fromTexture.name());
         if (fromAttachmentIt == mTextureAttachmentMap.end()) {
             throw std::invalid_argument(string_format("Texture %d was never attached to the framebuffer, therefore cannot blit from it.", fromTexture.name()));
@@ -274,8 +270,8 @@ namespace EARenderer {
         Rect2D dstRect(toTexture.size());
 
         glBlitFramebuffer(srcRect.origin.x, srcRect.origin.y, srcRect.origin.x + srcRect.size.width, srcRect.origin.y + srcRect.size.height,
-                          dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
-                          GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
+                dstRect.origin.x, dstRect.origin.y, dstRect.origin.x + dstRect.size.width, dstRect.origin.y + dstRect.size.height,
+                GL_COLOR_BUFFER_BIT, useLinearFilter ? GL_LINEAR : GL_NEAREST);
     }
 
     void GLFramebuffer::clear(UnderlyingBuffer bufferMask) {
@@ -284,5 +280,5 @@ namespace EARenderer {
         bind();
         glClear(bitmask);
     }
-    
+
 }

@@ -15,27 +15,31 @@
 #include "Rect2D.hpp"
 
 namespace EARenderer {
-    
+
     class GLViewport {
     private:
         Rect2D mFrame;
-        
+
     public:
-        static GLViewport& main();
-        
+        static GLViewport &main();
+
         GLViewport();
-        GLViewport(const Rect2D& frame);
-        
-        const Rect2D& frame() const;
+
+        GLViewport(const Rect2D &frame);
+
+        const Rect2D &frame() const;
+
         float aspectRatio() const;
-        
-        void setFrame(const Rect2D& frame);
-        void setDimensions(const Size2D& dimensions);
-        
+
+        void setFrame(const Rect2D &frame);
+
+        void setDimensions(const Size2D &dimensions);
+
         void apply() const;
-        
-        glm::vec2 NDCFromPoint(const glm::vec2& screenPoint) const;
-        glm::vec2 pointFromNDC(const glm::vec2& NDCPoint) const;
+
+        glm::vec2 NDCFromPoint(const glm::vec2 &screenPoint) const;
+
+        glm::vec2 pointFromNDC(const glm::vec2 &NDCPoint) const;
 
         /**
          Calculates a matrix for transformation from NDC to viewport space.
@@ -47,7 +51,7 @@ namespace EARenderer {
 
         glm::mat4 textureSpaceMatrix() const;
     };
-    
+
 }
 
 #endif /* GLViewport_hpp */

@@ -38,7 +38,7 @@ namespace bitsery {
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &, Writer &writer, const T &obj, Fnc &&fnc) const {
                 writer.beginSession();
-                fnc(const_cast<T&>(obj));
+                fnc(const_cast<T &>(obj));
                 writer.endSession();
             }
 

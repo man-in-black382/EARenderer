@@ -16,7 +16,7 @@ namespace EARenderer {
 
             void Draw(size_t instanceCount) {
                 if (instanceCount > 1) {
-                    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei)instanceCount);
+                    glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, (GLsizei) instanceCount);
                 } else {
                     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
                 }
@@ -27,7 +27,7 @@ namespace EARenderer {
         namespace Point {
 
             void Draw(size_t count) {
-                glDrawArrays(GL_POINTS, 0, (GLsizei)count);
+                glDrawArrays(GL_POINTS, 0, (GLsizei) count);
             }
 
         }

@@ -11,7 +11,9 @@
 @interface NSColor (ApplicationColors)
 
 + (NSColor *)fpsYellow;
+
 + (NSColor *)fpsRed;
+
 + (NSColor *)fpsGreen;
 
 @end

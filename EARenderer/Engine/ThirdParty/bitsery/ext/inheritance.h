@@ -35,23 +35,27 @@ namespace bitsery {
         class InheritanceContext {
         public:
             InheritanceContext() = default;
-            InheritanceContext(const InheritanceContext&) = delete;
-            InheritanceContext&operator = (const InheritanceContext&) = delete;
-            InheritanceContext(InheritanceContext&&) = default;
-            InheritanceContext& operator = (InheritanceContext&&) = default;
 
-            template <typename TDerived, typename TBase>
+            InheritanceContext(const InheritanceContext &) = delete;
+
+            InheritanceContext &operator=(const InheritanceContext &) = delete;
+
+            InheritanceContext(InheritanceContext &&) = default;
+
+            InheritanceContext &operator=(InheritanceContext &&) = default;
+
+            template<typename TDerived, typename TBase>
             void beginBase(const TDerived &derived, const TBase &) {
                 if (_depth == 0) {
-                    const void* ptr = std::addressof(derived);
-                    if ( _parentPtr != ptr)
+                    const void *ptr = std::addressof(derived);
+                    if (_parentPtr != ptr)
                         _virtualBases.clear();
                     _parentPtr = ptr;
                 }
                 ++_depth;
             }
 
-            template <typename TDerived, typename TBase>
+            template<typename TDerived, typename TBase>
             bool beginVirtualBase(const TDerived &derived, const TBase &base) {
                 beginBase(derived, base);
                 return _virtualBases.emplace(std::addressof(base)).second;
@@ -64,30 +68,30 @@ namespace bitsery {
         private:
             //these members are required to know when we can clear _virtualBases
             size_t _depth{};
-            const void* _parentPtr{};
+            const void *_parentPtr{};
             //add virtual bases to the list, as long as we're on the same parent
-            std::unordered_set<const void*> _virtualBases{};
+            std::unordered_set<const void *> _virtualBases{};
         };
 
-        template <typename TBase>
+        template<typename TBase>
         class BaseClass {
         public:
 
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &ser, Writer &, const T &obj, Fnc &&fnc) const {
-                auto& resObj = static_cast<const TBase&>(obj);
+                auto &resObj = static_cast<const TBase &>(obj);
                 if (auto ctx = ser.template contextOrNull<InheritanceContext>()) {
                     ctx->beginBase(obj, resObj);
-                    fnc(const_cast<TBase&>(resObj));
+                    fnc(const_cast<TBase &>(resObj));
                     ctx->end();
                 } else {
-                    fnc(const_cast<TBase&>(resObj));
+                    fnc(const_cast<TBase &>(resObj));
                 }
             }
 
             template<typename Des, typename Reader, typename T, typename Fnc>
             void deserialize(Des &des, Reader &, T &obj, Fnc &&fnc) const {
-                auto& resObj = static_cast<TBase&>(obj);
+                auto &resObj = static_cast<TBase &>(obj);
                 if (auto ctx = des.template contextOrNull<InheritanceContext>()) {
                     ctx->beginBase(obj, resObj);
                     fnc(resObj);
@@ -100,23 +104,23 @@ namespace bitsery {
         };
 
         //requires InheritanceContext
-        template <typename TBase>
+        template<typename TBase>
         class VirtualBaseClass {
         public:
 
             template<typename Ser, typename Writer, typename T, typename Fnc>
             void serialize(Ser &ser, Writer &, const T &obj, Fnc &&fnc) const {
                 auto ctx = ser.template context<InheritanceContext>();
-                auto& resObj = static_cast<const TBase&>(obj);
+                auto &resObj = static_cast<const TBase &>(obj);
                 if (ctx->beginVirtualBase(obj, resObj))
-                    fnc(const_cast<TBase&>(resObj));
+                    fnc(const_cast<TBase &>(resObj));
                 ctx->end();
             }
 
             template<typename Des, typename Reader, typename T, typename Fnc>
             void deserialize(Des &des, Reader &, T &obj, Fnc &&fnc) const {
                 auto ctx = des.template context<InheritanceContext>();
-                auto& resObj = static_cast<TBase&>(obj);
+                auto &resObj = static_cast<TBase &>(obj);
                 if (ctx->beginVirtualBase(obj, resObj))
                     fnc(resObj);
                 ctx->end();

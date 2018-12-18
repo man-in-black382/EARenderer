@@ -16,17 +16,18 @@
 #include "Parallelogram3D.hpp"
 
 namespace EARenderer {
-    
+
     struct Ray3D {
         glm::vec3 origin;
         glm::vec3 direction;
-        
-        Ray3D(const glm::vec3& origin, const glm::vec3& direction);
-        
-        Ray3D transformedBy(const Transformation& t) const;
-        Ray3D transformedBy(const glm::mat4& m) const;
+
+        Ray3D(const glm::vec3 &origin, const glm::vec3 &direction);
+
+        Ray3D transformedBy(const Transformation &t) const;
+
+        Ray3D transformedBy(const glm::mat4 &m) const;
     };
-    
+
 }
 
 #endif /* Ray_hpp */

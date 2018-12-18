@@ -17,7 +17,7 @@ namespace EARenderer {
 
 #pragma mark - Factory methods
 
-    std::shared_ptr<MeshLoader> MeshLoader::Create(const std::string& meshPath) {
+    std::shared_ptr<MeshLoader> MeshLoader::Create(const std::string &meshPath) {
         if (meshPath.empty()) {
             throw std::invalid_argument("Mesh path must not be empty");
         }

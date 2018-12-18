@@ -14,13 +14,15 @@
 
 namespace EARenderer {
 
-    class GLSLSMAABlendingWeightCalculation: public GLProgram {
+    class GLSLSMAABlendingWeightCalculation : public GLProgram {
     public:
         GLSLSMAABlendingWeightCalculation();
 
-        void setEdgesTexture(const GLFloatTexture2D<GLTexture::Float::RG16F>& edges);
-        void setAreaTexture(const GLNormalizedTexture2D<GLTexture::Normalized::RG>& area);
-        void setSearchTexture(const GLNormalizedTexture2D<GLTexture::Normalized::R>& search);
+        void setEdgesTexture(const GLFloatTexture2D<GLTexture::Float::RG16F> &edges);
+
+        void setAreaTexture(const GLNormalizedTexture2D<GLTexture::Normalized::RG> &area);
+
+        void setSearchTexture(const GLNormalizedTexture2D<GLTexture::Normalized::R> &search);
     };
 
 }

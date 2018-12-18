@@ -29,7 +29,7 @@
 #define BITSERY_PATCH_VERSION 0
 
 #define BITSERY_QUOTE_MACRO(name) #name
-#define BITSERY_BUILD_VERSION_STR(major,minor, patch) \
+#define BITSERY_BUILD_VERSION_STR(major, minor, patch) \
 BITSERY_QUOTE_MACRO(major) "." \
 BITSERY_QUOTE_MACRO(minor) "." \
 BITSERY_QUOTE_MACRO(patch)

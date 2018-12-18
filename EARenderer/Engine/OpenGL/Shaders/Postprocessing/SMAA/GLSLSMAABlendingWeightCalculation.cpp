@@ -13,21 +13,21 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLSMAABlendingWeightCalculation::GLSLSMAABlendingWeightCalculation()
-    :
-    GLProgram("SMAABlendingWeightCalculation.vert", "SMAABlendingWeightCalculation.frag", "")
-    { }
+            :
+            GLProgram("SMAABlendingWeightCalculation.vert", "SMAABlendingWeightCalculation.frag", "") {
+    }
 
 #pragma mark - Setters
 
-    void GLSLSMAABlendingWeightCalculation::setEdgesTexture(const GLFloatTexture2D<GLTexture::Float::RG16F>& edges) {
+    void GLSLSMAABlendingWeightCalculation::setEdgesTexture(const GLFloatTexture2D<GLTexture::Float::RG16F> &edges) {
         setUniformTexture(uint32_constant<ctcrc32("uEdgesTexture")>, edges);
     }
 
-    void GLSLSMAABlendingWeightCalculation::setAreaTexture(const GLNormalizedTexture2D<GLTexture::Normalized::RG>& area) {
-          setUniformTexture(uint32_constant<ctcrc32("uAreaTexture")>, area);
+    void GLSLSMAABlendingWeightCalculation::setAreaTexture(const GLNormalizedTexture2D<GLTexture::Normalized::RG> &area) {
+        setUniformTexture(uint32_constant<ctcrc32("uAreaTexture")>, area);
     }
 
-    void GLSLSMAABlendingWeightCalculation::setSearchTexture(const GLNormalizedTexture2D<GLTexture::Normalized::R>& search) {
+    void GLSLSMAABlendingWeightCalculation::setSearchTexture(const GLNormalizedTexture2D<GLTexture::Normalized::R> &search) {
         setUniformTexture(uint32_constant<ctcrc32("uSearchTexture")>, search);
     }
 

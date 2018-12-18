@@ -18,15 +18,17 @@ namespace EARenderer {
 
 #pragma mark - Normalized
 
-    template <class TextureFormat, TextureFormat format>
-    class GLTextureDataInterpreter { };
+    template<class TextureFormat, TextureFormat format>
+    class GLTextureDataInterpreter {
+    };
 
     template<>
     class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
+
         static float DecodeData(void *texData, size_t offset) {
-            return *((uint8_t *)texData + offset) / 255.0f;
+            return *((uint8_t *) texData + offset) / 255.0f;
         }
     };
 
@@ -34,10 +36,11 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
+
         static glm::vec2 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint8_t *)texData + offset + 0) / 255.0f,
-                *((uint8_t *)texData + offset + 1) / 255.0f
+                    *((uint8_t *) texData + offset + 0) / 255.0f,
+                    *((uint8_t *) texData + offset + 1) / 255.0f
             };
         }
     };
@@ -46,11 +49,12 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBCompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
+
         static glm::vec3 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint8_t *)texData + offset + 0) / 255.0f,
-                *((uint8_t *)texData + offset + 1) / 255.0f,
-                *((uint8_t *)texData + offset + 2) / 255.0f
+                    *((uint8_t *) texData + offset + 0) / 255.0f,
+                    *((uint8_t *) texData + offset + 1) / 255.0f,
+                    *((uint8_t *) texData + offset + 2) / 255.0f
             };
         }
     };
@@ -59,12 +63,13 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Normalized, GLTexture::Normalized::RGBACompressedRGBAInput> {
     public:
         static constexpr uint8_t BytesPerChannel = 1;
+
         static glm::vec4 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint8_t *)texData + offset + 0) / 255.0f,
-                *((uint8_t *)texData + offset + 1) / 255.0f,
-                *((uint8_t *)texData + offset + 2) / 255.0f,
-                *((uint8_t *)texData + offset + 3) / 255.0f
+                    *((uint8_t *) texData + offset + 0) / 255.0f,
+                    *((uint8_t *) texData + offset + 1) / 255.0f,
+                    *((uint8_t *) texData + offset + 2) / 255.0f,
+                    *((uint8_t *) texData + offset + 3) / 255.0f
             };
         }
     };
@@ -75,8 +80,9 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::R16F> {
     public:
         static constexpr uint8_t BytesPerChannel = 2;
+
         static float DecodeData(void *texData, size_t offset) {
-            return glm::unpackHalf1x16(*((uint16_t *)texData + offset));
+            return glm::unpackHalf1x16(*((uint16_t *) texData + offset));
         }
     };
 
@@ -84,10 +90,11 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RG16F> {
     public:
         static constexpr uint8_t BytesPerChannel = 2;
+
         static glm::vec2 DecodeData(void *texData, size_t offset) {
             return {
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 0)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 1))
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 0)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 1))
             };
         }
     };
@@ -96,11 +103,12 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RGB16F> {
     public:
         static constexpr uint8_t BytesPerChannel = 2;
+
         static glm::vec3 DecodeData(void *texData, size_t offset) {
             return {
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 0)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 1)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 2))
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 0)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 1)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 2))
             };
         }
     };
@@ -109,12 +117,13 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RGBA16F> {
     public:
         static constexpr uint8_t BytesPerChannel = 2;
+
         static glm::vec4 DecodeData(void *texData, size_t offset) {
             return {
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 0)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 1)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 2)),
-                glm::unpackHalf1x16(*((uint16_t *)texData + offset + 3))
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 0)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 1)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 2)),
+                    glm::unpackHalf1x16(*((uint16_t *) texData + offset + 3))
             };
         }
     };
@@ -125,8 +134,9 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::R32F> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static float DecodeData(void *texData, size_t offset) {
-            return *((float *)texData + offset);
+            return *((float *) texData + offset);
         }
     };
 
@@ -134,10 +144,11 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RG32F> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::vec2 DecodeData(void *texData, size_t offset) {
             return {
-                *((float *)texData + offset + 0),
-                *((float *)texData + offset + 1)
+                    *((float *) texData + offset + 0),
+                    *((float *) texData + offset + 1)
             };
         }
     };
@@ -146,11 +157,12 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RGB32F> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::vec3 DecodeData(void *texData, size_t offset) {
             return {
-                *((float *)texData + offset + 0),
-                *((float *)texData + offset + 1),
-                *((float *)texData + offset + 2)
+                    *((float *) texData + offset + 0),
+                    *((float *) texData + offset + 1),
+                    *((float *) texData + offset + 2)
             };
         }
     };
@@ -159,12 +171,13 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Float, GLTexture::Float::RGBA32F> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::vec4 DecodeData(void *texData, size_t offset) {
             return {
-                *((float *)texData + offset + 0),
-                *((float *)texData + offset + 1),
-                *((float *)texData + offset + 2),
-                *((float *)texData + offset + 3)
+                    *((float *) texData + offset + 0),
+                    *((float *) texData + offset + 1),
+                    *((float *) texData + offset + 2),
+                    *((float *) texData + offset + 3)
             };
         }
     };
@@ -175,8 +188,9 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Integer, GLTexture::Integer::R32UI> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static uint32_t DecodeData(void *texData, size_t offset) {
-            return *((uint32_t *)texData + offset);
+            return *((uint32_t *) texData + offset);
         }
     };
 
@@ -184,10 +198,11 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Integer, GLTexture::Integer::RG32UI> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::uvec2 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint32_t *)texData + offset + 0),
-                *((uint32_t *)texData + offset + 1)
+                    *((uint32_t *) texData + offset + 0),
+                    *((uint32_t *) texData + offset + 1)
             };
         }
     };
@@ -196,11 +211,12 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Integer, GLTexture::Integer::RGB32UI> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::uvec3 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint32_t *)texData + offset + 0),
-                *((uint32_t *)texData + offset + 1),
-                *((uint32_t *)texData + offset + 2)
+                    *((uint32_t *) texData + offset + 0),
+                    *((uint32_t *) texData + offset + 1),
+                    *((uint32_t *) texData + offset + 2)
             };
         }
     };
@@ -209,12 +225,13 @@ namespace EARenderer {
     class GLTextureDataInterpreter<GLTexture::Integer, GLTexture::Integer::RGBA32UI> {
     public:
         static constexpr uint8_t BytesPerChannel = 4;
+
         static glm::uvec4 DecodeData(void *texData, size_t offset) {
             return {
-                *((uint32_t *)texData + offset + 0),
-                *((uint32_t *)texData + offset + 1),
-                *((uint32_t *)texData + offset + 2),
-                *((uint32_t *)texData + offset + 3)
+                    *((uint32_t *) texData + offset + 0),
+                    *((uint32_t *) texData + offset + 1),
+                    *((uint32_t *) texData + offset + 2),
+                    *((uint32_t *) texData + offset + 3)
             };
         }
     };

@@ -9,16 +9,16 @@
 #include "FrameMeter.hpp"
 
 namespace EARenderer {
-    
-    #pragma mark - Lifecycle
-    
+
+#pragma mark - Lifecycle
+
     FrameMeter::FrameMeter(float throttleMilliseconds)
-    :
-    mThrottle(throttleMilliseconds)
-    { }
-    
+            :
+            mThrottle(throttleMilliseconds) {
+    }
+
 #pragma mark - Public methods
-    
+
     FrameMeter::FrameCharacteristics FrameMeter::tick() {
         mPassedFrames++;
         mThrottle.attemptToPerformAction([this]() {
@@ -28,5 +28,5 @@ namespace EARenderer {
         });
         return mFrameCharacteristics;
     }
-    
+
 }

@@ -17,18 +17,18 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLVertexAttribute::GLVertexAttribute(GLint sizeInBytes, GLint componentCount)
-    :
-    bytes(sizeInBytes),
-    components(componentCount)
-    { }
+            :
+            bytes(sizeInBytes),
+            components(componentCount) {
+    }
 
     GLVertexAttribute::GLVertexAttribute(GLint sizeInBytes, GLint componentCount, GLint divisor, GLint location)
-    :
-    bytes(sizeInBytes),
-    components(componentCount),
-    divisor(divisor),
-    location(location)
-    { }
+            :
+            bytes(sizeInBytes),
+            components(componentCount),
+            divisor(divisor),
+            location(location) {
+    }
 
     GLVertexAttribute GLVertexAttribute::UniqueAttribute(GLint sizeInBytes, GLint componentCount, GLint location) {
         return GLVertexAttribute(sizeInBytes, componentCount, 0, location);

@@ -32,16 +32,19 @@ namespace bitsery {
     namespace traits {
         template<typename ... TArgs>
         struct ContainerTraits<std::vector<TArgs...>>
-                :public StdContainer<std::vector<TArgs...>, true, true> {};
+                : public StdContainer<std::vector<TArgs...>, true, true> {
+        };
 
         //bool vector is not contiguous, do not copy it directly to buffer
         template<typename Allocator>
         struct ContainerTraits<std::vector<bool, Allocator>>
-                :public StdContainer<std::vector<bool, Allocator>, true, false> {};
+                : public StdContainer<std::vector<bool, Allocator>, true, false> {
+        };
 
         template<typename ... TArgs>
         struct BufferAdapterTraits<std::vector<TArgs...>>
-                :public StdContainerForBufferAdapter<std::vector<TArgs...>> {};
+                : public StdContainerForBufferAdapter<std::vector<TArgs...>> {
+        };
 
     }
 

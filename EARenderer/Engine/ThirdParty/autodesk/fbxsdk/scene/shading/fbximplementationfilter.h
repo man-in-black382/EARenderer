@@ -25,26 +25,25 @@ class FbxCriteria;
   * based on the shading node implementation.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxImplementationFilter : public FbxObjectFilter
-{
+class FBXSDK_DLL FbxImplementationFilter : public FbxObjectFilter {
 
 public:
 
-	/** The default shading API.
+    /** The default shading API.
       */
-	static const char * sCHR_ANY_SHADING_API;
+    static const char *sCHR_ANY_SHADING_API;
 
-	/** The default shading API version.
+    /** The default shading API version.
       */
-	static const char * sCHR_ANY_SHADING_API_VERSION;
+    static const char *sCHR_ANY_SHADING_API_VERSION;
 
-	/** The default shading language.
+    /** The default shading language.
       */
-	static const char * sCHR_ANY_SHADING_LANGUAGE;
-	
-	/** The default shading language version.
+    static const char *sCHR_ANY_SHADING_LANGUAGE;
+
+    /** The default shading language version.
       */
-	static const char * sCHR_ANY_SHADING_LANGUAGE_VERSION;
+    static const char *sCHR_ANY_SHADING_LANGUAGE_VERSION;
 
 
     /** Constructor
@@ -68,46 +67,48 @@ public:
 	  *
 	  * \remarks by default the created criteria correspond to any shader
 	  */
-	FbxImplementationFilter(
-		const char * pShadingAPI				= sCHR_ANY_SHADING_API,
-		const char * pShadingAPIVersion			= sCHR_ANY_SHADING_API_VERSION,
-		const char * pShadingLanguage			= sCHR_ANY_SHADING_LANGUAGE,
-		const char * pShadingLanguageVersion	= sCHR_ANY_SHADING_LANGUAGE_VERSION
-	);
+    FbxImplementationFilter(
+            const char *pShadingAPI = sCHR_ANY_SHADING_API,
+            const char *pShadingAPIVersion = sCHR_ANY_SHADING_API_VERSION,
+            const char *pShadingLanguage = sCHR_ANY_SHADING_LANGUAGE,
+            const char *pShadingLanguageVersion = sCHR_ANY_SHADING_LANGUAGE_VERSION
+    );
 
     //! Destructor.
     virtual ~FbxImplementationFilter();
 
-	/** Tells if this filter matches the given shading node implementation
-	  * \param pObjectPtr The given shading node implementation
-	  */
-	virtual bool Match(const FbxObject * pObjectPtr) const;
+    /** Tells if this filter matches the given shading node implementation
+      * \param pObjectPtr The given shading node implementation
+      */
+    virtual bool Match(const FbxObject *pObjectPtr) const;
 
-	//! Stores the shading API
-	FbxString mShadingAPI;
+    //! Stores the shading API
+    FbxString mShadingAPI;
 
-	//! Stores the shading API Version
-	FbxString mShadingAPIVersion;
+    //! Stores the shading API Version
+    FbxString mShadingAPIVersion;
 
-	//! Stores the shading language
-	FbxString mShadingLanguage;
+    //! Stores the shading language
+    FbxString mShadingLanguage;
 
-	//! Stores the shading language version
-	FbxString mShadingLanguageVersion;
+    //! Stores the shading language version
+    FbxString mShadingLanguageVersion;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	/** Utility method to determine if the given object is a shading node
-	  * that we recognize.
-	  */
-	static bool IsShadingObject( const FbxObject* pObject );
 
-	/** Returns a criteria suitable for use with querying connections 
-	  * to shading nodes that we recognize, on FbxObject.
-	  */
-	static FbxCriteria Criteria();
+    /** Utility method to determine if the given object is a shading node
+      * that we recognize.
+      */
+    static bool IsShadingObject(const FbxObject *pObject);
+
+    /** Returns a criteria suitable for use with querying connections 
+      * to shading nodes that we recognize, on FbxObject.
+      */
+    static FbxCriteria Criteria();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

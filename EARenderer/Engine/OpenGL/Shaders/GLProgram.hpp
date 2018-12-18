@@ -33,39 +33,41 @@
 #include "crc.hpp"
 
 namespace EARenderer {
-    
+
     template<uint32_t expr>
     std::integral_constant<uint32_t, expr> uint32_constant{};
-    
-    class GLProgram: public GLNamedObject {
+
+    class GLProgram : public GLNamedObject {
     protected:
         using VertexAttributeName = std::string;
         using CRC32 = uint32_t;
 
     private:
-        const GLShader* mVertexShader = nullptr;
-        const GLShader* mFragmentShader = nullptr;
-        const GLShader* mGeometryShader = nullptr;
+        const GLShader *mVertexShader = nullptr;
+        const GLShader *mFragmentShader = nullptr;
+        const GLShader *mGeometryShader = nullptr;
 
         std::unordered_map<VertexAttributeName, GLVertexAttribute> mVertexAttributes;
         std::unordered_map<CRC32, GLUniform> mUniforms;
         std::unordered_set<CRC32> mReportedMissingUniforms;
-        
+
         GLint mAvailableTextureUnits = 0;
-        
+
         bool isModifyingUniforms = false;
 
         void link();
+
         void obtainVertexAttributes();
+
         void obtainUniforms();
-        
+
     protected:
-        GLProgram(const std::string& vertexSourceName, const std::string& fragmentSourceName, const std::string& geometrySourceName);
-        
-        void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture& texture, const GLSampler* sampler = nullptr);
-        
-        template <typename BufferDataType>
-        void setUniformTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType>& bufferTexture) {
+        GLProgram(const std::string &vertexSourceName, const std::string &fragmentSourceName, const std::string &geometrySourceName);
+
+        void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture &texture, const GLSampler *sampler = nullptr);
+
+        template<typename BufferDataType>
+        void setUniformTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType> &bufferTexture) {
             if (bufferTexture.buffer().size() == 0) {
                 throw std::runtime_error("Passing empty texture buffer to a uniform is not allowed");
             }
@@ -74,23 +76,30 @@ namespace EARenderer {
             glActiveTexture(GL_TEXTURE0 + sampler.textureUnit());
             bufferTexture.bind();
         }
-        
+
     public:
-        using UniformModifierClosure = const std::function<void()>&;
-        
-        GLProgram(const GLProgram& rhs) = delete;
-        GLProgram& operator=(const GLProgram& that) = delete;
-        GLProgram(GLProgram&& that) = default;
-        GLProgram& operator=(GLProgram&& that) = default;
+        using UniformModifierClosure = const std::function<void()> &;
+
+        GLProgram(const GLProgram &rhs) = delete;
+
+        GLProgram &operator=(const GLProgram &that) = delete;
+
+        GLProgram(GLProgram &&that) = default;
+
+        GLProgram &operator=(GLProgram &&that) = default;
+
         virtual ~GLProgram() = 0;
-        void swap(GLProgram&);
-        
+
+        void swap(GLProgram &);
+
         void bind() const;
+
         bool validateState() const;
 
-        const GLVertexAttribute& vertexAttributeByName(const std::string& name);
-        const GLUniform& uniformByNameCRC32(CRC32 crc32);
-        
+        const GLVertexAttribute &vertexAttributeByName(const std::string &name);
+
+        const GLUniform &uniformByNameCRC32(CRC32 crc32);
+
         /**
          You should use this function for setting up uniform sampler values.
          If GLSL code for a particular program requires optional samplers,
@@ -101,9 +110,9 @@ namespace EARenderer {
          */
         void ensureSamplerValidity(UniformModifierClosure closure);
     };
-    
-    void swap(GLProgram&, GLProgram&);
-    
+
+    void swap(GLProgram &, GLProgram &);
+
 }
 
 #endif /* GLProgram_hpp */

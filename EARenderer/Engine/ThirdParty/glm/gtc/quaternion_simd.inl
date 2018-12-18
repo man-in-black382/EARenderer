@@ -3,9 +3,8 @@
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
-namespace glm{
-namespace detail
-{
+namespace glm {
+    namespace detail {
 /*
 	template <precision P>
 	struct compute_quat_mul<float, P, true>
@@ -61,137 +60,125 @@ namespace detail
 	};
 */
 
-	template <precision P>
-	struct compute_dot<tquat, float, P, true>
-	{
-		static GLM_FUNC_QUALIFIER float call(tquat<float, P> const& x, tquat<float, P> const& y)
-		{
-			return _mm_cvtss_f32(glm_vec1_dot(x.data, y.data));
-		}
-	};
+        template<precision P>
+        struct compute_dot<tquat, float, P, true> {
+            static GLM_FUNC_QUALIFIER float call(tquat<float, P> const &x, tquat<float, P> const &y) {
+                return _mm_cvtss_f32(glm_vec1_dot(x.data, y.data));
+            }
+        };
 
-	template <precision P>
-	struct compute_quat_add<float, P, true>
-	{
-		static tquat<float, P> call(tquat<float, P> const& q, tquat<float, P> const& p)
-		{
-			tquat<float, P> Result(uninitialize);
-			Result.data = _mm_add_ps(q.data, p.data);
-			return Result;
-		}
-	};
+        template<precision P>
+        struct compute_quat_add<float, P, true> {
+            static tquat<float, P> call(tquat<float, P> const &q, tquat<float, P> const &p) {
+                tquat<float, P> Result(uninitialize);
+                Result.data = _mm_add_ps(q.data, p.data);
+                return Result;
+            }
+        };
 
 #	if GLM_ARCH & GLM_ARCH_AVX_BIT
-	template <precision P>
-	struct compute_quat_add<double, P, true>
-	{
-		static tquat<double, P> call(tquat<double, P> const & a, tquat<double, P> const & b)
-		{
-			tquat<double, P> Result(uninitialize);
-			Result.data = _mm256_add_pd(a.data, b.data);
-			return Result;
-		}
-	};
+        template <precision P>
+        struct compute_quat_add<double, P, true>
+        {
+            static tquat<double, P> call(tquat<double, P> const & a, tquat<double, P> const & b)
+            {
+                tquat<double, P> Result(uninitialize);
+                Result.data = _mm256_add_pd(a.data, b.data);
+                return Result;
+            }
+        };
 #	endif
 
-	template <precision P>
-	struct compute_quat_sub<float, P, true>
-	{
-		static tquat<float, P> call(tquat<float, P> const& q, tquat<float, P> const& p)
-		{
-			tvec4<float, P> Result(uninitialize);
-			Result.data = _mm_sub_ps(q.data, p.data);
-			return Result;
-		}
-	};
+        template<precision P>
+        struct compute_quat_sub<float, P, true> {
+            static tquat<float, P> call(tquat<float, P> const &q, tquat<float, P> const &p) {
+                tvec4<float, P> Result(uninitialize);
+                Result.data = _mm_sub_ps(q.data, p.data);
+                return Result;
+            }
+        };
 
 #	if GLM_ARCH & GLM_ARCH_AVX_BIT
-	template <precision P>
-	struct compute_quat_sub<double, P, true>
-	{
-		static tquat<double, P> call(tquat<double, P> const & a, tquat<double, P> const & b)
-		{
-			tquat<double, P> Result(uninitialize);
-			Result.data = _mm256_sub_pd(a.data, b.data);
-			return Result;
-		}
-	};
+        template <precision P>
+        struct compute_quat_sub<double, P, true>
+        {
+            static tquat<double, P> call(tquat<double, P> const & a, tquat<double, P> const & b)
+            {
+                tquat<double, P> Result(uninitialize);
+                Result.data = _mm256_sub_pd(a.data, b.data);
+                return Result;
+            }
+        };
 #	endif
 
-	template <precision P>
-	struct compute_quat_mul_scalar<float, P, true>
-	{
-		static tquat<float, P> call(tquat<float, P> const& q, float s)
-		{
-			tvec4<float, P> Result(uninitialize);
-			Result.data = _mm_mul_ps(q.data, _mm_set_ps1(s));
-			return Result;
-		}
-	};
+        template<precision P>
+        struct compute_quat_mul_scalar<float, P, true> {
+            static tquat<float, P> call(tquat<float, P> const &q, float s) {
+                tvec4<float, P> Result(uninitialize);
+                Result.data = _mm_mul_ps(q.data, _mm_set_ps1(s));
+                return Result;
+            }
+        };
 
 #	if GLM_ARCH & GLM_ARCH_AVX_BIT
-	template <precision P>
-	struct compute_quat_mul_scalar<double, P, true>
-	{
-		static tquat<double, P> call(tquat<double, P> const& q, double s)
-		{
-			tquat<double, P> Result(uninitialize);
-			Result.data = _mm256_mul_pd(q.data, _mm_set_ps1(s));
-			return Result;
-		}
-	};
+        template <precision P>
+        struct compute_quat_mul_scalar<double, P, true>
+        {
+            static tquat<double, P> call(tquat<double, P> const& q, double s)
+            {
+                tquat<double, P> Result(uninitialize);
+                Result.data = _mm256_mul_pd(q.data, _mm_set_ps1(s));
+                return Result;
+            }
+        };
 #	endif
 
-	template <precision P>
-	struct compute_quat_div_scalar<float, P, true>
-	{
-		static tquat<float, P> call(tquat<float, P> const& q, float s)
-		{
-			tvec4<float, P> Result(uninitialize);
-			Result.data = _mm_div_ps(q.data, _mm_set_ps1(s));
-			return Result;
-		}
-	};
+        template<precision P>
+        struct compute_quat_div_scalar<float, P, true> {
+            static tquat<float, P> call(tquat<float, P> const &q, float s) {
+                tvec4<float, P> Result(uninitialize);
+                Result.data = _mm_div_ps(q.data, _mm_set_ps1(s));
+                return Result;
+            }
+        };
 
 #	if GLM_ARCH & GLM_ARCH_AVX_BIT
-	template <precision P>
-	struct compute_quat_div_scalar<double, P, true>
-	{
-		static tquat<double, P> call(tquat<double, P> const& q, double s)
-		{
-			tquat<double, P> Result(uninitialize);
-			Result.data = _mm256_div_pd(q.data, _mm_set_ps1(s));
-			return Result;
-		}
-	};
+        template <precision P>
+        struct compute_quat_div_scalar<double, P, true>
+        {
+            static tquat<double, P> call(tquat<double, P> const& q, double s)
+            {
+                tquat<double, P> Result(uninitialize);
+                Result.data = _mm256_div_pd(q.data, _mm_set_ps1(s));
+                return Result;
+            }
+        };
 #	endif
 
-	template <precision P>
-	struct compute_quat_mul_vec4<float, P, true>
-	{
-		static tvec4<float, P> call(tquat<float, P> const& q, tvec4<float, P> const& v)
-		{
-			__m128 const q_wwww = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 3, 3, 3));
-			__m128 const q_swp0 = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 0, 2, 1));
-			__m128 const q_swp1 = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 1, 0, 2));
-			__m128 const v_swp0 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(3, 0, 2, 1));
-			__m128 const v_swp1 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(3, 1, 0, 2));
-	
-			__m128 uv      = _mm_sub_ps(_mm_mul_ps(q_swp0, v_swp1), _mm_mul_ps(q_swp1, v_swp0));
-			__m128 uv_swp0 = _mm_shuffle_ps(uv, uv, _MM_SHUFFLE(3, 0, 2, 1));
-			__m128 uv_swp1 = _mm_shuffle_ps(uv, uv, _MM_SHUFFLE(3, 1, 0, 2));
-			__m128 uuv     = _mm_sub_ps(_mm_mul_ps(q_swp0, uv_swp1), _mm_mul_ps(q_swp1, uv_swp0));
+        template<precision P>
+        struct compute_quat_mul_vec4<float, P, true> {
+            static tvec4<float, P> call(tquat<float, P> const &q, tvec4<float, P> const &v) {
+                __m128 const q_wwww = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 3, 3, 3));
+                __m128 const q_swp0 = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 0, 2, 1));
+                __m128 const q_swp1 = _mm_shuffle_ps(q.data, q.data, _MM_SHUFFLE(3, 1, 0, 2));
+                __m128 const v_swp0 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(3, 0, 2, 1));
+                __m128 const v_swp1 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(3, 1, 0, 2));
 
-			__m128 const two = _mm_set1_ps(2.0f);
-			uv  = _mm_mul_ps(uv, _mm_mul_ps(q_wwww, two));
-			uuv = _mm_mul_ps(uuv, two);
+                __m128 uv = _mm_sub_ps(_mm_mul_ps(q_swp0, v_swp1), _mm_mul_ps(q_swp1, v_swp0));
+                __m128 uv_swp0 = _mm_shuffle_ps(uv, uv, _MM_SHUFFLE(3, 0, 2, 1));
+                __m128 uv_swp1 = _mm_shuffle_ps(uv, uv, _MM_SHUFFLE(3, 1, 0, 2));
+                __m128 uuv = _mm_sub_ps(_mm_mul_ps(q_swp0, uv_swp1), _mm_mul_ps(q_swp1, uv_swp0));
 
-			tvec4<float, P> Result(uninitialize);
-			Result.data = _mm_add_ps(v.Data, _mm_add_ps(uv, uuv));
-			return Result;
-		}
-	};
-}//namespace detail
+                __m128 const two = _mm_set1_ps(2.0f);
+                uv = _mm_mul_ps(uv, _mm_mul_ps(q_wwww, two));
+                uuv = _mm_mul_ps(uuv, two);
+
+                tvec4<float, P> Result(uninitialize);
+                Result.data = _mm_add_ps(v.Data, _mm_add_ps(uv, uuv));
+                return Result;
+            }
+        };
+    }//namespace detail
 }//namespace glm
 
 #endif//GLM_ARCH & GLM_ARCH_SSE2_BIT

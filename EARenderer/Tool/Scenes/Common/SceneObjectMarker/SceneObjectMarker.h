@@ -21,8 +21,8 @@ typedef NS_ENUM(NSUInteger, SceneObjectMarkerType) {
 
 @interface SceneObjectMarker : NSObject
 
-@property (assign, nonatomic) EARenderer::ID objectID;
-@property (assign, nonatomic) SceneObjectMarkerType type;
+@property(assign, nonatomic) EARenderer::ID objectID;
+@property(assign, nonatomic) SceneObjectMarkerType type;
 
 - (instancetype)initWithObjectID:(EARenderer::ID)objectID type:(SceneObjectMarkerType)marker;
 

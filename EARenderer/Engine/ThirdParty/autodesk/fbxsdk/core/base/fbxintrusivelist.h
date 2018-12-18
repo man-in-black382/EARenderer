@@ -26,78 +26,75 @@
     public: inline FbxListNode<Class>& GetListNode(int index = 0){ return this->mNode[index]; }\
     private: FbxListNode<Class> mNode[NodeCount];
 
-template <typename T> class FbxListNode
-{
-    typedef FbxListNode<T> NodeT; 
+template<typename T>
+class FbxListNode {
+    typedef FbxListNode<T> NodeT;
 
 public:
-	explicit FbxListNode(T* pData = 0):mNext(0),mPrev(0),mData(pData){}
-	~FbxListNode(){ Disconnect(); }
+    explicit FbxListNode(T *pData = 0) : mNext(0), mPrev(0), mData(pData) {
+    }
 
-	void Disconnect()
-	{
-		if ( mPrev != 0 )
-			mPrev->mNext = mNext;
+    ~FbxListNode() {
+        Disconnect();
+    }
 
-		if ( mNext != 0 )
-			mNext->mPrev = mPrev;
+    void Disconnect() {
+        if (mPrev != 0)
+            mPrev->mNext = mNext;
 
-		mPrev = mNext = 0;
-	}
+        if (mNext != 0)
+            mNext->mPrev = mPrev;
 
-	NodeT*	mNext;
-	NodeT*	mPrev;
-	T*		mData;
+        mPrev = mNext = 0;
+    }
+
+    NodeT *mNext;
+    NodeT *mPrev;
+    T *mData;
 };
 
 //-----------------------------------------------------------------
 // template arg T: Type listed
 //          arg NodeIndex: If an object listed has  multiple list node, which
 //                         index corresponds to the right node
-template <typename T, int NodeIndex=0> class FbxIntrusiveList
-{
+template<typename T, int NodeIndex = 0>
+class FbxIntrusiveList {
 public:
-    typedef T         allocator_type;
-    typedef T         value_type;
-    typedef T&        reference;
-    typedef const T&  const_reference;
-    typedef T*        pointer;
-    typedef const T*  const_pointer;
+    typedef T allocator_type;
+    typedef T value_type;
+    typedef T &reference;
+    typedef const T &const_reference;
+    typedef T *pointer;
+    typedef const T *const_pointer;
 
     typedef FbxListNode<T> NodeT;
 
     // Construction / Destruction
-    FbxIntrusiveList():mHead(0)
-    {
+    FbxIntrusiveList() : mHead(0) {
         mHead.mNext = mHead.mPrev = &mHead;
     }
-    ~FbxIntrusiveList()
-    {
-        while(!Empty())
+
+    ~FbxIntrusiveList() {
+        while (!Empty())
             Begin().Get()->Disconnect();  // LINUXNote:  should be Erase(Begin()); but there's an issue with gcc 4.2
     };
 
     // true if the list's size is 0.
-    bool Empty() const
-    {
-        return ((mHead.mNext==&mHead)&&(mHead.mPrev==&mHead));
+    bool Empty() const {
+        return ((mHead.mNext == &mHead) && (mHead.mPrev == &mHead));
     }
 
     // Back Insertion Sequence  Inserts a new element at the end.  
-    void PushBack(T& pElement)
-    {
-        NodeT* pNode = &pElement.GetListNode(NodeIndex);
+    void PushBack(T &pElement) {
+        NodeT *pNode = &pElement.GetListNode(NodeIndex);
         pNode->mData = &pElement;
 
-        if (Empty())
-        {
+        if (Empty()) {
             pNode->mNext = &mHead;
             pNode->mPrev = &mHead;
             mHead.mNext = pNode;
             mHead.mPrev = pNode;
-        }
-        else
-        {
+        } else {
             pNode->mNext = &mHead;
             pNode->mPrev = mHead.mPrev;
 
@@ -106,20 +103,16 @@ public:
         }
     }
 
-    void PushFront(T& pElement)
-    {
-        NodeT* pNode = &pElement.GetListNode(NodeIndex);
+    void PushFront(T &pElement) {
+        NodeT *pNode = &pElement.GetListNode(NodeIndex);
         pNode->mData = &pElement;
 
-        if (Empty())
-        {
+        if (Empty()) {
             pNode->mNext = &mHead;
             pNode->mPrev = &mHead;
             mHead.mNext = pNode;
             mHead.mPrev = pNode;
-        }
-        else
-        {
+        } else {
             pNode->mNext = mHead.mNext;
             pNode->mPrev = &mHead;
 
@@ -128,100 +121,134 @@ public:
         }
     }
 
-    void PopFront()
-    {
+    void PopFront() {
         iterator begin = Begin();
         Erase(begin);
     }
 
-    void PopBack()
-    {
+    void PopBack() {
         Erase(--(End()));
     }
 
 public:
-    class IntrusiveListIterator
-    {
+    class IntrusiveListIterator {
     public:
-        explicit IntrusiveListIterator(NodeT* ptr=0):mPtr(ptr){}
+        explicit IntrusiveListIterator(NodeT *ptr = 0) : mPtr(ptr) {
+        }
 
         // pre-increment
-        IntrusiveListIterator& operator++()
-        {
-            mPtr = mPtr->mNext;return (*this);
+        IntrusiveListIterator &operator++() {
+            mPtr = mPtr->mNext;
+            return (*this);
         }
+
         // post-increment
-        const IntrusiveListIterator operator++(int)
-        {
+        const IntrusiveListIterator operator++(int) {
             IntrusiveListIterator temp = *this;
             ++*this;
             return (temp);
         }
+
         // pre-decrement
-        IntrusiveListIterator& operator--()
-        {
-            mPtr = mPtr->mPrev;return *this;
+        IntrusiveListIterator &operator--() {
+            mPtr = mPtr->mPrev;
+            return *this;
         }
+
         // post-decrement
-        const IntrusiveListIterator operator--(int)
-        {
+        const IntrusiveListIterator operator--(int) {
             IntrusiveListIterator temp = *this;
             --*this;
             return (temp);
         }
-        IntrusiveListIterator& operator=(const IntrusiveListIterator &other){mPtr = other.mPtr; return *this;}
 
-        reference operator*() const { return *(mPtr->mData); }
-        pointer operator->() const { return (&**this); }
-        bool operator==(const IntrusiveListIterator& other)const{ return mPtr==other.mPtr; } 
-        bool operator!=(const IntrusiveListIterator& other)const{ return !(*this == other); } 
+        IntrusiveListIterator &operator=(const IntrusiveListIterator &other) {
+            mPtr = other.mPtr;
+            return *this;
+        }
 
-        inline NodeT* Get()const { return mPtr; }
+        reference operator*() const {
+            return *(mPtr->mData);
+        }
+
+        pointer operator->() const {
+            return (&**this);
+        }
+
+        bool operator==(const IntrusiveListIterator &other) const {
+            return mPtr == other.mPtr;
+        }
+
+        bool operator!=(const IntrusiveListIterator &other) const {
+            return !(*this == other);
+        }
+
+        inline NodeT *Get() const {
+            return mPtr;
+        }
 
     private:
-        NodeT* mPtr;
+        NodeT *mPtr;
     };
 
-    class  IntrusiveListConstIterator
-    {
+    class IntrusiveListConstIterator {
     public:
-        explicit IntrusiveListConstIterator(const NodeT* ptr=0):mPtr(ptr){}
-
-       // pre-increment
-        IntrusiveListConstIterator& operator++()
-        {
-            mPtr = mPtr->mNext;return (*this);
+        explicit IntrusiveListConstIterator(const NodeT *ptr = 0) : mPtr(ptr) {
         }
+
+        // pre-increment
+        IntrusiveListConstIterator &operator++() {
+            mPtr = mPtr->mNext;
+            return (*this);
+        }
+
         // post-increment
-        const IntrusiveListConstIterator operator++(int)
-        {
+        const IntrusiveListConstIterator operator++(int) {
             IntrusiveListConstIterator temp = *this;
             ++*this;
             return (temp);
         }
+
         // pre-decrement
-        IntrusiveListConstIterator& operator--()
-        {
-            mPtr = mPtr->mPrev;return *this;
+        IntrusiveListConstIterator &operator--() {
+            mPtr = mPtr->mPrev;
+            return *this;
         }
+
         // post-decrement
-        const IntrusiveListConstIterator operator--(int)
-        {
+        const IntrusiveListConstIterator operator--(int) {
             IntrusiveListConstIterator temp = *this;
             --*this;
             return (temp);
         }
-        IntrusiveListConstIterator& operator=(const IntrusiveListConstIterator &other){mPtr = other.mPtr; return *this;}
 
-        const_reference operator*() const { return *(mPtr->mData); }
-        const_pointer operator->() const { return (&**this); }
-        bool operator==(const IntrusiveListConstIterator& other)const{ return mPtr==other.mPtr; } 
-        bool operator!=(const IntrusiveListConstIterator& other)const{ return !(*this == other); } 
+        IntrusiveListConstIterator &operator=(const IntrusiveListConstIterator &other) {
+            mPtr = other.mPtr;
+            return *this;
+        }
 
-        inline const NodeT* Get()const { return mPtr; }
+        const_reference operator*() const {
+            return *(mPtr->mData);
+        }
+
+        const_pointer operator->() const {
+            return (&**this);
+        }
+
+        bool operator==(const IntrusiveListConstIterator &other) const {
+            return mPtr == other.mPtr;
+        }
+
+        bool operator!=(const IntrusiveListConstIterator &other) const {
+            return !(*this == other);
+        }
+
+        inline const NodeT *Get() const {
+            return mPtr;
+        }
 
     private:
-        mutable const NodeT* mPtr;
+        mutable const NodeT *mPtr;
     };
 
     // --- Iterator definitions ---
@@ -229,30 +256,55 @@ public:
     typedef IntrusiveListConstIterator const_iterator;
 
     // iterator support
-    inline iterator Begin() { return iterator(mHead.mNext); }
-    inline const_iterator Begin() const { return const_iterator(mHead.mNext); }
-    inline iterator End() { return iterator(&mHead); }
-    inline const_iterator End() const { return const_iterator(&mHead); }
+    inline iterator Begin() {
+        return iterator(mHead.mNext);
+    }
+
+    inline const_iterator Begin() const {
+        return const_iterator(mHead.mNext);
+    }
+
+    inline iterator End() {
+        return iterator(&mHead);
+    }
+
+    inline const_iterator End() const {
+        return const_iterator(&mHead);
+    }
 
     // Because there is no real use, for the reverse iterators, 
     // they have not been implemented. 
 
-    reference Front(){return (*Begin());}
-    const_reference Front() const { return (*Begin()); }
-    reference Back(){ return (*(--End())); }
-    const_reference Back() const{ return (*(--End())); }
+    reference Front() {
+        return (*Begin());
+    }
 
-    iterator& Erase(iterator& it)
-    {
+    const_reference Front() const {
+        return (*Begin());
+    }
+
+    reference Back() {
+        return (*(--End()));
+    }
+
+    const_reference Back() const {
+        return (*(--End()));
+    }
+
+    iterator &Erase(iterator &it) {
         it.Get()->Disconnect();
         return (++it);
     }
+
 private:
     NodeT mHead;
 
     // Not copyable
-    FbxIntrusiveList(const FbxIntrusiveList&);
-    FbxIntrusiveList& operator=(const FbxIntrusiveList& Right){return (*this);}
+    FbxIntrusiveList(const FbxIntrusiveList &);
+
+    FbxIntrusiveList &operator=(const FbxIntrusiveList &Right) {
+        return (*this);
+    }
 };
 
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/

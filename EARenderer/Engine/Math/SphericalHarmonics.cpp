@@ -12,51 +12,51 @@
 #include <glm/gtc/epsilon.hpp>
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
 
-    SphericalHarmonics::SphericalHarmonics(const glm::vec3& direction, const Color& color) {
+    SphericalHarmonics::SphericalHarmonics(const glm::vec3 &direction, const Color &color) {
         contribute(direction, color, 4.0 * M_PI);
     }
-    
+
 #pragma mark - Getters
-    
-    const glm::vec3& SphericalHarmonics::L00() const {
+
+    const glm::vec3 &SphericalHarmonics::L00() const {
         return mL00;
     }
-    
-    const glm::vec3& SphericalHarmonics::L11() const {
+
+    const glm::vec3 &SphericalHarmonics::L11() const {
         return mL11;
     }
-    
-    const glm::vec3& SphericalHarmonics::L10() const {
+
+    const glm::vec3 &SphericalHarmonics::L10() const {
         return mL10;
     }
-    
-    const glm::vec3& SphericalHarmonics::L1_1() const {
+
+    const glm::vec3 &SphericalHarmonics::L1_1() const {
         return mL1_1;
     }
-    
-    const glm::vec3& SphericalHarmonics::L21() const {
+
+    const glm::vec3 &SphericalHarmonics::L21() const {
         return mL21;
     }
-    
-    const glm::vec3& SphericalHarmonics::L2_1() const {
+
+    const glm::vec3 &SphericalHarmonics::L2_1() const {
         return mL2_1;
     }
-    
-    const glm::vec3& SphericalHarmonics::L2_2() const {
+
+    const glm::vec3 &SphericalHarmonics::L2_2() const {
         return mL2_2;
     }
-    
-    const glm::vec3& SphericalHarmonics::L20() const {
+
+    const glm::vec3 &SphericalHarmonics::L20() const {
         return mL20;
     }
-    
-    const glm::vec3& SphericalHarmonics::L22() const {
+
+    const glm::vec3 &SphericalHarmonics::L22() const {
         return mL22;
     }
-    
+
 #pragma mark -
 
     float SphericalHarmonics::magnitude() const {
@@ -65,14 +65,14 @@ namespace EARenderer {
 
     float SphericalHarmonics::magnitude2() const {
         return glm::dot(mL00, mL00) +
-        glm::dot(mL1_1, mL1_1) +
-        glm::dot(mL10, mL10) +
-        glm::dot(mL11, mL11) +
-        glm::dot(mL2_2, mL2_2) +
-        glm::dot(mL2_1, mL2_1) +
-        glm::dot(mL21, mL21) +
-        glm::dot(mL20, mL20) +
-        glm::dot(mL22, mL22);
+                glm::dot(mL1_1, mL1_1) +
+                glm::dot(mL10, mL10) +
+                glm::dot(mL11, mL11) +
+                glm::dot(mL2_2, mL2_2) +
+                glm::dot(mL2_1, mL2_1) +
+                glm::dot(mL21, mL21) +
+                glm::dot(mL20, mL20) +
+                glm::dot(mL22, mL22);
     }
 
     void SphericalHarmonics::convolve() {
@@ -89,7 +89,7 @@ namespace EARenderer {
         mL22 *= CosineLobeBandFactors[8];
     }
 
-    void SphericalHarmonics::contribute(const glm::vec3& direction, const glm::vec3& value, float weight) {
+    void SphericalHarmonics::contribute(const glm::vec3 &direction, const glm::vec3 &value, float weight) {
         // l, m = 0, 0
         mL00 += value * Y00 * weight;
 
@@ -114,11 +114,11 @@ namespace EARenderer {
         mL22 += value * Y22 * (direction.x * direction.x - direction.y * direction.y) * weight;
     }
 
-    void SphericalHarmonics::contribute(const glm::vec3& direction, const Color& color, float weight) {
+    void SphericalHarmonics::contribute(const glm::vec3 &direction, const Color &color, float weight) {
         contribute(direction, color.rgb(), weight);
     }
 
-    void SphericalHarmonics::scale(const glm::vec3& scaleFactors) {
+    void SphericalHarmonics::scale(const glm::vec3 &scaleFactors) {
         mL00 *= scaleFactors;
 
         mL1_1 *= scaleFactors;
@@ -132,7 +132,7 @@ namespace EARenderer {
         mL22 *= scaleFactors;
     }
 
-    glm::vec3 SphericalHarmonics::evaluate(const glm::vec3& direction) const {
+    glm::vec3 SphericalHarmonics::evaluate(const glm::vec3 &direction) const {
         glm::vec3 result(0.0);
 
         result += mL00 * Y00;

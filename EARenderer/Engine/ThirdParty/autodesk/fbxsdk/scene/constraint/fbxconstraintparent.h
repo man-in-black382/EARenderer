@@ -24,109 +24,108 @@
   * You can use this constraint to connect objects without changing hierarchies.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxConstraintParent : public FbxConstraint
-{
-    FBXSDK_OBJECT_DECLARE(FbxConstraintParent, FbxConstraint);
+class FBXSDK_DLL FbxConstraintParent : public FbxConstraint {
+FBXSDK_OBJECT_DECLARE(FbxConstraintParent, FbxConstraint);
 
 public:
     /**
       * \name Properties
       */
     //@{
-        /** This property handles whether to affect the translation of the constrained object along X axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectTranslationX;
+    /** This property handles whether to affect the translation of the constrained object along X axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectTranslationX;
 
-        /** This property handles whether to affect the translation of the constrained object along Y axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectTranslationY;
+    /** This property handles whether to affect the translation of the constrained object along Y axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectTranslationY;
 
-        /** This property handles whether to affect the translation of the constrained object along Z axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectTranslationZ;
+    /** This property handles whether to affect the translation of the constrained object along Z axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectTranslationZ;
 
-        /** This property handles whether to affect the rotation of the constrained object around X axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectRotationX;
+    /** This property handles whether to affect the rotation of the constrained object around X axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectRotationX;
 
-        /** This property handles whether to affect the rotation of the constrained object around Y axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectRotationY;
+    /** This property handles whether to affect the rotation of the constrained object around Y axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectRotationY;
 
-        /** This property handles whether to affect the rotation of the constrained object around Z axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectRotationZ;
+    /** This property handles whether to affect the rotation of the constrained object around Z axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectRotationZ;
 
-        /** This property handles whether to affect the scaling of the constrained object along X axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectScalingX;
+    /** This property handles whether to affect the scaling of the constrained object along X axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectScalingX;
 
-        /** This property handles whether to affect the scaling of the constrained object along Y axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectScalingY;
+    /** This property handles whether to affect the scaling of the constrained object along Y axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectScalingY;
 
-        /** This property handles whether to affect the scaling of the constrained object along Z axis.
-          *
-          * Default value is true.
-          */
-        FbxPropertyT<FbxBool> AffectScalingZ;
+    /** This property handles whether to affect the scaling of the constrained object along Z axis.
+      *
+      * Default value is true.
+      */
+    FbxPropertyT<FbxBool> AffectScalingZ;
 
-        /** This property used to access constraint sources.
-          * A constrained object is an object whose position, orientation, and so on is driven by one or more constraint sources.
-          */
-        FbxPropertyT<FbxReference> ConstraintSources;
+    /** This property used to access constraint sources.
+      * A constrained object is an object whose position, orientation, and so on is driven by one or more constraint sources.
+      */
+    FbxPropertyT<FbxReference> ConstraintSources;
 
-        /** This property used to access constrained object.
-          * A constrained object is an object whose position, orientation, and so on is driven by one or more constraint sources.
-          */
-        FbxPropertyT<FbxReference> ConstrainedObject;
+    /** This property used to access constrained object.
+      * A constrained object is an object whose position, orientation, and so on is driven by one or more constraint sources.
+      */
+    FbxPropertyT<FbxReference> ConstrainedObject;
     //@}
 
     /** Set the translation offset of the specified constraint source.
       * \param pObject The specified constraint source.
       * \param pTranslation The new offset vector.
       */
-    void SetTranslationOffset(FbxObject* pObject, FbxVector4 pTranslation);
+    void SetTranslationOffset(FbxObject *pObject, FbxVector4 pTranslation);
 
     /** Retrieve the translation offset of the specified constraint source.
       * \param pObject The specified constraint source.
       * \return The current translation offset.
       */
-    FbxVector4 GetTranslationOffset(const FbxObject* pObject) const;
+    FbxVector4 GetTranslationOffset(const FbxObject *pObject) const;
 
     /** Set the rotation offset of the specified constraint source.
       * \param pObject The specified constraint source.
       * \param pRotation The new offset vector.
       */
-    virtual void SetRotationOffset(const FbxObject* pObject, FbxVector4 pRotation);
+    virtual void SetRotationOffset(const FbxObject *pObject, FbxVector4 pRotation);
 
     /** Retrieve the rotation offset of the specified constraint source.
       * \param pObject The specified constraint source.
       * \return The current translation offset.
       */
-    FbxVector4 GetRotationOffset(const FbxObject* pObject) const;
+    FbxVector4 GetRotationOffset(const FbxObject *pObject) const;
 
     /** Add a constraint source to the constraint.
       * \param pObject New constraint source.
       * \param pWeight Weight of the constraint source.
       */
-    void AddConstraintSource(FbxObject* pObject, double pWeight = 100);
+    void AddConstraintSource(FbxObject *pObject, double pWeight = 100);
 
     /** Retrieve the constraint source count.
       * \return Current constraint source count.
@@ -137,17 +136,17 @@ public:
       * \param pIndex Index of the constraint source.
       * \return The constraint source at the specified index.
       */
-    FbxObject* GetConstraintSource(int pIndex) const;
+    FbxObject *GetConstraintSource(int pIndex) const;
 
     /** Set the constrained object.
       * \param pObject The constrained object.
       */
-    void SetConstrainedObject(FbxObject* pObject);
+    void SetConstrainedObject(FbxObject *pObject);
 
     /** Retrieve the constrained object.
       * \return Current constrained object.
       */
-    FbxObject* GetConstrainedObject() const;
+    FbxObject *GetConstrainedObject() const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
@@ -155,7 +154,9 @@ public:
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
     virtual void ConstructProperties(bool pForceSet);
+
     virtual EType GetConstraintType() const;
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

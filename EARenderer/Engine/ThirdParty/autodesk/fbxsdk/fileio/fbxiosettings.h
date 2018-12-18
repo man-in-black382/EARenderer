@@ -22,7 +22,7 @@
 
 //Undefine the macro mkdir, since it conflict with function mkdir in Qt\4.2.3\src\corelib\io\qdir.h
 #if (defined(_MSC_VER) || defined(__MINGW32__)) && defined(mkdir)
-	#undef mkdir
+#undef mkdir
 #endif
 
 #define IOSVisible    true
@@ -38,46 +38,65 @@
 #define IOSASCII      1
 
 class FbxManager;
+
 class FbxIOSettings;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-class FbxIOPropInfo
-{
+
+class FbxIOPropInfo {
 public:
-	FbxIOPropInfo();
+    FbxIOPropInfo();
+
     ~FbxIOPropInfo();
 
-	void*			UIWidget;            // UI widget for showing the property
-	void*			cbValueChanged;      // call back when value changed
-    void*			cbDirty;             // call back when value changed
-    FbxStringList	labels;              // list of labels in many languages
+    void *UIWidget;            // UI widget for showing the property
+    void *cbValueChanged;      // call back when value changed
+    void *cbDirty;             // call back when value changed
+    FbxStringList labels;              // list of labels in many languages
 };
 
-class FBXSDK_DLL FbxIOInfo
-{
+class FBXSDK_DLL FbxIOInfo {
 public:
-	enum EImpExp {eImport, eExport};
+    enum EImpExp {
+        eImport, eExport
+    };
 
     FbxIOInfo();
 
     void Reset(EImpExp pImpExp);
-    void SetTimeMode(FbxTime::EMode pTimeMode, double pCustomFrameRate = 0.0);
-    FbxTime::EMode GetTimeMode(){ return mTimeMode; }
-    FbxTime GetFramePeriod();
-    void SetASFScene(FbxObject* pASFScene, bool pASFSceneOwned = false);
-    FbxObject* GetASFScene(){ return mASFScene; }
-	void Set_IOS(FbxIOSettings* pIOS){ios = pIOS;}
-	void SetImportExportMode(EImpExp pImpExp){mImpExp = pImpExp;}
 
-private: 
-    FbxTime::EMode	mTimeMode;
-    FbxObject*		mASFScene;
-    EImpExp			mImpExp;
-	FbxIOSettings*	ios;
+    void SetTimeMode(FbxTime::EMode pTimeMode, double pCustomFrameRate = 0.0);
+
+    FbxTime::EMode GetTimeMode() {
+        return mTimeMode;
+    }
+
+    FbxTime GetFramePeriod();
+
+    void SetASFScene(FbxObject *pASFScene, bool pASFSceneOwned = false);
+
+    FbxObject *GetASFScene() {
+        return mASFScene;
+    }
+
+    void Set_IOS(FbxIOSettings *pIOS) {
+        ios = pIOS;
+    }
+
+    void SetImportExportMode(EImpExp pImpExp) {
+        mImpExp = pImpExp;
+    }
+
+private:
+    FbxTime::EMode mTimeMode;
+    FbxObject *mASFScene;
+    EImpExp mImpExp;
+    FbxIOSettings *ios;
 };
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 
 /** FbxIOSettings is a collection of properties, arranged as a tree, that 
@@ -204,378 +223,384 @@ private:
   * }
   * \endcode
   */
-class FBXSDK_DLL FbxIOSettings : public FbxObject
-{
-	FBXSDK_OBJECT_DECLARE(FbxIOSettings, FbxObject);
+class FBXSDK_DLL FbxIOSettings : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxIOSettings, FbxObject);
 
 public:
-	//! Supported languages enumeration list
-	enum ELanguage
-	{
-		eENU,			//!< 409 English - United States
-		eDEU,			//!< 407 German - Germany
-		eFRA,			//!< 40c French - France
-		eJPN,			//!< 411 Japanese - Japan
-		eKOR,			//!< 412 Korean(Extended Wansung) - Korea 
-		eCHS,			//!< 804 Chinese - PRC
-		eLanguageCount	//!< Total language count
-	};
+    //! Supported languages enumeration list
+    enum ELanguage {
+        eENU,            //!< 409 English - United States
+        eDEU,            //!< 407 German - Germany
+        eFRA,            //!< 40c French - France
+        eJPN,            //!< 411 Japanese - Japan
+        eKOR,            //!< 412 Korean(Extended Wansung) - Korea
+        eCHS,            //!< 804 Chinese - PRC
+        eLanguageCount    //!< Total language count
+    };
 
-	/** Add a property group under the root prop to be a direct child of IOSROOT
-	  * \param pName
-	  * \param pDataType
-	  * \param pLabel
-	  * \return a new FbxProperty created
-	  */
-	FbxProperty AddPropertyGroup(const char* pName, const FbxDataType& pDataType=FbxDataType(), const char* pLabel="");
+    /** Add a property group under the root prop to be a direct child of IOSROOT
+      * \param pName
+      * \param pDataType
+      * \param pLabel
+      * \return a new FbxProperty created
+      */
+    FbxProperty AddPropertyGroup(const char *pName, const FbxDataType &pDataType = FbxDataType(), const char *pLabel = "");
 
-	/** Add a property group under another parent property
-	  * \param pParentProperty
-	  * \param pName
-	  * \param pDataType
-	  * \param pLabel   (optional, used by the UI as widget label)
-	  * \param pVisible (used by the UI to show or not that property)
-	  * \param pSavable (to enable a read & write to an XML file)
-	  * \param pEnabled (used by the widget UI to show enabled or disabled)
-	  * \return a new FbxProperty created
-	  */
-	FbxProperty AddPropertyGroup(const FbxProperty& pParentProperty, const char* pName, const FbxDataType& pDataType = FbxDataType(), 
-								  const char* pLabel  = "", bool pVisible = true, bool pSavable = true, bool pEnabled = true );
+    /** Add a property group under another parent property
+      * \param pParentProperty
+      * \param pName
+      * \param pDataType
+      * \param pLabel   (optional, used by the UI as widget label)
+      * \param pVisible (used by the UI to show or not that property)
+      * \param pSavable (to enable a read & write to an XML file)
+      * \param pEnabled (used by the widget UI to show enabled or disabled)
+      * \return a new FbxProperty created
+      */
+    FbxProperty AddPropertyGroup(const FbxProperty &pParentProperty, const char *pName, const FbxDataType &pDataType = FbxDataType(),
+            const char *pLabel = "", bool pVisible = true, bool pSavable = true, bool pEnabled = true);
 
-	/** Add a property under another parent property with a value to set
-	  * \param pParentProperty
-	  * \param pName
-	  * \param pDataType
-	  * \param pLabel      (optional, used by the UI as widget label)
-	  * \param pValue
-	  * \param pVisible    (used by the UI to show or not that property)
-	  * \param pSavable    (to enable a read & write to an XML file)
-	  * \param pEnabled    (used by the widget UI to show enabled or disabled)
-	  * \return a new FbxProperty created
-	  */		  
-	FbxProperty AddProperty(const FbxProperty& pParentProperty, const char* pName, const FbxDataType& pDataType = FbxDataType(), 
-							 const char* pLabel = "", const void* pValue = NULL, bool pVisible = true,
-							 bool pSavable = true, bool pEnabled = true );
+    /** Add a property under another parent property with a value to set
+      * \param pParentProperty
+      * \param pName
+      * \param pDataType
+      * \param pLabel      (optional, used by the UI as widget label)
+      * \param pValue
+      * \param pVisible    (used by the UI to show or not that property)
+      * \param pSavable    (to enable a read & write to an XML file)
+      * \param pEnabled    (used by the widget UI to show enabled or disabled)
+      * \return a new FbxProperty created
+      */
+    FbxProperty AddProperty(const FbxProperty &pParentProperty, const char *pName, const FbxDataType &pDataType = FbxDataType(),
+            const char *pLabel = "", const void *pValue = NULL, bool pVisible = true,
+            bool pSavable = true, bool pEnabled = true);
 
-		/** Add a property under another parent property with a value to set and a min max values
-		  * \param pParentProperty
-		  * \param pName
-		  * \param pDataType
-		  * \param pLabel     (optional, used by the UI as widget label)
-		  * \param pValue
-		  * \param pMinValue
-		  * \param pMaxValue
-		  * \param pVisible   (used by the UI to show or not that property)
-		  * \param pSavable   (to enable a read & write to an XML file)
-		  * \param pEnabled   (used by the widget UI to show enabled or disabled)
-		  * \return a new FbxProperty created
-		  * \remarks Normally used with numeric properties Ex: integer, float, double, etc.
-		  */		  		  
-	FbxProperty AddPropertyMinMax(const FbxProperty& pParentProperty, const char* pName, const FbxDataType& pDataType = FbxDataType(), 
-								   const char* pLabel = "", const void* pValue = NULL, const double* pMinValue = NULL, const double* pMaxValue = NULL,
-								   bool pVisible = true, bool pSavable = true, bool pEnabled = true );
+    /** Add a property under another parent property with a value to set and a min max values
+      * \param pParentProperty
+      * \param pName
+      * \param pDataType
+      * \param pLabel     (optional, used by the UI as widget label)
+      * \param pValue
+      * \param pMinValue
+      * \param pMaxValue
+      * \param pVisible   (used by the UI to show or not that property)
+      * \param pSavable   (to enable a read & write to an XML file)
+      * \param pEnabled   (used by the widget UI to show enabled or disabled)
+      * \return a new FbxProperty created
+      * \remarks Normally used with numeric properties Ex: integer, float, double, etc.
+      */
+    FbxProperty AddPropertyMinMax(const FbxProperty &pParentProperty, const char *pName, const FbxDataType &pDataType = FbxDataType(),
+            const char *pLabel = "", const void *pValue = NULL, const double *pMinValue = NULL, const double *pMaxValue = NULL,
+            bool pVisible = true, bool pSavable = true, bool pEnabled = true);
 
 
-		/** Get a property using the full path in the tree ex: "Export|IncludeGrp|Animation"
-		  * \param pName
-		  * \return a FbxProperty found
-		  * \remarks We strongly encourage to use the defined path in kfbxiosettingspath.h
-		  * ex: EXP_ANIMATION == "Export|IncludeGrp|Animation"
-		  */
-	FbxProperty GetProperty(const char* pName) const;
+    /** Get a property using the full path in the tree ex: "Export|IncludeGrp|Animation"
+      * \param pName
+      * \return a FbxProperty found
+      * \remarks We strongly encourage to use the defined path in kfbxiosettingspath.h
+      * ex: EXP_ANIMATION == "Export|IncludeGrp|Animation"
+      */
+    FbxProperty GetProperty(const char *pName) const;
 
-		/** Get a property using a short path found under the parent property.
-		  * \param pParentProperty
-		  * \param pName
-		  * \return a FbxProperty found
-		  * \remarks This is a faster way to access a property when the parent is known
-		  */
-	FbxProperty GetProperty(const FbxProperty& pParentProperty, const char* pName) const;
+    /** Get a property using a short path found under the parent property.
+      * \param pParentProperty
+      * \param pName
+      * \return a FbxProperty found
+      * \remarks This is a faster way to access a property when the parent is known
+      */
+    FbxProperty GetProperty(const FbxProperty &pParentProperty, const char *pName) const;
 
-        /** Get a bool property value using the full path
-		  * \param pName
-		  * \param pDefValue  Value returned if the property is not found
-		  * \return true or false
-		  */
-	bool GetBoolProp(const char* pName, bool pDefValue) const;
+    /** Get a bool property value using the full path
+      * \param pName
+      * \param pDefValue  Value returned if the property is not found
+      * \return true or false
+      */
+    bool GetBoolProp(const char *pName, bool pDefValue) const;
 
-        /** set a bool property value using the full path
-		  * \param pName
-		  * \param pValue
-		  */
-	void SetBoolProp(const char* pName, bool pValue);
+    /** set a bool property value using the full path
+      * \param pName
+      * \param pValue
+      */
+    void SetBoolProp(const char *pName, bool pValue);
 
-        /** Get a double property value using the full path
-		  * \param pName
-		  * \param pDefValue Value returned if the property is not found
-		  * \return a double
-		  */
-	double GetDoubleProp(const char* pName, double pDefValue) const;
+    /** Get a double property value using the full path
+      * \param pName
+      * \param pDefValue Value returned if the property is not found
+      * \return a double
+      */
+    double GetDoubleProp(const char *pName, double pDefValue) const;
 
-        /** Set a double property using the full path
-		  * \param pName
-		  * \param pValue
-		  */
-	void   SetDoubleProp(const char* pName, double pValue);
+    /** Set a double property using the full path
+      * \param pName
+      * \param pValue
+      */
+    void SetDoubleProp(const char *pName, double pValue);
 
-        /** Get a int property value using the full path
-		  * \param pName
-		  * \param pDefValue Value returned if the property is not found
-		  * \return a int
-		  */
-	int    GetIntProp(const char* pName, int pDefValue) const;
+    /** Get a int property value using the full path
+      * \param pName
+      * \param pDefValue Value returned if the property is not found
+      * \return a int
+      */
+    int GetIntProp(const char *pName, int pDefValue) const;
 
-        /** Set a int property value using the full path
-		  * \param pName
-		  * \param pValue
-		  */
-	void   SetIntProp(const char* pName, int pValue);
+    /** Set a int property value using the full path
+      * \param pName
+      * \param pValue
+      */
+    void SetIntProp(const char *pName, int pValue);
 
-        /** Get a FbxTime property value using the full path
-		  * \param pName 
-		  * \param pDefValue  Value returned if the property is not found
-		  */
-	FbxTime  GetTimeProp(const char* pName, FbxTime pDefValue) const;
+    /** Get a FbxTime property value using the full path
+      * \param pName
+      * \param pDefValue  Value returned if the property is not found
+      */
+    FbxTime GetTimeProp(const char *pName, FbxTime pDefValue) const;
 
-        /** Set a FbxTime property value using the full path
-		  * \param pName 
-		  * \param pValue
-		  * \return a FbxTime
-		  */
-	void   SetTimeProp(const char* pName, FbxTime pValue);
+    /** Set a FbxTime property value using the full path
+      * \param pName
+      * \param pValue
+      * \return a FbxTime
+      */
+    void SetTimeProp(const char *pName, FbxTime pValue);
 
-		/** \name Enum Properties 
-          * An enum property is a list of FbxString and integer pairs.
-		  * A current index value is available to get the selected pair
-		  * of FbxString+integer
-		  *
-		  * Ex: Content of an enum property
-          * \code
-		  *    0 -> (14, "Bird")
-		  *    1 -> (17, "Horse")
-		  *    2 -> (93, "Cat")
-		  *    3 -> (45, "Dog")
-		  * \endcode
-          * 
-		  *    If current index is 2: the current int value is 93, 
-		  *    and the current FbxString value is "Cat"
-		  */    		
-    
+    /** \name Enum Properties
+      * An enum property is a list of FbxString and integer pairs.
+      * A current index value is available to get the selected pair
+      * of FbxString+integer
+      *
+      * Ex: Content of an enum property
+      * \code
+      *    0 -> (14, "Bird")
+      *    1 -> (17, "Horse")
+      *    2 -> (93, "Cat")
+      *    3 -> (45, "Dog")
+      * \endcode
+      *
+      *    If current index is 2: the current int value is 93,
+      *    and the current FbxString value is "Cat"
+      */
+
     //@{
-	
-        /** Get the FbxString at current index of an enum property using the full path.
-		  * \param pName
-		  * \param pDefValue Value returned if the property is not found
-		  * \return a FbxString
-		  */
-	FbxString GetEnumProp(const char* pName, FbxString pDefValue) const;
 
-        /** Get the integer at current index of an enum property using the full path.
-		  * \param pName
-		  * \param pDefValue Value returned if the property is not found
-		  * \return a int
-		  */
-	int     GetEnumProp(const char* pName, int pDefValue) const;
+    /** Get the FbxString at current index of an enum property using the full path.
+      * \param pName
+      * \param pDefValue Value returned if the property is not found
+      * \return a FbxString
+      */
+    FbxString GetEnumProp(const char *pName, FbxString pDefValue) const;
 
-        /** Get the index of a FbxString from the enum property using the full path.
-		  * \param pName
-		  * \param pValue Return -1 if the FbxString is not found
-		  * \return a int
-		  */
-	int     GetEnumIndex(const char* pName, FbxString pValue) const;
+    /** Get the integer at current index of an enum property using the full path.
+      * \param pName
+      * \param pDefValue Value returned if the property is not found
+      * \return a int
+      */
+    int GetEnumProp(const char *pName, int pDefValue) const;
 
-		/** Set the current index using an existing FbxString of an enum property using the full path.
-		  * \param pName
-		  * \param pValue
-		  * \remarks The current index will not change if the FbxString is not found
-		  */
-	void    SetEnumProp(const char* pName, FbxString pValue);
+    /** Get the index of a FbxString from the enum property using the full path.
+      * \param pName
+      * \param pValue Return -1 if the FbxString is not found
+      * \return a int
+      */
+    int GetEnumIndex(const char *pName, FbxString pValue) const;
 
-		/** Set the current index of an enum property using the full path.
-		  * \param pName
-		  * \param pValue
-		  * \remarks The current index will not change if the pValue is out of bound
-		  */
-	void    SetEnumProp(const char* pName, int pValue);
+    /** Set the current index using an existing FbxString of an enum property using the full path.
+      * \param pName
+      * \param pValue
+      * \remarks The current index will not change if the FbxString is not found
+      */
+    void SetEnumProp(const char *pName, FbxString pValue);
 
-		/** Remove a pair of FbxString+integer from an enum property.
-		  * \param pName
-		  * \param pValue The FbxString to find
-		  * \remarks The first FbxString found from 0 index will be removed only even 
-		  * if the same FbxString exist in other index, if the current index was on the FbxString found
-		  * the current index will be set to 0
-		  */
-	void    RemoveEnumPropValue(const char* pName, FbxString pValue);
+    /** Set the current index of an enum property using the full path.
+      * \param pName
+      * \param pValue
+      * \remarks The current index will not change if the pValue is out of bound
+      */
+    void SetEnumProp(const char *pName, int pValue);
 
-		/** Empty all the FbxString+integer pair of the enum property
-          * \param pName
-		  */
-	void    EmptyEnumProp(const char* pName);
+    /** Remove a pair of FbxString+integer from an enum property.
+      * \param pName
+      * \param pValue The FbxString to find
+      * \remarks The first FbxString found from 0 index will be removed only even
+      * if the same FbxString exist in other index, if the current index was on the FbxString found
+      * the current index will be set to 0
+      */
+    void RemoveEnumPropValue(const char *pName, FbxString pValue);
 
-		/** Check if a FbxString is present in the enum property.
-		  * \param &pProp a ref to an enum prop
-		  * \param &enumString ref to a FbxString to find
-		  * \return \c true if found, \c false otherwise. 
-		  */
-	bool	IsEnumExist(FbxProperty& pProp, const FbxString& enumString) const;
+    /** Empty all the FbxString+integer pair of the enum property
+      * \param pName
+      */
+    void EmptyEnumProp(const char *pName);
 
-		/** Get the enum index of a FbxString
-		  * \param &pProp a ref to an enum prop
-		  * \param &enumString ref to string to find
-		  * \param pNoCase To match case sensitive or not
-		  * \return the index found or -1 if not found
-		  */
-	int		GetEnumIndex(FbxProperty& pProp, const FbxString& enumString, bool pNoCase = false) const;
+    /** Check if a FbxString is present in the enum property.
+      * \param &pProp a ref to an enum prop
+      * \param &enumString ref to a FbxString to find
+      * \return \c true if found, \c false otherwise.
+      */
+    bool IsEnumExist(FbxProperty &pProp, const FbxString &enumString) const;
+
+    /** Get the enum index of a FbxString
+      * \param &pProp a ref to an enum prop
+      * \param &enumString ref to string to find
+      * \param pNoCase To match case sensitive or not
+      * \return the index found or -1 if not found
+      */
+    int GetEnumIndex(FbxProperty &pProp, const FbxString &enumString, bool pNoCase = false) const;
     //@}
 
-		/** Set a specific flag value on a property using the full path
-		  * \param pName
-		  * \param propFlag
-		  * \param pValue
-		  * \return Always true
-		  */
-	bool    SetFlag(const char* pName, FbxPropertyFlags::EFlags propFlag, bool pValue);
+    /** Set a specific flag value on a property using the full path
+      * \param pName
+      * \param propFlag
+      * \param pValue
+      * \return Always true
+      */
+    bool SetFlag(const char *pName, FbxPropertyFlags::EFlags propFlag, bool pValue);
 
-        /** Get a FbxString property value using the full path.
-		  * \param pName
-		  * \param pDefValue  Value returned if the property is not found
-		  * \return The FbxString value
-		  */
-	FbxString GetStringProp(const char* pName, FbxString pDefValue) const;
+    /** Get a FbxString property value using the full path.
+      * \param pName
+      * \param pDefValue  Value returned if the property is not found
+      * \return The FbxString value
+      */
+    FbxString GetStringProp(const char *pName, FbxString pDefValue) const;
 
-        /** Set a FbxString property value using the full path
-		  * \param pName
-		  * \param pValue
-		  */
-	void    SetStringProp(const char* pName, FbxString pValue);
+    /** Set a FbxString property value using the full path
+      * \param pName
+      * \param pValue
+      */
+    void SetStringProp(const char *pName, FbxString pValue);
 
     /** \name XML Serialization Functions */
     //@{
-     
-		/** Load the settings values from an XML file.
-		  * \param path The path of the XML file.
-		  * \return \c True on success, \c false otherwise.
-		  */
-	virtual bool ReadXMLFile(const FbxString& path);
 
-		/** Write the settings values to an XML file.
-		  * \param path The path of the XML file.
-          * \return \c True on success, \c false otherwise.
-		  * \remarks The flag of the property must be FbxPropertyFlags::eNotSavable == false
-		  */
-	virtual bool WriteXMLFile(const FbxString& path);
+    /** Load the settings values from an XML file.
+      * \param path The path of the XML file.
+      * \return \c True on success, \c false otherwise.
+      */
+    virtual bool ReadXMLFile(const FbxString &path);
 
-		/** Write the settings values to an XML file.
-		  * \param pFullPath The path of the XML file.
-		  * \param propPath a prop Path
-          * \return \c True on success, \c false otherwise.
-		  * \remarks To save only a branch of the settings ex: Import branch only
-		  */
-	bool WriteXmlPropToFile(const FbxString& pFullPath, const FbxString& propPath);
+    /** Write the settings values to an XML file.
+      * \param path The path of the XML file.
+      * \return \c True on success, \c false otherwise.
+      * \remarks The flag of the property must be FbxPropertyFlags::eNotSavable == false
+      */
+    virtual bool WriteXMLFile(const FbxString &path);
+
+    /** Write the settings values to an XML file.
+      * \param pFullPath The path of the XML file.
+      * \param propPath a prop Path
+      * \return \c True on success, \c false otherwise.
+      * \remarks To save only a branch of the settings ex: Import branch only
+      */
+    bool WriteXmlPropToFile(const FbxString &pFullPath, const FbxString &propPath);
     //@}
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	FbxIOPropInfo* GetPropInfo(FbxProperty &pProp);
 
-	ELanguage UILanguage;
-	FbxString GetLanguageLabel(FbxProperty& pProp);
-	void SetLanguageLabel(FbxProperty& pProp, FbxString& pLabel);
-	ELanguage Get_Max_Runtime_Language(FbxString pRegLocation);
+    FbxIOPropInfo *GetPropInfo(FbxProperty &pProp);
 
-	FbxIOInfo impInfo;
-	FbxIOInfo expInfo;
+    ELanguage UILanguage;
 
-	static FbxString GetUserMyDocumentDir();
-	void SetPropVisible(FbxProperty& pProp, bool pWithChildren, bool pVisible);
+    FbxString GetLanguageLabel(FbxProperty &pProp);
 
-			// Read an XML file from MyDocument dir
-	bool ReadXmlPropFromMyDocument(const FbxString& subDir, const FbxString& filename);
+    void SetLanguageLabel(FbxProperty &pProp, FbxString &pLabel);
 
-			// Write property branch to an XML file in MyDocument dir
-	bool WriteXmlPropToMyDocument(const FbxString& subDir, const FbxString& filename, const FbxString& propPath);
+    ELanguage Get_Max_Runtime_Language(FbxString pRegLocation);
 
-    static const char* GetFileMergeDescription(int pIndex);
+    FbxIOInfo impInfo;
+    FbxIOInfo expInfo;
 
-    enum ELoadMode         
-    { 
-		eCreate,          /*!< Add to scene(duplicate the ones with the same name)    */  
-		eMerge,           /*!< Add to scene and update animation                      */
+    static FbxString GetUserMyDocumentDir();
+
+    void SetPropVisible(FbxProperty &pProp, bool pWithChildren, bool pVisible);
+
+    // Read an XML file from MyDocument dir
+    bool ReadXmlPropFromMyDocument(const FbxString &subDir, const FbxString &filename);
+
+    // Write property branch to an XML file in MyDocument dir
+    bool WriteXmlPropToMyDocument(const FbxString &subDir, const FbxString &filename, const FbxString &propPath);
+
+    static const char *GetFileMergeDescription(int pIndex);
+
+    enum ELoadMode {
+        eCreate,          /*!< Add to scene(duplicate the ones with the same name)    */
+        eMerge,           /*!< Add to scene and update animation                      */
         eExclusiveMerge  /*!< Update animation                                       */
     };
 
 
-	enum EQuaternionMode   { eAsQuaternion, eAsEuler, eResample };
-	enum EObjectDerivation { eByLayer, eByEntity, eByBlock }; 
+    enum EQuaternionMode {
+        eAsQuaternion, eAsEuler, eResample
+    };
+    enum EObjectDerivation {
+        eByLayer, eByEntity, eByBlock
+    };
 
-	enum ESysUnits
-	{
-		eUnitsUser,
-		eUnitsInches, 
-		eUnitsFeet,
-		eUnitYards,
-		eUnitsMiles,
-		eUnitsMillimeters,
-		eUnitsCentimeters,
-		eUnitsMeters,
-		eUnitsKilometers
-	};
+    enum ESysUnits {
+        eUnitsUser,
+        eUnitsInches,
+        eUnitsFeet,
+        eUnitYards,
+        eUnitsMiles,
+        eUnitsMillimeters,
+        eUnitsCentimeters,
+        eUnitsMeters,
+        eUnitsKilometers
+    };
 
-	enum ESysFrameRate  
-	{
-		eFrameRateUser,
-		eFrameRateHours,
-		eFrameRateMinutes,
-		eFrameRateSeconds,
-		eFrameRateMilliseconds,
-		eFrameRateGames15,
-		eFrameRateFilm24,
-		eFrameRatePAL25,
-		eFrameRateNTSC30,
-		eFrameRateShowScan48,
-		eFrameRatePALField50,
-		eFrameRateNTSCField60
-	};
-    
-// Max
-	enum EEnveloppeSystem
-	{
-		eSkinModifier,
-		ePhysic,
-		eBonePro,
-		eEnveloppeSystemCount
-	};
+    enum ESysFrameRate {
+        eFrameRateUser,
+        eFrameRateHours,
+        eFrameRateMinutes,
+        eFrameRateSeconds,
+        eFrameRateMilliseconds,
+        eFrameRateGames15,
+        eFrameRateFilm24,
+        eFrameRatePAL25,
+        eFrameRateNTSC30,
+        eFrameRateShowScan48,
+        eFrameRatePALField50,
+        eFrameRateNTSCField60
+    };
 
 // Max
-	enum EGeometryType
-	{
-		eTriangle,
-		eSimplifiedPoly,
-		ePolygon,
-		eNurbs,
-		ePatch,
-		eGeometryTypeCount
-	};
+    enum EEnveloppeSystem {
+        eSkinModifier,
+        ePhysic,
+        eBonePro,
+        eEnveloppeSystemCount
+    };
+
+// Max
+    enum EGeometryType {
+        eTriangle,
+        eSimplifiedPoly,
+        ePolygon,
+        eNurbs,
+        ePatch,
+        eGeometryTypeCount
+    };
 
 // Maya IK type
-	enum EIKType
-	{
-		eNone,
-		eFBIK,		
-		eHumanIK
-	};
+    enum EIKType {
+        eNone,
+        eFBIK,
+        eHumanIK
+    };
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void ConstructProperties(bool pForceSet);
-	virtual void Destruct(bool pRecursive);
+    virtual void Construct(const FbxObject *pFrom);
+
+    virtual void ConstructProperties(bool pForceSet);
+
+    virtual void Destruct(bool pRecursive);
 
 private:
-	void AddNewPropInfo(FbxProperty& pProp);
-	void DeletePropInfo(FbxProperty& pProp);
-	void DeleteAllPropInfo(FbxProperty& pProp);
+    void AddNewPropInfo(FbxProperty &pProp);
+
+    void DeletePropInfo(FbxProperty &pProp);
+
+    void DeleteAllPropInfo(FbxProperty &pProp);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

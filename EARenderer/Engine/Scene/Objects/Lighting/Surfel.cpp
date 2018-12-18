@@ -9,20 +9,20 @@
 #include "Surfel.hpp"
 
 namespace EARenderer {
-    
+
 #pragma mark - Lifecycle
-    
-    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal, const Color& albedo, float area)
-    :
-    position(position),
-    normal(normal),
-    albedo(albedo),
-    area(area)
-    { }
-    
-    Surfel::Surfel(const glm::vec3& position, const glm::vec3& normal)
-    :
-    Surfel(position, normal, Color(1.0, 1.0), 0.0)
-    { }
-    
+
+    Surfel::Surfel(const glm::vec3 &position, const glm::vec3 &normal, const Color &albedo, float area)
+            :
+            position(position),
+            normal(normal),
+            albedo(albedo),
+            area(area) {
+    }
+
+    Surfel::Surfel(const glm::vec3 &position, const glm::vec3 &normal)
+            :
+            Surfel(position, normal, Color(1.0, 1.0), 0.0) {
+    }
+
 }

@@ -9,11 +9,11 @@
 #include "AxesSelection.hpp"
 
 namespace EARenderer {
-    
+
     AxesSelection::AxesSelection(CartesianAxis axesMask, ID meshID)
-    :
-    axesMask(axesMask),
-    meshID(meshID)
-    { }
-    
+            :
+            axesMask(axesMask),
+            meshID(meshID) {
+    }
+
 }

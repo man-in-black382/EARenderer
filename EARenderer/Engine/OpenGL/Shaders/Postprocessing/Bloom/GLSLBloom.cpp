@@ -14,15 +14,14 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLBloom::GLSLBloom()
-    :
-    GLProgram("FullScreenQuad.vert", "Bloom.frag", "")
-    { }
+            :
+            GLProgram("FullScreenQuad.vert", "Bloom.frag", "") {
+    }
 
 #pragma mark - Lifecycle
 
-    void GLSLBloom::setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F>& baseImageTexture,
-                                const GLFloatTexture2D<GLTexture::Float::RGBA16F>& blurTexture)
-    {
+    void GLSLBloom::setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &baseImageTexture,
+            const GLFloatTexture2D<GLTexture::Float::RGBA16F> &blurTexture) {
         setUniformTexture(uint32_constant<ctcrc32("uBaseImageTexture")>, baseImageTexture);
         setUniformTexture(uint32_constant<ctcrc32("uBlurTexture")>, blurTexture);
     }

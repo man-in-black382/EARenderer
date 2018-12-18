@@ -13,12 +13,12 @@
 #include "GLBuffer.hpp"
 
 namespace EARenderer {
-    
+
     class GLElementArrayBuffer : public GLBuffer<GLushort> {
     public:
         GLElementArrayBuffer();
     };
-    
+
 }
 
 #endif /* GLElementArrayBuffer_hpp */

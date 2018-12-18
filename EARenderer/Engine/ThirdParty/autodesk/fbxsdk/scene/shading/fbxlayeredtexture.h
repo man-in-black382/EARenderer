@@ -40,12 +40,11 @@
   * \nosubgrouping
   * \see FbxTexture
   */
-class FBXSDK_DLL FbxLayeredTexture : public FbxTexture
-{
-	FBXSDK_OBJECT_DECLARE(FbxLayeredTexture, FbxTexture);
+class FBXSDK_DLL FbxLayeredTexture : public FbxTexture {
+FBXSDK_OBJECT_DECLARE(FbxLayeredTexture, FbxTexture);
 
 public:
-	/** \enum EBlendMode Blend modes.
+    /** \enum EBlendMode Blend modes.
       * - \e eTranslucent,        The new texture layer is transparent (depending on the Alpha value).
       * - \e eAdditive,           Add the color of the new texture to the previous texture.
       * - \e eModulate,           Multiples the color value of the new texture by the color values of all previous layers of texture.
@@ -78,86 +77,85 @@ public:
       * - \e eLuminosity,         Luminosity changes the luminosity of the lower layer to the luminosity of the upper layer while leaving hue and saturation the same.
       * - \e eOverlay,            Multiplies (darkens) when the layer on which the mode is set is dark and screens (brightens) when the layer on which the mode is applied is lighter.
       * - \e eBlendModeCount,           Marks the end of the blend mode enum.
-	  */
-	enum EBlendMode
-	{
-		eTranslucent,
-		eAdditive,
-		eModulate,
-		eModulate2,
+      */
+    enum EBlendMode {
+        eTranslucent,
+        eAdditive,
+        eModulate,
+        eModulate2,
         eOver,
-        eNormal,		
+        eNormal,
         eDissolve,
-        eDarken,			
+        eDarken,
         eColorBurn,
-        eLinearBurn, 	
+        eLinearBurn,
         eDarkerColor,
-        eLighten,			
-        eScreen,		
+        eLighten,
+        eScreen,
         eColorDodge,
         eLinearDodge,
         eLighterColor,
-        eSoftLight,		
-        eHardLight,		
+        eSoftLight,
+        eHardLight,
         eVividLight,
         eLinearLight,
-        ePinLight, 		
-        eHardMix,		
-        eDifference, 		
-        eExclusion, 		
+        ePinLight,
+        eHardMix,
+        eDifference,
+        eExclusion,
         eSubtract,
         eDivide,
-        eHue, 			
-        eSaturation,		
-        eColor,		
+        eHue,
+        eSaturation,
+        eColor,
         eLuminosity,
         eOverlay,
         eBlendModeCount
-	};
+    };
 
-	/** Equivalence operator.
-	  * \param pOther                      The object for comparison.
-	  * \return                            \c True if pOther is equivalent to this object, returns \c false otherwise.
-	  */
-	bool operator==( const FbxLayeredTexture& pOther ) const;
+    /** Equivalence operator.
+      * \param pOther                      The object for comparison.
+      * \return                            \c True if pOther is equivalent to this object, returns \c false otherwise.
+      */
+    bool operator==(const FbxLayeredTexture &pOther) const;
 
     /** Sets the blending mode of a specified texture.
       * \param pIndex                      The texture index.
       * \param pMode                       The blend mode to be set.
       * \return                            \c True if successful, returns \c false otherwise.
       */
-    bool SetTextureBlendMode( int pIndex, EBlendMode pMode ); 
+    bool SetTextureBlendMode(int pIndex, EBlendMode pMode);
 
     /** Returns the blending mode of a specified texture
       * \param pIndex                      The texture index.
       * \param pMode                       The parameter that will hold the returned blend mode.
       * \return                            \c True if successful, returns \c false otherwise.
       */
-    bool GetTextureBlendMode( int pIndex, EBlendMode& pMode ) const;
+    bool GetTextureBlendMode(int pIndex, EBlendMode &pMode) const;
 
-     /** Sets the alpha of a specified texture.
-      * \param pIndex                      The texture index.
-      * \param pAlpha                      The alpha to be set.
-      * \return                            \c True if successful, returns \c false otherwise.
-      */
-    bool SetTextureAlpha( int pIndex, double pAlpha );
+    /** Sets the alpha of a specified texture.
+     * \param pIndex                      The texture index.
+     * \param pAlpha                      The alpha to be set.
+     * \return                            \c True if successful, returns \c false otherwise.
+     */
+    bool SetTextureAlpha(int pIndex, double pAlpha);
 
     /** Returns the alpha of a specified texture
       * \param pIndex                      The texture index.
       * \param pAlpha                      The parameter that will hold the returned alpha.
       * \return                            \c True if successful, returns \c false otherwise.
       */
-    bool GetTextureAlpha( int pIndex, double& pAlpha ) const;
+    bool GetTextureAlpha(int pIndex, double &pAlpha) const;
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    virtual FbxObject& Copy(const FbxObject& pObject);
+
+    virtual FbxObject &Copy(const FbxObject &pObject);
 
 protected:
-    struct InputData
-    {
+    struct InputData {
         EBlendMode mBlendMode;
         double mAlpha;
     };
@@ -166,13 +164,16 @@ public:
     FbxArray<InputData> mInputData;
 
 protected:
-    virtual bool ConnectNotify (FbxConnectEvent const &pEvent);
+    virtual bool ConnectNotify(FbxConnectEvent const &pEvent);
 
-    bool RemoveInputData( int pIndex );
+    bool RemoveInputData(int pIndex);
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 
-inline EFbxType FbxTypeOf(const FbxLayeredTexture::EBlendMode&){ return eFbxEnum; }
+inline EFbxType FbxTypeOf(const FbxLayeredTexture::EBlendMode &) {
+    return eFbxEnum;
+}
 
 #include <fbxsdk/fbxsdk_nsend.h>
 

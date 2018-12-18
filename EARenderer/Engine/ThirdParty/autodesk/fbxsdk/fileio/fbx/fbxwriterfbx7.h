@@ -19,48 +19,64 @@
 
 struct FbxWriterFbx7_Impl;
 
-class FbxWriterFbx7 : public FbxWriter
-{
+class FbxWriterFbx7 : public FbxWriter {
 public:
-    typedef enum
-    {
+    typedef enum {
         eASCII,
         eBINARY,
         eENCRYPTED
     } EExportMode;
 
-    FbxWriterFbx7(FbxManager& pManager, FbxExporter& pExporter, int pID, FbxStatus& pStatus);
-    FbxWriterFbx7(FbxManager& pManager, FbxExporter& pExporter, EExportMode pMode, int pID, FbxStatus& pStatus);
+    FbxWriterFbx7(FbxManager &pManager, FbxExporter &pExporter, int pID, FbxStatus &pStatus);
+
+    FbxWriterFbx7(FbxManager &pManager, FbxExporter &pExporter, EExportMode pMode, int pID, FbxStatus &pStatus);
+
     virtual ~FbxWriterFbx7();
 
-    virtual bool FileCreate(char* pFileName);
-    virtual bool FileCreate(FbxStream* pStream, void* pStreamData);
+    virtual bool FileCreate(char *pFileName);
+
+    virtual bool FileCreate(FbxStream *pStream, void *pStreamData);
+
     virtual bool FileClose();
+
     virtual bool IsFileOpen();
 
     virtual void GetWriteOptions();
-    virtual bool Write(FbxDocument* pDocument);
+
+    virtual bool Write(FbxDocument *pDocument);
+
     virtual bool PreprocessScene(FbxScene &pScene);
+
     virtual bool PostprocessScene(FbxScene &pScene);
-    virtual bool Write(FbxDocument* pDocument, FbxIO* pFbx);
-	virtual void PluginWriteParameters(FbxObject& pParams);
+
+    virtual bool Write(FbxDocument *pDocument, FbxIO *pFbx);
+
+    virtual void PluginWriteParameters(FbxObject &pParams);
+
     virtual void SetProgressHandler(FbxProgress *pProgress);
 
     void SetExportMode(EExportMode pMode);
 
-	virtual bool SupportsStreams() const		{ return true; }
+    virtual bool SupportsStreams() const {
+        return true;
+    }
 
 private:
     // Declared, not defined.
-    FbxWriterFbx7(const FbxWriterFbx7&);
-    FbxWriterFbx7& operator=(const FbxWriterFbx7&);
+    FbxWriterFbx7(const FbxWriterFbx7 &);
 
-    struct ModifiedPropertyInfo{ FbxObject* mObj; FbxString mPropName; };
-    FbxArray<ModifiedPropertyInfo*> mModifiedProperties;
-	void StoreUnsupportedProperty(FbxObject* pObject, FbxProperty& pProperty);
+    FbxWriterFbx7 &operator=(const FbxWriterFbx7 &);
+
+    struct ModifiedPropertyInfo {
+        FbxObject *mObj;
+        FbxString mPropName;
+    };
+    FbxArray<ModifiedPropertyInfo *> mModifiedProperties;
+
+    void StoreUnsupportedProperty(FbxObject *pObject, FbxProperty &pProperty);
 
 private:
-    FbxWriterFbx7_Impl* mImpl;
+    FbxWriterFbx7_Impl *mImpl;
 };
 
 #include <fbxsdk/fbxsdk_nsend.h>

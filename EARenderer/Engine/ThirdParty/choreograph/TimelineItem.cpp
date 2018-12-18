@@ -10,7 +10,7 @@
  * notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other mCookTorranceMaterials provided with the distribution.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -29,93 +29,80 @@
 
 using namespace choreograph;
 
-Control::Control( TimelineItem *item ):
-  _item( item )
-{}
-
-void Control::cancel()
-{
-  if( _item ){
-    _item->cancel();
-    _item = nullptr;
-  }
+Control::Control(TimelineItem *item) :
+        _item(item) {
 }
 
-bool Control::isValid() const
-{
-  return _item && (! _item->cancelled());
+void Control::cancel() {
+    if (_item) {
+        _item->cancel();
+        _item = nullptr;
+    }
 }
 
-bool Control::isInvalid() const
-{
-  return (_item == nullptr) || _item->cancelled();
+bool Control::isValid() const {
+    return _item && (!_item->cancelled());
+}
+
+bool Control::isInvalid() const {
+    return (_item == nullptr) || _item->cancelled();
 }
 
 ///
 ///
 ///
 
-TimelineItem::~TimelineItem()
-{
-  if( _control ) {
-    _control->cancel();
-  }
+TimelineItem::~TimelineItem() {
+    if (_control) {
+        _control->cancel();
+    }
 }
 
-void TimelineItem::step( Time dt )
-{
-  _time += dt * _speed;
-  if( ! cancelled() ) {
-    // update properties
-    update();
-  }
-  _previous_time = _time;
+void TimelineItem::step(Time dt) {
+    _time += dt * _speed;
+    if (!cancelled()) {
+        // update properties
+        update();
+    }
+    _previous_time = _time;
 }
 
-void TimelineItem::jumpTo( Time time )
-{
-  _time = time;
-  if( ! cancelled() ) {
-    // update properties
-    update();
-  }
-  _previous_time = _time;
+void TimelineItem::jumpTo(Time time) {
+    _time = time;
+    if (!cancelled()) {
+        // update properties
+        update();
+    }
+    _previous_time = _time;
 }
 
-bool TimelineItem::isFinished() const
-{
-  if( backward() ) {
-    return time() <= 0.0f;
-  }
-  else {
-    return time() >= getDuration();
-  }
+bool TimelineItem::isFinished() const {
+    if (backward()) {
+        return time() <= 0.0f;
+    } else {
+        return time() >= getDuration();
+    }
 }
 
-void TimelineItem::resetTime()
-{
-  if( forward() ) {
-    setTime( 0.0f );
-  }
-  else {
-    setTime( getEndTime() );
-  }
+void TimelineItem::resetTime() {
+    if (forward()) {
+        setTime(0.0f);
+    } else {
+        setTime(getEndTime());
+    }
 }
 
-Time TimelineItem::getTimeUntilFinish() const
-{
-  if( forward() ) {
-    return (getDuration() / getPlaybackSpeed()) - time();
-  }
-  else {
-    return time() / getPlaybackSpeed();
-  }
+Time TimelineItem::getTimeUntilFinish() const {
+    if (forward()) {
+        return (getDuration() / getPlaybackSpeed()) - time();
+    } else {
+        return time() / getPlaybackSpeed();
+    }
 }
 
-const std::shared_ptr<Control>& TimelineItem::getControl()
-{
-  if( ! _control ) {
-    _control = std::make_shared<Control>( this );
-  }
-  return _control;
+const std::shared_ptr<Control> &TimelineItem::getControl() {
+    if (!_control) {
+        _control = std::make_shared<Control>(this);
+    }
+    return _control;
 }

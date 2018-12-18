@@ -25,11 +25,12 @@ namespace EARenderer {
         SphericalHarmonics skySphericalHarmonics;
 
         DiffuseLightProbe() = default;
-        DiffuseLightProbe(const glm::vec3& position);
+
+        DiffuseLightProbe(const glm::vec3 &position);
     };
 
-    template <typename S>
-    void serialize(S& s, DiffuseLightProbe& probe) {
+    template<typename S>
+    void serialize(S &s, DiffuseLightProbe &probe) {
         s.object(probe.position);
         s.value4b(probe.surfelClusterProjectionGroupOffset);
         s.value4b(probe.surfelClusterProjectionGroupSize);

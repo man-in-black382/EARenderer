@@ -15,7 +15,7 @@ in vec2 vTexCoords;
 
 uniform sampler2D uFrame;
 
-uniform usampler2D uGBufferAlbedoRoughnessMetalnessAONormal;
+uniform usampler2D uMaterialData;
 uniform sampler2D uGBufferHiZBuffer;
 uniform int uHiZBufferMipCount;
 
@@ -151,7 +151,8 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     // it will drown out those reflections since backward facing pixels are not available
     // for screen space reflection. Attenuate reflections for angles between 90 degrees
     // and 100 degrees, and drop all contribution beyond the (-100,100)  degree range
-    vec3 reflectionNormal = DecodeGBufferNormal(uGBufferAlbedoRoughnessMetalnessAONormal, raySample.xy);
+    uvec4 materialData = texture(uMaterialData, raySample.xy);
+    vec3 reflectionNormal = DecodeGBufferCookTorranceNormal(materialData);
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
 }
 
@@ -259,7 +260,8 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 ////////////////////////////////////////////////////////////
 
 void main() {
-    GBuffer gBuffer     = DecodeGBuffer(uGBufferAlbedoRoughnessMetalnessAONormal, vTexCoords);
+    uvec4 materialData = texture(uMaterialData, vTexCoords);
+    GBufferCookTorrance gBuffer = DecodeGBufferCookTorrance(materialData);
 
     vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     vec3 N              = gBuffer.normal;

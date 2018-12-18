@@ -24,56 +24,58 @@
   * \see FbxTexture
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxProceduralTexture : public FbxTexture
-{
-	FBXSDK_OBJECT_DECLARE(FbxProceduralTexture, FbxTexture);
+class FBXSDK_DLL FbxProceduralTexture : public FbxTexture {
+FBXSDK_OBJECT_DECLARE(FbxProceduralTexture, FbxTexture);
 
-	public:
-	/**
-	  * \name Procedural Texture Properties
-	  */
-	//@{
+public:
+    /**
+      * \name Procedural Texture Properties
+      */
+    //@{
 
     /** This property handles the raw data for generating procedural texture.
       */
-	FbxPropertyT<FbxBlob>			BlobProp;
+    FbxPropertyT<FbxBlob> BlobProp;
 
-	/** Resets the default procedural texture values.
-	  */
-	void Reset();
-
-	//@}
-
-	/**
-	  * \name Property Access Methods
-	  */
-	//@{
-
-	/** Sets the blob.
-	  *	\param pBlob Blob containing information for the procedural texture
+    /** Resets the default procedural texture values.
       */
-	void SetBlob(FbxBlob& pBlob);
+    void Reset();
 
-	/** Get the blob.
-	  *	\return Blob containing information for the procedural texture
-	  */
-	FbxBlob GetBlob() const;
+    //@}
 
-	//@}
+    /**
+      * \name Property Access Methods
+      */
+    //@{
+
+    /** Sets the blob.
+      *	\param pBlob Blob containing information for the procedural texture
+      */
+    void SetBlob(FbxBlob &pBlob);
+
+    /** Get the blob.
+      *	\return Blob containing information for the procedural texture
+      */
+    FbxBlob GetBlob() const;
+
+    //@}
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-	virtual FbxObject& Copy(const FbxObject& pObject);
 
-	bool operator==(FbxProceduralTexture const& pTexture) const;
+    virtual FbxObject &Copy(const FbxObject &pObject);
+
+    bool operator==(FbxProceduralTexture const &pTexture) const;
 
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual void ConstructProperties(bool pForceSet);
+    virtual void Construct(const FbxObject *pFrom);
 
-	void Init();
+    virtual void ConstructProperties(bool pForceSet);
+
+    void Init();
+
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

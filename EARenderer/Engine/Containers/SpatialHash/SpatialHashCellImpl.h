@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <typename T>
+    template<typename T>
     SpatialHash<T>::Cell::Cell(uint16_t x, uint16_t y, uint16_t z) {
         encodeX(x);
         encodeY(y);
@@ -22,7 +22,7 @@ namespace EARenderer {
 
 #pragma mark - Hash
 
-    template <typename T>
+    template<typename T>
     typename SpatialHash<T>::Cell
     SpatialHash<T>::Cell::InvalidCell() {
         static Cell c;
@@ -30,7 +30,7 @@ namespace EARenderer {
         return c;
     }
 
-    template <typename T>
+    template<typename T>
     uint64_t
     SpatialHash<T>::Cell::hash() const {
         return mHash;
@@ -38,13 +38,13 @@ namespace EARenderer {
 
 #pragma mark - Operators
 
-    template <typename T>
+    template<typename T>
     bool
     SpatialHash<T>::Cell::operator==(Cell that) const {
         return mHash == that.mHash;
     }
 
-    template <typename T>
+    template<typename T>
     bool
     SpatialHash<T>::Cell::operator!=(Cell that) const {
         return mHash != that.mHash;
@@ -52,14 +52,14 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    template <typename T>
+    template<typename T>
     void
     SpatialHash<T>::Cell::encodeX(uint16_t x) {
         mHash &= 0xFFFFFFFFFFFF0000;
         mHash |= x;
     }
 
-    template <typename T>
+    template<typename T>
     void
     SpatialHash<T>::Cell::encodeY(uint16_t x) {
         mHash &= 0xFFFFFFFF0000FFFF;
@@ -67,7 +67,7 @@ namespace EARenderer {
         mHash |= (x64 << 16);
     }
 
-    template <typename T>
+    template<typename T>
     void
     SpatialHash<T>::Cell::encodeZ(uint16_t x) {
         mHash &= 0xFFFF0000FFFFFFFF;
@@ -77,19 +77,19 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    template <typename T>
+    template<typename T>
     uint16_t
     SpatialHash<T>::Cell::decodeX() const {
         return mHash & 0xFFFF;
     }
 
-    template <typename T>
+    template<typename T>
     uint16_t
     SpatialHash<T>::Cell::decodeY() const {
         return (mHash >> 16) & 0xFFFF;
     }
 
-    template <typename T>
+    template<typename T>
     uint16_t
     SpatialHash<T>::Cell::decodeZ() const {
         return (mHash >> 32) & 0xFFFF;

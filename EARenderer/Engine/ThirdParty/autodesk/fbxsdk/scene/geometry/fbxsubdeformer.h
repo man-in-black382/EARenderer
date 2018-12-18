@@ -52,46 +52,49 @@
   * The blend shape channel also control the deform percent of each target shape or In-Between blend shape on it.
   * \nosubgrouping
   */
-class FBXSDK_DLL FbxSubDeformer : public FbxObject
-{
-    FBXSDK_OBJECT_DECLARE(FbxSubDeformer, FbxObject);
-    public:
+class FBXSDK_DLL FbxSubDeformer : public FbxObject {
+FBXSDK_OBJECT_DECLARE(FbxSubDeformer, FbxObject);
+public:
 
-        /** Set multi layer state flag.
-          * \param pMultiLayer               If \c true, multi-layering is enabled.
-          */
-        void SetMultiLayer(bool pMultiLayer);
+    /** Set multi layer state flag.
+      * \param pMultiLayer               If \c true, multi-layering is enabled.
+      */
+    void SetMultiLayer(bool pMultiLayer);
 
-        /** Get multilayer state.
-          * \return                         The state of the multi-layer flag.
-          */
-        bool GetMultiLayer() const;
+    /** Get multilayer state.
+      * \return                         The state of the multi-layer flag.
+      */
+    bool GetMultiLayer() const;
 
 
-         /** \enum EType Sub-deformer type
-          */
-        enum EType
-        {
-            eUnknown,			//!< Untyped sub-deformer            
-            eCluster,			//!< Type FbxCluster            
-            eBlendShapeChannel	//!< Type FbxBlendShapeChannel
-        };
+    /** \enum EType Sub-deformer type
+     */
+    enum EType {
+        eUnknown,            //!< Untyped sub-deformer            
+        eCluster,            //!< Type FbxCluster            
+        eBlendShapeChannel    //!< Type FbxBlendShapeChannel
+    };
 
-        /** Get the type of the sub-deformer.
-          * \return                         SubDeformer type identifier.
-          */
-        virtual EType GetSubDeformerType() const { return eUnknown; }
+    /** Get the type of the sub-deformer.
+      * \return                         SubDeformer type identifier.
+      */
+    virtual EType GetSubDeformerType() const {
+        return eUnknown;
+    }
 
 /*****************************************************************************************************************************
 ** WARNING! Anything beyond these lines is for internal use, may not be documented and is subject to change without notice! **
 *****************************************************************************************************************************/
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 protected:
-	virtual void Construct(const FbxObject* pFrom);
-	virtual FbxStringList GetTypeFlags() const { return FbxStringList(); }
+    virtual void Construct(const FbxObject *pFrom);
 
-	// Local
-	bool		mMultiLayer;
+    virtual FbxStringList GetTypeFlags() const {
+        return FbxStringList();
+    }
+
+    // Local
+    bool mMultiLayer;
 #endif /* !DOXYGEN_SHOULD_SKIP_THIS *****************************************************************************************/
 };
 

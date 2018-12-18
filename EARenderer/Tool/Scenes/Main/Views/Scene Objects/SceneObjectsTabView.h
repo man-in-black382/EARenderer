@@ -16,9 +16,9 @@
 
 @interface SceneObjectsTabView : NSTabView
 
-@property (weak, nonatomic) IBOutlet MeshListTabViewItem *meshesTab;
-@property (weak, nonatomic) IBOutlet CameraListTabViewItem *camerasTab;
-@property (weak, nonatomic) IBOutlet LightListTabViewItem *lightsTab;
+@property(weak, nonatomic) IBOutlet MeshListTabViewItem *meshesTab;
+@property(weak, nonatomic) IBOutlet CameraListTabViewItem *camerasTab;
+@property(weak, nonatomic) IBOutlet LightListTabViewItem *lightsTab;
 
 - (void)buildTabsWithScene:(EARenderer::Scene *)scene;
 

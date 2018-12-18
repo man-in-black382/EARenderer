@@ -17,18 +17,21 @@
 
 namespace EARenderer {
 
-    template <GLTexture::Float TextureFormat>
+    template<GLTexture::Float TextureFormat>
     class PostprocessEffect {
     protected:
         std::shared_ptr<GLFramebuffer> mFramebuffer;
-        std::shared_ptr<PostprocessTexturePool<TextureFormat>> mTexturePool;
+        std::shared_ptr<PostprocessTexturePool < TextureFormat>> mTexturePool;
 
     public:
-        PostprocessEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool)
+        PostprocessEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool < TextureFormat>>
+
+        sharedTexturePool)
         :
-        mFramebuffer(sharedFramebuffer),
-        mTexturePool(sharedTexturePool)
-        { }
+
+        mFramebuffer (sharedFramebuffer),
+        mTexturePool(sharedTexturePool) {
+        }
     };
 
 }

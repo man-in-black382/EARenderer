@@ -17,17 +17,16 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template <typename T>
-    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D& boundingBox,
-                                  size_t maximumDepth,
-                                  const ContainmentDetector& containmentDetector,
-                                  const CollisionDetector& collisionDetector)
-    :
-    mBoundingBox(boundingBox),
-    mMaximumDepth(maximumDepth),
-    mContainmentDetector(containmentDetector),
-    mCollisionDetector(collisionDetector)
-    {
+    template<typename T>
+    SparseOctree<T>::SparseOctree(const AxisAlignedBox3D &boundingBox,
+            size_t maximumDepth,
+            const ContainmentDetector &containmentDetector,
+            const CollisionDetector &collisionDetector)
+            :
+            mBoundingBox(boundingBox),
+            mMaximumDepth(maximumDepth),
+            mContainmentDetector(containmentDetector),
+            mCollisionDetector(collisionDetector) {
         if (maximumDepth > mDepthCap) {
             throw std::invalid_argument(string_format("Octree maximum depth is %d, you requested %d", mDepthCap, maximumDepth));
         }
@@ -41,7 +40,7 @@ namespace EARenderer {
 
 #pragma mark - Internal logic
 
-    template <typename T>
+    template<typename T>
     glm::mat4
     SparseOctree<T>::localNormalizedSpaceMatrix() const {
         glm::mat4 translation = glm::translate(-mBoundingBox.center());
@@ -50,7 +49,7 @@ namespace EARenderer {
         return scale * translation;
     }
 
-    template <typename T>
+    template<typename T>
     void
     SparseOctree<T>::pushRootNode() {
         NodeIndex rootNodeIndex = RootNodeIndex;
@@ -61,7 +60,7 @@ namespace EARenderer {
         mTraversalStack.push(StackFrame(rootNodeIndex, rootDepth, rootT1, rootT2));
     }
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::NodeIndex
     SparseOctree<T>::appendChildIndex(NodeIndex parent, NodeIndex child) {
         parent <<= 3;
@@ -69,58 +68,57 @@ namespace EARenderer {
         return parent;
     }
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::BitMask
-    SparseOctree<T>::signMask(const glm::vec3& valueTriple) const {
+    SparseOctree<T>::signMask(const glm::vec3 &valueTriple) const {
         BitMask mask = 0;
 
-        if (valueTriple.x < 0.0) { mask |= XBitMask; }
-        if (valueTriple.y < 0.0) { mask |= YBitMask; }
-        if (valueTriple.z < 0.0) { mask |= ZBitMask; }
+        if (valueTriple.x < 0.0) {mask |= XBitMask;}
+        if (valueTriple.y < 0.0) {mask |= YBitMask;}
+        if (valueTriple.z < 0.0) {mask |= ZBitMask;}
 
         return mask;
     }
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::BitMask
-    SparseOctree<T>::sortMaskByMinimum(const glm::vec3& valueTriple) const {
+    SparseOctree<T>::sortMaskByMinimum(const glm::vec3 &valueTriple) const {
         BitMask mask = 0;
 
         float minimum = std::min(valueTriple.x, valueTriple.y);
         minimum = std::min(minimum, valueTriple.z);
 
-        if (valueTriple.x == minimum) { mask |= XBitMask; }
-        if (valueTriple.y == minimum) { mask |= YBitMask; }
-        if (valueTriple.z == minimum) { mask |= ZBitMask; }
+        if (valueTriple.x == minimum) {mask |= XBitMask;}
+        if (valueTriple.y == minimum) {mask |= YBitMask;}
+        if (valueTriple.z == minimum) {mask |= ZBitMask;}
 
         return mask;
     }
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::BitMask
-    SparseOctree<T>::sortMaskByMaximum(const glm::vec3& valueTriple) const {
+    SparseOctree<T>::sortMaskByMaximum(const glm::vec3 &valueTriple) const {
         BitMask mask = 0;
 
         float maximum = std::max(valueTriple.x, valueTriple.y);
         maximum = std::max(maximum, valueTriple.z);
 
-        if (valueTriple.x == maximum) { mask |= XBitMask; }
-        if (valueTriple.y == maximum) { mask |= YBitMask; }
-        if (valueTriple.z == maximum) { mask |= ZBitMask; }
+        if (valueTriple.x == maximum) {mask |= XBitMask;}
+        if (valueTriple.y == maximum) {mask |= YBitMask;}
+        if (valueTriple.z == maximum) {mask |= ZBitMask;}
 
         return mask;
     }
 
-    template <typename T>
+    template<typename T>
     void
-    SparseOctree<T>::pushChildNodes(const StackFrame& currentFrame,
-                                    const glm::vec3& t,
-                                    BitMask signMaskA,
-                                    BitMask signMaskB,
-                                    BitMask p_first,
-                                    BitMask p_last,
-                                    size_t planeIntersectionCounter)
-    {
+    SparseOctree<T>::pushChildNodes(const StackFrame &currentFrame,
+            const glm::vec3 &t,
+            BitMask signMaskA,
+            BitMask signMaskB,
+            BitMask p_first,
+            BitMask p_last,
+            size_t planeIntersectionCounter) {
         NodeIndex parentIndex = currentFrame.nodeIndex;
         NodeIndex childIndex = 0;
 
@@ -178,18 +176,18 @@ namespace EARenderer {
 
 #pragma mark - Building
 
-    template <typename T>
+    template<typename T>
     void
-    SparseOctree<T>::insert(const T& object) {
+    SparseOctree<T>::insert(const T &object) {
         std::unordered_map<uint8_t, BitMask> childBoxChildNodeCorrespondenceMap({
-            std::make_pair(0, 7),
-            std::make_pair(1, 3),
-            std::make_pair(2, 6),
-            std::make_pair(3, 2),
-            std::make_pair(4, 5),
-            std::make_pair(5, 1),
-            std::make_pair(6, 4),
-            std::make_pair(7, 0),
+                std::make_pair(0, 7),
+                std::make_pair(1, 3),
+                std::make_pair(2, 6),
+                std::make_pair(3, 2),
+                std::make_pair(4, 5),
+                std::make_pair(5, 1),
+                std::make_pair(6, 4),
+                std::make_pair(7, 0),
         });
 
         StackFrame stackFrame(RootNodeIndex, 0);
@@ -200,7 +198,7 @@ namespace EARenderer {
         while (true) {
 //            printf("Traversing through node %d\n", stackFrame.nodeIndex);
 
-            Node& node = mNodes[stackFrame.nodeIndex];
+            Node &node = mNodes[stackFrame.nodeIndex];
             node.mBoundingBox = nodeBoundingBox;
             std::array<AxisAlignedBox3D, 8> childBoxes = node.mBoundingBox.octet();
 
@@ -229,9 +227,9 @@ namespace EARenderer {
 
 #pragma mark - Traversal
 
-    template <typename T>
+    template<typename T>
     bool
-    SparseOctree<T>::raymarch(const glm::vec3& p0, const glm::vec3& p1) {
+    SparseOctree<T>::raymarch(const glm::vec3 &p0, const glm::vec3 &p1) {
         glm::mat4 localSpaceMat = localNormalizedSpaceMatrix();
 
         // Transform to voxelspace
@@ -249,8 +247,8 @@ namespace EARenderer {
             StackFrame stackFrame = mTraversalStack.top();
             mTraversalStack.pop();
 
-            Node& node = mNodes[stackFrame.nodeIndex];
-            for (T& object : node.mObjects) {
+            Node &node = mNodes[stackFrame.nodeIndex];
+            for (T &object : node.mObjects) {
                 bool collisionDetected = mCollisionDetector(object, Ray3D(p0, p1 - p0));
                 if (collisionDetected) {
                     mTraversalStack = std::stack<StackFrame>();
@@ -272,7 +270,7 @@ namespace EARenderer {
 
             BitMask signMaskA = signMask(p_in + d);
             BitMask signMaskB = signMask(p_out + d);
-            BitMask signMaskC = signMaskA ^ signMaskB;
+            BitMask signMaskC = signMaskA ^signMaskB;
 
             glm::vec3 t(std::numeric_limits<float>::max());
             size_t planeIntersectionCounter = 0;
@@ -301,9 +299,9 @@ namespace EARenderer {
         return false;
     }
 
-    template <typename T>
+    template<typename T>
     bool
-    SparseOctree<T>::raymarch(const Ray3D& ray) {
+    SparseOctree<T>::raymarch(const Ray3D &ray) {
         // Extend ray's end point to ensure that it reaches all across the bounding box
         float t1 = mBoundingBox.diagonal();
         glm::vec3 a = ray.origin;
@@ -314,13 +312,13 @@ namespace EARenderer {
 
 #pragma mark Iteration
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::Iterator
     SparseOctree<T>::begin() {
         return Iterator(mNodes.begin(), mNodes.end());
     }
 
-    template <typename T>
+    template<typename T>
     typename SparseOctree<T>::Iterator
     SparseOctree<T>::end() {
         return Iterator(mNodes.end());

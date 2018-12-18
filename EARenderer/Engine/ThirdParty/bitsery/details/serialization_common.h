@@ -183,8 +183,8 @@ namespace bitsery {
         template<typename T>
         struct IsFundamentalType : std::integral_constant<bool,
                 std::is_enum<T>::value
-                || std::is_floating_point<T>::value
-                || std::is_integral<T>::value> {
+                        || std::is_floating_point<T>::value
+                        || std::is_integral<T>::value> {
         };
 
         template<typename T, typename Integral = void>
@@ -220,12 +220,12 @@ namespace bitsery {
 
             static void invoke(S &s, T &v) {
                 static_assert(HasSerializeFunction<S, T>::value || HasSerializeMethod<S, T>::value,
-                              "\nPlease define 'serialize' function for your type (inside or outside of class):\n"
-                                      "  template<typename S>\n"
-                                      "  void serialize(S& s)\n"
-                                      "  {\n"
-                                      "    ...\n"
-                                      "  }\n");
+                        "\nPlease define 'serialize' function for your type (inside or outside of class):\n"
+                        "  template<typename S>\n"
+                        "  void serialize(S& s)\n"
+                        "  {\n"
+                        "    ...\n"
+                        "  }\n");
                 using TDecayed = typename std::decay<T>::type;
                 selectSerializeFnc(s, v, SelectSerializeFnc<TDecayed>{});
             }
@@ -233,10 +233,10 @@ namespace bitsery {
         private:
             static void selectSerializeFnc(S &s, T &v, std::integral_constant<int, 0>) {
                 static_assert(!(HasSerializeFunction<S, T>::value && HasSerializeMethod<S, T>::value),
-                              "\nPlease define only one 'serialize' function (member OR free).\n"
-                                      "If serialization function is inherited from base class, then explicitly select correct function for your type e.g.:\n"
-                                      "  template <>\n"
-                                      "  struct SelectSerializeFnc<DerivedClass>:UseMemberFnc {};\n");
+                        "\nPlease define only one 'serialize' function (member OR free).\n"
+                        "If serialization function is inherited from base class, then explicitly select correct function for your type e.g.:\n"
+                        "  template <>\n"
+                        "  struct SelectSerializeFnc<DerivedClass>:UseMemberFnc {};\n");
                 selectSerializeFnc(s, v, std::integral_constant<int,
                         HasSerializeFunction<S, T>::value ? 1 : 2>{});
             }
@@ -259,7 +259,7 @@ namespace bitsery {
 
             static void invoke(S &s, T &&obj) {
                 static_assert(IsFlexibleIncluded<S, T>::value,
-                              "\nPlease include '<bitsery/flexible.h>' to use 'archive' function:\n");
+                        "\nPlease include '<bitsery/flexible.h>' to use 'archive' function:\n");
 
                 archiveProcess(s, std::forward<T>(obj));
             }
@@ -332,8 +332,8 @@ namespace bitsery {
         template<typename TCast, typename TContext, typename TInternalContext>
         TCast *chooseInternalOrExternalContext(TContext *ctx, TInternalContext &, std::false_type) {
             return ctx
-                   ? getContextImpl<TCast>(ctx, IsSpecializationOf<TContext, std::tuple>{})
-                   : nullptr;
+                    ? getContextImpl<TCast>(ctx, IsSpecializationOf<TContext, std::tuple>{})
+                    : nullptr;
         }
 
         template<typename TCast, typename TContext, typename TInternalContext>
@@ -385,8 +385,8 @@ namespace bitsery {
         template<typename TCast, typename TContext, typename TInternalContext>
         TCast *chooseInternalOrExternalContextIfExists(TContext *ctx, TInternalContext &, std::false_type) {
             return ctx
-                   ? getContextImplIfExists<TCast>(ctx, IsSpecializationOf<TContext, std::tuple>{})
-                   : nullptr;
+                    ? getContextImplIfExists<TCast>(ctx, IsSpecializationOf<TContext, std::tuple>{})
+                    : nullptr;
         }
 
         template<typename TCast, typename TContext, typename TInternalContext>

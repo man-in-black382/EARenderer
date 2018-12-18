@@ -19,11 +19,11 @@ namespace EARenderer {
         size_t inputImageMipLevel = 0;
         size_t outputImageMipLevel = 0;
 
-        bool operator==(const GaussianBlurSettings& rhs) const {
+        bool operator==(const GaussianBlurSettings &rhs) const {
             return this->radius == rhs.radius && std::fabs(this->sigma - rhs.sigma) < 0.001;
         }
 
-        bool operator!=(const GaussianBlurSettings& rhs) const {
+        bool operator!=(const GaussianBlurSettings &rhs) const {
             return !(*this == rhs);
         }
     };
