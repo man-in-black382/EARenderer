@@ -12,14 +12,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    DirectLightAccumulator::DirectLightAccumulator(const Scene *scene,
-            std::shared_ptr<const SceneGBuffer> gBuffer,
-            std::shared_ptr<const ShadowMapper> shadowMapper)
-            :
-            mScene(scene),
-            mGBuffer(gBuffer),
-            mShadowMapper(shadowMapper) {
-    }
+    DirectLightAccumulator::DirectLightAccumulator(const Scene *scene, std::shared_ptr<const SceneGBuffer> gBuffer, std::shared_ptr<const ShadowMapper> shadowMapper)
+            : mScene(scene), mGBuffer(gBuffer), mShadowMapper(shadowMapper) {}
 
 #pragma mark -
 

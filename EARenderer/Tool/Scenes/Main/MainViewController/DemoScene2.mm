@@ -125,7 +125,8 @@
             [self pathForResource:@"Sponza_Floor_normal.tga"],
             [self pathForResource:@"blank_black.png"],
             [self pathForResource:@"blank_white.jpg"],
-            [self pathForResource:@"blank_white.jpg"]
+            [self pathForResource:@"blank_white.jpg"],
+            0.0f
     });
 }
 

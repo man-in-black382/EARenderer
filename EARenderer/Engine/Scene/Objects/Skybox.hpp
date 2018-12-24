@@ -21,12 +21,18 @@ namespace EARenderer {
     private:
         std::unique_ptr<GLFloatTexture2D<GLTexture::Float::RGB16F>> mEquirectangularMap;
 
-    public:
-        Skybox(const std::string &equirectangularImage);
+        float mExposure = 1.0;
 
+    public:
+        Skybox(const std::string &equirectangularImage, float exposure = 1.0f);
+
+        float exposure() const;
         const GLFloatTexture2D<GLTexture::Float::RGB16F> *equirectangularMap() const;
 
+        void setExposure(float exposure);
+
         void draw() const;
+
     };
 
 }

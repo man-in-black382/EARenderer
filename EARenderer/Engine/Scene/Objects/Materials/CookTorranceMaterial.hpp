@@ -11,10 +11,12 @@
 
 #include <string>
 #include <memory>
-
+#include <variant>
+#include <optional>
 #include <glm/vec3.hpp>
 
 #include "GLTexture2D.hpp"
+#include "Color.hpp"
 
 namespace EARenderer {
 
@@ -37,12 +39,12 @@ namespace EARenderer {
 
     public:
         CookTorranceMaterial(
-                const std::string &albedoMapPath = "",
-                const std::string &normalMapPath = "",
-                const std::string &metallicMapPath = "",
-                const std::string &roughnessMapPath = "",
-                const std::string &ambientOcclusionMapPath = "",
-                const std::string &displacementMapPath = ""
+                std::variant<std::string, Color> albedo,
+                std::variant<std::string, glm::vec3> normal,
+                std::variant<std::string, float> metalness,
+                std::variant<std::string, float> roughness,
+                std::variant<std::string, float> ambientOcclusion,
+                std::variant<std::string, float> displacement
         );
 
         const AlbedoMap *albedoMap() const;

@@ -119,6 +119,7 @@ namespace EARenderer {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
             mSkyboxShader.setEquirectangularMap(*mScene->skybox()->equirectangularMap());
+            mSkyboxShader.setExposure(mScene->skybox()->exposure());
 //            ID id = *mScene->pointLights().begin();
 //            mSkyboxShader.setCubemap(mShadowMapper->shadowMapForPointLight(id));
         });

@@ -41,7 +41,11 @@ namespace EARenderer {
         return mModelMatrix;
     }
 
-    Transformation MeshInstance::transformation() const {
+    const Transformation &MeshInstance::transformation() const {
+        return mTransformation;
+    }
+
+    Transformation& MeshInstance::transformation() {
         return mTransformation;
     }
 

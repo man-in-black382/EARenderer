@@ -17,11 +17,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     Transformation::Transformation()
-            :
-            scale(glm::one<glm::vec3>()),
-            translation(glm::zero<glm::vec3>()),
-            rotation(glm::quat()) {
-    }
+            : scale(glm::one<glm::vec3>()), translation(glm::zero<glm::vec3>()), rotation(glm::quat()) {}
 
     Transformation::Transformation(const glm::mat4 &matrix) {
         glm::vec3 skew;
@@ -30,11 +26,7 @@ namespace EARenderer {
     }
 
     Transformation::Transformation(glm::vec3 scale, glm::vec3 translation, glm::quat rotation)
-            :
-            scale(scale),
-            translation(translation),
-            rotation(rotation) {
-    }
+            : scale(scale), translation(translation), rotation(rotation) {}
 
     Transformation Transformation::combinedWith(const Transformation &other) const {
         return Transformation(other.modelMatrix() * modelMatrix());

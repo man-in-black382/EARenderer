@@ -155,7 +155,8 @@
             [self pathForBlankBlackImage],
             [self pathForResource:@"T_stoneFloorA_wet_RF.tga"],
             [self pathForResource:@"T_stoneFloorA_wet_AO.tga"],
-            [self pathForResource:@"T_stoneFloorA_wet_DS.tif"]
+            0.0f
+//            [self pathForResource:@"T_stoneFloorA_wet_DS.tif"]
     });
 }
 

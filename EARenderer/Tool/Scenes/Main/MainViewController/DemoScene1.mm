@@ -79,7 +79,6 @@
     EARenderer::MaterialReference marbleTiled_MaterialID = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
     EARenderer::MaterialReference wetStones_MaterialID = [MaterialLoader load_WetStones_MaterialToPool:resourcePool];
 
-    EARenderer::MaterialReference lightMaterialID = resourcePool->addMaterial(EARenderer::EmissiveMaterial{EARenderer::Color(2.0, 1.0)});
 //
 //    EARenderer::ID sandGround_MaterialID = [MaterialLoader load_sandFloor_MaterialToPool:resourcePool];
 
@@ -146,8 +145,7 @@
         } else if (subMesh.materialName() == "flagpole") {
             sponzaInstance.setMaterialReferenceForSubMeshID(flagpole_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "fabric_e") {
-//            sponzaInstance.setMaterialReferenceForSubMeshID(fabricE_MaterialID, subMeshID);
-            sponzaInstance.setMaterialReferenceForSubMeshID(lightMaterialID, subMeshID);
+            sponzaInstance.setMaterialReferenceForSubMeshID(fabricE_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "fabric_d") {
             sponzaInstance.setMaterialReferenceForSubMeshID(fabricD_MaterialID, subMeshID);
         } else if (subMesh.materialName() == "fabric_a") {
@@ -177,20 +175,22 @@
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
 
-    EARenderer::MeshInstance sphereInstance(sphereMeshID);
-    EARenderer::ID sphereInstanceID = scene->meshInstances().insert(sphereInstance);
-
     // Skybox
-    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
-    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
+    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"night_sky" ofType:@"hdr"];
+    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String), 0.03));
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
+    scene->directionalLight().setIsEnabled(false);
 
-//    scene->directionalLight().setIsEnabled(false);
-
-    EARenderer::PointLight pointLight(glm::vec3(0.0), EARenderer::Color(2.0, 1.0), 8.0, 0.1, 70.0);
-    pointLight.setIsEnabled(false);
+    EARenderer::Color lightColor(3.0, 2.55, 1.98);
+    EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.7, 1.8};
+    EARenderer::MaterialReference lightMaterialRef = resourcePool->addMaterial(EARenderer::EmissiveMaterial{lightColor});
+    EARenderer::PointLight pointLight(glm::vec3(0.0), lightColor, 5.0, 0.1, 80.0, lightAttenuation);
+    pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID);
+    pointLight.meshInstance->materialReference = lightMaterialRef;
+    pointLight.meshInstance->transformation().scale = glm::vec3(0.005);
+//    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);
 
@@ -284,11 +284,12 @@
     NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank_white" ofType:@"jpg"];
 
     return pool->addMaterial({
-            std::string(albedoMapPath.UTF8String),
-            std::string(normalMapPath.UTF8String),
-            std::string(metallicMapPath.UTF8String),
-            std::string(roughnessMapPath.UTF8String),
-            std::string(blankImagePath.UTF8String)
+            albedoMapPath.UTF8String,
+            normalMapPath.UTF8String,
+            metallicMapPath.UTF8String,
+            roughnessMapPath.UTF8String,
+            blankImagePath.UTF8String,
+            0.0f
     });
 }
 
@@ -300,11 +301,12 @@
     NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank_black" ofType:@"png"];
 
     return pool->addMaterial({
-            std::string(albedoMapPath.UTF8String),
-            std::string(normalMapPath.UTF8String),
-            std::string(blankImagePath.UTF8String),
-            std::string(roughnessMapPath.UTF8String),
-            std::string(aoMapPath.UTF8String)
+            albedoMapPath.UTF8String,
+            normalMapPath.UTF8String,
+            blankImagePath.UTF8String,
+            roughnessMapPath.UTF8String,
+            aoMapPath.UTF8String,
+            0.0f
     });
 }
 
@@ -316,11 +318,12 @@
     NSString *blankImagePath = [[NSBundle mainBundle] pathForResource:@"blank_white" ofType:@"jpg"];
 
     return pool->addMaterial({
-            std::string(albedoMapPath.UTF8String),
-            std::string(normalMapPath.UTF8String),
-            std::string(metallicMapPath.UTF8String),
-            std::string(roughnessMapPath.UTF8String),
-            std::string(blankImagePath.UTF8String)
+            albedoMapPath.UTF8String,
+            normalMapPath.UTF8String,
+            metallicMapPath.UTF8String,
+            roughnessMapPath.UTF8String,
+            blankImagePath.UTF8String,
+            0.0f
     });
 }
 

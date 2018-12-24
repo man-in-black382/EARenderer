@@ -53,27 +53,52 @@ namespace EARenderer {
 
         for (ID instanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[instanceID];
-            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            renderMeshInstance(instance);
+        }
 
-            mGBufferShader.setModelMatrix(instance.transformation().modelMatrix());
-
-            for (ID subMeshID : subMeshes) {
-                auto &subMesh = subMeshes[subMeshID];
-
-                mGBufferShader.ensureSamplerValidity([&] {
-                    auto materialRef = instance.materialReferenceForSubMeshID(subMeshID);
-                    switch (materialRef->first) {
-                        case MaterialType::CookTorrance:
-                            mGBufferShader.setMaterial(ResourcePool::shared().cookTorranceMaterial(materialRef->second));
-                            break;
-                        case MaterialType::Emissive:
-                            mGBufferShader.setMaterial(ResourcePool::shared().emissiveMaterial(materialRef->second));
-                            break;
-                    }
-                });
-
-                subMesh.draw();
+        for (ID lightID : mScene->pointLights()) {
+            const PointLight& light = mScene->pointLights()[lightID];
+            if (light.meshInstance) {
+                Transformation lightBaseTransform(glm::vec3(1.0), light.position(), glm::quat());
+                renderMeshInstance(*light.meshInstance, &lightBaseTransform);
             }
+        }
+    }
+
+    void SceneGBufferConstructor::renderMeshInstance(const MeshInstance &instance, const Transformation* baseTransform) {
+        auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+
+        if (baseTransform) {
+            mGBufferShader.setModelMatrix(instance.transformation().combinedWith(*baseTransform).modelMatrix());
+        } else {
+            mGBufferShader.setModelMatrix(instance.transformation().modelMatrix());
+        }
+
+        for (ID subMeshID : subMeshes) {
+            auto &subMesh = subMeshes[subMeshID];
+
+            mGBufferShader.ensureSamplerValidity([&] {
+                auto materialRef = instance.materialReference;
+
+                if (!materialRef) {
+                    materialRef = instance.materialReferenceForSubMeshID(subMeshID);
+                }
+
+                if (!materialRef) {
+                    return;
+                }
+
+                switch (materialRef->first) {
+                    case MaterialType::CookTorrance:
+                        mGBufferShader.setMaterial(ResourcePool::shared().cookTorranceMaterial(materialRef->second));
+                        break;
+                    case MaterialType::Emissive:
+                        mGBufferShader.setMaterial(ResourcePool::shared().emissiveMaterial(materialRef->second));
+                        break;
+                }
+            });
+
+            subMesh.draw();
         }
     }
 

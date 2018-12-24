@@ -35,6 +35,8 @@ namespace EARenderer {
 
         void generateGBuffer();
 
+        void renderMeshInstance(const MeshInstance& instance, const Transformation* baseTransform = nullptr);
+
         void generateHiZBuffer();
 
     public:

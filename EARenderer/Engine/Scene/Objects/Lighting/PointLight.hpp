@@ -22,6 +22,14 @@
 namespace EARenderer {
 
     class PointLight : public Light {
+    public:
+        // http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
+        struct Attenuation {
+            float constant = 1.0;
+            float linear = 0.0;
+            float quadratic = 0.0;
+        };
+
     private:
         float mRadius = 1.0;
         float mNearPlane = 1.0;
@@ -29,7 +37,9 @@ namespace EARenderer {
     public:
         std::optional<MeshInstance> meshInstance;
 
-        PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area);
+        Attenuation attenuation;
+
+        PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area, const Attenuation& attenuation);
 
         float nearClipPlane() const;
 

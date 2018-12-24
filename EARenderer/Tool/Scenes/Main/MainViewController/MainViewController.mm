@@ -16,6 +16,7 @@
 #import "DemoSceneComposing.h"
 #import "DemoScene1.h"
 #import "DemoScene2.h"
+#import "DemoScene3.h"
 
 #import "DefaultRenderComponentsProvider.h"
 

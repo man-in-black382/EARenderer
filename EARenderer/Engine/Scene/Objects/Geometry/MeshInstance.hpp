@@ -30,6 +30,9 @@ namespace EARenderer {
         std::unordered_map<ID, MaterialReference> mSubMeshMaterialMap;
 
     public:
+        /// Material reference that overrides individual sub mesh materials if set
+        std::optional<MaterialReference> materialReference;
+
         MeshInstance(ID meshID);
 
         ID meshID() const;
@@ -40,7 +43,9 @@ namespace EARenderer {
 
         const glm::mat4 &modelMatrix() const;
 
-        Transformation transformation() const;
+        const Transformation& transformation() const;
+
+        Transformation& transformation();
 
         AxisAlignedBox3D boundingBox() const;
 

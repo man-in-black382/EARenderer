@@ -1,0 +1,31 @@
+//
+//  GLCubemapFace.hpp
+//  EARenderer
+//
+//  Created by Pavlo Muratov on 18.11.2017.
+//  Copyright © 2017 MPO. All rights reserved.
+//
+
+#ifndef GLCubemapFace_hpp
+#define GLCubemapFace_hpp
+
+#include <OpenGL/OpenGL.h>
+
+namespace EARenderer {
+
+    enum class GLCubemapFace : GLenum {
+        PositiveX = GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+        NegativeX = GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+        PositiveY = GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+        NegativeY = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        PositiveZ = GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+        NegativeZ = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+    };
+
+    GLCubemapFace CubemapFaceFromIndex(uint8_t index);
+
+    uint8_t IndexFromCubemapFace(GLCubemapFace face);
+
+}
+
+#endif /* GLCubemapFace_hpp */

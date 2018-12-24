@@ -9,17 +9,14 @@
 #include "Light.hpp"
 
 #include <glm/gtc/constants.hpp>
+#include <algorithm>
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
     Light::Light(const glm::vec3 &position, const Color &color, float area)
-            :
-            mPosition(position),
-            mColor(color),
-            mArea(area) {
-    }
+            : mPosition(position), mColor(color), mArea(std::max(area, 0.0f)) {}
 
 #pragma mark - Getters
 
@@ -35,6 +32,10 @@ namespace EARenderer {
         return mIsEnabled;
     }
 
+    float Light::area() const {
+        return mArea;
+    }
+
 #pragma mark - Setters
 
     void Light::setPosition(const glm::vec3 &position) {
@@ -47,6 +48,10 @@ namespace EARenderer {
 
     void Light::setIsEnabled(bool enabled) {
         mIsEnabled = enabled;
+    }
+
+    void Light::setArea(float area) {
+        mArea = std::max(area, 0.0f);
     }
 
 #pragma mark - Protected
