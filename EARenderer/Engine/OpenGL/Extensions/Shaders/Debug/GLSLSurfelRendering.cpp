@@ -40,11 +40,11 @@ namespace EARenderer {
     }
 
     void GLSLSurfelRendering::setSurfelLuminances(const GLFloatTexture2D<GLTexture::Float::R16F> &surfelLuminances) {
-        setUniformTexture(uint32_constant<ctcrc32("uSurfelLuminances")>, surfelLuminances);
+        setUniformTexture(ctcrc32("uSurfelLuminances"), surfelLuminances);
     }
 
     void GLSLSurfelRendering::setSurfelsGBuffer(const GLFloatTexture2DArray<GLTexture::Float::RGB32F> &gBuffer) {
-        setUniformTexture(uint32_constant<ctcrc32("uSurfelsGBuffer")>, gBuffer);
+        setUniformTexture(ctcrc32("uSurfelsGBuffer"), gBuffer);
     }
 
 }

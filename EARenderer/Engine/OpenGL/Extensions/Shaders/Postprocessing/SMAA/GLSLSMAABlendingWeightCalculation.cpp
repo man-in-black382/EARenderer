@@ -20,15 +20,15 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLSMAABlendingWeightCalculation::setEdgesTexture(const GLFloatTexture2D<GLTexture::Float::RG16F> &edges) {
-        setUniformTexture(uint32_constant<ctcrc32("uEdgesTexture")>, edges);
+        setUniformTexture(ctcrc32("uEdgesTexture"), edges);
     }
 
     void GLSLSMAABlendingWeightCalculation::setAreaTexture(const GLNormalizedTexture2D<GLTexture::Normalized::RG> &area) {
-        setUniformTexture(uint32_constant<ctcrc32("uAreaTexture")>, area);
+        setUniformTexture(ctcrc32("uAreaTexture"), area);
     }
 
     void GLSLSMAABlendingWeightCalculation::setSearchTexture(const GLNormalizedTexture2D<GLTexture::Normalized::R> &search) {
-        setUniformTexture(uint32_constant<ctcrc32("uSearchTexture")>, search);
+        setUniformTexture(ctcrc32("uSearchTexture"), search);
     }
 
 }

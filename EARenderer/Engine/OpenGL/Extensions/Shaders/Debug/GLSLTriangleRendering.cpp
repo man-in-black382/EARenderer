@@ -13,8 +13,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLTriangleRendering::GLSLTriangleRendering()
-            :
-            GLSLGenericGeometry("GenericGeometry.vert", "GenericGeometry.frag", "TriangleRendering.geom") {
+            : GLSLGenericGeometry("GenericGeometry.vert", "GenericGeometry.frag", "TriangleRendering.geom") {
     }
 
 }

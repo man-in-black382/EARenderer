@@ -17,8 +17,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLBRDFIntegration::GLSLBRDFIntegration()
-            :
-            GLProgram("FullScreenQuad.vert", "BRDFIntegration.frag", "") {
+            : GLProgram("FullScreenQuad.vert", "BRDFIntegration.frag", "") {
     }
 
 }

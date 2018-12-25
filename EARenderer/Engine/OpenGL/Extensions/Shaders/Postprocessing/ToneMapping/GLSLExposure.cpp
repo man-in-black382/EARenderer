@@ -20,7 +20,7 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLExposure::setLuminanceHistogram(const GLFloatTexture2D<GLTexture::Float::R32F> &histogram) {
-        setUniformTexture(uint32_constant<ctcrc32("uHistogram")>, histogram);
+        setUniformTexture(ctcrc32("uHistogram"), histogram);
     }
 
 }

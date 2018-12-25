@@ -20,11 +20,11 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     void GLSLToneMapping::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
-        setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
+        setUniformTexture(ctcrc32("uImage"), image);
     }
 
     void GLSLToneMapping::setExposure(const GLFloatTexture2D<GLTexture::Float::R16F> &exposure) {
-        setUniformTexture(uint32_constant<ctcrc32("uExposure")>, exposure);
+        setUniformTexture(ctcrc32("uExposure"), exposure);
     }
 
 }

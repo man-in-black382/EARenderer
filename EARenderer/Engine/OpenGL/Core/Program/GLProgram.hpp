@@ -36,9 +36,6 @@
 
 namespace EARenderer {
 
-    template<uint32_t expr>
-    std::integral_constant<uint32_t, expr> uint32_constant{};
-
     class GLProgram : public GLNamedObject {
     protected:
         using VertexAttributeName = std::string;

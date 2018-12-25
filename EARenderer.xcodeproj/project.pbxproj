@@ -26,6 +26,7 @@
 		36EBC1F364BD0CBF918E7A01 /* EmissiveMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */; };
 		36EBC1FE3890683374F99E4B /* ColorSpace.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCCF06A7173DC393E4517 /* ColorSpace.glsl */; };
 		36EBC2208D86B81DE1E01C33 /* GLSLCubeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF8A0B52A547F5A86437 /* GLSLCubeRendering.cpp */; };
+		36EBC24A7A7F8FB702CCDD34 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC12E541DB7E3577A25ED /* Material.cpp */; };
 		36EBC24D51FB616E0E2175E6 /* Shadows.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC71E7D7161D613AE5BFF /* Shadows.glsl */; };
 		36EBC2651BBA973677795E9B /* EquirectangularMapConversion.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC713D67D46745C8233DE /* EquirectangularMapConversion.frag */; };
 		36EBC27D0BB706CCFDC3FD69 /* GLSLSMAANeighborhoodBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCD3584A85D483DA2777F /* GLSLSMAANeighborhoodBlending.cpp */; };
@@ -80,6 +81,7 @@
 		36EBC8BC4E55C82A724D8BCA /* CubeSidesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC35452CC177D70403412 /* CubeSidesRendering.geom */; };
 		36EBC8C3F8F4136615732F7B /* night_sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCD357D3C4205A7755B2B /* night_sky.hdr */; };
 		36EBC8E3E61236F7DD68716F /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0024397398B22BEAD21 /* GLVertexAttribute.cpp */; };
+		36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF4762755EEB818D8CF9 /* crc.cpp */; };
 		36EBC8F2CFCF0AD144733B71 /* DepthPrepass.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCA0110C9F7785232F51B /* DepthPrepass.vert */; };
 		36EBC931FFC610AB5BAF6D00 /* CookTorrance.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCFE5E0E43E858D872FE6 /* CookTorrance.glsl */; };
 		36EBC946C7DB2888E2D58166 /* GLSLEquirectangularMapConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC5B6A45EE87C9C40C424 /* GLSLEquirectangularMapConversion.cpp */; };
@@ -168,7 +170,6 @@
 		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
 		ACFF6DAA21369F0300D21C48 /* ShadowMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF6DA821369F0300D21C48 /* ShadowMapper.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
-		CE0590061FA77C6100822524 /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE0590051FA77C6100822524 /* crc.cpp */; };
 		CE151388217FA6DA004273EE /* Marble_tiles_02_4K_Height.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151383217FA6D9004273EE /* Marble_tiles_02_4K_Height.png */; };
 		CE151389217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151384217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png */; };
 		CE15138A217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png in Resources */ = {isa = PBXBuildFile; fileRef = CE151385217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png */; };
@@ -421,7 +422,9 @@
 		36EBC1057A36C314A16F7A85 /* ProbeOcclusionRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.geom; sourceTree = "<group>"; };
 		36EBC1233C06584B540E9E78 /* SMAADefines.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = SMAADefines.glsl; sourceTree = "<group>"; };
 		36EBC124B11EFF965EBDF32D /* GLSLSMAANeighborhoodBlending.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAANeighborhoodBlending.hpp; sourceTree = "<group>"; };
+		36EBC12E541DB7E3577A25ED /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		36EBC148DC927D9C77AEFB2C /* GLSLLuminanceHistogram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceHistogram.hpp; sourceTree = "<group>"; };
+		36EBC14A683FCE09FD4647DF /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
 		36EBC16B3DC51DC115D5563E /* SSRConeTracing.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SSRConeTracing.frag; sourceTree = "<group>"; };
 		36EBC17EE4BDB2EF8DF09E40 /* GLSLBloom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLBloom.hpp; sourceTree = "<group>"; };
 		36EBC18959E4314B4F74F980 /* GLSLGridLightProbesUpdate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGridLightProbesUpdate.hpp; sourceTree = "<group>"; };
@@ -616,6 +619,7 @@
 		36EBCF21527E8E9EA0D7D76C /* GLSLIndirectLightEvaluation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLIndirectLightEvaluation.hpp; sourceTree = "<group>"; };
 		36EBCF2C841253B1CC86C5E0 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		36EBCF34ACE3063AA0C62CC9 /* GLSLDirectLightEvaluation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectLightEvaluation.hpp; sourceTree = "<group>"; };
+		36EBCF4762755EEB818D8CF9 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		36EBCF4F95A09CB2435433F5 /* FullScreenQuad.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullScreenQuad.vert; sourceTree = "<group>"; };
 		36EBCF5A7A018B693B5A38CF /* GLTextureFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureFactory.cpp; sourceTree = "<group>"; };
 		36EBCF5A86BB7D7B35EF15A9 /* Skybox.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Skybox.vert; sourceTree = "<group>"; };
@@ -905,7 +909,6 @@
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
 		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
-		CE0590051FA77C6100822524 /* crc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
 		CE151383217FA6D9004273EE /* Marble_tiles_02_4K_Height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Height.png; sourceTree = "<group>"; };
 		CE151384217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Base_Color.png; sourceTree = "<group>"; };
 		CE151385217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Normal.png; sourceTree = "<group>"; };
@@ -3032,7 +3035,7 @@
 				CE70F8421F8F8EBD00AD9027 /* Foundation */,
 				AC1F6BD520E2301400E81EB0 /* Threading */,
 				CE70F8521F8F8EBD00AD9027 /* Rendering */,
-				CE70F85F1F8F8EBD00AD9027 /* Containers */,
+				CE70F85F1F8F8EBD00AD9027 /* Algorithm */,
 				CE70F8611F8F8EBD00AD9027 /* Math */,
 				CE70F8751F8F8EBD00AD9027 /* Scene */,
 				CE70F8991F8F8EBD00AD9027 /* ThirdParty */,
@@ -3054,7 +3057,6 @@
 				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
 				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
 				CE058FFF1FA73C7A00822524 /* crc.hpp */,
-				CE0590051FA77C6100822524 /* crc.cpp */,
 				AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */,
 				AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */,
 				CE5C5E242000CA04004D2B4E /* Measurement.cpp */,
@@ -3073,6 +3075,7 @@
 				AC3275B320D24FA800899697 /* GaussianFunction.hpp */,
 				CE79B26220E51E53004E28EF /* RenderingSettings.hpp */,
 				36EBCB843A22334E32722178 /* Visitor.hpp */,
+				36EBCF4762755EEB818D8CF9 /* crc.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -3087,7 +3090,7 @@
 			path = Rendering;
 			sourceTree = "<group>";
 		};
-		CE70F85F1F8F8EBD00AD9027 /* Containers */ = {
+		CE70F85F1F8F8EBD00AD9027 /* Algorithm */ = {
 			isa = PBXGroup;
 			children = (
 				CE73110D2098C8E2002A8DE7 /* BinPack */,
@@ -3097,7 +3100,7 @@
 				CE895F8D204C087700E63140 /* SparseOctree */,
 				CE895F94204C137000E63140 /* LogarithmicBin */,
 			);
-			path = Containers;
+			path = Algorithm;
 			sourceTree = "<group>";
 		};
 		CE70F8611F8F8EBD00AD9027 /* Math */ = {
@@ -3194,6 +3197,8 @@
 				36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */,
 				36EBC9BB3B90960654F51513 /* EmissiveMaterial.hpp */,
 				36EBC34434EB045E5FA36E76 /* MaterialType.hpp */,
+				36EBC12E541DB7E3577A25ED /* Material.cpp */,
+				36EBC14A683FCE09FD4647DF /* Material.hpp */,
 			);
 			path = Materials;
 			sourceTree = "<group>";
@@ -4249,7 +4254,6 @@
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
 				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
-				CE0590061FA77C6100822524 /* crc.cpp in Sources */,
 				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */,
 				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
@@ -4371,6 +4375,8 @@
 				36EBC740B6D527BC3A8B897D /* GLSLHiZBuffer.cpp in Sources */,
 				36EBC33784E11E70B9DF67CF /* GLSLDirectLightEvaluation.cpp in Sources */,
 				36EBCB3E638BFF706123299B /* GLSLIndirectLightEvaluation.cpp in Sources */,
+				36EBC24A7A7F8FB702CCDD34 /* Material.cpp in Sources */,
+				36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

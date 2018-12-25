@@ -20,12 +20,12 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLLuminanceHistogram::setLuminance(const GLFloatTexture2D<GLTexture::Float::RG16F> &luminance) {
-        setUniformTexture(uint32_constant<ctcrc32("uLuminance")>, luminance);
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLuminanceMaxLOD")>).location(), (GLint) luminance.mipMapCount());
+        setUniformTexture(ctcrc32("uLuminance"), luminance);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uLuminanceMaxLOD")).location(), (GLint) luminance.mipMapCount());
     }
 
     void GLSLLuminanceHistogram::setHistogramWidth(size_t width) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uHistogramWidth")>).location(), (GLint) width);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uHistogramWidth")).location(), (GLint) width);
     }
 
 }

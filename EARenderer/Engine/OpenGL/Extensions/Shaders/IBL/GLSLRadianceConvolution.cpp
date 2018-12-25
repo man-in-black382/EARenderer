@@ -17,23 +17,21 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLRadianceConvolution::GLSLRadianceConvolution()
-            :
-            GLSLCubemapRendering("RadianceConvolution.frag") {
-    }
+            : GLSLCubemapRendering("RadianceConvolution.frag") {}
 
 #pragma mark - Setters
 
 //    void GLSLRadianceConvolution::setEnvironmentRadianceMap(const GLHDRTextureCubemap& map) {
-//        setBufferTexture(uint32_constant<ctcrc32("uEnvironmentMap")>, map);
-//        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uEnvironmentResolution")>).location(), map.size().width);
+//        setBufferTexture(ctcrc32("uEnvironmentMap"), map);
+//        glUniform1f(uniformByNameCRC32(ctcrc32("uEnvironmentResolution")).location(), map.size().width);
 //    }
 
     void GLSLRadianceConvolution::setRoughness(float roughness) {
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uRoughness")>).location(), roughness);
+        glUniform1f(uniformByNameCRC32(ctcrc32("uRoughness")).location(), roughness);
     }
 
     void GLSLRadianceConvolution::setAlgorithm(Algorithm algorithm) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uAlgorithm")>).location(), static_cast<GLint>(algorithm));
+        glUniform1i(uniformByNameCRC32(ctcrc32("uAlgorithm")).location(), static_cast<GLint>(algorithm));
     }
 
 }

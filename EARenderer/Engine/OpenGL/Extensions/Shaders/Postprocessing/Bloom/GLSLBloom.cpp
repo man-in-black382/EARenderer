@@ -22,14 +22,14 @@ namespace EARenderer {
 
     void GLSLBloom::setTextures(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &baseImageTexture,
             const GLFloatTexture2D<GLTexture::Float::RGBA16F> &blurTexture) {
-        setUniformTexture(uint32_constant<ctcrc32("uBaseImageTexture")>, baseImageTexture);
-        setUniformTexture(uint32_constant<ctcrc32("uBlurTexture")>, blurTexture);
+        setUniformTexture(ctcrc32("uBaseImageTexture"), baseImageTexture);
+        setUniformTexture(ctcrc32("uBlurTexture"), blurTexture);
     }
 
     void GLSLBloom::setTextureWeights(float smallBlurWeight, float mediumBlurWeight, float largeBlurWeight) {
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uSmallBlurWeight")>).location(), smallBlurWeight);
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uMediumBlurWeight")>).location(), mediumBlurWeight);
-        glUniform1f(uniformByNameCRC32(uint32_constant<ctcrc32("uLargeBlurWeight")>).location(), largeBlurWeight);
+        glUniform1f(uniformByNameCRC32(ctcrc32("uSmallBlurWeight")).location(), smallBlurWeight);
+        glUniform1f(uniformByNameCRC32(ctcrc32("uMediumBlurWeight")).location(), mediumBlurWeight);
+        glUniform1f(uniformByNameCRC32(ctcrc32("uLargeBlurWeight")).location(), largeBlurWeight);
     }
 
 }

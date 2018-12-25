@@ -20,11 +20,11 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLSMAANeighborhoodBlending::setImage(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &image) {
-        setUniformTexture(uint32_constant<ctcrc32("uImage")>, image);
+        setUniformTexture(ctcrc32("uImage"), image);
     }
 
     void GLSLSMAANeighborhoodBlending::setBlendingWeights(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &weightsTexture) {
-        setUniformTexture(uint32_constant<ctcrc32("uBlendingWeights")>, weightsTexture);
+        setUniformTexture(ctcrc32("uBlendingWeights"), weightsTexture);
     }
 
 }

@@ -20,11 +20,11 @@ namespace EARenderer {
 #pragma mark - Setters
 
     void GLSLLuminanceRange::setLuminance(const GLFloatTexture2D<GLTexture::Float::RG16F> &luminance) {
-        setUniformTexture(uint32_constant<ctcrc32("uLuminance")>, luminance);
+        setUniformTexture(ctcrc32("uLuminance"), luminance);
     }
 
     void GLSLLuminanceRange::setMipLevel(int8_t mipLevel) {
-        glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uLOD")>).location(), mipLevel);
+        glUniform1i(uniformByNameCRC32(ctcrc32("uLOD")).location(), mipLevel);
     }
 
 }

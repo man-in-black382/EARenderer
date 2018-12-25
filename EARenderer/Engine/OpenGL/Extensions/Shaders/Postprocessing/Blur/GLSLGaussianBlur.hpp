@@ -29,8 +29,8 @@ namespace EARenderer {
 
         template<GLTexture::Float Format>
         void setTexture(const GLFloatTexture2D<Format> &texture, size_t mipLevel) {
-            setUniformTexture(uint32_constant<ctcrc32("uTexture")>, texture);
-            glUniform1i(uniformByNameCRC32(uint32_constant<ctcrc32("uMipLevel")>).location(), GLint(mipLevel));
+            setUniformTexture(ctcrc32("uTexture"), texture);
+            glUniform1i(uniformByNameCRC32(ctcrc32("uMipLevel")).location(), GLint(mipLevel));
         }
 
         void setBlurDirection(BlurDirection direction);

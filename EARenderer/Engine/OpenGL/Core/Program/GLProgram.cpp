@@ -115,7 +115,7 @@ namespace EARenderer {
                 textureUnit++;
             }
 
-            uint32_t crc = crc32(name.c_str(), name.length());
+            uint32_t crc = ctcrc32(name);
             mUniforms.insert(std::make_pair(crc, uniform));
         }
     }
@@ -149,7 +149,7 @@ namespace EARenderer {
             glUniformBlockBinding(mName, blockIndex, binding);
 
             GLUniformBlock block(nameList.back(), blockIndex, binding);
-            CRC32 key = crc32(nameList.back().data(), nameList.back().size());
+            CRC32 key = ctcrc32(nameList.back());
             mUniformBlocks.insert(std::pair<CRC32, GLUniformBlock>(key, block));
 
             printf("Program %d | UBO Name %s | UBO Index %d | UBO Binding %d \n", mName, nameList.back().c_str(), blockIndex, binding);
@@ -157,7 +157,7 @@ namespace EARenderer {
     }
 
     GLuint GLProgram::uniformBlockBinding(const std::string &UBOName, GLint maximumUBOBindings) {
-        CRC32 nameHash = crc32(UBOName.data(), UBOName.size());
+        CRC32 nameHash = ctcrc32(UBOName);
         return nameHash % maximumUBOBindings;
     }
 

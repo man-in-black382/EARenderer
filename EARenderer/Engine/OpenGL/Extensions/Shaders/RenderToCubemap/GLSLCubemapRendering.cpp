@@ -48,7 +48,7 @@ namespace EARenderer {
                 projMat * glm::lookAt(zero, ZNegative, glm::vec3(0.0, -1.0, 0.0))
         };
 
-        glUniformMatrix4fv(uniformByNameCRC32(uint32_constant<ctcrc32("uViewProjectionMatrices[0]")>).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uViewProjectionMatrices[0]")).location(), 6, GL_FALSE, reinterpret_cast<const GLfloat *>(matrices.data()));
     }
 
     GLSLCubemapRendering::~GLSLCubemapRendering() {
