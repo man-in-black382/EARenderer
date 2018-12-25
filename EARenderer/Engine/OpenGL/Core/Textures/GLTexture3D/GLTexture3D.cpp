@@ -9,7 +9,7 @@
 #include "GLTexture3D.hpp"
 
 #include <stdexcept>
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3ext.h>
 
 namespace EARenderer {
 

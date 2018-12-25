@@ -11,7 +11,7 @@
 
 #include "GLTexture.hpp"
 
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3ext.h>
 #include <vector>
 
 namespace EARenderer {

@@ -8,7 +8,7 @@
 
 #include "GLSampler.hpp"
 
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3ext.h>
 
 namespace EARenderer {
 

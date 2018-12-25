@@ -9,7 +9,7 @@
 #ifndef GLUniform_hpp
 #define GLUniform_hpp
 
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3.h>
 #include <string>
 
 namespace EARenderer {

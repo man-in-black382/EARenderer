@@ -9,7 +9,7 @@
 #ifndef GLCubemapFace_hpp
 #define GLCubemapFace_hpp
 
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3.h>
 
 namespace EARenderer {
 

@@ -10,7 +10,7 @@
 #include "GLTextureUnitManager.hpp"
 
 #include <cmath>
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3ext.h>
 
 namespace EARenderer {
 

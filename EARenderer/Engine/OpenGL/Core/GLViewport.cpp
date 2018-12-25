@@ -8,7 +8,7 @@
 
 #include "GLViewport.hpp"
 
-#include <OpenGL/OpenGL.h>
+#include <OpenGL/gl3.h>
 #include <glm/gtx/transform.hpp>
 
 namespace EARenderer {
