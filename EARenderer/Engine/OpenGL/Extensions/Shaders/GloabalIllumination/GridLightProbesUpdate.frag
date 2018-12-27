@@ -152,7 +152,7 @@ void main() {
     SH skySH = UnpackSH(uSkySphericalHarmonics, probeIndex);
     skySH = SHProduct(skySH, uSkyColorSphericalHarmonics);
 
-    resultingSH = Sum2SH(resultingSH, skySH);
+//    resultingSH = Sum2SH(resultingSH, skySH);
 
     PackSHToRenderTargets(resultingSH);
 }

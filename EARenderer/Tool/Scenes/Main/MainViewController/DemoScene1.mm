@@ -181,7 +181,7 @@
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
-    scene->directionalLight().setIsEnabled(false);
+//    scene->directionalLight().setIsEnabled(false);
 
     EARenderer::Color lightColor(3.0, 2.55, 1.98);
     EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.7, 1.8};
@@ -190,7 +190,7 @@
     pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID);
     pointLight.meshInstance->materialReference = lightMaterialRef;
     pointLight.meshInstance->transformation().scale = glm::vec3(0.005);
-//    pointLight.setIsEnabled(false);
+    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);
 

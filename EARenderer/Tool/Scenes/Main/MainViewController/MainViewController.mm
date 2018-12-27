@@ -124,19 +124,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     std::shared_ptr<EARenderer::SurfelData> surfelData = std::make_shared<EARenderer::SurfelData>();
     std::string surfelStorageFileName = "surfels_" + self.scene->name();
 
-    if (!surfelData->deserialize(surfelStorageFileName)) {
+//    if (!surfelData->deserialize(surfelStorageFileName)) {
         surfelData = surfelGenerator.generateStaticGeometrySurfels();
         surfelData->serialize(surfelStorageFileName);
-    }
+//    }
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
     std::shared_ptr<EARenderer::DiffuseLightProbeData> diffuseLightProbeData = std::make_shared<EARenderer::DiffuseLightProbeData>();
     std::string probeStorageFileName = "diffuse_light_probes_" + self.scene->name();
 
-    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
+//    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
         diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
         diffuseLightProbeData->serialize(probeStorageFileName);
-    }
+//    }
 
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
@@ -164,6 +164,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
     self.cameraman->updateCamera();
     self.sceneGBufferRenderer->render();
+
+    NSLog(@"Camera pos: %f %f %f", self.scene->camera()->position().x, self.scene->camera()->position().y, self.scene->camera()->position().z);
 
     self.deferredSceneRenderer->render([&]() {
         if (self.renderingSettings.surfelSettings.renderingEnabled) {

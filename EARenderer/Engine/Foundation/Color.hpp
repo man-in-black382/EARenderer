@@ -15,6 +15,11 @@
 namespace EARenderer {
 
     struct Color {
+
+        enum class Space {
+            Linear, sRGB, YCoCg
+        };
+
         float r = 0.0;
         float g = 0.0;
         float b = 0.0;

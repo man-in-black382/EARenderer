@@ -26,7 +26,9 @@ namespace EARenderer {
 
         // Save ray casts if surfel's facing away from the standpoint
         if (visibilityTerm > 0.0) {
-            visibilityTest = mScene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position) ? 0.0 : 1.0;
+            constexpr float p0Offset = 0.01; // Offset line segment points to avoid erroneous collision detections at surfel positions,
+            constexpr float p1Offset = 0.99; // which will happen a lot since the're located exactly on the surface of geometry
+            visibilityTest = mScene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position, p0Offset, p1Offset) ? 0.0f : 1.0f;
         }
 
         return distanceTerm * visibilityTerm * visibilityTest;

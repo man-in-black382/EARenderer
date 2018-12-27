@@ -63,10 +63,6 @@ SH UnpackSH_333_HalfPacked() {
     sh.L20.g = pair10.x,  sh.L22.g = pair10.y;  sh.L21.b = pair11.x,  sh.L2_1.b = pair11.y;
     sh.L2_2.b = pair12.x; sh.L20.b = pair12.y;  sh.L22.b = pair13.x;
 
-    /////////
-//    sh = uSkySphericalHarmonics;
-    /////////
-
     return sh;
 }
 

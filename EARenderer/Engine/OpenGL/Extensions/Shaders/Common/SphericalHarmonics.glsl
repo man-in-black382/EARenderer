@@ -288,6 +288,20 @@ SH Sum8SH(SH first, SH second, SH third, SH fourth, SH fifth, SH sixth, SH seven
     return result;
 }
 
+float SHMagnitude2(SH sh) {
+    return dot(sh.L00, sh.L00) +
+
+    dot(sh.L1_1, sh.L1_1) +
+    dot(sh.L10, sh.L10) +
+    dot(sh.L11, sh.L11) +
+
+    dot(sh.L2_2, sh.L2_2) +
+    dot(sh.L2_1, sh.L2_1) +
+    dot(sh.L20, sh.L20) +
+    dot(sh.L21, sh.L21) +
+    dot(sh.L22, sh.L22);
+}
+
 float EvaluateSH(SH sh, vec3 direction, int component) {
     int c = component;
 

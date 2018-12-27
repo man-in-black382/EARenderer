@@ -160,7 +160,6 @@ namespace EARenderer {
         mLightEvaluationShader.setCamera(*(mScene->camera()));
         mLightEvaluationShader.setWorldBoundingBox(mScene->lightBakingVolume());
         mLightEvaluationShader.ensureSamplerValidity([&]() {
-            mLightEvaluationShader.setCamera(*mScene->camera());
             mLightEvaluationShader.setGBuffer(*mGBuffer);
             mLightEvaluationShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
             mLightEvaluationShader.setGridProbesSHTextures(*mGridProbeSHMaps);

@@ -79,7 +79,7 @@
     });
 
     scene->setName("cornell");
-    scene->setDiffuseProbeSpacing(0.3);
+    scene->setDiffuseProbeSpacing(0.2);
     scene->setSurfelSpacing(0.02);
 
     scene->camera()->moveTo(glm::vec3(0.5, 0.5, 1.5));

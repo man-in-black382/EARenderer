@@ -15,9 +15,8 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     EmbreeRayTracer::EmbreeRayTracer(const std::vector<Triangle3D> &triangles)
-            :
-            mDevice(rtcNewDevice(nullptr)),
-            mScene(rtcNewScene(mDevice)) {
+            : mDevice(rtcNewDevice(nullptr)), mScene(rtcNewScene(mDevice)) {
+
         RTCGeometry geometry = rtcNewGeometry(mDevice, RTC_GEOMETRY_TYPE_TRIANGLE);
 
         glm::vec3 *vertexBuffer = (glm::vec3 *) rtcSetNewGeometryBuffer(geometry,
@@ -125,11 +124,20 @@ namespace EARenderer {
 
 #pragma mark - Occlusion
 
-    bool EmbreeRayTracer::lineSegmentOccluded(const glm::vec3 &p0, const glm::vec3 &p1, FaceFilter faceFilter) {
+    bool EmbreeRayTracer::lineSegmentOccluded(
+            const glm::vec3 &p0,
+            const glm::vec3 &p1,
+            float p0OffsetFactor,
+            float p1OffsetFactor,
+            FaceFilter faceFilter) {
+
         RTCIntersectContext context;
         rtcInitIntersectContext(&context);
 
         mFaceFilter = faceFilter;
+
+        p0OffsetFactor = std::clamp(p0OffsetFactor, 0.0f, 1.0f);
+        p1OffsetFactor = std::clamp(p1OffsetFactor, 0.0f, 1.0f);
 
         glm::vec3 direction = (p1 - p0);
 
@@ -140,8 +148,8 @@ namespace EARenderer {
         ray.dir_x = direction.x;
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
-        ray.tnear = 0.00;
-        ray.tfar = 1.0;
+        ray.tnear = p0OffsetFactor;
+        ray.tfar = p1OffsetFactor;
         ray.flags = 0;
 
         rtcOccluded1(mScene, &context, &ray);

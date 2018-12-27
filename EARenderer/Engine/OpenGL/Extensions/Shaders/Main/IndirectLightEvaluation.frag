@@ -74,8 +74,6 @@ void main() {
     // using to-light and to-viewer vectors, but for specular reflections
     // to-light vector is replaced by the fragment's normal.
     //
-    // !!! (This could probably be improved by storing and using reflected point's normal alongside reflection buffer) !!!
-    //
     vec3 H = normalize(N + V);
 
     vec3 Ks = FresnelSchlick(V, H, albedo, metalness); // Reflected portion

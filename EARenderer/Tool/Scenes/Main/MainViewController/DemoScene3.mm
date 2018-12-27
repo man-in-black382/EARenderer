@@ -42,7 +42,8 @@
 
     EARenderer::MeshInstance corridorInstance(corridorMeshID);
     EARenderer::Transformation t = corridorInstance.transformation();
-    t.scale *= glm::vec3(15.0);
+    t.scale *= glm::vec3(20.0);
+//    t.translation
     corridorInstance.setTransformation(t);
 
     auto &sponzaMesh = resourcePool->meshes[corridorMeshID];
@@ -81,9 +82,9 @@
 
     scene->setName("corridor");
     scene->setDiffuseProbeSpacing(0.3);
-    scene->setSurfelSpacing(0.025);
+    scene->setSurfelSpacing(0.05);
 
-    scene->camera()->moveTo(glm::vec3(0.0, 0.0, 0.0));
+    scene->camera()->moveTo(glm::vec3(-3.936283, 4.859550, -6.620370));
     scene->camera()->lookAt(glm::vec3(1, 0, 0));
 
     [self setupAnimations];

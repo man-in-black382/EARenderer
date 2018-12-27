@@ -13,8 +13,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLGridLightProbesUpdate::GLSLGridLightProbesUpdate()
-            :
-            GLProgram("GridLightProbesUpdate.vert", "GridLightProbesUpdate.frag", "GridLightProbesUpdate.geom") {
+            : GLProgram("GridLightProbesUpdate.vert", "GridLightProbesUpdate.frag", "GridLightProbesUpdate.geom") {
     }
 
 #pragma mark - Setters

@@ -58,6 +58,11 @@ namespace EARenderer {
 
         for (ID lightID : mScene->pointLights()) {
             const PointLight& light = mScene->pointLights()[lightID];
+
+            if (!light.isEnabled()) {
+                continue;
+            }
+
             if (light.meshInstance) {
                 Transformation lightBaseTransform(glm::vec3(1.0), light.position(), glm::quat());
                 renderMeshInstance(*light.meshInstance, &lightBaseTransform);
