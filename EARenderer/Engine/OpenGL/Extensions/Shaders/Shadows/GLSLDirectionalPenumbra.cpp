@@ -13,8 +13,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     GLSLDirectionalPenumbra::GLSLDirectionalPenumbra()
-            :
-            GLProgram("FullScreenQuad.vert", "DirectionalPenumbra.frag", "") {
+            : GLProgram("FullScreenQuad.vert", "DirectionalPenumbra.frag", "") {
     }
 
 #pragma mark - Setters
@@ -42,6 +41,12 @@ namespace EARenderer {
                 reinterpret_cast<const GLfloat *>(cascades.splits.data()));
 
         glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uCSMSplitSpaceMat")).location(), 1, GL_FALSE, glm::value_ptr(cascades.splitSpaceMatrix));
+    }
+
+    void GLSLDirectionalPenumbra::setLight(const DirectionalLight &light) {
+        glUniform3fv(uniformByNameCRC32(ctcrc32("uDirectionalLight.direction")).location(), 1, glm::value_ptr(light.direction()));
+        glUniform3fv(uniformByNameCRC32(ctcrc32("uDirectionalLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform1f(uniformByNameCRC32(ctcrc32("uDirectionalLight.area")).location(), light.area());
     }
 
     void GLSLDirectionalPenumbra::setDirectionalShadowMapArray(const GLDepthTexture2DArray &array, const GLSampler &bilinearSampler) {

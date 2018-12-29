@@ -47,7 +47,7 @@ namespace EARenderer {
                 glMagFilter = GL_LINEAR;
                 float aniso = 0.0f;
                 glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
-                glSamplerParameterf(mName, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 8.0f));
+                glSamplerParameterf(mName, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 16.0f));
                 break;
         }
 

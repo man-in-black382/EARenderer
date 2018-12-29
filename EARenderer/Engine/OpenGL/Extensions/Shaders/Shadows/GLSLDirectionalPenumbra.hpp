@@ -13,6 +13,7 @@
 #include "FrustumCascades.hpp"
 #include "SceneGBuffer.hpp"
 #include "Camera.hpp"
+#include "DirectionalLight.hpp"
 
 namespace EARenderer {
 
@@ -25,6 +26,8 @@ namespace EARenderer {
         void setGBuffer(const SceneGBuffer &GBuffer);
 
         void setFrustumCascades(const FrustumCascades &cascades);
+
+        void setLight(const DirectionalLight& light);
 
         void setDirectionalShadowMapArray(const GLDepthTexture2DArray &array, const GLSampler &bilinearSampler);
     };

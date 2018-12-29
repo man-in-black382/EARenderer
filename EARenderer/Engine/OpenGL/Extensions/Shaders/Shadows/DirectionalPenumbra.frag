@@ -18,6 +18,8 @@ uniform sampler2DArray uDirectionalShadowMapsBilinearSampler;
 uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 
+uniform DirectionalLight uDirectionalLight;
+
 // Output
 
 layout(location = 0) out float oOutput;
@@ -29,5 +31,5 @@ in vec2 vTexCoords;
 void main() {
     vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-    oOutput = DirectionalPenumbra(worldPosition, cascade, uLightSpaceMatrices, uDirectionalShadowMapsBilinearSampler);
+    oOutput = DirectionalPenumbra(worldPosition, cascade, uLightSpaceMatrices, uDirectionalLight, uDirectionalShadowMapsBilinearSampler);
 }

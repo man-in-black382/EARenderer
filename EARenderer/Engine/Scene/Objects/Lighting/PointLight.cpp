@@ -15,11 +15,7 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     PointLight::PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area, const Attenuation& attenuation)
-            :
-            Light(position, color, area),
-            mRadius(radius),
-            mNearPlane(nearClipPlane),
-            attenuation(attenuation) {}
+            : Light(position, color, area), mRadius(radius), mNearPlane(nearClipPlane), attenuation(attenuation) {}
 
 #pragma mark - Accessors
 

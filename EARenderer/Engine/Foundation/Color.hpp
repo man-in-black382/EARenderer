@@ -15,16 +15,22 @@
 namespace EARenderer {
 
     struct Color {
-
+    public:
         enum class Space {
             Linear, sRGB, YCoCg
         };
 
-        float r = 0.0;
-        float g = 0.0;
-        float b = 0.0;
-        float a = 1.0;
+    private:
+        float mR = 0.0;
+        float mG = 0.0;
+        float mB = 0.0;
+        float mA = 1.0;
 
+        Space mSpace;
+
+        Color toLinear() const;
+
+    public:
         static const Color &white();
 
         static const Color &black();
@@ -39,33 +45,38 @@ namespace EARenderer {
 
         Color() = default;
 
-        Color(float red, float green, float blue, float alpha);
+        Color(float red, float green, float blue, float alpha, Space space = Space::Linear);
 
-        Color(float red, float green, float blue);
+        Color(float red, float green, float blue, Space space = Space::Linear);
 
-        Color(float white, float alpha);
+        Color(float white, float alpha, Space space = Space::Linear);
+
+        Color(float white, Space space = Space::Linear);
+
+        float r() const;
+
+        float g() const;
+
+        float b() const;
+
+        float a() const;
 
         glm::vec3 rgb() const;
 
         glm::vec4 rgba() const;
 
-        Color YCoCg() const;
+        Space space() const;
 
-        /**
-         Assumes that current color is a sRGB color and linearizes it
+        Color convertedTo(Space space) const;
 
-         @return linear color value
-         */
-        Color linear() const;
+        template<typename S>
+        void serialize(S &s) {
+            s.value4b(mR);
+            s.value4b(mG);
+            s.value4b(mB);
+            s.value4b(mA);
+        }
     };
-
-    template<typename S>
-    void serialize(S &s, Color &c) {
-        s.value4b(c.r);
-        s.value4b(c.g);
-        s.value4b(c.b);
-        s.value4b(c.a);
-    }
 
 }
 

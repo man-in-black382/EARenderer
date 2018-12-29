@@ -217,7 +217,7 @@ namespace EARenderer {
         uv = GLTexture::WrapCoordinates(uv);
 
         auto texel = albedoMapSampler.sample(uv);
-        Color albedoLinear = Color(texel.r, texel.g, texel.b).linear();
+        Color albedoLinear = Color(texel.r, texel.g, texel.b).convertedTo(Color::Space::Linear);
 
         float singleSurfelArea = M_PI * mSurfelSpacing * mSurfelSpacing;
 
@@ -304,8 +304,15 @@ namespace EARenderer {
         float normDistance2 = glm::length2(first.position - second.position) / workingVolumeMaximumExtent2;
         float normalDeviation = glm::dot(first.normal, second.normal);
 
-        const float Cn = 0.1;
-        const float Cb = 0.01;
+        const float Cn = 0.0;
+        const float Cb = 0.04;
+
+        auto offsetStart = first.position + first.normal * workingVolumeMaximumExtent2 * 0.001f;
+        auto offsetEnd = second.position + second.normal * workingVolumeMaximumExtent2 * 0.001f;
+
+        if (mScene->rayTracer()->lineSegmentOccluded(offsetStart, offsetEnd)) {
+            return false;
+        }
 
         return normDistance2 <= Cb && normalDeviation > Cn;
     }

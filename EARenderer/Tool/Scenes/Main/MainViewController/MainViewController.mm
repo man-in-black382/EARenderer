@@ -100,7 +100,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view {
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
-
     EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
 
     self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
@@ -124,19 +123,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     std::shared_ptr<EARenderer::SurfelData> surfelData = std::make_shared<EARenderer::SurfelData>();
     std::string surfelStorageFileName = "surfels_" + self.scene->name();
 
-//    if (!surfelData->deserialize(surfelStorageFileName)) {
+    if (!surfelData->deserialize(surfelStorageFileName)) {
         surfelData = surfelGenerator.generateStaticGeometrySurfels();
         surfelData->serialize(surfelStorageFileName);
-//    }
+    }
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
     std::shared_ptr<EARenderer::DiffuseLightProbeData> diffuseLightProbeData = std::make_shared<EARenderer::DiffuseLightProbeData>();
     std::string probeStorageFileName = "diffuse_light_probes_" + self.scene->name();
 
-//    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
+    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
         diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
         diffuseLightProbeData->serialize(probeStorageFileName);
-//    }
+    }
 
     self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
     self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
@@ -146,14 +145,9 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData, self.deferredSceneRenderer->surfelsLuminanceMap());
     self.probeRenderer = new EARenderer::DiffuseLightProbeRenderer(self.scene, diffuseLightProbeData, self.deferredSceneRenderer->gridProbesSphericalHarmonics());
     self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
-
-    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(),
-            self.scene,
-            self.axesRenderer,
-            &EARenderer::GLViewport::main());
+    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(), self.scene, self.axesRenderer, &EARenderer::GLViewport::main());
 
 //    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
-
 //    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
 
     self.scene->destroyAuxiliaryData();
@@ -169,9 +163,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self.deferredSceneRenderer->render([&]() {
         if (self.renderingSettings.surfelSettings.renderingEnabled) {
-            self.surfelRenderer->render(self.renderingSettings.surfelSettings.renderingMode,
+            self.surfelRenderer->render(
+                    self.renderingSettings.surfelSettings.renderingMode,
                     self.scene->surfelSpacing() / 2.0,
-                    self.renderingSettings.surfelSettings.POVProbeIndex);
+                    self.renderingSettings.surfelSettings.POVProbeIndex
+            );
         }
 
         if (self.renderingSettings.probeSettings.probeRenderingEnabled) {

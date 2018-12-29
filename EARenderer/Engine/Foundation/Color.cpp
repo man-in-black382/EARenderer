@@ -46,51 +46,91 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    Color::Color(float red, float green, float blue, float alpha)
-            :
-            r(red),
-            g(green),
-            b(blue),
-            a(alpha) {
+    Color::Color(float red, float green, float blue, float alpha, Space space)
+            : mR(red), mG(green), mB(blue), mA(alpha), mSpace(space) {
     }
 
-    Color::Color(float red, float green, float blue)
-            :
-            r(red),
-            g(green),
-            b(blue),
-            a(1.0) {
+    Color::Color(float red, float green, float blue, Space space) : Color(red, green, blue, 1.0, space) {
     }
 
-    Color::Color(float white, float alpha)
-            :
-            r(white),
-            g(white),
-            b(white),
-            a(alpha) {
+    Color::Color(float white, float alpha, Space space) : Color(white, white, white, alpha, space) {
+    }
+
+    Color::Color(float white, Color::Space space) : Color(white, white, white, 1.0, space) {
     }
 
 #pragma mark - Getters
 
+    float Color::r() const {
+        return mR;
+    }
+
+    float Color::g() const {
+        return mG;
+    }
+
+    float Color::b() const {
+        return mB;
+    }
+
+    float Color::a() const {
+        return mA;
+    }
+
     glm::vec3 Color::rgb() const {
-        return {r, g, b};
+        return {mR, mG, mB};
     }
 
     glm::vec4 Color::rgba() const {
-        return {r, g, b, a};
+        return {mR, mG, mB, mA};
     }
 
-    Color Color::YCoCg() const {
-        float Co = (r - b) / 2.0;
-        float t = b + Co;
-        float Cg = (g - t) / 2.0;
-        float Y = t + Cg;
-        return {Y, Co, Cg};
+    Color::Space Color::space() const {
+        return mSpace;
     }
 
-    Color Color::linear() const {
-        glm::vec3 linearRGB = glm::pow(rgb(), glm::vec3(2.2));
-        return {linearRGB.r, linearRGB.g, linearRGB.b, a};
+    Color Color::toLinear() const {
+        switch (mSpace) {
+            case Color::Space::sRGB: {
+                float power = 2.2;
+                return {std::pow(mR, power), std::pow(mG, power), std::pow(mB, power), mA};
+            }
+
+            case Color::Space::YCoCg: {
+                float t = mR - mB;
+                float g = mR + mB;
+                float b = t - mG;
+                float r = t + mG;
+                return {r, g, b, mA};
+            }
+
+            case Color::Space::Linear: {
+                return *this;
+            }
+        }
+    }
+
+    Color Color::convertedTo(Color::Space space) const {
+        Color linear = toLinear();
+
+        switch (space) {
+            case Space::Linear: {
+                return linear;
+            }
+
+            case Space::sRGB: {
+                float power = 1.0 / 2.2;
+                return {std::pow(linear.mR, power), std::pow(linear.mG, power), std::pow(linear.mB, power), mA};
+            }
+
+            case Space::YCoCg: {
+                float Co = (linear.mR - linear.mB) / 2.0;
+                float t = linear.mB + Co;
+                float Cg = (linear.mG - t) / 2.0;
+                float Y = t + linear.mG;
+                return {Y, Co, Cg};
+            }
+        }
     }
 
 }

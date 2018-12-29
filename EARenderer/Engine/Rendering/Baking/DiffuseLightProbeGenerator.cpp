@@ -27,7 +27,7 @@ namespace EARenderer {
         // Save ray casts if surfel's facing away from the standpoint
         if (visibilityTerm > 0.0) {
             constexpr float p0Offset = 0.01; // Offset line segment points to avoid erroneous collision detections at surfel positions,
-            constexpr float p1Offset = 0.99; // which will happen a lot since the're located exactly on the surface of geometry
+            constexpr float p1Offset = 0.01; // which will happen a lot since the're located exactly on the surface of geometry
             visibilityTest = mScene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position, p0Offset, p1Offset) ? 0.0f : 1.0f;
         }
 
@@ -44,7 +44,8 @@ namespace EARenderer {
 
             if (solidAngle > 0.0) {
                 // Accumulating in YCoCg space to enable compression possibilities
-                projection.sphericalHarmonics.contribute(Wps_norm, surfel.albedo.YCoCg(), solidAngle);
+                auto ycocg = surfel.albedo.convertedTo(Color::Space::YCoCg).rgb();
+                projection.sphericalHarmonics.contribute(Wps_norm, ycocg, solidAngle);
             }
         }
 
@@ -62,7 +63,7 @@ namespace EARenderer {
             SurfelClusterProjection projection = projectSurfelCluster(cluster, probe);
 
             // Only accept projections with non-zero SH
-            if (projection.sphericalHarmonics.magnitude2() > 0.0) {
+            if (projection.sphericalHarmonics.magnitude() > 10e-7) {
                 projection.surfelClusterIndex = (uint32_t) i;
                 mProbeData->mSurfelClusterProjections.push_back(projection);
                 probe.surfelClusterProjectionGroupSize++;

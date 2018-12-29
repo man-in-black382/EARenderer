@@ -121,7 +121,7 @@ namespace EARenderer {
 
     void IndirectLightAccumulator::updateGridProbes() {
         float weight = 2.0 * M_PI;
-        Color color = mSettings.meshSettings.skyColor.YCoCg();
+        Color color = mSettings.meshSettings.skyColor.convertedTo(EARenderer::Color::Space::YCoCg);
 
         SphericalHarmonics skySH;
         skySH.contribute(glm::vec3(1.0, 0.0, 0.0), color, weight);

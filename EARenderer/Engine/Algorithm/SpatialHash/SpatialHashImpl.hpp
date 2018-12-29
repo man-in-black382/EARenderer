@@ -17,11 +17,7 @@ namespace EARenderer {
 
     template<typename T>
     SpatialHash<T>::SpatialHash(const AxisAlignedBox3D &boundaries, uint32_t resolution)
-            :
-            mBoundaries(boundaries),
-            mResolution(resolution),
-            mSize(0) {
-    }
+            : mBoundaries(boundaries), mResolution(resolution), mSize(0) {}
 
 #pragma mark - Accessors
 

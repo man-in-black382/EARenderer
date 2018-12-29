@@ -15,16 +15,16 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     ShadowMapper::ShadowMapper(const Scene *scene, std::shared_ptr<const SceneGBuffer> gBuffer, uint8_t cascadeCount)
-            :
-            mScene(scene),
-            mGBuffer(gBuffer),
-            mCascadeCount(cascadeCount),
-            mShadowFramebuffer(mSettings.directionalShadowMapResolution),
-            mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
-            mPenumbraFramebuffer(mSettings.penumbraResolution),
-            mDirectionalPenumbra(mSettings.penumbraResolution),
-            mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
-            mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None) {
+            : mScene(scene),
+              mGBuffer(gBuffer),
+              mCascadeCount(cascadeCount),
+              mShadowFramebuffer(mSettings.directionalShadowMapResolution),
+              mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
+              mPenumbraFramebuffer(mSettings.penumbraResolution),
+              mDirectionalPenumbra(mSettings.penumbraResolution),
+              mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
+              mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None) {
+
         for (ID pointLightID : scene->pointLights()) {
             mOmnidirectionalPenumbras.emplace(
                     std::piecewise_construct,
@@ -146,6 +146,7 @@ namespace EARenderer {
 
         mDirectionalPenumbraGenerationShader.bind();
         mDirectionalPenumbraGenerationShader.setCamera(*mScene->camera());
+        mDirectionalPenumbraGenerationShader.setLight(mScene->directionalLight());
         mDirectionalPenumbraGenerationShader.ensureSamplerValidity([&] {
             mDirectionalPenumbraGenerationShader.setGBuffer(*mGBuffer);
             mDirectionalPenumbraGenerationShader.setFrustumCascades(mShadowCascades);

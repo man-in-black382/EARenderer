@@ -149,7 +149,7 @@ namespace EARenderer {
         ray.dir_y = direction.y;
         ray.dir_z = direction.z;
         ray.tnear = p0OffsetFactor;
-        ray.tfar = p1OffsetFactor;
+        ray.tfar = 1.0 - p1OffsetFactor;
         ray.flags = 0;
 
         rtcOccluded1(mScene, &context, &ray);

@@ -116,8 +116,7 @@ namespace EARenderer {
          @param debugClosure render any debug information needed inside this closure
          before the final frame is displayed
          */
-        void render(const DebugOpportunity &debugClosure = [] {
-        });
+        void render(const DebugOpportunity &debugClosure = []{});
     };
 
 }

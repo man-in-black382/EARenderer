@@ -23,6 +23,7 @@ namespace EARenderer {
 
     class PointLight : public Light {
     public:
+        // https://gamedev.stackexchange.com/a/56934
         // http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
         struct Attenuation {
             float constant = 1.0;

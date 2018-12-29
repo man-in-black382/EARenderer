@@ -21,7 +21,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SurfelRenderer::SurfelRenderer(const Scene *scene,
+    SurfelRenderer::SurfelRenderer(
+            const Scene *scene,
             std::shared_ptr<const SurfelData> surfelData,
             std::shared_ptr<const DiffuseLightProbeData> probeData,
             std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelLuminances)
@@ -30,6 +31,7 @@ namespace EARenderer {
             mSurfelData(surfelData),
             mProbeData(probeData),
             mSurfelLuminances(surfelLuminances) {
+
         std::random_device device;
         std::mt19937 engine(device());
         std::uniform_real_distribution<float> distribution(0.3, 1.0);

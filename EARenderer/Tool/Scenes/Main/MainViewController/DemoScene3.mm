@@ -71,9 +71,9 @@
 
     scene->calculateGeometricProperties();
 
-    glm::mat4 bbScale = glm::scale(glm::vec3(0.92, 0.92, 0.92));
-    glm::mat4 bbTranslation = glm::translate((scene->boundingBox().max - scene->boundingBox().min) * 0.04f);
-    scene->setLightBakingVolume(scene->boundingBox()/*.transformedBy(bbTranslation * bbScale)*/);
+    glm::mat4 bbScale = glm::scale(glm::vec3(0.98, 0.98, 0.98));
+//    glm::mat4 bbTranslation = glm::translate((scene->boundingBox().max - scene->boundingBox().min) * 0.04f);
+    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
@@ -122,15 +122,15 @@
 #pragma mark - Materials
 
 - (EARenderer::MaterialReference)loadWhiteMaterialToPool:(EARenderer::ResourcePool *)pool {
-    return pool->addMaterial({ EARenderer::Color::gray(), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({ EARenderer::Color::gray().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 - (EARenderer::MaterialReference)loadBlueMaterialToPool:(EARenderer::ResourcePool *)pool {
-    return pool->addMaterial({ EARenderer::Color::blue(), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({ EARenderer::Color::blue().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 - (EARenderer::MaterialReference)loadRedMaterialToPool:(EARenderer::ResourcePool *)pool {
-    return pool->addMaterial({ EARenderer::Color::red(), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({ EARenderer::Color::red().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 @end

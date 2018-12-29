@@ -9,7 +9,7 @@ flat in int vSurfelIndex;
 
 uniform float uRadius;
 uniform bool uUseExternalColor;
-uniform vec4 uExternalColor;
+uniform vec3 uExternalColor;
 uniform sampler2D uSurfelLuminances;
 uniform sampler2DArray uSurfelsGBuffer;
 
@@ -22,17 +22,14 @@ void main() {
         discard;
     }
 
-    if (uUseExternalColor) {
-        oFragColor = uExternalColor;
-    } else {
-        ivec2 luminanceMapSize = textureSize(uSurfelLuminances, 0);
-        int luminanceMapWidth = luminanceMapSize.x;
+    ivec2 luminanceMapSize = textureSize(uSurfelLuminances, 0);
+    int luminanceMapWidth = luminanceMapSize.x;
 
-        ivec2 luminanceUV = ivec2(vSurfelIndex % luminanceMapWidth,
-                                  vSurfelIndex / luminanceMapWidth);
+    ivec2 luminanceUV = ivec2(vSurfelIndex % luminanceMapWidth,
+                              vSurfelIndex / luminanceMapWidth);
 
-        float luminance = texelFetch(uSurfelLuminances, luminanceUV, 0).r;
+    float luminance = texelFetch(uSurfelLuminances, luminanceUV, 0).r;
 
-        oFragColor = vec4(vAlbedo * luminance * HDRNormalizationFactor, 1.0);
-    }    
+    vec3 color = uUseExternalColor ? uExternalColor : vAlbedo;
+    oFragColor = vec4(color * luminance * HDRNormalizationFactor, 1.0);
 }

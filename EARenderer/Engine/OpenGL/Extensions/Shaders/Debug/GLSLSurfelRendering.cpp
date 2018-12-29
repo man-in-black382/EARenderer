@@ -32,7 +32,7 @@ namespace EARenderer {
     }
 
     void GLSLSurfelRendering::setExternalColor(const Color &externalColor) {
-        glUniform4fv(uniformByNameCRC32(ctcrc32("uExternalColor")).location(), 1, reinterpret_cast<const float *>(&externalColor));
+        glUniform3fv(uniformByNameCRC32(ctcrc32("uExternalColor")).location(), 1, glm::value_ptr(externalColor.rgb()));
     }
 
     void GLSLSurfelRendering::setSurfelGroupOffset(int32_t surfelGroupOffset) {

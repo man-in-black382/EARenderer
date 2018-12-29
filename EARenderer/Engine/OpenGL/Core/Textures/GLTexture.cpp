@@ -16,12 +16,10 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLTexture::GLTexture(GLenum bindingPoint)
-            : GLTexture(Size2D(1), bindingPoint) {
+    GLTexture::GLTexture(GLenum bindingPoint) : GLTexture(Size2D(1), bindingPoint) {
     }
 
-    GLTexture::GLTexture(const Size2D &size, GLenum bindingPoint)
-            : mSize(size), mBindingPoint(bindingPoint) {
+    GLTexture::GLTexture(const Size2D &size, GLenum bindingPoint) : mSize(size), mBindingPoint(bindingPoint) {
         glGenTextures(1, &mName);
         GLTextureUnitManager::Shared().bindTextureToActiveUnit(*this);
     }
@@ -52,7 +50,7 @@ namespace EARenderer {
                 glMagFilter = GL_LINEAR;
                 float aniso = 0.0f;
                 glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &aniso);
-                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 8.0f));
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, std::min(aniso, 16.0f));
                 break;
         }
 

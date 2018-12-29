@@ -120,8 +120,6 @@ namespace EARenderer {
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
             mSkyboxShader.setEquirectangularMap(*mScene->skybox()->equirectangularMap());
             mSkyboxShader.setExposure(mScene->skybox()->exposure());
-//            ID id = *mScene->pointLights().begin();
-//            mSkyboxShader.setCubemap(mShadowMapper->shadowMapForPointLight(id));
         });
 
         mScene->skybox()->draw();
@@ -213,13 +211,13 @@ namespace EARenderer {
             mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
             glFinish();
         });
-
-        auto smaaOutputTexture = ssrBrightOutputTexture;
-
-        Measurement::ExecutionTime("Antialiasing", [&] {
-            mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
-            glFinish();
-        });
+//
+//        auto smaaOutputTexture = ssrBrightOutputTexture;
+//
+//        Measurement::ExecutionTime("Antialiasing", [&] {
+//            mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
+//            glFinish();
+//        });
 
 //        // DEBUG
 //        glDisable(GL_DEPTH_TEST);
@@ -234,7 +232,8 @@ namespace EARenderer {
 //        glEnable(GL_DEPTH_TEST);
 //        // DEBUG
 
-        renderFinalImage(smaaOutputTexture);
+//        renderFinalImage(smaaOutputTexture);
+        renderFinalImage(toneMappingOutputTexture);
 
         mPostprocessTexturePool->putBack(lightAccumulationTarget);
         mPostprocessTexturePool->putBack(ssrBaseOutputTexture);

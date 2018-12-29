@@ -181,16 +181,16 @@
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
-//    scene->directionalLight().setIsEnabled(false);
+    scene->directionalLight().setIsEnabled(false);
 
     EARenderer::Color lightColor(3.0, 2.55, 1.98);
-    EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.7, 1.8};
+    EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.0, 4.0};
     EARenderer::MaterialReference lightMaterialRef = resourcePool->addMaterial(EARenderer::EmissiveMaterial{lightColor});
-    EARenderer::PointLight pointLight(glm::vec3(0.0), lightColor, 5.0, 0.1, 80.0, lightAttenuation);
+    EARenderer::PointLight pointLight(glm::vec3(3.133468, -1.449196, -1.294581), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
     pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID);
     pointLight.meshInstance->materialReference = lightMaterialRef;
     pointLight.meshInstance->transformation().scale = glm::vec3(0.005);
-    pointLight.setIsEnabled(false);
+//    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);
 
@@ -205,7 +205,7 @@
     });
 
     scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.37); // 363
+    scene->setDiffuseProbeSpacing(0.358); // 360
     scene->setSurfelSpacing(0.05);
 
     scene->camera()->moveTo(glm::vec3(0.0, -0.7, 0.0));
@@ -258,10 +258,15 @@
 
     choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(lightPositionStart, lightPositionEnd, 10.0);
 
-    self.animationTimeline->apply(self.lightPositionOutput, lightPositionPhrase).finishFn([&m = *self.lightPositionOutput->inputPtr()] {
-        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
-        m.resetTime();
-    });
+    self.animationTimeline->apply(self.lightPositionOutput)
+            .then<choreograph::RampTo>(glm::vec3(3.172841, -1.449196, 1.107378), 10.0)
+            .then<choreograph::RampTo>(glm::vec3(-3.684157, -1.449196, 1.215628), 20.0)
+            .then<choreograph::RampTo>(glm::vec3(-3.800002, -1.449196, -1.361623), 10.0)
+            .then<choreograph::RampTo>(glm::vec3(3.133468, -1.449196, -1.294581), 20.0)
+            .finishFn([&m = *self.lightPositionOutput->inputPtr()] {
+                m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+                m.resetTime();
+            });
 
 //    glm::vec3 objectStart(-1.5, -1.5, 1.0);
 //    glm::vec3 objectEnd(-1.5, -1.5, -1.0);
