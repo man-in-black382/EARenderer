@@ -37,13 +37,13 @@ namespace EARenderer {
         std::uniform_real_distribution<float> distribution(0.3, 1.0);
 
         for (auto &cluster : surfelData->surfelClusters()) {
-            mSurfelClusterVAOs.emplace_back().initialize(surfelData->surfels().data() + cluster.surfelOffset, cluster.surfelCount, {
+            std::array<GLVertexAttribute, 4> attributes {
                     GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                     GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                     GLVertexAttribute::UniqueAttribute(sizeof(Color), 4),
                     GLVertexAttribute::UniqueAttribute(sizeof(float), 1)
-            });
-
+            };
+            mSurfelClusterVAOs.emplace_back(surfelData->surfels().data() + cluster.surfelOffset, cluster.surfelCount, attributes.data(), attributes.size());
             mSurfelClusterColors.emplace_back(Color(distribution(engine), distribution(engine), distribution(engine)));
         }
     }

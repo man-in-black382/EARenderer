@@ -132,7 +132,7 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto &instance = mMeshInstances[meshInstanceID];
-            auto &mesh = ResourcePool::shared().meshes[instance.meshID()];
+            auto &mesh = ResourcePool::shared().mesh(instance.meshID());
 
             for (ID subMeshID : mesh.subMeshes()) {
                 auto &subMesh = mesh.subMeshes()[subMeshID];
@@ -161,7 +161,7 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto &meshInstance = mMeshInstances[meshInstanceID];
-            auto &mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            auto &mesh = ResourcePool::shared().mesh(meshInstance.meshID());
 
             auto modelMatrix = meshInstance.modelMatrix();
 
@@ -184,13 +184,13 @@ namespace EARenderer {
         std::vector<Triangle3D> triangles;
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
-            auto &meshInstance = mMeshInstances[meshInstanceID];
-            auto &mesh = ResourcePool::shared().meshes[meshInstance.meshID()];
+            const auto &meshInstance = mMeshInstances[meshInstanceID];
+            const auto &mesh = ResourcePool::shared().mesh(meshInstance.meshID());
 
             auto modelMatrix = meshInstance.modelMatrix();
 
             for (ID subMeshID : mesh.subMeshes()) {
-                auto &subMesh = mesh.subMeshes()[subMeshID];
+                const auto &subMesh = mesh.subMeshes()[subMeshID];
 
                 for (size_t i = 0; i < subMesh.vertices().size(); i += 3) {
                     triangles.emplace_back(modelMatrix * subMesh.vertices()[i].position,

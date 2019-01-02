@@ -10,7 +10,6 @@
 #define SceneGBuffer_hpp
 
 #include "GLTexture2D.hpp"
-
 #include <memory>
 
 namespace EARenderer {

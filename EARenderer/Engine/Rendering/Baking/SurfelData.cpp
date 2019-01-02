@@ -50,8 +50,8 @@ namespace EARenderer {
         auto clusterGBufferSize = GLTexture::EstimatedSize(surfelClusterGBufferData.size());
         mSurfelClustersGBuffer = std::make_shared<GLIntegerTexture2D<GLTexture::Integer::R32UI>>(clusterGBufferSize, surfelClusterGBufferData.data());
 
-        mSurfelClusterCentersBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
-        mSurfelClusterCentersBufferTexture->buffer().initialize(clusterCenters);
+        mSurfelClusterCentersBufferTexture = std::make_shared<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>>(clusterCenters.data(), clusterCenters.size());
+//        mSurfelClusterCentersBufferTexture->buffer().initialize(clusterCenters);
     }
 
     void SurfelData::serialize(const std::string &filePath) {
@@ -103,7 +103,7 @@ namespace EARenderer {
         return mSurfelClustersGBuffer;
     }
 
-    std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> SurfelData::surfelClusterCentersBufferTexture() const {
+    std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> SurfelData::surfelClusterCentersBufferTexture() const {
         return mSurfelClusterCentersBufferTexture;
     }
 

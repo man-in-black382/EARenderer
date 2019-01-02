@@ -115,8 +115,8 @@ namespace EARenderer {
                     4, 7, 6
             } {
         std::vector<GLVertexAttribute> layout{GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())};
-        mAxisVAO.initialize(mAxisVertices, 13, mAxisVertexIndices, 51, layout);
-        mSegmentVAO.initialize(mSegmentVertices, 8, mSegmentVertexIndices, 36, layout);
+//        mAxisVAO.initialize(mAxisVertices, 13, mAxisVertexIndices, 51, layout);
+//        mSegmentVAO.initialize(mSegmentVertices, 8, mSegmentVertexIndices, 36, layout);
 
         Transformation t;
 
@@ -238,12 +238,12 @@ namespace EARenderer {
     }
 
     void AxesSystem::drawAxis() const {
-        mAxisVAO.bind();
-        glDrawElements(GL_TRIANGLES, sizeof(mAxisVertexIndices) / sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+//        mAxisVAO.bind();
+//        glDrawElements(GL_TRIANGLES, sizeof(mAxisVertexIndices) / sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
     }
 
     void AxesSystem::drawSegment() const {
-        mSegmentVAO.bind();
-        glDrawElements(GL_TRIANGLES, sizeof(mSegmentVertexIndices) / sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
+//        mSegmentVAO.bind();
+//        glDrawElements(GL_TRIANGLES, sizeof(mSegmentVertexIndices) / sizeof(GLushort), GL_UNSIGNED_SHORT, nullptr);
     }
 }

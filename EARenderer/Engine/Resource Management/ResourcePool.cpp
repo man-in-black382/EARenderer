@@ -17,17 +17,12 @@ namespace EARenderer {
         return pool;
     }
 
-    ResourcePool::ResourcePool()
-            :
-            meshes(100),
-            mCookTorranceMaterials(100),
-            mEmissiveMaterials(100) {
-    }
+    ResourcePool::ResourcePool() : mMeshes(100), mCookTorranceMaterials(100), mEmissiveMaterials(100) {}
 
 #pragma mark - Getters
 
-    const GLVertexArray<Vertex1P1N2UV1T1BT> &ResourcePool::VAO() const {
-        return mVAO;
+    const GLVertexArray<Vertex1P1N2UV1T1BT> *ResourcePool::meshVAO() const {
+        return mVAO.get();
     }
 
     int32_t ResourcePool::totalVertexCount() const {
@@ -38,8 +33,8 @@ namespace EARenderer {
 
     void ResourcePool::transferMeshesToGPU() {
         std::vector<Vertex1P1N2UV1T1BT> vertices;
-        for (ID meshID : meshes) {
-            Mesh &mesh = meshes[meshID];
+        for (ID meshID : mMeshes) {
+            Mesh &mesh = mMeshes[meshID];
             for (ID subMeshID : mesh.subMeshes()) {
                 SubMesh &subMesh = mesh.subMeshes()[subMeshID];
                 subMesh.setVBOOffset((int32_t) vertices.size());
@@ -47,14 +42,21 @@ namespace EARenderer {
                 vertices.insert(vertices.end(), subMesh.vertices().begin(), subMesh.vertices().end());
             }
         }
-        mVAO.initialize(vertices, {
+
+        std::array<GLVertexAttribute, 6> attributes {
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec4), glm::vec4::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec2), glm::vec2::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                 GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())
-        });
+        };
+
+        mVAO = std::make_unique<GLVertexArray<Vertex1P1N2UV1T1BT>>(vertices.data(), vertices.size(), attributes.data(), attributes.size());
+    }
+
+    ID ResourcePool::addMesh(Mesh &&mesh) {
+        return mMeshes.insert(std::move(mesh));
     }
 
     MaterialReference ResourcePool::addMaterial(CookTorranceMaterial &&material) {
@@ -65,6 +67,10 @@ namespace EARenderer {
     MaterialReference ResourcePool::addMaterial(EmissiveMaterial &&material) {
         ID id = mEmissiveMaterials.insert(std::move(material));
         return std::make_pair(MaterialType::Emissive, id);
+    }
+
+    const Mesh &ResourcePool::mesh(ID meshID) const {
+        return mMeshes[meshID];
     }
 
     const CookTorranceMaterial &ResourcePool::cookTorranceMaterial(ID materialID) const {

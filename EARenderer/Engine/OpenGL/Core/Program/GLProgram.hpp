@@ -16,6 +16,7 @@
 #include <array>
 #include <type_traits>
 #include <stdexcept>
+#include <memory>
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -81,8 +82,8 @@ namespace EARenderer {
             glBindBufferRange(GL_UNIFORM_BUFFER, block.binding(), UBO.name(), 0, UBO.size());
         }
 
-        template<typename BufferDataType>
-        void setBufferTexture(CRC32 uniformNameCRC32, const GLBufferTexture<BufferDataType> &bufferTexture) {
+        template<typename TextureFormat, TextureFormat Format, typename BufferDataType>
+        void setBufferTexture(CRC32 uniformNameCRC32, const GLBufferTexture<TextureFormat, Format, BufferDataType> &bufferTexture) {
             if (bufferTexture.buffer().size() == 0) {
                 throw std::runtime_error("Passing empty texture buffer to a uniform is not allowed");
             }

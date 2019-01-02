@@ -102,7 +102,7 @@ namespace EARenderer {
 
         for (ID instanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[instanceID];
-            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
 
             mDepthPrepassShader.setModelMatrix(instance.transformation().modelMatrix());
 
@@ -157,7 +157,7 @@ namespace EARenderer {
         // We're using depth buffer rendered during GBufferCookTorrance construction.
         // Depth writes are disabled for the purpose of combining skybox
         // and debugging entities with full screen deferred rendering:
-        // meshes are rendered as a full screen quad, then skybox is rendered
+        // mMeshes are rendered as a full screen quad, then skybox is rendered
         // where it should, using depth buffer filled by geometry.
         // Then, full screen quad rendering (postprocessing) can be applied without
         // polluting the depth buffer, which leaves us an ability to render 3D debug entities,

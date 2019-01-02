@@ -32,8 +32,7 @@ namespace EARenderer {
         }
 
     public:
-        GLTexture2D() : GLTexture(GL_TEXTURE_2D) {
-        };
+        GLTexture2D() : GLTexture(GL_TEXTURE_2D) {};
 
         virtual ~GLTexture2D() = 0;
 

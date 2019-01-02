@@ -38,9 +38,9 @@
 //    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
 
-    EARenderer::ID sponzaMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
-    EARenderer::ID sphereMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(spherePath.UTF8String)));
-    EARenderer::ID planeMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(planePath.UTF8String)));
+    EARenderer::ID sponzaMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
+    EARenderer::ID sphereMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(spherePath.UTF8String)));
+    EARenderer::ID planeMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(planePath.UTF8String)));
 
     // Materials
 
@@ -112,7 +112,7 @@
     sponzaTransform.scale *= 20.0;
     sponzaInstance.setTransformation(sponzaTransform);
 
-    auto &sponzaMesh = resourcePool->meshes[sponzaMeshID];
+    auto &sponzaMesh = resourcePool->mesh(sponzaMeshID);
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto &subMesh = sponzaMesh.subMeshes()[subMeshID];
 
@@ -189,7 +189,7 @@
     EARenderer::PointLight pointLight(glm::vec3(3.133468, -1.449196, -1.294581), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
     pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID);
     pointLight.meshInstance->materialReference = lightMaterialRef;
-    pointLight.meshInstance->transformation().scale = glm::vec3(0.005);
+    pointLight.meshInstance->transformation().scale = glm::vec3(0.003);
 //    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);

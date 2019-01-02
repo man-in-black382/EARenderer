@@ -30,11 +30,11 @@ namespace EARenderer {
         std::vector<SurfelClusterProjection> mSurfelClusterProjections;
         glm::ivec3 mGridResolution;
 
-        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
-        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> mSkySHsBufferTexture;
-        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProjectionClusterIndicesBufferTexture;
-        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
-        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mProbePositionsBufferTexture;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> mProjectionClusterSHsBufferTexture;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> mSkySHsBufferTexture;
+        std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> mProjectionClusterIndicesBufferTexture;
+        std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> mProbeClusterProjectionsMetadataBufferTexture;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> mProbePositionsBufferTexture;
 
     public:
         void initializeBuffers();
@@ -49,15 +49,15 @@ namespace EARenderer {
 
         const glm::ivec3 &gridResolution() const;
 
-        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> projectionClusterSHsBufferTexture() const;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> projectionClusterSHsBufferTexture() const;
 
-        std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> skySHsBufferTexture() const;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> skySHsBufferTexture() const;
 
-        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> projectionClusterIndicesBufferTexture() const;
+        std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> projectionClusterIndicesBufferTexture() const;
 
-        std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> probeClusterProjectionsMetadataBufferTexture() const;
+        std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> probeClusterProjectionsMetadataBufferTexture() const;
 
-        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> probePositionsBufferTexture() const;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> probePositionsBufferTexture() const;
     };
 
 }

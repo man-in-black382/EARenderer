@@ -11,16 +11,6 @@
 
 namespace EARenderer {
 
-//    SubMesh::SubMesh(const std::vector<Vertex1P1N2UV1T1BT>& vertices)
-//    :
-////    mVertices(vertices),
-//    mBoundingBox(AxisAlignedBox3D::MaximumReversed()),
-//    mArea(0.0),
-////    mVAO(GLVertexArray<Vertex1P1N2UV1T1BT>())
-//    {
-//        finalizeVertexBuffer();
-//    }
-//    
 #pragma mark - Getters
 
     const std::string &SubMesh::name() const {
@@ -87,7 +77,7 @@ namespace EARenderer {
         glDrawArrays(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount));
     }
 
-    void SubMesh::drawInstanced(size_t instanceCount) {
+    void SubMesh::drawInstanced(size_t instanceCount) const {
         glDrawArraysInstanced(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount), static_cast<GLsizei>(instanceCount));
     }
 

@@ -91,13 +91,13 @@ namespace EARenderer {
         mShadowFramebuffer.clear(GLFramebuffer::UnderlyingBuffer::Depth);
 
         for (ID meshInstanceID : mScene->meshInstances()) {
-            auto &instance = mScene->meshInstances()[meshInstanceID];
-            auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+            const auto &instance = mScene->meshInstances()[meshInstanceID];
+            const auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
 
             mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
-                auto &subMesh = subMeshes[subMeshID];
+                const auto &subMesh = subMeshes[subMeshID];
                 subMesh.drawInstanced(mShadowCascades.amount);
             }
         }
@@ -125,12 +125,12 @@ namespace EARenderer {
 
             for (ID meshInstanceID : mScene->meshInstances()) {
                 auto &instance = mScene->meshInstances()[meshInstanceID];
-                auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+                auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
 
                 mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
 
                 for (ID subMeshID : subMeshes) {
-                    auto &subMesh = subMeshes[subMeshID];
+                    const auto &subMesh = subMeshes[subMeshID];
                     subMesh.drawInstanced(6); // 6 for 6 cubemap faces
                 }
             }
@@ -185,7 +185,7 @@ namespace EARenderer {
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
-        ResourcePool::shared().VAO().bind();
+        ResourcePool::shared().meshVAO()->bind();
         mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
 
         renderOmnidirectionalShadowMaps();

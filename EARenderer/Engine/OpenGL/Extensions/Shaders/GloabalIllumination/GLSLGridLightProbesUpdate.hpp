@@ -24,13 +24,13 @@ namespace EARenderer {
 
         void setSurfelClustersLuminaceMap(const GLFloatTexture2D<GLTexture::Float::R16F> &luminanceMap);
 
-        void setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics> &SH);
+        void setProjectionClusterSphericalHarmonics(const GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics> &SH);
 
-        void setSkySphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics> &SH);
+        void setSkySphericalHarmonics(const GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics> &SH);
 
-        void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t> &indices);
+        void setProjectionClusterIndices(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &indices);
 
-        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t> &metadata);
+        void setProbeProjectionsMetadata(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &metadata);
 
         void setSkyColorSphericalHarmonics(const SphericalHarmonics &skyColorSH);
     };

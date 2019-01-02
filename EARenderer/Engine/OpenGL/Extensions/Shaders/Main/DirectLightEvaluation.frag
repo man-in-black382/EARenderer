@@ -137,7 +137,7 @@ vec4 ProcessEmissiveMaterial(uvec4 materialData) {
 
 void main() {
     uvec4 materialData = texture(uMaterialData, vTexCoords);
-    vec3 worldPosition  = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
+    vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
 
     switch (DecodeGBufferMaterialType(materialData)) {
         case MaterialTypeCookTorrance: oColor = ProcessCookTorranceMaterial(materialData, worldPosition); break;

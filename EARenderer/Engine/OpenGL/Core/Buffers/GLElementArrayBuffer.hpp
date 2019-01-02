@@ -16,7 +16,13 @@ namespace EARenderer {
 
     class GLElementArrayBuffer : public GLBuffer<GLushort> {
     public:
-        GLElementArrayBuffer();
+        template<template<class...> class ContinuousContainer>
+        static auto Create(const ContinuousContainer<GLushort> &indices) {
+            return GLElementArrayBuffer(indices.data(), indices.size());
+        }
+
+        GLElementArrayBuffer(const GLushort *indices, uint64_t count)
+                : GLBuffer<GLushort>(indices, count, GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW) {}
     };
 
 }

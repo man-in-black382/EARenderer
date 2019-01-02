@@ -113,7 +113,7 @@
     switch (marker.type) {
 #warning TODO: Fix later
 //        case SceneObjectMarkerTypeMesh: {
-//            EARenderer::Mesh& mesh = (*self.meshes)[marker.objectID];
+//            EARenderer::Mesh& mesh = (*self.mMeshes)[marker.objectID];
 //            EARenderer::ID subMeshID = mesh.subMeshes()[index];
 //            return [[SceneObjectMarker alloc] initWithObjectID:subMeshID type:SceneObjectMarkerTypeSubMesh];
 //        }

@@ -57,7 +57,7 @@ namespace EARenderer {
 
         void draw() const;
 
-        void drawInstanced(size_t instanceCount);
+        void drawInstanced(size_t instanceCount) const;
     };
 
 }

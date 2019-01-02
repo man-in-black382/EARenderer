@@ -20,7 +20,7 @@
 
 - (void)showMeshWithID:(EARenderer::ID)meshID {
 #warning TODO: Fix later
-//    const auto& mesh = self.scene->meshes()[meshID];
+//    const auto& mesh = self.scene->mMeshes()[meshID];
 //    self.meshTab.meshTransform = &self.scene->transforms()[mesh.transformID()];
 //    if (![self.selectedTabViewItem isEqual:self.meshTab]) {
 //        [self selectTabViewItem:self.meshTab];

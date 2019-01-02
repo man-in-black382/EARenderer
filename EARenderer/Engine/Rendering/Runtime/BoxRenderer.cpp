@@ -13,38 +13,18 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     BoxRenderer::BoxRenderer(const Camera *camera, const std::vector<AxisAlignedBox3D> &boxes)
-            :
-            mBoxSidesRenderingShader(GLSLCubeRendering::Mode::Sides),
-            mBoxEdgesRenderingShader(GLSLCubeRendering::Mode::Edges),
-            mCamera(camera) {
+            : mBoxSidesRenderingShader(GLSLCubeRendering::Mode::Sides),
+              mBoxEdgesRenderingShader(GLSLCubeRendering::Mode::Edges),
+              mCamera(camera),
+              mVAO(GLVertexArray<glm::vec3>::Create(
+                      mPoints,
+                      std::vector<GLVertexAttribute>{GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())}
+              )) {
+
         for (auto &box : boxes) {
             mPoints.push_back(box.min);
             mPoints.push_back(box.max);
         }
-
-        mVAO.initialize(mPoints, {GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())});
-    }
-
-    BoxRenderer::BoxRenderer(Scene *scene)
-            :
-            mBoxSidesRenderingShader(GLSLCubeRendering::Mode::Sides),
-            mBoxEdgesRenderingShader(GLSLCubeRendering::Mode::Edges),
-            mCamera(scene->camera()) {
-        for (ID meshInstanceID : scene->staticMeshInstanceIDs()) {
-            auto &instance = scene->meshInstances()[meshInstanceID];
-            auto &mesh = ResourcePool::shared().meshes[instance.meshID()];
-            auto &subMeshes = mesh.subMeshes();
-
-            for (ID subMeshID : subMeshes) {
-                auto &subMesh = subMeshes[subMeshID];
-
-                auto box = subMesh.boundingBox().transformedBy(instance.transformation());
-                mPoints.push_back(box.min);
-                mPoints.push_back(box.max);
-            }
-        }
-
-        mVAO.initialize(mPoints, {GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length())});
     }
 
 #pragma mark - Rendering

@@ -225,7 +225,7 @@ namespace EARenderer {
     }
 
     void SurfelGenerator::generateSurflesOnMeshInstance(const MeshInstance &instance) {
-        auto &mesh = mResourcePool->meshes[instance.meshID()];
+        const auto &mesh = mResourcePool->mesh(instance.meshID());
 
         for (ID subMeshID : mesh.subMeshes()) {
             auto &subMesh = mesh.subMeshes()[subMeshID];

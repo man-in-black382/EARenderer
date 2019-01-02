@@ -10,6 +10,8 @@
 #define GLBuffer_hpp
 
 #include <vector>
+#include <algorithm>
+#include <cmath>
 
 #include "GLNamedObject.hpp"
 #include "GLBufferWriter.hpp"
@@ -21,7 +23,9 @@ namespace EARenderer {
     private:
         GLint mBindingPoint;
         GLenum mUsageMode;
-        size_t mSize;
+        size_t mAlignment = 1;
+        size_t mSize = 0;
+        size_t mCount = 0;
 
     public:
 
@@ -31,9 +35,40 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-        GLBuffer(GLint bindingPoint, GLenum usageMode)
-                : mBindingPoint(bindingPoint), mUsageMode(usageMode) {
+        template<template<class...> class ContinuousContainer>
+        static auto Create(const ContinuousContainer<DataType> &data, GLint bindingPoint, GLenum usageMode, size_t perObjectAlignment = 1) {
+            return GLBuffer<DataType>(data.data(), data.size(), bindingPoint, usageMode, perObjectAlignment);
+        }
+
+        GLBuffer(const DataType *data, uint64_t count, GLint bindingPoint, GLenum usageMode, size_t perObjectAlignment = 1)
+                : mBindingPoint(bindingPoint), mUsageMode(usageMode), mAlignment(std::max(perObjectAlignment, 1ul)) {
+
             glGenBuffers(1, &mName);
+            bind();
+
+            size_t objectSize = sizeof(DataType);
+            uint16_t fullAlignments = objectSize / mAlignment;
+            size_t tail = objectSize - mAlignment * fullAlignments;
+            size_t padding = tail > 0 ? mAlignment - tail : 0;
+            size_t alignedObjectSize = objectSize + padding;
+            size_t totalBytes = alignedObjectSize * count;
+
+            mSize = totalBytes;
+            mCount = count;
+
+            // Data is already aligned. Lucky!
+            if (alignedObjectSize == objectSize) {
+                glBufferData(mBindingPoint, totalBytes, data, mUsageMode);
+                return;
+            }
+
+            // Not aligned. Have to allocate additional memory chunk.
+            unsigned char *alignedStorage = new unsigned char[totalBytes];
+            for (int i = 0; i < count; ++i) {
+                memcpy(alignedStorage + alignedObjectSize * i, data + i, objectSize);
+            }
+            glBufferData(mBindingPoint, totalBytes, alignedStorage, mUsageMode);
+            delete (alignedStorage);
         }
 
         ~GLBuffer() override {
@@ -47,9 +82,15 @@ namespace EARenderer {
 #pragma mark - Getters
 
         /// Size in bytes
-        /// @return size of the buffer
+        /// @return Size of the buffer
         size_t size() const {
             return mSize;
+        }
+
+        /// Amount of objects stored in the buffer
+        /// @return Number of stored objects
+        size_t count() const {
+            return mCount;
         }
 
 #pragma mark - Binding
@@ -60,26 +101,45 @@ namespace EARenderer {
 
 #pragma mark - Helpers
 
-        void initialize(const std::vector<DataType> &data) {
-            bind();
-            size_t bytesCount = data.size() * sizeof(DataType);
-            glBufferData(mBindingPoint, bytesCount, data.data(), mUsageMode);
-            mSize = bytesCount;
-        }
+//        template<template<class...> class ContinuousContainer>
+//        void initialize(const ContinuousContainer<DataType> &data) {
+//            initialize(data.data(), data.size());
+//        }
+//
+//        void initialize(const DataType *data, uint64_t count) {
+//            bind();
+//
+//            size_t objectSize = sizeof(DataType);
+//            uint16_t fullAlignments = objectSize / mAlignment;
+//            size_t tail = objectSize - mAlignment * fullAlignments;
+//            size_t padding = tail > 0 ? mAlignment - tail : 0;
+//            size_t alignedObjectSize = objectSize + padding;
+//            size_t totalBytes = alignedObjectSize * count;
+//
+//            mSize = totalBytes;
+//            mCount = count;
+//
+//            // Data is already aligned. Lucky!
+//            if (alignedObjectSize == objectSize) {
+//                glBufferData(mBindingPoint, totalBytes, data, mUsageMode);
+//                return;
+//            }
+//
+//            // Not aligned. Have to allocate additional memory chunk.
+//            unsigned char *alignedStorage = new unsigned char[totalBytes];
+//            for (int i = 0; i < count; ++i) {
+//                memcpy(alignedStorage + alignedObjectSize * i, data + i, objectSize);
+//            }
+//            glBufferData(mBindingPoint, totalBytes, alignedStorage, mUsageMode);
+//            delete (alignedStorage);
+//        }
 
-        void initialize(const DataType *data, uint64_t size) {
-            bind();
-            size_t bytesCount = size * sizeof(DataType);
-            glBufferData(mBindingPoint, bytesCount, data, mUsageMode);
-            mSize = bytesCount;
-        }
-
-        void write(const WriteContextClosure &contextClosure) {
-            bind();
-            DataType *data = reinterpret_cast<DataType *>(glMapBuffer(mBindingPoint, GL_WRITE_ONLY));
-            contextClosure(GLBufferWriter<DataType>(data, mSize));
-            glUnmapBuffer(mBindingPoint);
-        }
+//        void write(const WriteContextClosure &contextClosure) {
+//            bind();
+//            DataType *data = reinterpret_cast<DataType *>(glMapBuffer(mBindingPoint, GL_WRITE_ONLY));
+//            contextClosure(GLBufferWriter<DataType>(data, mSize));
+//            glUnmapBuffer(mBindingPoint);
+//        }
     };
 
 }

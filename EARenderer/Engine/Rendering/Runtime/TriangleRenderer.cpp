@@ -30,7 +30,7 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[meshInstanceID];
-            auto &subMeshes = mResourcePool->meshes[instance.meshID()].subMeshes();
+            auto &subMeshes = mResourcePool->mesh(instance.meshID()).subMeshes();
 
             glm::mat4 mvp = viewProjection * instance.modelMatrix();
             mTriangleRenderingShader.setModelViewProjectionMatrix(mvp);

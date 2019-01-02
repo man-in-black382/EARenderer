@@ -31,7 +31,7 @@ namespace EARenderer {
 
         std::shared_ptr<GLFloatTexture2DArray<GLTexture::Float::RGB32F>> mSurfelsGBuffer;
         std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::R32UI>> mSurfelClustersGBuffer;
-        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> mSurfelClusterCentersBufferTexture;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> mSurfelClusterCentersBufferTexture;
 
     public:
         void initializeBuffers();
@@ -48,7 +48,7 @@ namespace EARenderer {
 
         std::shared_ptr<GLIntegerTexture2D<GLTexture::Integer::R32UI>> surfelClustersGBuffer() const;
 
-        std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> surfelClusterCentersBufferTexture() const;
+        std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> surfelClusterCentersBufferTexture() const;
     };
 
 }

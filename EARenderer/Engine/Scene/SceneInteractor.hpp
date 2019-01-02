@@ -35,7 +35,7 @@ namespace EARenderer {
 
         ID mPreviouslyHighlightedMeshID = IDNotFound;
         ID mPreviouslySelectedMeshID = IDNotFound;
-        AxesSelection mAxesSelection;;
+        AxesSelection mAxesSelection;
         glm::vec2 mPreviousMousePosition;
         glm::vec2 mPreviousMouseDragPosition;
 

@@ -27,9 +27,9 @@ namespace EARenderer {
 //        setBufferTexture(ctcrc32("uProbeOcclusionMapsAtlas"), atlas);
 //    }
 
-    void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2> &offsets) {
-        setBufferTexture(ctcrc32("uProbeOcclusionMapAtlasOffsets"), offsets);
-    }
+//    void GLSLProbeOcclusionRendering::setProbeOcclusionMapAtlasOffsets(const GLUInteger2BufferTexture<glm::uvec2> &offsets) {
+//        setBufferTexture(ctcrc32("uProbeOcclusionMapAtlasOffsets"), offsets);
+//    }
 
     void GLSLProbeOcclusionRendering::setProbeIndex(size_t index) {
         glUniform1i(uniformByNameCRC32(ctcrc32("uProbeIndex")).location(), (GLint) index);

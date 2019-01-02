@@ -71,7 +71,7 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uWorldBoudningBoxTransform")).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
-    void GLSLSurfelLighting::setProbePositions(const GLFloat3BufferTexture<glm::vec3> &positions) {
+    void GLSLSurfelLighting::setProbePositions(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &positions) {
         setBufferTexture(ctcrc32("uProbePositions"), positions);
     }
 

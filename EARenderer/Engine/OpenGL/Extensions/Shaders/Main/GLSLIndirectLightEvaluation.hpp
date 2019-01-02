@@ -30,7 +30,7 @@ namespace EARenderer {
 
         void setWorldBoundingBox(const AxisAlignedBox3D &box);
 
-        void setProbePositions(const GLFloat3BufferTexture<glm::vec3> &positions);
+        void setProbePositions(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &positions);
     };
 
 }

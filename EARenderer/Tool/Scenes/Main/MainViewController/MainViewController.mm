@@ -192,14 +192,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didSelectMeshWithID:(EARenderer::ID)id {
 #warning TODO: Fix later
-//    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+//    EARenderer::Mesh& mesh = self.scene->mMeshes()[id];
 //    mesh.setIsSelected(true);
 //    [self.sceneEditorTabView showMeshWithID:id];
 }
 
 - (void)meshListTabViewItem:(MeshListTabViewItem *)item didDeselectMeshWithID:(EARenderer::ID)id {
 #warning TODO: Fix later
-//    EARenderer::Mesh& mesh = self.scene->meshes()[id];
+//    EARenderer::Mesh& mesh = self.scene->mMeshes()[id];
 //    mesh.setIsSelected(false);
 }
 
@@ -209,8 +209,8 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)meshListTabViewItemDidDeselectAll:(MeshListTabViewItem *)item {
 #warning TODO: Fix later
-//    for (EARenderer::ID meshID : self.scene->meshes()) {
-//        EARenderer::Mesh& mesh = self.scene->meshes()[meshID];
+//    for (EARenderer::ID meshID : self.scene->mMeshes()) {
+//        EARenderer::Mesh& mesh = self.scene->mMeshes()[meshID];
 //        mesh.setIsSelected(false);
 //    }
 }

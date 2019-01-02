@@ -21,19 +21,19 @@ namespace EARenderer {
 
     class ResourcePool {
     private:
-        GLVertexArray<Vertex1P1N2UV1T1BT> mVAO;
+        std::unique_ptr<GLVertexArray<Vertex1P1N2UV1T1BT>> mVAO;
         int32_t mTotalVertexCount = 0;
 
-    public:
-        PackedLookupTable<Mesh> meshes;
+        PackedLookupTable<Mesh> mMeshes;
         PackedLookupTable<CookTorranceMaterial> mCookTorranceMaterials;
         PackedLookupTable<EmissiveMaterial> mEmissiveMaterials;
 
+    public:
         static ResourcePool &shared();
 
         ResourcePool();
 
-        const GLVertexArray<Vertex1P1N2UV1T1BT> &VAO() const;
+        const GLVertexArray<Vertex1P1N2UV1T1BT> *meshVAO() const;
 
         int32_t totalVertexCount() const;
 
@@ -43,9 +43,13 @@ namespace EARenderer {
          */
         void transferMeshesToGPU();
 
+        ID addMesh(Mesh &&mesh);
+
         MaterialReference addMaterial(CookTorranceMaterial &&material);
 
         MaterialReference addMaterial(EmissiveMaterial &&material);
+
+        const Mesh &mesh(ID meshID) const;
 
         const CookTorranceMaterial &cookTorranceMaterial(ID materialID) const;
 

@@ -25,11 +25,11 @@ namespace EARenderer {
 
         void setWorldBoundingBox(const AxisAlignedBox3D &box);
 
-        void setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t> &indices);
+        void setProjectionClusterIndices(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &indices);
 
-        void setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t> &metadata);
+        void setProbeProjectionsMetadata(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &metadata);
 
-        void setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3> &centers);
+        void setSurfelClusterCenters(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &centers);
 
         void setProbesGridResolution(const glm::ivec3 &resolution);
     };

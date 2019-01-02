@@ -12,10 +12,6 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SurfelCluster::SurfelCluster(size_t offset, size_t count)
-            :
-            surfelOffset(offset),
-            surfelCount(count) {
-    }
+    SurfelCluster::SurfelCluster(size_t offset, size_t count) : surfelOffset(offset), surfelCount(count) {}
 
 }

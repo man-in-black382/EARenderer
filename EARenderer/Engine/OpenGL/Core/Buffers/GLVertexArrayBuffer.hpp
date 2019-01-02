@@ -17,7 +17,13 @@ namespace EARenderer {
     template<typename Vertex>
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:
-        GLVertexArrayBuffer() : GLBuffer<Vertex>(GL_ARRAY_BUFFER, GL_STATIC_DRAW) {}
+        template<template<class...> class ContinuousContainer>
+        static auto Create(const ContinuousContainer<Vertex> &data) {
+            return GLVertexArrayBuffer<Vertex>(data.data(), data.size());
+        }
+
+        GLVertexArrayBuffer(const Vertex *data, uint64_t count)
+                : GLBuffer<Vertex>(data, count, GL_ARRAY_BUFFER, GL_STATIC_DRAW) {}
     };
 
 }

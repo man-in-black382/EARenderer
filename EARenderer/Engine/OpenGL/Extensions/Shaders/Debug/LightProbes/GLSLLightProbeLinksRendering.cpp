@@ -27,15 +27,15 @@ namespace EARenderer {
         glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uWorldBoudningBoxTransform")).location(), 1, GL_FALSE, glm::value_ptr(box.localSpaceMatrix()));
     }
 
-    void GLSLLightProbeLinksRendering::setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t> &indices) {
+    void GLSLLightProbeLinksRendering::setProjectionClusterIndices(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &indices) {
         setBufferTexture(ctcrc32("uProjectionClusterIndices"), indices);
     }
 
-    void GLSLLightProbeLinksRendering::setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t> &metadata) {
+    void GLSLLightProbeLinksRendering::setProbeProjectionsMetadata(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &metadata) {
         setBufferTexture(ctcrc32("uProbeProjectionsMetadata"), metadata);
     }
 
-    void GLSLLightProbeLinksRendering::setSurfelClusterCenters(const GLFloat3BufferTexture<glm::vec3> &centers) {
+    void GLSLLightProbeLinksRendering::setSurfelClusterCenters(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &centers) {
         setBufferTexture(ctcrc32("uClusterCenters"), centers);
     }
 

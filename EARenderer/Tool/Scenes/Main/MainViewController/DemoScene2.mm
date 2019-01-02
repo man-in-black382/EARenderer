@@ -30,7 +30,7 @@
     // Meshes
     NSString *cornellBoxPath = [[NSBundle mainBundle] pathForResource:@"cornell_box_covered" ofType:@"obj"];
 
-    EARenderer::ID cornellBoxMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(cornellBoxPath.UTF8String)));
+    EARenderer::ID cornellBoxMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(cornellBoxPath.UTF8String)));
 
     // Materials
 
@@ -45,7 +45,7 @@
     t.scale *= glm::vec3(3.0);
     cornellBoxInstance.setTransformation(t);
 
-    auto &sponzaMesh = resourcePool->meshes[cornellBoxMeshID];
+    auto &sponzaMesh = resourcePool->mesh(cornellBoxMeshID);
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto &subMesh = sponzaMesh.subMeshes()[subMeshID];
 

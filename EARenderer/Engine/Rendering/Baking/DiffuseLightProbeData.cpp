@@ -44,20 +44,11 @@ namespace EARenderer {
             skySHs.push_back(probe.skySphericalHarmonics);
         }
 
-        mProjectionClusterSHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
-        mProjectionClusterSHsBufferTexture->buffer().initialize(shs);
-
-        mSkySHsBufferTexture = std::make_shared<GLFloat3BufferTexture<SphericalHarmonics>>();
-        mSkySHsBufferTexture->buffer().initialize(skySHs);
-
-        mProjectionClusterIndicesBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
-        mProjectionClusterIndicesBufferTexture->buffer().initialize(indices);
-
-        mProbeClusterProjectionsMetadataBufferTexture = std::make_shared<GLUIntegerBufferTexture<uint32_t>>();
-        mProbeClusterProjectionsMetadataBufferTexture->buffer().initialize(metadata);
-
-        mProbePositionsBufferTexture = std::make_shared<GLFloat3BufferTexture<glm::vec3>>();
-        mProbePositionsBufferTexture->buffer().initialize(positions);
+        mProjectionClusterSHsBufferTexture = std::make_shared<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>>(shs.data(), shs.size());
+        mSkySHsBufferTexture = std::make_shared<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>>(skySHs.data(), skySHs.size());
+        mProjectionClusterIndicesBufferTexture = std::make_shared<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>>(indices.data(), indices.size());
+        mProbeClusterProjectionsMetadataBufferTexture = std::make_shared<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>>(metadata.data(), metadata.size());
+        mProbePositionsBufferTexture = std::make_shared<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>>(positions.data(), positions.size());
     }
 
     void DiffuseLightProbeData::serialize(const std::string &filePath) {
@@ -107,23 +98,23 @@ namespace EARenderer {
         return mGridResolution;
     }
 
-    std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> DiffuseLightProbeData::projectionClusterSHsBufferTexture() const {
+    std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> DiffuseLightProbeData::projectionClusterSHsBufferTexture() const {
         return mProjectionClusterSHsBufferTexture;
     }
 
-    std::shared_ptr<GLFloat3BufferTexture<SphericalHarmonics>> DiffuseLightProbeData::skySHsBufferTexture() const {
+    std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics>> DiffuseLightProbeData::skySHsBufferTexture() const {
         return mSkySHsBufferTexture;
     }
 
-    std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> DiffuseLightProbeData::projectionClusterIndicesBufferTexture() const {
+    std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> DiffuseLightProbeData::projectionClusterIndicesBufferTexture() const {
         return mProjectionClusterIndicesBufferTexture;
     };
 
-    std::shared_ptr<GLUIntegerBufferTexture<uint32_t>> DiffuseLightProbeData::probeClusterProjectionsMetadataBufferTexture() const {
+    std::shared_ptr<GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t>> DiffuseLightProbeData::probeClusterProjectionsMetadataBufferTexture() const {
         return mProbeClusterProjectionsMetadataBufferTexture;
     }
 
-    std::shared_ptr<GLFloat3BufferTexture<glm::vec3>> DiffuseLightProbeData::probePositionsBufferTexture() const {
+    std::shared_ptr<GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3>> DiffuseLightProbeData::probePositionsBufferTexture() const {
         return mProbePositionsBufferTexture;
     }
 

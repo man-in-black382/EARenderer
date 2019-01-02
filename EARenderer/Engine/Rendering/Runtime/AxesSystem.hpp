@@ -54,8 +54,8 @@ namespace EARenderer {
         glm::mat4 mZXSegmentTransform;
         glm::mat4 mZYSegmentTransform;
 
-        GLVertexArray<Vertex1P3> mAxisVAO;
-        GLVertexArray<Vertex1P3> mSegmentVAO;
+//        GLVertexArray<Vertex1P3> mAxisVAO;
+//        GLVertexArray<Vertex1P3> mSegmentVAO;
 
     public:
         AxesSystem();

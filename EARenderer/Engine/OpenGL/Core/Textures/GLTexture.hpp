@@ -57,6 +57,14 @@ namespace EARenderer {
 
         void setComparisonMode(Sampling::ComparisonMode comparisonMode);
 
+        static constexpr GLTextureFormat glFormat(Depth format) {
+            switch (format) {
+                case Depth::Default:
+                    return {GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT};
+            }
+        }
+
+    public:
         static constexpr GLTextureFormat glFormat(Normalized format) {
             switch (format) {
                 case Normalized::RCompressedRGBAInput:
@@ -112,14 +120,6 @@ namespace EARenderer {
             }
         }
 
-        static constexpr GLTextureFormat glFormat(Depth format) {
-            switch (format) {
-                case Depth::Default:
-                    return {GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT};
-            }
-        }
-
-    public:
         GLTexture(const GLTexture &that) = default;
 
         GLTexture &operator=(const GLTexture &rhs) = default;

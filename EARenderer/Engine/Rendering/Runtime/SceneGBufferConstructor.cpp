@@ -49,7 +49,7 @@ namespace EARenderer {
                 mGBuffer->materialData, mGBuffer->HiZBuffer
         );
 
-        ResourcePool::shared().VAO().bind();
+        ResourcePool::shared().meshVAO()->bind();
 
         for (ID instanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[instanceID];
@@ -71,7 +71,7 @@ namespace EARenderer {
     }
 
     void SceneGBufferConstructor::renderMeshInstance(const MeshInstance &instance, const Transformation* baseTransform) {
-        auto &subMeshes = ResourcePool::shared().meshes[instance.meshID()].subMeshes();
+        auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
 
         if (baseTransform) {
             mGBufferShader.setModelMatrix(instance.transformation().combinedWith(*baseTransform).modelMatrix());

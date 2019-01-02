@@ -24,15 +24,61 @@ namespace EARenderer {
     template<typename Vertex>
     class GLVertexArray : public GLNamedObject {
     private:
-        GLVertexArrayBuffer<Vertex> mVertexBuffer;
-        GLElementArrayBuffer mIndexBuffer;
+        std::unique_ptr<GLVertexArrayBuffer<Vertex>> mVertexBuffer;
+        std::unique_ptr<GLElementArrayBuffer> mIndexBuffer;
+
+        void hookUpBuffers(const GLVertexAttribute *attributes, size_t attributeCount) {
+            bind();
+            mVertexBuffer->bind();
+
+            if (mIndexBuffer) {
+                mIndexBuffer->bind();
+            }
+
+            GLuint offset = 0;
+            for (GLuint location = 0; location < attributeCount; location++) {
+                glEnableVertexAttribArray(location);
+                const GLVertexAttribute &attribute = attributes[location];
+                glVertexAttribPointer(location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
+                glVertexAttribDivisor(location, attribute.divisor);
+                offset += attribute.bytes;
+            }
+        }
 
     public:
 
 #pragma mark - Lifecycle
 
-        GLVertexArray() {
+        template<
+                template<class...> class VertexContainer,
+                template<class...> class AttributeContainer
+        >
+        static auto Create(const VertexContainer<Vertex> &vertices, const AttributeContainer<GLVertexAttribute> &attributes) {
+            return GLVertexArray(vertices.data(), vertices.size(), attributes.data(), attributes.size());
+        }
+
+        template<
+                template<class...> class VertexContainer,
+                template<class...> class IndexContainer,
+                template<class...> class AttributeContainer
+        >
+        static auto Create(const VertexContainer<Vertex> &vertices, const IndexContainer<GLushort> &indices, const AttributeContainer<GLVertexAttribute> &attributes) {
+            return GLVertexArray(vertices.data(), vertices.size(), indices.data(), indices.size(), attributes.data(), attributes.size());
+        }
+
+        GLVertexArray(const Vertex *vertices, size_t vertexCount, const GLVertexAttribute *attributes, size_t attributeCount)
+                : mVertexBuffer(std::make_unique<GLVertexArrayBuffer<Vertex>>(vertices, vertexCount)) {
+
             glGenVertexArrays(1, &mName);
+            hookUpBuffers(attributes, attributeCount);
+        }
+
+        GLVertexArray(const Vertex *vertices, size_t vertexCount, const GLushort *indices, size_t indexCount, const GLVertexAttribute *attributes, size_t attributeCount)
+                : mVertexBuffer(std::make_unique<GLVertexArrayBuffer<Vertex>>(vertices, vertexCount)),
+                  mIndexBuffer(std::make_unique<GLElementArrayBuffer>(indices, indexCount)) {
+
+            glGenVertexArrays(1, &mName);
+            hookUpBuffers(attributes, attributeCount);
         }
 
         ~GLVertexArray() override {
@@ -49,40 +95,8 @@ namespace EARenderer {
             glBindVertexArray(mName);
         }
 
-#pragma mark - Lazy initialization
-
-        void initialize(const Vertex *vertices, uint64_t verticesSize,
-                const GLushort *indices, uint64_t indicesSize,
-                const std::vector<GLVertexAttribute> &attributes) {
-            bind();
-
-            mVertexBuffer.initialize(vertices, verticesSize);
-            if (indices) {mIndexBuffer.initialize(indices, indicesSize);}
-
-            GLuint offset = 0;
-            for (GLuint location = 0; location < attributes.size(); location++) {
-                glEnableVertexAttribArray(location);
-                const GLVertexAttribute &attribute = attributes[location];
-                glVertexAttribPointer(location, attribute.components, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void *>(offset));
-                glVertexAttribDivisor(location, attribute.divisor);
-                offset += attribute.bytes;
-            }
-        }
-
-        void initialize(const Vertex *vertices, uint64_t verticesSize, const std::vector<GLVertexAttribute> &attributes) {
-            initialize(vertices, verticesSize, nullptr, 0, attributes);
-        }
-
-        void initialize(const std::vector<Vertex> &vertices, const std::vector<GLVertexAttribute> &attributes) {
-            initialize(vertices.data(), vertices.size(), nullptr, 0, attributes);
-        }
-
-        void initialize(const std::vector<Vertex> &vertices, const std::vector<GLushort> &indices, const std::vector<GLVertexAttribute> &attributes) {
-            initialize(vertices.data(), vertices.size(), nullptr, 0, attributes);
-        }
-
-        template<typename T>
-        void useExternalBuffer(const GLVertexArrayBuffer<T> &buffer, const std::vector<GLVertexAttribute> &attributes) {
+        template<typename T, template<class...> class AttributeContainer>
+        void useExternalBuffer(const GLVertexArrayBuffer<T> &buffer, const AttributeContainer<GLVertexAttribute> &attributes) {
             bind();
             buffer.bind();
 
@@ -99,15 +113,6 @@ namespace EARenderer {
             }
         }
 
-#pragma mark - Getters
-
-        const GLVertexArrayBuffer<Vertex> &vertexBuffer() const {
-            return mVertexBuffer;
-        }
-
-        const GLVertexArrayBuffer<Vertex> &indexBuffer() const {
-            return mIndexBuffer;
-        }
     };
 
 }

@@ -15,10 +15,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    MeshInstance::MeshInstance(ID meshID)
-            : mMeshID(meshID) {
-
-        Mesh &mesh = ResourcePool::shared().meshes[mMeshID];
+    MeshInstance::MeshInstance(ID meshID) : mMeshID(meshID) {
+        const Mesh &mesh = ResourcePool::shared().mesh(mMeshID);
         mTransformation = mesh.baseTransform();
         mModelMatrix = mTransformation.modelMatrix();
     }
@@ -50,7 +48,7 @@ namespace EARenderer {
     }
 
     AxisAlignedBox3D MeshInstance::boundingBox() const {
-        Mesh &mesh = ResourcePool::shared().meshes[mMeshID];
+        const Mesh &mesh = ResourcePool::shared().mesh(mMeshID);
         return mesh.boundingBox().transformedBy(mTransformation);
     }
 

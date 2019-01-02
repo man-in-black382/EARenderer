@@ -26,19 +26,19 @@ namespace EARenderer {
         setUniformTexture(ctcrc32("uSurfelClustersLuminanceMap"), luminanceMap);
     }
 
-    void GLSLGridLightProbesUpdate::setProjectionClusterSphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics> &SH) {
+    void GLSLGridLightProbesUpdate::setProjectionClusterSphericalHarmonics(const GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics> &SH) {
         setBufferTexture(ctcrc32("uProjectionClusterSphericalHarmonics"), SH);
     }
 
-    void GLSLGridLightProbesUpdate::setSkySphericalHarmonics(const GLFloat3BufferTexture<SphericalHarmonics> &SH) {
+    void GLSLGridLightProbesUpdate::setSkySphericalHarmonics(const GLFloatBufferTexture<GLTexture::Float::RGB32F, SphericalHarmonics> &SH) {
         setBufferTexture(ctcrc32("uSkySphericalHarmonics"), SH);
     }
 
-    void GLSLGridLightProbesUpdate::setProjectionClusterIndices(const GLUIntegerBufferTexture<uint32_t> &indices) {
+    void GLSLGridLightProbesUpdate::setProjectionClusterIndices(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &indices) {
         setBufferTexture(ctcrc32("uProjectionClusterIndices"), indices);
     }
 
-    void GLSLGridLightProbesUpdate::setProbeProjectionsMetadata(const GLUIntegerBufferTexture<uint32_t> &metadata) {
+    void GLSLGridLightProbesUpdate::setProbeProjectionsMetadata(const GLIntegerBufferTexture<GLTexture::Integer::R32UI, uint32_t> &metadata) {
         setBufferTexture(ctcrc32("uProbeProjectionsMetadata"), metadata);
     }
 

@@ -17,16 +17,14 @@
 		36EBC0EDD2E740C34FCAADDA /* LuminanceHistogram.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC4313427D993E2C27A2C /* LuminanceHistogram.vert */; };
 		36EBC0FFF89499B92B52FF38 /* GLSLSurfelLighting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC6A2937C12690A75AB10 /* GLSLSurfelLighting.cpp */; };
 		36EBC1081B315525F23DAB5B /* GLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCD97FA71DD19DD0C0EFD /* GLFramebuffer.cpp */; };
+		36EBC129FCF9EF0AF49A39A4 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCA316D37FA34BE399E18 /* Mesh.cpp */; };
 		36EBC12DF211DC089C13FAB1 /* SurfelClusterAveraging.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC6249848A26D07655B96 /* SurfelClusterAveraging.frag */; };
 		36EBC140781FA494C5BE371F /* OmnidirectionalPenumbra.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCD2EFA402CC399D4349D /* OmnidirectionalPenumbra.frag */; };
 		36EBC15B2FF7BEC071DFAF60 /* Skybox.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC00E929EF046BD11D79E /* Skybox.frag */; };
-		36EBC181FB553B6B08E2E40E /* GLElementArrayBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC338596B49FE342BCEB9 /* GLElementArrayBuffer.cpp */; };
 		36EBC1C2218DF41C3B4E5050 /* CookTorranceMaterialOverridesUBO.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCA3E82615A07748EE071 /* CookTorranceMaterialOverridesUBO.glsl */; };
 		36EBC1E07576FFDEB0B7FB3C /* FullScreenQuad.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCF4F95A09CB2435433F5 /* FullScreenQuad.vert */; };
-		36EBC1F364BD0CBF918E7A01 /* EmissiveMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */; };
 		36EBC1FE3890683374F99E4B /* ColorSpace.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCCF06A7173DC393E4517 /* ColorSpace.glsl */; };
 		36EBC2208D86B81DE1E01C33 /* GLSLCubeRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF8A0B52A547F5A86437 /* GLSLCubeRendering.cpp */; };
-		36EBC24A7A7F8FB702CCDD34 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC12E541DB7E3577A25ED /* Material.cpp */; };
 		36EBC24D51FB616E0E2175E6 /* Shadows.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC71E7D7161D613AE5BFF /* Shadows.glsl */; };
 		36EBC2651BBA973677795E9B /* EquirectangularMapConversion.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC713D67D46745C8233DE /* EquirectangularMapConversion.frag */; };
 		36EBC27D0BB706CCFDC3FD69 /* GLSLSMAANeighborhoodBlending.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCD3584A85D483DA2777F /* GLSLSMAANeighborhoodBlending.cpp */; };
@@ -40,6 +38,7 @@
 		36EBC3A60C68AC39DBE21E7B /* GLSLSurfelClusterAveraging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCB01171D6B9E9EB42033 /* GLSLSurfelClusterAveraging.cpp */; };
 		36EBC3A9C94EB5A2E02BDE4A /* SMAABlendingWeightCalculation.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC821A62FD3998A496494 /* SMAABlendingWeightCalculation.frag */; };
 		36EBC3ACE17C60A8B8C0DE37 /* LightProbeLinksRendering.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC5D7D3EA2B53BD6B4A9F /* LightProbeLinksRendering.vert */; };
+		36EBC3E67AC69638CBB1E92A /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCFF1188FD8E24D20A865 /* Transformation.cpp */; };
 		36EBC430F03EA7C1D363635D /* CubeEdgesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCF756FD25737CF6FE3E3 /* CubeEdgesRendering.geom */; };
 		36EBC4418EA8595E5C169DA2 /* LightProbeEnvironmentCapture.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC9C910442121ED3564E9 /* LightProbeEnvironmentCapture.vert */; };
 		36EBC4492508439FD799371A /* ProbeOcclusionRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC1057A36C314A16F7A85 /* ProbeOcclusionRendering.geom */; };
@@ -49,6 +48,7 @@
 		36EBC4A6715DEF92FF868F98 /* GLCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCAA8D5BF6B3796E8110D /* GLCubemapSampler.cpp */; };
 		36EBC4AC7DBE4E264F993E90 /* GLSLShadowMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCA2D878DECF12D168574 /* GLSLShadowMap.cpp */; };
 		36EBC4EAF3CDCB78387CD4F6 /* GridLightProbesUpdate.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCE409B23C902DF355F5B /* GridLightProbesUpdate.vert */; };
+		36EBC50F90E4B193486FB1C3 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC6F92854DDD5837A5136 /* Camera.cpp */; };
 		36EBC55C99787FA3581C65B8 /* GLSLSkybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC4099857C777F95B2021 /* GLSLSkybox.cpp */; };
 		36EBC5C8FB4B83D59246B738 /* FullScreenQuad.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC982048912AAE41BC1E0 /* FullScreenQuad.frag */; };
 		36EBC5E5BDD1D23744642470 /* CubemapRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC8E70DBB8E4BE69748F6 /* CubemapRendering.geom */; };
@@ -64,12 +64,15 @@
 		36EBC6AAD21BFE152EAD3087 /* SurfelLighting.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCFDE708C561A101B2B08 /* SurfelLighting.frag */; };
 		36EBC6E41F6D5ACA504CA7D2 /* GLSLProbeOcclusionRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC3A3B48D2BF046DEFDF6 /* GLSLProbeOcclusionRendering.cpp */; };
 		36EBC6F69267E01285C6BFDD /* GLSLLuminanceRange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC2D947D8027638DE1362 /* GLSLLuminanceRange.cpp */; };
+		36EBC7183211E87A3E589C5D /* Cameraman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCE251D4848F4C37F3D8F /* Cameraman.cpp */; };
 		36EBC71D4A5A5D37BDD08699 /* GaussianBlur.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC3927703D13FC15BD5F9 /* GaussianBlur.frag */; };
 		36EBC740B51E889C31025228 /* BRDFIntegration.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC37EAAD8239E9220FD87 /* BRDFIntegration.frag */; };
 		36EBC740B6D527BC3A8B897D /* GLSLHiZBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0446C31BCDA994DED66 /* GLSLHiZBuffer.cpp */; };
 		36EBC762679D425D2C7CDB44 /* IndirectLightEvaluation.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC956BD0A70929E76B24C /* IndirectLightEvaluation.frag */; };
 		36EBC77F82EA12CC241110BA /* GBuffer.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCC72425AB2A0C090CA41 /* GBuffer.glsl */; };
 		36EBC7C42704A9C0834BB255 /* DirectLightEvaluation.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCB78D4385335E46B75B7 /* DirectLightEvaluation.frag */; };
+		36EBC805B2ECCEC91114C7D1 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCBB632926E7D9713FF65 /* DiffuseLightProbe.cpp */; };
+		36EBC809A1653B0CFEFA1CF5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCD695DA90A151531B88E /* MeshInstance.cpp */; };
 		36EBC821A08138F5FC298E5B /* TriangleRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC253A1ADD634C05DD218 /* TriangleRendering.geom */; };
 		36EBC8276861D77A03C63ACA /* GLNamedObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCA70D56F8CB0473AB195 /* GLNamedObject.cpp */; };
 		36EBC82FA1524C3C2D59E780 /* GLSLTriangleRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC63A57423F7595FBF09D /* GLSLTriangleRendering.cpp */; };
@@ -83,6 +86,7 @@
 		36EBC8E3E61236F7DD68716F /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0024397398B22BEAD21 /* GLVertexAttribute.cpp */; };
 		36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF4762755EEB818D8CF9 /* crc.cpp */; };
 		36EBC8F2CFCF0AD144733B71 /* DepthPrepass.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCA0110C9F7785232F51B /* DepthPrepass.vert */; };
+		36EBC91168689FEDCD18530D /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCE3DB0800C24503E266E /* Light.cpp */; };
 		36EBC931FFC610AB5BAF6D00 /* CookTorrance.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCFE5E0E43E858D872FE6 /* CookTorrance.glsl */; };
 		36EBC946C7DB2888E2D58166 /* GLSLEquirectangularMapConversion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC5B6A45EE87C9C40C424 /* GLSLEquirectangularMapConversion.cpp */; };
 		36EBC94B9C62E9C683002E24 /* GLViewport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC853105CEB57AB73EBD1 /* GLViewport.cpp */; };
@@ -93,19 +97,26 @@
 		36EBC9C4B06B88BBA5ACA5B3 /* GridLightProbeRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCA9366F063616853FB86 /* GridLightProbeRendering.frag */; };
 		36EBC9DCFDDADF93A40EDB4E /* GLSLGaussianBlur.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC7F64232C3191B5333EF /* GLSLGaussianBlur.cpp */; };
 		36EBC9FE07FFF85C1D0BD43D /* LuminanceHistogram.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCD12D0CF5C51F392CC92 /* LuminanceHistogram.frag */; };
+		36EBCA1883C302768E384687 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC962A37FEE377D3DF911 /* DirectionalLight.cpp */; };
 		36EBCA48D37C8775D5B36FE7 /* SSRConeTracing.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC16B3DC51DC115D5563E /* SSRConeTracing.frag */; };
 		36EBCA4A4EE7F9E81EEB7378 /* GridLightProbesUpdate.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCF981BB5272B3E2D6071 /* GridLightProbesUpdate.geom */; };
 		36EBCA5FB6E970AD3FF73882 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC2FDE3FEC0B86ABA9B6F /* GLShader.cpp */; };
+		36EBCA6A6BB05E35CB7880AD /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCEDE720E57130BDCB735 /* Surfel.cpp */; };
 		36EBCA8167BE57CAC44D772A /* GLSLSurfelRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC49119339F8DC7D6D27B /* GLSLSurfelRendering.cpp */; };
+		36EBCAA5112F7C5E45A953CC /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC3554B5C51D09BD60994 /* Skybox.cpp */; };
 		36EBCAAB58E8C209270028BB /* Constants.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCBBE7DEE969A7F94BEF7 /* Constants.glsl */; };
 		36EBCAACB1401143131AB9B6 /* GLSLConeTracing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCBABCFED88D19ED6741D /* GLSLConeTracing.cpp */; };
 		36EBCAB5047080E7DE031149 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC6662F7AE2D39E11B1EE /* GLProgram.cpp */; };
+		36EBCABB2CFA97B5DB91D8C6 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC90F32C821C47A1AD08C /* Material.cpp */; };
 		36EBCACEF05A5DB5CDDD5665 /* ShadowMap.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC3A2FEC918474D2B4EAB /* ShadowMap.frag */; };
 		36EBCAD8FEE8BF221AC06B42 /* DepthPrepass.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC63A132B1A56A3DA6D77 /* DepthPrepass.frag */; };
+		36EBCADD3659F269B1E830C9 /* EmissiveMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCEF4ABF4683B60A51DE9 /* EmissiveMaterial.cpp */; };
 		36EBCAE1FE42E322FB768A2A /* Exposure.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC3DCFAA4CDB9C8BC04B7 /* Exposure.frag */; };
 		36EBCB2512D61BE3D0D54DC4 /* SurfelRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC87CDC9AE46E12A92398 /* SurfelRendering.frag */; };
 		36EBCB3B114E8D1F44F15E00 /* GLCubemapFace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC7795A8CE658D4A99833 /* GLCubemapFace.cpp */; };
 		36EBCB3E638BFF706123299B /* GLSLIndirectLightEvaluation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC647A0CA19F7ABD4CAFF /* GLSLIndirectLightEvaluation.cpp */; };
+		36EBCB457A336FEAFEF4422B /* SceneInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC216E72345EF5A1EA24E /* SceneInteractor.cpp */; };
+		36EBCB5A7E446F128279F1EA /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCCC31DE4C93192A77916 /* SurfelCluster.cpp */; };
 		36EBCB60589CDDF484C29B5E /* GLHDRTexture3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCDC09344691B5139D21B /* GLHDRTexture3D.cpp */; };
 		36EBCB65A9B2E91F7DEB87BA /* GBuffer.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC18BF40F13F5A6C7C420 /* GBuffer.vert */; };
 		36EBCB666E0E8D2CAC2DFFB4 /* GLSLExposure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCE03E6BB974370E5E82F /* GLSLExposure.cpp */; };
@@ -114,6 +125,7 @@
 		36EBCBAA5799408DAD579426 /* GLSLOmnidirectionalPenumbra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC6F86A0EE57BE08FB202 /* GLSLOmnidirectionalPenumbra.cpp */; };
 		36EBCBD41E83DFD618528626 /* GLSLSMAAEdgeDetection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC8ECADC521D2B1A9398E /* GLSLSMAAEdgeDetection.cpp */; };
 		36EBCBE1DB7F839ED6E3E18B /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCAE04D315D5B1BB39C25 /* GLHDRCubemapSampler.cpp */; };
+		36EBCC10CB24AAAD3BDD8C7B /* CookTorranceMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCB1D83FE7E4235118157 /* CookTorranceMaterial.cpp */; };
 		36EBCC1974D4BC853072145B /* Skybox.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCF5A86BB7D7B35EF15A9 /* Skybox.vert */; };
 		36EBCC1D9C83E5A7DE7E0BED /* Packing.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC291810B31BE25D0C876 /* Packing.glsl */; };
 		36EBCC1E3202537F2B14E65C /* CookTorrance.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC53B2D5666A9393DA111 /* CookTorrance.vert */; };
@@ -123,7 +135,10 @@
 		36EBCCC34BCF9B42264CFE27 /* GLSLGenericGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCEF349C4F92A2CF12294 /* GLSLGenericGeometry.cpp */; };
 		36EBCCC7C78A7C7BA17072EB /* GenericGeometry.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC4DE6C4EA6616AFB7A47 /* GenericGeometry.frag */; };
 		36EBCCDC27253737BDB9DE5C /* GLSLScreenSpaceReflections.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC99F3C66D49D1F5955AF /* GLSLScreenSpaceReflections.cpp */; };
+		36EBCCDDBE288116B83B7D05 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCB6C91C5C5197ADFEDF6 /* PointLight.cpp */; };
 		36EBCCF529E6F600AC9A8814 /* GLSLRadianceConvolution.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCA40F11B96421A6B64C4 /* GLSLRadianceConvolution.cpp */; };
+		36EBCD316857ACABB174BA41 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC052B6030C5165ADC3FD /* SubMesh.cpp */; };
+		36EBCD35DA8ACFA6FD73D3B2 /* MeshTriangleRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF8AF1C1857722CB3C23 /* MeshTriangleRef.cpp */; };
 		36EBCD3A224BA6BFC253876B /* DiffuseLightProbes.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC285781307FC4FA45C27 /* DiffuseLightProbes.glsl */; };
 		36EBCD44CBF44F3781E15A76 /* GBuffer.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCDE7348D3CD3B2CDB40A /* GBuffer.frag */; };
 		36EBCD7CFED81ADC740B9B33 /* GLUniform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0F9BC47AC3CB51DAE11 /* GLUniform.cpp */; };
@@ -156,17 +171,14 @@
 		AC1F6BDA20E2321200E81EB0 /* BloomEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC1F6BD820E2321200E81EB0 /* BloomEffect.tpp */; };
 		AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC2E383D209B0165002F754F /* DiffuseLightProbeGenerator.cpp */; };
 		AC3275B420D24FA800899697 /* GaussianFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC3275B220D24FA800899697 /* GaussianFunction.cpp */; };
-		AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */; };
 		AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC38E982213D47B500F6F2B1 /* DirectLightAccumulator.cpp */; };
 		AC40397E20E38A680079112E /* ToneMappingEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC40397C20E38A680079112E /* ToneMappingEffect.tpp */; };
 		AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC58071D213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp */; };
-		AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC62416B205657AD009B36DF /* SurfelCluster.cpp */; };
 		AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.tpp */; };
 		AC71D95720D26F9D001524BC /* GaussianBlurEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = AC71D95520D26F9D001524BC /* GaussianBlurEffect.tpp */; };
 		AC8F7DFC203AF676004CD033 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = AC8F7DFB203AF676004CD033 /* sphere.obj */; };
 		AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9B6BBE1FED3874006CC12E /* SurfelGenerator.cpp */; };
 		AC9FB7D41FF0F76000FE28DD /* LowDiscrepancySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */; };
-		ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */; };
 		ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACF8B7792012462200BCA351 /* Sphere.cpp */; };
 		ACFF6DAA21369F0300D21C48 /* ShadowMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFF6DA821369F0300D21C48 /* ShadowMapper.cpp */; };
 		ACFFD8D81FC340F200F747CC /* SphericalHarmonics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */; };
@@ -305,17 +317,6 @@
 		CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8701F8F8EBD00AD9027 /* Parallelogram3D.cpp */; };
 		CE70FA251F8F8EF600AD9027 /* Size2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8711F8F8EBD00AD9027 /* Size2D.cpp */; };
 		CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8761F8F8EBD00AD9027 /* Scene.cpp */; };
-		CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */; };
-		CE70FA281F8F8EF600AD9027 /* Cameraman.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */; };
-		CE70FA2A1F8F8EF600AD9027 /* CookTorranceMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */; };
-		CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8821F8F8EBD00AD9027 /* Camera.cpp */; };
-		CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */; };
-		CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */; };
-		CE70FA2E1F8F8EF600AD9027 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */; };
-		CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8881F8F8EBD00AD9027 /* Light.cpp */; };
-		CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */; };
-		CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */; };
-		CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */; };
 		CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8F31F8F8EBD00AD9027 /* glm.cpp */; };
 		CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */; };
 		CE70FA6E1F8F8F7400AD9027 /* blank_white.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CE70F8131F8F8EBD00AD9027 /* blank_white.jpg */; };
@@ -350,7 +351,6 @@
 		CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE73110F2098C8E2002A8DE7 /* MaxRectsBinPack.cpp */; };
 		CE7311132098C8E2002A8DE7 /* GuillotineBinPack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */; };
 		CE7311162098C920002A8DE7 /* Rect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE7311152098C920002A8DE7 /* Rect.cpp */; };
-		CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */; };
 		CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE891BB9205D1EA100D2B09D /* EmbreeRayTracer.cpp */; };
 		CE81CB161FA24F6200535020 /* blank_black.png in Resources */ = {isa = PBXBuildFile; fileRef = CE81CB151FA24ED000535020 /* blank_black.png */; };
 		CE82A9F11FA2212F00F980A2 /* DemoScene1.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE82A9F01FA2212F00F980A2 /* DemoScene1.mm */; };
@@ -404,7 +404,6 @@
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.tpp */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
 		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
-		CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */; };
 		CEFB7A30205578E400364550 /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2E205578E400364550 /* Plane.cpp */; };
 /* End PBXBuildFile section */
 
@@ -414,26 +413,32 @@
 		36EBC00974A0DC02C35E438A /* GLSLExposure.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLExposure.hpp; sourceTree = "<group>"; };
 		36EBC00E929EF046BD11D79E /* Skybox.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Skybox.frag; sourceTree = "<group>"; };
 		36EBC0380E7BCD11849EB6AB /* GLSLSMAABlendingWeightCalculation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAABlendingWeightCalculation.hpp; sourceTree = "<group>"; };
+		36EBC0385525474DF66C1207 /* DirectionalLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
 		36EBC0446C31BCDA994DED66 /* GLSLHiZBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLHiZBuffer.cpp; sourceTree = "<group>"; };
 		36EBC0470C9E124A24E6EFE5 /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
+		36EBC052B6030C5165ADC3FD /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
 		36EBC060DE6A6220A721923B /* ProbeOcclusionRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.vert; sourceTree = "<group>"; };
+		36EBC0AB9199125D8A600A5D /* Skybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
 		36EBC0F7D57946E628C8B128 /* Luminance.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Luminance.frag; sourceTree = "<group>"; };
 		36EBC0F9BC47AC3CB51DAE11 /* GLUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniform.cpp; sourceTree = "<group>"; };
 		36EBC1057A36C314A16F7A85 /* ProbeOcclusionRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.geom; sourceTree = "<group>"; };
 		36EBC1233C06584B540E9E78 /* SMAADefines.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = SMAADefines.glsl; sourceTree = "<group>"; };
 		36EBC124B11EFF965EBDF32D /* GLSLSMAANeighborhoodBlending.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAANeighborhoodBlending.hpp; sourceTree = "<group>"; };
-		36EBC12E541DB7E3577A25ED /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		36EBC12B5E0D7ECCBA1E7A6A /* UBOCompatible.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UBOCompatible.hpp; sourceTree = "<group>"; };
+		36EBC1401F8BFEE8D2184B4B /* SubMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SubMesh.hpp; sourceTree = "<group>"; };
 		36EBC148DC927D9C77AEFB2C /* GLSLLuminanceHistogram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceHistogram.hpp; sourceTree = "<group>"; };
-		36EBC14A683FCE09FD4647DF /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
+		36EBC1508605B44BD630F2F7 /* PointLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PointLight.hpp; sourceTree = "<group>"; };
+		36EBC15B2CCE844B6D3582D1 /* DiffuseLightProbe.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbe.hpp; sourceTree = "<group>"; };
 		36EBC16B3DC51DC115D5563E /* SSRConeTracing.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SSRConeTracing.frag; sourceTree = "<group>"; };
 		36EBC17EE4BDB2EF8DF09E40 /* GLSLBloom.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLBloom.hpp; sourceTree = "<group>"; };
 		36EBC18959E4314B4F74F980 /* GLSLGridLightProbesUpdate.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGridLightProbesUpdate.hpp; sourceTree = "<group>"; };
 		36EBC18BF40F13F5A6C7C420 /* GBuffer.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GBuffer.vert; sourceTree = "<group>"; };
 		36EBC1A70A3A0EEB594E7B0B /* GLUniformBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLUniformBuffer.hpp; sourceTree = "<group>"; };
 		36EBC1DD00876C2C35BDF912 /* GLTextureUnitManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureUnitManager.cpp; sourceTree = "<group>"; };
-		36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmissiveMaterial.cpp; sourceTree = "<group>"; };
 		36EBC1ECBF0802FF27A4693C /* GLDepthRenderbuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLDepthRenderbuffer.hpp; sourceTree = "<group>"; };
 		36EBC1F584B84EC530DE73D2 /* LightProbeLinksRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.geom; sourceTree = "<group>"; };
+		36EBC202AABC771597EA3391 /* CookTorranceMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CookTorranceMaterial.hpp; sourceTree = "<group>"; };
+		36EBC216E72345EF5A1EA24E /* SceneInteractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInteractor.cpp; sourceTree = "<group>"; };
 		36EBC2452D76FF12E4EF796D /* GLCubemapFace.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapFace.hpp; sourceTree = "<group>"; };
 		36EBC253A1ADD634C05DD218 /* TriangleRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = TriangleRendering.geom; sourceTree = "<group>"; };
 		36EBC262CF9717416CC3684E /* GLRenderbuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLRenderbuffer.hpp; sourceTree = "<group>"; };
@@ -450,11 +455,10 @@
 		36EBC30F1A8CF02B7FBE2734 /* LightProbeEnvironmentCapture.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.geom; sourceTree = "<group>"; };
 		36EBC321449BC8AA721BD832 /* GLLDRTexture3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLLDRTexture3D.cpp; sourceTree = "<group>"; };
 		36EBC3357F408AF6EA21DAE4 /* GLTextureFormat.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFormat.hpp; sourceTree = "<group>"; };
-		36EBC338596B49FE342BCEB9 /* GLElementArrayBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLElementArrayBuffer.cpp; sourceTree = "<group>"; };
-		36EBC34434EB045E5FA36E76 /* MaterialType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MaterialType.hpp; sourceTree = "<group>"; };
 		36EBC34743C3B7FA41C55721 /* GLSLFullScreenQuad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLFullScreenQuad.cpp; sourceTree = "<group>"; };
 		36EBC348C374DCD5DD10599B /* GLSLScreenSpaceReflections.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLScreenSpaceReflections.hpp; sourceTree = "<group>"; };
 		36EBC35452CC177D70403412 /* CubeSidesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeSidesRendering.geom; sourceTree = "<group>"; };
+		36EBC3554B5C51D09BD60994 /* Skybox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
 		36EBC37EAAD8239E9220FD87 /* BRDFIntegration.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = BRDFIntegration.frag; sourceTree = "<group>"; };
 		36EBC37F82059476BC2385BB /* GLSLGBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGBuffer.cpp; sourceTree = "<group>"; };
 		36EBC3927703D13FC15BD5F9 /* GaussianBlur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GaussianBlur.frag; sourceTree = "<group>"; };
@@ -470,6 +474,7 @@
 		36EBC3BAC32205EF4852EA44 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		36EBC3C0BAF2340F2B61DDB0 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		36EBC3CEB10D503615867CCF /* GLSLCubeRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLCubeRendering.hpp; sourceTree = "<group>"; };
+		36EBC3D1D56D9FD5DC980710 /* CameraUBOContent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraUBOContent.hpp; sourceTree = "<group>"; };
 		36EBC3DCFAA4CDB9C8BC04B7 /* Exposure.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Exposure.frag; sourceTree = "<group>"; };
 		36EBC402255572C5DE2E1C19 /* CubemapRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubemapRendering.vert; sourceTree = "<group>"; };
 		36EBC407F41CD88EFFBA7550 /* GLHDRTexture3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTexture3D.hpp; sourceTree = "<group>"; };
@@ -484,6 +489,7 @@
 		36EBC4408144D15EDCEAFB5C /* GLSLProbeOcclusionRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLProbeOcclusionRendering.hpp; sourceTree = "<group>"; };
 		36EBC44242C2DFE537460D52 /* DemoScene3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DemoScene3.mm; sourceTree = "<group>"; };
 		36EBC44DB78D252F60083391 /* GLSLDirectLightEvaluation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDirectLightEvaluation.cpp; sourceTree = "<group>"; };
+		36EBC473BE92D66B74E8E271 /* Surfel.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		36EBC479177388372FA7B36C /* GLTextureFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFactory.hpp; sourceTree = "<group>"; };
 		36EBC486D773397DFC66B481 /* GLViewport.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLViewport.hpp; sourceTree = "<group>"; };
 		36EBC49119339F8DC7D6D27B /* GLSLSurfelRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelRendering.cpp; sourceTree = "<group>"; };
@@ -491,7 +497,9 @@
 		36EBC4A107E6D3A04E65DE32 /* GI_corridor.obj */ = {isa = PBXFileReference; lastKnownFileType = file.obj; path = GI_corridor.obj; sourceTree = "<group>"; };
 		36EBC4DE6C4EA6616AFB7A47 /* GenericGeometry.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GenericGeometry.frag; sourceTree = "<group>"; };
 		36EBC52DA239DBDDAE47C0FC /* GLLDRTexture3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLLDRTexture3D.hpp; sourceTree = "<group>"; };
+		36EBC532D8FC2B4CB9C23386 /* MeshTriangleRef.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MeshTriangleRef.hpp; sourceTree = "<group>"; };
 		36EBC53B2D5666A9393DA111 /* CookTorrance.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CookTorrance.vert; sourceTree = "<group>"; };
+		36EBC54DCFCA9D05EF449D21 /* Cameraman.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Cameraman.hpp; sourceTree = "<group>"; };
 		36EBC555C3E0D52C82867897 /* GLTexture2DArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DArray.hpp; sourceTree = "<group>"; };
 		36EBC5597C2966E64BD4E5D2 /* GenericGeometry.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GenericGeometry.vert; sourceTree = "<group>"; };
 		36EBC569EEFFB62301FBCA0D /* GLVertexArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArray.hpp; sourceTree = "<group>"; };
@@ -516,6 +524,8 @@
 		36EBC6BED7704D63B2ABDD63 /* SurfelRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.geom; sourceTree = "<group>"; };
 		36EBC6DD41FDAB25FAD1001D /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
 		36EBC6F86A0EE57BE08FB202 /* GLSLOmnidirectionalPenumbra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLOmnidirectionalPenumbra.cpp; sourceTree = "<group>"; };
+		36EBC6F92854DDD5837A5136 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		36EBC7075FAC8A9607082771 /* SurfelCluster.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		36EBC707FF295439F930D5CF /* HiZBuffer.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = HiZBuffer.frag; sourceTree = "<group>"; };
 		36EBC713D67D46745C8233DE /* EquirectangularMapConversion.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = EquirectangularMapConversion.frag; sourceTree = "<group>"; };
 		36EBC71CE62541D6E5655502 /* CubeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeRendering.vert; sourceTree = "<group>"; };
@@ -538,26 +548,32 @@
 		36EBC87CDC9AE46E12A92398 /* SurfelRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.frag; sourceTree = "<group>"; };
 		36EBC890A7259C24DB0BD4E8 /* GLUniformBlock.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLUniformBlock.hpp; sourceTree = "<group>"; };
 		36EBC8AA248F6A19D12D62ED /* GLSLGridLightProbeRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGridLightProbeRendering.hpp; sourceTree = "<group>"; };
+		36EBC8DB13CF6D8B7EBD6127 /* Material.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Material.hpp; sourceTree = "<group>"; };
 		36EBC8E70DBB8E4BE69748F6 /* CubemapRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubemapRendering.geom; sourceTree = "<group>"; };
 		36EBC8ECADC521D2B1A9398E /* GLSLSMAAEdgeDetection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAAEdgeDetection.cpp; sourceTree = "<group>"; };
 		36EBC8F45901989D56DE465C /* GLNamedObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLNamedObject.hpp; sourceTree = "<group>"; };
+		36EBC90F32C821C47A1AD08C /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		36EBC912F4EEAB05ECCA3AFF /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		36EBC919FECB4BB0BB679F16 /* GLSLLuminanceRange.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceRange.hpp; sourceTree = "<group>"; };
+		36EBC9384534769737314C45 /* SceneInteractor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneInteractor.hpp; sourceTree = "<group>"; };
 		36EBC956BD0A70929E76B24C /* IndirectLightEvaluation.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = IndirectLightEvaluation.frag; sourceTree = "<group>"; };
+		36EBC962A37FEE377D3DF911 /* DirectionalLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
 		36EBC969451F86FA7D3EED78 /* GLTexture2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2D.hpp; sourceTree = "<group>"; };
 		36EBC982048912AAE41BC1E0 /* FullScreenQuad.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullScreenQuad.frag; sourceTree = "<group>"; };
 		36EBC99F3C66D49D1F5955AF /* GLSLScreenSpaceReflections.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLScreenSpaceReflections.cpp; sourceTree = "<group>"; };
 		36EBC9B1C3FBF2E128CCA5B7 /* GLSLEquirectangularMapConversion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLEquirectangularMapConversion.hpp; sourceTree = "<group>"; };
-		36EBC9BB3B90960654F51513 /* EmissiveMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EmissiveMaterial.hpp; sourceTree = "<group>"; };
 		36EBC9C910442121ED3564E9 /* LightProbeEnvironmentCapture.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeEnvironmentCapture.vert; sourceTree = "<group>"; };
 		36EBC9EC535337EE17F7A8DB /* GLSLBloom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBloom.cpp; sourceTree = "<group>"; };
 		36EBC9F809F3240D19F615E9 /* GLTexture2DSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DSampler.hpp; sourceTree = "<group>"; };
+		36EBC9F9C88F95CE806E11DF /* MeshInstance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
 		36EBCA0110C9F7785232F51B /* DepthPrepass.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DepthPrepass.vert; sourceTree = "<group>"; };
 		36EBCA1FE0893F849031ACE4 /* Lights.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Lights.glsl; sourceTree = "<group>"; };
 		36EBCA2D878DECF12D168574 /* GLSLShadowMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLShadowMap.cpp; sourceTree = "<group>"; };
+		36EBCA316D37FA34BE399E18 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
 		36EBCA36721AC297D34CBF1A /* ShadowMap.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShadowMap.vert; sourceTree = "<group>"; };
 		36EBCA3E82615A07748EE071 /* CookTorranceMaterialOverridesUBO.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = CookTorranceMaterialOverridesUBO.glsl; sourceTree = "<group>"; };
 		36EBCA40F11B96421A6B64C4 /* GLSLRadianceConvolution.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLRadianceConvolution.cpp; sourceTree = "<group>"; };
+		36EBCA6C69A720BE707BB4E8 /* SurfelClusterProjection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelClusterProjection.hpp; sourceTree = "<group>"; };
 		36EBCA70D56F8CB0473AB195 /* GLNamedObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLNamedObject.cpp; sourceTree = "<group>"; };
 		36EBCA79611419C997D0561F /* SMAANeighborhoodBlending.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAANeighborhoodBlending.vert; sourceTree = "<group>"; };
 		36EBCA805E35265121615213 /* GLSLHiZBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLHiZBuffer.hpp; sourceTree = "<group>"; };
@@ -565,6 +581,8 @@
 		36EBCAA72767DEE4F107B589 /* GLSLLuminance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLuminance.cpp; sourceTree = "<group>"; };
 		36EBCAA8D5BF6B3796E8110D /* GLCubemapSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLCubemapSampler.cpp; sourceTree = "<group>"; };
 		36EBCACFC229BDDB40A6A76B /* GLSLLightProbeEnvironmentCapture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLightProbeEnvironmentCapture.hpp; sourceTree = "<group>"; };
+		36EBCAD5EBB9C96E46E50949 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		36EBCADBE12278441226DD45 /* EmissiveMaterial.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EmissiveMaterial.hpp; sourceTree = "<group>"; };
 		36EBCAE04D315D5B1BB39C25 /* GLHDRCubemapSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRCubemapSampler.cpp; sourceTree = "<group>"; };
 		36EBCAE21B94F6464CBECB2C /* GLTextureDataInterpreter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureDataInterpreter.hpp; sourceTree = "<group>"; };
 		36EBCAEE42DC3F302D8DF3E9 /* GLSLGenericGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGenericGeometry.hpp; sourceTree = "<group>"; };
@@ -572,13 +590,16 @@
 		36EBCB106F0C203B22C9E0CF /* GLSLToneMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLToneMapping.hpp; sourceTree = "<group>"; };
 		36EBCB127BCD3A178B934B03 /* DirectionalPenumbra.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectionalPenumbra.frag; sourceTree = "<group>"; };
 		36EBCB15FCF62215B89CC91E /* ShadowMap.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShadowMap.geom; sourceTree = "<group>"; };
+		36EBCB1D83FE7E4235118157 /* CookTorranceMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CookTorranceMaterial.cpp; sourceTree = "<group>"; };
 		36EBCB2292F7B656D19D57DB /* SSR.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SSR.frag; sourceTree = "<group>"; };
+		36EBCB6C91C5C5197ADFEDF6 /* PointLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
 		36EBCB78A535AFA5B193FE03 /* GLSLSurfelClusterAveraging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSurfelClusterAveraging.hpp; sourceTree = "<group>"; };
 		36EBCB78D4385335E46B75B7 /* DirectLightEvaluation.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DirectLightEvaluation.frag; sourceTree = "<group>"; };
 		36EBCB843A22334E32722178 /* Visitor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Visitor.hpp; sourceTree = "<group>"; };
 		36EBCB8465F24B8552702A71 /* GLSLDepthPrepass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLDepthPrepass.cpp; sourceTree = "<group>"; };
 		36EBCB8B4F3705FD27EE687E /* GLSLConeTracing.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLConeTracing.hpp; sourceTree = "<group>"; };
 		36EBCBABCFED88D19ED6741D /* GLSLConeTracing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLConeTracing.cpp; sourceTree = "<group>"; };
+		36EBCBB632926E7D9713FF65 /* DiffuseLightProbe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbe.cpp; sourceTree = "<group>"; };
 		36EBCBBE7DEE969A7F94BEF7 /* Constants.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Constants.glsl; sourceTree = "<group>"; };
 		36EBCBD45875C866D89CA0AA /* GLSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSampler.hpp; sourceTree = "<group>"; };
 		36EBCC6E3368AC984D3AD9C6 /* SphericalHarmonics.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = SphericalHarmonics.glsl; sourceTree = "<group>"; };
@@ -587,34 +608,45 @@
 		36EBCC9F5E3C885AA936D0F3 /* GLSLGBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGBuffer.hpp; sourceTree = "<group>"; };
 		36EBCCA75331B5B7ED420145 /* GLShader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLShader.hpp; sourceTree = "<group>"; };
 		36EBCCAE3CB125FB77143F8D /* GLTextureCubemap.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureCubemap.hpp; sourceTree = "<group>"; };
+		36EBCCC31DE4C93192A77916 /* SurfelCluster.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
 		36EBCCEAD9A09ECDE51DB453 /* GLSLSkybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSkybox.hpp; sourceTree = "<group>"; };
 		36EBCCF06A7173DC393E4517 /* ColorSpace.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = ColorSpace.glsl; sourceTree = "<group>"; };
+		36EBCCF4C37C5910DA4B4B1E /* Light.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
+		36EBCD0A715C7DCB80991786 /* MaterialType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MaterialType.hpp; sourceTree = "<group>"; };
 		36EBCD12D0CF5C51F392CC92 /* LuminanceHistogram.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LuminanceHistogram.frag; sourceTree = "<group>"; };
 		36EBCD17EE6A155023C3E745 /* GLSLSMAAEdgeDetection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAAEdgeDetection.hpp; sourceTree = "<group>"; };
 		36EBCD2EFA402CC399D4349D /* OmnidirectionalPenumbra.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = OmnidirectionalPenumbra.frag; sourceTree = "<group>"; };
 		36EBCD357D3C4205A7755B2B /* night_sky.hdr */ = {isa = PBXFileReference; lastKnownFileType = file.hdr; path = night_sky.hdr; sourceTree = "<group>"; };
 		36EBCD3584A85D483DA2777F /* GLSLSMAANeighborhoodBlending.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAANeighborhoodBlending.cpp; sourceTree = "<group>"; };
+		36EBCD695DA90A151531B88E /* MeshInstance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
+		36EBCD74735A9DC8200FA40A /* FrustumCascades.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = FrustumCascades.hpp; sourceTree = "<group>"; };
 		36EBCD93EEF6AABE53A2444F /* GLCubemapSampler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLCubemapSampler.hpp; sourceTree = "<group>"; };
 		36EBCD97FA71DD19DD0C0EFD /* GLFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFramebuffer.cpp; sourceTree = "<group>"; };
 		36EBCDB09A3358715B78BEF6 /* GLBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLBuffer.hpp; sourceTree = "<group>"; };
 		36EBCDBBA1499D795BEC92F4 /* Camera.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Camera.glsl; sourceTree = "<group>"; };
 		36EBCDC09344691B5139D21B /* GLHDRTexture3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLHDRTexture3D.cpp; sourceTree = "<group>"; };
+		36EBCDCC81538028B8146FF5 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		36EBCDE7348D3CD3B2CDB40A /* GBuffer.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GBuffer.frag; sourceTree = "<group>"; };
 		36EBCDECD6F019FE8689350C /* RadianceConvolution.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = RadianceConvolution.frag; sourceTree = "<group>"; };
 		36EBCDF071D2980A7028102F /* GLTexture3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTexture3D.hpp; sourceTree = "<group>"; };
 		36EBCDFCE60F8ADEAC811565 /* GLSLLuminanceHistogram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLLuminanceHistogram.cpp; sourceTree = "<group>"; };
 		36EBCE03E6BB974370E5E82F /* GLSLExposure.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLExposure.cpp; sourceTree = "<group>"; };
+		36EBCE04816232B06E4CFB6C /* Transformation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Transformation.hpp; sourceTree = "<group>"; };
 		36EBCE079E0D7E14DECEFCE3 /* GridLightProbesUpdate.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbesUpdate.frag; sourceTree = "<group>"; };
+		36EBCE251D4848F4C37F3D8F /* Cameraman.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cameraman.cpp; sourceTree = "<group>"; };
 		36EBCE3D279701D666D4E84A /* Sampling.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Sampling.hpp; sourceTree = "<group>"; };
+		36EBCE3DB0800C24503E266E /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
 		36EBCE409B23C902DF355F5B /* GridLightProbesUpdate.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbesUpdate.vert; sourceTree = "<group>"; };
 		36EBCE43063FEDEAE7526C39 /* GLSampler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSampler.cpp; sourceTree = "<group>"; };
 		36EBCE5B04EBE141D15BA130 /* CameraUBO.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = CameraUBO.glsl; sourceTree = "<group>"; };
 		36EBCE8EDB917F5C3255CC3D /* GLSLGaussianBlur.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGaussianBlur.hpp; sourceTree = "<group>"; };
 		36EBCEB08CD4BB614B4EA958 /* GLSLTriangleRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLTriangleRendering.hpp; sourceTree = "<group>"; };
 		36EBCEB3A27B221462CCE592 /* GLSLToneMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLToneMapping.cpp; sourceTree = "<group>"; };
+		36EBCEDE720E57130BDCB735 /* Surfel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		36EBCEE4BA7CC95337E37B2B /* GLTextureFetcher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFetcher.hpp; sourceTree = "<group>"; };
 		36EBCEF349C4F92A2CF12294 /* GLSLGenericGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGenericGeometry.cpp; sourceTree = "<group>"; };
 		36EBCEF473667F5EE5EDF2F9 /* SMAANeighborhoodBlending.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAANeighborhoodBlending.frag; sourceTree = "<group>"; };
+		36EBCEF4ABF4683B60A51DE9 /* EmissiveMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmissiveMaterial.cpp; sourceTree = "<group>"; };
 		36EBCF198CB1AD1B294E61C7 /* SMAAEdgeDetection.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SMAAEdgeDetection.vert; sourceTree = "<group>"; };
 		36EBCF21527E8E9EA0D7D76C /* GLSLIndirectLightEvaluation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLIndirectLightEvaluation.hpp; sourceTree = "<group>"; };
 		36EBCF2C841253B1CC86C5E0 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
@@ -627,6 +659,7 @@
 		36EBCF756FD25737CF6FE3E3 /* CubeEdgesRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubeEdgesRendering.geom; sourceTree = "<group>"; };
 		36EBCF8571F490048FBE5F45 /* GridLightProbeRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbeRendering.geom; sourceTree = "<group>"; };
 		36EBCF8A0B52A547F5A86437 /* GLSLCubeRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLCubeRendering.cpp; sourceTree = "<group>"; };
+		36EBCF8AF1C1857722CB3C23 /* MeshTriangleRef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshTriangleRef.cpp; sourceTree = "<group>"; };
 		36EBCF8F1ACBEE6C16C8A5C4 /* GLTexture3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture3D.cpp; sourceTree = "<group>"; };
 		36EBCF981BB5272B3E2D6071 /* GridLightProbesUpdate.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbesUpdate.geom; sourceTree = "<group>"; };
 		36EBCFD67E07A43F85E58B27 /* ProbeOcclusionRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.frag; sourceTree = "<group>"; };
@@ -634,6 +667,7 @@
 		36EBCFDE708C561A101B2B08 /* SurfelLighting.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelLighting.frag; sourceTree = "<group>"; };
 		36EBCFE5E0E43E858D872FE6 /* CookTorrance.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = CookTorrance.glsl; sourceTree = "<group>"; };
 		36EBCFEA30165DE902327522 /* Transforms.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Transforms.glsl; sourceTree = "<group>"; };
+		36EBCFF1188FD8E24D20A865 /* Transformation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Transformation.cpp; sourceTree = "<group>"; };
 		AC0636D42015E0560065DEB7 /* StringUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StringUtils.hpp; sourceTree = "<group>"; };
 		AC0ADF1E2080B5F50026FD48 /* libfbxsdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfbxsdk.a; sourceTree = "<group>"; };
 		AC0ADF222080B6050026FD48 /* fbxpropertydef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fbxpropertydef.h; sourceTree = "<group>"; };
@@ -873,9 +907,6 @@
 		AC2E383E209B0165002F754F /* DiffuseLightProbeGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbeGenerator.hpp; sourceTree = "<group>"; };
 		AC3275B220D24FA800899697 /* GaussianFunction.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GaussianFunction.cpp; sourceTree = "<group>"; };
 		AC3275B320D24FA800899697 /* GaussianFunction.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GaussianFunction.hpp; sourceTree = "<group>"; };
-		AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelClusterProjection.hpp; sourceTree = "<group>"; };
-		AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiffuseLightProbe.cpp; sourceTree = "<group>"; };
-		AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DiffuseLightProbe.hpp; sourceTree = "<group>"; };
 		AC38E982213D47B500F6F2B1 /* DirectLightAccumulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectLightAccumulator.cpp; sourceTree = "<group>"; };
 		AC38E983213D47B500F6F2B1 /* DirectLightAccumulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectLightAccumulator.hpp; sourceTree = "<group>"; };
 		AC40397C20E38A680079112E /* ToneMappingEffect.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = ToneMappingEffect.tpp; sourceTree = "<group>"; };
@@ -883,8 +914,6 @@
 		AC40402E2004B25E00715B1A /* TupleHash.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TupleHash.hpp; sourceTree = "<group>"; };
 		AC58071D213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IndirectLightAccumulator.cpp; sourceTree = "<group>"; };
 		AC58071E213FC2AC00A5BE75 /* IndirectLightAccumulator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IndirectLightAccumulator.hpp; sourceTree = "<group>"; };
-		AC62416B205657AD009B36DF /* SurfelCluster.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelCluster.cpp; sourceTree = "<group>"; };
-		AC62416C205657AD009B36DF /* SurfelCluster.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelCluster.hpp; sourceTree = "<group>"; };
 		AC68DD58212D4F8B00EDACD6 /* PostprocessEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PostprocessEffect.hpp; sourceTree = "<group>"; };
 		AC6A3E2920ECC096008238E9 /* SceneGBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneGBuffer.hpp; sourceTree = "<group>"; };
 		AC6D0C7020EB601D00A329E2 /* PostprocessTexturePool.tpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; path = PostprocessTexturePool.tpp; sourceTree = "<group>"; };
@@ -898,8 +927,6 @@
 		AC9B6BBF1FED3874006CC12E /* SurfelGenerator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SurfelGenerator.hpp; sourceTree = "<group>"; };
 		AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LowDiscrepancySequence.cpp; sourceTree = "<group>"; };
 		AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LowDiscrepancySequence.hpp; sourceTree = "<group>"; };
-		ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
-		ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Surfel.hpp; sourceTree = "<group>"; };
 		ACE0274020454DAA004A9A13 /* SparseOctree.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SparseOctree.hpp; sourceTree = "<group>"; };
 		ACE7A9751FFE56260023DB7C /* LogarithmicBin.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogarithmicBin.hpp; sourceTree = "<group>"; };
 		ACF8B7792012462200BCA351 /* Sphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sphere.cpp; sourceTree = "<group>"; };
@@ -1127,29 +1154,6 @@
 		CE70F8731F8F8EBD00AD9027 /* Ray3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ray3D.hpp; sourceTree = "<group>"; };
 		CE70F8741F8F8EBD00AD9027 /* AxisAlignedBox3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxisAlignedBox3D.hpp; sourceTree = "<group>"; };
 		CE70F8761F8F8EBD00AD9027 /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		CE70F8781F8F8EBD00AD9027 /* Cameraman.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Cameraman.hpp; sourceTree = "<group>"; };
-		CE70F8791F8F8EBD00AD9027 /* SceneInteractor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SceneInteractor.hpp; sourceTree = "<group>"; };
-		CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneInteractor.cpp; sourceTree = "<group>"; };
-		CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Cameraman.cpp; sourceTree = "<group>"; };
-		CE70F87E1F8F8EBD00AD9027 /* CookTorranceMaterial.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CookTorranceMaterial.hpp; sourceTree = "<group>"; };
-		CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CookTorranceMaterial.cpp; sourceTree = "<group>"; };
-		CE70F8821F8F8EBD00AD9027 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
-		CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
-		CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
-		CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionalLight.cpp; sourceTree = "<group>"; };
-		CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
-		CE70F8881F8F8EBD00AD9027 /* Light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
-		CE70F88A1F8F8EBD00AD9027 /* Light.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Light.hpp; sourceTree = "<group>"; };
-		CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FrustumCascades.hpp; sourceTree = "<group>"; };
-		CE70F88C1F8F8EBD00AD9027 /* DirectionalLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DirectionalLight.hpp; sourceTree = "<group>"; };
-		CE70F88D1F8F8EBD00AD9027 /* PointLight.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PointLight.hpp; sourceTree = "<group>"; };
-		CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
-		CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SubMesh.hpp; sourceTree = "<group>"; };
-		CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Transformation.hpp; sourceTree = "<group>"; };
-		CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
-		CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Transformation.cpp; sourceTree = "<group>"; };
-		CE70F8941F8F8EBD00AD9027 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
-		CE70F8951F8F8EBD00AD9027 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 		CE70F8961F8F8EBD00AD9027 /* Scene.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Scene.hpp; sourceTree = "<group>"; };
 		CE70F8981F8F8EBD00AD9027 /* Event.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Event.hpp; sourceTree = "<group>"; };
 		CE70F89B1F8F8EBD00AD9027 /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -1428,8 +1432,6 @@
 		CE7311112098C8E2002A8DE7 /* GuillotineBinPack.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GuillotineBinPack.cpp; sourceTree = "<group>"; };
 		CE7311142098C920002A8DE7 /* Rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rect.h; sourceTree = "<group>"; };
 		CE7311152098C920002A8DE7 /* Rect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rect.cpp; sourceTree = "<group>"; };
-		CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshInstance.cpp; sourceTree = "<group>"; };
-		CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshInstance.hpp; sourceTree = "<group>"; };
 		CE79B26220E51E53004E28EF /* RenderingSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RenderingSettings.hpp; sourceTree = "<group>"; };
 		CE79B26520E51F89004E28EF /* BloomSettings.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BloomSettings.hpp; sourceTree = "<group>"; };
 		CE7A016A20B1BF1F0002D422 /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libtbb.dylib; path = ../../../../opt/local/lib/libtbb.dylib; sourceTree = "<group>"; };
@@ -1597,8 +1599,6 @@
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
 		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
 		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
-		CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MeshTriangleRef.cpp; sourceTree = "<group>"; };
-		CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MeshTriangleRef.hpp; sourceTree = "<group>"; };
 		CEFB7A2E205578E400364550 /* Plane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Plane.cpp; sourceTree = "<group>"; };
 		CEFB7A2F205578E400364550 /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Plane.hpp; sourceTree = "<group>"; };
 		CEFB7A3120559EAA00364550 /* SpatialHashCellImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpatialHashCellImpl.h; sourceTree = "<group>"; };
@@ -1622,6 +1622,18 @@
 			children = (
 				36EBCE5B04EBE141D15BA130 /* CameraUBO.glsl */,
 				36EBCDBBA1499D795BEC92F4 /* Camera.glsl */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
+		36EBC09E48556D4D8BF6ABF0 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				36EBC6F92854DDD5837A5136 /* Camera.cpp */,
+				36EBCDCC81538028B8146FF5 /* Camera.hpp */,
+				36EBC54DCFCA9D05EF449D21 /* Cameraman.hpp */,
+				36EBCE251D4848F4C37F3D8F /* Cameraman.cpp */,
+				36EBC3D1D56D9FD5DC980710 /* CameraUBOContent.hpp */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -1715,6 +1727,27 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		36EBC28E7E74380F7E75C0F6 /* Lighting */ = {
+			isa = PBXGroup;
+			children = (
+				36EBC962A37FEE377D3DF911 /* DirectionalLight.cpp */,
+				36EBC0385525474DF66C1207 /* DirectionalLight.hpp */,
+				36EBCD74735A9DC8200FA40A /* FrustumCascades.hpp */,
+				36EBCE3DB0800C24503E266E /* Light.cpp */,
+				36EBCCF4C37C5910DA4B4B1E /* Light.hpp */,
+				36EBCB6C91C5C5197ADFEDF6 /* PointLight.cpp */,
+				36EBC1508605B44BD630F2F7 /* PointLight.hpp */,
+				36EBCEDE720E57130BDCB735 /* Surfel.cpp */,
+				36EBC473BE92D66B74E8E271 /* Surfel.hpp */,
+				36EBCCC31DE4C93192A77916 /* SurfelCluster.cpp */,
+				36EBC7075FAC8A9607082771 /* SurfelCluster.hpp */,
+				36EBCA6C69A720BE707BB4E8 /* SurfelClusterProjection.hpp */,
+				36EBCBB632926E7D9713FF65 /* DiffuseLightProbe.cpp */,
+				36EBC15B2CCE844B6D3582D1 /* DiffuseLightProbe.hpp */,
+			);
+			path = Lighting;
+			sourceTree = "<group>";
+		};
 		36EBC30D68E7FAF5B5BB4E63 /* Skybox */ = {
 			isa = PBXGroup;
 			children = (
@@ -1769,6 +1802,21 @@
 				36EBC6300B42BA34EC4F2835 /* GLSLFullScreenQuad.hpp */,
 			);
 			path = FullScreenQuad;
+			sourceTree = "<group>";
+		};
+		36EBC583B351CE25AFD5EC95 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				36EBCD695DA90A151531B88E /* MeshInstance.cpp */,
+				36EBC9F9C88F95CE806E11DF /* MeshInstance.hpp */,
+				36EBCA316D37FA34BE399E18 /* Mesh.cpp */,
+				36EBCAD5EBB9C96E46E50949 /* Mesh.hpp */,
+				36EBC052B6030C5165ADC3FD /* SubMesh.cpp */,
+				36EBC1401F8BFEE8D2184B4B /* SubMesh.hpp */,
+				36EBCFF1188FD8E24D20A865 /* Transformation.cpp */,
+				36EBCE04816232B06E4CFB6C /* Transformation.hpp */,
+			);
+			path = Geometry;
 			sourceTree = "<group>";
 		};
 		36EBC5F3C9D415A7AF40E686 /* Samplers */ = {
@@ -2001,7 +2049,6 @@
 			children = (
 				36EBCDB09A3358715B78BEF6 /* GLBuffer.hpp */,
 				36EBC39CC5A83D01664D213B /* GLBufferWriter.hpp */,
-				36EBC338596B49FE342BCEB9 /* GLElementArrayBuffer.cpp */,
 				36EBC3A2A40D591A271B357C /* GLElementArrayBuffer.hpp */,
 				36EBC6397137E814A450203A /* GLVertexArrayBuffer.hpp */,
 				36EBC0470C9E124A24E6EFE5 /* GLTextureBuffer.hpp */,
@@ -2018,6 +2065,20 @@
 				36EBC1A70A3A0EEB594E7B0B /* GLUniformBuffer.hpp */,
 			);
 			path = Buffers;
+			sourceTree = "<group>";
+		};
+		36EBCE68F3C35D11E97EEBDA /* Materials */ = {
+			isa = PBXGroup;
+			children = (
+				36EBC202AABC771597EA3391 /* CookTorranceMaterial.hpp */,
+				36EBCB1D83FE7E4235118157 /* CookTorranceMaterial.cpp */,
+				36EBCEF4ABF4683B60A51DE9 /* EmissiveMaterial.cpp */,
+				36EBCADBE12278441226DD45 /* EmissiveMaterial.hpp */,
+				36EBCD0A715C7DCB80991786 /* MaterialType.hpp */,
+				36EBC90F32C821C47A1AD08C /* Material.cpp */,
+				36EBC8DB13CF6D8B7EBD6127 /* Material.hpp */,
+			);
+			path = Materials;
 			sourceTree = "<group>";
 		};
 		36EBCEE07FA459954652277B /* RenderToCubemap */ = {
@@ -3156,87 +3217,19 @@
 			children = (
 				CE70F8761F8F8EBD00AD9027 /* Scene.cpp */,
 				CE70F8961F8F8EBD00AD9027 /* Scene.hpp */,
-				CE70F8771F8F8EBD00AD9027 /* Logic */,
-				CE70F87C1F8F8EBD00AD9027 /* Objects */,
+				36EBC09E48556D4D8BF6ABF0 /* Camera */,
+				36EBC9384534769737314C45 /* SceneInteractor.hpp */,
+				36EBC216E72345EF5A1EA24E /* SceneInteractor.cpp */,
+				36EBC28E7E74380F7E75C0F6 /* Lighting */,
+				36EBC583B351CE25AFD5EC95 /* Geometry */,
+				36EBCE68F3C35D11E97EEBDA /* Materials */,
+				36EBC3554B5C51D09BD60994 /* Skybox.cpp */,
+				36EBC0AB9199125D8A600A5D /* Skybox.hpp */,
+				36EBCF8AF1C1857722CB3C23 /* MeshTriangleRef.cpp */,
+				36EBC532D8FC2B4CB9C23386 /* MeshTriangleRef.hpp */,
+				36EBC12B5E0D7ECCBA1E7A6A /* UBOCompatible.hpp */,
 			);
 			path = Scene;
-			sourceTree = "<group>";
-		};
-		CE70F8771F8F8EBD00AD9027 /* Logic */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F87B1F8F8EBD00AD9027 /* Cameraman.cpp */,
-				CE70F8781F8F8EBD00AD9027 /* Cameraman.hpp */,
-				CE70F87A1F8F8EBD00AD9027 /* SceneInteractor.cpp */,
-				CE70F8791F8F8EBD00AD9027 /* SceneInteractor.hpp */,
-			);
-			path = Logic;
-			sourceTree = "<group>";
-		};
-		CE70F87C1F8F8EBD00AD9027 /* Objects */ = {
-			isa = PBXGroup;
-			children = (
-				CEFB7A2B2053BE6900364550 /* MeshTriangleRef.cpp */,
-				CEFB7A2C2053BE6900364550 /* MeshTriangleRef.hpp */,
-				CE70F8821F8F8EBD00AD9027 /* Camera.cpp */,
-				CE70F8951F8F8EBD00AD9027 /* Camera.hpp */,
-				CE70F8841F8F8EBD00AD9027 /* Skybox.cpp */,
-				CE70F8831F8F8EBD00AD9027 /* Skybox.hpp */,
-				CE70F88E1F8F8EBD00AD9027 /* Geometry */,
-				CE70F8851F8F8EBD00AD9027 /* Lighting */,
-				CE70F87D1F8F8EBD00AD9027 /* Materials */,
-			);
-			path = Objects;
-			sourceTree = "<group>";
-		};
-		CE70F87D1F8F8EBD00AD9027 /* Materials */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F87E1F8F8EBD00AD9027 /* CookTorranceMaterial.hpp */,
-				CE70F8811F8F8EBD00AD9027 /* CookTorranceMaterial.cpp */,
-				36EBC1EC1D7B7974D38FAA63 /* EmissiveMaterial.cpp */,
-				36EBC9BB3B90960654F51513 /* EmissiveMaterial.hpp */,
-				36EBC34434EB045E5FA36E76 /* MaterialType.hpp */,
-				36EBC12E541DB7E3577A25ED /* Material.cpp */,
-				36EBC14A683FCE09FD4647DF /* Material.hpp */,
-			);
-			path = Materials;
-			sourceTree = "<group>";
-		};
-		CE70F8851F8F8EBD00AD9027 /* Lighting */ = {
-			isa = PBXGroup;
-			children = (
-				CE70F8861F8F8EBD00AD9027 /* DirectionalLight.cpp */,
-				CE70F88C1F8F8EBD00AD9027 /* DirectionalLight.hpp */,
-				CE70F88B1F8F8EBD00AD9027 /* FrustumCascades.hpp */,
-				CE70F8881F8F8EBD00AD9027 /* Light.cpp */,
-				CE70F88A1F8F8EBD00AD9027 /* Light.hpp */,
-				CE70F8871F8F8EBD00AD9027 /* PointLight.cpp */,
-				CE70F88D1F8F8EBD00AD9027 /* PointLight.hpp */,
-				ACD4EB161FF3949E009E7BA4 /* Surfel.cpp */,
-				ACD4EB171FF3949E009E7BA4 /* Surfel.hpp */,
-				AC62416B205657AD009B36DF /* SurfelCluster.cpp */,
-				AC62416C205657AD009B36DF /* SurfelCluster.hpp */,
-				AC348DE9205A795C00D03C48 /* SurfelClusterProjection.hpp */,
-				AC348DEB205A79CF00D03C48 /* DiffuseLightProbe.cpp */,
-				AC348DEC205A79CF00D03C48 /* DiffuseLightProbe.hpp */,
-			);
-			path = Lighting;
-			sourceTree = "<group>";
-		};
-		CE70F88E1F8F8EBD00AD9027 /* Geometry */ = {
-			isa = PBXGroup;
-			children = (
-				CE76D8C31FA1DF3A009F05C5 /* MeshInstance.cpp */,
-				CE76D8C41FA1DF3A009F05C5 /* MeshInstance.hpp */,
-				CE70F88F1F8F8EBD00AD9027 /* Mesh.cpp */,
-				CE70F8941F8F8EBD00AD9027 /* Mesh.hpp */,
-				CE70F8921F8F8EBD00AD9027 /* SubMesh.cpp */,
-				CE70F8901F8F8EBD00AD9027 /* SubMesh.hpp */,
-				CE70F8931F8F8EBD00AD9027 /* Transformation.cpp */,
-				CE70F8911F8F8EBD00AD9027 /* Transformation.hpp */,
-			);
-			path = Geometry;
 			sourceTree = "<group>";
 		};
 		CE70F8991F8F8EBD00AD9027 /* ThirdParty */ = {
@@ -4216,19 +4209,15 @@
 				ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
-				AC348DED205A79CF00D03C48 /* DiffuseLightProbe.cpp in Sources */,
 				CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */,
 				CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */,
 				CE70FA8B1F8F912300AD9027 /* DefaultRenderComponentsProvider.mm in Sources */,
-				CE70FA281F8F8EF600AD9027 /* Cameraman.cpp in Sources */,
 				CE70FA211F8F8EF600AD9027 /* Vertex1P3.cpp in Sources */,
 				CE70FA1E1F8F8EF600AD9027 /* Ray3D.cpp in Sources */,
 				CE70FA251F8F8EF600AD9027 /* Size2D.cpp in Sources */,
-				CEFB7A2D2053BE6900364550 /* MeshTriangleRef.cpp in Sources */,
 				CE70FA261F8F8EF600AD9027 /* Scene.cpp in Sources */,
 				CEA95A451FCAF0090090F1EE /* Collision.cpp in Sources */,
 				AC1F6BDA20E2321200E81EB0 /* BloomEffect.tpp in Sources */,
-				CE70FA2F1F8F8EF600AD9027 /* Light.cpp in Sources */,
 				AC3275B420D24FA800899697 /* GaussianFunction.cpp in Sources */,
 				CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */,
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
@@ -4249,12 +4238,10 @@
 				CE70FA361F8F8EF600AD9027 /* WavefrontMeshLoader.cpp in Sources */,
 				CE4E19CA20834E7B00AF181A /* AutodeskMeshLoader.cpp in Sources */,
 				CE1C97592067B09E006A4A73 /* Timeline.cpp in Sources */,
-				CE70FA271F8F8EF600AD9027 /* SceneInteractor.cpp in Sources */,
 				CE70FA951F8F913100AD9027 /* OutlineView.m in Sources */,
 				CE70FA981F8F913100AD9027 /* NumericTextFieldManager.m in Sources */,
 				CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */,
 				CE96176E1FF8261600A5E9FC /* TriangleRenderer.cpp in Sources */,
-				AC62416D205657AD009B36DF /* SurfelCluster.cpp in Sources */,
 				CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */,
 				CEC2192920BF249100767342 /* SettingsTabViewItem.mm in Sources */,
 				AC40397E20E38A680079112E /* ToneMappingEffect.tpp in Sources */,
@@ -4266,25 +4253,19 @@
 				AC2E383F209B0165002F754F /* DiffuseLightProbeGenerator.cpp in Sources */,
 				AC9B6BC01FED3874006CC12E /* SurfelGenerator.cpp in Sources */,
 				CE2CF603218AFD3A00553EA0 /* Drawable.cpp in Sources */,
-				CE76D8C51FA1DF3A009F05C5 /* MeshInstance.cpp in Sources */,
 				CE658430216281140059677C /* DiffuseLightProbeRenderer.cpp in Sources */,
 				CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */,
 				CE5C5E262000CA04004D2B4E /* Measurement.cpp in Sources */,
-				CE70FA331F8F8EF600AD9027 /* Transformation.cpp in Sources */,
 				AC38E984213D47B500F6F2B1 /* DirectLightAccumulator.cpp in Sources */,
 				CEB2D973215F630500F5E4A0 /* SurfelData.cpp in Sources */,
 				CE86CE71216E62210094FE86 /* SMAAEffect.tpp in Sources */,
 				AC58071F213FC2AC00A5BE75 /* IndirectLightAccumulator.cpp in Sources */,
 				CE70FA8F1F8F912300AD9027 /* SceneObjectsTabView.mm in Sources */,
-				CE70FA2A1F8F8EF600AD9027 /* CookTorranceMaterial.cpp in Sources */,
 				CE70FA221F8F8EF600AD9027 /* Vertex1P4.cpp in Sources */,
 				CE152E04215E4A66009ACAC3 /* DiffuseLightProbeData.cpp in Sources */,
-				CE70FA311F8F8EF600AD9027 /* Mesh.cpp in Sources */,
 				CE70FA231F8F8EF600AD9027 /* Vertex1P1N2UV.cpp in Sources */,
 				CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */,
 				CE70FA921F8F912300AD9027 /* LightListTabViewItem.mm in Sources */,
-				CE70FA2E1F8F8EF600AD9027 /* PointLight.cpp in Sources */,
-				ACD4EB181FF3949E009E7BA4 /* Surfel.cpp in Sources */,
 				CE53ED0A201275B900A03146 /* Triangle3D.cpp in Sources */,
 				CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */,
 				CE70FA8E1F8F912300AD9027 /* FPSView.mm in Sources */,
@@ -4293,16 +4274,12 @@
 				CE1C975A2067B09E006A4A73 /* TimelineItem.cpp in Sources */,
 				AC6D0C7220EB601D00A329E2 /* PostprocessTexturePool.tpp in Sources */,
 				CE70FA971F8F913100AD9027 /* ColoredView.m in Sources */,
-				CE70FA321F8F8EF600AD9027 /* SubMesh.cpp in Sources */,
 				CE53ED072012759C00A03146 /* Triangle2D.cpp in Sources */,
 				AC71D95720D26F9D001524BC /* GaussianBlurEffect.tpp in Sources */,
-				CE70FA2D1F8F8EF600AD9027 /* DirectionalLight.cpp in Sources */,
 				CE70FA8C1F8F912300AD9027 /* MeshEditingTabViewItem.mm in Sources */,
 				CE1C97582067B09E006A4A73 /* Cue.cpp in Sources */,
-				CE70FA2B1F8F8EF600AD9027 /* Camera.cpp in Sources */,
 				CE70FA941F8F913100AD9027 /* NumericFormatter.m in Sources */,
 				CEA0B90920E7733400257E37 /* SceneGBufferConstructor.cpp in Sources */,
-				CE70FA2C1F8F8EF600AD9027 /* Skybox.cpp in Sources */,
 				CE7311162098C920002A8DE7 /* Rect.cpp in Sources */,
 				CE7311122098C8E2002A8DE7 /* MaxRectsBinPack.cpp in Sources */,
 				CE70FA1C1F8F8EF600AD9027 /* AxesSelection.cpp in Sources */,
@@ -4315,7 +4292,6 @@
 				CE70FA991F8F913100AD9027 /* main.m in Sources */,
 				CE70FA1B1F8F8EF600AD9027 /* AxesRenderer.cpp in Sources */,
 				CE70FA1A1F8F8EF600AD9027 /* AxesSystem.cpp in Sources */,
-				36EBC1F364BD0CBF918E7A01 /* EmissiveMaterial.cpp in Sources */,
 				36EBCF51AB4E37A3F7E6CAF3 /* DemoScene3.mm in Sources */,
 				36EBCAB5047080E7DE031149 /* GLProgram.cpp in Sources */,
 				36EBCA5FB6E970AD3FF73882 /* GLShader.cpp in Sources */,
@@ -4330,7 +4306,6 @@
 				36EBCB60589CDDF484C29B5E /* GLHDRTexture3D.cpp in Sources */,
 				36EBC4A6715DEF92FF868F98 /* GLCubemapSampler.cpp in Sources */,
 				36EBCBE1DB7F839ED6E3E18B /* GLHDRCubemapSampler.cpp in Sources */,
-				36EBC181FB553B6B08E2E40E /* GLElementArrayBuffer.cpp in Sources */,
 				36EBC1081B315525F23DAB5B /* GLFramebuffer.cpp in Sources */,
 				36EBC96F235B8A5D0711735D /* GLRenderbuffer.cpp in Sources */,
 				36EBC95E1E1E96F7DD89CB14 /* GLDepthRenderbuffer.cpp in Sources */,
@@ -4375,8 +4350,25 @@
 				36EBC740B6D527BC3A8B897D /* GLSLHiZBuffer.cpp in Sources */,
 				36EBC33784E11E70B9DF67CF /* GLSLDirectLightEvaluation.cpp in Sources */,
 				36EBCB3E638BFF706123299B /* GLSLIndirectLightEvaluation.cpp in Sources */,
-				36EBC24A7A7F8FB702CCDD34 /* Material.cpp in Sources */,
 				36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */,
+				36EBC50F90E4B193486FB1C3 /* Camera.cpp in Sources */,
+				36EBC7183211E87A3E589C5D /* Cameraman.cpp in Sources */,
+				36EBCB457A336FEAFEF4422B /* SceneInteractor.cpp in Sources */,
+				36EBCA1883C302768E384687 /* DirectionalLight.cpp in Sources */,
+				36EBC91168689FEDCD18530D /* Light.cpp in Sources */,
+				36EBCCDDBE288116B83B7D05 /* PointLight.cpp in Sources */,
+				36EBCA6A6BB05E35CB7880AD /* Surfel.cpp in Sources */,
+				36EBCB5A7E446F128279F1EA /* SurfelCluster.cpp in Sources */,
+				36EBC805B2ECCEC91114C7D1 /* DiffuseLightProbe.cpp in Sources */,
+				36EBC809A1653B0CFEFA1CF5 /* MeshInstance.cpp in Sources */,
+				36EBC129FCF9EF0AF49A39A4 /* Mesh.cpp in Sources */,
+				36EBCD316857ACABB174BA41 /* SubMesh.cpp in Sources */,
+				36EBC3E67AC69638CBB1E92A /* Transformation.cpp in Sources */,
+				36EBCC10CB24AAAD3BDD8C7B /* CookTorranceMaterial.cpp in Sources */,
+				36EBCADD3659F269B1E830C9 /* EmissiveMaterial.cpp in Sources */,
+				36EBCABB2CFA97B5DB91D8C6 /* Material.cpp in Sources */,
+				36EBCAA5112F7C5E45A953CC /* Skybox.cpp in Sources */,
+				36EBCD35DA8ACFA6FD73D3B2 /* MeshTriangleRef.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

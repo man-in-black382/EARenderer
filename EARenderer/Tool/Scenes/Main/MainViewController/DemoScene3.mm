@@ -30,7 +30,7 @@
     // Meshes
     NSString *corridorPath = [[NSBundle mainBundle] pathForResource:@"GI_corridor" ofType:@"obj"];
 
-    EARenderer::ID corridorMeshID = resourcePool->meshes.insert(EARenderer::Mesh(std::string(corridorPath.UTF8String)));
+    EARenderer::ID corridorMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(corridorPath.UTF8String)));
 
     // Materials
 
@@ -46,7 +46,7 @@
 //    t.translation
     corridorInstance.setTransformation(t);
 
-    auto &sponzaMesh = resourcePool->meshes[corridorMeshID];
+    auto &sponzaMesh = resourcePool->mesh(corridorMeshID);
     for (auto subMeshID : sponzaMesh.subMeshes()) {
         auto &subMesh = sponzaMesh.subMeshes()[subMeshID];
 
