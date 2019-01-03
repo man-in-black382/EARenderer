@@ -12,6 +12,7 @@
 #include "Vertex1P4.hpp"
 #include "Collision.hpp"
 #include "Measurement.hpp"
+#include "Drawable.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -35,7 +36,7 @@ namespace EARenderer {
 
             // Effects
             mFramebuffer(std::make_shared<GLFramebuffer>(settings.displayedFrameResolution)),
-            mPostprocessTexturePool(std::make_shared<HalfPrecisionTexturePool>(settings.displayedFrameResolution)),
+            mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.displayedFrameResolution)),
             mBloomEffect(mFramebuffer, mPostprocessTexturePool),
             mToneMappingEffect(mFramebuffer, mPostprocessTexturePool),
             mSSREffect(mFramebuffer, mPostprocessTexturePool),
@@ -125,7 +126,7 @@ namespace EARenderer {
         mScene->skybox()->draw();
     }
 
-    void DeferredSceneRenderer::renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image) {
+    void DeferredSceneRenderer::renderFinalImage(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 

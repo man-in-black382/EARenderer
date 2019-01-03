@@ -9,6 +9,7 @@
 #ifndef GaussianBlurEffect_h
 #define GaussianBlurEffect_h
 
+#include "GaussianBlurEffect.hpp"
 #include "GaussianFunction.hpp"
 #include "Drawable.hpp"
 #include "GLTexture2D.hpp"
@@ -19,8 +20,7 @@ namespace EARenderer {
 
 #pragma mark - Blur
 
-    template<GLTexture::Float TextureFormat>
-    void GaussianBlurEffect<TextureFormat>::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings &settings) {
+    void GaussianBlurEffect::computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings) {
         if (settings == mSettings && !mWeights.empty()) {
             return;
         }
@@ -54,15 +54,15 @@ namespace EARenderer {
         }
     }
 
-    template<GLTexture::Float TextureFormat>
-    void GaussianBlurEffect<TextureFormat>::blur(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-            std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage,
-            const GaussianBlurSettings &settings) {
+    void GaussianBlurEffect::blur(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
+            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
+            const GaussianBlurSettings& settings)
+    {
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         computeWeightsAndOffsetsIfNeeded(settings);
 
-        auto intermediateTexture = this->mTexturePool->claim();
+        auto intermediateTexture = mTexturePool->claim();
 
         mBlurShader.bind();
         mBlurShader.setRenderTargetSize(inputImage->mipMapSize(settings.outputImageMipLevel));
@@ -77,7 +77,7 @@ namespace EARenderer {
         //
         mBlurShader.setBlurDirection(GLSLGaussianBlur::BlurDirection::Horizontal);
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, intermediateTexture);
+        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, intermediateTexture);
         Drawable::TriangleStripQuad::Draw();
 
         // But, in the second pass, we read and write from and to the same
@@ -89,11 +89,11 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
-        this->mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, outputImage);
+        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, outputImage);
 
         Drawable::TriangleStripQuad::Draw();
 
-        this->mTexturePool->putBack(intermediateTexture);
+        mTexturePool->putBack(intermediateTexture);
     }
 
 }

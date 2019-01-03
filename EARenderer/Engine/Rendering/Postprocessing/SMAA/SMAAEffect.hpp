@@ -17,8 +17,7 @@
 
 namespace EARenderer {
 
-    template<GLTexture::Float TextureFormat>
-    class SMAAEffect : public PostprocessEffect<TextureFormat> {
+    class SMAAEffect : public PostprocessEffect {
     private:
         GLNormalizedTexture2D<GLTexture::Normalized::RG> mAreaTexture;
         GLNormalizedTexture2D<GLTexture::Normalized::R> mSearchTexture;
@@ -29,22 +28,20 @@ namespace EARenderer {
         GLSLSMAABlendingWeightCalculation mBlendingWeightCalculationShader;
         GLSLSMAANeighborhoodBlending mNeighborhoodBlendingShader;
 
-        void detectEdges(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image);
+        void detectEdges(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image);
 
         void calculateBlendingWeights();
 
-        void blendNeighbors(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> image,
-                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+        void blendNeighbors(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
+                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
 
     public:
-        SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool<TextureFormat>> sharedTexturePool);
+        SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
-        void antialise(std::shared_ptr<const typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> inputImage,
-                std::shared_ptr<typename PostprocessTexturePool<TextureFormat>::PostprocessTexture> outputImage);
+        void antialise(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
+                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
     };
 
 }
-
-#include "SMAAEffect.tpp"
 
 #endif /* SMAAEffect_hpp */

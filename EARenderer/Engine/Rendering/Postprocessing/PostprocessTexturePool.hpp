@@ -18,10 +18,9 @@
 
 namespace EARenderer {
 
-    template<GLTexture::Float Format>
     class PostprocessTexturePool {
     public:
-        using PostprocessTexture = GLFloatTexture2D<Format>;
+        using PostprocessTexture = GLFloatTexture2D<GLTexture::Float::RGBA16F>;
 
     private:
         using TexturePointerSet = std::unordered_set<std::shared_ptr<PostprocessTexture>>;
@@ -32,15 +31,12 @@ namespace EARenderer {
         Size2D mTextureResolution;
 
     public:
-        PostprocessTexturePool(const Size2D &resolution);
+        PostprocessTexturePool(const Size2D& resolution);
 
         std::shared_ptr<PostprocessTexture> claim();
-
         void putBack(std::shared_ptr<PostprocessTexture> texture);
     };
 
 }
-
-#include "PostprocessTexturePool.tpp"
 
 #endif /* TexturePool_hpp */

@@ -6,23 +6,19 @@
 //  Copyright © 2018 MPO. All rights reserved.
 //
 
+#include "PostprocessTexturePool.hpp"
+
 #include <stdexcept>
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    template<GLTexture::Float Format>
-    PostprocessTexturePool<Format>::PostprocessTexturePool(const Size2D &resolution)
-            :
-            mTextureResolution(resolution) {
-    }
+    PostprocessTexturePool::PostprocessTexturePool(const Size2D &resolution) : mTextureResolution(resolution) {}
 
 #pragma mark - Getters & Setters
 
-    template<GLTexture::Float Format>
-    std::shared_ptr<typename PostprocessTexturePool<Format>::PostprocessTexture>
-    PostprocessTexturePool<Format>::claim() {
+    std::shared_ptr<PostprocessTexturePool::PostprocessTexture> PostprocessTexturePool::claim() {
         if (mFreeTextures.empty()) {
             auto texture = std::make_shared<PostprocessTexture>(mTextureResolution);
             texture->generateMipMaps();
@@ -37,8 +33,7 @@ namespace EARenderer {
         return texture;
     }
 
-    template<GLTexture::Float Format>
-    void PostprocessTexturePool<Format>::putBack(std::shared_ptr<PostprocessTexture> texture) {
+    void PostprocessTexturePool::putBack(std::shared_ptr<PostprocessTexture> texture) {
         auto textureIt = mClaimedTextures.find(texture);
         if (textureIt == mClaimedTextures.end()) {
             throw std::invalid_argument("Attempt to put a texture in a pool that was never in it in the first place");

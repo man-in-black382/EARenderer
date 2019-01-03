@@ -7,6 +7,7 @@
 //
 
 #include "IndirectLightAccumulator.hpp"
+#include "Drawable.hpp"
 
 namespace EARenderer {
 

@@ -7,6 +7,7 @@
 //
 
 #include "ShadowMapper.hpp"
+#include "Drawable.hpp"
 #include "ResourcePool.hpp"
 #include "Log.hpp"
 

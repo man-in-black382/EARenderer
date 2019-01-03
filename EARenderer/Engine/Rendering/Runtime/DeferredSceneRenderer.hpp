@@ -51,9 +51,6 @@ namespace EARenderer {
 
     class DeferredSceneRenderer {
     private:
-        using HalfPrecisionTexturePool = PostprocessTexturePool<GLTexture::Float::RGBA16F>;
-        using HighPrecisionTexturePool = PostprocessTexturePool<GLTexture::Float::RGBA32F>;
-
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
 
@@ -63,11 +60,11 @@ namespace EARenderer {
         RenderingSettings mSettings;
 
         std::shared_ptr<GLFramebuffer> mFramebuffer;
-        std::shared_ptr<HalfPrecisionTexturePool> mPostprocessTexturePool;
-        BloomEffect<GLTexture::Float::RGBA16F> mBloomEffect;
-        ToneMappingEffect<GLTexture::Float::RGBA16F> mToneMappingEffect;
-        ScreenSpaceReflectionEffect<GLTexture::Float::RGBA16F> mSSREffect;
-        SMAAEffect<GLTexture::Float::RGBA16F> mSMAAEffect;
+        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
+        BloomEffect mBloomEffect;
+        ToneMappingEffect mToneMappingEffect;
+        ScreenSpaceReflectionEffect mSSREffect;
+        SMAAEffect mSMAAEffect;
 
         std::shared_ptr<const SurfelData> mSurfelData;
         std::shared_ptr<const DiffuseLightProbeData> mProbeData;
@@ -78,8 +75,6 @@ namespace EARenderer {
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLSkybox mSkyboxShader;
-        GLSLDirectLightEvaluation mCookTorranceShader;
-
         GLSLFullScreenQuad mFSQuadShader;
 
         void bindDefaultFramebuffer();
@@ -88,7 +83,7 @@ namespace EARenderer {
 
         void renderSkybox();
 
-        void renderFinalImage(std::shared_ptr<HalfPrecisionTexturePool::PostprocessTexture> image);
+        void renderFinalImage(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> image);
 
     public:
         using DebugOpportunity = std::function<void()>;
