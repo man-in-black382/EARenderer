@@ -15,8 +15,8 @@ namespace EARenderer {
 
     DiffuseLightProbeRenderer::DiffuseLightProbeRenderer(
             const Scene *scene,
-            std::shared_ptr<const DiffuseLightProbeData> probeData,
-            std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics)
+            const DiffuseLightProbeData *probeData,
+            const std::array<GLLDRTexture3D, 4> *sphericalHarmonics)
             :
             mScene(scene),
             mProbeData(probeData),

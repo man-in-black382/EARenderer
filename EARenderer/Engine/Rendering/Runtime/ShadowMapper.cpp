@@ -8,23 +8,31 @@
 
 #include "ShadowMapper.hpp"
 #include "Drawable.hpp"
-#include "ResourcePool.hpp"
-#include "Log.hpp"
+#include "SharedResourceStorage.hpp"
+#include "LogUtils.hpp"
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ShadowMapper::ShadowMapper(const Scene *scene, std::shared_ptr<const SceneGBuffer> gBuffer, uint8_t cascadeCount)
-            : mScene(scene),
-              mGBuffer(gBuffer),
-              mCascadeCount(cascadeCount),
-              mShadowFramebuffer(mSettings.directionalShadowMapResolution),
-              mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
-              mPenumbraFramebuffer(mSettings.penumbraResolution),
-              mDirectionalPenumbra(mSettings.penumbraResolution),
-              mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
-              mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None) {
+    ShadowMapper::ShadowMapper(
+            const Scene *scene,
+            const SharedResourceStorage *resourceStorage,
+            const GPUResourceController *gpuResourceController,
+            const SceneGBuffer *gBuffer,
+            uint8_t cascadeCount)
+            :
+            mScene(scene),
+            mGBuffer(gBuffer),
+            mGPUResourceController(gpuResourceController),
+            mResourceStorage(resourceStorage),
+            mCascadeCount(cascadeCount),
+            mShadowFramebuffer(mSettings.directionalShadowMapResolution),
+            mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
+            mPenumbraFramebuffer(mSettings.penumbraResolution),
+            mDirectionalPenumbra(mSettings.penumbraResolution),
+            mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
+            mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None) {
 
         for (ID pointLightID : scene->pointLights()) {
             mOmnidirectionalPenumbras.emplace(
@@ -93,13 +101,14 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mScene->meshInstances()) {
             const auto &instance = mScene->meshInstances()[meshInstanceID];
-            const auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
+            const auto &subMeshes = mResourceStorage->mesh(instance.meshID()).subMeshes();
 
             mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
 
             for (ID subMeshID : subMeshes) {
                 const auto &subMesh = subMeshes[subMeshID];
-                subMesh.drawInstanced(mShadowCascades.amount);
+                const auto &location = mGPUResourceController->subMeshVBODataLocation(instance.meshID(), subMeshID);
+                Drawable::TriangleMesh::DrawInstanced(mShadowCascades.amount, location);
             }
         }
     }
@@ -126,13 +135,14 @@ namespace EARenderer {
 
             for (ID meshInstanceID : mScene->meshInstances()) {
                 auto &instance = mScene->meshInstances()[meshInstanceID];
-                auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
+                auto &subMeshes = mResourceStorage->mesh(instance.meshID()).subMeshes();
 
                 mShadowMapShader.setModelMatrix(instance.transformation().modelMatrix());
 
                 for (ID subMeshID : subMeshes) {
                     const auto &subMesh = subMeshes[subMeshID];
-                    subMesh.drawInstanced(6); // 6 for 6 cubemap faces
+                    const auto &location = mGPUResourceController->subMeshVBODataLocation(instance.meshID(), subMeshID);
+                    Drawable::TriangleMesh::DrawInstanced(6, location); // 6 for 6 cubemap faces
                 }
             }
         }
@@ -186,7 +196,7 @@ namespace EARenderer {
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
-        ResourcePool::shared().meshVAO()->bind();
+        mGPUResourceController->meshVAO()->bind();
         mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
 
         renderOmnidirectionalShadowMaps();

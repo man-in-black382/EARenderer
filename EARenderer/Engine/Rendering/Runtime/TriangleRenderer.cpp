@@ -7,16 +7,14 @@
 //
 
 #include "TriangleRenderer.hpp"
+#include "Drawable.hpp"
 
 namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    TriangleRenderer::TriangleRenderer(Scene *scene, ResourcePool *resourcePool)
-            :
-            mScene(scene),
-            mResourcePool(resourcePool) {
-    }
+    TriangleRenderer::TriangleRenderer(const Scene *scene, const SharedResourceStorage *resourceStorage, const GPUResourceController *gpuResourceController)
+            : mScene(scene), mResourceStorage(resourceStorage), mGPUResourceController(gpuResourceController) {}
 
 #pragma mark - Rendering
 
@@ -30,14 +28,14 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[meshInstanceID];
-            auto &subMeshes = mResourcePool->mesh(instance.meshID()).subMeshes();
+            auto &subMeshes = mResourceStorage->mesh(instance.meshID()).subMeshes();
 
             glm::mat4 mvp = viewProjection * instance.modelMatrix();
             mTriangleRenderingShader.setModelViewProjectionMatrix(mvp);
 
             for (ID subMeshID : subMeshes) {
                 auto &subMesh = subMeshes[subMeshID];
-                subMesh.draw();
+                Drawable::TriangleMesh::Draw(mGPUResourceController->subMeshVBODataLocation(instance.meshID(), subMeshID));
             }
         }
 

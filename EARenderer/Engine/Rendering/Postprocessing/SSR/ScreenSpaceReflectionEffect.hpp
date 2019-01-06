@@ -29,28 +29,31 @@ namespace EARenderer {
 
         void traceReflections(
                 const Camera &camera,
-                std::shared_ptr<const SceneGBuffer> GBuffer,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo
+                const SceneGBuffer &GBuffer,
+                PostprocessTexturePool::PostprocessTexture &rayHitInfo
         );
 
-        void blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections);
+        void blurProgressively(PostprocessTexturePool::PostprocessTexture &mirrorReflections);
 
         void traceCones(
                 const Camera &camera,
-                std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> lightBuffer,
-                std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> rayHitInfo,
-                std::shared_ptr<const SceneGBuffer> GBuffer,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> baseOutputImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> brightOutputImage);
+                const PostprocessTexturePool::PostprocessTexture &lightBuffer,
+                const PostprocessTexturePool::PostprocessTexture &rayHitInfo,
+                const SceneGBuffer &GBuffer,
+                PostprocessTexturePool::PostprocessTexture &baseOutputImage,
+                PostprocessTexturePool::PostprocessTexture &brightOutputImage
+        );
 
     public:
         ScreenSpaceReflectionEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
-        void applyReflections(const Camera &camera,
-                std::shared_ptr<const SceneGBuffer> GBuffer,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> lightBuffer,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> baseOutputImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> brightOutputImage);
+        void applyReflections(
+                const Camera &camera,
+                const SceneGBuffer &GBuffer,
+                PostprocessTexturePool::PostprocessTexture &lightBuffer,
+                PostprocessTexturePool::PostprocessTexture &baseOutputImage,
+                PostprocessTexturePool::PostprocessTexture &brightOutputImage
+        );
     };
 
 }

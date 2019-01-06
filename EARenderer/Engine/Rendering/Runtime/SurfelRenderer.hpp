@@ -22,9 +22,9 @@ namespace EARenderer {
     class SurfelRenderer {
     private:
         const Scene *mScene = nullptr;
-        std::shared_ptr<const SurfelData> mSurfelData;
-        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
-        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelLuminances;
+        const SurfelData *mSurfelData;
+        const DiffuseLightProbeData *mProbeData;
+        const GLFloatTexture2D<GLTexture::Float::R16F> *mSurfelLuminances;
 
         std::vector<GLVertexArray<Surfel>> mSurfelClusterVAOs;
         std::vector<Color> mSurfelClusterColors;
@@ -35,10 +35,12 @@ namespace EARenderer {
             Default, Clusters
         };
 
-        SurfelRenderer(const Scene *scene,
-                std::shared_ptr<const SurfelData> surfelData,
-                std::shared_ptr<const DiffuseLightProbeData> probeData,
-                std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelLuminances);
+        SurfelRenderer(
+                const Scene *scene,
+                const SurfelData *surfelData,
+                const DiffuseLightProbeData *probeData,
+                const GLFloatTexture2D<GLTexture::Float::R16F> *surfelLuminances
+        );
 
         void render(Mode renderingMode, float surfelRadius, size_t probeIndex = -1);
     };

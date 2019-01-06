@@ -30,7 +30,7 @@
 
 @implementation DemoScene1
 
-- (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
+- (void)loadResourcesToPool:(EARenderer::SharedResourceStorage *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
     // Meshes
 
     NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
@@ -106,7 +106,7 @@
 
     // Instances
 
-    EARenderer::MeshInstance sponzaInstance(sponzaMeshID);
+    EARenderer::MeshInstance sponzaInstance(sponzaMeshID, resourcePool->mesh(sponzaMeshID));
     EARenderer::Transformation sponzaTransform = sponzaInstance.transformation();
     sponzaTransform.translation.y = -2.0;
     sponzaTransform.scale *= 20.0;
@@ -177,7 +177,7 @@
 
     // Skybox
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"night_sky" ofType:@"hdr"];
-    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String), 0.03));
+    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.03));
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
@@ -187,21 +187,21 @@
     EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.0, 4.0};
     EARenderer::MaterialReference lightMaterialRef = resourcePool->addMaterial(EARenderer::EmissiveMaterial{lightColor});
     EARenderer::PointLight pointLight(glm::vec3(3.133468, -1.449196, -1.294581), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
-    pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID);
+    pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
     pointLight.meshInstance->materialReference = lightMaterialRef;
     pointLight.meshInstance->transformation().scale = glm::vec3(0.003);
 //    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);
 
-    scene->calculateGeometricProperties();
+    scene->calculateGeometricProperties(*resourcePool);
 
     glm::mat4 bbScale = glm::scale(glm::vec3(0.75, 0.9, 0.6));
     scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
-        scene->buildStaticGeometryRaytracer();
+        scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
     scene->setName("sponza");
@@ -212,8 +212,6 @@
     scene->camera()->lookAt(glm::vec3(1, -0.5, 0));
 
     [self setupAnimations];
-
-    resourcePool->transferMeshesToGPU();
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
@@ -281,7 +279,7 @@
 
 #pragma mark - Other materials
 
-- (EARenderer::MaterialReference)loadIronMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadIronMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_basecolor" ofType:@"png"];
     NSString *metallicMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_metallic" ofType:@"png"];
     NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"rustediron2_normal" ofType:@"png"];
@@ -298,7 +296,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)loadLinoleumMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadLinoleumMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_basecolor" ofType:@"png"];
     NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_normal" ofType:@"png"];
     NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"mahogfloor_roughness" ofType:@"png"];
@@ -315,7 +313,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)loadScuffedTitamiumMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadScuffedTitamiumMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     NSString *albedoMapPath = [[NSBundle mainBundle] pathForResource:@"Titanium-Scuffed_basecolor" ofType:@"png"];
     NSString *normalMapPath = [[NSBundle mainBundle] pathForResource:@"Titanium-Scuffed_normal" ofType:@"png"];
     NSString *roughnessMapPath = [[NSBundle mainBundle] pathForResource:@"Titanium-Scuffed_roughness" ofType:@"png"];
@@ -334,7 +332,7 @@
 
 #pragma mark - Sponza materials
 
-- (EARenderer::MaterialReference)load_Leaf_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Leaf_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Thorn_diffuse.tga"],
             [self pathForResource:@"Sponza_Thorn_normal.tga"],
@@ -345,7 +343,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_VaseRound_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_VaseRound_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"VaseRound_diffuse.tga"],
             [self pathForResource:@"VaseRound_normal.tga"],
@@ -356,7 +354,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Material57_ToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Material57_ToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"VasePlant_diffuse.tga"],
             [self pathForResource:@"VasePlant_normal.tga"],
@@ -367,7 +365,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Material298_ToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Material298_ToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Background_Albedo.tga"],
             [self pathForResource:@"Background_Normal.tga"],
@@ -378,7 +376,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Bricks_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Bricks_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Bricks_a_Albedo.tga"],
             [self pathForResource:@"Sponza_Bricks_a_Normal.tga"],
@@ -390,7 +388,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Arch_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Arch_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Arch_diffuse.tga"],
             [self pathForResource:@"Sponza_Arch_normal.tga"],
@@ -402,7 +400,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Ceiling_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Ceiling_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Ceiling_diffuse.tga"],
             [self pathForResource:@"Sponza_Ceiling_normal.tga"],
@@ -413,7 +411,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_ColumnA_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_ColumnA_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Column_a_diffuse.tga"],
             [self pathForResource:@"Sponza_Column_a_normal.tga"],
@@ -425,7 +423,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Floor_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Floor_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Floor_diffuse.tga"],
             [self pathForResource:@"Sponza_Floor_normal.tga"],
@@ -436,7 +434,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_ColumnC_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_ColumnC_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Column_c_diffuse.tga"],
             [self pathForResource:@"Sponza_Column_c_normal.tga"],
@@ -448,7 +446,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Details_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Details_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Details_diffuse.tga"],
             [self pathForResource:@"Sponza_Details_normal.tga"],
@@ -459,7 +457,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_ColumnB_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_ColumnB_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Column_b_diffuse.tga"],
             [self pathForResource:@"Sponza_Column_b_normal.tga"],
@@ -471,7 +469,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FlagPole_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FlagPole_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_FlagPole_diffuse.tga"],
             [self pathForResource:@"Sponza_FlagPole_normal.tga"],
@@ -482,7 +480,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricE_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricE_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Fabric_Green_diffuse.tga"],
             [self pathForResource:@"Sponza_Fabric_Green_normal.tga"],
@@ -493,7 +491,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricD_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricD_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Fabric_Blue_diffuse.tga"],
             [self pathForResource:@"Sponza_Fabric_Blue_normal.tga"],
@@ -504,7 +502,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricA_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricA_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Fabric_Red_diffuse.tga"],
             [self pathForResource:@"Sponza_Fabric_Red_normal.tga"],
@@ -515,7 +513,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricG_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricG_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Curtain_Blue_diffuse.tga"],
             [self pathForResource:@"Sponza_Curtain_Blue_normal.tga"],
@@ -526,7 +524,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricC_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricC_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Curtain_Red_diffuse.tga"],
             [self pathForResource:@"Sponza_Curtain_Red_normal.tga"],
@@ -537,7 +535,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_FabricF_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_FabricF_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Curtain_Green_diffuse.tga"],
             [self pathForResource:@"Sponza_Curtain_Green_normal.tga"],
@@ -548,7 +546,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Chain_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Chain_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"ChainTexture_Albedo.tga"],
             [self pathForResource:@"ChainTexture_Normal.tga"],
@@ -559,7 +557,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_VaseHanging_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_VaseHanging_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"VaseHanging_diffuse.tga"],
             [self pathForResource:@"VaseHanging_normal.tga"],
@@ -570,7 +568,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Vase_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Vase_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Vase_diffuse.tga"],
             [self pathForResource:@"Vase_normal.tga"],
@@ -581,7 +579,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Material25_ToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Material25_ToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Lion_Albedo.tga"],
             [self pathForResource:@"Lion_Normal.tga"],
@@ -592,7 +590,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)load_Roof_MaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)load_Roof_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Sponza_Roof_diffuse.tga"],
             [self pathForResource:@"Sponza_Roof_normal.tga"],

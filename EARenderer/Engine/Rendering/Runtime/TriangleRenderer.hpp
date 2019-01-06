@@ -11,18 +11,20 @@
 
 #include "GLSLTriangleRendering.hpp"
 #include "Scene.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
+#include "GPUResourceController.hpp"
 
 namespace EARenderer {
 
     class TriangleRenderer {
     private:
         GLSLTriangleRendering mTriangleRenderingShader;
-        Scene *mScene;
-        ResourcePool *mResourcePool;
+        const Scene *mScene;
+        const SharedResourceStorage *mResourceStorage;
+        const GPUResourceController *mGPUResourceController;
 
     public:
-        TriangleRenderer(Scene *scene, ResourcePool *resourcePool);
+        TriangleRenderer(const Scene *scene, const SharedResourceStorage *resourceStorage, const GPUResourceController *gpuResourceController);
 
         void render();
     };

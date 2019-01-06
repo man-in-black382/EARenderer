@@ -40,7 +40,7 @@ namespace EARenderer {
             logarithmicBinIterator(iterator) {
     }
 
-    SurfelGenerator::SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene)
+    SurfelGenerator::SurfelGenerator(const SharedResourceStorage *resourcePool, const Scene *scene)
             :
             mEngine(std::random_device()()),
             mDistribution(0.0f, 1.0f),
@@ -377,8 +377,8 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    std::shared_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
-        mSurfelDataContainer = std::make_shared<SurfelData>();
+    std::unique_ptr<SurfelData> SurfelGenerator::generateStaticGeometrySurfels() {
+        mSurfelDataContainer = std::make_unique<SurfelData>();
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
@@ -402,7 +402,7 @@ namespace EARenderer {
 
         printf("Generated %lu clusters\n\n", mSurfelDataContainer->mSurfelClusters.size());
 
-        return mSurfelDataContainer;
+        return std::move(mSurfelDataContainer);
     }
 
 }

@@ -28,10 +28,10 @@ namespace EARenderer {
 
 #pragma mark - Antialiasing
 
-    void SMAAEffect::detectEdges(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image) {
+    void SMAAEffect::detectEdges(const PostprocessTexturePool::PostprocessTexture &image) {
         mEdgeDetectionShader.bind();
         mEdgeDetectionShader.ensureSamplerValidity([&]() {
-            mEdgeDetectionShader.setImage(*image);
+            mEdgeDetectionShader.setImage(image);
         });
 
         mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, &mEdgesTexture);
@@ -50,20 +50,18 @@ namespace EARenderer {
         Drawable::TriangleStripQuad::Draw();
     }
 
-    void SMAAEffect::blendNeighbors(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage) {
+    void SMAAEffect::blendNeighbors(const PostprocessTexturePool::PostprocessTexture &image, PostprocessTexturePool::PostprocessTexture &outputImage) {
         mNeighborhoodBlendingShader.bind();
         mNeighborhoodBlendingShader.ensureSamplerValidity([&]() {
-            mNeighborhoodBlendingShader.setImage(*image);
+            mNeighborhoodBlendingShader.setImage(image);
             mNeighborhoodBlendingShader.setBlendingWeights(mBlendTexture);
         });
 
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, outputImage);
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &outputImage);
         Drawable::TriangleStripQuad::Draw();
     }
 
-    void SMAAEffect::antialise(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage) {
+    void SMAAEffect::antialise(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage) {
         detectEdges(inputImage);
         calculateBlendingWeights();
         blendNeighbors(inputImage, outputImage);

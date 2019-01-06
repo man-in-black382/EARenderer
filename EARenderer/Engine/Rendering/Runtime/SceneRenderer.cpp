@@ -8,7 +8,7 @@
 
 #include "SceneRenderer.hpp"
 #include "GLShader.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
 #include "Vertex1P4.hpp"
 #include "Collision.hpp"
 

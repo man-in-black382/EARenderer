@@ -20,21 +20,23 @@
 
 namespace EARenderer {
 
-    class GaussianBlurEffect: public PostprocessEffect {
+    class GaussianBlurEffect : public PostprocessEffect {
     private:
         GLSLGaussianBlur mBlurShader;
         std::vector<float> mWeights;
         std::vector<float> mTextureOffsets;
         GaussianBlurSettings mSettings;
 
-        void computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings& settings);
+        void computeWeightsAndOffsetsIfNeeded(const GaussianBlurSettings &settings);
 
     public:
         using PostprocessEffect::PostprocessEffect;
 
-        void blur(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                const GaussianBlurSettings& settings);
+        void blur(
+                const PostprocessTexturePool::PostprocessTexture &inputImage,
+                PostprocessTexturePool::PostprocessTexture &outputImage,
+                const GaussianBlurSettings &settings
+        );
     };
 
 }

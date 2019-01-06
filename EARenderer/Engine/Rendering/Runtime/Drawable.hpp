@@ -12,6 +12,9 @@
 #include <OpenGL/gl3.h>
 #include <stdio.h>
 
+#include "GLVertexArrayBuffer.hpp"
+#include "GLElementArrayBuffer.hpp"
+
 namespace EARenderer {
 
     namespace Drawable {
@@ -25,7 +28,13 @@ namespace EARenderer {
         }
 
         namespace TriangleMesh {
-            void Draw(size_t count = 1);
+            void Draw(size_t vertexCount = 1, size_t VBOOffset = 0);
+
+            void DrawInstanced(size_t instanceCount, size_t vertexCount = 1, size_t VBOOffset = 0);
+
+            void Draw(const GLVBODataLocation& location);
+
+            void DrawInstanced(size_t instanceCount, const GLVBODataLocation& location);
         }
 
     }

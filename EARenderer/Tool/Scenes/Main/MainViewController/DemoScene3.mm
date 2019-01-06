@@ -26,7 +26,7 @@
 
 @implementation DemoScene3
 
-- (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
+- (void)loadResourcesToPool:(EARenderer::SharedResourceStorage *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
     // Meshes
     NSString *corridorPath = [[NSBundle mainBundle] pathForResource:@"GI_corridor" ofType:@"obj"];
 
@@ -40,7 +40,7 @@
 
     // Instances
 
-    EARenderer::MeshInstance corridorInstance(corridorMeshID);
+    EARenderer::MeshInstance corridorInstance(corridorMeshID, resourcePool->mesh(corridorMeshID));
     EARenderer::Transformation t = corridorInstance.transformation();
     t.scale *= glm::vec3(20.0);
 //    t.translation
@@ -67,9 +67,9 @@
     scene->directionalLight().setArea(10.0);
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
-    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String), 0.2));
+    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.2));
 
-    scene->calculateGeometricProperties();
+    scene->calculateGeometricProperties(*resourcePool);
 
     glm::mat4 bbScale = glm::scale(glm::vec3(0.98, 0.98, 0.98));
 //    glm::mat4 bbTranslation = glm::translate((scene->boundingBox().max - scene->boundingBox().min) * 0.04f);
@@ -77,7 +77,7 @@
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
-        scene->buildStaticGeometryRaytracer();
+        scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
     scene->setName("corridor");
@@ -88,8 +88,6 @@
     scene->camera()->lookAt(glm::vec3(1, 0, 0));
 
     [self setupAnimations];
-
-    resourcePool->transferMeshesToGPU();
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
@@ -121,15 +119,15 @@
 
 #pragma mark - Materials
 
-- (EARenderer::MaterialReference)loadWhiteMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadWhiteMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({ EARenderer::Color::gray().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
-- (EARenderer::MaterialReference)loadBlueMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadBlueMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({ EARenderer::Color::blue().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
-- (EARenderer::MaterialReference)loadRedMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadRedMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({ EARenderer::Color::red().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 

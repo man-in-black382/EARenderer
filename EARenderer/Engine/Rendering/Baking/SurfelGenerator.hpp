@@ -10,7 +10,7 @@
 #define MeshSampler_hpp
 
 #include "Scene.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
 #include "Surfel.hpp"
 #include "LogarithmicBin.hpp"
 #include "Triangle2D.hpp"
@@ -65,8 +65,8 @@ namespace EARenderer {
         std::uniform_real_distribution<float> mDistribution;
         PackedLookupTable<Surfel> mSurfelFlatStorage;
         SpatialHash<Surfel> mSurfelSpatialHash;
-        std::shared_ptr<SurfelData> mSurfelDataContainer;
-        const ResourcePool *mResourcePool = nullptr;
+        std::unique_ptr<SurfelData> mSurfelDataContainer;
+        const SharedResourceStorage *mResourcePool = nullptr;
         const Scene *mScene = nullptr;
 
 #pragma mark - Member functions
@@ -164,9 +164,9 @@ namespace EARenderer {
         void formClusters();
 
     public:
-        SurfelGenerator(const ResourcePool *resourcePool, const Scene *scene);
+        SurfelGenerator(const SharedResourceStorage *resourcePool, const Scene *scene);
 
-        std::shared_ptr<SurfelData> generateStaticGeometrySurfels();
+        std::unique_ptr<SurfelData> generateStaticGeometrySurfels();
     };
 
 }

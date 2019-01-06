@@ -814,7 +814,7 @@ void ltsqueeze(size_t padsz) {
                             if (inChunkFreeBlocks[((uintptr_t) block - minChunkAddr) / CHUNK_SIZE] == numBlocksInChunk)//if at least one block belongs to a releasable chunk, then this batch should be handled specially
                             {
                                 FreeBlock *nextBatch = (*pbatch)->nextBatch;
-                                for (block = *pbatch; block;)//re-add blocks of not-for-release chunks and organize them into another batches' list (to join it with the main later)
+                                for (block = *pbatch; block;)//re-add blocks of not-for-release chunks and organize them into another batches' list (to join it with the Main later)
                                     if (inChunkFreeBlocks[((uintptr_t) block - minChunkAddr) / CHUNK_SIZE] != numBlocksInChunk)//skip matching-for-release blocks
                                     {
                                         *ablock = block;

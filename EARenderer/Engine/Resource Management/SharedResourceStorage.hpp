@@ -1,5 +1,5 @@
 //
-//  ResourcePool.hpp
+//  SharedResourceStorage.hpp
 //  EARenderer
 //
 //  Created by Pavlo Muratov on 26.10.2017.
@@ -16,32 +16,29 @@
 #include "EmissiveMaterial.hpp"
 #include "GLVertexArray.hpp"
 #include "MaterialType.hpp"
+#include "GLUniformBuffer.hpp"
 
 namespace EARenderer {
 
-    class ResourcePool {
+    class Scene;
+
+    class SharedResourceStorage {
     private:
-        std::unique_ptr<GLVertexArray<Vertex1P1N2UV1T1BT>> mVAO;
         int32_t mTotalVertexCount = 0;
+
+        std::unique_ptr<GLVertexArray<Vertex1P1N2UV1T1BT>> mVAO;
+        std::unique_ptr<GLUniformBuffer> mUniformBuffer;
 
         PackedLookupTable<Mesh> mMeshes;
         PackedLookupTable<CookTorranceMaterial> mCookTorranceMaterials;
         PackedLookupTable<EmissiveMaterial> mEmissiveMaterials;
 
     public:
-        static ResourcePool &shared();
-
-        ResourcePool();
+        SharedResourceStorage();
 
         const GLVertexArray<Vertex1P1N2UV1T1BT> *meshVAO() const;
 
         int32_t totalVertexCount() const;
-
-        /**
-         Updates VAO's underlying buffer with all of the scene's geometry.
-         Updates VBO offsets and vertex counts in sub meshes.
-         */
-        void transferMeshesToGPU();
 
         ID addMesh(Mesh &&mesh);
 
@@ -54,6 +51,16 @@ namespace EARenderer {
         const CookTorranceMaterial &cookTorranceMaterial(ID materialID) const;
 
         const EmissiveMaterial &emissiveMaterial(ID materialID) const;
+
+        template <typename F>
+        void iterateMeshes(F f) const {
+            std::for_each(std::begin(mMeshes), std::end(mMeshes), f);
+        }
+
+        template <typename F>
+        void iterateMaterials(F f) const {
+//            std::for_each(std::begin(mMeshes), std::end(mMeshes), f);
+        }
     };
 
 }

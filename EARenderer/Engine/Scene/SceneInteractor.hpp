@@ -28,8 +28,8 @@ namespace EARenderer {
         using Event = Event<SceneInteractor, std::string, void()>;
 
     private:
-        Input *mUserInput = nullptr;
         Scene *mScene = nullptr;
+        Input *mUserInput = nullptr;
         AxesRenderer *mAxesRenderer = nullptr;
         GLViewport *mMainViewport = nullptr;
 
@@ -57,10 +57,7 @@ namespace EARenderer {
         void handleMouseClick(const Input *input);
 
     public:
-        SceneInteractor(Input *userInput,
-                Scene *scene,
-                AxesRenderer *axesRenderer,
-                GLViewport *mainViewport);
+        SceneInteractor(Scene *scene, Input *userInput, AxesRenderer *axesRenderer, GLViewport *mainViewport);
 
         SceneInteractor(const SceneInteractor &that) = default;
 

@@ -25,10 +25,10 @@ namespace EARenderer {
 
 #pragma mark - Private Interface
 
-    void ToneMappingEffect::measureLuminance(std::shared_ptr<const typename PostprocessTexturePool::PostprocessTexture> image) {
+    void ToneMappingEffect::measureLuminance(const PostprocessTexturePool::PostprocessTexture &image) {
         mLuminanceShader.bind();
         mLuminanceShader.ensureSamplerValidity([&]() {
-            mLuminanceShader.setImage(*image);
+            mLuminanceShader.setImage(image);
         });
 
 //        mFramebuffer->redirectRenderingToTextures(GLViewport(mLuminance.size()), &mLuminance);
@@ -75,8 +75,7 @@ namespace EARenderer {
 
 #pragma mark - Public Interface
 
-    void ToneMappingEffect::toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage) {
+    void ToneMappingEffect::toneMap(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage) {
         //        measureLuminance(inputImage, texturePool);
         //        computeLuminanceRange(texturePool);
         //        buildHistogram(texturePool);
@@ -84,11 +83,11 @@ namespace EARenderer {
 
         mToneMappingShader.bind();
         mToneMappingShader.ensureSamplerValidity([&]() {
-            mToneMappingShader.setImage(*inputImage);
+            mToneMappingShader.setImage(inputImage);
 //            mToneMappingShader.setExposure(mExposure);
         });
 
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, outputImage);
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &outputImage);
         Drawable::TriangleStripQuad::Draw();
     }
 

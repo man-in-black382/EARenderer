@@ -21,7 +21,7 @@ namespace EARenderer {
         Rect2D mFrame;
 
     public:
-        static GLViewport &main();
+        static GLViewport &Main();
 
         GLViewport();
 

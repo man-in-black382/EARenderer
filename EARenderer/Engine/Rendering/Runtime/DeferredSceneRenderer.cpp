@@ -8,7 +8,7 @@
 
 #include "DeferredSceneRenderer.hpp"
 #include "GLShader.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
 #include "Vertex1P4.hpp"
 #include "Collision.hpp"
 #include "Measurement.hpp"
@@ -24,14 +24,20 @@ namespace EARenderer {
 
     DeferredSceneRenderer::DeferredSceneRenderer(
             const Scene *scene,
+            const SharedResourceStorage *resourceStorage,
+            const GPUResourceController *gpuResourceController,
             const DefaultRenderComponentsProviding *provider,
-            const RenderingSettings &settings,
-            std::shared_ptr<const SurfelData> surfelData,
-            std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
-            std::shared_ptr<const SceneGBuffer> GBuffer)
+            const SurfelData* surfelData,
+            const DiffuseLightProbeData* diffuseProbeData,
+            const SceneGBuffer* GBuffer,
+            const RenderingSettings &settings)
             :
             mScene(scene),
+            mResourceStorage(resourceStorage),
+            mGPUResourceController(gpuResourceController),
             mDefaultRenderComponentsProvider(provider),
+            mSurfelData(surfelData),
+            mProbeData(diffuseProbeData),
             mSettings(settings),
 
             // Effects
@@ -43,11 +49,9 @@ namespace EARenderer {
             mSMAAEffect(mFramebuffer, mPostprocessTexturePool),
 
             // Helpers
-            mSurfelData(surfelData),
-            mProbeData(diffuseProbeData),
-            mShadowMapper(std::make_shared<ShadowMapper>(scene, GBuffer, settings.meshSettings.shadowCascadesCount)),
-            mDirectLightAccumulator(std::make_shared<DirectLightAccumulator>(scene, GBuffer, mShadowMapper)),
-            mIndirectLightAccumulator(std::make_shared<IndirectLightAccumulator>(scene, GBuffer, surfelData, diffuseProbeData, mShadowMapper)),
+            mShadowMapper(scene, resourceStorage, gpuResourceController, GBuffer, settings.meshSettings.shadowCascadesCount),
+            mDirectLightAccumulator(scene, GBuffer, &mShadowMapper),
+            mIndirectLightAccumulator(scene, GBuffer, surfelData, diffuseProbeData, &mShadowMapper),
             mGBuffer(GBuffer) {
 
         glEnable(GL_CULL_FACE);
@@ -65,23 +69,23 @@ namespace EARenderer {
 
     void DeferredSceneRenderer::setRenderingSettings(const RenderingSettings &settings) {
         mSettings = settings;
-        mShadowMapper->setRenderingSettings(settings);
-        mDirectLightAccumulator->setRenderingSettings(settings);
-        mIndirectLightAccumulator->setRenderingSettings(settings);
+        mShadowMapper.setRenderingSettings(settings);
+        mDirectLightAccumulator.setRenderingSettings(settings);
+        mIndirectLightAccumulator.setRenderingSettings(settings);
     }
 
 #pragma mark - Getters
 
-    std::shared_ptr<const std::array<GLLDRTexture3D, 4>> DeferredSceneRenderer::gridProbesSphericalHarmonics() const {
-        return mIndirectLightAccumulator->gridProbesSphericalHarmonics();
+    const std::array<GLLDRTexture3D, 4> &DeferredSceneRenderer::gridProbesSphericalHarmonics() const {
+        return mIndirectLightAccumulator.gridProbesSphericalHarmonics();
     }
 
-    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> DeferredSceneRenderer::surfelsLuminanceMap() const {
-        return mIndirectLightAccumulator->surfelsLuminanceMap();
+    const GLFloatTexture2D<GLTexture::Float::R16F> &DeferredSceneRenderer::surfelsLuminanceMap() const {
+        return mIndirectLightAccumulator.surfelsLuminanceMap();
     }
 
-    std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> DeferredSceneRenderer::surfelClustersLuminanceMap() const {
-        return mIndirectLightAccumulator->surfelClustersLuminanceMap();
+    const GLFloatTexture2D<GLTexture::Float::R16F> &DeferredSceneRenderer::surfelClustersLuminanceMap() const {
+        return mIndirectLightAccumulator.surfelClustersLuminanceMap();
     }
 
 #pragma mark - Rendering
@@ -91,26 +95,6 @@ namespace EARenderer {
         if (mDefaultRenderComponentsProvider) {
             mDefaultRenderComponentsProvider->bindSystemFramebuffer();
             mDefaultRenderComponentsProvider->defaultViewport().apply();
-        }
-    }
-
-    void DeferredSceneRenderer::performDepthPrepass() {
-        bindDefaultFramebuffer();
-        glClear(GL_DEPTH_BUFFER_BIT);
-
-        mDepthPrepassShader.bind();
-        mDepthPrepassShader.setCamera(*mScene->camera());
-
-        for (ID instanceID : mScene->meshInstances()) {
-            auto &instance = mScene->meshInstances()[instanceID];
-            auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
-
-            mDepthPrepassShader.setModelMatrix(instance.transformation().modelMatrix());
-
-            for (ID subMeshID : subMeshes) {
-                auto &subMesh = subMeshes[subMeshID];
-                subMesh.draw();
-            }
         }
     }
 
@@ -146,12 +130,12 @@ namespace EARenderer {
 
         glFinish();
         Measurement::ExecutionTime("Shadow and penumbra", [&] {
-            mShadowMapper->render();
+            mShadowMapper.render();
             glFinish();
         });
 
         Measurement::ExecutionTime("Probe update", [&] {
-            mIndirectLightAccumulator->updateProbes();
+            mIndirectLightAccumulator.updateProbes();
             glFinish();
         });
 
@@ -173,12 +157,12 @@ namespace EARenderer {
         glDisable(GL_DEPTH_TEST);
 
         Measurement::ExecutionTime("Direct light accumulation", [&] {
-            mDirectLightAccumulator->render();
+            mDirectLightAccumulator.render();
             glFinish();
         });
 
         Measurement::ExecutionTime("Indirect light accumulation", [&] {
-            mIndirectLightAccumulator->render();
+            mIndirectLightAccumulator.render();
             glFinish();
         });
 
@@ -191,14 +175,14 @@ namespace EARenderer {
         auto ssrBrightOutputTexture = mPostprocessTexturePool->claim(); // Frame filtered by luminosity threshold and suitable for bloom effect
 
         Measurement::ExecutionTime("SSR", [&] {
-            mSSREffect.applyReflections(*mScene->camera(), mGBuffer, lightAccumulationTarget, ssrBaseOutputTexture, ssrBrightOutputTexture);
+            mSSREffect.applyReflections(*mScene->camera(), *mGBuffer, *lightAccumulationTarget, *ssrBaseOutputTexture, *ssrBrightOutputTexture);
             glFinish();
         });
 
         auto bloomOutputTexture = lightAccumulationTarget;
 
         Measurement::ExecutionTime("Bloom", [&] {
-            mBloomEffect.bloom(ssrBaseOutputTexture, ssrBrightOutputTexture, bloomOutputTexture, mSettings.bloomSettings);
+            mBloomEffect.bloom(*ssrBaseOutputTexture, *ssrBrightOutputTexture, *bloomOutputTexture, mSettings.bloomSettings);
             glFinish();
         });
 
@@ -209,16 +193,16 @@ namespace EARenderer {
         auto toneMappingOutputTexture = ssrBaseOutputTexture;
 
         Measurement::ExecutionTime("Tone mapping", [&] {
-            mToneMappingEffect.toneMap(bloomOutputTexture, toneMappingOutputTexture);
+            mToneMappingEffect.toneMap(*bloomOutputTexture, *toneMappingOutputTexture);
             glFinish();
         });
-//
-//        auto smaaOutputTexture = ssrBrightOutputTexture;
-//
-//        Measurement::ExecutionTime("Antialiasing", [&] {
-//            mSMAAEffect.antialise(toneMappingOutputTexture, smaaOutputTexture);
-//            glFinish();
-//        });
+
+        auto smaaOutputTexture = ssrBrightOutputTexture;
+
+        Measurement::ExecutionTime("Antialiasing", [&] {
+            mSMAAEffect.antialise(*toneMappingOutputTexture, *smaaOutputTexture);
+            glFinish();
+        });
 
 //        // DEBUG
 //        glDisable(GL_DEPTH_TEST);
@@ -233,9 +217,12 @@ namespace EARenderer {
 //        glEnable(GL_DEPTH_TEST);
 //        // DEBUG
 
-//        renderFinalImage(smaaOutputTexture);
-        renderFinalImage(toneMappingOutputTexture);
-
+        Measurement::ExecutionTime("Final frame", [&] {
+            renderFinalImage(smaaOutputTexture);
+//        renderFinalImage(toneMappingOutputTexture);
+            glFinish();
+        });
+//
         mPostprocessTexturePool->putBack(lightAccumulationTarget);
         mPostprocessTexturePool->putBack(ssrBaseOutputTexture);
         mPostprocessTexturePool->putBack(ssrBrightOutputTexture);

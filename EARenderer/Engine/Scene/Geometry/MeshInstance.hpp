@@ -13,6 +13,7 @@
 #include "Transformation.hpp"
 #include "AxisAlignedBox3D.hpp"
 #include "MaterialType.hpp"
+#include "Mesh.hpp"
 
 #include <unordered_map>
 #include <glm/mat4x4.hpp>
@@ -33,7 +34,7 @@ namespace EARenderer {
         /// Material reference that overrides individual sub mesh materials if set
         std::optional<MaterialReference> materialReference;
 
-        MeshInstance(ID meshID);
+        MeshInstance(ID meshID, const Mesh& mesh);
 
         ID meshID() const;
 
@@ -47,7 +48,7 @@ namespace EARenderer {
 
         Transformation& transformation();
 
-        AxisAlignedBox3D boundingBox() const;
+        AxisAlignedBox3D boundingBox(const Mesh& mesh) const;
 
         std::optional<MaterialReference> materialReferenceForSubMeshID(ID subMeshID) const;
 

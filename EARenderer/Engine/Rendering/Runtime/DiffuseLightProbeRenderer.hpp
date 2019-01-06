@@ -21,16 +21,15 @@ namespace EARenderer {
     class DiffuseLightProbeRenderer {
     private:
         const Scene *mScene;
-        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
-        std::shared_ptr<const std::array<GLLDRTexture3D, 4>> mSphericalHarmonics;
+        const DiffuseLightProbeData *mProbeData;
+        const std::array<GLLDRTexture3D, 4> *mSphericalHarmonics;
+
         GLVertexArray<DiffuseLightProbe> mDiffuseProbesVAO;
         GLSLGridLightProbeRendering mGridProbeRenderingShader;
         RenderingSettings mRenderingSettings;
 
     public:
-        DiffuseLightProbeRenderer(const Scene *scene,
-                std::shared_ptr<const DiffuseLightProbeData> probeData,
-                std::shared_ptr<const std::array<GLLDRTexture3D, 4>> sphericalHarmonics);
+        DiffuseLightProbeRenderer(const Scene *scene, const DiffuseLightProbeData *probeData, const std::array<GLLDRTexture3D, 4> *sphericalHarmonics);
 
         void setRenderingSettings(const RenderingSettings &settings);
 

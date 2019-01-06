@@ -23,9 +23,9 @@ namespace EARenderer {
 
     SurfelRenderer::SurfelRenderer(
             const Scene *scene,
-            std::shared_ptr<const SurfelData> surfelData,
-            std::shared_ptr<const DiffuseLightProbeData> probeData,
-            std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelLuminances)
+            const SurfelData *surfelData,
+            const DiffuseLightProbeData *probeData,
+            const GLFloatTexture2D<GLTexture::Float::R16F> *surfelLuminances)
             :
             mScene(scene),
             mSurfelData(surfelData),
@@ -37,7 +37,7 @@ namespace EARenderer {
         std::uniform_real_distribution<float> distribution(0.3, 1.0);
 
         for (auto &cluster : surfelData->surfelClusters()) {
-            std::array<GLVertexAttribute, 4> attributes {
+            std::array<GLVertexAttribute, 4> attributes{
                     GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                     GLVertexAttribute::UniqueAttribute(sizeof(glm::vec3), glm::vec3::length()),
                     GLVertexAttribute::UniqueAttribute(sizeof(Color), 4),

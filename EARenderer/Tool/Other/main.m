@@ -1,5 +1,5 @@
 //
-//  main.m
+//  Main.m
 //  EARenderer
 //
 //  Created by Pavlo Muratov on 10.02.17.

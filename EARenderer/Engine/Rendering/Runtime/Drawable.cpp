@@ -34,8 +34,20 @@ namespace EARenderer {
 
         namespace TriangleMesh {
 
-            void Draw(size_t count) {
-                glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(count));
+            void Draw(size_t vertexCount, size_t VBOOffset) {
+                glDrawArrays(GL_TRIANGLES, VBOOffset, static_cast<GLsizei>(vertexCount));
+            }
+
+            void DrawInstanced(size_t instanceCount, size_t vertexCount, size_t VBOOffset) {
+                glDrawArraysInstanced(GL_TRIANGLES, VBOOffset, static_cast<GLsizei>(vertexCount), static_cast<GLsizei>(instanceCount));
+            }
+
+            void TriangleMesh::Draw(const GLVBODataLocation &location) {
+                glDrawArrays(GL_TRIANGLES, location.offset, static_cast<GLsizei>(location.vertexCount));
+            }
+
+            void TriangleMesh::DrawInstanced(size_t instanceCount, const GLVBODataLocation &location) {
+                glDrawArraysInstanced(GL_TRIANGLES, location.offset, static_cast<GLsizei>(location.vertexCount), static_cast<GLsizei>(instanceCount));
             }
 
         }

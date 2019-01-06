@@ -15,7 +15,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    Cameraman::Cameraman(Camera *camera, Input *userInput, GLViewport *viewport)
+    Cameraman::Cameraman(Camera *camera, Input *userInput, const GLViewport *viewport)
             :
             mCamera(camera),
             mUserInput(userInput),

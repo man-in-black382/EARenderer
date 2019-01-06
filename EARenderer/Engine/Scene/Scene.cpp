@@ -13,6 +13,7 @@
 
 #include "Collision.hpp"
 #include "Measurement.hpp"
+#include "SharedResourceStorage.hpp"
 
 namespace EARenderer {
 
@@ -59,11 +60,11 @@ namespace EARenderer {
     }
 
     Camera *Scene::camera() const {
-        return mCamera;
+        return mCamera.get();
     }
 
     Skybox *Scene::skybox() const {
-        return mSkybox;
+        return mSkybox.get();
     }
 
     const std::string &Scene::name() const {
@@ -100,12 +101,12 @@ namespace EARenderer {
 
 #pragma mark - Setters
 
-    void Scene::setCamera(Camera *camera) {
-        mCamera = camera;
+    void Scene::setCamera(std::unique_ptr<Camera> camera) {
+        mCamera = std::move(camera);
     }
 
-    void Scene::setSkybox(Skybox *skybox) {
-        mSkybox = skybox;
+    void Scene::setSkybox(std::unique_ptr<Skybox> skybox) {
+        mSkybox = std::move(skybox);
     }
 
     void Scene::setName(const std::string &name) {
@@ -126,20 +127,20 @@ namespace EARenderer {
 
 #pragma mark -
 
-    void Scene::calculateGeometricProperties() {
+    void Scene::calculateGeometricProperties(const SharedResourceStorage &resourceStorage) {
         mBoundingBox = AxisAlignedBox3D::MaximumReversed();
         mStaticGeometryArea = 0.0;
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto &instance = mMeshInstances[meshInstanceID];
-            auto &mesh = ResourcePool::shared().mesh(instance.meshID());
+            auto &mesh = resourceStorage.mesh(instance.meshID());
 
             for (ID subMeshID : mesh.subMeshes()) {
                 auto &subMesh = mesh.subMeshes()[subMeshID];
                 mStaticGeometryArea += subMesh.surfaceArea();
             }
 
-            auto boundingBox = instance.boundingBox();
+            auto boundingBox = instance.boundingBox(mesh);
             mBoundingBox.min = glm::min(mBoundingBox.min, boundingBox.min);
             mBoundingBox.max = glm::max(mBoundingBox.max, boundingBox.max);
         }
@@ -147,7 +148,7 @@ namespace EARenderer {
         mLightBakingVolume = mBoundingBox;
     }
 
-    void Scene::buildStaticGeometryOctree() {
+    void Scene::buildStaticGeometryOctree(const SharedResourceStorage &resourceStorage) {
         auto containment = [&](const MeshTriangleRef &ref, const AxisAlignedBox3D &nodeBoundingBox) {
             return nodeBoundingBox.contains(ref.triangle);
         };
@@ -161,7 +162,7 @@ namespace EARenderer {
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             auto &meshInstance = mMeshInstances[meshInstanceID];
-            auto &mesh = ResourcePool::shared().mesh(meshInstance.meshID());
+            auto &mesh = resourceStorage.mesh(meshInstance.meshID());
 
             auto modelMatrix = meshInstance.modelMatrix();
 
@@ -180,12 +181,12 @@ namespace EARenderer {
         }
     }
 
-    void Scene::buildStaticGeometryRaytracer() {
+    void Scene::buildStaticGeometryRaytracer(const SharedResourceStorage &resourceStorage) {
         std::vector<Triangle3D> triangles;
 
         for (ID meshInstanceID : mStaticMeshInstanceIDs) {
             const auto &meshInstance = mMeshInstances[meshInstanceID];
-            const auto &mesh = ResourcePool::shared().mesh(meshInstance.meshID());
+            const auto &mesh = resourceStorage.mesh(meshInstance.meshID());
 
             auto modelMatrix = meshInstance.modelMatrix();
 

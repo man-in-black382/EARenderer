@@ -19,30 +19,38 @@
 #include "SceneGBuffer.hpp"
 
 #include <memory>
+#include "GPUResourceController.hpp"
 
 namespace EARenderer {
 
     class SceneGBufferConstructor {
     private:
         const Scene *mScene;
+        const SharedResourceStorage *mResourceStorage;
+        const GPUResourceController *mGPUResourceController;
 
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLSLGBuffer mGBufferShader;
         GLSLHiZBuffer mHiZBufferShader;
 
-        std::shared_ptr<SceneGBuffer> mGBuffer;
+        std::unique_ptr<SceneGBuffer> mGBuffer;
 
         void generateGBuffer();
 
-        void renderMeshInstance(const MeshInstance& instance, const Transformation* baseTransform = nullptr);
+        void renderMeshInstance(const MeshInstance &instance, const Transformation *baseTransform = nullptr);
 
         void generateHiZBuffer();
 
     public:
-        SceneGBufferConstructor(const Scene *scene, const RenderingSettings &settings);
+        SceneGBufferConstructor(
+                const Scene *scene,
+                const SharedResourceStorage *resourceStorage,
+                const GPUResourceController *gpuResourceController,
+                const RenderingSettings &settings
+        );
 
-        std::shared_ptr<const SceneGBuffer> GBuffer() const;
+        const SceneGBuffer *GBuffer() const;
 
         void render();
     };

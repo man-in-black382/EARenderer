@@ -27,8 +27,6 @@ namespace EARenderer {
         std::vector<Vertex1P1N2UV1T1BT> mVertices;
         AxisAlignedBox3D mBoundingBox = AxisAlignedBox3D::MaximumReversed();
         float mArea = 0.0;
-        int32_t mVBOOffset = 0;
-        int32_t mVertexCount = 0;
 
     public:
         SubMesh() = default;
@@ -49,15 +47,7 @@ namespace EARenderer {
 
         void setMaterialName(const std::string &name);
 
-        void setVBOOffset(int32_t offset);
-
-        void setVertexCount(int32_t count);
-
         void addVertex(const Vertex1P1N2UV1T1BT &vertex);
-
-        void draw() const;
-
-        void drawInstanced(size_t instanceCount) const;
     };
 
 }

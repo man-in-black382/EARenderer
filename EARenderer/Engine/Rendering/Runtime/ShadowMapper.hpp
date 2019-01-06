@@ -24,6 +24,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include "GPUResourceController.hpp"
 
 namespace EARenderer {
 
@@ -31,9 +32,12 @@ namespace EARenderer {
     private:
         static constexpr uint8_t MaximumCascadeCount = 4;
 
-        const Scene *mScene = nullptr;
         uint8_t mCascadeCount;
-        std::shared_ptr<const SceneGBuffer> mGBuffer;
+
+        const Scene *mScene;
+        const SceneGBuffer *mGBuffer;
+        const GPUResourceController *mGPUResourceController;
+        const SharedResourceStorage *mResourceStorage;
 
         FrustumCascades mShadowCascades;
         RenderingSettings mSettings;
@@ -62,7 +66,13 @@ namespace EARenderer {
         void renderOmnidirectionalShadowMaps();
 
     public:
-        ShadowMapper(const Scene *scene, std::shared_ptr<const SceneGBuffer> gBuffer, uint8_t cascadeCount);
+        ShadowMapper(
+                const Scene *scene,
+                const SharedResourceStorage *resourceStorage,
+                const GPUResourceController *gpuResourceController,
+                const SceneGBuffer *gBuffer,
+                uint8_t cascadeCount
+        );
 
         void setRenderingSettings(const RenderingSettings &settings);
 

@@ -10,6 +10,7 @@
 		36EBC01839F3AE7B8DE08461 /* GLTextureUnitManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC1DD00876C2C35BDF912 /* GLTextureUnitManager.cpp */; };
 		36EBC018D1B08F17CFED3BDA /* LightProbeEnvironmentCapture.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC30F1A8CF02B7FBE2734 /* LightProbeEnvironmentCapture.geom */; };
 		36EBC03D4DF09A7A548DED4C /* ProbeOcclusionRendering.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCFD67E07A43F85E58B27 /* ProbeOcclusionRendering.frag */; };
+		36EBC0644B5C3784F280679B /* MemoryUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC8F68A24039002267CDE /* MemoryUtils.cpp */; };
 		36EBC06925161FF7B56D9C8A /* GLSLToneMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCEB3A27B221462CCE592 /* GLSLToneMapping.cpp */; };
 		36EBC0814AF8575FEB8FD869 /* LuminanceRange.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC30C46366CAB2A202B31 /* LuminanceRange.frag */; };
 		36EBC0BA4A2DCA74E02C7AC2 /* DirectionalPenumbra.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCB127BCD3A178B934B03 /* DirectionalPenumbra.frag */; };
@@ -84,7 +85,7 @@
 		36EBC8BC4E55C82A724D8BCA /* CubeSidesRendering.geom in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC35452CC177D70403412 /* CubeSidesRendering.geom */; };
 		36EBC8C3F8F4136615732F7B /* night_sky.hdr in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCD357D3C4205A7755B2B /* night_sky.hdr */; };
 		36EBC8E3E61236F7DD68716F /* GLVertexAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0024397398B22BEAD21 /* GLVertexAttribute.cpp */; };
-		36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF4762755EEB818D8CF9 /* crc.cpp */; };
+		36EBC8F2255BD6D1C4E1780B /* CRC32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCF4762755EEB818D8CF9 /* CRC32.cpp */; };
 		36EBC8F2CFCF0AD144733B71 /* DepthPrepass.vert in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCA0110C9F7785232F51B /* DepthPrepass.vert */; };
 		36EBC91168689FEDCD18530D /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCE3DB0800C24503E266E /* Light.cpp */; };
 		36EBC931FFC610AB5BAF6D00 /* CookTorrance.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCFE5E0E43E858D872FE6 /* CookTorrance.glsl */; };
@@ -123,6 +124,7 @@
 		36EBCB79240290E1FC748529 /* Luminance.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC0F7D57946E628C8B128 /* Luminance.frag */; };
 		36EBCB9183152AED32EB902B /* Camera.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCDBBA1499D795BEC92F4 /* Camera.glsl */; };
 		36EBCBAA5799408DAD579426 /* GLSLOmnidirectionalPenumbra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC6F86A0EE57BE08FB202 /* GLSLOmnidirectionalPenumbra.cpp */; };
+		36EBCBB7C39AD6411D618F23 /* GLUniformBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC0814906BDC41BF41D41 /* GLUniformBuffer.cpp */; };
 		36EBCBD41E83DFD618528626 /* GLSLSMAAEdgeDetection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC8ECADC521D2B1A9398E /* GLSLSMAAEdgeDetection.cpp */; };
 		36EBCBE1DB7F839ED6E3E18B /* GLHDRCubemapSampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCAE04D315D5B1BB39C25 /* GLHDRCubemapSampler.cpp */; };
 		36EBCC10CB24AAAD3BDD8C7B /* CookTorranceMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCB1D83FE7E4235118157 /* CookTorranceMaterial.cpp */; };
@@ -157,6 +159,7 @@
 		36EBCE955F8C70CA6E82BF7F /* RadianceConvolution.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBCDECD6F019FE8689350C /* RadianceConvolution.frag */; };
 		36EBCEA2E00E143CEE1CEAC5 /* GLTextureFetcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC61047FBEE976966A92D /* GLTextureFetcher.cpp */; };
 		36EBCEA31AC443A2C62B291B /* GLSLCubemapRendering.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC593D267D68277CD3056 /* GLSLCubemapRendering.cpp */; };
+		36EBCECE375214C94A751605 /* GPUResourceController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBC56A68493F4E11B62D08 /* GPUResourceController.cpp */; };
 		36EBCEE94A584A6C62AEB1A4 /* SMAADefines.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC1233C06584B540E9E78 /* SMAADefines.glsl */; };
 		36EBCEF003F1E939AA2D72E5 /* GLSLLuminance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 36EBCAA72767DEE4F107B589 /* GLSLLuminance.cpp */; };
 		36EBCEFB49F6B91B55C8E214 /* HiZBuffer.frag in Resources */ = {isa = PBXBuildFile; fileRef = 36EBC707FF295439F930D5CF /* HiZBuffer.frag */; };
@@ -300,7 +303,7 @@
 		CE70FA111F8F8EF600AD9027 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8401F8F8EBD00AD9027 /* Input.cpp */; };
 		CE70FA121F8F8EF600AD9027 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8431F8F8EBD00AD9027 /* Range.cpp */; };
 		CE70FA131F8F8EF600AD9027 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8441F8F8EBD00AD9027 /* Color.cpp */; };
-		CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84A1F8F8EBD00AD9027 /* Log.cpp */; };
+		CE70FA141F8F8EF600AD9027 /* LogUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84A1F8F8EBD00AD9027 /* LogUtils.cpp */; };
 		CE70FA151F8F8EF600AD9027 /* FileManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84B1F8F8EBD00AD9027 /* FileManager.cpp */; };
 		CE70FA161F8F8EF600AD9027 /* FrameMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */; };
 		CE70FA171F8F8EF600AD9027 /* Throttle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */; };
@@ -403,7 +406,7 @@
 		CEE826C82157D1210019D2F8 /* tiny_obj_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEE826C62157D1210019D2F8 /* tiny_obj_loader.cpp */; };
 		CEEE4CDF20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEE4CDD20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.cpp */; };
 		CEEEFDE71FF00E210049DABD /* SurfelRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */; };
-		CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */; };
+		CEF2301E1FA1F7130054E9CE /* SharedResourceStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEF2301C1FA1F7130054E9CE /* SharedResourceStorage.cpp */; };
 		CEFB7A30205578E400364550 /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CEFB7A2E205578E400364550 /* Plane.cpp */; };
 /* End PBXBuildFile section */
 
@@ -418,13 +421,13 @@
 		36EBC0470C9E124A24E6EFE5 /* GLTextureBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureBuffer.hpp; sourceTree = "<group>"; };
 		36EBC052B6030C5165ADC3FD /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
 		36EBC060DE6A6220A721923B /* ProbeOcclusionRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.vert; sourceTree = "<group>"; };
+		36EBC0814906BDC41BF41D41 /* GLUniformBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniformBuffer.cpp; sourceTree = "<group>"; };
 		36EBC0AB9199125D8A600A5D /* Skybox.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Skybox.hpp; sourceTree = "<group>"; };
 		36EBC0F7D57946E628C8B128 /* Luminance.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Luminance.frag; sourceTree = "<group>"; };
 		36EBC0F9BC47AC3CB51DAE11 /* GLUniform.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLUniform.cpp; sourceTree = "<group>"; };
 		36EBC1057A36C314A16F7A85 /* ProbeOcclusionRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ProbeOcclusionRendering.geom; sourceTree = "<group>"; };
 		36EBC1233C06584B540E9E78 /* SMAADefines.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = SMAADefines.glsl; sourceTree = "<group>"; };
 		36EBC124B11EFF965EBDF32D /* GLSLSMAANeighborhoodBlending.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLSMAANeighborhoodBlending.hpp; sourceTree = "<group>"; };
-		36EBC12B5E0D7ECCBA1E7A6A /* UBOCompatible.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UBOCompatible.hpp; sourceTree = "<group>"; };
 		36EBC1401F8BFEE8D2184B4B /* SubMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SubMesh.hpp; sourceTree = "<group>"; };
 		36EBC148DC927D9C77AEFB2C /* GLSLLuminanceHistogram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceHistogram.hpp; sourceTree = "<group>"; };
 		36EBC1508605B44BD630F2F7 /* PointLight.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PointLight.hpp; sourceTree = "<group>"; };
@@ -465,7 +468,7 @@
 		36EBC3998B9412C8A624C771 /* GLProgram.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLProgram.hpp; sourceTree = "<group>"; };
 		36EBC39A133D8D70BC2F4D74 /* GLSLLuminance.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminance.hpp; sourceTree = "<group>"; };
 		36EBC39C48410F6D30DA3958 /* DemoScene3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DemoScene3.h; sourceTree = "<group>"; };
-		36EBC39CC5A83D01664D213B /* GLBufferWriter.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWriter.hpp; sourceTree = "<group>"; };
+		36EBC39CC5A83D01664D213B /* GLBufferWritingSession.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLBufferWritingSession.hpp; sourceTree = "<group>"; };
 		36EBC3A2A40D591A271B357C /* GLElementArrayBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLElementArrayBuffer.hpp; sourceTree = "<group>"; };
 		36EBC3A2FEC918474D2B4EAB /* ShadowMap.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ShadowMap.frag; sourceTree = "<group>"; };
 		36EBC3A3B48D2BF046DEFDF6 /* GLSLProbeOcclusionRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLProbeOcclusionRendering.cpp; sourceTree = "<group>"; };
@@ -474,7 +477,6 @@
 		36EBC3BAC32205EF4852EA44 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		36EBC3C0BAF2340F2B61DDB0 /* GLVertexAttribute.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLVertexAttribute.hpp; sourceTree = "<group>"; };
 		36EBC3CEB10D503615867CCF /* GLSLCubeRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLCubeRendering.hpp; sourceTree = "<group>"; };
-		36EBC3D1D56D9FD5DC980710 /* CameraUBOContent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraUBOContent.hpp; sourceTree = "<group>"; };
 		36EBC3DCFAA4CDB9C8BC04B7 /* Exposure.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Exposure.frag; sourceTree = "<group>"; };
 		36EBC402255572C5DE2E1C19 /* CubemapRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubemapRendering.vert; sourceTree = "<group>"; };
 		36EBC407F41CD88EFFBA7550 /* GLHDRTexture3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLHDRTexture3D.hpp; sourceTree = "<group>"; };
@@ -503,6 +505,7 @@
 		36EBC555C3E0D52C82867897 /* GLTexture2DArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTexture2DArray.hpp; sourceTree = "<group>"; };
 		36EBC5597C2966E64BD4E5D2 /* GenericGeometry.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GenericGeometry.vert; sourceTree = "<group>"; };
 		36EBC569EEFFB62301FBCA0D /* GLVertexArray.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLVertexArray.hpp; sourceTree = "<group>"; };
+		36EBC56A68493F4E11B62D08 /* GPUResourceController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GPUResourceController.cpp; sourceTree = "<group>"; };
 		36EBC593D267D68277CD3056 /* GLSLCubemapRendering.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLCubemapRendering.cpp; sourceTree = "<group>"; };
 		36EBC5B6A45EE87C9C40C424 /* GLSLEquirectangularMapConversion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLEquirectangularMapConversion.cpp; sourceTree = "<group>"; };
 		36EBC5D05912DA6DBFE9C03C /* Types.glsl */ = {isa = PBXFileReference; lastKnownFileType = file.glsl; path = Types.glsl; sourceTree = "<group>"; };
@@ -517,9 +520,11 @@
 		36EBC647A0CA19F7ABD4CAFF /* GLSLIndirectLightEvaluation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLIndirectLightEvaluation.cpp; sourceTree = "<group>"; };
 		36EBC65AC2A4F2722F4FF898 /* GLSLOmnidirectionalPenumbra.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLOmnidirectionalPenumbra.hpp; sourceTree = "<group>"; };
 		36EBC6662F7AE2D39E11B1EE /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgram.cpp; sourceTree = "<group>"; };
+		36EBC66CDA1BF3BCB7BA2592 /* UBOCompatible.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = UBOCompatible.hpp; sourceTree = "<group>"; };
 		36EBC67E3DFA26AF95B0D18E /* LightProbeLinksRendering.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = LightProbeLinksRendering.frag; sourceTree = "<group>"; };
 		36EBC681B2E38FD477F6DFE4 /* GLSLGridLightProbesUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGridLightProbesUpdate.cpp; sourceTree = "<group>"; };
 		36EBC6A2937C12690A75AB10 /* GLSLSurfelLighting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSurfelLighting.cpp; sourceTree = "<group>"; };
+		36EBC6AE0E653A0717F1F33E /* CameraUBOContent.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CameraUBOContent.hpp; sourceTree = "<group>"; };
 		36EBC6B9F27FD4223FA704DE /* GridLightProbeRendering.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = GridLightProbeRendering.vert; sourceTree = "<group>"; };
 		36EBC6BED7704D63B2ABDD63 /* SurfelRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SurfelRendering.geom; sourceTree = "<group>"; };
 		36EBC6DD41FDAB25FAD1001D /* GLSLBRDFIntegration.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLBRDFIntegration.hpp; sourceTree = "<group>"; };
@@ -552,6 +557,7 @@
 		36EBC8E70DBB8E4BE69748F6 /* CubemapRendering.geom */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = CubemapRendering.geom; sourceTree = "<group>"; };
 		36EBC8ECADC521D2B1A9398E /* GLSLSMAAEdgeDetection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLSMAAEdgeDetection.cpp; sourceTree = "<group>"; };
 		36EBC8F45901989D56DE465C /* GLNamedObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLNamedObject.hpp; sourceTree = "<group>"; };
+		36EBC8F68A24039002267CDE /* MemoryUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryUtils.cpp; sourceTree = "<group>"; };
 		36EBC90F32C821C47A1AD08C /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
 		36EBC912F4EEAB05ECCA3AFF /* GLSLBRDFIntegration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLBRDFIntegration.cpp; sourceTree = "<group>"; };
 		36EBC919FECB4BB0BB679F16 /* GLSLLuminanceRange.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLLuminanceRange.hpp; sourceTree = "<group>"; };
@@ -642,6 +648,7 @@
 		36EBCE8EDB917F5C3255CC3D /* GLSLGaussianBlur.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLGaussianBlur.hpp; sourceTree = "<group>"; };
 		36EBCEB08CD4BB614B4EA958 /* GLSLTriangleRendering.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLTriangleRendering.hpp; sourceTree = "<group>"; };
 		36EBCEB3A27B221462CCE592 /* GLSLToneMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLToneMapping.cpp; sourceTree = "<group>"; };
+		36EBCED12276395349338073 /* MemoryUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MemoryUtils.hpp; sourceTree = "<group>"; };
 		36EBCEDE720E57130BDCB735 /* Surfel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Surfel.cpp; sourceTree = "<group>"; };
 		36EBCEE4BA7CC95337E37B2B /* GLTextureFetcher.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLTextureFetcher.hpp; sourceTree = "<group>"; };
 		36EBCEF349C4F92A2CF12294 /* GLSLGenericGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLGenericGeometry.cpp; sourceTree = "<group>"; };
@@ -651,7 +658,8 @@
 		36EBCF21527E8E9EA0D7D76C /* GLSLIndirectLightEvaluation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLIndirectLightEvaluation.hpp; sourceTree = "<group>"; };
 		36EBCF2C841253B1CC86C5E0 /* GLRenderbuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderbuffer.cpp; sourceTree = "<group>"; };
 		36EBCF34ACE3063AA0C62CC9 /* GLSLDirectLightEvaluation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLSLDirectLightEvaluation.hpp; sourceTree = "<group>"; };
-		36EBCF4762755EEB818D8CF9 /* crc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = crc.cpp; sourceTree = "<group>"; };
+		36EBCF3B980FE4CFCC461BBB /* GPUResourceController.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GPUResourceController.hpp; sourceTree = "<group>"; };
+		36EBCF4762755EEB818D8CF9 /* CRC32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CRC32.cpp; sourceTree = "<group>"; };
 		36EBCF4F95A09CB2435433F5 /* FullScreenQuad.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = FullScreenQuad.vert; sourceTree = "<group>"; };
 		36EBCF5A7A018B693B5A38CF /* GLTextureFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTextureFactory.cpp; sourceTree = "<group>"; };
 		36EBCF5A86BB7D7B35EF15A9 /* Skybox.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Skybox.vert; sourceTree = "<group>"; };
@@ -935,7 +943,7 @@
 		ACFF6DA921369F0300D21C48 /* ShadowMapper.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShadowMapper.hpp; sourceTree = "<group>"; };
 		ACFFD8D61FC340F200F747CC /* SphericalHarmonics.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SphericalHarmonics.cpp; sourceTree = "<group>"; };
 		ACFFD8D71FC340F200F747CC /* SphericalHarmonics.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SphericalHarmonics.hpp; sourceTree = "<group>"; };
-		CE058FFF1FA73C7A00822524 /* crc.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc.hpp; sourceTree = "<group>"; };
+		CE058FFF1FA73C7A00822524 /* CRC32.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CRC32.hpp; sourceTree = "<group>"; };
 		CE151383217FA6D9004273EE /* Marble_tiles_02_4K_Height.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Height.png; sourceTree = "<group>"; };
 		CE151384217FA6DA004273EE /* Marble_tiles_02_4K_Base_Color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Base_Color.png; sourceTree = "<group>"; };
 		CE151385217FA6DA004273EE /* Marble_tiles_02_4K_Normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Marble_tiles_02_4K_Normal.png; sourceTree = "<group>"; };
@@ -1116,14 +1124,14 @@
 		CE70F8461F8F8EBD00AD9027 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Color.hpp; sourceTree = "<group>"; };
 		CE70F8471F8F8EBD00AD9027 /* Range.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Range.hpp; sourceTree = "<group>"; };
 		CE70F8481F8F8EBD00AD9027 /* BitwiseEnum.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BitwiseEnum.hpp; sourceTree = "<group>"; };
-		CE70F84A1F8F8EBD00AD9027 /* Log.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Log.cpp; sourceTree = "<group>"; };
+		CE70F84A1F8F8EBD00AD9027 /* LogUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogUtils.cpp; sourceTree = "<group>"; };
 		CE70F84B1F8F8EBD00AD9027 /* FileManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FileManager.cpp; sourceTree = "<group>"; };
 		CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Throttle.hpp; sourceTree = "<group>"; };
 		CE70F84D1F8F8EBD00AD9027 /* FrameMeter.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FrameMeter.hpp; sourceTree = "<group>"; };
 		CE70F84E1F8F8EBD00AD9027 /* FileManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = FileManager.hpp; sourceTree = "<group>"; };
 		CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FrameMeter.cpp; sourceTree = "<group>"; };
 		CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Throttle.cpp; sourceTree = "<group>"; };
-		CE70F8511F8F8EBD00AD9027 /* Log.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Log.hpp; sourceTree = "<group>"; };
+		CE70F8511F8F8EBD00AD9027 /* LogUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LogUtils.hpp; sourceTree = "<group>"; };
 		CE70F8531F8F8EBD00AD9027 /* SceneRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SceneRenderer.cpp; sourceTree = "<group>"; };
 		CE70F8541F8F8EBD00AD9027 /* AxesSelection.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AxesSelection.hpp; sourceTree = "<group>"; };
 		CE70F8561F8F8EBD00AD9027 /* AxesSystem.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AxesSystem.cpp; sourceTree = "<group>"; };
@@ -1597,8 +1605,8 @@
 		CEEE4CDE20FB873000CCBBF5 /* ScreenSpaceReflectionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ScreenSpaceReflectionEffect.hpp; sourceTree = "<group>"; };
 		CEEEFDE51FF00E200049DABD /* SurfelRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurfelRenderer.cpp; sourceTree = "<group>"; };
 		CEEEFDE61FF00E200049DABD /* SurfelRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SurfelRenderer.hpp; sourceTree = "<group>"; };
-		CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResourcePool.cpp; sourceTree = "<group>"; };
-		CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePool.hpp; sourceTree = "<group>"; };
+		CEF2301C1FA1F7130054E9CE /* SharedResourceStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SharedResourceStorage.cpp; sourceTree = "<group>"; };
+		CEF2301D1FA1F7130054E9CE /* SharedResourceStorage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SharedResourceStorage.hpp; sourceTree = "<group>"; };
 		CEFB7A2E205578E400364550 /* Plane.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Plane.cpp; sourceTree = "<group>"; };
 		CEFB7A2F205578E400364550 /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Plane.hpp; sourceTree = "<group>"; };
 		CEFB7A3120559EAA00364550 /* SpatialHashCellImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpatialHashCellImpl.h; sourceTree = "<group>"; };
@@ -1633,7 +1641,6 @@
 				36EBCDCC81538028B8146FF5 /* Camera.hpp */,
 				36EBC54DCFCA9D05EF449D21 /* Cameraman.hpp */,
 				36EBCE251D4848F4C37F3D8F /* Cameraman.cpp */,
-				36EBC3D1D56D9FD5DC980710 /* CameraUBOContent.hpp */,
 			);
 			path = Camera;
 			sourceTree = "<group>";
@@ -2048,7 +2055,7 @@
 			isa = PBXGroup;
 			children = (
 				36EBCDB09A3358715B78BEF6 /* GLBuffer.hpp */,
-				36EBC39CC5A83D01664D213B /* GLBufferWriter.hpp */,
+				36EBC39CC5A83D01664D213B /* GLBufferWritingSession.hpp */,
 				36EBC3A2A40D591A271B357C /* GLElementArrayBuffer.hpp */,
 				36EBC6397137E814A450203A /* GLVertexArrayBuffer.hpp */,
 				36EBC0470C9E124A24E6EFE5 /* GLTextureBuffer.hpp */,
@@ -2063,6 +2070,7 @@
 				36EBC0024397398B22BEAD21 /* GLVertexAttribute.cpp */,
 				36EBC3C0BAF2340F2B61DDB0 /* GLVertexAttribute.hpp */,
 				36EBC1A70A3A0EEB594E7B0B /* GLUniformBuffer.hpp */,
+				36EBC0814906BDC41BF41D41 /* GLUniformBuffer.cpp */,
 			);
 			path = Buffers;
 			sourceTree = "<group>";
@@ -3117,7 +3125,7 @@
 				CE70F8461F8F8EBD00AD9027 /* Color.hpp */,
 				CE70F8431F8F8EBD00AD9027 /* Range.cpp */,
 				CE70F8471F8F8EBD00AD9027 /* Range.hpp */,
-				CE058FFF1FA73C7A00822524 /* crc.hpp */,
+				CE058FFF1FA73C7A00822524 /* CRC32.hpp */,
 				AC9FB7D21FF0F76000FE28DD /* LowDiscrepancySequence.cpp */,
 				AC9FB7D31FF0F76000FE28DD /* LowDiscrepancySequence.hpp */,
 				CE5C5E242000CA04004D2B4E /* Measurement.cpp */,
@@ -3127,8 +3135,8 @@
 				CE70F84E1F8F8EBD00AD9027 /* FileManager.hpp */,
 				CE70F84F1F8F8EBD00AD9027 /* FrameMeter.cpp */,
 				CE70F84D1F8F8EBD00AD9027 /* FrameMeter.hpp */,
-				CE70F84A1F8F8EBD00AD9027 /* Log.cpp */,
-				CE70F8511F8F8EBD00AD9027 /* Log.hpp */,
+				CE70F84A1F8F8EBD00AD9027 /* LogUtils.cpp */,
+				CE70F8511F8F8EBD00AD9027 /* LogUtils.hpp */,
 				CE70F8501F8F8EBD00AD9027 /* Throttle.cpp */,
 				CE70F84C1F8F8EBD00AD9027 /* Throttle.hpp */,
 				AC0636D42015E0560065DEB7 /* StringUtils.hpp */,
@@ -3136,7 +3144,9 @@
 				AC3275B320D24FA800899697 /* GaussianFunction.hpp */,
 				CE79B26220E51E53004E28EF /* RenderingSettings.hpp */,
 				36EBCB843A22334E32722178 /* Visitor.hpp */,
-				36EBCF4762755EEB818D8CF9 /* crc.cpp */,
+				36EBCF4762755EEB818D8CF9 /* CRC32.cpp */,
+				36EBC8F68A24039002267CDE /* MemoryUtils.cpp */,
+				36EBCED12276395349338073 /* MemoryUtils.hpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -3227,7 +3237,6 @@
 				36EBC0AB9199125D8A600A5D /* Skybox.hpp */,
 				36EBCF8AF1C1857722CB3C23 /* MeshTriangleRef.cpp */,
 				36EBC532D8FC2B4CB9C23386 /* MeshTriangleRef.hpp */,
-				36EBC12B5E0D7ECCBA1E7A6A /* UBOCompatible.hpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -3573,14 +3582,18 @@
 		CE70F9AF1F8F8EBD00AD9027 /* Resource Management */ = {
 			isa = PBXGroup;
 			children = (
-				CEF2301C1FA1F7130054E9CE /* ResourcePool.cpp */,
-				CEF2301D1FA1F7130054E9CE /* ResourcePool.hpp */,
+				CEF2301C1FA1F7130054E9CE /* SharedResourceStorage.cpp */,
+				CEF2301D1FA1F7130054E9CE /* SharedResourceStorage.hpp */,
 				CE4E19CB20837DB700AF181A /* MeshLoader.cpp */,
 				CE4E19CC20837DB700AF181A /* MeshLoader.hpp */,
 				CE70F9B21F8F8EBD00AD9027 /* WavefrontMeshLoader.cpp */,
 				CE70F9B11F8F8EBD00AD9027 /* WavefrontMeshLoader.hpp */,
 				CE4E19C820834E7B00AF181A /* AutodeskMeshLoader.cpp */,
 				CE4E19C920834E7B00AF181A /* AutodeskMeshLoader.hpp */,
+				36EBC56A68493F4E11B62D08 /* GPUResourceController.cpp */,
+				36EBCF3B980FE4CFCC461BBB /* GPUResourceController.hpp */,
+				36EBC6AE0E653A0717F1F33E /* CameraUBOContent.hpp */,
+				36EBC66CDA1BF3BCB7BA2592 /* UBOCompatible.hpp */,
 			);
 			path = "Resource Management";
 			sourceTree = "<group>";
@@ -4205,7 +4218,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CEF2301E1FA1F7130054E9CE /* ResourcePool.cpp in Sources */,
+				CEF2301E1FA1F7130054E9CE /* SharedResourceStorage.cpp in Sources */,
 				ACF8B77B2012462200BCA351 /* Sphere.cpp in Sources */,
 				CE70FA901F8F912300AD9027 /* CameraListTabViewItem.mm in Sources */,
 				CE70FA351F8F8EF600AD9027 /* glm.cpp in Sources */,
@@ -4223,7 +4236,7 @@
 				CE70FA241F8F8EF600AD9027 /* Parallelogram3D.cpp in Sources */,
 				CE70FA1F1F8F8EF600AD9027 /* AxisAlignedBox3D.cpp in Sources */,
 				CEC2197120C076B000767342 /* MaterialLoader.mm in Sources */,
-				CE70FA141F8F8EF600AD9027 /* Log.cpp in Sources */,
+				CE70FA141F8F8EF600AD9027 /* LogUtils.cpp in Sources */,
 				CEA0B91320E799DC00257E37 /* DeferredSceneRenderer.cpp in Sources */,
 				CE7A017E20B1C46E0002D422 /* EmbreeRayTracer.cpp in Sources */,
 				CE70FA9B1F8F913100AD9027 /* NSColor+ApplicationColors.m in Sources */,
@@ -4350,7 +4363,7 @@
 				36EBC740B6D527BC3A8B897D /* GLSLHiZBuffer.cpp in Sources */,
 				36EBC33784E11E70B9DF67CF /* GLSLDirectLightEvaluation.cpp in Sources */,
 				36EBCB3E638BFF706123299B /* GLSLIndirectLightEvaluation.cpp in Sources */,
-				36EBC8F2255BD6D1C4E1780B /* crc.cpp in Sources */,
+				36EBC8F2255BD6D1C4E1780B /* CRC32.cpp in Sources */,
 				36EBC50F90E4B193486FB1C3 /* Camera.cpp in Sources */,
 				36EBC7183211E87A3E589C5D /* Cameraman.cpp in Sources */,
 				36EBCB457A336FEAFEF4422B /* SceneInteractor.cpp in Sources */,
@@ -4369,6 +4382,9 @@
 				36EBCABB2CFA97B5DB91D8C6 /* Material.cpp in Sources */,
 				36EBCAA5112F7C5E45A953CC /* Skybox.cpp in Sources */,
 				36EBCD35DA8ACFA6FD73D3B2 /* MeshTriangleRef.cpp in Sources */,
+				36EBCBB7C39AD6411D618F23 /* GLUniformBuffer.cpp in Sources */,
+				36EBC0644B5C3784F280679B /* MemoryUtils.cpp in Sources */,
+				36EBCECE375214C94A751605 /* GPUResourceController.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

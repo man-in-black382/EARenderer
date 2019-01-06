@@ -15,20 +15,14 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLViewport &GLViewport::main() {
+    GLViewport &GLViewport::Main() {
         static GLViewport main;
         return main;
     }
 
-    GLViewport::GLViewport()
-            :
-            mFrame(Rect2D::zero()) {
-    }
+    GLViewport::GLViewport() : mFrame(Rect2D::zero()) {}
 
-    GLViewport::GLViewport(const Rect2D &frame)
-            :
-            mFrame(frame) {
-    }
+    GLViewport::GLViewport(const Rect2D &frame) : mFrame(frame) {}
 
 #pragma mark - Getters
 

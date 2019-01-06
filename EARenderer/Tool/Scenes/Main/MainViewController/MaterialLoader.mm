@@ -27,7 +27,7 @@
     return std::string(path.UTF8String);
 }
 
-+ (EARenderer::MaterialReference)load_sandFloor_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_sandFloor_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Ground05_col.jpg"],
             [self pathForResource:@"Ground05_nrm.jpg"],
@@ -38,7 +38,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_marbleTiles_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_marbleTiles_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Marble_tiles_02_4K_Base_Color.png"],
             [self pathForResource:@"Marble_tiles_02_4K_Normal.png"],
@@ -49,7 +49,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_testBricks_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_testBricks_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"bricks2.jpg"],
             [self pathForResource:@"bricks2_normal.jpg"],
@@ -60,7 +60,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_bricks08_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_bricks08_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Bricks08_col.jpg"],
             [self pathForResource:@"Bricks08_nrm.jpg"],
@@ -71,7 +71,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_fabric05_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_fabric05_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Fabric05_col.jpg"],
             [self pathForResource:@"Fabric05_nrm.jpg"],
@@ -82,7 +82,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_fabric06_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_fabric06_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Fabric06_col.jpg"],
             [self pathForResource:@"Fabric06_nrm.jpg"],
@@ -93,7 +93,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_rocks01_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_rocks01_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Rocks01_col.jpg"],
             [self pathForResource:@"Rocks01_nrm.jpg"],
@@ -104,7 +104,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_pavingStones09_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_pavingStones09_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"PavingStones09_col.jpg"],
             [self pathForResource:@"PavingStones09_nrm.jpg"],
@@ -115,7 +115,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_pavingStones10_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_pavingStones10_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"PavingStones10_col.jpg"],
             [self pathForResource:@"PavingStones10_nrm.jpg"],
@@ -126,7 +126,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_BlueFabric_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_BlueFabric_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Fabric03_col.jpg"],
             [self pathForResource:@"Fabric03_nrm.jpg"],
@@ -137,7 +137,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_RedFabric_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_RedFabric_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"fabric02_col.jpg"],
             [self pathForResource:@"fabric02_nrm.jpg"],
@@ -148,7 +148,7 @@
     });
 }
 
-+ (EARenderer::MaterialReference)load_WetStones_MaterialToPool:(EARenderer::ResourcePool *)pool {
++ (EARenderer::MaterialReference)load_WetStones_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"T_stoneFloorA_wet_AL.tga"],
             [self pathForResource:@"T_stoneFloorA_wet_NM.tga"],

@@ -18,7 +18,7 @@
 #include "CookTorranceMaterial.hpp"
 #include "Skybox.hpp"
 #include "DiffuseLightProbe.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
 #include "GLBufferTexture.hpp"
 #include "Surfel.hpp"
 #include "SurfelCluster.hpp"
@@ -33,6 +33,8 @@
 #include <memory>
 
 namespace EARenderer {
+
+    class SharedResourceStorage;
 
     class Scene {
     public:
@@ -63,8 +65,8 @@ namespace EARenderer {
         std::list<ID> mStaticMeshInstanceIDs;
         std::list<ID> mDynamicMeshInstanceIDs;
 
-        Camera *mCamera;
-        Skybox *mSkybox;
+        std::unique_ptr<Camera> mCamera;
+        std::unique_ptr<Skybox> mSkybox;
 
         AxisAlignedBox3D mBoundingBox;
         AxisAlignedBox3D mLightBakingVolume;
@@ -123,9 +125,9 @@ namespace EARenderer {
 
         void setLightBakingVolume(const AxisAlignedBox3D &volume);
 
-        void setCamera(Camera *camera);
+        void setCamera(std::unique_ptr<Camera> camera);
 
-        void setSkybox(Skybox *skybox);
+        void setSkybox(std::unique_ptr<Skybox> skybox);
 
         void addMeshInstanceWithIDAsStatic(ID meshInstanceID);
 
@@ -133,11 +135,11 @@ namespace EARenderer {
 
 #pragma mark -
 
-        void calculateGeometricProperties();
+        void calculateGeometricProperties(const SharedResourceStorage& resourceStorage);
 
-        void buildStaticGeometryOctree();
+        void buildStaticGeometryOctree(const SharedResourceStorage& resourceStorage);
 
-        void buildStaticGeometryRaytracer();
+        void buildStaticGeometryRaytracer(const SharedResourceStorage& resourceStorage);
 
         /**
          Destroy helper objects that take up a lot of memory, but can be recreated at any time (ray tracers, etc.)

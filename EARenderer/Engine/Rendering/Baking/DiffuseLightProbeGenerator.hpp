@@ -20,25 +20,18 @@ namespace EARenderer {
 
     class DiffuseLightProbeGenerator {
     private:
+        std::unique_ptr<DiffuseLightProbeData> mProbeData;
 
-#pragma mark - Member variables
+        float surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe, const Scene &scene);
 
-        std::shared_ptr<DiffuseLightProbeData> mProbeData;
-        std::shared_ptr<const SurfelData> mSurfelData;
-        const Scene *mScene = nullptr;
+        SurfelClusterProjection projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe, const SurfelData& surfelData, const Scene &scene);
 
-#pragma mark - Members functions
+        void projectSurfelClustersOnProbe(DiffuseLightProbe &probe, const SurfelData& surfelData, const Scene &scene);
 
-        float surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe);
-
-        SurfelClusterProjection projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe);
-
-        void projectSurfelClustersOnProbe(DiffuseLightProbe &probe);
-
-        void projectSkyOnProbe(DiffuseLightProbe &probe);
+        void projectSkyOnProbe(DiffuseLightProbe &probe, const Scene &scene);
 
     public:
-        std::shared_ptr<DiffuseLightProbeData> generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData);
+        std::unique_ptr<DiffuseLightProbeData> generateProbes(const Scene &scene, const SurfelData& surfelData);
     };
 
 }

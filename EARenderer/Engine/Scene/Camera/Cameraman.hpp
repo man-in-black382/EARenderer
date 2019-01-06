@@ -22,7 +22,7 @@ namespace EARenderer {
     private:
         Camera *mCamera = nullptr;
         Input *mUserInput = nullptr;
-        GLViewport *mViewport = nullptr;
+        const GLViewport *mViewport = nullptr;
 
         glm::vec2 mPreviousMousePosition;
         glm::vec2 mRotation;
@@ -49,7 +49,7 @@ namespace EARenderer {
         bool isMouseMovingHorizontally(const glm::vec2 &mouseDirection) const;
 
     public:
-        Cameraman(Camera *camera, Input *userInput, GLViewport *viewport);
+        Cameraman(Camera *camera, Input *userInput, const GLViewport *viewport);
 
         Cameraman(const Cameraman &that) = default;
 

@@ -14,7 +14,8 @@
 #include <cmath>
 
 #include "GLNamedObject.hpp"
-#include "GLBufferWriter.hpp"
+#include "GLBufferWritingSession.hpp"
+#include "MemoryUtils.hpp"
 
 namespace EARenderer {
 
@@ -27,11 +28,20 @@ namespace EARenderer {
         size_t mSize = 0;
         size_t mCount = 0;
 
+    protected:
+        DataType *map() {
+            return reinterpret_cast<DataType *>(glMapBuffer(mBindingPoint, GL_WRITE_ONLY));
+        }
+
+        void unmap() {
+            glUnmapBuffer(mBindingPoint);
+        }
+
     public:
 
 #pragma mark - Types
 
-        using WriteContextClosure = std::function<void(GLBufferWriter<DataType> writer)>;
+        using WriteContextClosure = std::function<void(GLBufferWritingSession<DataType> writer)>;
 
 #pragma mark - Lifecycle
 
@@ -43,13 +53,15 @@ namespace EARenderer {
         GLBuffer(const DataType *data, uint64_t count, GLint bindingPoint, GLenum usageMode, size_t perObjectAlignment = 1)
                 : mBindingPoint(bindingPoint), mUsageMode(usageMode), mAlignment(std::max(perObjectAlignment, 1ul)) {
 
+            if (count == 0) {
+                throw std::invalid_argument("Buffer size cannot be 0, though it can be constructed without any data");
+            }
+
             glGenBuffers(1, &mName);
             bind();
 
+            size_t padding = Utils::Memory::Padding<DataType>(perObjectAlignment);
             size_t objectSize = sizeof(DataType);
-            uint16_t fullAlignments = objectSize / mAlignment;
-            size_t tail = objectSize - mAlignment * fullAlignments;
-            size_t padding = tail > 0 ? mAlignment - tail : 0;
             size_t alignedObjectSize = objectSize + padding;
             size_t totalBytes = alignedObjectSize * count;
 
@@ -57,7 +69,7 @@ namespace EARenderer {
             mCount = count;
 
             // Data is already aligned. Lucky!
-            if (alignedObjectSize == objectSize) {
+            if (alignedObjectSize == objectSize || data == nullptr) {
                 glBufferData(mBindingPoint, totalBytes, data, mUsageMode);
                 return;
             }
@@ -68,7 +80,7 @@ namespace EARenderer {
                 memcpy(alignedStorage + alignedObjectSize * i, data + i, objectSize);
             }
             glBufferData(mBindingPoint, totalBytes, alignedStorage, mUsageMode);
-            delete (alignedStorage);
+            delete[] (alignedStorage);
         }
 
         ~GLBuffer() override {
@@ -101,45 +113,15 @@ namespace EARenderer {
 
 #pragma mark - Helpers
 
-//        template<template<class...> class ContinuousContainer>
-//        void initialize(const ContinuousContainer<DataType> &data) {
-//            initialize(data.data(), data.size());
-//        }
-//
-//        void initialize(const DataType *data, uint64_t count) {
-//            bind();
-//
-//            size_t objectSize = sizeof(DataType);
-//            uint16_t fullAlignments = objectSize / mAlignment;
-//            size_t tail = objectSize - mAlignment * fullAlignments;
-//            size_t padding = tail > 0 ? mAlignment - tail : 0;
-//            size_t alignedObjectSize = objectSize + padding;
-//            size_t totalBytes = alignedObjectSize * count;
-//
-//            mSize = totalBytes;
-//            mCount = count;
-//
-//            // Data is already aligned. Lucky!
-//            if (alignedObjectSize == objectSize) {
-//                glBufferData(mBindingPoint, totalBytes, data, mUsageMode);
-//                return;
-//            }
-//
-//            // Not aligned. Have to allocate additional memory chunk.
-//            unsigned char *alignedStorage = new unsigned char[totalBytes];
-//            for (int i = 0; i < count; ++i) {
-//                memcpy(alignedStorage + alignedObjectSize * i, data + i, objectSize);
-//            }
-//            glBufferData(mBindingPoint, totalBytes, alignedStorage, mUsageMode);
-//            delete (alignedStorage);
-//        }
+        auto mapForWriting() {
+            bind();
+            auto ptr = map();
+            return GLBufferWritingSession<DataType>(ptr, mCount, mAlignment, [this] {
+                bind();
+                unmap();
+            });
+        }
 
-//        void write(const WriteContextClosure &contextClosure) {
-//            bind();
-//            DataType *data = reinterpret_cast<DataType *>(glMapBuffer(mBindingPoint, GL_WRITE_ONLY));
-//            contextClosure(GLBufferWriter<DataType>(data, mSize));
-//            glUnmapBuffer(mBindingPoint);
-//        }
     };
 
 }

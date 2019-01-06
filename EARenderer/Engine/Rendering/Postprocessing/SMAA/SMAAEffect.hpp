@@ -28,18 +28,16 @@ namespace EARenderer {
         GLSLSMAABlendingWeightCalculation mBlendingWeightCalculationShader;
         GLSLSMAANeighborhoodBlending mNeighborhoodBlendingShader;
 
-        void detectEdges(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image);
+        void detectEdges(const PostprocessTexturePool::PostprocessTexture &image);
 
         void calculateBlendingWeights();
 
-        void blendNeighbors(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
+        void blendNeighbors(const PostprocessTexturePool::PostprocessTexture &image, PostprocessTexturePool::PostprocessTexture &outputImage);
 
     public:
         SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
-        void antialise(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
+        void antialise(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage);
     };
 
 }

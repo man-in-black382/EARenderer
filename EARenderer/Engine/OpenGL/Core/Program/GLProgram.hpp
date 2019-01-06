@@ -33,7 +33,7 @@
 #include "GLTexture2DArray.hpp"
 #include "GLBufferTexture.hpp"
 #include "GLUniformBuffer.hpp"
-#include "crc.hpp"
+#include "CRC32.hpp"
 
 namespace EARenderer {
 
@@ -76,8 +76,7 @@ namespace EARenderer {
 
         void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture &texture, const GLSampler *sampler = nullptr);
 
-        template<typename BufferDataType>
-        void setUniformBuffer(CRC32 uniformNameCRC32, const GLUniformBuffer<BufferDataType>& UBO) {
+        void setUniformBuffer(CRC32 uniformNameCRC32, const GLUniformBuffer& UBO) {
             const GLUniformBlock& block = uniformBlockByNameCRC32(uniformNameCRC32);
             glBindBufferRange(GL_UNIFORM_BUFFER, block.binding(), UBO.name(), 0, UBO.size());
         }

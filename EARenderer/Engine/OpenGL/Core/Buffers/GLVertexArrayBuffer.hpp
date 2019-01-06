@@ -14,6 +14,11 @@
 
 namespace EARenderer {
 
+    struct GLVBODataLocation {
+        size_t offset;
+        size_t vertexCount;
+    };
+
     template<typename Vertex>
     class GLVertexArrayBuffer : public GLBuffer<Vertex> {
     public:

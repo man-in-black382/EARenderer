@@ -6,7 +6,7 @@
 //  Copyright © 2017 MPO. All rights reserved.
 //
 
-#include "crc.hpp"
+#include "CRC32.hpp"
 
 uint32_t ctcrc32(std::string const &str) {
     size_t len = str.size() + 1;

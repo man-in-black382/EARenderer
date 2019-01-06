@@ -23,9 +23,10 @@ namespace EARenderer {
 
     class DirectLightAccumulator {
     private:
-        const Scene *mScene = nullptr;
-        std::shared_ptr<const SceneGBuffer> mGBuffer;
-        std::shared_ptr<const ShadowMapper> mShadowMapper;
+        const Scene *mScene;
+        const SceneGBuffer *mGBuffer;
+        const ShadowMapper *mShadowMapper;
+
         GLSLDirectLightEvaluation mLightEvaluationShader;
         RenderingSettings mSettings;
 
@@ -34,9 +35,7 @@ namespace EARenderer {
         void renderPointLights();
 
     public:
-        DirectLightAccumulator(const Scene *scene,
-                std::shared_ptr<const SceneGBuffer> gBuffer,
-                std::shared_ptr<const ShadowMapper> shadowMapper);
+        DirectLightAccumulator(const Scene *scene, const SceneGBuffer *gBuffer, const ShadowMapper *shadowMapper);
 
         void setRenderingSettings(const RenderingSettings &settings);
 

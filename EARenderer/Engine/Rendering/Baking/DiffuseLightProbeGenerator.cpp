@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Protected
 
-    float DiffuseLightProbeGenerator::surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe) {
+    float DiffuseLightProbeGenerator::surfelSolidAngle(const Surfel &surfel, const DiffuseLightProbe &probe, const Scene &scene) {
         glm::vec3 Wps = surfel.position - probe.position;
         float distance2 = glm::length2(Wps);
         Wps = glm::normalize(Wps);
@@ -28,19 +28,19 @@ namespace EARenderer {
         if (visibilityTerm > 0.0) {
             constexpr float p0Offset = 0.01; // Offset line segment points to avoid erroneous collision detections at surfel positions,
             constexpr float p1Offset = 0.01; // which will happen a lot since the're located exactly on the surface of geometry
-            visibilityTest = mScene->rayTracer()->lineSegmentOccluded(probe.position, surfel.position, p0Offset, p1Offset) ? 0.0f : 1.0f;
+            visibilityTest = scene.rayTracer()->lineSegmentOccluded(probe.position, surfel.position, p0Offset, p1Offset) ? 0.0f : 1.0f;
         }
 
         return distanceTerm * visibilityTerm * visibilityTest;
     }
 
-    SurfelClusterProjection DiffuseLightProbeGenerator::projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe) {
+    SurfelClusterProjection DiffuseLightProbeGenerator::projectSurfelCluster(const SurfelCluster &cluster, const DiffuseLightProbe &probe, const SurfelData& surfelData, const Scene &scene) {
         SurfelClusterProjection projection;
 
         for (size_t i = cluster.surfelOffset; i < cluster.surfelOffset + cluster.surfelCount; i++) {
-            const Surfel &surfel = mSurfelData->surfels()[i];
+            const Surfel &surfel = surfelData.surfels()[i];
             glm::vec3 Wps_norm = glm::normalize(surfel.position - probe.position);
-            float solidAngle = surfelSolidAngle(surfel, probe);
+            float solidAngle = surfelSolidAngle(surfel, probe, scene);
 
             if (solidAngle > 0.0) {
                 // Accumulating in YCoCg space to enable compression possibilities
@@ -55,12 +55,12 @@ namespace EARenderer {
         return projection;
     }
 
-    void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe &probe) {
+    void DiffuseLightProbeGenerator::projectSurfelClustersOnProbe(DiffuseLightProbe &probe, const SurfelData& surfelData, const Scene &scene) {
         probe.surfelClusterProjectionGroupOffset = (uint32_t) mProbeData->mSurfelClusterProjections.size();
 
-        for (size_t i = 0; i < mSurfelData->surfelClusters().size(); i++) {
-            const SurfelCluster &cluster = mSurfelData->surfelClusters()[i];
-            SurfelClusterProjection projection = projectSurfelCluster(cluster, probe);
+        for (size_t i = 0; i < surfelData.surfelClusters().size(); i++) {
+            const SurfelCluster &cluster = surfelData.surfelClusters()[i];
+            SurfelClusterProjection projection = projectSurfelCluster(cluster, probe, surfelData, scene);
 
             // Only accept projections with non-zero SH
             if (projection.sphericalHarmonics.magnitude() > 10e-7) {
@@ -71,7 +71,7 @@ namespace EARenderer {
         }
     }
 
-    void DiffuseLightProbeGenerator::projectSkyOnProbe(DiffuseLightProbe &probe) {
+    void DiffuseLightProbeGenerator::projectSkyOnProbe(DiffuseLightProbe &probe, const Scene &scene) {
 
         float sampleDelta = 0.025;
         int32_t iterationCount = 0;
@@ -94,7 +94,7 @@ namespace EARenderer {
                 Ray3D sampleRay(probe.position, sampleVector);
 
                 // If sky is visible (not obstructed by geometry) contribute to the spherical harmonics in that direction
-                if (!mScene->rayTracer()->rayHit(sampleRay, distance)) {
+                if (!scene.rayTracer()->rayHit(sampleRay, distance)) {
                     // Scale by sin(theta) to account for the smaller sample areas in the higher hemisphere areas
                     probe.skySphericalHarmonics.contribute(sampleVector, glm::vec3(1.0), sinTheta);
                 }
@@ -109,14 +109,12 @@ namespace EARenderer {
 
 #pragma mark - Public interface
 
-    std::shared_ptr<DiffuseLightProbeData> DiffuseLightProbeGenerator::generateProbes(const Scene *scene, std::shared_ptr<const SurfelData> surfelData) {
-        mProbeData = std::make_shared<DiffuseLightProbeData>();
-        mSurfelData = surfelData;
-        mScene = scene;
+    std::unique_ptr<DiffuseLightProbeData> DiffuseLightProbeGenerator::generateProbes(const Scene &scene, const SurfelData& surfelData) {
+        mProbeData = std::make_unique<DiffuseLightProbeData>();
 
-        AxisAlignedBox3D bb = scene->lightBakingVolume();
+        AxisAlignedBox3D bb = scene.lightBakingVolume();
         glm::vec3 bbLengths = bb.max - bb.min;
-        glm::vec3 resolution = glm::round(bbLengths / scene->difuseProbesSpacing());
+        glm::vec3 resolution = glm::round(bbLengths / scene.difuseProbesSpacing());
         glm::vec3 step = bbLengths / (resolution - 1.0f);
 
         printf("Building grid probes...\n");
@@ -125,8 +123,8 @@ namespace EARenderer {
                 for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
                     for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
                         DiffuseLightProbe probe({x, y, z});
-                        projectSurfelClustersOnProbe(probe);
-                        projectSkyOnProbe(probe);
+                        projectSurfelClustersOnProbe(probe, surfelData, scene);
+                        projectSkyOnProbe(probe, scene);
                         mProbeData->mProbes.push_back(probe);
                     }
                 }
@@ -137,7 +135,7 @@ namespace EARenderer {
         mProbeData->mGridResolution = resolution;
         mProbeData->initializeBuffers();
 
-        return mProbeData;
+        return std::move(mProbeData);
     }
 
 }

@@ -26,7 +26,7 @@
 
 @implementation DemoScene2
 
-- (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
+- (void)loadResourcesToPool:(EARenderer::SharedResourceStorage *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
     // Meshes
     NSString *cornellBoxPath = [[NSBundle mainBundle] pathForResource:@"cornell_box_covered" ofType:@"obj"];
 
@@ -40,7 +40,7 @@
 
     // Instances
 
-    EARenderer::MeshInstance cornellBoxInstance(cornellBoxMeshID);
+    EARenderer::MeshInstance cornellBoxInstance(cornellBoxMeshID, resourcePool->mesh(cornellBoxMeshID));
     EARenderer::Transformation t = cornellBoxInstance.transformation();
     t.scale *= glm::vec3(3.0);
     cornellBoxInstance.setTransformation(t);
@@ -65,9 +65,9 @@
     scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
-    scene->setSkybox(new EARenderer::Skybox(std::string(hdrSkyboxPath.UTF8String)));
+    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String)));
 
-    scene->calculateGeometricProperties();
+    scene->calculateGeometricProperties(*resourcePool);
 
     glm::mat4 bbScale = glm::scale(glm::vec3(0.92, 0.92, 0.92));
     glm::mat4 bbTranslation = glm::translate((scene->boundingBox().max - scene->boundingBox().min) * 0.04f);
@@ -75,7 +75,7 @@
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
-        scene->buildStaticGeometryRaytracer();
+        scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
     scene->setName("cornell");
@@ -86,8 +86,6 @@
     scene->camera()->lookAt(glm::vec3(0, 0, 0));
 
     [self setupAnimations];
-
-    resourcePool->transferMeshesToGPU();
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
@@ -119,7 +117,7 @@
 
 #pragma mark - Materials
 
-- (EARenderer::MaterialReference)loadBlankMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadBlankMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"blank_white.jpg"],
             [self pathForResource:@"Sponza_Floor_normal.tga"],
@@ -130,7 +128,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)loadBlueFabricMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadBlueFabricMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"Fabric03_col.jpg"],
             [self pathForResource:@"Fabric03_nrm.jpg"],
@@ -141,7 +139,7 @@
     });
 }
 
-- (EARenderer::MaterialReference)loadRedFabricMaterialToPool:(EARenderer::ResourcePool *)pool {
+- (EARenderer::MaterialReference)loadRedFabricMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
     return pool->addMaterial({
             [self pathForResource:@"fabric02_col.jpg"],
             [self pathForResource:@"fabric02_nrm.jpg"],

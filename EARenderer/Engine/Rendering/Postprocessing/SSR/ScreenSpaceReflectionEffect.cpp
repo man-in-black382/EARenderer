@@ -18,30 +18,27 @@ namespace EARenderer {
 
 #pragma mark - Pivate Helpers
 
-    void ScreenSpaceReflectionEffect::traceReflections(const Camera &camera,
-            std::shared_ptr<const SceneGBuffer> GBuffer,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> rayHitInfo) {
-
+    void ScreenSpaceReflectionEffect::traceReflections(const Camera &camera, const SceneGBuffer &GBuffer, PostprocessTexturePool::PostprocessTexture &rayHitInfo) {
         mSSRShader.bind();
         mSSRShader.ensureSamplerValidity([&]() {
             mSSRShader.setCamera(camera);
-            mSSRShader.setGBuffer(*GBuffer);
+            mSSRShader.setGBuffer(GBuffer);
         });
 
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, rayHitInfo);
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &rayHitInfo);
 
         Drawable::TriangleStripQuad::Draw();
     }
 
-    void ScreenSpaceReflectionEffect::blurProgressively(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> mirrorReflections) {
+    void ScreenSpaceReflectionEffect::blurProgressively(PostprocessTexturePool::PostprocessTexture &mirrorReflections) {
         // Shape up the Gaussian curve to obtain [0.474, 0.233, 0.028, 0.001] weights
         // GPU Pro 5, 4.5.4 Pre-convolution Pass
         size_t blurRadius = 3;
         float sigma = 0.84;
 
-        mirrorReflections->generateMipMaps();
+        mirrorReflections.generateMipMaps();
 
-        for (size_t mipLevel = 0; mipLevel < mirrorReflections->mipMapCount(); mipLevel++) {
+        for (size_t mipLevel = 0; mipLevel < mirrorReflections.mipMapCount(); mipLevel++) {
             GaussianBlurSettings blurSettings{blurRadius, sigma, mipLevel, mipLevel + 1};
             mBlurEffect.blur(mirrorReflections, mirrorReflections, blurSettings);
         }
@@ -49,21 +46,21 @@ namespace EARenderer {
 
     void ScreenSpaceReflectionEffect::traceCones(
             const Camera &camera,
-            std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> reflections,
-            std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> rayHitInfo,
-            std::shared_ptr<const SceneGBuffer> GBuffer,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> baseOutputImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> brightOutputImage) {
+            const PostprocessTexturePool::PostprocessTexture &lightBuffer,
+            const PostprocessTexturePool::PostprocessTexture &rayHitInfo,
+            const SceneGBuffer &GBuffer,
+            PostprocessTexturePool::PostprocessTexture &baseOutputImage,
+            PostprocessTexturePool::PostprocessTexture &brightOutputImage) {
 
         mConeTracingShader.bind();
         mConeTracingShader.setCamera(camera);
         mConeTracingShader.ensureSamplerValidity([&]() {
-            mConeTracingShader.setGBuffer(*GBuffer);
-            mConeTracingShader.setRayHitInfo(*rayHitInfo);
-            mConeTracingShader.setReflections(*reflections);
+            mConeTracingShader.setGBuffer(GBuffer);
+            mConeTracingShader.setRayHitInfo(rayHitInfo);
+            mConeTracingShader.setReflections(lightBuffer);
         });
 
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, baseOutputImage, brightOutputImage);
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &baseOutputImage, &brightOutputImage);
 
         Drawable::TriangleStripQuad::Draw();
     }
@@ -72,16 +69,16 @@ namespace EARenderer {
 
     void ScreenSpaceReflectionEffect::applyReflections(
             const Camera &camera,
-            std::shared_ptr<const SceneGBuffer> GBuffer,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> lightBuffer,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> baseOutputImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> brightOutputImage) {
+            const SceneGBuffer &GBuffer,
+            PostprocessTexturePool::PostprocessTexture &lightBuffer,
+            PostprocessTexturePool::PostprocessTexture &baseOutputImage,
+            PostprocessTexturePool::PostprocessTexture &brightOutputImage) {
 
         auto rayTracingInfo = mTexturePool->claim();
 
-        traceReflections(camera, GBuffer, rayTracingInfo);
+        traceReflections(camera, GBuffer, *rayTracingInfo);
         blurProgressively(lightBuffer);
-        traceCones(camera, lightBuffer, rayTracingInfo, GBuffer, baseOutputImage, brightOutputImage);
+        traceCones(camera, lightBuffer, *rayTracingInfo, GBuffer, baseOutputImage, brightOutputImage);
 
         mTexturePool->putBack(rayTracingInfo);
     }

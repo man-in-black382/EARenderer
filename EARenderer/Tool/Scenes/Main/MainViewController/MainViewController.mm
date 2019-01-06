@@ -15,31 +15,21 @@
 
 #import "DemoSceneComposing.h"
 #import "DemoScene1.h"
-#import "DemoScene2.h"
-#import "DemoScene3.h"
 
 #import "DefaultRenderComponentsProvider.h"
 
-#import "Color.hpp"
-#import "Scene.hpp"
 #import "SceneGBufferConstructor.hpp"
-#import "SceneRenderer.hpp"
 #import "DeferredSceneRenderer.hpp"
 #import "AxesRenderer.hpp"
 #import "SceneInteractor.hpp"
 #import "Cameraman.hpp"
 #import "FileManager.hpp"
-#import "FrameMeter.hpp"
-#import "Throttle.hpp"
-#import "SurfelRenderer.hpp"
 #import "SurfelGenerator.hpp"
 #import "TriangleRenderer.hpp"
 #import "BoxRenderer.hpp"
 #import "Measurement.hpp"
 #import "DiffuseLightProbeGenerator.hpp"
 #import "DiffuseLightProbeRenderer.hpp"
-
-#import "Choreograph.h"
 
 static float const FrequentEventsThrottleCooldownMS = 100;
 
@@ -50,20 +40,23 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property(weak, nonatomic) IBOutlet SceneObjectsTabView *sceneObjectsTabView;
 @property(weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
 
-// C++ raw pointers
-@property(assign, nonatomic) DefaultRenderComponentsProvider *defaultRenderComponentsProvider;
-@property(assign, nonatomic) EARenderer::Scene *scene;
-@property(assign, nonatomic) EARenderer::SceneGBufferConstructor *sceneGBufferRenderer;
-@property(assign, nonatomic) EARenderer::DeferredSceneRenderer *deferredSceneRenderer;
-@property(assign, nonatomic) EARenderer::AxesRenderer *axesRenderer;
-@property(assign, nonatomic) EARenderer::SceneInteractor *sceneInteractor;
-@property(assign, nonatomic) EARenderer::Cameraman *cameraman;
-@property(assign, nonatomic) EARenderer::FrameMeter *frameMeter;
-@property(assign, nonatomic) EARenderer::Throttle *frequentEventsThrottle;
-@property(assign, nonatomic) EARenderer::SurfelRenderer *surfelRenderer;
-@property(assign, nonatomic) EARenderer::DiffuseLightProbeRenderer *probeRenderer;
-@property(assign, nonatomic) EARenderer::TriangleRenderer *triangleRenderer;
-@property(assign, nonatomic) EARenderer::BoxRenderer *boxRenderer;
+//@property(assign, nonatomic) std::unique_ptr<DefaultRenderComponentsProvider> defaultRenderComponentsProvider;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::Scene> scene;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::SceneGBufferConstructor> sceneGBufferRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::DeferredSceneRenderer> deferredSceneRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::AxesRenderer> axesRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::SceneInteractor> sceneInteractor;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::Cameraman> cameraman;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::FrameMeter> frameMeter;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::Throttle> frequentEventsThrottle;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::SurfelRenderer> surfelRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::DiffuseLightProbeRenderer> probeRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::TriangleRenderer> triangleRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::BoxRenderer> boxRenderer;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::SharedResourceStorage> sharedResourceStorage;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::GPUResourceController> gpuResourceController;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::SurfelData> surfelData;
+//@property(assign, nonatomic) std::unique_ptr<EARenderer::DiffuseLightProbeData> diffuseProbeData;
 
 @property(assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
 
@@ -72,120 +65,139 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 @end
 
-@implementation MainViewController
+@implementation MainViewController {
+    std::unique_ptr<DefaultRenderComponentsProvider> defaultRenderComponentsProvider;
+    std::unique_ptr<EARenderer::Scene> scene;
+    std::unique_ptr<EARenderer::SceneGBufferConstructor> sceneGBufferRenderer;
+    std::unique_ptr<EARenderer::DeferredSceneRenderer> deferredSceneRenderer;
+    std::unique_ptr<EARenderer::AxesRenderer> axesRenderer;
+    std::unique_ptr<EARenderer::SceneInteractor> sceneInteractor;
+    std::unique_ptr<EARenderer::Cameraman> cameraman;
+    std::unique_ptr<EARenderer::FrameMeter> frameMeter;
+    std::unique_ptr<EARenderer::Throttle> frequentEventsThrottle;
+    std::unique_ptr<EARenderer::SurfelRenderer> surfelRenderer;
+    std::unique_ptr<EARenderer::DiffuseLightProbeRenderer> probeRenderer;
+    std::unique_ptr<EARenderer::TriangleRenderer> triangleRenderer;
+    std::unique_ptr<EARenderer::BoxRenderer> boxRenderer;
+    std::unique_ptr<EARenderer::SharedResourceStorage> sharedResourceStorage;
+    std::unique_ptr<EARenderer::GPUResourceController> gpuResourceController;
+    std::unique_ptr<EARenderer::SurfelData> surfelData;
+    std::unique_ptr<EARenderer::DiffuseLightProbeData> diffuseProbeData;
+}
 
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self.openGLView becomeFirstResponder];
     self.openGLView.delegate = self;
-}
-
-- (void)dealloc {
-    delete self.scene;
-    delete self.axesRenderer;
-    delete self.defaultRenderComponentsProvider;
-    delete self.sceneInteractor;
-    delete self.cameraman;
-    delete self.frameMeter;
-    delete self.frequentEventsThrottle;
-    delete self.surfelRenderer;
-    delete self.triangleRenderer;
-    delete self.boxRenderer;
 }
 
 #pragma mark - SceneGLViewDelegate
 
 - (void)glViewIsReadyForInitialization:(SceneGLView *)view {
     EARenderer::FileManager::shared().setResourceRootPath([self resourceDirectory]);
-    EARenderer::ResourcePool *resourcePool = &EARenderer::ResourcePool::shared();
 
-    self.defaultRenderComponentsProvider = new DefaultRenderComponentsProvider(&EARenderer::GLViewport::main());
-    self.scene = new EARenderer::Scene();
-    self.frameMeter = new EARenderer::FrameMeter();
-    self.frequentEventsThrottle = new EARenderer::Throttle(FrequentEventsThrottleCooldownMS);
+    self->scene = std::make_unique<EARenderer::Scene>();
+    self->sharedResourceStorage = std::make_unique<EARenderer::SharedResourceStorage>();
+    self->gpuResourceController = std::make_unique<EARenderer::GPUResourceController>();
+    self->defaultRenderComponentsProvider = std::make_unique<DefaultRenderComponentsProvider>(&EARenderer::GLViewport::Main());
+    self->frameMeter = std::make_unique<EARenderer::FrameMeter>();
+    self->frequentEventsThrottle = std::make_unique<EARenderer::Throttle>(FrequentEventsThrottleCooldownMS);
 
-    EARenderer::Camera *camera = new EARenderer::Camera(110.f, 0.05f, 25.f);
+    auto camera = std::make_unique<EARenderer::Camera>(110.f, 0.05f, 25.f);
+    self->cameraman = std::make_unique<EARenderer::Cameraman>(camera.get(), &EARenderer::Input::shared(), &EARenderer::GLViewport::Main());
+    self->scene->setCamera(std::move(camera));
 
-    self.cameraman = new EARenderer::Cameraman(camera, &EARenderer::Input::shared(), &EARenderer::GLViewport::main());
-    self.scene->setCamera(camera);
+    self.demoScene = [[DemoScene1 alloc] init];;
+    [self.demoScene loadResourcesToPool:self->sharedResourceStorage.get() andComposeScene:self->scene.get()];
 
-    [self.sceneObjectsTabView buildTabsWithScene:self.scene];
-    self.sceneEditorTabView.scene = self.scene;
+    EARenderer::SurfelGenerator surfelGenerator(self->sharedResourceStorage.get(), self->scene.get());
+    self->surfelData = std::make_unique<EARenderer::SurfelData>();
+    std::string surfelStorageFileName = "surfels_" + self->scene->name();
 
-    id <DemoSceneComposing> demoScene = [[DemoScene1 alloc] init];
-    [demoScene loadResourcesToPool:&EARenderer::ResourcePool::shared() andComposeScene:self.scene];
-    self.demoScene = demoScene;
-
-    EARenderer::SurfelGenerator surfelGenerator(resourcePool, self.scene);
-    std::shared_ptr<EARenderer::SurfelData> surfelData = std::make_shared<EARenderer::SurfelData>();
-    std::string surfelStorageFileName = "surfels_" + self.scene->name();
-
-    if (!surfelData->deserialize(surfelStorageFileName)) {
-        surfelData = surfelGenerator.generateStaticGeometrySurfels();
-        surfelData->serialize(surfelStorageFileName);
+    if (!self->surfelData->deserialize(surfelStorageFileName)) {
+        self->surfelData = surfelGenerator.generateStaticGeometrySurfels();
+        self->surfelData->serialize(surfelStorageFileName);
     }
 
     EARenderer::DiffuseLightProbeGenerator lightProbeGenerator;
-    std::shared_ptr<EARenderer::DiffuseLightProbeData> diffuseLightProbeData = std::make_shared<EARenderer::DiffuseLightProbeData>();
-    std::string probeStorageFileName = "diffuse_light_probes_" + self.scene->name();
+    self->diffuseProbeData = std::make_unique<EARenderer::DiffuseLightProbeData>();
+    std::string probeStorageFileName = "diffuse_light_probes_" + self->scene->name();
 
-    if (!diffuseLightProbeData->deserialize(probeStorageFileName)) {
-        diffuseLightProbeData = lightProbeGenerator.generateProbes(self.scene, surfelData);
-        diffuseLightProbeData->serialize(probeStorageFileName);
+    if (!self->diffuseProbeData->deserialize(probeStorageFileName)) {
+        self->diffuseProbeData = lightProbeGenerator.generateProbes(*self->scene, *self->surfelData);
+        self->diffuseProbeData->serialize(probeStorageFileName);
     }
 
-    self.triangleRenderer = new EARenderer::TriangleRenderer(self.scene, resourcePool);
-    self.sceneGBufferRenderer = new EARenderer::SceneGBufferConstructor(self.scene, self.renderingSettings);
-    self.deferredSceneRenderer = new EARenderer::DeferredSceneRenderer(self.scene, self.defaultRenderComponentsProvider, self.renderingSettings,
-            surfelData, diffuseLightProbeData, self.sceneGBufferRenderer->GBuffer());
+    self->triangleRenderer = std::make_unique<EARenderer::TriangleRenderer>(
+            self->scene.get(), self->sharedResourceStorage.get(), self->gpuResourceController.get()
+    );
 
-    self.surfelRenderer = new EARenderer::SurfelRenderer(self.scene, surfelData, diffuseLightProbeData, self.deferredSceneRenderer->surfelsLuminanceMap());
-    self.probeRenderer = new EARenderer::DiffuseLightProbeRenderer(self.scene, diffuseLightProbeData, self.deferredSceneRenderer->gridProbesSphericalHarmonics());
-    self.axesRenderer = new EARenderer::AxesRenderer(self.scene);
-    self.sceneInteractor = new EARenderer::SceneInteractor(&EARenderer::Input::shared(), self.scene, self.axesRenderer, &EARenderer::GLViewport::main());
+    self->sceneGBufferRenderer = std::make_unique<EARenderer::SceneGBufferConstructor>(
+            self->scene.get(), self->sharedResourceStorage.get(), self->gpuResourceController.get(), self.renderingSettings
+    );
 
-//    self.sceneRenderer->setDefaultRenderComponentsProvider(self.defaultRenderComponentsProvider);
-//    self.boxRenderer = new EARenderer::BoxRenderer(self.scene->camera(), self.sceneRenderer->shadowCascades().lightSpaceCascades );
+    self->deferredSceneRenderer = std::make_unique<EARenderer::DeferredSceneRenderer>(
+            self->scene.get(), self->sharedResourceStorage.get(),
+            self->gpuResourceController.get(), self->defaultRenderComponentsProvider.get(),
+            self->surfelData.get(), self->diffuseProbeData.get(),
+            self->sceneGBufferRenderer->GBuffer(), self.renderingSettings
+    );
 
-    self.scene->destroyAuxiliaryData();
+    self->surfelRenderer = std::make_unique<EARenderer::SurfelRenderer>(
+            self->scene.get(), self->surfelData.get(), self->diffuseProbeData.get(), &self->deferredSceneRenderer->surfelsLuminanceMap()
+    );
+
+    self->probeRenderer = std::make_unique<EARenderer::DiffuseLightProbeRenderer>(
+            self->scene.get(), self->diffuseProbeData.get(), &self->deferredSceneRenderer->gridProbesSphericalHarmonics()
+    );
+
+    self->axesRenderer = std::make_unique<EARenderer::AxesRenderer>(self->scene.get());
+
+    self->sceneInteractor = std::make_unique<EARenderer::SceneInteractor>(self->scene.get(), &EARenderer::Input::shared(), self->axesRenderer.get(), &EARenderer::GLViewport::Main());
+
+//    self->sceneRenderer->setDefaultRenderComponentsProvider(self->defaultRenderComponentsProvider);
+//    self->boxRenderer = new EARenderer::BoxRenderer(self->scene->camera(), self->sceneRenderer->shadowCascades().lightSpaceCascades );
+
+    self->gpuResourceController->updateMeshVAO(*self->sharedResourceStorage);
+    self->scene->destroyAuxiliaryData();
 
     [self subscribeForEvents];
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
-    self.cameraman->updateCamera();
-    self.sceneGBufferRenderer->render();
+    self->cameraman->updateCamera();
+    self->sceneGBufferRenderer->render();
+    self->gpuResourceController->updateUniformBuffer(*self->sharedResourceStorage, *self->scene);
 
-    NSLog(@"Camera pos: %f %f %f", self.scene->camera()->position().x, self.scene->camera()->position().y, self.scene->camera()->position().z);
+    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
 
-    self.deferredSceneRenderer->render([&]() {
+    self->deferredSceneRenderer->render([&]() {
         if (self.renderingSettings.surfelSettings.renderingEnabled) {
-            self.surfelRenderer->render(
+            self->surfelRenderer->render(
                     self.renderingSettings.surfelSettings.renderingMode,
-                    self.scene->surfelSpacing() / 2.0,
+                    self->scene->surfelSpacing() / 2.0f,
                     self.renderingSettings.surfelSettings.POVProbeIndex
             );
         }
 
         if (self.renderingSettings.probeSettings.probeRenderingEnabled) {
-            self.probeRenderer->render();
+            self->probeRenderer->render();
         }
 
         if (self.renderingSettings.triangleRenderingEnabled) {
-            self.triangleRenderer->render();
+            self->triangleRenderer->render();
         }
     });
 
-    self.axesRenderer->render();
+    self->axesRenderer->render();
 
-    auto frameCharacteristics = self.frameMeter->tick();
+    auto frameCharacteristics = self->frameMeter->tick();
     self.fpsView.frameCharacteristics = frameCharacteristics;
     self.fpsView.viewportResolution = view.bounds.size;
 
-    [self.demoScene updateAnimatedObjectsInScene:self.scene frameCharacteristics:frameCharacteristics];
+    [self.demoScene updateAnimatedObjectsInScene:self->scene.get() frameCharacteristics:frameCharacteristics];
 }
 
 #pragma mark - MeshListTabViewItemDelegate
@@ -220,37 +232,37 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings {
     self.renderingSettings = settings;
     // FIXME: Fix rendering settings
-    self.deferredSceneRenderer->setRenderingSettings(settings);
-    self.probeRenderer->setRenderingSettings(settings);
+    self->deferredSceneRenderer->setRenderingSettings(settings);
+    self->probeRenderer->setRenderingSettings(settings);
 }
 
 #pragma mark - Helper methods
 
 - (void)subscribeForEvents {
-    self.sceneInteractor->meshUpdateStartEvent() += {"main.controller.mesh.update.start", [self](EARenderer::ID meshID) {
-        self.cameraman->setIsEnabled(false);
+    self->sceneInteractor->meshUpdateStartEvent() += {"Main.controller.mesh.update.start", [self](EARenderer::ID meshID) {
+        self->cameraman->setIsEnabled(false);
     }};
 
-    self.sceneInteractor->meshUpdateEvent() += {"main.controller.mesh.update", [self](EARenderer::ID meshID) {
-        self.frequentEventsThrottle->attemptToPerformAction([=]() {
+    self->sceneInteractor->meshUpdateEvent() += {"Main.controller.mesh.update", [self](EARenderer::ID meshID) {
+        self->frequentEventsThrottle->attemptToPerformAction([=]() {
             [self.sceneEditorTabView showMeshWithID:meshID];
         });
     }};
 
-    self.sceneInteractor->meshUpdateEndEvent() += {"main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
-        self.cameraman->setIsEnabled(true);
+    self->sceneInteractor->meshUpdateEndEvent() += {"Main.controller.mesh.update.end", [self](EARenderer::ID meshID) {
+        self->cameraman->setIsEnabled(true);
     }};
 
-    self.sceneInteractor->meshSelectionEvent() += {"main.controller.mesh.select", [self](EARenderer::ID meshID) {
+    self->sceneInteractor->meshSelectionEvent() += {"Main.controller.mesh.select", [self](EARenderer::ID meshID) {
         [self.sceneObjectsTabView.meshesTab selectMeshWithID:meshID];
         [self.sceneEditorTabView showMeshWithID:meshID];
     }};
 
-    self.sceneInteractor->meshDeselectionEvent() += {"main.controller.mesh.deselect", [self](EARenderer::ID meshID) {
+    self->sceneInteractor->meshDeselectionEvent() += {"Main.controller.mesh.deselect", [self](EARenderer::ID meshID) {
         [self.sceneObjectsTabView.meshesTab deselectMeshWithID:meshID];
     }};
 
-    self.sceneInteractor->allObjectsDeselectionEvent() += {"main.controller.deselect.all", [self]() {
+    self->sceneInteractor->allObjectsDeselectionEvent() += {"Main.controller.deselect.all", [self]() {
         [self.sceneObjectsTabView.meshesTab deselectAll];
     }};
 }

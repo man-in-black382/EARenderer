@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ResourcePool.hpp"
+#import "SharedResourceStorage.hpp"
 #import "Scene.hpp"
 #import "FrameMeter.hpp"
 
 @protocol DemoSceneComposing <NSObject>
 
-- (void)loadResourcesToPool:(EARenderer::ResourcePool *)resourcePool andComposeScene:(EARenderer::Scene *)scene;
+- (void)loadResourcesToPool:(EARenderer::SharedResourceStorage *)resourcePool andComposeScene:(EARenderer::Scene *)scene;
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics;

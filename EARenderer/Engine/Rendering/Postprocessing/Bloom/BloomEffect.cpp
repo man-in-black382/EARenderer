@@ -15,25 +15,26 @@ namespace EARenderer {
 
     BloomEffect::BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
             : PostprocessEffect(sharedFramebuffer, sharedTexturePool),
-            mSmallBlurEffect(sharedFramebuffer, sharedTexturePool),
-            mMediumBlurEffect(sharedFramebuffer, sharedTexturePool),
-            mLargeBlurEffect(sharedFramebuffer, sharedTexturePool) {}
+              mSmallBlurEffect(sharedFramebuffer, sharedTexturePool),
+              mMediumBlurEffect(sharedFramebuffer, sharedTexturePool),
+              mLargeBlurEffect(sharedFramebuffer, sharedTexturePool) {
+    }
 
 #pragma mark - Bloom
 
     void BloomEffect::bloom(
-            std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
+            const PostprocessTexturePool::PostprocessTexture &baseImage,
+            PostprocessTexturePool::PostprocessTexture &thresholdFilteredImage,
+            PostprocessTexturePool::PostprocessTexture &outputImage,
             const BloomSettings &settings) {
 
-        thresholdFilteredImage->generateMipMaps();
+        thresholdFilteredImage.generateMipMaps();
 
         auto blurTexture = mTexturePool->claim();
 
-        mSmallBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.smallBlurSettings);
-        mMediumBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.mediumBlurSettings);
-        mLargeBlurEffect.blur(thresholdFilteredImage, blurTexture, settings.largeBlurSettings);
+        mSmallBlurEffect.blur(thresholdFilteredImage, *blurTexture, settings.smallBlurSettings);
+        mMediumBlurEffect.blur(thresholdFilteredImage, *blurTexture, settings.mediumBlurSettings);
+        mLargeBlurEffect.blur(thresholdFilteredImage, *blurTexture, settings.largeBlurSettings);
 
         float totalWeight = settings.smallBlurWeight + settings.mediumBlurWeight + settings.largeBlurWeight;
         float smallBlurWeightNorm = settings.smallBlurWeight / totalWeight * settings.bloomStrength;
@@ -42,11 +43,11 @@ namespace EARenderer {
 
         mBloomShader.bind();
         mBloomShader.ensureSamplerValidity([&]() {
-            mBloomShader.setTextures(*baseImage, *blurTexture);
+            mBloomShader.setTextures(baseImage, *blurTexture);
             mBloomShader.setTextureWeights(smallBlurWeightNorm, mediumBlurWeightNorm, largeBlurWeightNorm);
         });
 
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, outputImage);
+        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &outputImage);
         Drawable::TriangleStripQuad::Draw();
 
         mTexturePool->putBack(blurTexture);

@@ -47,14 +47,6 @@ namespace EARenderer {
         mMaterialName = name;
     }
 
-    void SubMesh::setVBOOffset(int32_t offset) {
-        mVBOOffset = offset;
-    }
-
-    void SubMesh::setVertexCount(int32_t count) {
-        mVertexCount = count;
-    }
-
 #pragma mark - Other methods
 
     void SubMesh::addVertex(const Vertex1P1N2UV1T1BT &vertex) {
@@ -71,14 +63,6 @@ namespace EARenderer {
             Triangle3D triangle(v0.position, v1.position, v2.position);
             mArea += triangle.area();
         }
-    }
-
-    void SubMesh::draw() const {
-        glDrawArrays(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount));
-    }
-
-    void SubMesh::drawInstanced(size_t instanceCount) const {
-        glDrawArraysInstanced(GL_TRIANGLES, mVBOOffset, static_cast<GLsizei>(mVertexCount), static_cast<GLsizei>(instanceCount));
     }
 
 }

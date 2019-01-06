@@ -16,15 +16,9 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SceneInteractor::SceneInteractor(Input *userInput,
-            Scene *scene,
-            AxesRenderer *axesRenderer,
-            GLViewport *mainViewport)
-            :
-            mUserInput(userInput),
-            mScene(scene),
-            mAxesRenderer(axesRenderer),
-            mMainViewport(mainViewport) {
+    SceneInteractor::SceneInteractor(Scene *scene, Input *userInput, AxesRenderer *axesRenderer, GLViewport *mainViewport)
+            : mScene(scene), mUserInput(userInput), mAxesRenderer(axesRenderer), mMainViewport(mainViewport) {
+
         mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Move] += {"move", this, &SceneInteractor::handleMouseMove};
         mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::Drag] += {"drag", this, &SceneInteractor::handleMouseDrag};
         mUserInput->simpleMouseEvent()[Input::SimpleMouseAction::PressDown] += {"down", this, &SceneInteractor::handleMouseDown};

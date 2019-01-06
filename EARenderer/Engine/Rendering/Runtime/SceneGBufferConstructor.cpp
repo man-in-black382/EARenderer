@@ -13,12 +13,19 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SceneGBufferConstructor::SceneGBufferConstructor(const Scene *scene, const RenderingSettings &settings)
+    SceneGBufferConstructor::SceneGBufferConstructor(
+            const Scene *scene,
+            const SharedResourceStorage *resourceStorage,
+            const GPUResourceController *gpuResourceController,
+            const RenderingSettings &settings)
             :
             mScene(scene),
+            mResourceStorage(resourceStorage),
+            mGPUResourceController(gpuResourceController),
             mFramebuffer(settings.displayedFrameResolution),
             mDepthRenderbuffer(settings.displayedFrameResolution),
-            mGBuffer(std::make_shared<SceneGBuffer>(settings.displayedFrameResolution)) {
+            mGBuffer(std::make_unique<SceneGBuffer>(settings.displayedFrameResolution)) {
+
         mFramebuffer.attachTexture(*mGBuffer->materialData);
         mFramebuffer.attachTexture(*mGBuffer->HiZBuffer);
         mFramebuffer.attachDepthTexture(*mGBuffer->depthBuffer);
@@ -29,8 +36,8 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-    std::shared_ptr<const SceneGBuffer> SceneGBufferConstructor::GBuffer() const {
-        return mGBuffer;
+    const SceneGBuffer *SceneGBufferConstructor::GBuffer() const {
+        return mGBuffer.get();
     }
 
 #pragma mark - Rendering
@@ -49,7 +56,7 @@ namespace EARenderer {
                 mGBuffer->materialData, mGBuffer->HiZBuffer
         );
 
-        ResourcePool::shared().meshVAO()->bind();
+        mGPUResourceController->meshVAO()->bind();
 
         for (ID instanceID : mScene->meshInstances()) {
             auto &instance = mScene->meshInstances()[instanceID];
@@ -57,7 +64,7 @@ namespace EARenderer {
         }
 
         for (ID lightID : mScene->pointLights()) {
-            const PointLight& light = mScene->pointLights()[lightID];
+            const PointLight &light = mScene->pointLights()[lightID];
 
             if (!light.isEnabled()) {
                 continue;
@@ -70,8 +77,8 @@ namespace EARenderer {
         }
     }
 
-    void SceneGBufferConstructor::renderMeshInstance(const MeshInstance &instance, const Transformation* baseTransform) {
-        auto &subMeshes = ResourcePool::shared().mesh(instance.meshID()).subMeshes();
+    void SceneGBufferConstructor::renderMeshInstance(const MeshInstance &instance, const Transformation *baseTransform) {
+        auto &subMeshes = mResourceStorage->mesh(instance.meshID()).subMeshes();
 
         if (baseTransform) {
             mGBufferShader.setModelMatrix(instance.transformation().combinedWith(*baseTransform).modelMatrix());
@@ -95,15 +102,15 @@ namespace EARenderer {
 
                 switch (materialRef->first) {
                     case MaterialType::CookTorrance:
-                        mGBufferShader.setMaterial(ResourcePool::shared().cookTorranceMaterial(materialRef->second));
+                        mGBufferShader.setMaterial(mResourceStorage->cookTorranceMaterial(materialRef->second));
                         break;
                     case MaterialType::Emissive:
-                        mGBufferShader.setMaterial(ResourcePool::shared().emissiveMaterial(materialRef->second));
+                        mGBufferShader.setMaterial(mResourceStorage->emissiveMaterial(materialRef->second));
                         break;
                 }
             });
 
-            subMesh.draw();
+            Drawable::TriangleMesh::Draw(mGPUResourceController->subMeshVBODataLocation(instance.meshID(), subMeshID));
         }
     }
 

@@ -31,10 +31,12 @@ namespace EARenderer {
     public:
         BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
-        void bloom(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> baseImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> thresholdFilteredImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-                const BloomSettings &settings);
+        void bloom(
+                const PostprocessTexturePool::PostprocessTexture &baseImage,
+                PostprocessTexturePool::PostprocessTexture &thresholdFilteredImage,
+                PostprocessTexturePool::PostprocessTexture &outputImage,
+                const BloomSettings &settings
+        );
     };
 
 }

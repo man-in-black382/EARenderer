@@ -7,7 +7,7 @@
 //
 
 #include "MeshInstance.hpp"
-#include "ResourcePool.hpp"
+#include "SharedResourceStorage.hpp"
 #include "Scene.hpp"
 #include "StringUtils.hpp"
 
@@ -15,8 +15,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    MeshInstance::MeshInstance(ID meshID) : mMeshID(meshID) {
-        const Mesh &mesh = ResourcePool::shared().mesh(mMeshID);
+    MeshInstance::MeshInstance(ID meshID, const Mesh& mesh) : mMeshID(meshID) {
         mTransformation = mesh.baseTransform();
         mModelMatrix = mTransformation.modelMatrix();
     }
@@ -47,8 +46,7 @@ namespace EARenderer {
         return mTransformation;
     }
 
-    AxisAlignedBox3D MeshInstance::boundingBox() const {
-        const Mesh &mesh = ResourcePool::shared().mesh(mMeshID);
+    AxisAlignedBox3D MeshInstance::boundingBox(const Mesh& mesh) const {
         return mesh.boundingBox().transformedBy(mTransformation);
     }
 

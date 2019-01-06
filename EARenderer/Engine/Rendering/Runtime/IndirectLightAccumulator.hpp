@@ -27,13 +27,13 @@ namespace EARenderer {
 
     class IndirectLightAccumulator {
     private:
-        const Scene *mScene = nullptr;
-        RenderingSettings mSettings;
+        const Scene *mScene;
+        const SceneGBuffer *mGBuffer;
+        const SurfelData *mSurfelData;
+        const DiffuseLightProbeData *mProbeData;
+        const ShadowMapper *mShadowMapper;
 
-        std::shared_ptr<const SceneGBuffer> mGBuffer;
-        std::shared_ptr<const SurfelData> mSurfelData;
-        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
-        std::shared_ptr<const ShadowMapper> mShadowMapper;
+        RenderingSettings mSettings;
 
         GLSLSurfelLighting mSurfelLightingShader;
         GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;
@@ -41,13 +41,13 @@ namespace EARenderer {
         GLSLIndirectLightEvaluation mLightEvaluationShader;
 
         GLFramebuffer mFramebuffer;
-        std::shared_ptr<std::array<GLLDRTexture3D, 4>> mGridProbeSHMaps;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelsLuminanceMap;
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> mSurfelClustersLuminanceMap;
+        std::array<GLLDRTexture3D, 4> mGridProbeSHMaps;
+        GLFloatTexture2D<GLTexture::Float::R16F> mSurfelsLuminanceMap;
+        GLFloatTexture2D<GLTexture::Float::R16F> mSurfelClustersLuminanceMap;
 
         Size2D framebufferResolution();
 
-        std::shared_ptr<std::array<GLLDRTexture3D, 4>> gridProbeSHMaps();
+        std::array<GLLDRTexture3D, 4> gridProbeSHMaps();
 
         void relightSurfels();
 
@@ -56,19 +56,21 @@ namespace EARenderer {
         void updateGridProbes();
 
     public:
-        IndirectLightAccumulator(const Scene *scene,
-                std::shared_ptr<const SceneGBuffer> gBuffer,
-                std::shared_ptr<const SurfelData> surfelData,
-                std::shared_ptr<const DiffuseLightProbeData> probeData,
-                std::shared_ptr<const ShadowMapper> shadowMapper);
+        IndirectLightAccumulator(
+                const Scene *scene,
+                const SceneGBuffer *gBuffer,
+                const SurfelData *surfelData,
+                const DiffuseLightProbeData *probeData,
+                const ShadowMapper *shadowMapper
+        );
 
         void setRenderingSettings(const RenderingSettings &settings);
 
-        std::shared_ptr<std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
+        const std::array<GLLDRTexture3D, 4> &gridProbesSphericalHarmonics() const;
 
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &surfelsLuminanceMap() const;
 
-        std::shared_ptr<GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &surfelClustersLuminanceMap() const;
 
         void updateProbes();
 

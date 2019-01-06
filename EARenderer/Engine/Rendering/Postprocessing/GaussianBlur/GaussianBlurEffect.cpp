@@ -54,10 +54,11 @@ namespace EARenderer {
         }
     }
 
-    void GaussianBlurEffect::blur(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-            std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage,
-            const GaussianBlurSettings& settings)
-    {
+    void GaussianBlurEffect::blur(
+            const PostprocessTexturePool::PostprocessTexture &inputImage,
+            PostprocessTexturePool::PostprocessTexture &outputImage,
+            const GaussianBlurSettings &settings) {
+
         if (settings.radius == 0) throw std::invalid_argument("Blur radius must be greater than 0");
 
         computeWeightsAndOffsetsIfNeeded(settings);
@@ -65,11 +66,11 @@ namespace EARenderer {
         auto intermediateTexture = mTexturePool->claim();
 
         mBlurShader.bind();
-        mBlurShader.setRenderTargetSize(inputImage->mipMapSize(settings.outputImageMipLevel));
+        mBlurShader.setRenderTargetSize(inputImage.mipMapSize(settings.outputImageMipLevel));
         mBlurShader.setKernelWeights(mWeights);
         mBlurShader.setTextureOffsets(mTextureOffsets);
         mBlurShader.ensureSamplerValidity([&]() {
-            mBlurShader.setTexture(*inputImage, settings.inputImageMipLevel);
+            mBlurShader.setTexture(inputImage, settings.inputImageMipLevel);
         });
 
         // For the first pass we read from input mip level and output
@@ -89,7 +90,7 @@ namespace EARenderer {
             mBlurShader.setTexture(*intermediateTexture, settings.outputImageMipLevel);
         });
 
-        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, outputImage);
+        mFramebuffer->redirectRenderingToTexturesMip(settings.outputImageMipLevel, GLFramebuffer::UnderlyingBuffer::None, &outputImage);
 
         Drawable::TriangleStripQuad::Draw();
 

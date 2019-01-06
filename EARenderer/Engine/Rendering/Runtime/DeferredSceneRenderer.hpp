@@ -54,32 +54,33 @@ namespace EARenderer {
         uint8_t mNumberOfIrradianceMips = 5;
         glm::ivec3 mProbeGridResolution;
 
-        const Scene *mScene = nullptr;
-        const DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider = nullptr;
+        const Scene *mScene;
+        const SharedResourceStorage *mResourceStorage;
+        const GPUResourceController *mGPUResourceController;
+        const DefaultRenderComponentsProviding *mDefaultRenderComponentsProvider;
+        const SurfelData *mSurfelData;
+        const DiffuseLightProbeData *mProbeData;
+        const SceneGBuffer *mGBuffer;
 
         RenderingSettings mSettings;
 
         std::shared_ptr<GLFramebuffer> mFramebuffer;
         std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
+
         BloomEffect mBloomEffect;
         ToneMappingEffect mToneMappingEffect;
         ScreenSpaceReflectionEffect mSSREffect;
         SMAAEffect mSMAAEffect;
 
-        std::shared_ptr<const SurfelData> mSurfelData;
-        std::shared_ptr<const DiffuseLightProbeData> mProbeData;
-        std::shared_ptr<const SceneGBuffer> mGBuffer;
-        std::shared_ptr<ShadowMapper> mShadowMapper;
-        std::shared_ptr<DirectLightAccumulator> mDirectLightAccumulator;
-        std::shared_ptr<IndirectLightAccumulator> mIndirectLightAccumulator;
+        ShadowMapper mShadowMapper;
+        DirectLightAccumulator mDirectLightAccumulator;
+        IndirectLightAccumulator mIndirectLightAccumulator;
 
         GLSLDepthPrepass mDepthPrepassShader;
         GLSLSkybox mSkyboxShader;
         GLSLFullScreenQuad mFSQuadShader;
 
         void bindDefaultFramebuffer();
-
-        void performDepthPrepass();
 
         void renderSkybox();
 
@@ -88,22 +89,26 @@ namespace EARenderer {
     public:
         using DebugOpportunity = std::function<void()>;
 
-        DeferredSceneRenderer(const Scene *scene,
+        DeferredSceneRenderer(
+                const Scene *scene,
+                const SharedResourceStorage *resourceStorage,
+                const GPUResourceController *gpuResourceController,
                 const DefaultRenderComponentsProviding *provider,
-                const RenderingSettings &settings,
-                std::shared_ptr<const SurfelData> surfelData,
-                std::shared_ptr<const DiffuseLightProbeData> diffuseProbeData,
-                std::shared_ptr<const SceneGBuffer> GBuffer);
+                const SurfelData* surfelData,
+                const DiffuseLightProbeData* diffuseProbeData,
+                const SceneGBuffer* GBuffer,
+                const RenderingSettings &settings
+        );
 
         // Setters
         void setRenderingSettings(const RenderingSettings &settings);
 
         // Getters
-        std::shared_ptr<const std::array<GLLDRTexture3D, 4>> gridProbesSphericalHarmonics() const;
+        const std::array<GLLDRTexture3D, 4> &gridProbesSphericalHarmonics() const;
 
-        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelsLuminanceMap() const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &surfelsLuminanceMap() const;
 
-        std::shared_ptr<const GLFloatTexture2D<GLTexture::Float::R16F>> surfelClustersLuminanceMap() const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &surfelClustersLuminanceMap() const;
 
         /**
          Renders the scene
@@ -111,7 +116,8 @@ namespace EARenderer {
          @param debugClosure render any debug information needed inside this closure
          before the final frame is displayed
          */
-        void render(const DebugOpportunity &debugClosure = []{});
+        void render(const DebugOpportunity &debugClosure = [] {
+        });
     };
 
 }

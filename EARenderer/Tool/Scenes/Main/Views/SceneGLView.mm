@@ -108,7 +108,7 @@ static CVReturn OpenGLViewCoreProfileCallBack(CVDisplayLinkRef displayLink,
 - (void)reshape {
     [super reshape];
 
-    EARenderer::GLViewport::main().setDimensions(EARenderer::Size2D(self.bounds.size.width, self.bounds.size.height));
+    EARenderer::GLViewport::Main().setDimensions(EARenderer::Size2D(self.bounds.size.width, self.bounds.size.height));
 }
 
 #pragma mark - Keyboard

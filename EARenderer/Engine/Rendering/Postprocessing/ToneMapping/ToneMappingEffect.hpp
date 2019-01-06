@@ -27,7 +27,7 @@ namespace EARenderer {
     // Efficient Histogram Generation Using Scattering on GPUs
     // https://developer.amd.com/wordpress/media/2012/10/GPUHistogramGeneration_preprint.pdf
 
-    class ToneMappingEffect: public PostprocessEffect {
+    class ToneMappingEffect : public PostprocessEffect {
     private:
         GLSLLuminance mLuminanceShader;
         GLSLLuminanceRange mLuminanceRangeShader;
@@ -38,7 +38,7 @@ namespace EARenderer {
         GLFloatTexture2D<GLTexture::Float::R32F> mHistogram;
         GLFloatTexture2D<GLTexture::Float::R16F> mExposure;
 
-        void measureLuminance(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> image);
+        void measureLuminance(const PostprocessTexturePool::PostprocessTexture &image);
 
         void computeLuminanceRange();
 
@@ -49,8 +49,7 @@ namespace EARenderer {
     public:
         ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
 
-        void toneMap(std::shared_ptr<const PostprocessTexturePool::PostprocessTexture> inputImage,
-                std::shared_ptr<PostprocessTexturePool::PostprocessTexture> outputImage);
+        void toneMap(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage);
     };
 
 }
