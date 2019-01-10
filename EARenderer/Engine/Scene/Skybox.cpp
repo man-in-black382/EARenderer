@@ -30,10 +30,18 @@ namespace EARenderer {
         return mExposure;
     }
 
+    const Color &Skybox::ambientColor() const {
+        return mAmbientColor;
+    }
+
 #pragma mark - Setters
 
     void Skybox::setExposure(float exposure) {
         mExposure = std::max(exposure, 0.0f);
+    }
+
+    void Skybox::setAmbientColor(const Color &color) {
+        mAmbientColor = color;
     }
 
 #pragma mark - Drawable

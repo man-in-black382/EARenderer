@@ -23,13 +23,20 @@ namespace EARenderer {
 
         float mExposure = 1.0;
 
+        Color mAmbientColor = Color::Black();
+
     public:
         Skybox(const std::string &equirectangularImage, float exposure = 1.0f);
 
         float exposure() const;
+
+        const Color& ambientColor() const;
+
         const GLFloatTexture2D<GLTexture::Float::RGB16F> *equirectangularMap() const;
 
         void setExposure(float exposure);
+
+        void setAmbientColor(const Color& color);
 
         void draw() const;
 

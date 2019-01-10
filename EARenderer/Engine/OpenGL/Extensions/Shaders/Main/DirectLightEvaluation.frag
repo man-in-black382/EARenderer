@@ -4,7 +4,8 @@
 #include "Lights.glsl"
 #include "CookTorrance.glsl"
 #include "Constants.glsl"
-#include "Shadows.glsl"
+#include "DirectionalShadows.glsl"
+#include "OmnidirectionalShadows.glsl"
 
 // Constants
 
@@ -128,6 +129,7 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
 
     return vec4(specularAndDiffuse, 1.0);
+//    return vec4(vec3(shadow), 1.0);
 }
 
 vec4 ProcessEmissiveMaterial(uvec4 materialData) {

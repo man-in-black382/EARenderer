@@ -20,7 +20,7 @@ namespace EARenderer {
     class Light {
     protected:
         glm::vec3 mPosition;
-        Color mColor = Color::white();
+        Color mColor = Color::White();
         bool mIsEnabled = true;
         float mArea = 1.0; // Used for penumbra estimation, no physical meaning right now
 

@@ -14,32 +14,32 @@ namespace EARenderer {
 
 #pragma mark - Singletons
 
-    const Color &Color::white() {
+    const Color &Color::White() {
         static Color white(1.0, 1.0);
         return white;
     }
 
-    const Color &Color::black() {
+    const Color &Color::Black() {
         static Color black(0.0, 1.0);
         return black;
     }
 
-    const Color &Color::gray() {
+    const Color &Color::Gray() {
         static Color gray(0.3, 1.0);
         return gray;
     }
 
-    const Color &Color::red() {
+    const Color &Color::Red() {
         static Color red(1.0, 0.0, 0.0, 1.0);
         return red;
     }
 
-    const Color &Color::blue() {
+    const Color &Color::Blue() {
         static Color blue(0.0, 0.0, 1.0, 1.0);
         return blue;
     }
 
-    const Color &Color::green() {
+    const Color &Color::Green() {
         static Color green(0.0, 1.0, 0.0, 1.0);
         return green;
     }
@@ -47,17 +47,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     Color::Color(float red, float green, float blue, float alpha, Space space)
-            : mR(red), mG(green), mB(blue), mA(alpha), mSpace(space) {
-    }
+            : mR(red), mG(green), mB(blue), mA(alpha), mSpace(space) {}
 
-    Color::Color(float red, float green, float blue, Space space) : Color(red, green, blue, 1.0, space) {
-    }
+    Color::Color(float red, float green, float blue, Space space) : Color(red, green, blue, 1.0, space) {}
 
-    Color::Color(float white, float alpha, Space space) : Color(white, white, white, alpha, space) {
-    }
+    Color::Color(float white, float alpha, Space space) : Color(white, white, white, alpha, space) {}
 
-    Color::Color(float white, Color::Space space) : Color(white, white, white, 1.0, space) {
-    }
+    Color::Color(float white, Color::Space space) : Color(white, white, white, 1.0, space) {}
 
 #pragma mark - Getters
 

@@ -5,7 +5,8 @@
 #include "Packing.glsl"
 #include "DiffuseLightProbes.glsl"
 #include "ColorSpace.glsl"
-#include "Shadows.glsl"
+#include "DirectionalShadows.glsl"
+#include "OmnidirectionalShadows.glsl"
 #include "Constants.glsl"
 #include "Lights.glsl"
 

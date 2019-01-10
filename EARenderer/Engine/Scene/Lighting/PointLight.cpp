@@ -14,8 +14,9 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    PointLight::PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area, const Attenuation& attenuation)
-            : Light(position, color, area), mRadius(radius), mNearPlane(nearClipPlane), attenuation(attenuation) {}
+    PointLight::PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area, const Attenuation &attenuation)
+            : Light(position, color, area), mRadius(radius), mNearPlane(nearClipPlane), attenuation(attenuation) {
+    }
 
 #pragma mark - Accessors
 
@@ -54,7 +55,19 @@ namespace EARenderer {
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)),
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)),
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
-                projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)),
+                projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0))
+        };
+    }
+
+    std::array<glm::mat4, 6> PointLight::inverseViewProjectionMatrices() const {
+        glm::mat4 projMat = glm::perspective(glm::radians(90.f), 1.f, mNearPlane, mRadius);
+        return {
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))),
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))),
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0))),
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0))),
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0))),
+                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)))
         };
     }
 

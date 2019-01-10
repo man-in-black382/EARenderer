@@ -51,7 +51,7 @@ namespace EARenderer {
 
         void setOmnidirectionalShadowCubemap(const GLDepthTextureCubemap &cubemap);
 
-        void setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R> &penumbra);
+        void setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F> &penumbra);
 
         void setSettings(const RenderingSettings &settings);
     };

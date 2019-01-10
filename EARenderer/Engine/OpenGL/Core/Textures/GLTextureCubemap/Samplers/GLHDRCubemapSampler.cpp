@@ -29,8 +29,8 @@
 //
 //        // Despite the fact that texture is being 3-component we treat it as 4-component as stated in the OpenGL docs:
 //        //
-//        // Three-component textures are treated as RGBA buffers with red set to component zero,
-//        // green set to component one, blue set to component two, and alpha set to 1
+//        // Three-component textures are treated as RGBA buffers with Red set to component zero,
+//        // Green set to component one, Blue set to component two, and alpha set to 1
 //
 //        glGetTexImage(0, mipLevel, GL_RGBA, GL_HALF_FLOAT, mPositiveXPixelBuffer.get());
 //        glGetTexImage(1, mipLevel, GL_RGBA, GL_HALF_FLOAT, mNegativeXPixelBuffer.get());

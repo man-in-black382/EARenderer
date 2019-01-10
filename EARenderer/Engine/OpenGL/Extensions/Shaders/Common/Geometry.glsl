@@ -32,3 +32,16 @@ vec3 HemisphereSampleUniform(float u, float v) {
      float sinTheta = sqrt(1.0 - cosTheta * cosTheta);
      return vec3(cos(phi) * sinTheta, sin(phi) * sinTheta, cosTheta);
  }
+
+ float LinearDepth(float hyperbolicDepth, float nearPlane, float farPlane) {
+     float depth = hyperbolicDepth;// * 2.0 - 1.0;
+     return nearPlane * farPlane / (farPlane + depth * (nearPlane - farPlane));
+ }
+
+ bool RayPlaneIntersection(vec3 pointOnPlane, vec3 planeNormal, vec3 rayOrigin, vec3 rayDirection, inout float t)  {
+     // Assuming vectors are all normalized
+     float denom = dot(planeNormal, rayDirection);
+     vec3 p0l0 = pointOnPlane - rayOrigin;
+     t = dot(p0l0, planeNormal) / denom;
+     return (t >= 0);
+ }

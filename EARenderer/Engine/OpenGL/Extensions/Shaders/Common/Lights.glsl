@@ -14,6 +14,9 @@ struct PointLight {
     float constant;
     float linear;
     float quadratic;
+    //
+    mat4 viewProjections[6];
+    mat4 inverseViewProjections[6];
 };
 
 struct Spotlight {

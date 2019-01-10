@@ -35,17 +35,17 @@ namespace EARenderer {
         glm::mat4 highlightScaleZ = shouldHighlightZ ? glm::scale(glm::vec3(1.15)) : glm::mat4(1.0);
 
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleX * mAxesSystem.rotationForAxis(CartesianAxis::x));
-        mGenericGeometryShader.setHighlightColor(shouldHighlightX ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightX ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setColor(mXAxisColor);
         mAxesSystem.drawAxis();
 
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleY * mAxesSystem.rotationForAxis(CartesianAxis::y));
-        mGenericGeometryShader.setHighlightColor(shouldHighlightY ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightY ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setColor(mYAxisColor);
         mAxesSystem.drawAxis();
 
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleZ * mAxesSystem.rotationForAxis(CartesianAxis::z));
-        mGenericGeometryShader.setHighlightColor(shouldHighlightZ ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightZ ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setColor(mZAxisColor);
         mAxesSystem.drawAxis();
     }
@@ -64,31 +64,31 @@ namespace EARenderer {
 
         mGenericGeometryShader.setColor(mXAxisColor);
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightX && shouldHighlightY ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightX && shouldHighlightY ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleXY * mAxesSystem.XYSegmentTransform());
         mAxesSystem.drawSegment();
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightX && shouldHighlightZ ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightX && shouldHighlightZ ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleXZ * mAxesSystem.XZSegmentTransform());
         mAxesSystem.drawSegment();
 
         mGenericGeometryShader.setColor(mYAxisColor);
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightY && shouldHighlightX ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightY && shouldHighlightX ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleYX * mAxesSystem.YXSegmentTransform());
         mAxesSystem.drawSegment();
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightY && shouldHighlightZ ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightY && shouldHighlightZ ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleYZ * mAxesSystem.YZSegmentTransform());
         mAxesSystem.drawSegment();
 
         mGenericGeometryShader.setColor(mZAxisColor);
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightZ && shouldHighlightX ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightZ && shouldHighlightX ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleZX * mAxesSystem.ZXSegmentTransform());
         mAxesSystem.drawSegment();
 
-        mGenericGeometryShader.setHighlightColor(shouldHighlightZ && shouldHighlightY ? Color::gray() : Color::black());
+        mGenericGeometryShader.setHighlightColor(shouldHighlightZ && shouldHighlightY ? Color::Gray() : Color::Black());
         mGenericGeometryShader.setModelViewProjectionMatrix(mvp * highlightScaleZY * mAxesSystem.ZYSegmentTransform());
         mAxesSystem.drawSegment();
     }

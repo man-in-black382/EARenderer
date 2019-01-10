@@ -53,6 +53,8 @@ namespace EARenderer {
         void setNearClipPlane(float nearPlane);
 
         std::array<glm::mat4, 6> viewProjectionMatrices() const;
+
+        std::array<glm::mat4, 6> inverseViewProjectionMatrices() const;
     };
 
 }

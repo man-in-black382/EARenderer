@@ -51,9 +51,9 @@ namespace EARenderer {
         GLFramebuffer mPenumbraFramebuffer;
 
         GLDepthTexture2DArray mDirectionalShadowMapArray;
-        GLNormalizedTexture2D<GLTexture::Normalized::R> mDirectionalPenumbra;
+        GLFloatTexture2D<GLTexture::Float::R16F> mDirectionalPenumbra;
         std::unordered_map<ID, GLDepthTextureCubemap> mOmnidirectionalShadowMaps;
-        std::unordered_map<ID, GLNormalizedTexture2D<GLTexture::Normalized::R>> mOmnidirectionalPenumbras;
+        std::unordered_map<ID, GLFloatTexture2D<GLTexture::Float::R16F>> mOmnidirectionalPenumbras;
 
         GLSampler mBilinearSampler;
 
@@ -78,11 +78,11 @@ namespace EARenderer {
 
         const GLDepthTexture2DArray &directionalShadowMapArray() const;
 
-        const GLNormalizedTexture2D<GLTexture::Normalized::R> &directionalPenumbra() const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &directionalPenumbra() const;
 
         const GLDepthTextureCubemap &shadowMapForPointLight(ID pointLightID) const;
 
-        const GLNormalizedTexture2D<GLTexture::Normalized::R> &penumbraForPointLight(ID pointLightID) const;
+        const GLFloatTexture2D<GLTexture::Float::R16F> &penumbraForPointLight(ID pointLightID) const;
 
         const FrustumCascades &cascades() const;
 

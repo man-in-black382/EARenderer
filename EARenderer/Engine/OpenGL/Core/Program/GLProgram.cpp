@@ -232,8 +232,8 @@ namespace EARenderer {
         GLTextureUnitManager::Shared().unbindAllSamplers();
         closure();
 
-        // For some reason this is sometimes necessary to make GLSL sampler not to return black
-        // (in a case of radiance convolution shader sampling cubemap gives black color without following line)
+        // For some reason this is sometimes necessary to make GLSL sampler not to return Black
+        // (in a case of radiance convolution shader sampling cubemap gives Black color without following line)
         GLTextureUnitManager::Shared().activateUnit(GLTextureUnitManager::Shared().maximumTextureUnits() - 1);
         isModifyingUniforms = false;
     }

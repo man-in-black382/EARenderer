@@ -520,7 +520,7 @@ public:
                 mRoot = lNode;
             }
 
-            // Fix red black tree property
+            // Fix Red Black tree property
             FixNodesAfterInsertion(lNode);
 
             lResult = true;
@@ -739,7 +739,7 @@ protected:
                     lUncle = lNode->mParent->mParent->mLeftChild;
                 }
 
-                // since lNode->mParent is red, lNode->mParent->mParent exists
+                // since lNode->mParent is Red, lNode->mParent->mParent exists
 
                 if (lUncle && lUncle->mColor == RecordType::eRed) {
                     lNode->mParent->mColor = RecordType::eBlack;
@@ -1040,7 +1040,7 @@ protected:
                         // update sibling: it may have change after rotation
                         lSibling = Sibling(lParent, lNode);
                         FBX_ASSERT(lSibling != 0 && lParent != 0); // lSibling is now
-                        // the former red
+                        // the former Red
                         // child of the
                         // former sibling
 
@@ -1120,7 +1120,7 @@ protected:
             FBX_ASSERT(pNode != pNode->mLeftChild);
             FBX_ASSERT(pNode != pNode->mRightChild);
 
-            // Check for two consecutive red nodes
+            // Check for two consecutive Red nodes
             FBX_ASSERT((pNode->mColor == RecordType::eBlack) ||
                      (pNode->mLeftChild == NULL) ||
                      (pNode->mLeftChild->mColor == RecordType::eBlack));

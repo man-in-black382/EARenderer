@@ -23,6 +23,7 @@
 @property(assign, nonatomic) choreograph::Timeline *animationTimeline;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *lightPositionOutput;
+@property(assign, nonatomic) choreograph::Output<float> *lightSizeOutput;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *objectPositionOutput;
 @property(assign, nonatomic) EARenderer::ID lightID;
 
@@ -186,7 +187,7 @@
     EARenderer::Color lightColor(3.0, 2.55, 1.98);
     EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.0, 4.0};
     EARenderer::MaterialReference lightMaterialRef = resourcePool->addMaterial(EARenderer::EmissiveMaterial{lightColor});
-    EARenderer::PointLight pointLight(glm::vec3(3.133468, -1.449196, -1.294581), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
+    EARenderer::PointLight pointLight(glm::vec3(3.172841, -1.449196, 1.107378), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
     pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
     pointLight.meshInstance->materialReference = lightMaterialRef;
     pointLight.meshInstance->transformation().scale = glm::vec3(0.003);
@@ -221,6 +222,7 @@
 
     EARenderer::PointLight &light = scene->pointLights()[self.lightID];
     light.setPosition(self.lightPositionOutput->value());
+//    light.setArea(self.lightSizeOutput->value());
 
 //    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
 //    auto transformation = sphereInstance.transformation();
@@ -239,6 +241,7 @@
     self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.lightPositionOutput = new choreograph::Output<glm::vec3>();
+    self.lightSizeOutput = new choreograph::Output<float>();
     self.animationTimeline = new choreograph::Timeline();
 
     glm::vec3 sunDirectionStart(-0.3, -0.5, 0.45);
@@ -256,11 +259,19 @@
 
     choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(lightPositionStart, lightPositionEnd, 10.0);
 
+    // Light size
+    choreograph::PhraseRef<float> lightSizePhrase = choreograph::makeRamp(1.0f, 300.0f, 6.0);
+    self.animationTimeline->apply(self.lightSizeOutput, lightSizePhrase).finishFn([&m = *self.lightSizeOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
     self.animationTimeline->apply(self.lightPositionOutput)
             .then<choreograph::RampTo>(glm::vec3(3.172841, -1.449196, 1.107378), 10.0)
             .then<choreograph::RampTo>(glm::vec3(-3.684157, -1.449196, 1.215628), 20.0)
             .then<choreograph::RampTo>(glm::vec3(-3.800002, -1.449196, -1.361623), 10.0)
             .then<choreograph::RampTo>(glm::vec3(3.133468, -1.449196, -1.294581), 20.0)
+            .then<choreograph::RampTo>(glm::vec3(3.172841, -1.449196, 1.107378), 10.0)
             .finishFn([&m = *self.lightPositionOutput->inputPtr()] {
                 m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
                 m.resetTime();

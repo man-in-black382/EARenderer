@@ -162,7 +162,7 @@ namespace EARenderer {
         });
 
         Measurement::ExecutionTime("Indirect light accumulation", [&] {
-            mIndirectLightAccumulator.render();
+//            mIndirectLightAccumulator.render();
             glFinish();
         });
 

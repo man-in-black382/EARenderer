@@ -22,7 +22,7 @@ namespace EARenderer {
         glEnable(GL_MULTISAMPLE);
 
         mTriangleRenderingShader.bind();
-        mTriangleRenderingShader.setColor(Color::white());
+        mTriangleRenderingShader.setColor(Color::White());
 
         glm::mat4 viewProjection = mScene->camera()->viewProjectionMatrix();
 

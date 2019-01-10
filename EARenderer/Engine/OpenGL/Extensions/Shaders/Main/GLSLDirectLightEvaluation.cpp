@@ -40,6 +40,18 @@ namespace EARenderer {
         glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.quadratic")).location(), light.attenuation.quadratic);
         glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.area")).location(), light.area());
         glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), 1);
+
+        auto viewProjections = light.viewProjectionMatrices();
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uPointLight.viewProjections[0]")).location(),
+                (GLsizei) viewProjections.size(),
+                GL_FALSE,
+                (GLfloat *) viewProjections.data());
+
+        auto inverseViewProjections = light.inverseViewProjectionMatrices();
+        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uPointLight.inverseViewProjections[0]")).location(),
+                (GLsizei) inverseViewProjections.size(),
+                GL_FALSE,
+                (GLfloat *) inverseViewProjections.data());
     }
 
     void GLSLDirectLightEvaluation::setLight(const DirectionalLight &light) {
@@ -76,7 +88,7 @@ namespace EARenderer {
         setUniformTexture(ctcrc32("uOmnidirectionalShadowMapComparisonSampler"), cubemap);
     }
 
-    void GLSLDirectLightEvaluation::setPenumbra(const GLNormalizedTexture2D<GLTexture::Normalized::R> &penumbra) {
+    void GLSLDirectLightEvaluation::setPenumbra(const GLFloatTexture2D<GLTexture::Float::R16F> &penumbra) {
         setUniformTexture(ctcrc32("uPenumbra"), penumbra);
     }
 

@@ -31,17 +31,17 @@ namespace EARenderer {
         Color toLinear() const;
 
     public:
-        static const Color &white();
+        static const Color &White();
 
-        static const Color &black();
+        static const Color &Black();
 
-        static const Color &gray();
+        static const Color &Gray();
 
-        static const Color &red();
+        static const Color &Red();
 
-        static const Color &blue();
+        static const Color &Blue();
 
-        static const Color &green();
+        static const Color &Green();
 
         Color() = default;
 

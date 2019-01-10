@@ -53,7 +53,7 @@ RECENT REVISION HISTORY:
       2.13  (2016-12-04) experimental 16-bit API, only for PNG so far; fixes
       2.12  (2016-04-02) fix typo in 2.11 PSD fix that caused crashes
       2.11  (2016-04-02) 16-bit PNGS; enable SSE2 in non-gcc x64
-                         RGB-format JPEG; remove white matting in PSD;
+                         RGB-format JPEG; remove White matting in PSD;
                          allocate large structures on the stack;
                          correct channel count for PNG & BMP
       2.10  (2016-01-22) avoid warning introduced in 2.09
@@ -146,8 +146,8 @@ RECENT REVISION HISTORY:
 //     N=#comp     components
 //       1           grey
 //       2           grey, alpha
-//       3           red, green, blue
-//       4           red, green, blue, alpha
+//       3           Red, Green, Blue
+//       4           Red, Green, Blue, alpha
 //
 // If image loading fails for any reason, the return value will be NULL,
 // and *x, *y, *comp will be unchanged. The function stbi_failure_reason()
@@ -5759,7 +5759,7 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
       }
    }
 
-   // remove weird white matte from PSD
+   // remove weird White matte from PSD
    if (channelCount >= 4) {
       if (ri->bits_per_channel == 16) {
          for (i=0; i < w*h; ++i) {
@@ -6974,7 +6974,7 @@ STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int
       2.13  (2016-11-29) add 16-bit API, only supported for PNG right now
       2.12  (2016-04-02) fix typo in 2.11 PSD fix that caused crashes
       2.11  (2016-04-02) allocate large structures on the stack
-                         remove white matting for transparent PSD
+                         remove White matting for transparent PSD
                          fix reported channel count for PNG & BMP
                          re-enable SSE2 in non-gcc 64-bit
                          support RGB-formatted JPEG

@@ -120,15 +120,15 @@
 #pragma mark - Materials
 
 - (EARenderer::MaterialReference)loadWhiteMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({ EARenderer::Color::gray().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({EARenderer::Color::Gray().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 - (EARenderer::MaterialReference)loadBlueMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({ EARenderer::Color::blue().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({EARenderer::Color::Blue().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 - (EARenderer::MaterialReference)loadRedMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({ EARenderer::Color::red().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+    return pool->addMaterial({EARenderer::Color::Red().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
 }
 
 @end

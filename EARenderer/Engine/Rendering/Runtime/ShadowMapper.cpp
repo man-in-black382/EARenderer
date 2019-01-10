@@ -68,7 +68,7 @@ namespace EARenderer {
         return it->second;
     }
 
-    const GLNormalizedTexture2D<GLTexture::Normalized::R> &ShadowMapper::penumbraForPointLight(ID pointLightID) const {
+    const GLFloatTexture2D<GLTexture::Float::R16F> &ShadowMapper::penumbraForPointLight(ID pointLightID) const {
         auto it = mOmnidirectionalPenumbras.find(pointLightID);
         if (it == mOmnidirectionalPenumbras.end()) {
             throw std::invalid_argument("Penumbra not found");
@@ -80,7 +80,7 @@ namespace EARenderer {
         return mDirectionalShadowMapArray;
     }
 
-    const GLNormalizedTexture2D<GLTexture::Normalized::R> &ShadowMapper::directionalPenumbra() const {
+    const GLFloatTexture2D<GLTexture::Float::R16F> &ShadowMapper::directionalPenumbra() const {
         return mDirectionalPenumbra;
     }
 

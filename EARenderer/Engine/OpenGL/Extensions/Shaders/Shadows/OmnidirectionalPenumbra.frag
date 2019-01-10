@@ -2,7 +2,7 @@
 
 #include "GBuffer.glsl"
 #include "Constants.glsl"
-#include "Shadows.glsl"
+#include "OmnidirectionalShadows.glsl"
 #include "Lights.glsl"
 
 // Uniforms
