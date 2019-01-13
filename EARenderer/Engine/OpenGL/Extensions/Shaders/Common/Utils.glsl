@@ -30,12 +30,5 @@ vec3 CubeMapTextureCoords(vec3 sampleVector) {
     /* -Z */ case 5: tmpS = -sampleVector.x; tmpT = -sampleVector.y; m = a.z; face = 5.0; break;
     }
 
-          //      /* +X */ case 0: tmpS = -sampleVector.z; tmpT = -sampleVector.y; m = a.x; face = GLCubemapFace::PositiveX; break;
-    //            /* -X */ case 1: tmpS =  sampleVector.z; tmpT = -sampleVector.y; m = a.x; face = GLCubemapFace::NegativeX; break;
-    //            /* +Y */ case 2: tmpS =  sampleVector.x; tmpT =  sampleVector.z; m = a.y; face = GLCubemapFace::PositiveY; break;
-    //            /* -Y */ case 3: tmpS =  sampleVector.x; tmpT = -sampleVector.z; m = a.y; face = GLCubemapFace::NegativeY; break;
-    //            /* +Z */ case 4: tmpS =  sampleVector.x; tmpT = -sampleVector.y; m = a.z; face = GLCubemapFace::PositiveZ; break;
-    //            /* -Z */ case 5: tmpS = -sampleVector.x; tmpT = -sampleVector.y; m = a.z; face = GLCubemapFace::NegativeZ; break;
-
     return vec3(0.5 * (tmpS / m + 1.0), 0.5 * (tmpT / m + 1.0), face);
 }

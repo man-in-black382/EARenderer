@@ -190,7 +190,7 @@
     EARenderer::PointLight pointLight(glm::vec3(3.172841, -1.449196, 1.107378), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
     pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
     pointLight.meshInstance->materialReference = lightMaterialRef;
-    pointLight.meshInstance->transformation().scale = glm::vec3(0.003);
+    pointLight.meshInstance->transformation().scale = glm::vec3(0.001);
 //    pointLight.setIsEnabled(false);
 
     self.lightID = scene->pointLights().insert(pointLight);

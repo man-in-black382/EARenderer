@@ -26,8 +26,14 @@ namespace EARenderer {
     private:
         GLint obtainMandatoryAlignment() const;
 
+        GLint obtainMaximumSize() const;
+
     public:
         GLUniformBuffer(const std::byte *data, size_t count);
+
+        GLUniformBuffer(size_t count);
+
+        GLUniformBuffer();
     };
 
 }

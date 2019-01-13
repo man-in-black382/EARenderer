@@ -26,12 +26,12 @@ namespace EARenderer {
             mDepthRenderbuffer(settings.displayedFrameResolution),
             mGBuffer(std::make_unique<SceneGBuffer>(settings.displayedFrameResolution)) {
 
-        mFramebuffer.attachTexture(*mGBuffer->materialData);
-        mFramebuffer.attachTexture(*mGBuffer->HiZBuffer);
-        mFramebuffer.attachDepthTexture(*mGBuffer->depthBuffer);
+        mFramebuffer.attachTexture(mGBuffer->materialData);
+        mFramebuffer.attachTexture(mGBuffer->HiZBuffer);
+        mFramebuffer.attachDepthTexture(mGBuffer->depthBuffer);
 
         // Preallocate HiZ buffer mipmaps
-        mGBuffer->HiZBuffer->generateMipMaps();
+//        mGBuffer->HiZBuffer.generateMipMaps();
     }
 
 #pragma mark - Getters
@@ -48,12 +48,12 @@ namespace EARenderer {
         mFramebuffer.viewport().apply();
 
         mGBufferShader.bind();
-        mGBufferShader.setCamera(*(mScene->camera()));
+        mGBufferShader.setCamera(*mScene->camera());
 
         // Attach 0 mip again after HiZ buffer construction
         mFramebuffer.redirectRenderingToTexturesMip(
                 0, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
-                mGBuffer->materialData, mGBuffer->HiZBuffer
+                &mGBuffer->materialData, &mGBuffer->HiZBuffer
         );
 
         mGPUResourceController->meshVAO()->bind();
@@ -122,19 +122,19 @@ namespace EARenderer {
 
         mHiZBufferShader.bind();
         mHiZBufferShader.ensureSamplerValidity([&]() {
-            mHiZBufferShader.setTexture(*mGBuffer->HiZBuffer);
+            mHiZBufferShader.setTexture(mGBuffer->HiZBuffer);
         });
 
-        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer->mipMapCount();
+        mGBuffer->HiZBufferMipCount = mGBuffer->HiZBuffer.mipMapCount();
 
         for (size_t mipLevel = 0; mipLevel < mGBuffer->HiZBufferMipCount; mipLevel++) {
             mHiZBufferShader.setMipLevel(mipLevel);
 
-            Size2D mipSize = mGBuffer->HiZBuffer->mipMapSize(mipLevel + 1);
+            Size2D mipSize = mGBuffer->HiZBuffer.mipMapSize(mipLevel + 1);
             GLViewport(mipSize).apply();
 
             // Leave only linear depth attachment active so that other textures won't get corrupted
-            mFramebuffer.redirectRenderingToTexturesMip(mipLevel + 1, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, mGBuffer->HiZBuffer);
+            mFramebuffer.redirectRenderingToTexturesMip(mipLevel + 1, GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth, &mGBuffer->HiZBuffer);
 
             Drawable::TriangleStripQuad::Draw();
         }
@@ -146,7 +146,7 @@ namespace EARenderer {
 
     void SceneGBufferConstructor::render() {
         generateGBuffer();
-        generateHiZBuffer();
+//        generateHiZBuffer();
     }
 
 }

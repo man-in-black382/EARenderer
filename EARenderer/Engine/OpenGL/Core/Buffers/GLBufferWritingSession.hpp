@@ -11,6 +11,7 @@
 
 #include <stdlib.h>
 #include "MemoryUtils.hpp"
+#include "StringUtils.hpp"
 
 namespace EARenderer {
 
@@ -27,17 +28,17 @@ namespace EARenderer {
         std::byte *mMappedBuffer = nullptr;
         size_t mObjectCapacity = 0;
         size_t mAlignment = 1;
-        const DeallocationCallback &mDeallocationCallback;
+        DeallocationCallback mDeallocationCallback;
 
         GLBufferWritingSession(std::byte *mappedAddress, size_t objectCapacity, size_t alignment, const DeallocationCallback &deallocationCallback)
                 : mMappedBuffer(mappedAddress), mObjectCapacity(objectCapacity), mAlignment(alignment), mDeallocationCallback(deallocationCallback) {}
 
+    public:
+        using AlignedOffset = size_t;
+
         ~GLBufferWritingSession() {
             mDeallocationCallback();
         }
-
-    public:
-        using AlignedOffset = size_t;
 
         /// Copies client's memory region into a mapped GL buffer.
         /// Inserts padding at the end of the copied data according to the alignment parameter provided at the buffer construction stage.

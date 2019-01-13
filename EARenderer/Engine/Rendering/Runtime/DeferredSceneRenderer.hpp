@@ -94,9 +94,9 @@ namespace EARenderer {
                 const SharedResourceStorage *resourceStorage,
                 const GPUResourceController *gpuResourceController,
                 const DefaultRenderComponentsProviding *provider,
-                const SurfelData* surfelData,
-                const DiffuseLightProbeData* diffuseProbeData,
-                const SceneGBuffer* GBuffer,
+                const SurfelData *surfelData,
+                const DiffuseLightProbeData *diffuseProbeData,
+                const SceneGBuffer *gBuffer,
                 const RenderingSettings &settings
         );
 
@@ -116,8 +116,7 @@ namespace EARenderer {
          @param debugClosure render any debug information needed inside this closure
          before the final frame is displayed
          */
-        void render(const DebugOpportunity &debugClosure = [] {
-        });
+        void render(const DebugOpportunity &debugClosure = [] {});
     };
 
 }

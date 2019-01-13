@@ -28,8 +28,8 @@ namespace EARenderer {
     }
 
     void GLSLConeTracing::setGBuffer(const SceneGBuffer &GBuffer) {
-        setUniformTexture(ctcrc32("uMaterialData"), *GBuffer.materialData);
-        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), *GBuffer.HiZBuffer);
+        setUniformTexture(ctcrc32("uMaterialData"), GBuffer.materialData);
+        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), GBuffer.HiZBuffer);
     }
 
     void GLSLConeTracing::setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &reflections) {

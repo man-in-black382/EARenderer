@@ -167,11 +167,15 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
-    self->cameraman->updateCamera();
-    self->sceneGBufferRenderer->render();
-    self->gpuResourceController->updateUniformBuffer(*self->sharedResourceStorage, *self->scene);
-
     NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
+
+    self->cameraman->updateCamera();
+
+    EARenderer::Measurement::ExecutionTime("G Buffer Construction", [&] {
+        self->sceneGBufferRenderer->render();
+    });
+
+    self->gpuResourceController->updateUniformBuffer(*self->sharedResourceStorage, *self->scene);
 
     self->deferredSceneRenderer->render([&]() {
         if (self.renderingSettings.surfelSettings.renderingEnabled) {

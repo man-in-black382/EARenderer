@@ -27,9 +27,9 @@ namespace EARenderer {
             const SharedResourceStorage *resourceStorage,
             const GPUResourceController *gpuResourceController,
             const DefaultRenderComponentsProviding *provider,
-            const SurfelData* surfelData,
-            const DiffuseLightProbeData* diffuseProbeData,
-            const SceneGBuffer* GBuffer,
+            const SurfelData *surfelData,
+            const DiffuseLightProbeData *diffuseProbeData,
+            const SceneGBuffer *gBuffer,
             const RenderingSettings &settings)
             :
             mScene(scene),
@@ -49,10 +49,10 @@ namespace EARenderer {
             mSMAAEffect(mFramebuffer, mPostprocessTexturePool),
 
             // Helpers
-            mShadowMapper(scene, resourceStorage, gpuResourceController, GBuffer, settings.meshSettings.shadowCascadesCount),
-            mDirectLightAccumulator(scene, GBuffer, &mShadowMapper),
-            mIndirectLightAccumulator(scene, GBuffer, surfelData, diffuseProbeData, &mShadowMapper),
-            mGBuffer(GBuffer) {
+            mShadowMapper(scene, resourceStorage, gpuResourceController, gBuffer, settings.meshSettings.shadowCascadesCount),
+            mDirectLightAccumulator(scene, gBuffer, &mShadowMapper),
+            mIndirectLightAccumulator(scene, gBuffer, surfelData, diffuseProbeData, &mShadowMapper),
+            mGBuffer(gBuffer) {
 
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
@@ -62,7 +62,7 @@ namespace EARenderer {
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
 
-        mFramebuffer->attachDepthTexture(*mGBuffer->depthBuffer);
+        mFramebuffer->attachDepthTexture(mGBuffer->depthBuffer);
     }
 
 #pragma mark - Setters
@@ -162,7 +162,7 @@ namespace EARenderer {
         });
 
         Measurement::ExecutionTime("Indirect light accumulation", [&] {
-//            mIndirectLightAccumulator.render();
+            mIndirectLightAccumulator.render();
             glFinish();
         });
 

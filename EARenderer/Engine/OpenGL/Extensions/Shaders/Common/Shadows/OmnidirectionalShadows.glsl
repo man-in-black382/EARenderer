@@ -35,25 +35,25 @@ float OmnidirectionalAdaptiveEpsilon(
     return (num / denom) * sceneBBDiagonal * K * scaleFactor;
 }
 
-float OmnidirectionalAdaptiveBias(
+float OmnidirectionalPotentialOccluderDepth(
     PointLight light,
     vec3 surfaceWorldPosition,
     vec3 surfaceWorldNormal,
-    vec2 surfaceTexCoords, // [0; 1]
     float surfaceDepth, // Hyperbolic depth [0; 1], in light space
+    vec3 texCoords, // Cube texture coords. S, T and Face index
     vec2 shadowMapSize)
 {
     // 1) Find center of the shadow map texel in NDC space that corresponds to the current fragment.
-    vec2 texelIndex = surfaceTexCoords * (shadowMapSize); // Go from [0; 1] to [0; texSize - 1] (from [0.1, 0.55] to [102.3, 563.65])
+    vec2 texelIndex = texCoords.st * (shadowMapSize - 1); // Go from [0; 1] to [0; texSize - 1] (from [0.1, 0.55] to [102.3, 563.65])
     texelIndex = floor(texelIndex); // Go for the actual index (from [102.3, 563.65] to [102.0, 563.0])
     texelIndex += 0.5; // Go to the center (from [102.0, 563.0] to [102.5, 563.5])
 
-    vec2 texelCenter = texelIndex / (shadowMapSize); // Obtain normalized texture coordinates of the texel center
+    vec2 texelCenter = texelIndex / (shadowMapSize - 1); // Obtain normalized texture coordinates of the texel center
     vec2 ndcTexelCenter = texelCenter * 2.0 - 1.0; // From [0; 1] to [-1; 1]
     vec4 nearPlaneNDCCenter = vec4(ndcTexelCenter, -1.0, 1.0); // You can say that texture data lies on the near plane which is -1 in NDC space
 
     // 2) Find out which view-projection matrix was used to transform current fragment into light's space
-    int cubeFace = CubeMapFace(surfaceWorldPosition - light.position);
+    int cubeFace = int(texCoords.z);
     mat4 inverseViewProjection = light.inverseViewProjections[cubeFace];
 
     // 3) Get light-to-texel center vector in world space to be able to perform ray tracing against surface defined by current fragment's position and normal
@@ -74,10 +74,10 @@ float OmnidirectionalAdaptiveBias(
     vec3 potentialOccluder = light.position + lightToTexelCenter.xyz * t;
     mat4 viewProjection = light.viewProjections[cubeFace];
     vec4 potentialOccluderNDC = viewProjection * vec4(potentialOccluder, 1.0);
-    potentialOccluderNDC.xyz /= potentialOccluderNDC.w;
+    potentialOccluderNDC /= potentialOccluderNDC.w;
     vec3 normalizedCoords = potentialOccluderNDC.xyz * 0.5 + 0.5;
-    float potentialOccluderDepth = normalizedCoords.z;
-    return max(0.0, surfaceDepth - potentialOccluderDepth);
+
+    return normalizedCoords.z;
 }
 
 float OmnidirectionalPenumbra(vec3 surfaceWorldPosition, // World position of the surface point
@@ -137,9 +137,12 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
     float currentDepth = DepthFromPointLightPerspective(light, surfaceWorldPosition);
     vec2 shadowMapSize = textureSize(comparisonSampler, 0).xy;
 
+    float epsilon = OmnidirectionalAdaptiveEpsilon(light, lightDirection, surfaceNormal, currentDepth, 1.0, 0.0035);
+    float biasedDepth = currentDepth - epsilon;
+
     #ifndef SHADOW_NO_PCF
-    vec2 twoTexelSize = 2.0 / shadowMapSize;
-    vec2 kernelSize = twoTexelSize * 8.0;
+    vec2 texelSize = 2.0 / shadowMapSize;
+    vec2 kernelSize = texelSize * 4.0;
 
     float gradientNoise = InterleavedGradientNoise(gl_FragCoord.xy);
     int VogelDiskSampleCount = 16;
@@ -149,22 +152,12 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
     for(int i = 0; i < VogelDiskSampleCount; i++) {
         vec2 vogelDiskSample = VogelDiskSample(i, VogelDiskSampleCount, gradientNoise) * kernelSize * penumbra;
         vec3 sampleVector = (rotationMatrix * vec4(vogelDiskSample, 1.0, 0.0)).xyz;
-
-        vec2 texCoords = CubeMapTextureCoords(sampleVector).xy;
-        float bias = OmnidirectionalAdaptiveBias(light, surfaceWorldPosition, surfaceNormal, texCoords, currentDepth, shadowMapSize);
-        float epsilon = OmnidirectionalAdaptiveEpsilon(light, sampleVector, surfaceNormal, currentDepth, 1.0, 0.001);
-        float biasedDepth = currentDepth - bias - epsilon;
-
         shadow += texture(comparisonSampler, vec4(sampleVector, biasedDepth));
     }
 
     shadow /= float(VogelDiskSampleCount);
     return shadow;
-
     #else
-    vec2 texCoords = CubeMapTextureCoords(lightDirection).xy;
-    float bias = OmnidirectionalAdaptiveBias(light, surfaceWorldPosition, surfaceNormal, texCoords, currentDepth, shadowMapSize) + 0.001;
-    float biasedDepth = currentDepth - bias;
     return texture(comparisonSampler, vec4(lightDirection, biasedDepth));
     #endif
 }

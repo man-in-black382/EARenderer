@@ -26,7 +26,7 @@ namespace EARenderer {
     }
 
     void GLSLDirectionalPenumbra::setGBuffer(const SceneGBuffer &GBuffer) {
-        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), *GBuffer.HiZBuffer);
+        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), GBuffer.HiZBuffer);
     }
 
     void GLSLDirectionalPenumbra::setFrustumCascades(const FrustumCascades &cascades) {

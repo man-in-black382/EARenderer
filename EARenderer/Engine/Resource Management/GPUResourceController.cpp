@@ -5,6 +5,7 @@
 
 #include "GPUResourceController.hpp"
 #include "StringUtils.hpp"
+#include "CameraUBOContent.hpp"
 
 namespace EARenderer {
 
@@ -46,7 +47,12 @@ namespace EARenderer {
     }
 
     void GPUResourceController::updateUniformBuffer(const SharedResourceStorage &resourceStorage, const Scene &scene) {
+        auto session = mUniformBuffer->mapForWriting();
+        size_t offset = 0;
 
+        CameraUBOContent cameraContent(*scene.camera());
+        auto d = sizeof(std::byte);
+//        offset = session.write(reinterpret_cast<std::byte *>(&cameraContent), sizeof(cameraContent), offset);
     }
 
     const GLVBODataLocation &GPUResourceController::subMeshVBODataLocation(ID meshID, ID subMeshID) const {

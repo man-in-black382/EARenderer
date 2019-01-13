@@ -7,10 +7,12 @@
 #define EARENDERER_CAMERAUBO_HPP
 
 #include <glm/mat4x4.hpp>
+#include "Camera.hpp"
 
 namespace EARenderer {
 
     struct CameraUBOContent {
+    private:
         float nearPlane;
         float farPlane;
         glm::vec4 position;
@@ -20,6 +22,9 @@ namespace EARenderer {
         glm::mat4 inverseView;
         glm::mat4 inverseProjection;
         glm::mat4 inverseViewProjection;
+
+    public:
+        CameraUBOContent(const Camera& camera);
     };
 
 }

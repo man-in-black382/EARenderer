@@ -62,8 +62,8 @@ namespace EARenderer {
     }
 
     void GLSLDirectLightEvaluation::setGBuffer(const SceneGBuffer &GBuffer) {
-        setUniformTexture(ctcrc32("uMaterialData"), *GBuffer.materialData);
-        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), *GBuffer.HiZBuffer);
+        setUniformTexture(ctcrc32("uMaterialData"), GBuffer.materialData);
+        setUniformTexture(ctcrc32("uGBufferHiZBuffer"), GBuffer.HiZBuffer);
     }
 
     void GLSLDirectLightEvaluation::setFrustumCascades(const FrustumCascades &cascades) {
