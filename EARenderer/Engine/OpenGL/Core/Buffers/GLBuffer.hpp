@@ -28,20 +28,7 @@ namespace EARenderer {
         size_t mSize = 0;
         size_t mCount = 0;
 
-    protected:
-        DataType *map() {
-            return reinterpret_cast<DataType *>(glMapBuffer(mBindingPoint, GL_WRITE_ONLY));
-        }
-
-        void unmap() {
-            glUnmapBuffer(mBindingPoint);
-        }
-
     public:
-
-#pragma mark - Types
-
-        using WriteContextClosure = std::function<void(GLBufferWritingSession<DataType> writer)>;
 
 #pragma mark - Lifecycle
 
@@ -105,6 +92,10 @@ namespace EARenderer {
             return mCount;
         }
 
+        size_t alignment() const {
+            return mAlignment;
+        }
+
 #pragma mark - Binding
 
         virtual void bind() const {
@@ -113,13 +104,8 @@ namespace EARenderer {
 
 #pragma mark - Helpers
 
-        auto mapForWriting() {
-            bind();
-            auto ptr = map();
-            return GLBufferWritingSession<DataType>(ptr, mCount, mAlignment, [this] {
-                bind();
-                unmap();
-            });
+        auto createWritingSession() {
+            return GLBufferWritingSession<DataType>(this, mBindingPoint);
         }
 
     };

@@ -1,7 +1,5 @@
 #version 400 core
 
-#define SHADOW_NO_PCF
-
 #include "Packing.glsl"
 #include "DiffuseLightProbes.glsl"
 #include "ColorSpace.glsl"
@@ -74,13 +72,13 @@ void main() {
         radiance    = DirectionalLightRadiance(uDirectionalLight);
         L           = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-        float penumbra = 0.0;
+        float penumbra = 10.0;
         shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(uPointLight, worldPosition);
-        L           = normalize(uPointLight.position - worldPosition);
-        float penumbra = 0.0;
+        L           = normalize(uPointLight.position.xyz - worldPosition);
+        float penumbra = 10.0;
         shadow = OmnidirectionalShadow(worldPosition, N, uPointLight, uOmnidirectionalShadowMap, penumbra);
     }
     else if (uLightType == kLightTypeSpot) {

@@ -8,14 +8,14 @@
 namespace EARenderer {
 
     CameraUBOContent::CameraUBOContent(const Camera &camera)
-            :
-            nearPlane(camera.nearClipPlane()),
-            farPlane(camera.farClipPlane()),
-            position(glm::vec4(camera.position(), 1.0)),
-            view(camera.viewMatrix()),
-            projection(camera.projectionMatrix()),
-            viewProjection(projection * view),
-            inverseView(camera.inverseViewMatrix()),
-            inverseProjection(camera.inverseProjectionMatrix()) {}
+            : nearPlane(camera.nearClipPlane()),
+              farPlane(camera.farClipPlane()),
+              position(glm::vec4(camera.position(), 1.0)),
+              view(camera.viewMatrix()),
+              projection(camera.projectionMatrix()),
+              viewProjection(projection * view),
+              inverseView(camera.inverseViewMatrix()),
+              inverseProjection(camera.inverseProjectionMatrix()) {
+    }
 
 }

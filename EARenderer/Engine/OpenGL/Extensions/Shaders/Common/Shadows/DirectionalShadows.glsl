@@ -22,7 +22,13 @@ int ShadowCascadeIndex(vec3 surfaceWorldPosition, // World position of the surfa
     return 0;
 }
 
-/////////////////// PENUMBRA ///////////////////////
+float DirectionalAdaptiveEpsilon(vec3 surfaceNormal, vec3 surfaceToLight, float K) {
+    float dotProduct = dot(surfaceNormal, surfaceToLight);
+    float scaleFactor = min(1.0 / (dotProduct * dotProduct), 100.0);
+    return K * scaleFactor;
+}
+
+///////////////// PENUMBRA ///////////////////////
 
 float DirectionalPenumbra(vec3 surfaceWorldPosition, // World position of the surface point
                           int cascadeIndex,          // Index of the shadow cascade containing the surface point
@@ -84,8 +90,6 @@ float DirectionalShadow(vec3 surfaceWorldPosition, // World position of the surf
     // Constants that should be refactored into configurable parameters
     const int KernelSize = 4;
     const int VogelDiskSampleCount = KernelSize * KernelSize; // kernelSize * kernelSize
-    const float KernelScale = 4.0; // Can be used to increase sampling window when used in conjunction with penumbra
-    const vec2 BiasLimits = vec2(0.002, 0.004);
     //
     
     mat4 relevantLightMatrix = lightSpaceMatrices[cascadeIndex];
@@ -98,21 +102,18 @@ float DirectionalShadow(vec3 surfaceWorldPosition, // World position of the surf
     
     // Get depth of current fragment from light's perspective
     float currentDepth = projectedCoords.z;
-
-    float sine = 1.0 - dot(surfaceNormal, surfaceToLight);
-    float bias = max(BiasLimits.x, BiasLimits.y * sine);
-    float biasedDepth = currentDepth - bias;
+    float biasedDepth = currentDepth - DirectionalAdaptiveEpsilon(surfaceNormal, surfaceToLight, 0.00001);
 
     #ifndef SHADOW_NO_PCF
     float gradientNoise = InterleavedGradientNoise(gl_FragCoord.xy);
     vec2 shadowMapSize = textureSize(comparisonSampler, 0).xy;
-    vec2 shadowFilterMaxSize = KernelScale * VogelDiskScale(shadowMapSize, KernelSize);
+    vec2 shadowFilterMaxSize = VogelDiskScale(shadowMapSize, KernelSize);
     
     float shadow = 0.0f;
 
     for(int i = 0; i < VogelDiskSampleCount; i++) {
         vec2 sampleUV = VogelDiskSample(i, VogelDiskSampleCount, gradientNoise);
-        sampleUV = shadowMapUV + sampleUV * penumbra * shadowFilterMaxSize;
+        sampleUV = shadowMapUV + sampleUV * shadowFilterMaxSize * penumbra;
         shadow += texture(comparisonSampler, vec4(sampleUV, cascadeIndex, biasedDepth));
     }
     

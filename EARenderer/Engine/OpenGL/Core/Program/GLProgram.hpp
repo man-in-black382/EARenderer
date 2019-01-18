@@ -76,11 +76,6 @@ namespace EARenderer {
 
         void setUniformTexture(CRC32 uniformNameCRC32, const GLTexture &texture, const GLSampler *sampler = nullptr);
 
-        void setUniformBuffer(CRC32 uniformNameCRC32, const GLUniformBuffer& UBO) {
-            const GLUniformBlock& block = uniformBlockByNameCRC32(uniformNameCRC32);
-            glBindBufferRange(GL_UNIFORM_BUFFER, block.binding(), UBO.name(), 0, UBO.size());
-        }
-
         template<typename TextureFormat, TextureFormat Format, typename BufferDataType>
         void setBufferTexture(CRC32 uniformNameCRC32, const GLBufferTexture<TextureFormat, Format, BufferDataType> &bufferTexture) {
             if (bufferTexture.buffer().size() == 0) {
@@ -120,6 +115,8 @@ namespace EARenderer {
          @param closure function object in which uniform sampler modifications should be performed
          */
         void ensureSamplerValidity(UniformModifierClosure closure);
+
+        void setUniformBuffer(CRC32 uniformNameCRC32, const GLUniformBuffer& UBO, const GLUBODataLocation& location);
     };
 
     void swap(GLProgram &, GLProgram &);

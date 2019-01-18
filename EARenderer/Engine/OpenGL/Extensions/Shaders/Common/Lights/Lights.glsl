@@ -5,8 +5,11 @@ struct DirectionalLight {
 };
 
 struct PointLight {
-    vec3 radiantFlux; // a.k.a color
-    vec3 position;
+    mat4 projection;
+    mat4 inverseProjection;
+
+    vec4 radiantFlux; // a.k.a color
+    vec4 position;
     float nearPlane;
     float farPlane;
     float area;
@@ -15,8 +18,7 @@ struct PointLight {
     float linear;
     float quadratic;
     //
-    mat4 viewProjections[6];
-    mat4 inverseViewProjections[6];
+
 };
 
 struct Spotlight {
@@ -27,7 +29,7 @@ struct Spotlight {
 };
 
 vec3 PointLightRadiance(PointLight light, vec3 surfaceWorldPosition) {
-    float surfaceToLightDistance = distance(light.position, surfaceWorldPosition);
+    float surfaceToLightDistance = distance(light.position.xyz, surfaceWorldPosition);
 
     // https://gamedev.stackexchange.com/a/56934
     float attenuation = 1.0 / (
@@ -36,9 +38,9 @@ vec3 PointLightRadiance(PointLight light, vec3 surfaceWorldPosition) {
         light.quadratic * (surfaceToLightDistance * surfaceToLightDistance)
     );
 
-    return light.radiantFlux * attenuation;
+    return light.radiantFlux.rgb * attenuation;
 }
 
 vec3 DirectionalLightRadiance(DirectionalLight light) {
-    return light.radiantFlux;
+    return light.radiantFlux.rgb;
 }

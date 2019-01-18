@@ -31,8 +31,6 @@ namespace EARenderer {
             uint32_t shadowCascadesCount = 1;
             GaussianBlurSettings shadowBlur{8, 8};
 
-            Color skyColor = Color::Black();//Color(0.059, 0.071, 0.087);
-
             uint32_t booleanBitmask() const {
                 uint32_t bitmask = 0;
                 bitmask |= materialsEnabled;

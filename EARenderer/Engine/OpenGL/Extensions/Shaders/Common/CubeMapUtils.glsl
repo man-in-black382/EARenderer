@@ -1,3 +1,5 @@
+#include "Geometry.glsl"
+
 int CubeMapFace(vec3 sampleVector) {
     int majorAxis = 0;
     vec3 a = abs(sampleVector);
@@ -31,4 +33,41 @@ vec3 CubeMapTextureCoords(vec3 sampleVector) {
     }
 
     return vec3(0.5 * (tmpS / m + 1.0), 0.5 * (tmpT / m + 1.0), face);
+}
+
+mat4 ViewMatrixForCubeFace(vec3 eye, int face) {
+    vec3 direction;
+    vec3 up;
+
+    switch (face) {
+        case 0:
+            direction = vec3(1.0, 0.0, 0.0);
+            up = vec3(0.0, -1.0, 0.0);
+            break;
+        case 1:
+            direction = vec3(-1.0, 0.0, 0.0);
+            up = vec3(0.0, -1.0, 0.0);
+            break;
+        case 2:
+             direction = vec3(0.0, 1.0, 0.0);
+             up = vec3(0.0, 0.0, 1.0);
+             break;
+        case 3:
+            direction = vec3(0.0, -1.0, 0.0);
+            up = vec3(0.0, 0.0, -1.0);
+            break;
+        case 4:
+            direction = vec3(0.0, 0.0, 1.0);
+            up = vec3(0.0, -1.0, 0.0);
+            break;
+        case 5:
+            direction = vec3(0.0, 0.0, -1.0);
+            up = vec3(0.0, -1.0, 0.0);
+            break;
+        default:
+            direction = vec3(0.0);
+            up = vec3(0.0, -1.0, 0.0);
+    }
+
+    return LookAt(eye, eye + direction, up);
 }

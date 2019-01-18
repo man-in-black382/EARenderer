@@ -6,12 +6,13 @@
 #include "GPUResourceController.hpp"
 #include "StringUtils.hpp"
 #include "CameraUBOContent.hpp"
+#include "PointLightUBOContent.hpp"
 
 namespace EARenderer {
 
     GPUResourceController::GPUResourceController()
             : mMeshVAO(std::make_unique<GLVertexArray<Vertex1P1N2UV1T1BT>>(nullptr, 1, nullptr, 0)),
-              mUniformBuffer(std::make_unique<GLUniformBuffer>(nullptr, 1)) {
+              mUniformBuffer(std::make_unique<GLUniformBuffer>()) {
     }
 
     const GLVertexArray<Vertex1P1N2UV1T1BT> *GPUResourceController::meshVAO() const {
@@ -47,12 +48,21 @@ namespace EARenderer {
     }
 
     void GPUResourceController::updateUniformBuffer(const SharedResourceStorage &resourceStorage, const Scene &scene) {
-        auto session = mUniformBuffer->mapForWriting();
-        size_t offset = 0;
+        auto session = mUniformBuffer->createWritingSession();
 
         CameraUBOContent cameraContent(*scene.camera());
-        auto d = sizeof(std::byte);
 //        offset = session.write(reinterpret_cast<std::byte *>(&cameraContent), sizeof(cameraContent), offset);
+
+        std::vector<PointLightUBOContent> pointLightContent;
+
+        for (ID id : scene.pointLights()) {
+            const PointLight &light = scene.pointLights()[id];
+            auto &content = pointLightContent.emplace_back(light);
+            size_t offset = session.enqueueData(reinterpret_cast<std::byte *>(&content), sizeof(content));
+            mPointLightUBODataLocations[id] = {offset, sizeof(content)};
+        }
+
+        session.flush();
     }
 
     const GLVBODataLocation &GPUResourceController::subMeshVBODataLocation(ID meshID, ID subMeshID) const {
@@ -83,6 +93,14 @@ namespace EARenderer {
 
     const GLUBODataLocation &GPUResourceController::meshInstanceUBODataLocation(ID meshInstanceID) const {
         return GLUBODataLocation();
+    }
+
+    const GLUBODataLocation &GPUResourceController::pointLightUBODataLocation(ID lightID) const {
+        auto it = mPointLightUBODataLocations.find(lightID);
+        if (it == mPointLightUBODataLocations.end()) {
+            throw std::invalid_argument(string_format("Point light UBO location not found"));
+        }
+        return it->second;
     }
 
 }

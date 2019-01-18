@@ -53,4 +53,12 @@ namespace EARenderer {
         return mEmissiveMaterials[materialID];
     }
 
+    CookTorranceMaterial &SharedResourceStorage::cookTorranceMaterial(ID materialID) {
+        return mCookTorranceMaterials[materialID];
+    }
+
+    EmissiveMaterial &SharedResourceStorage::emissiveMaterial(ID materialID) {
+        return mEmissiveMaterials[materialID];
+    }
+
 }

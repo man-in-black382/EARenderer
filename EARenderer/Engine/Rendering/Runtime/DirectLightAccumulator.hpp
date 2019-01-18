@@ -15,6 +15,7 @@
 #include "Scene.hpp"
 #include "ShadowMapper.hpp"
 #include "GLFramebuffer.hpp"
+#include "GPUResourceController.hpp"
 #include "GLSLDirectLightEvaluation.hpp"
 
 #include <memory>
@@ -26,6 +27,7 @@ namespace EARenderer {
         const Scene *mScene;
         const SceneGBuffer *mGBuffer;
         const ShadowMapper *mShadowMapper;
+        const GPUResourceController *mGPUResourceController;
 
         GLSLDirectLightEvaluation mLightEvaluationShader;
         RenderingSettings mSettings;
@@ -35,7 +37,10 @@ namespace EARenderer {
         void renderPointLights();
 
     public:
-        DirectLightAccumulator(const Scene *scene, const SceneGBuffer *gBuffer, const ShadowMapper *shadowMapper);
+        DirectLightAccumulator(
+                const Scene *scene, const SceneGBuffer *gBuffer,
+                const ShadowMapper *shadowMapper, const GPUResourceController *gpuResourceController
+        );
 
         void setRenderingSettings(const RenderingSettings &settings);
 

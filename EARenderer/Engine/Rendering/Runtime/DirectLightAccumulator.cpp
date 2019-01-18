@@ -13,8 +13,16 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    DirectLightAccumulator::DirectLightAccumulator(const Scene *scene, const SceneGBuffer *gBuffer, const ShadowMapper *shadowMapper)
-            : mScene(scene), mGBuffer(gBuffer), mShadowMapper(shadowMapper) {}
+    DirectLightAccumulator::DirectLightAccumulator(
+            const Scene *scene,
+            const SceneGBuffer *gBuffer,
+            const ShadowMapper *shadowMapper,
+            const GPUResourceController *gpuResourceController)
+            : mScene(scene),
+              mGBuffer(gBuffer),
+              mShadowMapper(shadowMapper),
+              mGPUResourceController(gpuResourceController) {
+    }
 
 #pragma mark -
 
@@ -24,6 +32,7 @@ namespace EARenderer {
         }
 
         mLightEvaluationShader.setLight(mScene->directionalLight());
+        mLightEvaluationShader.setFrustumCascades(mShadowMapper->cascades());
         mLightEvaluationShader.ensureSamplerValidity([&]() {
             mLightEvaluationShader.setDirectionalShadowMapArray(mShadowMapper->directionalShadowMapArray());
             mLightEvaluationShader.setPenumbra(mShadowMapper->directionalPenumbra());
@@ -40,7 +49,13 @@ namespace EARenderer {
                 continue;
             }
 
-            mLightEvaluationShader.setLight(light);
+//            mLightEvaluationShader.setLight(light);
+
+            mLightEvaluationShader.setUniformBuffer(
+                    ctcrc32("PointLightUBO"),
+                    *mGPUResourceController->uniformBuffer(),
+                    mGPUResourceController->pointLightUBODataLocation(lightId)
+            );
             mLightEvaluationShader.ensureSamplerValidity([&]() {
                 mLightEvaluationShader.setOmnidirectionalShadowCubemap(mShadowMapper->shadowMapForPointLight(lightId));
                 mLightEvaluationShader.setPenumbra(mShadowMapper->penumbraForPointLight(lightId));
@@ -62,7 +77,6 @@ namespace EARenderer {
         mLightEvaluationShader.bind();
         mLightEvaluationShader.setSettings(mSettings);
         mLightEvaluationShader.setCamera(*(mScene->camera()));
-        mLightEvaluationShader.setFrustumCascades(mShadowMapper->cascades());
 
         renderDirectionalLights();
         renderPointLights();

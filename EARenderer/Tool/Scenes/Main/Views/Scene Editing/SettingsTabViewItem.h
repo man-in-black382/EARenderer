@@ -17,6 +17,14 @@
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings;
 
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSkyColor:(NSColor *)color;
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunColor:(NSColor *)color;
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSkyBrightness:(CGFloat)brightness;
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunBrightness:(CGFloat)brightness;
+
 @end
 
 

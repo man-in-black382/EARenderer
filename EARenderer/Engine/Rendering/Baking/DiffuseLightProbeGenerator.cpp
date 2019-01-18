@@ -48,7 +48,6 @@ namespace EARenderer {
                 projection.sphericalHarmonics.contribute(Wps_norm, ycocg, solidAngle);
             }
         }
-
         projection.sphericalHarmonics.convolve();
         projection.sphericalHarmonics.scale(glm::vec3(1.0f / (4.0f * M_PI)));
 

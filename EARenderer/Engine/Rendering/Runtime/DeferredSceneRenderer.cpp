@@ -50,7 +50,7 @@ namespace EARenderer {
 
             // Helpers
             mShadowMapper(scene, resourceStorage, gpuResourceController, gBuffer, settings.meshSettings.shadowCascadesCount),
-            mDirectLightAccumulator(scene, gBuffer, &mShadowMapper),
+            mDirectLightAccumulator(scene, gBuffer, &mShadowMapper, gpuResourceController),
             mIndirectLightAccumulator(scene, gBuffer, surfelData, diffuseProbeData, &mShadowMapper),
             mGBuffer(gBuffer) {
 
@@ -110,14 +110,14 @@ namespace EARenderer {
         mScene->skybox()->draw();
     }
 
-    void DeferredSceneRenderer::renderFinalImage(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> image) {
+    void DeferredSceneRenderer::renderFinalImage(const PostprocessTexturePool::PostprocessTexture& image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
         mFSQuadShader.bind();
         mFSQuadShader.setApplyToneMapping(false);
         mFSQuadShader.ensureSamplerValidity([&]() {
-            mFSQuadShader.setTexture(*image);
+            mFSQuadShader.setTexture(image);
         });
 
         Drawable::TriangleStripQuad::Draw();
@@ -127,17 +127,8 @@ namespace EARenderer {
 #pragma mark - Public interface
 
     void DeferredSceneRenderer::render(const DebugOpportunity &debugClosure) {
-
-        glFinish();
-        Measurement::ExecutionTime("Shadow and penumbra", [&] {
-            mShadowMapper.render();
-            glFinish();
-        });
-
-        Measurement::ExecutionTime("Probe update", [&] {
-            mIndirectLightAccumulator.updateProbes();
-            glFinish();
-        });
+        mShadowMapper.render();
+        mIndirectLightAccumulator.updateProbes();
 
         // We're using depth buffer rendered during GBufferCookTorrance construction.
         // Depth writes are disabled for the purpose of combining skybox
@@ -156,15 +147,13 @@ namespace EARenderer {
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
 
-        Measurement::ExecutionTime("Direct light accumulation", [&] {
+        glFinish();
+        Measurement::ExecutionTime("Dir acc", [&]() {
             mDirectLightAccumulator.render();
             glFinish();
         });
 
-        Measurement::ExecutionTime("Indirect light accumulation", [&] {
-            mIndirectLightAccumulator.render();
-            glFinish();
-        });
+//        mIndirectLightAccumulator.render();
 
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -174,35 +163,20 @@ namespace EARenderer {
         auto ssrBaseOutputTexture = mPostprocessTexturePool->claim(); // Frame with reflections applied
         auto ssrBrightOutputTexture = mPostprocessTexturePool->claim(); // Frame filtered by luminosity threshold and suitable for bloom effect
 
-        Measurement::ExecutionTime("SSR", [&] {
-            mSSREffect.applyReflections(*mScene->camera(), *mGBuffer, *lightAccumulationTarget, *ssrBaseOutputTexture, *ssrBrightOutputTexture);
-            glFinish();
-        });
+        mSSREffect.applyReflections(*mScene->camera(), *mGBuffer, *lightAccumulationTarget, *ssrBaseOutputTexture, *ssrBrightOutputTexture);
 
         auto bloomOutputTexture = lightAccumulationTarget;
-
-        Measurement::ExecutionTime("Bloom", [&] {
-            mBloomEffect.bloom(*ssrBaseOutputTexture, *ssrBrightOutputTexture, *bloomOutputTexture, mSettings.bloomSettings);
-            glFinish();
-        });
+        mBloomEffect.bloom(*ssrBaseOutputTexture, *ssrBrightOutputTexture, *bloomOutputTexture, mSettings.bloomSettings);
 
         glDepthMask(GL_TRUE);
 
         debugClosure();
 
         auto toneMappingOutputTexture = ssrBaseOutputTexture;
-
-        Measurement::ExecutionTime("Tone mapping", [&] {
-            mToneMappingEffect.toneMap(*bloomOutputTexture, *toneMappingOutputTexture);
-            glFinish();
-        });
+        mToneMappingEffect.toneMap(*bloomOutputTexture, *toneMappingOutputTexture);
 
         auto smaaOutputTexture = ssrBrightOutputTexture;
-
-        Measurement::ExecutionTime("Antialiasing", [&] {
-            mSMAAEffect.antialise(*toneMappingOutputTexture, *smaaOutputTexture);
-            glFinish();
-        });
+        mSMAAEffect.antialise(*toneMappingOutputTexture, *smaaOutputTexture);
 
 //        // DEBUG
 //        glDisable(GL_DEPTH_TEST);
@@ -217,11 +191,7 @@ namespace EARenderer {
 //        glEnable(GL_DEPTH_TEST);
 //        // DEBUG
 
-        Measurement::ExecutionTime("Final frame", [&] {
-            renderFinalImage(smaaOutputTexture);
-//        renderFinalImage(toneMappingOutputTexture);
-            glFinish();
-        });
+        renderFinalImage(*smaaOutputTexture);
 //
         mPostprocessTexturePool->putBack(lightAccumulationTarget);
         mPostprocessTexturePool->putBack(ssrBaseOutputTexture);

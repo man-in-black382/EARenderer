@@ -15,26 +15,20 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     Camera::Camera()
-            :
-            mPosition(glm::zero<glm::vec3>()),
-            mFieldOfView(75),
-            mNearClipPlane(0.1),
-            mFarClipPlane(10),
-            mViewportAspectRatio(16.f / 9.f),
-            mWorldUp(glm::vec3(0, 1, 0)),
-            mFront(glm::vec3(0, 0, 1)),
-            mRight(glm::vec3(1, 0, 0)),
-            mUp(glm::vec3(0, 1, 0)),
-            mPitch(0),
-            mYaw(-90.f),
-            mMaximumPitch(85.f) {
-    }
+            : mPosition(glm::zero<glm::vec3>()),
+              mFieldOfView(75),
+              mNearClipPlane(0.1),
+              mFarClipPlane(10),
+              mViewportAspectRatio(16.f / 9.f),
+              mWorldUp(glm::vec3(0, 1, 0)),
+              mFront(glm::vec3(0, 0, 1)),
+              mRight(glm::vec3(1, 0, 0)),
+              mUp(glm::vec3(0, 1, 0)),
+              mPitch(0),
+              mYaw(-90.f),
+              mMaximumPitch(85.f) {}
 
-    Camera::Camera(float fieldOfView,
-            float zNear,
-            float zFar)
-            :
-            Camera() {
+    Camera::Camera(float fieldOfView, float zNear, float zFar) : Camera() {
         mFieldOfView = fieldOfView;
         mNearClipPlane = zNear;
         mFarClipPlane = zFar;

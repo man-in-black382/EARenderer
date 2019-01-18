@@ -40,6 +40,14 @@ namespace EARenderer {
         mNearPlane = nearPlane;
     }
 
+    glm::mat4 PointLight::projectionMatrix() const {
+        return glm::perspective(glm::radians(90.f), 1.f, mNearPlane, mRadius);
+    }
+
+    glm::mat4 PointLight::inverseProjectionMatrix() const {
+        return glm::inverse(projectionMatrix());
+    }
+
     std::array<glm::mat4, 6> PointLight::viewProjectionMatrices() const {
         // Cubemap's coordinate system was taken from RenderMan by Pixar
         // because of that several adjustments are needed to match a conventional OpenGL coordinate system
@@ -48,7 +56,7 @@ namespace EARenderer {
         // Some details:
         // https://stackoverflow.com/questions/33769539/what-is-the-reason-for-opengl-rotated-textures-when-cube-mapping
         //
-        glm::mat4 projMat = glm::perspective(glm::radians(90.f), 1.f, mNearPlane, mRadius);
+        glm::mat4 projMat = projectionMatrix();
         return {
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)),
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)),
@@ -56,18 +64,6 @@ namespace EARenderer {
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)),
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)),
                 projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0))
-        };
-    }
-
-    std::array<glm::mat4, 6> PointLight::inverseViewProjectionMatrices() const {
-        glm::mat4 projMat = glm::perspective(glm::radians(90.f), 1.f, mNearPlane, mRadius);
-        return {
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))),
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0))),
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0))),
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0))),
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0))),
-                glm::inverse(projMat * glm::lookAt(mPosition, mPosition + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)))
         };
     }
 

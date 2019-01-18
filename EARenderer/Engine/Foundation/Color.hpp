@@ -69,6 +69,8 @@ namespace EARenderer {
 
         Color convertedTo(Space space) const;
 
+        Color scaled(float scale) const;
+
         template<typename S>
         void serialize(S &s) {
             s.value4b(mR);

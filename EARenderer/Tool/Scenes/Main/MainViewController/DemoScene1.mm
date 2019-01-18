@@ -23,9 +23,15 @@
 @property(assign, nonatomic) choreograph::Timeline *animationTimeline;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *sunDirectionOutput;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *lightPositionOutput;
+@property(assign, nonatomic) choreograph::Output<glm::vec3> *cameraPositionOutput;
+@property(assign, nonatomic) choreograph::Output<glm::vec3> *cameraDirectionOutput;
 @property(assign, nonatomic) choreograph::Output<float> *lightSizeOutput;
+@property(assign, nonatomic) choreograph::Output<float> *lightIntensityOutput;
 @property(assign, nonatomic) choreograph::Output<glm::vec3> *objectPositionOutput;
-@property(assign, nonatomic) EARenderer::ID lightID;
+@property(assign, nonatomic) EARenderer::ID firstLightID;
+@property(assign, nonatomic) EARenderer::ID secondLightID;
+@property(assign, nonatomic) EARenderer::Color secondLightColor;
+@property(assign, nonatomic) EARenderer::EmissiveMaterial *secondLightMaterial;
 
 @end
 
@@ -178,22 +184,36 @@
 
     // Skybox
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"night_sky" ofType:@"hdr"];
-    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.03));
+//    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
+    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.01));
+//    scene->skybox()->setAmbientColor(EARenderer::Color(0.059, 0.071, 0.087));
 
     scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
     scene->directionalLight().setIsEnabled(false);
 
-    EARenderer::Color lightColor(3.0, 2.55, 1.98);
-    EARenderer::PointLight::Attenuation lightAttenuation{1.0, 0.0, 4.0};
-    EARenderer::MaterialReference lightMaterialRef = resourcePool->addMaterial(EARenderer::EmissiveMaterial{lightColor});
-    EARenderer::PointLight pointLight(glm::vec3(3.172841, -1.449196, 1.107378), lightColor, 8.0, 0.1, 10.0, lightAttenuation);
-    pointLight.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
-    pointLight.meshInstance->materialReference = lightMaterialRef;
-    pointLight.meshInstance->transformation().scale = glm::vec3(0.001);
-//    pointLight.setIsEnabled(false);
+    EARenderer::Color light1Color(3.0, 2.55, 1.98);
+    EARenderer::PointLight::Attenuation lightAttenuation1{1.0, 0.0, 4.0};
+    EARenderer::MaterialReference lightMaterialRef1 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light1Color});
+    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 20.0, lightAttenuation1);
+    pointLight1.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
+    pointLight1.meshInstance->materialReference = lightMaterialRef1;
+    pointLight1.meshInstance->transformation().scale = glm::vec3(0.002);
+//    pointLight1.setIsEnabled(false);
 
-    self.lightID = scene->pointLights().insert(pointLight);
+//    EARenderer::Color light2Color(0.356, 0.541, 0.898);
+//    EARenderer::PointLight::Attenuation lightAttenuation2{1.0, 0.0, 4.0};
+//    EARenderer::MaterialReference lightMaterialRef2 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light2Color});
+//    EARenderer::PointLight pointLight2(glm::vec3(3.172841, 0.0, 1.107378), light2Color, 8.0, 0.1, 30.0, lightAttenuation2);
+//    pointLight2.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
+//    pointLight2.meshInstance->materialReference = lightMaterialRef2;
+//    pointLight2.meshInstance->transformation().scale = glm::vec3(0.003);
+////    pointLight2.setIsEnabled(false);
+//    self.secondLightColor = light2Color;
+//    self.secondLightMaterial = &resourcePool->emissiveMaterial(lightMaterialRef2.second);
+
+    self.firstLightID = scene->pointLights().insert(pointLight1);
+//    self.secondLightID = scene->pointLights().insert(pointLight2);
 
     scene->calculateGeometricProperties(*resourcePool);
 
@@ -205,9 +225,9 @@
         scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
-    scene->setName("sponza");
-    scene->setDiffuseProbeSpacing(0.358); // 360
-    scene->setSurfelSpacing(0.05);
+    scene->setName("sponza_2");
+    scene->setDiffuseProbeSpacing(0.360); // 370 // 360
+    scene->setSurfelSpacing(0.048);
 
     scene->camera()->moveTo(glm::vec3(0.0, -0.7, 0.0));
     scene->camera()->lookAt(glm::vec3(1, -0.5, 0));
@@ -217,12 +237,20 @@
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics {
-    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+    self.animationTimeline->step(frameCharacteristics.frameTimeMillisecons / 1000.0);
     scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 
-    EARenderer::PointLight &light = scene->pointLights()[self.lightID];
-    light.setPosition(self.lightPositionOutput->value());
+    EARenderer::PointLight &firstLight = scene->pointLights()[self.firstLightID];
+    firstLight.setPosition(self.lightPositionOutput->value());
 //    light.setArea(self.lightSizeOutput->value());
+
+//    EARenderer::PointLight &secondLight = scene->pointLights()[self.secondLightID];
+//    auto secondLightColor = EARenderer::Color(self.secondLightColor.scaled(self.lightIntensityOutput->value()));
+//    secondLight.setColor(secondLightColor);
+//    self.secondLightMaterial->emissionColor = secondLightColor;
+
+//    scene->camera()->moveTo(self.cameraPositionOutput->value());
+//    scene->camera()->lookAt(scene->camera()->position() - self.cameraDirectionOutput->value());
 
 //    auto& sphereInstance = scene->meshInstances()[self.sphereMeshInstanceID];
 //    auto transformation = sphereInstance.transformation();
@@ -241,41 +269,71 @@
     self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
     self.objectPositionOutput = new choreograph::Output<glm::vec3>();
     self.lightPositionOutput = new choreograph::Output<glm::vec3>();
+    self.cameraPositionOutput = new choreograph::Output<glm::vec3>();
+    self.cameraDirectionOutput = new choreograph::Output<glm::vec3>();
     self.lightSizeOutput = new choreograph::Output<float>();
+    self.lightIntensityOutput = new choreograph::Output<float>();
     self.animationTimeline = new choreograph::Timeline();
 
     glm::vec3 sunDirectionStart(-0.3, -0.5, 0.45);
     glm::vec3 sunDirectionEnd(0.5, -0.5, -0.45);
 
-    choreograph::PhraseRef<glm::vec3> sunDirectionPhrase = choreograph::makeRamp(sunDirectionStart, sunDirectionEnd, 20.0);
+    choreograph::PhraseRef<glm::vec3> sunDirectionPhrase = choreograph::makeRamp(sunDirectionStart, sunDirectionEnd, 8.0);
 
     self.animationTimeline->apply(self.sunDirectionOutput, sunDirectionPhrase).finishFn([&m = *self.sunDirectionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
 
-    glm::vec3 lightPositionStart(-2.0, 0.0, 0.45);
-    glm::vec3 lightPositionEnd(2.0, 0.0, -0.45);
-
-    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(lightPositionStart, lightPositionEnd, 10.0);
+//    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(lightPositionStart, lightPositionEnd, 10.0);
 
     // Light size
-    choreograph::PhraseRef<float> lightSizePhrase = choreograph::makeRamp(1.0f, 300.0f, 6.0);
+    choreograph::PhraseRef<float> lightSizePhrase = choreograph::makeRamp(1.0f, 300.0f, 10.0);
     self.animationTimeline->apply(self.lightSizeOutput, lightSizePhrase).finishFn([&m = *self.lightSizeOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
 
-    self.animationTimeline->apply(self.lightPositionOutput)
-            .then<choreograph::RampTo>(glm::vec3(3.172841, -1.449196, 1.107378), 10.0)
-            .then<choreograph::RampTo>(glm::vec3(-3.684157, -1.449196, 1.215628), 20.0)
-            .then<choreograph::RampTo>(glm::vec3(-3.800002, -1.449196, -1.361623), 10.0)
-            .then<choreograph::RampTo>(glm::vec3(3.133468, -1.449196, -1.294581), 20.0)
-            .then<choreograph::RampTo>(glm::vec3(3.172841, -1.449196, 1.107378), 10.0)
-            .finishFn([&m = *self.lightPositionOutput->inputPtr()] {
-                m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
-                m.resetTime();
-            });
+    // Light intensity
+    choreograph::PhraseRef<float> lightIntensityPhrase = choreograph::makeRamp(1.0f, 6.0f, 3.0f);
+    self.animationTimeline->apply(self.lightIntensityOutput, lightIntensityPhrase).finishFn([&m = *self.lightIntensityOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
+    // Light position
+    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(glm::vec3(3.172841, -1.449196, 1.107378), glm::vec3(-3.684157, -1.449196, 1.215628), 10.0f);
+    self.animationTimeline->apply(self.lightPositionOutput, lightPositionPhrase).finishFn([&m = *self.lightPositionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
+    //// CAMERA ////
+
+    // First floor
+//    glm::vec3 cameraPositionEnd(-3.410375, -1.533569, -1.630354);
+//    glm::vec3 cameraPositionStart(-3.643409, -1.477225, 1.385521);
+
+    // Second floor
+    glm::vec3 cameraPositionEnd(-4.189603, -0.086351, 1.448207);
+    glm::vec3 cameraPositionStart(-4.027953, -0.086351, -1.806176);
+
+    choreograph::PhraseRef<glm::vec3> cameraPositionPhrase = choreograph::makeRamp(cameraPositionStart, cameraPositionEnd, 25.0);
+
+    self.animationTimeline->apply(self.cameraPositionOutput, cameraPositionPhrase).finishFn([&m = *self.cameraPositionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
+
+    glm::vec3 cameraDirectionEnd(0.864879, 0.051428, 0.499338);
+    glm::vec3 cameraDirectionStart(0.820979, -0.004046, -0.570944);
+
+    choreograph::PhraseRef<glm::vec3> cameraDirectionPhrase = choreograph::makeRamp(cameraDirectionStart, cameraDirectionEnd, 25.0);
+
+    self.animationTimeline->apply(self.cameraDirectionOutput, cameraDirectionPhrase).finishFn([&m = *self.cameraDirectionOutput->inputPtr()] {
+        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+        m.resetTime();
+    });
 
 //    glm::vec3 objectStart(-1.5, -1.5, 1.0);
 //    glm::vec3 objectEnd(-1.5, -1.5, -1.0);
@@ -416,7 +474,8 @@
             [self pathForResource:@"Sponza_Ceiling_diffuse.tga"],
             [self pathForResource:@"Sponza_Ceiling_normal.tga"],
             [self pathForResource:@"Dielectric_metallic.tga"],
-            [self pathForResource:@"Sponza_Ceiling_roughness.tga"],
+//            [self pathForResource:@"Sponza_Ceiling_roughness.tga"],
+            1.0,
             [self pathForResource:@"blank_white.jpg"],
             [self pathForResource:@"blank_white.jpg"]
     });
@@ -462,7 +521,8 @@
             [self pathForResource:@"Sponza_Details_diffuse.tga"],
             [self pathForResource:@"Sponza_Details_normal.tga"],
             [self pathForResource:@"Dielectric_metallic.tga"],
-            [self pathForResource:@"Sponza_Details_roughness.tga"],
+//            [self pathForResource:@"Sponza_Details_roughness.tga"],
+            1.0,
             [self pathForResource:@"blank_white.jpg"],
             [self pathForResource:@"blank_white.jpg"]
     });

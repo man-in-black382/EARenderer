@@ -148,11 +148,13 @@ namespace EARenderer {
             GLuint binding = uniformBlockBinding(nameList.back(), maxUBOBindings);
             glUniformBlockBinding(mName, blockIndex, binding);
 
+            auto testIdx = glGetUniformBlockIndex(mName, nameList.back().c_str());
+
             GLUniformBlock block(nameList.back(), blockIndex, binding);
             CRC32 key = ctcrc32(nameList.back());
             mUniformBlocks.insert(std::pair<CRC32, GLUniformBlock>(key, block));
 
-            printf("Program %d | UBO Name %s | UBO Index %d | UBO Binding %d \n", mName, nameList.back().c_str(), blockIndex, binding);
+            printf("Program %d | UBO Name %s | UBO Index %d | Test Index %d |  UBO Binding %d \n", mName, nameList.back().c_str(), blockIndex, testIdx, binding);
         }
     }
 
@@ -223,6 +225,11 @@ namespace EARenderer {
         if (sampler) {
             GLTextureUnitManager::Shared().bindSamplerToUnit(*sampler, uniform.textureUnit());
         }
+    }
+
+    void GLProgram::setUniformBuffer(CRC32 uniformNameCRC32, const GLUniformBuffer &UBO, const GLUBODataLocation& location) {
+        const GLUniformBlock& block = uniformBlockByNameCRC32(uniformNameCRC32);
+        glBindBufferRange(GL_UNIFORM_BUFFER, block.binding(), UBO.name(), location.offset, location.dataSize);
     }
 
 #pragma mark - Public

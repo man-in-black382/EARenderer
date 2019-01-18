@@ -30,6 +30,7 @@
 #import "Measurement.hpp"
 #import "DiffuseLightProbeGenerator.hpp"
 #import "DiffuseLightProbeRenderer.hpp"
+#import "LogUtils.hpp"
 
 static float const FrequentEventsThrottleCooldownMS = 100;
 
@@ -39,24 +40,6 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 @property(weak, nonatomic) IBOutlet FPSView *fpsView;
 @property(weak, nonatomic) IBOutlet SceneObjectsTabView *sceneObjectsTabView;
 @property(weak, nonatomic) IBOutlet SceneEditorTabView *sceneEditorTabView;
-
-//@property(assign, nonatomic) std::unique_ptr<DefaultRenderComponentsProvider> defaultRenderComponentsProvider;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::Scene> scene;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::SceneGBufferConstructor> sceneGBufferRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::DeferredSceneRenderer> deferredSceneRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::AxesRenderer> axesRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::SceneInteractor> sceneInteractor;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::Cameraman> cameraman;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::FrameMeter> frameMeter;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::Throttle> frequentEventsThrottle;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::SurfelRenderer> surfelRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::DiffuseLightProbeRenderer> probeRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::TriangleRenderer> triangleRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::BoxRenderer> boxRenderer;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::SharedResourceStorage> sharedResourceStorage;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::GPUResourceController> gpuResourceController;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::SurfelData> surfelData;
-//@property(assign, nonatomic) std::unique_ptr<EARenderer::DiffuseLightProbeData> diffuseProbeData;
 
 @property(assign, nonatomic) EARenderer::RenderingSettings renderingSettings;
 
@@ -91,6 +74,14 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     [super viewDidLoad];
     [self.openGLView becomeFirstResponder];
     self.openGLView.delegate = self;
+
+    [self.view layout];
+
+    CGRect frame = CGRectMake(0.0, 0.0, 1920.0 + self.sceneEditorTabView.bounds.size.width, 1080.0);
+    [self.view.window setContentSize:frame.size];
+    [self.view.window setFrame:frame display:YES];
+
+    [self.fpsView setHidden:YES];
 }
 
 #pragma mark - SceneGLViewDelegate
@@ -167,14 +158,12 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
-    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
+//    NSLog(@"GLView width: %f", view.frame.size.width);
+//    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
+//    NSLog(@"Camera dir: %f %f %f", self->scene->camera()->front().x, self->scene->camera()->front().y, self->scene->camera()->front().z);
 
     self->cameraman->updateCamera();
-
-    EARenderer::Measurement::ExecutionTime("G Buffer Construction", [&] {
-        self->sceneGBufferRenderer->render();
-    });
-
+    self->sceneGBufferRenderer->render();
     self->gpuResourceController->updateUniformBuffer(*self->sharedResourceStorage, *self->scene);
 
     self->deferredSceneRenderer->render([&]() {
@@ -238,6 +227,22 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     // FIXME: Fix rendering settings
     self->deferredSceneRenderer->setRenderingSettings(settings);
     self->probeRenderer->setRenderingSettings(settings);
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSkyColor:(NSColor *)color {
+    self->scene->skybox()->setAmbientColor(EARenderer::Color(color.redComponent, color.greenComponent, color.blueComponent));
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunColor:(NSColor *)color {
+    self->scene->directionalLight().setColor(EARenderer::Color(color.redComponent, color.greenComponent, color.blueComponent));
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSkyBrightness:(CGFloat)brightness {
+
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunBrightness:(CGFloat)brightness {
+
 }
 
 #pragma mark - Helper methods

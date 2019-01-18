@@ -11,8 +11,8 @@
 namespace EARenderer {
 
     struct GLUBODataLocation {
-        size_t offset;
-        size_t dataSize;
+        size_t offset = 0;
+        size_t dataSize = 0;
     };
 
     // UBO Correct usage and performance

@@ -304,7 +304,7 @@ namespace EARenderer {
         float normDistance2 = glm::length2(first.position - second.position) / workingVolumeMaximumExtent2;
         float normalDeviation = glm::dot(first.normal, second.normal);
 
-        const float Cn = 0.0;
+        const float Cn = -0.3;
         const float Cb = 0.04;
 
         auto offsetStart = first.position + first.normal * workingVolumeMaximumExtent2 * 0.001f;

@@ -52,6 +52,10 @@ namespace EARenderer {
 
         const EmissiveMaterial &emissiveMaterial(ID materialID) const;
 
+        CookTorranceMaterial &cookTorranceMaterial(ID materialID);
+
+        EmissiveMaterial &emissiveMaterial(ID materialID);
+
         template <typename F>
         void iterateMeshes(F f) const {
             std::for_each(std::begin(mMeshes), std::end(mMeshes), f);

@@ -24,6 +24,7 @@ namespace EARenderer {
         std::unordered_map<ID, GLUBODataLocation> mMaterialUBODataLocations;
         std::unordered_map<ID, GLUBODataLocation> mMaterialInstanceUBODataLocations;
         std::unordered_map<ID, GLUBODataLocation> mMeshInstanceUBODataLocations;
+        std::unordered_map<ID, GLUBODataLocation> mPointLightUBODataLocations;
 
         GLUBODataLocation mCameraUBODataLocation;
 
@@ -47,6 +48,8 @@ namespace EARenderer {
         const GLUBODataLocation &materialInstanceUBODataLocation(ID materialInstanceID) const;
 
         const GLUBODataLocation &meshInstanceUBODataLocation(ID meshInstanceID) const;
+
+        const GLUBODataLocation &pointLightUBODataLocation(ID lightID) const;
     };
 
 }

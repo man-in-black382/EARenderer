@@ -38,8 +38,8 @@ namespace EARenderer {
     }
 
     void GLSLSurfelLighting::setLight(const PointLight &light) {
-        glUniform3fv(uniformByNameCRC32(ctcrc32("uPointLight.position")).location(), 1, glm::value_ptr(light.position()));
-        glUniform3fv(uniformByNameCRC32(ctcrc32("uPointLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
+        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.position")).location(), 1, glm::value_ptr(light.position()));
+        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
         glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.nearPlane")).location(), light.nearClipPlane());
         glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.farPlane")).location(), light.farClipPlane());
         glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.constant")).location(), light.attenuation.constant);

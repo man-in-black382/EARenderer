@@ -202,7 +202,7 @@ namespace EARenderer {
         renderOmnidirectionalShadowMaps();
         renderDirectionalShadowMaps();
         renderOmnidirectionalPenumbras();
-        renderDirectionalPenumbra();
+//        renderDirectionalPenumbra();
     }
 
 }

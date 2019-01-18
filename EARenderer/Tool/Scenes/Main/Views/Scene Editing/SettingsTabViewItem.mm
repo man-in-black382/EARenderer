@@ -68,27 +68,19 @@
 #pragma mark - Lights
 
 - (IBAction)skyColorChanged:(NSColorWell *)sender {
-    NSLog(@"Sky color changed to: %@", sender.color);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSkyColor:sender.color];
 }
 
 - (IBAction)skyBrightnessChanged:(NSSlider *)sender {
-    NSLog(@"Sky brightness changed to: %f", sender.floatValue);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSkyBrightness:sender.floatValue];
 }
 
 - (IBAction)sunColorChanged:(NSColorWell *)sender {
-    NSLog(@"Sun color changed to: %@", sender.color);
-//    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-//    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSunColor:sender.color];
 }
 
 - (IBAction)sunBrightnessChanged:(NSSlider *)sender {
-    NSLog(@"Sun brightness changed to: %f", sender.floatValue);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSunBrightness:sender.floatValue];
 }
 
 - (IBAction)sunXDirectionChanged:(NSSlider *)sender {

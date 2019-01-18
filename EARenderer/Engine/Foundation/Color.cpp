@@ -116,17 +116,21 @@ namespace EARenderer {
 
             case Space::sRGB: {
                 float power = 1.0 / 2.2;
-                return {std::pow(linear.mR, power), std::pow(linear.mG, power), std::pow(linear.mB, power), mA};
+                return {std::pow(linear.mR, power), std::pow(linear.mG, power), std::pow(linear.mB, power), mA, Space::sRGB};
             }
 
             case Space::YCoCg: {
                 float Co = (linear.mR - linear.mB) / 2.0;
                 float t = linear.mB + Co;
                 float Cg = (linear.mG - t) / 2.0;
-                float Y = t + linear.mG;
-                return {Y, Co, Cg};
+                float Y = t + Cg;
+                return {Y, Co, Cg, mA, Space::YCoCg};
             }
         }
+    }
+
+    Color Color::scaled(float scale) const {
+        return { mR * scale, mG * scale, mB * scale, mA };
     }
 
 }

@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include "MemoryUtils.hpp"
 #include "StringUtils.hpp"
+#include "LogUtils.hpp"
 
 namespace EARenderer {
 
@@ -25,49 +26,55 @@ namespace EARenderer {
 
         using DeallocationCallback = std::function<void()>;
 
-        std::byte *mMappedBuffer = nullptr;
-        size_t mObjectCapacity = 0;
-        size_t mAlignment = 1;
-        DeallocationCallback mDeallocationCallback;
+        struct MemoryLocation {
+            const DataType *data = nullptr;
+            size_t count = 1;
+            size_t nextOffset = 0;
+        };
 
-        GLBufferWritingSession(std::byte *mappedAddress, size_t objectCapacity, size_t alignment, const DeallocationCallback &deallocationCallback)
-                : mMappedBuffer(mappedAddress), mObjectCapacity(objectCapacity), mAlignment(alignment), mDeallocationCallback(deallocationCallback) {}
+        const GLBuffer<DataType> *mBuffer;
+        GLint mBindingPoint;
+        std::vector<MemoryLocation> mDataQueue;
+
+        GLBufferWritingSession(const GLBuffer<DataType> *buffer, GLint bindingPoint)
+                : mBuffer(buffer), mBindingPoint(bindingPoint) {}
 
     public:
-        using AlignedOffset = size_t;
-
-        ~GLBufferWritingSession() {
-            mDeallocationCallback();
-        }
-
-        /// Copies client's memory region into a mapped GL buffer.
-        /// Inserts padding at the end of the copied data according to the alignment parameter provided at the buffer construction stage.
-        /// @param data Pointer to the client's data.
-        /// @param count Amount of data objects to be copied.
-        /// @param alignedOffset Byte offset at which data will be placed inside a GL buffer.
-        /// Must be aligned to the alignment parameter provided at the buffer construction stage.
-        /// @return Aligned byte offset at which the next data chunk should be placed.
-        AlignedOffset write(const DataType* data, size_t count = 1, AlignedOffset alignedOffset = 0) {
+        size_t enqueueData(const DataType *data, size_t count = 1) {
 
             if (count == 0) {
-                throw std::invalid_argument("Count must bo greater than 0. You cannot copy 0 objects.");
-            }
-
-            if ((alignedOffset % mAlignment) != 0) {
-                throw std::invalid_argument(string_format("Buffer offset %d is not aligned to the alignment of %d", alignedOffset, mAlignment));
-            }
-
-            if ((alignedOffset / sizeof(DataType) + count) >= mObjectCapacity) {
-                throw std::range_error("Attempt to write data outside of the buffer");
+                throw std::invalid_argument("Count must bo greater than 0");
             }
 
             size_t dataByteSize = sizeof(DataType) * count;
-            auto padding = Utils::Memory::Padding(dataByteSize, mAlignment);
-            memcpy(mMappedBuffer + alignedOffset, data, dataByteSize);
-
+            size_t alignedOffset = mDataQueue.size() ? mDataQueue.back().nextOffset : 0;
+            size_t padding = Utils::Memory::Padding(dataByteSize, mBuffer->alignment());
             size_t newOffset = alignedOffset + dataByteSize + padding;
-            return newOffset;
+
+            if ((alignedOffset / sizeof(DataType) + count) >= mBuffer->count()) {
+                throw std::range_error("Attempt to queue data write outside of the buffer");
+            }
+
+            mDataQueue.push_back({data, count, newOffset});
+
+            return alignedOffset;
         }
+
+        void flush() {
+            if (mDataQueue.empty()) {
+                return;
+            }
+
+            mBuffer->bind();
+            auto ptr = reinterpret_cast<DataType *>(glMapBufferRange(mBindingPoint, 0, mDataQueue.back().nextOffset, GL_MAP_WRITE_BIT));
+            size_t offset = 0;
+            for (auto &location : mDataQueue) {
+                memcpy(ptr + offset, location.data, sizeof(DataType) * location.count);
+                offset = location.nextOffset;
+            }
+            glUnmapBuffer(mBindingPoint);
+        }
+
     };
 
 }

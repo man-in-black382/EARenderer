@@ -1,11 +1,11 @@
 #version 400 core
 
 #include "GBuffer.glsl"
-#include "Lights.glsl"
 #include "CookTorrance.glsl"
 #include "Constants.glsl"
 #include "DirectionalShadows.glsl"
 #include "OmnidirectionalShadows.glsl"
+#include "PointLightUBO.glsl"
 
 // Constants
 
@@ -107,29 +107,32 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
         metallic = 0.0;
     }
 
-    // Analytical lighting
-    if (uLightType == kLightTypeDirectional) {
-        radiance = DirectionalLightRadiance(uDirectionalLight);
-        L  = -normalize(uDirectionalLight.direction);
-        int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-        float penumbra = texture(uPenumbra, vTexCoords).r;
-        shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
-    }
-    else if (uLightType == kLightTypePoint) {
-        radiance = PointLightRadiance(uPointLight, worldPosition);
-        L = normalize(uPointLight.position - worldPosition);
-        float penumbra = texture(uPenumbra, vTexCoords).r;
-        shadow = OmnidirectionalShadow(worldPosition, N, uPointLight, uOmnidirectionalShadowMapComparisonSampler, penumbra);
-    }
-    else if (uLightType == kLightTypeSpot) {
-        // Nothing to do here... yet
-    }
+//    switch (uLightType) {
+//        case kLightTypeDirectional: {
+//            radiance = DirectionalLightRadiance(uDirectionalLight);
+//            L  = -normalize(uDirectionalLight.direction);
+//            int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
+//            float penumbra = texture(uPenumbra, vTexCoords).r;
+//            penumbra = 1.0;
+//            shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
+//            break;
+//        }
+//
+//        case kLightTypePoint: {
+            radiance = PointLightRadiance(uboPointLight, worldPosition);
+            L = normalize(uboPointLight.position.xyz - worldPosition);
+            float penumbra = texture(uPenumbra, vTexCoords).r;
+            shadow = OmnidirectionalShadow(worldPosition, N, uboPointLight, uOmnidirectionalShadowMapComparisonSampler, penumbra);
+
+//            break;
+//        }
+//
+//    }
 
     vec3 H = normalize(L + V);
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
 
     return vec4(specularAndDiffuse, 1.0);
-//    return vec4(vec3(shadow), 1.0);
 }
 
 vec4 ProcessEmissiveMaterial(uvec4 materialData) {

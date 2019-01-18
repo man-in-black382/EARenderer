@@ -84,7 +84,7 @@ namespace EARenderer {
 
         void renderSkybox();
 
-        void renderFinalImage(std::shared_ptr<PostprocessTexturePool::PostprocessTexture> image);
+        void renderFinalImage(const PostprocessTexturePool::PostprocessTexture& image);
 
     public:
         using DebugOpportunity = std::function<void()>;
