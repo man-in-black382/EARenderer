@@ -7,7 +7,6 @@ struct DirectionalLight {
 struct PointLight {
     mat4 projection;
     mat4 inverseProjection;
-
     vec4 radiantFlux; // a.k.a color
     vec4 position;
     float nearPlane;
@@ -18,7 +17,7 @@ struct PointLight {
     float linear;
     float quadratic;
     //
-
+    float shadowBias;
 };
 
 struct Spotlight {

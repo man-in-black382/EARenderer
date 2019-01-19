@@ -30,34 +30,8 @@ namespace EARenderer {
                 glm::value_ptr(camera.inverseProjectionMatrix()));
     }
 
-    void GLSLDirectLightEvaluation::setLight(const PointLight &light) {
-        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.position")).location(), 1, glm::value_ptr(light.position()));
-        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.nearPlane")).location(), light.nearClipPlane());
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.farPlane")).location(), light.farClipPlane());
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.constant")).location(), light.attenuation.constant);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.linear")).location(), light.attenuation.linear);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.quadratic")).location(), light.attenuation.quadratic);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.area")).location(), light.area());
-//        glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), 1);
-
-        auto proj = light.projectionMatrix();
-        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uPointLight.projection")).location(),
-                (GLsizei) 1,
-                GL_FALSE,
-                (GLfloat *) &proj);
-
-        auto invProj = light.inverseProjectionMatrix();
-        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uPointLight.inverseProjection")).location(),
-                (GLsizei) 1,
-                GL_FALSE,
-                (GLfloat *) &invProj);
-//
-//        auto views = light.viewMatrices();
-//        glUniformMatrix4fv(uniformByNameCRC32(ctcrc32("uPointLight.views[0]")).location(),
-//                (GLsizei) views.size(),
-//                GL_FALSE,
-//                (GLfloat *) &views);
+    void GLSLDirectLightEvaluation::setLightType(LightType type) {
+        glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), std::underlying_type<LightType>::type(type));
     }
 
     void GLSLDirectLightEvaluation::setLight(const DirectionalLight &light) {

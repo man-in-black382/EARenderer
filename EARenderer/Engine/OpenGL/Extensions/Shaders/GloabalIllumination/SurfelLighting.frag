@@ -6,7 +6,7 @@
 #include "DirectionalShadows.glsl"
 #include "OmnidirectionalShadows.glsl"
 #include "Constants.glsl"
-#include "Lights.glsl"
+#include "PointLightUBO.glsl"
 
 // Constants
 
@@ -28,7 +28,6 @@ in vec2 vTexCoords;
 
 // Uniforms
 uniform DirectionalLight uDirectionalLight;
-uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
 uniform sampler2DArray uSurfelsGBuffer;
 
@@ -72,17 +71,14 @@ void main() {
         radiance    = DirectionalLightRadiance(uDirectionalLight);
         L           = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-        float penumbra = 10.0;
+        float penumbra = 5.0;
         shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
-        radiance    = PointLightRadiance(uPointLight, worldPosition);
-        L           = normalize(uPointLight.position.xyz - worldPosition);
-        float penumbra = 10.0;
-        shadow = OmnidirectionalShadow(worldPosition, N, uPointLight, uOmnidirectionalShadowMap, penumbra);
-    }
-    else if (uLightType == kLightTypeSpot) {
-        // Nothing to do here... yet
+        radiance    = PointLightRadiance(uboPointLight, worldPosition);
+        L           = normalize(uboPointLight.position.xyz - worldPosition);
+        float penumbra = 5.0;
+        shadow = OmnidirectionalShadow(worldPosition, N, uboPointLight, uOmnidirectionalShadowMap, penumbra);
     }
 
     float NdotL = max(dot(N, L), 0.0);

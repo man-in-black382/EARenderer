@@ -3,11 +3,9 @@
 #include "GBuffer.glsl"
 #include "Constants.glsl"
 #include "OmnidirectionalShadows.glsl"
-#include "Lights.glsl"
+#include "PointLightUBO.glsl"
 
 // Uniforms
-
-uniform PointLight uPointLight;
 
 uniform sampler2D uGBufferHiZBuffer;
 uniform samplerCube uOmnidirectionalShadowMapBilinearSampler;
@@ -25,5 +23,5 @@ in vec2 vTexCoords;
 
 void main() {
     vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
-    oOutput = OmnidirectionalPenumbra(worldPosition, uPointLight, uOmnidirectionalShadowMapBilinearSampler);
+    oOutput = OmnidirectionalPenumbra(worldPosition, uboPointLight, uOmnidirectionalShadowMapBilinearSampler);
 }

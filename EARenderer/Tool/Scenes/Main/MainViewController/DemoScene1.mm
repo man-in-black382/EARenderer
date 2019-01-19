@@ -195,7 +195,7 @@
     EARenderer::Color light1Color(3.0, 2.55, 1.98);
     EARenderer::PointLight::Attenuation lightAttenuation1{1.0, 0.0, 4.0};
     EARenderer::MaterialReference lightMaterialRef1 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light1Color});
-    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 20.0, lightAttenuation1);
+    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 30.0, 0.0005, lightAttenuation1);
     pointLight1.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
     pointLight1.meshInstance->materialReference = lightMaterialRef1;
     pointLight1.meshInstance->transformation().scale = glm::vec3(0.002);
@@ -302,7 +302,7 @@
     });
 
     // Light position
-    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(glm::vec3(3.172841, -1.449196, 1.107378), glm::vec3(-3.684157, -1.449196, 1.215628), 10.0f);
+    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(glm::vec3(3.172841, -1.449196, -1.5), glm::vec3(-3.684157, -1.449196, -1.5), 10.0f);
     self.animationTimeline->apply(self.lightPositionOutput, lightPositionPhrase).finishFn([&m = *self.lightPositionOutput->inputPtr()] {
         m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();

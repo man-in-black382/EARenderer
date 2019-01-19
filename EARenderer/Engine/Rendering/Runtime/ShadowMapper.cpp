@@ -183,7 +183,12 @@ namespace EARenderer {
 
             mPenumbraFramebuffer.redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &penumbra);
 
-            mOmnidirectionalPenumbraGenerationShader.setLight(light);
+            mOmnidirectionalPenumbraGenerationShader.setUniformBuffer(
+                    ctcrc32("PointLightUBO"),
+                    *mGPUResourceController->uniformBuffer(),
+                    mGPUResourceController->pointLightUBODataLocation(lightID)
+            );
+
             mOmnidirectionalPenumbraGenerationShader.ensureSamplerValidity([&] {
                 mOmnidirectionalPenumbraGenerationShader.setGBuffer(*mGBuffer);
                 mOmnidirectionalPenumbraGenerationShader.setShadowMap(shadowMap, mBilinearSampler);

@@ -15,8 +15,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    Light::Light(const glm::vec3 &position, const Color &color, float area)
-            : mPosition(position), mColor(color), mArea(std::max(area, 0.0f)) {}
+    Light::Light(const glm::vec3 &position, const Color &color, float area, float shadowBias)
+            : mPosition(position), mColor(color), mArea(std::max(area, 0.0f)), mShadowBias(shadowBias) {}
 
 #pragma mark - Getters
 
@@ -36,6 +36,10 @@ namespace EARenderer {
         return mArea;
     }
 
+    float Light::shadowBias() const {
+        return mShadowBias;
+    }
+
 #pragma mark - Setters
 
     void Light::setPosition(const glm::vec3 &position) {
@@ -52,6 +56,10 @@ namespace EARenderer {
 
     void Light::setArea(float area) {
         mArea = std::max(area, 0.0f);
+    }
+
+    void Light::setShadowBias(float bias) {
+        mShadowBias = std::max(0.0f, bias);
     }
 
 #pragma mark - Protected

@@ -25,7 +25,7 @@ namespace EARenderer {
     public:
         GLSLSurfelLighting();
 
-        void setLight(const PointLight &light);
+        void setLightType(LightType type);
 
         void setLight(const DirectionalLight &light);
 

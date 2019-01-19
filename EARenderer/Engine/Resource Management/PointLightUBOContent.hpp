@@ -26,7 +26,7 @@ namespace EARenderer {
         float constant;
         float linear;
         float quadratic;
-
+        float shadowBias;
 
         PointLightUBOContent(const PointLight& light);
     };

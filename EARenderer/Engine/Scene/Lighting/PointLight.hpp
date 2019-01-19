@@ -40,7 +40,10 @@ namespace EARenderer {
 
         Attenuation attenuation;
 
-        PointLight(const glm::vec3 &position, const Color &color, float radius, float nearClipPlane, float area, const Attenuation& attenuation);
+        PointLight(
+                const glm::vec3 &position, const Color &color, float radius,
+                float nearClipPlane, float area, float shadowBias, const Attenuation &attenuation
+        );
 
         float nearClipPlane() const;
 

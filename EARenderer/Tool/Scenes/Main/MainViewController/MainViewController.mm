@@ -159,7 +159,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
 //    NSLog(@"GLView width: %f", view.frame.size.width);
-//    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
+    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
 //    NSLog(@"Camera dir: %f %f %f", self->scene->camera()->front().x, self->scene->camera()->front().y, self->scene->camera()->front().z);
 
     self->cameraman->updateCamera();

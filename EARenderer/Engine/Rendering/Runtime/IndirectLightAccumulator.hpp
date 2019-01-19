@@ -28,6 +28,7 @@ namespace EARenderer {
     class IndirectLightAccumulator {
     private:
         const Scene *mScene;
+        const GPUResourceController *mGPUResourceController;
         const SceneGBuffer *mGBuffer;
         const SurfelData *mSurfelData;
         const DiffuseLightProbeData *mProbeData;
@@ -58,6 +59,7 @@ namespace EARenderer {
     public:
         IndirectLightAccumulator(
                 const Scene *scene,
+                const GPUResourceController *gpuResourceController,
                 const SceneGBuffer *gBuffer,
                 const SurfelData *surfelData,
                 const DiffuseLightProbeData *probeData,

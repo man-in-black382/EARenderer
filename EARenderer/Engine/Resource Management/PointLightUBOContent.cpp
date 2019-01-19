@@ -16,6 +16,7 @@ namespace EARenderer {
               constant(light.attenuation.constant),
               linear(light.attenuation.linear),
               quadratic(light.attenuation.quadratic),
+              shadowBias(light.shadowBias()),
               projection(light.projectionMatrix()),
               inverseProjection(light.inverseProjectionMatrix()) {}
 

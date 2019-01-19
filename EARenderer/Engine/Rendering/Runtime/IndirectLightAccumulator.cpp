@@ -15,12 +15,14 @@ namespace EARenderer {
 
     IndirectLightAccumulator::IndirectLightAccumulator(
             const Scene *scene,
+            const GPUResourceController *gpuResourceController,
             const SceneGBuffer *gBuffer,
             const SurfelData *surfelData,
             const DiffuseLightProbeData *probeData,
             const ShadowMapper *shadowMapper)
             :
             mScene(scene),
+            mGPUResourceController(gpuResourceController),
             mGBuffer(gBuffer),
             mSurfelData(surfelData),
             mProbeData(probeData),
@@ -79,11 +81,7 @@ namespace EARenderer {
                 &mSurfelsLuminanceMap);
 
         mSurfelLightingShader.bind();
-        mSurfelLightingShader.setLight(directionalLight);
         mSurfelLightingShader.setSettings(mSettings);
-        mSurfelLightingShader.setShadowCascades(mShadowMapper->cascades());
-        mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
-
         mSurfelLightingShader.ensureSamplerValidity([&]() {
             mSurfelLightingShader.setDirectionalShadowMapArray(mShadowMapper->directionalShadowMapArray());
             mSurfelLightingShader.setSurfelsGBuffer(*mSurfelData->surfelsGBuffer());
@@ -91,12 +89,24 @@ namespace EARenderer {
             mSurfelLightingShader.setProbePositions(*mProbeData->probePositionsBufferTexture());
         });
 
+        mSurfelLightingShader.setLightType(LightType::Directional);
+
+        mSurfelLightingShader.setLight(directionalLight);
+        mSurfelLightingShader.setShadowCascades(mShadowMapper->cascades());
+        mSurfelLightingShader.setWorldBoundingBox(mScene->lightBakingVolume());
+
         Drawable::TriangleStripQuad::Draw();
+
+        mSurfelLightingShader.setLightType(LightType::Point);
 
         for (ID lightID : mScene->pointLights()) {
             const PointLight &light = mScene->pointLights()[lightID];
 
-            mSurfelLightingShader.setLight(light);
+            mSurfelLightingShader.setUniformBuffer(
+                    ctcrc32("PointLightUBO"),
+                    *mGPUResourceController->uniformBuffer(),
+                    mGPUResourceController->pointLightUBODataLocation(lightID)
+            );
             mSurfelLightingShader.ensureSamplerValidity([&]() {
                 mSurfelLightingShader.setOmnidirectionalShadowMap(mShadowMapper->shadowMapForPointLight(lightID));
             });

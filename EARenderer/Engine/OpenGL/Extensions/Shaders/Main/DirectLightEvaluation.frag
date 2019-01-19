@@ -31,7 +31,6 @@ uniform mat4 uCameraViewInverse;
 uniform mat4 uCameraProjectionInverse;
 
 uniform DirectionalLight uDirectionalLight;
-uniform PointLight uPointLight;
 uniform Spotlight uSpotlight;
 
 uniform int uLightType;
@@ -107,27 +106,26 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
         metallic = 0.0;
     }
 
-//    switch (uLightType) {
-//        case kLightTypeDirectional: {
-//            radiance = DirectionalLightRadiance(uDirectionalLight);
-//            L  = -normalize(uDirectionalLight.direction);
-//            int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
-//            float penumbra = texture(uPenumbra, vTexCoords).r;
-//            penumbra = 1.0;
-//            shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
-//            break;
-//        }
-//
-//        case kLightTypePoint: {
+    switch (uLightType) {
+        case kLightTypeDirectional: {
+            radiance = DirectionalLightRadiance(uDirectionalLight);
+            L  = -normalize(uDirectionalLight.direction);
+            int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
+            float penumbra = texture(uPenumbra, vTexCoords).r;
+            penumbra = 1.0;
+            shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
+            break;
+        }
+
+        case kLightTypePoint: {
             radiance = PointLightRadiance(uboPointLight, worldPosition);
             L = normalize(uboPointLight.position.xyz - worldPosition);
             float penumbra = texture(uPenumbra, vTexCoords).r;
             shadow = OmnidirectionalShadow(worldPosition, N, uboPointLight, uOmnidirectionalShadowMapComparisonSampler, penumbra);
+            break;
+        }
 
-//            break;
-//        }
-//
-//    }
+    }
 
     vec3 H = normalize(L + V);
     vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);

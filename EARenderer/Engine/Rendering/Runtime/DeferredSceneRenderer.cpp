@@ -51,7 +51,7 @@ namespace EARenderer {
             // Helpers
             mShadowMapper(scene, resourceStorage, gpuResourceController, gBuffer, settings.meshSettings.shadowCascadesCount),
             mDirectLightAccumulator(scene, gBuffer, &mShadowMapper, gpuResourceController),
-            mIndirectLightAccumulator(scene, gBuffer, surfelData, diffuseProbeData, &mShadowMapper),
+            mIndirectLightAccumulator(scene, gpuResourceController, gBuffer, surfelData, diffuseProbeData, &mShadowMapper),
             mGBuffer(gBuffer) {
 
         glEnable(GL_CULL_FACE);
@@ -153,7 +153,7 @@ namespace EARenderer {
             glFinish();
         });
 
-//        mIndirectLightAccumulator.render();
+        mIndirectLightAccumulator.render();
 
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);

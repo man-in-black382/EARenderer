@@ -37,16 +37,8 @@ namespace EARenderer {
         setUniformTexture(ctcrc32("uDirectionalShadowMapArray"), array);
     }
 
-    void GLSLSurfelLighting::setLight(const PointLight &light) {
-        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.position")).location(), 1, glm::value_ptr(light.position()));
-        glUniform4fv(uniformByNameCRC32(ctcrc32("uPointLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.nearPlane")).location(), light.nearClipPlane());
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.farPlane")).location(), light.farClipPlane());
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.constant")).location(), light.attenuation.constant);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.linear")).location(), light.attenuation.linear);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.quadratic")).location(), light.attenuation.quadratic);
-        glUniform1f(uniformByNameCRC32(ctcrc32("uPointLight.area")).location(), light.area());
-        glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), 1);
+    void GLSLSurfelLighting::setLightType(LightType type) {
+        glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), std::underlying_type<LightType>::type(type));
     }
 
     void GLSLSurfelLighting::setLight(const DirectionalLight &light) {

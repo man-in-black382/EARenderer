@@ -17,12 +17,15 @@
 
 namespace EARenderer {
 
+    enum class LightType: uint8_t { Directional = 0, Point = 1 };
+
     class Light {
     protected:
         glm::vec3 mPosition;
         Color mColor = Color::White();
         bool mIsEnabled = true;
         float mArea = 1.0; // Used for penumbra estimation, no physical meaning right now
+        float mShadowBias = 0.0;
 
     protected:
 
@@ -41,7 +44,7 @@ namespace EARenderer {
     public:
         Light() = default;
 
-        Light(const glm::vec3 &position, const Color &color, float area);
+        Light(const glm::vec3 &position, const Color &color, float area, float shadowBias);
 
         const glm::vec3 &position() const;
 
@@ -51,6 +54,8 @@ namespace EARenderer {
 
         bool isEnabled() const;
 
+        float shadowBias() const;
+
         void setPosition(const glm::vec3 &position);
 
         void setColor(const Color &color);
@@ -58,6 +63,8 @@ namespace EARenderer {
         void setIsEnabled(bool enabled);
 
         void setArea(float area);
+
+        void setShadowBias(float bias);
     };
 
 }

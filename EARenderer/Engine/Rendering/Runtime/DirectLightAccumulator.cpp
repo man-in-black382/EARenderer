@@ -27,6 +27,8 @@ namespace EARenderer {
 #pragma mark -
 
     void DirectLightAccumulator::renderDirectionalLights() {
+        mLightEvaluationShader.setLightType(LightType::Directional);
+
         if (!mScene->directionalLight().isEnabled()) {
             return;;
         }
@@ -42,14 +44,14 @@ namespace EARenderer {
     }
 
     void DirectLightAccumulator::renderPointLights() {
+        mLightEvaluationShader.setLightType(LightType::Point);
+
         for (ID lightId : mScene->pointLights()) {
             const PointLight &light = mScene->pointLights()[lightId];
 
             if (!light.isEnabled()) {
                 continue;
             }
-
-//            mLightEvaluationShader.setLight(light);
 
             mLightEvaluationShader.setUniformBuffer(
                     ctcrc32("PointLightUBO"),

@@ -39,7 +39,7 @@ namespace EARenderer {
 
         void setCamera(const Camera &camera);
 
-        void setLight(const PointLight &light);
+        void setLightType(LightType type);
 
         void setLight(const DirectionalLight &light);
 

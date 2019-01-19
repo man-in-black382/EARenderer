@@ -23,8 +23,7 @@ float OmnidirectionalAdaptiveEpsilon(
     vec3 lightDirection, // Surface-to-light vector. Expected to be normalized.
     vec3 surfaceNormal, // Surface normal in world space.
     float surfaceDepth, // Surface hyperbolic depth in light space.
-    float sceneBBDiagonal, // Length of scene's bounding box diagonal.
-    float K) // Empiric constant that needs to be manually set for each scene.
+    float sceneBBDiagonal) // Length of scene's bounding box diagonal.
 {
     float num = light.farPlane - surfaceDepth * (light.farPlane - light.nearPlane);
     num *= num;
@@ -33,7 +32,7 @@ float OmnidirectionalAdaptiveEpsilon(
     float dotProduct = dot(surfaceNormal, lightDirection);
     float scaleFactor = min(1.0 / (dotProduct * dotProduct), 100.0);
 
-    return (num / denom) * sceneBBDiagonal * K * scaleFactor;
+    return (num / denom) * sceneBBDiagonal * light.shadowBias * scaleFactor;
 }
 
 float OmnidirectionalPotentialOccluderDepth(
@@ -151,7 +150,7 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
         vec3 texCoords = CubeMapTextureCoords(sampleVector);
         float pod = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, currentDepth, texCoords, shadowMapSize);
         vec3 surfaceToLight = -normalize(sampleVector);
-        float epsilon = OmnidirectionalAdaptiveEpsilon(light, surfaceToLight, surfaceNormal, pod, 1.0, 0.001);
+        float epsilon = OmnidirectionalAdaptiveEpsilon(light, surfaceToLight, surfaceNormal, pod, 1.0);
         float bias = max(0.0, currentDepth - pod);
         float biasedDepth = currentDepth - bias - epsilon;
 
