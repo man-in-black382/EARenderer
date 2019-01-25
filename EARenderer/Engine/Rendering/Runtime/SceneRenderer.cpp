@@ -177,7 +177,7 @@ namespace EARenderer {
         mEnvironmentMapCube.generateMipmaps();
     }
 
-    void SceneRenderer::buildDiffuseIrradianceMap() {
+    void SceneRenderer::buildDiffuseIrradianceMap()  {
         mIBLFramebuffer.bind();
         mIBLFramebuffer.attachTexture(mDiffuseIrradianceMap);
         GLViewport(mDiffuseIrradianceMap.size()).apply();

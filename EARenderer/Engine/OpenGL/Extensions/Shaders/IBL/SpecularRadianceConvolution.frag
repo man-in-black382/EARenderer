@@ -1,17 +1,12 @@
 #version 400 core
 
-// Constants
-
-const float PI = 3.1415926535897932384626433832795;
-const int kAlgorithmDiffuse = 0;
-const int kAlgorithmSpecular = 1;
+#include "Constants.glsl"
+#include "Geometry.glsl"
 
 // Uniforms
 
 uniform samplerCube uEnvironmentMap;
 uniform float       uRoughness;
-uniform float       uEnvironmentResolution;
-uniform int         uAlgorithm; // 0 for diffuse and 1 for specular
 
 // Input
 
@@ -19,31 +14,13 @@ in vec4 vFragPosition;
 
 // Output
 
-out vec4 oFragColor;
+out vec3 oFragColor;
 
 // Functions
 
 ////////////////////////////////////////////////////////////
 /////////////////// Unreal Engine 4 IBL ////////////////////
 ////////////////////////////////////////////////////////////
-
-// Hammersley Points on the Hemisphere
-// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
-
-float RadicalInverse_VdC(uint bits) {
-    bits = (bits << 16u) | (bits >> 16u);
-    bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
-    bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
-    bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
-    bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
-    return float(bits) * 2.3283064365386963e-10; // / 0x100000000
-}
-
-// Generates a uniformly distributed and stochasticlooking sampling pattern at low computational cost
-// Used for quasi-Monte Carlo integration
-vec2 Hammersley2D(uint i, uint N) {
-    return vec2(float(i) / float(N), RadicalInverse_VdC(i));
-}
 
 // Following Epic's paper
 // http://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
@@ -120,7 +97,7 @@ vec3 IntegrateRadianceSpecular() {
             float D             = NormalDistributionGGX(NdotH, roughness2);
             float pdf           = (D * NdotH / (4.0 * HdotV)) + 0.0001; // Propability density function
             
-            float resolution    = uEnvironmentResolution; // Resolution of source cubemap (per face)
+            float resolution    = textureSize(uEnvironmentMap, 0).x; // Resolution of source cubemap (per face)
             float saTexel       = 4.0 * PI / (6.0 * resolution * resolution);
             float saSample      = 1.0 / (float(kSampleCount) * pdf + 0.0001);
             
@@ -134,40 +111,6 @@ vec3 IntegrateRadianceSpecular() {
     return totalIrradiance / totalWeight;
 }
 
-vec3 IntegrateRadianceDiffuse() {
-    vec3 N      = normalize(vFragPosition.xyz);
-    vec3 up     = vec3(0.0, 1.0, 0.0);
-    vec3 right  = normalize(cross(up, N));
-    up          = normalize(cross(N, right));
-    
-    vec3 irradiance     = vec3(0.0);
-    float samplesCount  = 0.0;
-    
-    const float kSampleDelta = 0.025;
-    const float twoPI        = 2.0 * PI;
-    const float halfPI       = 0.5 * PI;
-    
-    for(float phi = 0.0; phi < twoPI; phi += kSampleDelta) { // Phi - azimuth (horizontal) angle
-        for(float theta = 0.0; theta < halfPI; theta += kSampleDelta) { // Theta - zenith (vertical) angle
-            // Spherical to cartesian (in tangent space)
-            vec3 tangentSample = vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
-            // Tangent space to world
-            vec3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * N;
-            
-            // Scale the sampled color value by cos(theta) due to the light being weaker at larger angles
-            // And by sin(theta) to account for the smaller sample areas in the higher hemisphere areas
-            irradiance += texture(uEnvironmentMap, sampleVec).rgb * cos(theta) * sin(theta);
-            samplesCount += 1.0;
-        }
-    }
-    
-    return PI * irradiance / samplesCount;
-}
-
 void main() {
-    if (uAlgorithm == kAlgorithmDiffuse) {
-        oFragColor = vec4(IntegrateRadianceDiffuse(), 1.0);
-    } else if (uAlgorithm == kAlgorithmSpecular) {
-        oFragColor = vec4(IntegrateRadianceSpecular(), 1.0);
-    }
+    oFragColor = IntegrateRadianceSpecular();
 }

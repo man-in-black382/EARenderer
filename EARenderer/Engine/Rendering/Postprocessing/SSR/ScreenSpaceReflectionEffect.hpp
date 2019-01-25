@@ -16,6 +16,7 @@
 #include "SceneGBuffer.hpp"
 #include "Camera.hpp"
 #include "GaussianBlurEffect.hpp"
+#include "ImageBasedLightProbe.hpp"
 
 #include <memory>
 
@@ -40,6 +41,7 @@ namespace EARenderer {
                 const PostprocessTexturePool::PostprocessTexture &lightBuffer,
                 const PostprocessTexturePool::PostprocessTexture &rayHitInfo,
                 const SceneGBuffer &GBuffer,
+                const ImageBasedLightProbe *IBLProbe,
                 PostprocessTexturePool::PostprocessTexture &baseOutputImage,
                 PostprocessTexturePool::PostprocessTexture &brightOutputImage
         );
@@ -50,6 +52,7 @@ namespace EARenderer {
         void applyReflections(
                 const Camera &camera,
                 const SceneGBuffer &GBuffer,
+                const ImageBasedLightProbe *IBLProbe,
                 PostprocessTexturePool::PostprocessTexture &lightBuffer,
                 PostprocessTexturePool::PostprocessTexture &baseOutputImage,
                 PostprocessTexturePool::PostprocessTexture &brightOutputImage

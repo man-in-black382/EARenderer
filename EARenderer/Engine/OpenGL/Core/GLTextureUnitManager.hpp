@@ -21,13 +21,15 @@ namespace EARenderer {
     public:
         using TextureUnit = uint16_t;
         using ObjectName = GLint;
+        using BindingPoint = GLenum;
 
     private:
-        std::unordered_map<TextureUnit, ObjectName> mBoundTextures;
+        std::unordered_map<TextureUnit, std::pair<ObjectName, BindingPoint>> mBoundTextures;
+        std::unordered_map<ObjectName, std::pair<TextureUnit, BindingPoint>> mBoundTexturesReverse;
         std::unordered_map<TextureUnit, ObjectName> mBoundSamplers;
 
-        GLint mMaximumTextureUnits;
-        TextureUnit mActiveTextureUnit;
+        GLint mMaximumTextureUnits = 0;
+        TextureUnit mActiveTextureUnit = 0;
 
         GLTextureUnitManager();
 

@@ -25,6 +25,12 @@
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunBrightness:(CGFloat)brightness;
 
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionX:(CGFloat)x;
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionY:(CGFloat)y;
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionZ:(CGFloat)z;
+
 @end
 
 

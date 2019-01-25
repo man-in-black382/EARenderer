@@ -43,13 +43,7 @@ namespace EARenderer {
             activateUnit(unit);
         }
 
-        auto it = mBoundTextures.find(unit);
-        if (it != mBoundTextures.end() && it->second == texture.name()) {
-            return;
-        }
-
-        glBindTexture(texture.bindingPoint(), texture.name());
-        mBoundTextures[unit] = texture.name();
+        bindTextureToActiveUnit(texture);
     }
 
     void GLTextureUnitManager::bindSamplerToUnit(const GLSampler &sampler, GLTextureUnitManager::TextureUnit unit) {
@@ -72,13 +66,21 @@ namespace EARenderer {
     }
 
     void GLTextureUnitManager::bindTextureToActiveUnit(const GLTexture &texture) {
-        auto it = mBoundTextures.find(mActiveTextureUnit);
-        if (it != mBoundTextures.end() && it->second == texture.name()) {
+        auto boundTextureInfo = mBoundTextures[mActiveTextureUnit];
+        auto name = boundTextureInfo.first;
+        auto bindingPoint = boundTextureInfo.second;
+
+        if (name == texture.name() && bindingPoint == texture.bindingPoint()) {
             return;
         }
 
+        if (name > 0 && bindingPoint != texture.bindingPoint()) {
+            // Unbind previous texture
+            glBindTexture(bindingPoint, 0);
+        }
+
         glBindTexture(texture.bindingPoint(), texture.name());
-        mBoundTextures[mActiveTextureUnit] = texture.name();
+        mBoundTextures[mActiveTextureUnit] = std::make_pair(texture.name(), texture.bindingPoint());
     }
 
     void GLTextureUnitManager::unbindAllSamplers() {

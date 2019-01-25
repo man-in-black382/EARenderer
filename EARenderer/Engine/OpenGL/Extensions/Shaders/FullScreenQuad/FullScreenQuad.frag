@@ -1,6 +1,7 @@
 #version 400 core
 
 #include "ColorSpace.glsl"
+#include "Constants.glsl"
 
 uniform sampler2D uTexture;
 uniform sampler2DArray uTextureArray;

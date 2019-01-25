@@ -192,10 +192,10 @@
     scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
     scene->directionalLight().setIsEnabled(false);
 
-    EARenderer::Color light1Color(3.0, 2.55, 1.98);
+    EARenderer::Color light1Color(2.0, 1.052, 0.32);
     EARenderer::PointLight::Attenuation lightAttenuation1{1.0, 0.0, 4.0};
     EARenderer::MaterialReference lightMaterialRef1 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light1Color});
-    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 30.0, 0.0005, lightAttenuation1);
+    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 30.0, 0.002, lightAttenuation1);
     pointLight1.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
     pointLight1.meshInstance->materialReference = lightMaterialRef1;
     pointLight1.meshInstance->transformation().scale = glm::vec3(0.002);
@@ -302,9 +302,9 @@
     });
 
     // Light position
-    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(glm::vec3(3.172841, -1.449196, -1.5), glm::vec3(-3.684157, -1.449196, -1.5), 10.0f);
+    choreograph::PhraseRef<glm::vec3> lightPositionPhrase = choreograph::makeRamp(glm::vec3(3.172841, -1.79196, -0.126853), glm::vec3(-3.684157, -1.79196, -0.126853), 20.0f);
     self.animationTimeline->apply(self.lightPositionOutput, lightPositionPhrase).finishFn([&m = *self.lightPositionOutput->inputPtr()] {
-        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+//        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
 
@@ -315,13 +315,17 @@
 //    glm::vec3 cameraPositionStart(-3.643409, -1.477225, 1.385521);
 
     // Second floor
-    glm::vec3 cameraPositionEnd(-4.189603, -0.086351, 1.448207);
-    glm::vec3 cameraPositionStart(-4.027953, -0.086351, -1.806176);
+//    glm::vec3 cameraPositionEnd(-4.189603, -0.086351, 1.448207);
+//    glm::vec3 cameraPositionStart(-4.027953, -0.086351, -1.806176);
 
-    choreograph::PhraseRef<glm::vec3> cameraPositionPhrase = choreograph::makeRamp(cameraPositionStart, cameraPositionEnd, 25.0);
+    // Night, 1st light
+    glm::vec3 cameraPositionEnd(-2.7, -1.7996, 1.156121);
+    glm::vec3 cameraPositionStart(4.30, -1.7996, 1.156121);
+
+    choreograph::PhraseRef<glm::vec3> cameraPositionPhrase = choreograph::makeRamp(cameraPositionStart, cameraPositionEnd, 23.0);
 
     self.animationTimeline->apply(self.cameraPositionOutput, cameraPositionPhrase).finishFn([&m = *self.cameraPositionOutput->inputPtr()] {
-        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+//        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
         m.resetTime();
     });
 

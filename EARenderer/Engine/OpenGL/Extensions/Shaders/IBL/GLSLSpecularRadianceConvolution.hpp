@@ -1,5 +1,5 @@
 //
-//  GLSLRadianceConvolution.hpp
+//  GLSLSpecularRadianceConvolution.hpp
 //  EARenderer
 //
 //  Created by Pavlo Muratov on 12.10.2017.
@@ -10,21 +10,17 @@
 #define GLSLRadianceConvolution_hpp
 
 #include "GLSLCubemapRendering.hpp"
+#include "GLTextureCubemap.hpp"
 
 namespace EARenderer {
 
-    class GLSLRadianceConvolution : public GLSLCubemapRendering {
+    class GLSLSpecularRadianceConvolution : public GLSLCubemapRendering {
     public:
-        enum class Algorithm {
-            diffuse = 0, specular = 1
-        };
+        GLSLSpecularRadianceConvolution();
 
-        GLSLRadianceConvolution();
+        void setEnvironmentRadianceMap(const GLFloatTextureCubemap<GLTexture::Float::RGB16F> &map);
 
-//        void setEnvironmentRadianceMap(const GLHDRTextureCubemap& map);
         void setRoughness(float roughness);
-
-        void setAlgorithm(Algorithm algorithm);
     };
 
 }

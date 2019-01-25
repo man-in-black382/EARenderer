@@ -34,6 +34,10 @@ namespace EARenderer {
         return mAmbientColor;
     }
 
+    const ImageBasedLightProbe *Skybox::lightProbe() const {
+        return mLightProbe.get();
+    }
+
 #pragma mark - Setters
 
     void Skybox::setExposure(float exposure) {
@@ -42,6 +46,10 @@ namespace EARenderer {
 
     void Skybox::setAmbientColor(const Color &color) {
         mAmbientColor = color;
+    }
+
+    void Skybox::setLightProbe(std::unique_ptr<ImageBasedLightProbe> probe) {
+        mLightProbe = std::move(probe);
     }
 
 #pragma mark - Drawable

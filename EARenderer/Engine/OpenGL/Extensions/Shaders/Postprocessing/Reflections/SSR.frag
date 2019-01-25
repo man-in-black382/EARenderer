@@ -151,7 +151,7 @@ float BackFaceAttenuation(vec3 raySample, vec3 worldReflectionVec) {
     // direction of the reflection vector, and if they are pointing in the same direction,
     // it will drown out those reflections since backward facing pixels are not available
     // for screen space reflection. Attenuate reflections for angles between 90 degrees
-    // and 100 degrees, and drop all contribution beyond the (-100,100)  degree range
+    // and 100 degrees, and drop all contribution beyond the (-100,100) degree range
     uvec4 materialData = texture(uMaterialData, raySample.xy);
     vec3 reflectionNormal = DecodeGBufferCookTorranceNormal(materialData);
     return smoothstep(-0.17, 0.0, dot(reflectionNormal, -worldReflectionVec));
@@ -177,18 +177,25 @@ bool RayMarch(vec3 worldReflectionVec,
     // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
     for (int rayStepIdx = 0; rayStepIdx < kMaxRayMarchIterations; rayStepIdx++) {
 
-        vec3 raySample = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec + screenSpacePos;
+        vec3 offset = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec;
+        vec3 raySample = screenSpacePos + offset;
 
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-            attenuationFactor = 0.0;
+            attenuationFactor = viewportAttenuationFactor;
             return false;
         }
 
         float ZBufferVal = texture(uGBufferHiZBuffer, raySample.xy).r;
 
+        // We have stepped onto a territory without any geometry, hence the default depth value
+        if (ZBufferVal == 0.0 || ZBufferVal == 1.0) {
+            attenuationFactor = 0.0;
+            return false;
+        }
+
         maxraySample = raySample;
 
-        float bias = rayStepIdx == 0 ? 0.001 : 0.0;
+        float bias = rayStepIdx == 0 ? 0.0001 : 0.0;
 
         if (raySample.z > ZBufferVal + bias) {
             bFoundIntersection = true;
@@ -226,6 +233,7 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     // Prerequisites
     float fragDepth = texture(uGBufferHiZBuffer, currentFragUV).r;
+
     vec3 cameraToFrag = normalize(worldPosition - uCameraPosition);
 
     // ScreenSpacePos --> (screencoord.xy, device_z)
@@ -255,10 +263,6 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     return RayHit(outAttenuationFactor, outHitPosition);
 }
-
-////////////////////////////////////////////////////////////
-////////////////////////// Main ////////////////////////////
-////////////////////////////////////////////////////////////
 
 void main() {
     uvec4 materialData = texture(uMaterialData, vTexCoords);

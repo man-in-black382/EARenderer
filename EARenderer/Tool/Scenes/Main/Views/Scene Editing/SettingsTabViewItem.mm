@@ -84,21 +84,15 @@
 }
 
 - (IBAction)sunXDirectionChanged:(NSSlider *)sender {
-    NSLog(@"Sun x direction changed to: %f", sender.floatValue);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSunDirectionX:sender.floatValue];
 }
 
 - (IBAction)sunYDirectionChanged:(NSSlider *)sender {
-    NSLog(@"Sun y direction changed to: %f", sender.floatValue);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSunDirectionY:sender.floatValue];
 }
 
 - (IBAction)sunZDirectionChanged:(NSSlider *)sender {
-    NSLog(@"Sun z direction changed to: %f", sender.floatValue);
-    //    mSettings.meshSettings.meshRenderingEnabled = sender.state == NSControlStateValueOn;
-    //    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
+    [self.delegate settingsTabViewItem:self didChangeSunDirectionZ:sender.floatValue];
 }
 
 - (IBAction)expositionChanged:(NSTextField *)sender {

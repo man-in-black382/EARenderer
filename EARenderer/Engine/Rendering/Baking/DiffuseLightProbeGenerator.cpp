@@ -113,23 +113,19 @@ namespace EARenderer {
 
         AxisAlignedBox3D bb = scene.lightBakingVolume();
         glm::vec3 bbLengths = bb.max - bb.min;
-        glm::vec3 resolution = glm::round(bbLengths / scene.difuseProbesSpacing());
+        glm::vec3 resolution = glm::max(glm::vec3(1.0), glm::round(bbLengths / scene.difuseProbesSpacing()));
         glm::vec3 step = bbLengths / (resolution - 1.0f);
 
-        printf("Building grid probes...\n");
-        Measurement::ExecutionTime("Grid probes placement took", [&]() {
-            for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
-                for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
-                    for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
-                        DiffuseLightProbe probe({x, y, z});
-                        projectSurfelClustersOnProbe(probe, surfelData, scene);
-                        projectSkyOnProbe(probe, scene);
-                        mProbeData->mProbes.push_back(probe);
-                    }
+        for (float z = bb.min.z; z <= bb.max.z + step.z / 2.0; z += step.z) {
+            for (float y = bb.min.y; y <= bb.max.y + step.y / 2.0; y += step.y) {
+                for (float x = bb.min.x; x <= bb.max.x + step.x / 2.0; x += step.x) {
+                    DiffuseLightProbe probe({x, y, z});
+                    projectSurfelClustersOnProbe(probe, surfelData, scene);
+                    projectSkyOnProbe(probe, scene);
+                    mProbeData->mProbes.push_back(probe);
                 }
             }
-            printf("Built %lu probes | %lu projections \n", mProbeData->mProbes.size(), mProbeData->mSurfelClusterProjections.size());
-        });
+        }
 
         mProbeData->mGridResolution = resolution;
         mProbeData->initializeBuffers();

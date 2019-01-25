@@ -49,6 +49,7 @@ namespace EARenderer {
             const PostprocessTexturePool::PostprocessTexture &lightBuffer,
             const PostprocessTexturePool::PostprocessTexture &rayHitInfo,
             const SceneGBuffer &GBuffer,
+            const ImageBasedLightProbe *IBLProbe,
             PostprocessTexturePool::PostprocessTexture &baseOutputImage,
             PostprocessTexturePool::PostprocessTexture &brightOutputImage) {
 
@@ -58,6 +59,7 @@ namespace EARenderer {
             mConeTracingShader.setGBuffer(GBuffer);
             mConeTracingShader.setRayHitInfo(rayHitInfo);
             mConeTracingShader.setReflections(lightBuffer);
+            if (IBLProbe) mConeTracingShader.setIBLProbe(*IBLProbe);
         });
 
         mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &baseOutputImage, &brightOutputImage);
@@ -70,6 +72,7 @@ namespace EARenderer {
     void ScreenSpaceReflectionEffect::applyReflections(
             const Camera &camera,
             const SceneGBuffer &GBuffer,
+            const ImageBasedLightProbe *IBLProbe,
             PostprocessTexturePool::PostprocessTexture &lightBuffer,
             PostprocessTexturePool::PostprocessTexture &baseOutputImage,
             PostprocessTexturePool::PostprocessTexture &brightOutputImage) {
@@ -78,7 +81,7 @@ namespace EARenderer {
 
         traceReflections(camera, GBuffer, *rayTracingInfo);
         blurProgressively(lightBuffer);
-        traceCones(camera, lightBuffer, *rayTracingInfo, GBuffer, baseOutputImage, brightOutputImage);
+        traceCones(camera, lightBuffer, *rayTracingInfo, GBuffer, IBLProbe, baseOutputImage, brightOutputImage);
 
         mTexturePool->putBack(rayTracingInfo);
     }

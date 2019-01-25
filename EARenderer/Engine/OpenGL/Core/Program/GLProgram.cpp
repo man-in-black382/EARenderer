@@ -94,7 +94,7 @@ namespace EARenderer {
         GLint count = 0;
         glGetProgramiv(mName, GL_ACTIVE_UNIFORMS, &count);
 
-        GLuint textureUnit = 0;
+        GLint textureUnit = 0;
         for (GLuint index = 0; index < count; index++) {
             std::vector<GLchar> uniformNameChars(128);
             GLint size;
@@ -239,8 +239,7 @@ namespace EARenderer {
         GLTextureUnitManager::Shared().unbindAllSamplers();
         closure();
 
-        // For some reason this is sometimes necessary to make GLSL sampler not to return Black
-        // (in a case of radiance convolution shader sampling cubemap gives Black color without following line)
+        // For some reason this is sometimes necessary to make GLSL sampler not return Black
         GLTextureUnitManager::Shared().activateUnit(GLTextureUnitManager::Shared().maximumTextureUnits() - 1);
         isModifyingUniforms = false;
     }
@@ -253,8 +252,10 @@ namespace EARenderer {
         if (loglen > 0) {
             printf("OpenGL Program %d is invalid: \n %s\n", mName, logbuffer);
             return false;
+        } else {
+            printf("OpenGL Program %d is valid \n", mName);
+            return true;
         }
-        return true;
     }
 
 }

@@ -16,15 +16,12 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLSLEquirectangularMapConversion::GLSLEquirectangularMapConversion()
-            :
-            GLSLCubemapRendering("EquirectangularMapConversion.frag") {
-    }
+    GLSLEquirectangularMapConversion::GLSLEquirectangularMapConversion() : GLSLCubemapRendering("EquirectangularMapConversion.frag") {}
 
 #pragma mark - Setters
 
-//    void GLSLEquirectangularMapConversion::setEquirectangularEnvironmentMap(const GLHDRTexture2D& map) {
-//        setBufferTexture(ctcrc32("uEquirectangularMap"), map);
-//    }
+    void GLSLEquirectangularMapConversion::setEquirectangularEnvironmentMap(const GLFloatTexture2D<GLTexture::Float::RGB16F> &map) {
+        setUniformTexture(ctcrc32("uEquirectangularMap"), map);
+    }
 
 }

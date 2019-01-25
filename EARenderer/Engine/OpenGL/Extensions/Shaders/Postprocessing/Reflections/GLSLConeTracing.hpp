@@ -13,6 +13,7 @@
 #include "GLTexture2D.hpp"
 #include "SceneGBuffer.hpp"
 #include "Camera.hpp"
+#include "ImageBasedLightProbe.hpp"
 
 namespace EARenderer {
 
@@ -29,6 +30,8 @@ namespace EARenderer {
         void setReflections(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &reflections);
 
         void setRayHitInfo(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &rayHitInfo);
+
+        void setIBLProbe(const ImageBasedLightProbe& probe);
     };
 
 }

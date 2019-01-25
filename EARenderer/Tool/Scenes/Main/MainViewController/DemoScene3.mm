@@ -7,15 +7,11 @@
 //
 
 #import "DemoScene3.h"
-
-#import "MeshInstance.hpp"
+#import "MaterialLoader.h"
 #import "SurfelGenerator.hpp"
 #import "Measurement.hpp"
-
-#import <string>
-#import <memory>
-
 #import "Choreograph.h"
+#import "ImageBasedLightProbeGenerator.hpp"
 
 @interface DemoScene3 ()
 
@@ -28,72 +24,57 @@
 
 - (void)loadResourcesToPool:(EARenderer::SharedResourceStorage *)resourcePool andComposeScene:(EARenderer::Scene *)scene {
     // Meshes
-    NSString *corridorPath = [[NSBundle mainBundle] pathForResource:@"GI_corridor" ofType:@"obj"];
+    NSString *spherePath = [[NSBundle mainBundle] pathForResource:@"sphere" ofType:@"obj"];
 
-    EARenderer::ID corridorMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(corridorPath.UTF8String)));
+    EARenderer::ID sphereMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(spherePath.UTF8String)));
 
     // Materials
 
-    EARenderer::MaterialReference blueMaterialID = [self loadBlueMaterialToPool:resourcePool];
-    EARenderer::MaterialReference redMaterialID = [self loadRedMaterialToPool:resourcePool];
-    EARenderer::MaterialReference grayMaterialID = [self loadWhiteMaterialToPool:resourcePool];
+    EARenderer::MaterialReference wetStonesMaterial = [MaterialLoader load_WetStones_MaterialToPool:resourcePool];
+    EARenderer::MaterialReference marbleMaterial = [MaterialLoader load_marbleTiles_MaterialToPool:resourcePool];
+    EARenderer::MaterialReference redFabricMaterial = [MaterialLoader load_RedFabric_MaterialToPool:resourcePool];
 
     // Instances
 
-    EARenderer::MeshInstance corridorInstance(corridorMeshID, resourcePool->mesh(corridorMeshID));
-    EARenderer::Transformation t = corridorInstance.transformation();
-    t.scale *= glm::vec3(20.0);
-//    t.translation
-    corridorInstance.setTransformation(t);
+    EARenderer::MeshInstance sphere1Instance(sphereMeshID, resourcePool->mesh(sphereMeshID));
+    EARenderer::Transformation t = sphere1Instance.transformation();
 
-    auto &sponzaMesh = resourcePool->mesh(corridorMeshID);
-    for (auto subMeshID : sponzaMesh.subMeshes()) {
-        auto &subMesh = sponzaMesh.subMeshes()[subMeshID];
+    sphere1Instance.materialReference = redFabricMaterial;
 
-        printf("Material %s\n", subMesh.materialName().c_str());
-
-        if (subMesh.materialName() == "Material.White") {
-            corridorInstance.setMaterialReferenceForSubMeshID(grayMaterialID, subMeshID);
-        } else if (subMesh.materialName() == "Material.Blue") {
-            corridorInstance.setMaterialReferenceForSubMeshID(blueMaterialID, subMeshID);
-        } else {
-            corridorInstance.setMaterialReferenceForSubMeshID(redMaterialID, subMeshID);
-        }
-    }
-
-    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(corridorInstance));
-    scene->directionalLight().setColor(EARenderer::Color(0.8, 0.8, 0.8));
+    scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sphere1Instance));
+    scene->directionalLight().setColor(EARenderer::Color(1.8, 1.8, 1.8));
     scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
-    scene->directionalLight().setArea(10.0);
+    scene->directionalLight().setArea(1.0);
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.2));
 
     scene->calculateGeometricProperties(*resourcePool);
-
-    glm::mat4 bbScale = glm::scale(glm::vec3(0.98, 0.98, 0.98));
-//    glm::mat4 bbTranslation = glm::translate((scene->boundingBox().max - scene->boundingBox().min) * 0.04f);
-    scene->setLightBakingVolume(scene->boundingBox().transformedBy(bbScale));
+    scene->setLightBakingVolume(scene->boundingBox());
 
     printf("Generating Embree BVH...\n");
     EARenderer::Measurement::ExecutionTime("Embree BVH generation took", [&]() {
         scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
-    scene->setName("corridor");
-    scene->setDiffuseProbeSpacing(0.3);
-    scene->setSurfelSpacing(0.05);
+    scene->setName("demo3");
+    scene->setDiffuseProbeSpacing(scene->boundingBox().diagonal() / 4.0f);
+    scene->setSurfelSpacing(scene->boundingBox().diagonal() / 4.0f);
 
-    scene->camera()->moveTo(glm::vec3(-3.936283, 4.859550, -6.620370));
-    scene->camera()->lookAt(glm::vec3(1, 0, 0));
+    scene->camera()->moveTo(glm::vec3(0.0, 0.0, 5.0));
+    scene->camera()->lookAt(glm::vec3(0, 0, -1));
+
+    auto lightProbeGenerator = EARenderer::ImageBasedLightProbeGenerator(2048);
+    auto probe = lightProbeGenerator.generate(*scene->skybox()->equirectangularMap());
+    scene->skybox()->setLightProbe(std::make_unique<EARenderer::ImageBasedLightProbe>(std::move(probe)));
 
     [self setupAnimations];
 }
 
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics {
-    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
-    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+//    self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
+//    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
 }
 
 #pragma mark - Helpers
@@ -104,31 +85,17 @@
 }
 
 - (void)setupAnimations {
-    self.animationTimeline = new choreograph::Timeline();
-    self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
-
-    glm::vec3 lightStart(-1.0, -1.0, -1);
-    glm::vec3 lightEnd(1.0, -1.0, -0.0);
-
-    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);
-
-    self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn([&m = *self.sunDirectionOutput->inputPtr()] {
-        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
-    });
-}
-
-#pragma mark - Materials
-
-- (EARenderer::MaterialReference)loadWhiteMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({EARenderer::Color::Gray().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
-}
-
-- (EARenderer::MaterialReference)loadBlueMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({EARenderer::Color::Blue().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
-}
-
-- (EARenderer::MaterialReference)loadRedMaterialToPool:(EARenderer::SharedResourceStorage *)pool {
-    return pool->addMaterial({EARenderer::Color::Red().convertedTo(EARenderer::Color::Space::sRGB), [self pathForResource:@"fabric02_nrm.jpg"], 0.0f, 1.0f, 1.0f, 0.0f });
+//    self.animationTimeline = new choreograph::Timeline();
+//    self.sunDirectionOutput = new choreograph::Output<glm::vec3>();
+//
+//    glm::vec3 lightStart(-1.0, -1.0, -1);
+//    glm::vec3 lightEnd(1.0, -1.0, -0.0);
+//
+//    choreograph::PhraseRef<glm::vec3> lightPhrase = choreograph::makeRamp(lightStart, lightEnd, 15.0);
+//
+//    self.animationTimeline->apply(self.sunDirectionOutput, lightPhrase).finishFn([&m = *self.sunDirectionOutput->inputPtr()] {
+//        m.setPlaybackSpeed(m.getPlaybackSpeed() * -1);
+//    });
 }
 
 @end

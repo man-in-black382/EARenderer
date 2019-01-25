@@ -5,6 +5,7 @@
 #include "CookTorrance.glsl"
 #include "ColorSpace.glsl"
 #include "CameraUBO.glsl"
+#include "ImageBasedLightProbes.glsl"
 
 // Output
 
@@ -22,6 +23,8 @@ uniform sampler2D uGBufferHiZBuffer;
 uniform sampler2D uReflections; // Source image
 uniform sampler2D uRayHitInfo;
 uniform int uMipCount;
+
+uniform IBLProbe uIBLProbe;
 
 uniform vec3 uCameraPosition;
 uniform mat4 uCameraViewInverse;
@@ -80,8 +83,7 @@ float IsoscelesTriangleNextAdjacent(float adjacentLength, float incircleRadius) 
 ////////////////////////////////////////////////////////////
 
 vec3 TraceCones(GBufferCookTorrance gBuffer, vec4 rayHitInfo) {
-
-    if (rayHitInfo.a == 0) {
+    if (rayHitInfo.a == 0.0) {
         return vec3(0.0);
     }
 
@@ -149,30 +151,48 @@ vec3 TraceCones(GBufferCookTorrance gBuffer, vec4 rayHitInfo) {
         glossMult *= gloss;
     }
 
-    return totalReflectedColor.rgb;
+    return totalReflectedColor.rgb * rayHitInfo.a;
 }
 
 void main() {
     vec4 rayHitInfo = textureLod(uRayHitInfo, vTexCoords, 0);
     uvec4 materialData = texture(uMaterialData, vTexCoords);
     GBufferCookTorrance gBuffer = DecodeGBufferCookTorrance(materialData);
-    vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
+
+    float depth = texture(uGBufferHiZBuffer, vTexCoords).r;
+    vec3 worldPosition = ReconstructWorldPosition(depth, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
     vec3 reflectedPointWorldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, rayHitInfo.xy, uCameraViewInverse, uCameraProjectionInverse);
 
-    // For analytical lights we compute Half-vector used in Fresnel calculations
-    // using to-light and to-viewer vectors, but for specular reflections
-    // to-light vector is replaced by the fragment's normal.
-    //
     vec3 N = gBuffer.normal;
     vec3 V = normalize(uCameraPosition - worldPosition);
-    vec3 L = normalize(reflectedPointWorldPosition - worldPosition);
-    vec3 H = normalize(L + V);
+    vec3 H;
+
+    float attenuation = rayHitInfo.a;
+    bool rayHitDetected = attenuation > 0.0;
+
+    if (rayHitDetected) {
+        // Compute a proper half-vector if it's possible using reflected point's position.
+        vec3 L = normalize(reflectedPointWorldPosition - worldPosition);
+        H = normalize(L + V);
+    } else {
+        // If not, just take a normal instead.
+        H = normalize(N + V);
+    }
+
     vec3 Ks = FresnelSchlick(V, H, gBuffer.albedo, gBuffer.metalness); // Reflected portion
 
     vec3 sourceColor = textureLod(uReflections, vTexCoords, 0).rgb;
     vec3 reflectedColor = TraceCones(gBuffer, rayHitInfo);
     vec3 finalColor = (sourceColor + reflectedColor * Ks) * HDRNormalizationFactor; // Do not forget that input image was normalized by [1.0 / HDRNormalizationFactor]
 
+    // Only apply probe data onto actual geometry (which have non-zero and non-unit depth values).
+    // This will effectively skip skybox areas.
+    if (depth > 0.0 && depth < 1.0) {
+        vec3 IBLColor = IBL(N, V, gBuffer.roughness, Ks, uIBLProbe);
+        IBLColor *= (1.0 - attenuation); // IBL contribution based on SSR success
+        finalColor += IBLColor;
+    }
+
     oBaseOutput = vec4(finalColor, 1.0);
-    oBrightOutput = LuminanceFromRGB(finalColor) > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
+    oBrightOutput = LuminanceFromRGB(oBaseOutput.rgb) > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);
 }

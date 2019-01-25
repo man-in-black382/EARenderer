@@ -14,8 +14,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLSLSkybox::GLSLSkybox()
-            : GLProgram("Skybox.vert", "Skybox.frag", "") {}
+    GLSLSkybox::GLSLSkybox() : GLProgram("Skybox.vert", "Skybox.frag", "") {}
 
 #pragma mark - Setters
 

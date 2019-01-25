@@ -128,7 +128,7 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
     }
 
     vec3 H = normalize(L + V);
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, 1.0/*shadow*/);
 
     return vec4(specularAndDiffuse, 1.0);
 }

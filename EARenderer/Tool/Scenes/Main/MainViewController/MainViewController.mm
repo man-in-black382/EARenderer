@@ -15,6 +15,7 @@
 
 #import "DemoSceneComposing.h"
 #import "DemoScene1.h"
+#import "DemoScene3.h"
 
 #import "DefaultRenderComponentsProvider.h"
 
@@ -100,7 +101,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self->cameraman = std::make_unique<EARenderer::Cameraman>(camera.get(), &EARenderer::Input::shared(), &EARenderer::GLViewport::Main());
     self->scene->setCamera(std::move(camera));
 
-    self.demoScene = [[DemoScene1 alloc] init];;
+    self.demoScene = [[DemoScene3 alloc] init];;
     [self.demoScene loadResourcesToPool:self->sharedResourceStorage.get() andComposeScene:self->scene.get()];
 
     EARenderer::SurfelGenerator surfelGenerator(self->sharedResourceStorage.get(), self->scene.get());
@@ -159,7 +160,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
 //    NSLog(@"GLView width: %f", view.frame.size.width);
-    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
+//    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
 //    NSLog(@"Camera dir: %f %f %f", self->scene->camera()->front().x, self->scene->camera()->front().y, self->scene->camera()->front().z);
 
     self->cameraman->updateCamera();
@@ -243,6 +244,24 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunBrightness:(CGFloat)brightness {
 
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionX:(CGFloat)x {
+    auto direction = self->scene->directionalLight().direction();
+    direction.x = x;
+    self->scene->directionalLight().setDirection(direction);
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionY:(CGFloat)y {
+    auto direction = self->scene->directionalLight().direction();
+    direction.y = y;
+    self->scene->directionalLight().setDirection(direction);
+}
+
+- (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionZ:(CGFloat)z {
+    auto direction = self->scene->directionalLight().direction();
+    direction.z = z;
+    self->scene->directionalLight().setDirection(direction);
 }
 
 #pragma mark - Helper methods

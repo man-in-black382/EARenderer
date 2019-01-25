@@ -19,8 +19,6 @@ namespace EARenderer {
 
     class GLSLCubemapRendering : public GLProgram {
     public:
-        using GLProgram::GLProgram;
-
         GLSLCubemapRendering(const std::string &fragmentShaderName);
 
         virtual ~GLSLCubemapRendering() = 0;

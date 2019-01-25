@@ -104,13 +104,14 @@ namespace EARenderer {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
             mSkyboxShader.setEquirectangularMap(*mScene->skybox()->equirectangularMap());
+//            mSkyboxShader.setCubemap(mScene->skybox()->lightProbe()->specularIrradiance());
             mSkyboxShader.setExposure(mScene->skybox()->exposure());
         });
 
         mScene->skybox()->draw();
     }
 
-    void DeferredSceneRenderer::renderFinalImage(const PostprocessTexturePool::PostprocessTexture& image) {
+    void DeferredSceneRenderer::renderFinalImage(const PostprocessTexturePool::PostprocessTexture &image) {
         bindDefaultFramebuffer();
         glDisable(GL_DEPTH_TEST);
 
@@ -147,12 +148,7 @@ namespace EARenderer {
         glBlendFunc(GL_ONE, GL_ONE);
         glDisable(GL_DEPTH_TEST);
 
-        glFinish();
-        Measurement::ExecutionTime("Dir acc", [&]() {
-            mDirectLightAccumulator.render();
-            glFinish();
-        });
-
+        mDirectLightAccumulator.render();
         mIndirectLightAccumulator.render();
 
         glDisable(GL_BLEND);
@@ -163,15 +159,18 @@ namespace EARenderer {
         auto ssrBaseOutputTexture = mPostprocessTexturePool->claim(); // Frame with reflections applied
         auto ssrBrightOutputTexture = mPostprocessTexturePool->claim(); // Frame filtered by luminosity threshold and suitable for bloom effect
 
-        mSSREffect.applyReflections(*mScene->camera(), *mGBuffer, *lightAccumulationTarget, *ssrBaseOutputTexture, *ssrBrightOutputTexture);
+        mSSREffect.applyReflections(
+                *mScene->camera(), *mGBuffer, mScene->skybox()->lightProbe(),
+                *lightAccumulationTarget, *ssrBaseOutputTexture, *ssrBrightOutputTexture
+        );
 
         auto bloomOutputTexture = lightAccumulationTarget;
         mBloomEffect.bloom(*ssrBaseOutputTexture, *ssrBrightOutputTexture, *bloomOutputTexture, mSettings.bloomSettings);
-
+//
         glDepthMask(GL_TRUE);
-
+//
         debugClosure();
-
+//
         auto toneMappingOutputTexture = ssrBaseOutputTexture;
         mToneMappingEffect.toneMap(*bloomOutputTexture, *toneMappingOutputTexture);
 

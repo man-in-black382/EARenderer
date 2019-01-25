@@ -35,7 +35,7 @@
 //#include "GLSLSkybox.hpp"
 //#include "GLSLGenericGeometry.hpp"
 //#include "GLSLEquirectangularMapConversion.hpp"
-//#include "GLSLRadianceConvolution.hpp"
+//#include "GLSLSpecularRadianceConvolution.hpp"
 //#include "GLSLBRDFIntegration.hpp"
 //#include "GLSLSurfelLighting.hpp"
 //#include "GLSLSurfelClusterAveraging.hpp"
@@ -82,7 +82,7 @@
 //        GLSLSkybox mSkyboxShader;
 //        GLSLCookTorrance mLightEvaluationShader;
 //        GLSLEquirectangularMapConversion mEqurectangularMapConversionShader;
-//        GLSLRadianceConvolution mRadianceConvolutionShader;
+//        GLSLSpecularRadianceConvolution mRadianceConvolutionShader;
 //        GLSLBRDFIntegration mBRDFIntegrationShader;
 //        GLSLSurfelLighting mSurfelLightingShader;
 //        GLSLSurfelClusterAveraging mSurfelClusterAveragingShader;

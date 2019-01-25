@@ -10,6 +10,7 @@
 #define GLSLEquirectangularMapConversion_hpp
 
 #include "GLSLCubemapRendering.hpp"
+#include "GLTexture2D.hpp"
 
 namespace EARenderer {
 
@@ -17,7 +18,7 @@ namespace EARenderer {
     public:
         GLSLEquirectangularMapConversion();
 
-//        void setEquirectangularEnvironmentMap(const GLHDRTexture2D& map);
+        void setEquirectangularEnvironmentMap(const GLFloatTexture2D<GLTexture::Float::RGB16F> &map);
     };
 
 }

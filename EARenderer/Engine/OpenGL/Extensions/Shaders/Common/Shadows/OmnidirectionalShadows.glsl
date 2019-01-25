@@ -136,21 +136,48 @@ float OmnidirectionalShadow(vec3 surfaceWorldPosition, // World position of the 
     vec2 shadowMapSize = textureSize(comparisonSampler, 0).xy;
 
     #ifndef SHADOW_NO_PCF
-    vec2 texelSize = 2.0 / shadowMapSize;
-    vec2 kernelSize = texelSize * 4.0;
+    vec2 texelSize = 1.0 / shadowMapSize;
+    vec2 twoTexelSize = 2.0 * texelSize;
+    vec2 kernelSize = twoTexelSize * 4.0;
 
     float gradientNoise = InterleavedGradientNoise(gl_FragCoord.xy);
     int VogelDiskSampleCount = 16;
+
+    // Adaptive bias
+    // A fast way of retrieving neighbour texel for cubemap needs to be invented. An approach proposed in the paper
+    // is intended to work with orthographic projection and a single shadow map for directional light source.
+    // Resorting to a more expensive O(N) instead of O(1) approach until then.
+    //
+//    vec3 texCoords = CubeMapTextureCoords(lightToSurface);
+//    float pod = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, currentDepth, texCoords, shadowMapSize);
+//    float podX = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, currentDepth, texCoords + (texelSize.x, 0.0, 0.0), shadowMapSize);
+//    float podY = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, currentDepth, texCoords + (0.0, texelSize.y, 0.0), shadowMapSize);
+//
+//    float deltaBiasX = podX - pod;
+//    float deltaBiasY = podY - pod;
+    //
 
     float shadow = 0.0f;
 
     for(int i = 0; i < VogelDiskSampleCount; i++) {
         vec2 vogelDiskSample = VogelDiskSample(i, VogelDiskSampleCount, gradientNoise) * kernelSize * penumbra;
         vec3 sampleVector = (rotationMatrix * vec4(vogelDiskSample, 1.0, 0.0)).xyz;
+
+        // Adaptive bias. More robust approach. Commented until fast neighbour texel search is implemented.
+        //
+//        float currentPOD = pod + vogelDiskSample.x * deltaBiasX + vogelDiskSample.y * deltaBiasY;
+//        vec3 surfaceToLight = -normalize(sampleVector);
+//        float epsilon = OmnidirectionalAdaptiveEpsilon(light, surfaceToLight, surfaceNormal, currentPOD, 1.0);
+//        float bias = max(0.0, currentDepth - currentPOD);
+//        float biasedDepth = currentDepth - bias - epsilon;
+        //
+
         vec3 texCoords = CubeMapTextureCoords(sampleVector);
         float pod = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, currentDepth, texCoords, shadowMapSize);
+
         vec3 surfaceToLight = -normalize(sampleVector);
         float epsilon = OmnidirectionalAdaptiveEpsilon(light, surfaceToLight, surfaceNormal, pod, 1.0);
+
         float bias = max(0.0, currentDepth - pod);
         float biasedDepth = currentDepth - bias - epsilon;
 

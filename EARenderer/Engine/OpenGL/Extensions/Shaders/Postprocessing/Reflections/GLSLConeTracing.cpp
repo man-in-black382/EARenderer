@@ -41,4 +41,10 @@ namespace EARenderer {
         setUniformTexture(ctcrc32("uRayHitInfo"), rayHitInfo);
     }
 
+    void GLSLConeTracing::setIBLProbe(const ImageBasedLightProbe &probe) {
+        setUniformTexture(ctcrc32("uIBLProbe.specularIrradiance"), probe.specularIrradiance());
+        setUniformTexture(ctcrc32("uIBLProbe.BRDFIntegrationMap"), probe.BRDFIntegrationMap());
+        glUniform1i(uniformByNameCRC32(ctcrc32("uIBLProbe.specularIrradianceMipCount")).location(), GLint(probe.specularIrradianceMipCount()));
+    }
+
 }

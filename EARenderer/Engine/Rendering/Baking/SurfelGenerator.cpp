@@ -231,7 +231,11 @@ namespace EARenderer {
             auto &subMesh = mesh.subMeshes()[subMeshID];
 
             // Right now surfels could only be generated on CookTorrance surfaces
-            auto materialRef = instance.materialReferenceForSubMeshID(subMeshID);
+            auto materialRef = instance.materialReference;
+            if (!materialRef) {
+                materialRef = instance.materialReferenceForSubMeshID(subMeshID);
+            }
+
             if (!materialRef.has_value() || materialRef->first != MaterialType::CookTorrance) {
                 continue;
             }
@@ -382,25 +386,14 @@ namespace EARenderer {
         mSurfelSpatialHash = SpatialHash<Surfel>(mScene->lightBakingVolume(), spaceDivisionResolution(1.5, mScene->lightBakingVolume()));
         mSurfelFlatStorage = PackedLookupTable<Surfel>(10000);
 
-        printf("Generating surfels...\n");
+        for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
+            const auto &meshInstance = mScene->meshInstances()[meshInstanceID];
+            generateSurflesOnMeshInstance(meshInstance);
+        }
 
-        EARenderer::Measurement::ExecutionTime("Surfel generation took", [&]() {
-            for (ID meshInstanceID : mScene->staticMeshInstanceIDs()) {
-                const auto &meshInstance = mScene->meshInstances()[meshInstanceID];
-                generateSurflesOnMeshInstance(meshInstance);
-            }
-        });
-
-        printf("Generated %lu surfels\n\n", mSurfelSpatialHash.size());
-
-        printf("Generating surfel clusters...\n");
-        EARenderer::Measurement::ExecutionTime("Surfel clustering took", [&]() {
-            formClusters();
-        });
+        formClusters();
 
         mSurfelDataContainer->initializeBuffers();
-
-        printf("Generated %lu clusters\n\n", mSurfelDataContainer->mSurfelClusters.size());
 
         return std::move(mSurfelDataContainer);
     }
