@@ -47,7 +47,7 @@ namespace EARenderer {
         void computeExposure();
 
     public:
-        ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+        ToneMappingEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool);
 
         void toneMap(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage);
     };

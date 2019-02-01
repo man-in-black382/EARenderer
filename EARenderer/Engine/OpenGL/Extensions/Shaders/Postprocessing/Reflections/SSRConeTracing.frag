@@ -183,15 +183,16 @@ void main() {
 
     vec3 sourceColor = textureLod(uReflections, vTexCoords, 0).rgb;
     vec3 reflectedColor = TraceCones(gBuffer, rayHitInfo);
+
     vec3 finalColor = (sourceColor + reflectedColor * Ks) * HDRNormalizationFactor; // Do not forget that input image was normalized by [1.0 / HDRNormalizationFactor]
 
     // Only apply probe data onto actual geometry (which have non-zero and non-unit depth values).
     // This will effectively skip skybox areas.
-    if (depth > 0.0 && depth < 1.0) {
-        vec3 IBLColor = IBL(N, V, gBuffer.roughness, Ks, uIBLProbe);
-        IBLColor *= (1.0 - attenuation); // IBL contribution based on SSR success
-        finalColor += IBLColor;
-    }
+//    if (depth > 0.0 && depth < 1.0) {
+//        vec3 IBLColor = IBL(N, V, gBuffer.roughness, Ks, uIBLProbe);
+//        IBLColor *= (1.0 - attenuation); // IBL contribution based on SSR success
+//        finalColor += IBLColor;
+//    }
 
     oBaseOutput = vec4(finalColor, 1.0);
     oBrightOutput = LuminanceFromRGB(oBaseOutput.rgb) > 1.0 ? oBaseOutput : vec4(0.0, 0.0, 0.0, 1.0);

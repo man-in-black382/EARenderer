@@ -19,8 +19,8 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    DirectionalLight::DirectionalLight(const Color &color, const glm::vec3 &direction, float area)
-            : Light(glm::zero<glm::vec3>(), color, area, 0.0), mDirection(direction) {}
+    DirectionalLight::DirectionalLight(const Color &color, const glm::vec3 &direction, float area, float shadowBias)
+            : Light(glm::zero<glm::vec3>(), color, area, shadowBias), mDirection(direction) {}
 
 #pragma mark - Getters
 

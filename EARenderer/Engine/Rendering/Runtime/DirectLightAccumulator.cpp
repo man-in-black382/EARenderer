@@ -29,11 +29,11 @@ namespace EARenderer {
     void DirectLightAccumulator::renderDirectionalLights() {
         mLightEvaluationShader.setLightType(LightType::Directional);
 
-        if (!mScene->directionalLight().isEnabled()) {
+        if (!mScene->sun().isEnabled()) {
             return;;
         }
 
-        mLightEvaluationShader.setLight(mScene->directionalLight());
+        mLightEvaluationShader.setLight(mScene->sun());
         mLightEvaluationShader.setFrustumCascades(mShadowMapper->cascades());
         mLightEvaluationShader.ensureSamplerValidity([&]() {
             mLightEvaluationShader.setDirectionalShadowMapArray(mShadowMapper->directionalShadowMapArray());

@@ -21,6 +21,7 @@
 #include "GLSLShadowMap.hpp"
 #include "GLSLDirectionalPenumbra.hpp"
 #include "GLSLOmnidirectionalPenumbra.hpp"
+#include "GaussianBlurEffect.hpp"
 
 #include <memory>
 #include <unordered_map>
@@ -49,12 +50,14 @@ namespace EARenderer {
         GLFramebuffer mShadowFramebuffer;
         GLFramebuffer mOmnidirectionalShadowFramebuffer;
         GLFramebuffer mPenumbraFramebuffer;
+        PostprocessTexturePool mTexturePool;
 
         GLDepthTexture2DArray mDirectionalShadowMapArray;
         GLFloatTexture2D<GLTexture::Float::R16F> mDirectionalPenumbra;
         std::unordered_map<ID, GLDepthTextureCubemap> mOmnidirectionalShadowMaps;
         std::unordered_map<ID, GLFloatTexture2D<GLTexture::Float::R16F>> mOmnidirectionalPenumbras;
 
+        GaussianBlurEffect mBlurEffect;
         GLSampler mBilinearSampler;
 
         void renderDirectionalPenumbra();

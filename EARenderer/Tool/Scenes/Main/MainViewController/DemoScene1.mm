@@ -44,15 +44,18 @@
     NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza_lightweight_3" ofType:@"obj"];
 //    NSString *sponzaPath = [[NSBundle mainBundle] pathForResource:@"sponza" ofType:@"obj"];
     NSString *planePath = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"obj"];
+    NSString *skeletonPath = [[NSBundle mainBundle] pathForResource:@"skeleton" ofType:@"obj"];
 
     EARenderer::ID sponzaMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(sponzaPath.UTF8String)));
     EARenderer::ID sphereMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(spherePath.UTF8String)));
     EARenderer::ID planeMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(planePath.UTF8String)));
+    EARenderer::ID skeletonMeshID = resourcePool->addMesh(EARenderer::Mesh(std::string(skeletonPath.UTF8String)));
 
     // Materials
 
-    EARenderer::MaterialReference ironMaterialID = [self loadIronMaterialToPool:resourcePool];
+//    EARenderer::MaterialReference ironMaterialID = [self loadIronMaterialToPool:resourcePool];
     EARenderer::MaterialReference scuffedTitaniumMaterialID = [self loadScuffedTitamiumMaterialToPool:resourcePool];
+//    EARenderer::MaterialReference skeletonMaterialID = [self load_Skeleton_MaterialToPool:resourcePool];
 
     // Sponza mCookTorranceMaterials
 
@@ -182,23 +185,30 @@
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(sponzaInstance));
 
+//    EARenderer::MeshInstance skeletonInstance(skeletonMeshID, resourcePool->mesh(skeletonMeshID));
+//    skeletonInstance.transformation().translation = glm::vec3(-1.691458, -1.507035, -0.091587);
+//    skeletonInstance.transformation().rotation = glm::angleAxis(glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+//    skeletonInstance.materialReference = skeletonMaterialID;
+//    scene->addMeshInstanceWithIDAsDynamic(scene->meshInstances().insert(skeletonInstance));
+//    sponzaInstance.transformation();
+
     // Skybox
-    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"night_sky" ofType:@"hdr"];
-//    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
-    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.01));
-//    scene->skybox()->setAmbientColor(EARenderer::Color(0.059, 0.071, 0.087));
+//    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"night_sky" ofType:@"hdr"];
+    NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
+    scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String), 0.4));
 
-    scene->directionalLight().setColor(EARenderer::Color(3.0, 3.0, 3.0));
-    scene->directionalLight().setDirection(glm::vec3(0.0, -1.0, 0.0));
-    scene->directionalLight().setIsEnabled(false);
+    scene->sun().setColor(EARenderer::Color(2.0, 2.0, 2.0));
+    scene->sun().setDirection(glm::vec3(0.0, -1.0, 0.0));
+    scene->sun().setShadowBias(0.006);
+//    scene->sun().setIsEnabled(false);
 
-    EARenderer::Color light1Color(2.0, 1.052, 0.32);
-    EARenderer::PointLight::Attenuation lightAttenuation1{1.0, 0.0, 4.0};
-    EARenderer::MaterialReference lightMaterialRef1 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light1Color});
-    EARenderer::PointLight pointLight1(glm::vec3(3.172841, -1.449196, 1.107378), light1Color, 8.0, 0.1, 30.0, 0.002, lightAttenuation1);
-    pointLight1.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
-    pointLight1.meshInstance->materialReference = lightMaterialRef1;
-    pointLight1.meshInstance->transformation().scale = glm::vec3(0.002);
+//    EARenderer::Color light1Color(2.0, 2.052, 2.5);
+//    EARenderer::PointLight::Attenuation lightAttenuation1{1.0, 0.0, 4.0};
+//    EARenderer::MaterialReference lightMaterialRef1 = resourcePool->addMaterial(EARenderer::EmissiveMaterial{light1Color});
+//    EARenderer::PointLight pointLight1(glm::vec3(-2.3273, -1.15, -0.097809), light1Color, 8.0, 0.1, 30.0, 0.002, lightAttenuation1);
+//    pointLight1.meshInstance = EARenderer::MeshInstance(sphereMeshID, resourcePool->mesh(sphereMeshID));
+//    pointLight1.meshInstance->materialReference = lightMaterialRef1;
+//    pointLight1.meshInstance->transformation().scale = glm::vec3(0.002);
 //    pointLight1.setIsEnabled(false);
 
 //    EARenderer::Color light2Color(0.356, 0.541, 0.898);
@@ -212,7 +222,7 @@
 //    self.secondLightColor = light2Color;
 //    self.secondLightMaterial = &resourcePool->emissiveMaterial(lightMaterialRef2.second);
 
-    self.firstLightID = scene->pointLights().insert(pointLight1);
+//    self.firstLightID = scene->pointLights().insert(pointLight1);
 //    self.secondLightID = scene->pointLights().insert(pointLight2);
 
     scene->calculateGeometricProperties(*resourcePool);
@@ -225,7 +235,7 @@
         scene->buildStaticGeometryRaytracer(*resourcePool);
     });
 
-    scene->setName("sponza_2");
+    scene->setName("sponza");
     scene->setDiffuseProbeSpacing(0.360); // 370 // 360
     scene->setSurfelSpacing(0.048);
 
@@ -238,10 +248,10 @@
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics {
     self.animationTimeline->step(frameCharacteristics.frameTimeMillisecons / 1000.0);
-    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+//    scene->sun().setDirection(self.sunDirectionOutput->value());
 
-    EARenderer::PointLight &firstLight = scene->pointLights()[self.firstLightID];
-    firstLight.setPosition(self.lightPositionOutput->value());
+//    EARenderer::PointLight &firstLight = scene->pointLights()[self.firstLightID];
+//    firstLight.setPosition(self.lightPositionOutput->value());
 //    light.setArea(self.lightSizeOutput->value());
 
 //    EARenderer::PointLight &secondLight = scene->pointLights()[self.secondLightID];
@@ -673,6 +683,12 @@
             [self pathForResource:@"Sponza_Roof_roughness.tga"],
             [self pathForResource:@"blank_white.jpg"],
             [self pathForResource:@"blank_white.jpg"]
+    });
+}
+
+- (EARenderer::MaterialReference)load_Skeleton_MaterialToPool:(EARenderer::SharedResourceStorage *)pool {
+    return pool->addMaterial({
+            EARenderer::Color::Gray(), glm::vec3(0.0, 0.0, 1.0), 0.0f, 1.0f, 1.0f, 0.0f
     });
 }
 

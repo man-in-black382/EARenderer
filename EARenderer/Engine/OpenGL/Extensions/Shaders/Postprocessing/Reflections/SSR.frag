@@ -126,7 +126,7 @@ vec3 hi_z_trace(vec3 p, vec3 v, in uint camera, out uint iterations) {
 }
 
 // Thanks to Sakib Saikia
-// and his post https://sakibsaikia.github.io/graphics/2016/12/25/Screen-Space-Reflection-in-Killing-Floor-2.html#fn:fn3
+// and his post https://sakibsaikia.github.io/graphics/2016/12/26/Screen-Space-Reflection-in-Killing-Floor-2.html
 
 bool IsSamplingOutsideViewport(vec3 raySample, inout float attenuationFactor) {
     // Any rays that march outside the screen viewport will not have any valid pixel information. These need to be dropped.
@@ -164,8 +164,8 @@ bool RayMarch(vec3 worldReflectionVec,
               out float attenuationFactor)
 {
     const float kMaxRayMarchStep = 0.04;
-    const int kMaxRayMarchIterations = 25;
-    const int kMaxBinarySearchSamples = 8;
+    const int kMaxRayMarchIterations = 24;
+    const int kMaxBinarySearchSamples = 6;
 
     int stub = uHiZBufferMipCount;
     bool bFoundIntersection = false;
@@ -174,35 +174,45 @@ bool RayMarch(vec3 worldReflectionVec,
 
     float viewportAttenuationFactor = 1.0;
 
+    attenuationFactor = 0.0;
+
+    float previousRaySampleZ = 0.0;
+
     // Raymarch in the direction of the ScreenSpaceReflectionVec until you get an intersection with your z buffer
     for (int rayStepIdx = 0; rayStepIdx < kMaxRayMarchIterations; rayStepIdx++) {
 
         vec3 offset = float(rayStepIdx) * kMaxRayMarchStep * screenSpaceReflectionVec;
         vec3 raySample = screenSpacePos + offset;
 
+        // If ray have traveled too far
+        if (raySample.z >= 1.0) {
+            return false;
+        }
+
         if (IsSamplingOutsideViewport(raySample, viewportAttenuationFactor)) {
-            attenuationFactor = viewportAttenuationFactor;
             return false;
         }
 
         float ZBufferVal = texture(uGBufferHiZBuffer, raySample.xy).r;
 
-        // We have stepped onto a territory without any geometry, hence the default depth value
-        if (ZBufferVal == 0.0 || ZBufferVal == 1.0) {
-            attenuationFactor = 0.0;
-            return false;
-        }
+//        // Obstructed geometry detection
+//        if (ZBufferVal < previousRaySampleZ) {
+//            return false;
+//        }
 
         maxraySample = raySample;
 
-        float bias = rayStepIdx == 0 ? 0.0001 : 0.0;
+        float bias = rayStepIdx == 0 ? 0.001 : 0.0;
 
+        // Found intersection
         if (raySample.z > ZBufferVal + bias) {
             bFoundIntersection = true;
             break;
         }
 
         minraySample = maxraySample;
+
+        previousRaySampleZ = raySample.z;
     }
 
     // Binary search
@@ -233,6 +243,11 @@ RayHit ScreenSpaceReflection(vec3 N, vec3 worldPosition) {
 
     // Prerequisites
     float fragDepth = texture(uGBufferHiZBuffer, currentFragUV).r;
+
+    // This texel represents empty space
+    if (fragDepth == 0.0 || fragDepth == 1.0) {
+        return RayHit(0.0, vec3(0.0));
+    }
 
     vec3 cameraToFrag = normalize(worldPosition - uCameraPosition);
 

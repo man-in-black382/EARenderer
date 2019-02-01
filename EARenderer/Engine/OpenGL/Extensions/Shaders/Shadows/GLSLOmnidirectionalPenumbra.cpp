@@ -20,6 +20,7 @@ namespace EARenderer {
     }
 
     void GLSLOmnidirectionalPenumbra::setGBuffer(const SceneGBuffer &GBuffer) {
+        setUniformTexture(ctcrc32("uMaterialData"), GBuffer.materialData);
         setUniformTexture(ctcrc32("uGBufferHiZBuffer"), GBuffer.HiZBuffer);
     }
 

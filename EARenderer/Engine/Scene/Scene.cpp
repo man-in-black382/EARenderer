@@ -20,14 +20,13 @@ namespace EARenderer {
 #pragma mark - Lifecycle
 
     Scene::Scene()
-            : mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0), 1.0),
-              mPointLights(10),
-              mMeshInstances(1000) {
-    }
+            : mDirectionalLight(Color(1.0, 1.0), glm::vec3(0.0, -1.0, 0.0), 1.0, 0.0),
+              mPointLights(5),
+              mMeshInstances(10) {}
 
 #pragma mark - Getters
 
-    DirectionalLight &Scene::directionalLight() {
+    DirectionalLight &Scene::sun() {
         return mDirectionalLight;
     }
 
@@ -39,7 +38,7 @@ namespace EARenderer {
         return mMeshInstances;
     }
 
-    const DirectionalLight &Scene::directionalLight() const {
+    const DirectionalLight &Scene::sun() const {
         return mDirectionalLight;
     }
 

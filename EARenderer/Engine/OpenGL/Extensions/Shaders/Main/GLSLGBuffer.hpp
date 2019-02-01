@@ -30,6 +30,8 @@ namespace EARenderer {
         void setMaterial(const CookTorranceMaterial &material);
 
         void setMaterial(const EmissiveMaterial &material);
+
+        void setSettings(const RenderingSettings &settings);
     };
 
 }

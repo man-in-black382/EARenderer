@@ -19,11 +19,11 @@ namespace EARenderer {
 
     class PostprocessEffect {
     protected:
-        std::shared_ptr<GLFramebuffer> mFramebuffer;
-        std::shared_ptr<PostprocessTexturePool> mTexturePool;
+        GLFramebuffer *mFramebuffer;
+        PostprocessTexturePool *mTexturePool;
 
     public:
-        PostprocessEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+        PostprocessEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool)
                 : mFramebuffer(sharedFramebuffer), mTexturePool(sharedTexturePool) {}
     };
 

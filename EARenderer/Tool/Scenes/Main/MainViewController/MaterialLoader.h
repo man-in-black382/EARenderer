@@ -36,4 +36,28 @@
 
 + (EARenderer::MaterialReference)load_WetStones_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
 
++ (EARenderer::MaterialReference)load_Iron_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_CliffRocks_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_Linoleum_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_Scuffed_TitamiumMaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_BambooWood_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_Charcoal_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_GrimyMetal_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_PatchyCement_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_SplotchyMetal_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_RedPlastic_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_SynthRubber_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
++ (EARenderer::MaterialReference)load_WoodPlanks_MaterialToPool:(EARenderer::SharedResourceStorage *)pool;
+
 @end

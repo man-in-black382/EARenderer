@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ScreenSpaceReflectionEffect::ScreenSpaceReflectionEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+    ScreenSpaceReflectionEffect::ScreenSpaceReflectionEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool)
             : PostprocessEffect(sharedFramebuffer, sharedTexturePool), mBlurEffect(sharedFramebuffer, sharedTexturePool) {}
 
 #pragma mark - Pivate Helpers
@@ -63,7 +63,6 @@ namespace EARenderer {
         });
 
         mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::None, &baseOutputImage, &brightOutputImage);
-
         Drawable::TriangleStripQuad::Draw();
     }
 

@@ -45,6 +45,7 @@ namespace EARenderer {
         glUniform3fv(uniformByNameCRC32(ctcrc32("uDirectionalLight.direction")).location(), 1, glm::value_ptr(light.direction()));
         glUniform3fv(uniformByNameCRC32(ctcrc32("uDirectionalLight.radiantFlux")).location(), 1, reinterpret_cast<const GLfloat *>(&light.color()));
         glUniform1f(uniformByNameCRC32(ctcrc32("uDirectionalLight.area")).location(), light.area());
+        glUniform1f(uniformByNameCRC32(ctcrc32("uDirectionalLight.shadowBias")).location(), light.shadowBias());
         glUniform1i(uniformByNameCRC32(ctcrc32("uLightType")).location(), 0);
     }
 

@@ -77,7 +77,7 @@ namespace EARenderer {
 
         HDRCubemap.generateMipMaps();
 
-        ImageBasedLightProbe probe(mProbeResolution, 64);
+        ImageBasedLightProbe probe(mProbeResolution, 32);
         probe.mBRDFIntegrationMap = mBRDFIntegrationMap;
         probe.mSpecularIrradianceMipCount = mSpecularIrradianceMipCount;
         buildDiffuseIrradianceMap(HDRCubemap, *probe.mDiffuseIrradiance);

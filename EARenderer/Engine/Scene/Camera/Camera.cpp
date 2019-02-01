@@ -89,6 +89,10 @@ namespace EARenderer {
 
     }
 
+    void Camera::setFarPlane(float farPlane) {
+        mFarClipPlane = std::max(mNearClipPlane, farPlane);
+    }
+
     Ray3D Camera::rayFromPointOnViewport(const glm::vec2 &point, const GLViewport *viewport) const {
         glm::vec2 ndc = viewport->NDCFromPoint(point);
         glm::mat4 inverseVP = glm::inverse(viewProjectionMatrix());

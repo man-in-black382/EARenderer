@@ -45,4 +45,8 @@ namespace EARenderer {
         glUniform1i(uniformByNameCRC32(ctcrc32("uMaterialType")).location(), std::underlying_type<MaterialType>::type(MaterialType::Emissive));
     }
 
+    void GLSLGBuffer::setSettings(const RenderingSettings &settings) {
+        glUniform1f(uniformByNameCRC32(ctcrc32("uPOMStrength")).location(), settings.meshSettings.parallaxMappingStrength);
+    }
+
 }

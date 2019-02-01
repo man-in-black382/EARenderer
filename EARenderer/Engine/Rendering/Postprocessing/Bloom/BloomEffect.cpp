@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    BloomEffect::BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+    BloomEffect::BloomEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool)
             : PostprocessEffect(sharedFramebuffer, sharedTexturePool),
               mSmallBlurEffect(sharedFramebuffer, sharedTexturePool),
               mMediumBlurEffect(sharedFramebuffer, sharedTexturePool),

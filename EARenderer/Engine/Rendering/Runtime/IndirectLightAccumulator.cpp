@@ -74,7 +74,7 @@ namespace EARenderer {
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
-        const DirectionalLight &directionalLight = mScene->directionalLight();
+        const DirectionalLight &directionalLight = mScene->sun();
 
         mFramebuffer.redirectRenderingToTextures(GLViewport(mSurfelsLuminanceMap.size()),
                 GLFramebuffer::UnderlyingBuffer::Color | GLFramebuffer::UnderlyingBuffer::Depth,
@@ -171,6 +171,7 @@ namespace EARenderer {
         mLightEvaluationShader.bind();
         mLightEvaluationShader.setCamera(*(mScene->camera()));
         mLightEvaluationShader.setWorldBoundingBox(mScene->lightBakingVolume());
+        mLightEvaluationShader.setSettings(mSettings);
         mLightEvaluationShader.ensureSamplerValidity([&]() {
             mLightEvaluationShader.setGBuffer(*mGBuffer);
             mLightEvaluationShader.setProbePositions(*mProbeData->probePositionsBufferTexture());

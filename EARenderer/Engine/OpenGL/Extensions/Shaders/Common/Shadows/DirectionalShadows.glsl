@@ -38,7 +38,7 @@ float DirectionalPenumbra(vec3 surfaceWorldPosition, // World position of the su
 {
     // Constants that should be refactored into configurable parameters
     const int KernelSize = 4;
-    const int VogelDiskSampleCount = KernelSize * KernelSize; // kernelSize * kernelSize
+    const int VogelDiskSampleCount = KernelSize * KernelSize;
     //
 
     mat4 relevantLightMatrix = lightSpaceMatrices[cascadeIndex];
@@ -81,7 +81,7 @@ float DirectionalPenumbra(vec3 surfaceWorldPosition, // World position of the su
 
 float DirectionalShadow(vec3 surfaceWorldPosition, // World position of the surface point
                         vec3 surfaceNormal,        // World normal of the surface point
-                        vec3 surfaceToLight,       // World Surface to light vector. Expected to be normalized.
+                        DirectionalLight light,
                         int cascadeIndex,          // Index of the shadow cascade containing the surface point
                         mat4 lightSpaceMatrices[MaximumShadowCascadesCount], // Transformation matrices for each cascade
                         sampler2DArrayShadow comparisonSampler, // Shadow map array with shadow maps for each cascade. Comparison sampler for hardware PCF.
@@ -102,7 +102,9 @@ float DirectionalShadow(vec3 surfaceWorldPosition, // World position of the surf
     
     // Get depth of current fragment from light's perspective
     float currentDepth = projectedCoords.z;
-    float biasedDepth = currentDepth - DirectionalAdaptiveEpsilon(surfaceNormal, surfaceToLight, 0.00001);
+    float biasFactor = 1.0 - dot(surfaceNormal, -light.direction);
+    float bias = max(0.001, light.shadowBias * biasFactor);
+    float biasedDepth = currentDepth - bias;
 
     #ifndef SHADOW_NO_PCF
     float gradientNoise = InterleavedGradientNoise(gl_FragCoord.xy);

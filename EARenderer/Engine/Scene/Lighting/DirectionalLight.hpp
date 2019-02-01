@@ -22,7 +22,7 @@ namespace EARenderer {
         glm::vec3 mDirection;
 
     public:
-        DirectionalLight(const Color &color, const glm::vec3 &direction, float area);
+        DirectionalLight(const Color &color, const glm::vec3 &direction, float area, float shadowBias);
 
         glm::mat4 viewMatrix() const;
 

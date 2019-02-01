@@ -113,7 +113,7 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
             int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
             float penumbra = texture(uPenumbra, vTexCoords).r;
             penumbra = 1.0;
-            shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
+            shadow = DirectionalShadow(worldPosition, N, uDirectionalLight, cascade, uLightSpaceMatrices, uDirectionalShadowMapsComparisonSampler, penumbra);
             break;
         }
 
@@ -128,7 +128,7 @@ vec4 ProcessCookTorranceMaterial(uvec4 materialData, vec3 worldPosition) {
     }
 
     vec3 H = normalize(L + V);
-    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, 1.0/*shadow*/);
+    vec3 specularAndDiffuse = CookTorranceBRDF(N, V, H, L, roughness2, albedo, metallic, radiance, shadow);
 
     return vec4(specularAndDiffuse, 1.0);
 }

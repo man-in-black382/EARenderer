@@ -12,9 +12,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLSLIndirectLightEvaluation::GLSLIndirectLightEvaluation()
-            :
-            GLProgram("FullScreenQuad.vert", "IndirectLightEvaluation.frag", "") {
+    GLSLIndirectLightEvaluation::GLSLIndirectLightEvaluation() : GLProgram("FullScreenQuad.vert", "IndirectLightEvaluation.frag", "") {
     }
 
 #pragma mark - Setters
@@ -45,6 +43,10 @@ namespace EARenderer {
 
     void GLSLIndirectLightEvaluation::setProbePositions(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &positions) {
         setBufferTexture(ctcrc32("uProbePositions"), positions);
+    }
+
+    void GLSLIndirectLightEvaluation::setSettings(const RenderingSettings &settings) {
+        glUniform1ui(uniformByNameCRC32(ctcrc32("uSettingsBitmask")).location(), settings.meshSettings.booleanBitmask());
     }
 
 }

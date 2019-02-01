@@ -18,7 +18,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    SMAAEffect::SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+    SMAAEffect::SMAAEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool)
             : PostprocessEffect(sharedFramebuffer, sharedTexturePool),
               mAreaTexture(Size2D(AREATEX_WIDTH, AREATEX_HEIGHT), areaTexBytes),
               mSearchTexture(Size2D(SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT), searchTexBytes),

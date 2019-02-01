@@ -72,7 +72,7 @@ void main() {
         L           = -normalize(uDirectionalLight.direction);
         int cascade = ShadowCascadeIndex(worldPosition, uCSMSplitSpaceMat, uDepthSplitsAxis, uDepthSplits);
         float penumbra = 5.0;
-        shadow = DirectionalShadow(worldPosition, N, L, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray, penumbra);
+        shadow = DirectionalShadow(worldPosition, N, uDirectionalLight, cascade, uLightSpaceMatrices, uDirectionalShadowMapArray, penumbra);
     }
     else if (uLightType == kLightTypePoint) {
         radiance    = PointLightRadiance(uboPointLight, worldPosition);

@@ -64,8 +64,8 @@ namespace EARenderer {
 
         RenderingSettings mSettings;
 
-        std::shared_ptr<GLFramebuffer> mFramebuffer;
-        std::shared_ptr<PostprocessTexturePool> mPostprocessTexturePool;
+        GLFramebuffer mFramebuffer;
+        PostprocessTexturePool mPostprocessTexturePool;
 
         BloomEffect mBloomEffect;
         ToneMappingEffect mToneMappingEffect;

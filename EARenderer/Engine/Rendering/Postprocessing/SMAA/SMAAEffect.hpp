@@ -35,7 +35,7 @@ namespace EARenderer {
         void blendNeighbors(const PostprocessTexturePool::PostprocessTexture &image, PostprocessTexturePool::PostprocessTexture &outputImage);
 
     public:
-        SMAAEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+        SMAAEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool);
 
         void antialise(const PostprocessTexturePool::PostprocessTexture &inputImage, PostprocessTexturePool::PostprocessTexture &outputImage);
     };

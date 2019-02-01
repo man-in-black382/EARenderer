@@ -15,6 +15,7 @@
 #include "GLLDRTexture3D.hpp"
 #include "RenderingSettings.hpp"
 #include "GLTexture2D.hpp"
+#include "ImageBasedLightProbe.hpp"
 
 namespace EARenderer {
 
@@ -31,6 +32,8 @@ namespace EARenderer {
         void setWorldBoundingBox(const AxisAlignedBox3D &box);
 
         void setProbePositions(const GLFloatBufferTexture<GLTexture::Float::RGB32F, glm::vec3> &positions);
+
+        void setSettings(const RenderingSettings& settings);
     };
 
 }

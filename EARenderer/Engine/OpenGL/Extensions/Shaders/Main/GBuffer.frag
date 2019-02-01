@@ -36,6 +36,8 @@ uniform MaterialCookTorrance uMaterialCookTorrance;
 uniform MaterialEmissive uMaterialEmissive;
 uniform int uMaterialType;
 
+uniform float uPOMStrength;
+
 // Functions
 
 ////////////////////////////////////////////////////////////
@@ -72,50 +74,52 @@ float FetchDisplacementMap() {
 }
 
 vec2 DisplacedTextureCoords() {
-
-    float uParallaxMappingStrength = 0.015;
-
     vec2 texCoords = vTexCoords.st;
     vec3 viewDir = normalize(vCameraPosInTangentSpace - vPosInTangentSpace);
 
-    // Number of depth layers
-    const float minLayers = 8;
-    const float maxLayers = 32;
-    float numLayers = mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
-    // Calculate the size of each layer
-    float layerDepth = 1.0 / numLayers;
-    // Depth of current layer
-    float currentLayerDepth = 0.0;
-    // The amount to shift the texture coordinates per layer (from vector P)
-    vec2 P = viewDir.xy / viewDir.z * uParallaxMappingStrength;
+    float height =  texture(uMaterialCookTorrance.displacementMap, texCoords).r;
+    vec2 p = viewDir.xy / viewDir.z * (height * uPOMStrength);
+    return texCoords + p;
+//    // Number of depth layers
+//    const float minLayers = 8;
+//    const float maxLayers = 32;
+//    float numLayers = 32.0;// mix(maxLayers, minLayers, abs(dot(vec3(0.0, 0.0, 1.0), viewDir)));
+//    // Calculate the size of each layer
+//    float layerDepth = 1.0 / numLayers;
+//    // Depth of current layer
+//    float currentLayerDepth = 1.0;
+//    // The amount to shift the texture coordinates per layer (from vector P)
+//    vec2 P = viewDir.xy / viewDir.z * uPOMStrength;
+//
+//    vec2 deltaTexCoords = P / numLayers;
+//
+//    // Get initial values
+//    vec2  currentTexCoords = texCoords;
+//    float currentDepthMapValue = texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
+//
+//    while(currentLayerDepth > currentDepthMapValue) {
+//        // Shift texture coordinates along direction of P
+//        currentTexCoords += deltaTexCoords;
+//        // Get depthmap value at current texture coordinates
+//        currentDepthMapValue = texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
+//        // Get depth of next layer
+//        currentLayerDepth -= layerDepth;
+//    }
+//
+//    return currentTexCoords;
 
-    vec2 deltaTexCoords = P / numLayers;
-
-    // Get initial values
-    vec2  currentTexCoords     = texCoords;
-    float currentDepthMapValue = 1.0 - texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
-
-    while(currentLayerDepth < currentDepthMapValue) {
-        // Shift texture coordinates along direction of P
-        currentTexCoords -= deltaTexCoords;
-        // Get depthmap value at current texture coordinates
-        currentDepthMapValue = 1.0 - texture(uMaterialCookTorrance.displacementMap, currentTexCoords).r;
-        // Get depth of next layer
-        currentLayerDepth += layerDepth;
-    }
-
-    // Get texture coordinates before collision (reverse operations)
-    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
-
-    // Get depth after and before collision for linear interpolation
-    float afterDepth  = currentDepthMapValue - currentLayerDepth;
-    float beforeDepth = (1.0 - texture(uMaterialCookTorrance.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
-
-    // Interpolation of texture coordinates
-    float weight = afterDepth / (afterDepth - beforeDepth);
-    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
-
-    return finalTexCoords;
+//    // Get texture coordinates before collision (reverse operations)
+//    vec2 prevTexCoords = currentTexCoords + deltaTexCoords;
+//
+//    // Get depth after and before collision for linear interpolation
+//    float afterDepth  = currentDepthMapValue - currentLayerDepth;
+//    float beforeDepth = (1.0 - texture(uMaterialCookTorrance.displacementMap, prevTexCoords).r) - currentLayerDepth + layerDepth;
+//
+//    // Interpolation of texture coordinates
+//    float weight = afterDepth / (afterDepth - beforeDepth);
+//    vec2 finalTexCoords = prevTexCoords * weight + currentTexCoords * (1.0 - weight);
+//
+//    return finalTexCoords;
 }
 
 ////////////////////////////////////////////////////////////
@@ -138,7 +142,9 @@ void EncodeCookTorranceMaterial() {
     // |______________________|______________________|_____________________________________________|
     // |________Third component of output UVEC4______|_______Fourth component of output UVEC4______|
 
-    vec2 texCoords = vTexCoords.st; //DisplacedTextureCoords();
+    float stub = uPOMStrength;
+    vec2 texCoords = vTexCoords.st;
+//    vec2 texCoords = DisplacedTextureCoords();
 
     float roughness = FetchRoughnessMap(texCoords);
     float metallic  = FetchMetallicMap(texCoords);

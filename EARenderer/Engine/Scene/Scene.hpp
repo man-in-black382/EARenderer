@@ -79,13 +79,13 @@ namespace EARenderer {
 
 #pragma mark - Getters
 
-        DirectionalLight &directionalLight();
+        DirectionalLight &sun();
 
         PackedLookupTable<PointLight> &pointLights();
 
         PackedLookupTable<MeshInstance> &meshInstances();
 
-        const DirectionalLight &directionalLight() const;
+        const DirectionalLight &sun() const;
 
         const PackedLookupTable<PointLight> &pointLights() const;
 

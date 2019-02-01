@@ -79,11 +79,12 @@ float OmnidirectionalPotentialOccluderDepth(
 }
 
 float OmnidirectionalPenumbra(vec3 surfaceWorldPosition, // World position of the surface point
+                              vec3 surfaceNormal,
                               PointLight light,
                               samplerCube bilinearSampler) // Shadow map bilinear sampler
 {
     // Constants that should be refactored into configurable parameters
-    float KernelSize = 2.0;
+    float KernelSize = 4.0;
     int VogelDiskSampleCount = int(KernelSize * KernelSize);
 
     vec3 surfaceToLight = light.position.xyz - surfaceWorldPosition;
@@ -104,9 +105,17 @@ float OmnidirectionalPenumbra(vec3 surfaceWorldPosition, // World position of th
         vec2 vogelDiskSample = VogelDiskSample(i, VogelDiskSampleCount, gradientNoise);
         vec3 sampleVector = (rotationMatrix * vec4(vogelDiskSample, 1.0, 0.0)).xyz;
 
+        vec3 texCoords = CubeMapTextureCoords(sampleVector);
+        float pod = OmnidirectionalPotentialOccluderDepth(light, surfaceWorldPosition, surfaceNormal, surfaceDepth, texCoords, shadowMapSize);
+
+        vec3 surfaceToLight = -normalize(sampleVector);
+        float epsilon = OmnidirectionalAdaptiveEpsilon(light, surfaceToLight, surfaceNormal, pod, light.shadowBias);
+        float bias = max(0.0, surfaceDepth - pod);
+        float biasedDepth = surfaceDepth - bias - epsilon;
+
         float sampleDepth = texture(bilinearSampler, sampleVector).r;
 
-        if(sampleDepth < surfaceDepth) {
+        if(sampleDepth < biasedDepth) {
             avgBlockersDepth += sampleDepth;
             blockersCount += 1.0f;
         }

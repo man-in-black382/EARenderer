@@ -41,12 +41,12 @@ namespace EARenderer {
             mSettings(settings),
 
             // Effects
-            mFramebuffer(std::make_shared<GLFramebuffer>(settings.displayedFrameResolution)),
-            mPostprocessTexturePool(std::make_shared<PostprocessTexturePool>(settings.displayedFrameResolution)),
-            mBloomEffect(mFramebuffer, mPostprocessTexturePool),
-            mToneMappingEffect(mFramebuffer, mPostprocessTexturePool),
-            mSSREffect(mFramebuffer, mPostprocessTexturePool),
-            mSMAAEffect(mFramebuffer, mPostprocessTexturePool),
+            mFramebuffer(settings.displayedFrameResolution),
+            mPostprocessTexturePool(settings.displayedFrameResolution),
+            mBloomEffect(&mFramebuffer, &mPostprocessTexturePool),
+            mToneMappingEffect(&mFramebuffer, &mPostprocessTexturePool),
+            mSSREffect(&mFramebuffer, &mPostprocessTexturePool),
+            mSMAAEffect(&mFramebuffer, &mPostprocessTexturePool),
 
             // Helpers
             mShadowMapper(scene, resourceStorage, gpuResourceController, gBuffer, settings.meshSettings.shadowCascadesCount),
@@ -62,7 +62,7 @@ namespace EARenderer {
         glClearDepth(1.0);
         glDepthFunc(GL_LEQUAL);
 
-        mFramebuffer->attachDepthTexture(mGBuffer->depthBuffer);
+        mFramebuffer.attachDepthTexture(mGBuffer->depthBuffer);
     }
 
 #pragma mark - Setters
@@ -104,7 +104,6 @@ namespace EARenderer {
             mSkyboxShader.setViewMatrix(mScene->camera()->viewMatrix());
             mSkyboxShader.setProjectionMatrix(mScene->camera()->projectionMatrix());
             mSkyboxShader.setEquirectangularMap(*mScene->skybox()->equirectangularMap());
-//            mSkyboxShader.setCubemap(mScene->skybox()->lightProbe()->specularIrradiance());
             mSkyboxShader.setExposure(mScene->skybox()->exposure());
         });
 
@@ -131,7 +130,7 @@ namespace EARenderer {
         mShadowMapper.render();
         mIndirectLightAccumulator.updateProbes();
 
-        // We're using depth buffer rendered during GBufferCookTorrance construction.
+        // We're using depth buffer rendered during g-buffer construction.
         // Depth writes are disabled for the purpose of combining skybox
         // and debugging entities with full screen deferred rendering:
         // mMeshes are rendered as a full screen quad, then skybox is rendered
@@ -141,8 +140,8 @@ namespace EARenderer {
         // like light probe spheres, surfels etc.
         glDepthMask(GL_FALSE);
 
-        auto lightAccumulationTarget = mPostprocessTexturePool->claim();
-        mFramebuffer->redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, lightAccumulationTarget);
+        auto lightAccumulationTarget = mPostprocessTexturePool.claim();
+        mFramebuffer.redirectRenderingToTextures(GLFramebuffer::UnderlyingBuffer::Color, lightAccumulationTarget);
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
@@ -154,10 +153,12 @@ namespace EARenderer {
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
 
-        renderSkybox();
+        if (mSettings.skyboxRenderingEnabled) {
+            renderSkybox();
+        }
 
-        auto ssrBaseOutputTexture = mPostprocessTexturePool->claim(); // Frame with reflections applied
-        auto ssrBrightOutputTexture = mPostprocessTexturePool->claim(); // Frame filtered by luminosity threshold and suitable for bloom effect
+        auto ssrBaseOutputTexture = mPostprocessTexturePool.claim(); // Frame with reflections applied
+        auto ssrBrightOutputTexture = mPostprocessTexturePool.claim(); // Frame filtered by luminosity threshold and suitable for bloom effect
 
         mSSREffect.applyReflections(
                 *mScene->camera(), *mGBuffer, mScene->skybox()->lightProbe(),
@@ -166,35 +167,22 @@ namespace EARenderer {
 
         auto bloomOutputTexture = lightAccumulationTarget;
         mBloomEffect.bloom(*ssrBaseOutputTexture, *ssrBrightOutputTexture, *bloomOutputTexture, mSettings.bloomSettings);
-//
+
         glDepthMask(GL_TRUE);
-//
+
         debugClosure();
-//
+
         auto toneMappingOutputTexture = ssrBaseOutputTexture;
         mToneMappingEffect.toneMap(*bloomOutputTexture, *toneMappingOutputTexture);
 
         auto smaaOutputTexture = ssrBrightOutputTexture;
         mSMAAEffect.antialise(*toneMappingOutputTexture, *smaaOutputTexture);
 
-//        // DEBUG
-//        glDisable(GL_DEPTH_TEST);
-//
-//        mFSQuadShader.bind();
-//        mFSQuadShader.setApplyToneMapping(false);
-//        mFSQuadShader.ensureSamplerValidity([&]() {
-//            mFSQuadShader.setTexture(mShadowMapper->penumbraForPointLight(*mScene->pointLights().begin()));
-//        });
-
-//        Drawable::TriangleStripQuad::Draw();
-//        glEnable(GL_DEPTH_TEST);
-//        // DEBUG
-
         renderFinalImage(*smaaOutputTexture);
-//
-        mPostprocessTexturePool->putBack(lightAccumulationTarget);
-        mPostprocessTexturePool->putBack(ssrBaseOutputTexture);
-        mPostprocessTexturePool->putBack(ssrBrightOutputTexture);
+
+        mPostprocessTexturePool.putBack(lightAccumulationTarget);
+        mPostprocessTexturePool.putBack(ssrBaseOutputTexture);
+        mPostprocessTexturePool.putBack(ssrBrightOutputTexture);
     }
 
 }

@@ -34,10 +34,14 @@ namespace EARenderer {
 //        mGBuffer->HiZBuffer.generateMipMaps();
     }
 
-#pragma mark - Getters
+#pragma mark -
 
     const SceneGBuffer *SceneGBufferConstructor::GBuffer() const {
         return mGBuffer.get();
+    }
+
+    void SceneGBufferConstructor::setRenderingSettings(const RenderingSettings &settings) {
+        mSettings = settings;
     }
 
 #pragma mark - Rendering
@@ -49,6 +53,7 @@ namespace EARenderer {
 
         mGBufferShader.bind();
         mGBufferShader.setCamera(*mScene->camera());
+        mGBufferShader.setSettings(mSettings);
 
         // Attach 0 mip again after HiZ buffer construction
         mFramebuffer.redirectRenderingToTexturesMip(

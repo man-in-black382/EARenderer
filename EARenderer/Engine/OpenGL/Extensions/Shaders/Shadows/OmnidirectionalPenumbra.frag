@@ -7,6 +7,7 @@
 
 // Uniforms
 
+uniform usampler2D uMaterialData;
 uniform sampler2D uGBufferHiZBuffer;
 uniform samplerCube uOmnidirectionalShadowMapBilinearSampler;
 
@@ -22,6 +23,8 @@ layout(location = 0) out float oOutput;
 in vec2 vTexCoords;
 
 void main() {
+    uvec4 materialData = texture(uMaterialData, vTexCoords);
+    vec3 normal = DecodeGBufferCookTorranceNormal(materialData);
     vec3 worldPosition = ReconstructWorldPosition(uGBufferHiZBuffer, vTexCoords, uCameraViewInverse, uCameraProjectionInverse);
-    oOutput = OmnidirectionalPenumbra(worldPosition, uboPointLight, uOmnidirectionalShadowMapBilinearSampler);
+    oOutput = OmnidirectionalPenumbra(worldPosition, normal, uboPointLight, uOmnidirectionalShadowMapBilinearSampler);
 }

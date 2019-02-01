@@ -29,6 +29,8 @@ namespace EARenderer {
         const SharedResourceStorage *mResourceStorage;
         const GPUResourceController *mGPUResourceController;
 
+        RenderingSettings mSettings;
+
         GLFramebuffer mFramebuffer;
         GLDepthRenderbuffer mDepthRenderbuffer;
         GLSLGBuffer mGBufferShader;
@@ -51,6 +53,8 @@ namespace EARenderer {
         );
 
         const SceneGBuffer *GBuffer() const;
+
+        void setRenderingSettings(const RenderingSettings &settings);
 
         void render();
     };

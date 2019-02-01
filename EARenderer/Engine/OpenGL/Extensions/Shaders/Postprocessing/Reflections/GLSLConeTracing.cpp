@@ -12,9 +12,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    GLSLConeTracing::GLSLConeTracing()
-            :
-            GLProgram("FullScreenQuad.vert", "SSRConeTracing.frag", "") {
+    GLSLConeTracing::GLSLConeTracing() : GLProgram("FullScreenQuad.vert", "SSRConeTracing.frag", "") {
     }
 
 #pragma mark - Lifecycle
@@ -45,6 +43,10 @@ namespace EARenderer {
         setUniformTexture(ctcrc32("uIBLProbe.specularIrradiance"), probe.specularIrradiance());
         setUniformTexture(ctcrc32("uIBLProbe.BRDFIntegrationMap"), probe.BRDFIntegrationMap());
         glUniform1i(uniformByNameCRC32(ctcrc32("uIBLProbe.specularIrradianceMipCount")).location(), GLint(probe.specularIrradianceMipCount()));
+    }
+
+    void GLSLConeTracing::setDebugRoughness(float r) {
+        glUniform1f(uniformByNameCRC32(ctcrc32("uDebugRoughness")).location(), r);
     }
 
 }

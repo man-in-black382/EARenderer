@@ -30,8 +30,10 @@ namespace EARenderer {
             mShadowFramebuffer(mSettings.directionalShadowMapResolution),
             mOmnidirectionalShadowFramebuffer(mSettings.omnidirectionalShadowMapResolution),
             mPenumbraFramebuffer(mSettings.penumbraResolution),
+            mTexturePool(mSettings.penumbraResolution),
             mDirectionalPenumbra(mSettings.penumbraResolution),
             mDirectionalShadowMapArray(mSettings.directionalShadowMapResolution, std::min(cascadeCount, MaximumCascadeCount), Sampling::ComparisonMode::ReferenceToTexture),
+            mBlurEffect(&mPenumbraFramebuffer, &mTexturePool),
             mBilinearSampler(Sampling::Filter::Bilinear, Sampling::WrapMode::ClampToEdge, Sampling::ComparisonMode::None) {
 
         for (ID pointLightID : scene->pointLights()) {
@@ -87,7 +89,7 @@ namespace EARenderer {
 #pragma mark - Private Helpers
 
     void ShadowMapper::renderDirectionalShadowMaps() {
-        if (!mScene->directionalLight().isEnabled()) {
+        if (!mScene->sun().isEnabled()) {
             return;
         }
 
@@ -149,7 +151,7 @@ namespace EARenderer {
     }
 
     void ShadowMapper::renderDirectionalPenumbra() {
-        if (!mScene->directionalLight().isEnabled()) {
+        if (!mScene->sun().isEnabled()) {
             return;
         }
 
@@ -157,7 +159,7 @@ namespace EARenderer {
 
         mDirectionalPenumbraGenerationShader.bind();
         mDirectionalPenumbraGenerationShader.setCamera(*mScene->camera());
-        mDirectionalPenumbraGenerationShader.setLight(mScene->directionalLight());
+        mDirectionalPenumbraGenerationShader.setLight(mScene->sun());
         mDirectionalPenumbraGenerationShader.ensureSamplerValidity([&] {
             mDirectionalPenumbraGenerationShader.setGBuffer(*mGBuffer);
             mDirectionalPenumbraGenerationShader.setFrustumCascades(mShadowCascades);
@@ -196,13 +198,19 @@ namespace EARenderer {
 
             Drawable::TriangleStripQuad::Draw();
         }
+
+//        for (auto& pair : mOmnidirectionalPenumbras) {
+//            auto &penumbra = it.second;
+//            mBlurEffect.blur(penumbra, <#EARenderer::PostprocessTexturePool::PostprocessTexture & outputImage#>, { 3, 0.84, 0, 0 })
+//        }
     }
 
 #pragma mark - Rendering
 
     void ShadowMapper::render() {
         mGPUResourceController->meshVAO()->bind();
-        mShadowCascades = mScene->directionalLight().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
+        mShadowCascades = mScene->sun().cascadesForBoundingBox(mScene->boundingBox(), mCascadeCount);
+//        mShadowCascades = mScene->sun().cascadesForCamera(*mScene->camera(), 1);
 
         renderOmnidirectionalShadowMaps();
         renderDirectionalShadowMaps();

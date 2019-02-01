@@ -32,6 +32,8 @@ namespace EARenderer {
         void setRayHitInfo(const GLFloatTexture2D<GLTexture::Float::RGBA16F> &rayHitInfo);
 
         void setIBLProbe(const ImageBasedLightProbe& probe);
+
+        void setDebugRoughness(float r);
     };
 
 }

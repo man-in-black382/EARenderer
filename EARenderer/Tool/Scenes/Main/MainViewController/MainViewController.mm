@@ -71,18 +71,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 #pragma mark - Lifecycle
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewDidAppear {
     [self.openGLView becomeFirstResponder];
     self.openGLView.delegate = self;
-
-    [self.view layout];
-
-    CGRect frame = CGRectMake(0.0, 0.0, 1920.0 + self.sceneEditorTabView.bounds.size.width, 1080.0);
-    [self.view.window setContentSize:frame.size];
-    [self.view.window setFrame:frame display:YES];
-
     [self.fpsView setHidden:YES];
+    [super viewDidAppear];
 }
 
 #pragma mark - SceneGLViewDelegate
@@ -97,11 +90,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self->frameMeter = std::make_unique<EARenderer::FrameMeter>();
     self->frequentEventsThrottle = std::make_unique<EARenderer::Throttle>(FrequentEventsThrottleCooldownMS);
 
-    auto camera = std::make_unique<EARenderer::Camera>(110.f, 0.05f, 25.f);
+    auto camera = std::make_unique<EARenderer::Camera>(90.f, 0.05f, 25.f);
     self->cameraman = std::make_unique<EARenderer::Cameraman>(camera.get(), &EARenderer::Input::shared(), &EARenderer::GLViewport::Main());
     self->scene->setCamera(std::move(camera));
 
-    self.demoScene = [[DemoScene3 alloc] init];;
+    self.demoScene = [[DemoScene1 alloc] init];;
     [self.demoScene loadResourcesToPool:self->sharedResourceStorage.get() andComposeScene:self->scene.get()];
 
     EARenderer::SurfelGenerator surfelGenerator(self->sharedResourceStorage.get(), self->scene.get());
@@ -156,6 +149,11 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self->scene->destroyAuxiliaryData();
 
     [self subscribeForEvents];
+
+    dispatch_after(2.0f, dispatch_get_main_queue(), ^{
+        CGRect frame = CGRectMake(0.0, 0.0, 1920.0 + self.sceneEditorTabView.bounds.size.width, 1080.0);
+        [self.view.window setFrame:frame display:YES];
+    });
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
@@ -225,7 +223,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeRenderingSettings:(EARenderer::RenderingSettings)settings {
     self.renderingSettings = settings;
-    // FIXME: Fix rendering settings
+    self->sceneGBufferRenderer->setRenderingSettings(settings);
     self->deferredSceneRenderer->setRenderingSettings(settings);
     self->probeRenderer->setRenderingSettings(settings);
 }
@@ -235,7 +233,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 }
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunColor:(NSColor *)color {
-    self->scene->directionalLight().setColor(EARenderer::Color(color.redComponent, color.greenComponent, color.blueComponent));
+    self->scene->sun().setColor(EARenderer::Color(color.redComponent, color.greenComponent, color.blueComponent));
 }
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSkyBrightness:(CGFloat)brightness {
@@ -247,21 +245,21 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 }
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionX:(CGFloat)x {
-    auto direction = self->scene->directionalLight().direction();
+    auto direction = self->scene->sun().direction();
     direction.x = x;
-    self->scene->directionalLight().setDirection(direction);
+    self->scene->sun().setDirection(direction);
 }
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionY:(CGFloat)y {
-    auto direction = self->scene->directionalLight().direction();
+    auto direction = self->scene->sun().direction();
     direction.y = y;
-    self->scene->directionalLight().setDirection(direction);
+    self->scene->sun().setDirection(direction);
 }
 
 - (void)settingsTabViewItem:(SettingsTabViewItem *)item didChangeSunDirectionZ:(CGFloat)z {
-    auto direction = self->scene->directionalLight().direction();
+    auto direction = self->scene->sun().direction();
     direction.z = z;
-    self->scene->directionalLight().setDirection(direction);
+    self->scene->sun().setDirection(direction);
 }
 
 #pragma mark - Helper methods

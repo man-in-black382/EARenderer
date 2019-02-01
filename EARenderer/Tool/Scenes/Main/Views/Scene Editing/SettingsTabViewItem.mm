@@ -73,6 +73,8 @@
 
 - (IBAction)skyBrightnessChanged:(NSSlider *)sender {
     [self.delegate settingsTabViewItem:self didChangeSkyBrightness:sender.floatValue];
+    mSettings.meshSettings.parallaxMappingStrength = sender.floatValue / 10.0;
+    [self.delegate settingsTabViewItem:self didChangeRenderingSettings:mSettings];
 }
 
 - (IBAction)sunColorChanged:(NSColorWell *)sender {

@@ -17,6 +17,7 @@
 #include "Camera.hpp"
 #include "GaussianBlurEffect.hpp"
 #include "ImageBasedLightProbe.hpp"
+#include "RenderingSettings.hpp"
 
 #include <memory>
 
@@ -47,7 +48,7 @@ namespace EARenderer {
         );
 
     public:
-        ScreenSpaceReflectionEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+        ScreenSpaceReflectionEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool);
 
         void applyReflections(
                 const Camera &camera,

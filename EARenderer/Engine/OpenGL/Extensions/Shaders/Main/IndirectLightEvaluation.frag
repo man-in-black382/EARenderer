@@ -7,6 +7,7 @@
 #include "DiffuseLightProbes.glsl"
 #include "Constants.glsl"
 #include "CookTorrance.glsl"
+#include "ImageBasedLightProbes.glsl"
 
 // Output
 
@@ -35,6 +36,9 @@ uniform usampler3D uGridSHMap2;
 uniform usampler3D uGridSHMap3;
 
 uniform samplerBuffer uProbePositions;
+
+uniform IBLProbe uIBLProbe;
+uniform bool uUseIBL;
 
 // Functions
 
@@ -78,25 +82,19 @@ void main() {
 
     vec3 Ks = FresnelSchlick(V, H, albedo, metalness); // Reflected portion
     vec3 Kd = 1.0 - Ks; // Refracted portion
+    Kd *= 1.0 - metalness; // Metallic surfaces
 
-    vec3 indirectRadiance = EvaluateDiffuseLightProbes(uGridSHMap0,
-                                                       uGridSHMap1,
-                                                       uGridSHMap2,
-                                                       uGridSHMap3,
-                                                       uProbePositions,
-                                                       N,
-                                                       worldPosition,
-                                                       uWorldBoudningBoxTransform);
+    vec3 indirectRadiance;
+
+    indirectRadiance = EvaluateDiffuseLightProbes(uGridSHMap0, uGridSHMap1, uGridSHMap2, uGridSHMap3,
+                                                  uProbePositions, N, worldPosition, uWorldBoudningBoxTransform);
 
     indirectRadiance = RGB_From_YCoCg(indirectRadiance);
-    
     // Filter out negative values which can occur from time to time when dealing with spherical harmonics
     indirectRadiance = max(indirectRadiance, vec3(0.0));
 
-    //    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
-    indirectRadiance *= Kd;
-
-    vec3 fragmentColor = indirectRadiance * albedo * ao;
+    indirectRadiance *= isGlobalIlluminationEnabled() ? 1.0 : 0.0;
+    vec3 fragmentColor = indirectRadiance * Kd * albedo * ao;
 
     oOutputColor = vec4(fragmentColor / HDRNormalizationFactor, 1.0);
 }

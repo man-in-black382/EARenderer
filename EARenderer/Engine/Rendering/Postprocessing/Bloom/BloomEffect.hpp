@@ -29,7 +29,7 @@ namespace EARenderer {
         GLSLBloom mBloomShader;
 
     public:
-        BloomEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool);
+        BloomEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool);
 
         void bloom(
                 const PostprocessTexturePool::PostprocessTexture &baseImage,

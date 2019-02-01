@@ -54,6 +54,8 @@ namespace EARenderer {
 
         void zoom(float zoomFactor);
 
+        void setFarPlane(float farPlane);
+
         Ray3D rayFromPointOnViewport(const glm::vec2 &point, const GLViewport *viewport) const;
 
         glm::vec3 worldToNDC(const glm::vec3 &v) const;

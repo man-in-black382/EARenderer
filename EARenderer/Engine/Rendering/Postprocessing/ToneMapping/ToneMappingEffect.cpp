@@ -13,7 +13,7 @@ namespace EARenderer {
 
 #pragma mark - Lifecycle
 
-    ToneMappingEffect::ToneMappingEffect(std::shared_ptr<GLFramebuffer> sharedFramebuffer, std::shared_ptr<PostprocessTexturePool> sharedTexturePool)
+    ToneMappingEffect::ToneMappingEffect(GLFramebuffer *sharedFramebuffer, PostprocessTexturePool *sharedTexturePool)
             : PostprocessEffect(sharedFramebuffer, sharedTexturePool),
               mLuminance(sharedFramebuffer->size()),
               mHistogram(Size2D(64, 1)),

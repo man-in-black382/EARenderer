@@ -56,7 +56,7 @@ void main() {
 //    float exposure = texelFetch(uExposure, ivec2(0), 0).r;
 
     vec3 color = textureLod(uImage, vTexCoords, 0).rgb;
-    color *= 0.001;//exposure;  // Exposure Adjustment
+    color *= 0.003;//exposure;  // Exposure Adjustment
 
     float lum = 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
     vec3 newLum = Uncharted2Tonemap(vec3(ExposureBias * lum));

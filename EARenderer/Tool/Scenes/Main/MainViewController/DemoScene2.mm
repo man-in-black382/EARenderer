@@ -61,8 +61,8 @@
     }
 
     scene->addMeshInstanceWithIDAsStatic(scene->meshInstances().insert(cornellBoxInstance));
-    scene->directionalLight().setColor(EARenderer::Color(0.8, 0.8, 0.8));
-    scene->directionalLight().setDirection(glm::vec3(-1, -1, 0));
+    scene->sun().setColor(EARenderer::Color(0.8, 0.8, 0.8));
+    scene->sun().setDirection(glm::vec3(-1, -1, 0));
 
     NSString *hdrSkyboxPath = [[NSBundle mainBundle] pathForResource:@"sky" ofType:@"hdr"];
     scene->setSkybox(std::make_unique<EARenderer::Skybox>(std::string(hdrSkyboxPath.UTF8String)));
@@ -91,7 +91,7 @@
 - (void)updateAnimatedObjectsInScene:(EARenderer::Scene *)scene
                 frameCharacteristics:(EARenderer::FrameMeter::FrameCharacteristics)frameCharacteristics {
     self.animationTimeline->step(1.0 / frameCharacteristics.framesPerSecond);
-    scene->directionalLight().setDirection(self.sunDirectionOutput->value());
+    scene->sun().setDirection(self.sunDirectionOutput->value());
 }
 
 #pragma mark - Helpers
