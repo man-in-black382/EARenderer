@@ -90,17 +90,19 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self->frameMeter = std::make_unique<EARenderer::FrameMeter>();
     self->frequentEventsThrottle = std::make_unique<EARenderer::Throttle>(FrequentEventsThrottleCooldownMS);
 
-    auto camera = std::make_unique<EARenderer::Camera>(90.f, 0.05f, 25.f);
+    auto camera = std::make_unique<EARenderer::Camera>(100.f, 0.05f, 25.f);
     self->cameraman = std::make_unique<EARenderer::Cameraman>(camera.get(), &EARenderer::Input::shared(), &EARenderer::GLViewport::Main());
     self->scene->setCamera(std::move(camera));
 
-    self.demoScene = [[DemoScene1 alloc] init];;
+    NSLog(@"Loading geometry and materials");
+    self.demoScene = [[DemoScene1 alloc] init];
     [self.demoScene loadResourcesToPool:self->sharedResourceStorage.get() andComposeScene:self->scene.get()];
 
     EARenderer::SurfelGenerator surfelGenerator(self->sharedResourceStorage.get(), self->scene.get());
     self->surfelData = std::make_unique<EARenderer::SurfelData>();
     std::string surfelStorageFileName = "surfels_" + self->scene->name();
 
+    NSLog(@"Loading/generating surfels");
     if (!self->surfelData->deserialize(surfelStorageFileName)) {
         self->surfelData = surfelGenerator.generateStaticGeometrySurfels();
         self->surfelData->serialize(surfelStorageFileName);
@@ -110,6 +112,7 @@ static float const FrequentEventsThrottleCooldownMS = 100;
     self->diffuseProbeData = std::make_unique<EARenderer::DiffuseLightProbeData>();
     std::string probeStorageFileName = "diffuse_light_probes_" + self->scene->name();
 
+    NSLog(@"Loading/generating probes");
     if (!self->diffuseProbeData->deserialize(probeStorageFileName)) {
         self->diffuseProbeData = lightProbeGenerator.generateProbes(*self->scene, *self->surfelData);
         self->diffuseProbeData->serialize(probeStorageFileName);
@@ -142,25 +145,15 @@ static float const FrequentEventsThrottleCooldownMS = 100;
 
     self->sceneInteractor = std::make_unique<EARenderer::SceneInteractor>(self->scene.get(), &EARenderer::Input::shared(), self->axesRenderer.get(), &EARenderer::GLViewport::Main());
 
-//    self->sceneRenderer->setDefaultRenderComponentsProvider(self->defaultRenderComponentsProvider);
 //    self->boxRenderer = new EARenderer::BoxRenderer(self->scene->camera(), self->sceneRenderer->shadowCascades().lightSpaceCascades );
 
     self->gpuResourceController->updateMeshVAO(*self->sharedResourceStorage);
     self->scene->destroyAuxiliaryData();
 
     [self subscribeForEvents];
-
-    dispatch_after(2.0f, dispatch_get_main_queue(), ^{
-        CGRect frame = CGRectMake(0.0, 0.0, 1920.0 + self.sceneEditorTabView.bounds.size.width, 1080.0);
-        [self.view.window setFrame:frame display:YES];
-    });
 }
 
 - (void)glViewIsReadyToRenderFrame:(SceneGLView *)view {
-//    NSLog(@"GLView width: %f", view.frame.size.width);
-//    NSLog(@"Camera pos: %f %f %f", self->scene->camera()->position().x, self->scene->camera()->position().y, self->scene->camera()->position().z);
-//    NSLog(@"Camera dir: %f %f %f", self->scene->camera()->front().x, self->scene->camera()->front().y, self->scene->camera()->front().z);
-
     self->cameraman->updateCamera();
     self->sceneGBufferRenderer->render();
     self->gpuResourceController->updateUniformBuffer(*self->sharedResourceStorage, *self->scene);

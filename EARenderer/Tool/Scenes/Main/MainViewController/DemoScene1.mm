@@ -59,8 +59,6 @@
 
     // Sponza mCookTorranceMaterials
 
-    printf("Loading mCookTorranceMaterials...\n");
-
     EARenderer::MaterialReference leaf_MaterialID = [self load_Leaf_MaterialToPool:resourcePool];
     EARenderer::MaterialReference vaseRound_MaterialID = [self load_VaseRound_MaterialToPool:resourcePool];
     EARenderer::MaterialReference _57_MaterialID = [self load_Material57_ToPool:resourcePool];
