@@ -1,6 +1,6 @@
 # EARenderer
 
-XCode project includes rendering engine and a GUI tool. Exists for the purpose of learning C++, OpenGL and computer graphics in general. Development has stopped.
+XCode project includes rendering engine and a GUI tool. Exists for the purpose of learning C++, OpenGL and computer graphics in general. Development has stopped: I moved on to modern tech https://github.com/man-in-black382/PathFinder
 
 # Dependencies
 Project depends on Intel Embree and TBB frameworks.
